@@ -4234,7 +4234,6 @@ public final class Config
 					_hosts.add("127.0.0.1");
 				}
 				
-				_hosts.add(externalIp);
 				_subnets.add("0.0.0.0/0");
 				_log.log(Level.INFO, "Network Config: Adding new subnet: 0.0.0.0/0 address: " + externalIp);
 			}
