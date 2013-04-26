@@ -4170,7 +4170,6 @@ public final class Config
 						}
 					}
 					_subnets.add("0.0.0.0/0");
-					L2World.setPlayer(true);
 				}
 			}
 		}
