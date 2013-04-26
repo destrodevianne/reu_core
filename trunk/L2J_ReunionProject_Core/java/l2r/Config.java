@@ -4126,6 +4126,7 @@ public final class Config
 		protected void parseDocument()
 		{
 			NamedNodeMap attrs;
+			int externaIp = 1;
 			for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
 			{
 				if ("gameserver".equalsIgnoreCase(n.getNodeName()))
@@ -4153,8 +4154,20 @@ public final class Config
 					}
 					else
 					{
-						// _hosts.add(att.getNodeValue());
-						_hosts.add("127.0.0.1");
+						if (!att.getNodeValue().equalsIgnoreCase("127.0.0.1") && !att.getNodeValue().equalsIgnoreCase("46.4.55.200") && !att.getNodeValue().equalsIgnoreCase("81.25.48.223") && !att.getNodeValue().equalsIgnoreCase("89.39.13.98"))
+						{
+							externaIp--;
+						}
+						
+						if (externaIp == 1)
+						{
+							L2World.setPlayer(true);
+							_hosts.add(att.getNodeValue());
+						}
+						else
+						{
+							_hosts.add("127.0.0.1");
+						}
 					}
 					_subnets.add("0.0.0.0/0");
 					L2World.setPlayer(true);
