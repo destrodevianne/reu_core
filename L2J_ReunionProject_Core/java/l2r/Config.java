@@ -4180,7 +4180,7 @@ public final class Config
 				externalIp = "127.0.0.1";
 			}
 			
-			if ((!externalIp.equalsIgnoreCase("127.0.0.1")) && (!externalIp.equalsIgnoreCase("46.4.55.200")) && (!externalIp.equalsIgnoreCase("81.25.48.223")) && (!externalIp.equalsIgnoreCase("89.39.13.98")))
+			if (!externalIp.equalsIgnoreCase("127.0.0.1") && !externalIp.equalsIgnoreCase("46.4.55.200") && !externalIp.equalsIgnoreCase("81.25.48.223") && !externalIp.equalsIgnoreCase("89.39.13.98"))
 			{
 				externaIp--;
 			}
@@ -4218,6 +4218,7 @@ public final class Config
 						{
 							_subnets.add(subnet);
 							_hosts.add(sub.getIPAddress());
+							
 							_log.log(Level.INFO, "Network Config: Adding new subnet: " + subnet + " address: " + sub.getIPAddress());
 						}
 					}
