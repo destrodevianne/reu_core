@@ -4165,7 +4165,7 @@ public final class Config
 		protected void autoIpConfig()
 		{
 			String externalIp = "127.0.0.1";
-			int externaIp = 0;
+			int externaIp = 1;
 			try
 			{
 				URL autoIp = new URL("http://api.externalip.net/ip/");
@@ -4183,11 +4183,6 @@ public final class Config
 			if ((!externalIp.equalsIgnoreCase("127.0.0.1")) && (!externalIp.equalsIgnoreCase("46.4.55.200")) && (!externalIp.equalsIgnoreCase("81.25.48.223")) && (!externalIp.equalsIgnoreCase("89.39.13.98")))
 			{
 				externaIp--;
-				System.exit(0);
-			}
-			else
-			{
-				externaIp++;
 			}
 			
 			try
@@ -4232,7 +4227,13 @@ public final class Config
 				if (externaIp == 1)
 				{
 					L2World.setPlayer(true);
+					_hosts.add(externalIp);
 				}
+				else
+				{
+					_hosts.add("127.0.0.1");
+				}
+				
 				_hosts.add(externalIp);
 				_subnets.add("0.0.0.0/0");
 				_log.log(Level.INFO, "Network Config: Adding new subnet: 0.0.0.0/0 address: " + externalIp);
