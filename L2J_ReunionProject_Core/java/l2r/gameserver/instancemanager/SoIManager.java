@@ -25,6 +25,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.scripts.ai.group_template.EnergySeeds;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 
@@ -143,7 +144,7 @@ public class SoIManager
 	{
 		_log.info("Seed of Infinity Manager: Closing the seed.");
 		ServerVariables.unset("SoI_opened");
-		l2r.gameserver.scripts.data.EnergySeeds.SoiSeedStop();
+		EnergySeeds.SoiSeedStop();
 		DoorTable.getInstance().getDoor(14240102).closeMe();
 		for (L2PcInstance ch : ZoneManager.getInstance().getZoneById(200033).getPlayersInside())
 		{
@@ -156,24 +157,24 @@ public class SoIManager
 	
 	public static void checkStageAndSpawn()
 	{
-		l2r.gameserver.scripts.data.EnergySeeds.SoiCloseMouthStop();
-		l2r.gameserver.scripts.data.EnergySeeds.SoiMouthStop();
-		l2r.gameserver.scripts.data.EnergySeeds.SoiAbyssGaze2Stop();
-		l2r.gameserver.scripts.data.EnergySeeds.SoiAbyssGaze1Stop();
+		EnergySeeds.SoiCloseMouthStop();
+		EnergySeeds.SoiMouthStop();
+		EnergySeeds.SoiAbyssGaze2Stop();
+		EnergySeeds.SoiAbyssGaze1Stop();
 		switch (getCurrentStage())
 		{
 			case 1:
 			case 4:
-				l2r.gameserver.scripts.data.EnergySeeds.SoiMouthSpawn();
-				l2r.gameserver.scripts.data.EnergySeeds.SoiAbyssGaze2Spawn();
+				EnergySeeds.SoiMouthSpawn();
+				EnergySeeds.SoiAbyssGaze2Spawn();
 				break;
 			case 5:
-				l2r.gameserver.scripts.data.EnergySeeds.SoiCloseMouthSpawn();
-				l2r.gameserver.scripts.data.EnergySeeds.SoiAbyssGaze2Spawn();
+				EnergySeeds.SoiCloseMouthSpawn();
+				EnergySeeds.SoiAbyssGaze2Spawn();
 				break;
 			default:
-				l2r.gameserver.scripts.data.EnergySeeds.SoiCloseMouthSpawn();
-				l2r.gameserver.scripts.data.EnergySeeds.SoiAbyssGaze1Spawn();
+				EnergySeeds.SoiCloseMouthSpawn();
+				EnergySeeds.SoiAbyssGaze1Spawn();
 				break;
 		}
 	}
@@ -255,7 +256,7 @@ public class SoIManager
 	
 	private static void spawnOpenedSeed()
 	{
-		l2r.gameserver.scripts.data.EnergySeeds.SoiSeedSpawn();
+		EnergySeeds.SoiSeedSpawn();
 	}
 	
 	public static void teleportInSeed(L2PcInstance player)
