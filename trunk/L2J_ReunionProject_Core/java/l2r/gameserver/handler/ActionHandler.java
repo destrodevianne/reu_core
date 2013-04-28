@@ -22,6 +22,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import l2r.gameserver.model.L2Object.InstanceType;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2ArtefactInstanceAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2DecoyAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2DoorInstanceAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2ItemInstanceAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2NpcAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2PcInstanceAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2PetInstanceAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2StaticObjectInstanceAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2SummonAction;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2TrapAction;
 
 /**
  * @author UnAfraid
@@ -38,6 +48,17 @@ public class ActionHandler implements IHandler<IActionHandler, InstanceType>
 	protected ActionHandler()
 	{
 		_actions = new HashMap<>();
+		
+		registerHandler(new L2ArtefactInstanceAction());
+		registerHandler(new L2DecoyAction());
+		registerHandler(new L2DoorInstanceAction());
+		registerHandler(new L2ItemInstanceAction());
+		registerHandler(new L2NpcAction());
+		registerHandler(new L2PcInstanceAction());
+		registerHandler(new L2PetInstanceAction());
+		registerHandler(new L2StaticObjectInstanceAction());
+		registerHandler(new L2SummonAction());
+		registerHandler(new L2TrapAction());
 	}
 	
 	@Override

@@ -21,6 +21,21 @@ package l2r.gameserver.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import l2r.gameserver.scripts.handlers.usercommandhandlers.ChannelDelete;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.ChannelInfo;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.ChannelLeave;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.ClanPenalty;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.ClanWarsList;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.Dismount;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.InstanceZone;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.Loc;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.Mount;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.MyBirthday;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.OlympiadStat;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.PartyInfo;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.Time;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.Unstuck;
+
 /**
  * @author UnAfraid
  */
@@ -31,6 +46,21 @@ public class UserCommandHandler implements IHandler<IUserCommandHandler, Integer
 	protected UserCommandHandler()
 	{
 		_datatable = new HashMap<>();
+		
+		registerHandler(new ChannelDelete());
+		registerHandler(new ChannelInfo());
+		registerHandler(new ChannelLeave());
+		registerHandler(new ClanPenalty());
+		registerHandler(new ClanWarsList());
+		registerHandler(new Dismount());
+		registerHandler(new InstanceZone());
+		registerHandler(new Loc());
+		registerHandler(new Mount());
+		registerHandler(new MyBirthday());
+		registerHandler(new OlympiadStat());
+		registerHandler(new PartyInfo());
+		registerHandler(new Time());
+		registerHandler(new Unstuck());
 	}
 	
 	@Override

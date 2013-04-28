@@ -22,6 +22,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 import l2r.gameserver.model.skills.targets.L2TargetType;
+import l2r.gameserver.scripts.handlers.targethandlers.Area;
+import l2r.gameserver.scripts.handlers.targethandlers.AreaCorpseMob;
+import l2r.gameserver.scripts.handlers.targethandlers.AreaFriendly;
+import l2r.gameserver.scripts.handlers.targethandlers.AreaSummon;
+import l2r.gameserver.scripts.handlers.targethandlers.Aura;
+import l2r.gameserver.scripts.handlers.targethandlers.AuraCorpseMob;
+import l2r.gameserver.scripts.handlers.targethandlers.BehindArea;
+import l2r.gameserver.scripts.handlers.targethandlers.BehindAura;
+import l2r.gameserver.scripts.handlers.targethandlers.Clan;
+import l2r.gameserver.scripts.handlers.targethandlers.ClanMember;
+import l2r.gameserver.scripts.handlers.targethandlers.CorpseClan;
+import l2r.gameserver.scripts.handlers.targethandlers.CorpseMob;
+import l2r.gameserver.scripts.handlers.targethandlers.CorpsePet;
+import l2r.gameserver.scripts.handlers.targethandlers.CorpsePlayer;
+import l2r.gameserver.scripts.handlers.targethandlers.EnemySummon;
+import l2r.gameserver.scripts.handlers.targethandlers.FlagPole;
+import l2r.gameserver.scripts.handlers.targethandlers.FrontArea;
+import l2r.gameserver.scripts.handlers.targethandlers.FrontAura;
+import l2r.gameserver.scripts.handlers.targethandlers.Ground;
+import l2r.gameserver.scripts.handlers.targethandlers.Holy;
+import l2r.gameserver.scripts.handlers.targethandlers.One;
+import l2r.gameserver.scripts.handlers.targethandlers.OwnerPet;
+import l2r.gameserver.scripts.handlers.targethandlers.Party;
+import l2r.gameserver.scripts.handlers.targethandlers.PartyClan;
+import l2r.gameserver.scripts.handlers.targethandlers.PartyMember;
+import l2r.gameserver.scripts.handlers.targethandlers.PartyNotMe;
+import l2r.gameserver.scripts.handlers.targethandlers.PartyOther;
+import l2r.gameserver.scripts.handlers.targethandlers.Pet;
+import l2r.gameserver.scripts.handlers.targethandlers.Self;
+import l2r.gameserver.scripts.handlers.targethandlers.Summon;
+import l2r.gameserver.scripts.handlers.targethandlers.Unlockable;
 
 /**
  * @author UnAfraid
@@ -33,6 +64,38 @@ public class TargetHandler implements IHandler<ITargetTypeHandler, Enum<L2Target
 	protected TargetHandler()
 	{
 		_datatable = new HashMap<>();
+		
+		registerHandler(new Area());
+		registerHandler(new AreaCorpseMob());
+		registerHandler(new AreaFriendly());
+		registerHandler(new AreaSummon());
+		registerHandler(new Aura());
+		registerHandler(new AuraCorpseMob());
+		registerHandler(new BehindArea());
+		registerHandler(new BehindAura());
+		registerHandler(new Clan());
+		registerHandler(new ClanMember());
+		registerHandler(new CorpseClan());
+		registerHandler(new CorpseMob());
+		registerHandler(new CorpsePet());
+		registerHandler(new CorpsePlayer());
+		registerHandler(new EnemySummon());
+		registerHandler(new FlagPole());
+		registerHandler(new FrontArea());
+		registerHandler(new FrontAura());
+		registerHandler(new Ground());
+		registerHandler(new Holy());
+		registerHandler(new One());
+		registerHandler(new OwnerPet());
+		registerHandler(new Party());
+		registerHandler(new PartyClan());
+		registerHandler(new PartyMember());
+		registerHandler(new PartyNotMe());
+		registerHandler(new PartyOther());
+		registerHandler(new Pet());
+		registerHandler(new Self());
+		registerHandler(new Summon());
+		registerHandler(new Unlockable());
 	}
 	
 	@Override

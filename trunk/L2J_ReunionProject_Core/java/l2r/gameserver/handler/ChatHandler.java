@@ -21,6 +21,20 @@ package l2r.gameserver.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import l2r.gameserver.scripts.handlers.chathandlers.ChatAll;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatAlliance;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatBattlefield;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatClan;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatHeroVoice;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatParty;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatPartyMatchRoom;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatPartyRoomAll;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatPartyRoomCommander;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatPetition;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatShout;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatTell;
+import l2r.gameserver.scripts.handlers.chathandlers.ChatTrade;
+
 /**
  * This class handles all chat handlers
  * @author durgus, UnAfraid
@@ -35,6 +49,20 @@ public class ChatHandler implements IHandler<IChatHandler, Integer>
 	protected ChatHandler()
 	{
 		_datatable = new HashMap<>();
+		
+		registerHandler(new ChatAll());
+		registerHandler(new ChatAlliance());
+		registerHandler(new ChatBattlefield());
+		registerHandler(new ChatClan());
+		registerHandler(new ChatHeroVoice());
+		registerHandler(new ChatParty());
+		registerHandler(new ChatPartyMatchRoom());
+		registerHandler(new ChatPartyRoomAll());
+		registerHandler(new ChatPartyRoomCommander());
+		registerHandler(new ChatPetition());
+		registerHandler(new ChatShout());
+		registerHandler(new ChatTell());
+		registerHandler(new ChatTrade());
 	}
 	
 	/**

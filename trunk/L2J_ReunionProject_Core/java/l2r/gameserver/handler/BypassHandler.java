@@ -21,6 +21,41 @@ package l2r.gameserver.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import l2r.gameserver.scripts.handlers.bypasshandlers.ArenaBuff;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Augment;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Buy;
+import l2r.gameserver.scripts.handlers.bypasshandlers.BuyShadowItem;
+import l2r.gameserver.scripts.handlers.bypasshandlers.ChatLink;
+import l2r.gameserver.scripts.handlers.bypasshandlers.ClanWarehouse;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Festival;
+import l2r.gameserver.scripts.handlers.bypasshandlers.FortSiege;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Freight;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Henna;
+import l2r.gameserver.scripts.handlers.bypasshandlers.ItemAuctionLink;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Link;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Loto;
+import l2r.gameserver.scripts.handlers.bypasshandlers.ManorManager;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Multisell;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Observation;
+import l2r.gameserver.scripts.handlers.bypasshandlers.OlympiadManagerLink;
+import l2r.gameserver.scripts.handlers.bypasshandlers.OlympiadObservation;
+import l2r.gameserver.scripts.handlers.bypasshandlers.PlayerHelp;
+import l2r.gameserver.scripts.handlers.bypasshandlers.PrivateWarehouse;
+import l2r.gameserver.scripts.handlers.bypasshandlers.QuestLink;
+import l2r.gameserver.scripts.handlers.bypasshandlers.QuestList;
+import l2r.gameserver.scripts.handlers.bypasshandlers.ReceivePremium;
+import l2r.gameserver.scripts.handlers.bypasshandlers.ReleaseAttribute;
+import l2r.gameserver.scripts.handlers.bypasshandlers.RemoveDeathPenalty;
+import l2r.gameserver.scripts.handlers.bypasshandlers.RentPet;
+import l2r.gameserver.scripts.handlers.bypasshandlers.RideWyvern;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Rift;
+import l2r.gameserver.scripts.handlers.bypasshandlers.SkillList;
+import l2r.gameserver.scripts.handlers.bypasshandlers.SupportBlessing;
+import l2r.gameserver.scripts.handlers.bypasshandlers.SupportMagic;
+import l2r.gameserver.scripts.handlers.bypasshandlers.TerritoryStatus;
+import l2r.gameserver.scripts.handlers.bypasshandlers.VoiceCommand;
+import l2r.gameserver.scripts.handlers.bypasshandlers.Wear;
+
 /**
  * @author nBd, UnAfraid
  */
@@ -31,6 +66,41 @@ public class BypassHandler implements IHandler<IBypassHandler, String>
 	protected BypassHandler()
 	{
 		_datatable = new HashMap<>();
+		
+		registerHandler(new ArenaBuff());
+		registerHandler(new Augment());
+		registerHandler(new Buy());
+		registerHandler(new BuyShadowItem());
+		registerHandler(new ChatLink());
+		registerHandler(new ClanWarehouse());
+		registerHandler(new Festival());
+		registerHandler(new FortSiege());
+		registerHandler(new Freight());
+		registerHandler(new Henna());
+		registerHandler(new ItemAuctionLink());
+		registerHandler(new Link());
+		registerHandler(new Loto());
+		registerHandler(new ManorManager());
+		registerHandler(new Multisell());
+		registerHandler(new Observation());
+		registerHandler(new OlympiadManagerLink());
+		registerHandler(new OlympiadObservation());
+		registerHandler(new PlayerHelp());
+		registerHandler(new PrivateWarehouse());
+		registerHandler(new QuestLink());
+		registerHandler(new QuestList());
+		registerHandler(new ReceivePremium());
+		registerHandler(new ReleaseAttribute());
+		registerHandler(new RemoveDeathPenalty());
+		registerHandler(new RentPet());
+		registerHandler(new RideWyvern());
+		registerHandler(new Rift());
+		registerHandler(new SkillList());
+		registerHandler(new SupportBlessing());
+		registerHandler(new SupportMagic());
+		registerHandler(new TerritoryStatus());
+		registerHandler(new VoiceCommand());
+		registerHandler(new Wear());
 	}
 	
 	@Override

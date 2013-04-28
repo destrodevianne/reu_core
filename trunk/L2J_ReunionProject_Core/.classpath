@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="dist/libs/reunion_events.jar"/>
 	<classpathentry kind="lib" path="dist/libs/reunion_interface.jar"/>
 	<classpathentry kind="lib" path="dist/libs/CatsByteGuard.jar"/>
+	<classpathentry kind="lib" path="dist/libs/reunion-scripts.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
