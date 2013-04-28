@@ -22,6 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import l2r.gameserver.model.L2Object.InstanceType;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2DoorInstanceActionShift;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2ItemInstanceActionShift;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2NpcActionShift;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2PcInstanceActionShift;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2StaticObjectInstanceActionShift;
+import l2r.gameserver.scripts.handlers.actionhandlers.L2SummonActionShift;
 
 /**
  * @author UnAfraid
@@ -33,6 +39,13 @@ public class ActionShiftHandler
 	protected ActionShiftHandler()
 	{
 		_actionsShift = new HashMap<>();
+		
+		registerHandler(new L2DoorInstanceActionShift());
+		registerHandler(new L2ItemInstanceActionShift());
+		registerHandler(new L2NpcActionShift());
+		registerHandler(new L2PcInstanceActionShift());
+		registerHandler(new L2StaticObjectInstanceActionShift());
+		registerHandler(new L2SummonActionShift());
 	}
 	
 	public void registerHandler(IActionHandler handler)

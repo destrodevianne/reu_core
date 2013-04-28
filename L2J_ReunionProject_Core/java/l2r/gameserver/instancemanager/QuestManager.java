@@ -18,13 +18,9 @@
  */
 package l2r.gameserver.instancemanager;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l2r.Config;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.scripting.L2ScriptEngineManager;
 import l2r.gameserver.scripting.ScriptManager;
@@ -68,27 +64,18 @@ public class QuestManager extends ScriptManager<Quest>
 	
 	public final void reloadAllQuests()
 	{
-		_log.info(getClass().getSimpleName() + ": Reloading all server scripts.");
-		// unload all scripts
-		for (Quest quest : _quests.values())
+		_log.info("Reloading Server Scripts");
+		
+		for (Quest quest : this._quests.values())
 		{
 			if (quest != null)
 			{
 				quest.unload(false);
 			}
 		}
-		_quests.clear();
-		
-		try
-		{
-			// now load all scripts
-			L2ScriptEngineManager.getInstance().executeScriptList(new File(Config.DATAPACK_ROOT, "data/scripts.cfg"));
-			QuestManager.getInstance().report();
-		}
-		catch (IOException e)
-		{
-			_log.log(Level.SEVERE, getClass().getSimpleName() + ": Failed loading scripts.cfg, no script going to be loaded!", e);
-		}
+		this._quests.clear();
+		L2ScriptEngineManager.getInstance().executeScriptList();
+		getInstance().report();
 	}
 	
 	public final void report()

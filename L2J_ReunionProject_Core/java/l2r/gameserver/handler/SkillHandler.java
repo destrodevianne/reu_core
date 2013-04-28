@@ -22,6 +22,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 import l2r.gameserver.model.skills.L2SkillType;
+import l2r.gameserver.scripts.handlers.skillhandlers.BallistaBomb;
+import l2r.gameserver.scripts.handlers.skillhandlers.BeastSkills;
+import l2r.gameserver.scripts.handlers.skillhandlers.Blow;
+import l2r.gameserver.scripts.handlers.skillhandlers.Continuous;
+import l2r.gameserver.scripts.handlers.skillhandlers.CpDamPercent;
+import l2r.gameserver.scripts.handlers.skillhandlers.Craft;
+import l2r.gameserver.scripts.handlers.skillhandlers.DeluxeKey;
+import l2r.gameserver.scripts.handlers.skillhandlers.Detection;
+import l2r.gameserver.scripts.handlers.skillhandlers.Disablers;
+import l2r.gameserver.scripts.handlers.skillhandlers.Dummy;
+import l2r.gameserver.scripts.handlers.skillhandlers.Fishing;
+import l2r.gameserver.scripts.handlers.skillhandlers.FishingSkill;
+import l2r.gameserver.scripts.handlers.skillhandlers.GetPlayer;
+import l2r.gameserver.scripts.handlers.skillhandlers.GiveReco;
+import l2r.gameserver.scripts.handlers.skillhandlers.GiveVitality;
+import l2r.gameserver.scripts.handlers.skillhandlers.InstantJump;
+import l2r.gameserver.scripts.handlers.skillhandlers.Manadam;
+import l2r.gameserver.scripts.handlers.skillhandlers.Mdam;
+import l2r.gameserver.scripts.handlers.skillhandlers.NornilsPower;
+import l2r.gameserver.scripts.handlers.skillhandlers.Pdam;
+import l2r.gameserver.scripts.handlers.skillhandlers.RefuelAirShip;
+import l2r.gameserver.scripts.handlers.skillhandlers.Resurrect;
+import l2r.gameserver.scripts.handlers.skillhandlers.ShiftTarget;
+import l2r.gameserver.scripts.handlers.skillhandlers.Sow;
+import l2r.gameserver.scripts.handlers.skillhandlers.StealBuffs;
+import l2r.gameserver.scripts.handlers.skillhandlers.StrSiegeAssault;
+import l2r.gameserver.scripts.handlers.skillhandlers.SummonFriend;
+import l2r.gameserver.scripts.handlers.skillhandlers.TakeCastle;
+import l2r.gameserver.scripts.handlers.skillhandlers.TakeFort;
+import l2r.gameserver.scripts.handlers.skillhandlers.TransformDispel;
+import l2r.gameserver.scripts.handlers.skillhandlers.Trap;
+import l2r.gameserver.scripts.handlers.skillhandlers.Unlock;
 
 /**
  * @author UnAfraid
@@ -33,6 +65,39 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 	protected SkillHandler()
 	{
 		_datatable = new HashMap<>();
+		
+		registerHandler(new BallistaBomb());
+		registerHandler(new BeastSkills());
+		registerHandler(new Blow());
+		registerHandler(new Continuous());
+		registerHandler(new CpDamPercent());
+		registerHandler(new Craft());
+		registerHandler(new DeluxeKey());
+		registerHandler(new Detection());
+		registerHandler(new Disablers());
+		registerHandler(new Dummy());
+		registerHandler(new Fishing());
+		registerHandler(new FishingSkill());
+		registerHandler(new GetPlayer());
+		registerHandler(new GiveReco());
+		registerHandler(new GiveVitality());
+		registerHandler(new InstantJump());
+		registerHandler(new Manadam());
+		registerHandler(new Mdam());
+		registerHandler(new NornilsPower());
+		registerHandler(new Pdam());
+		registerHandler(new RefuelAirShip());
+		registerHandler(new Resurrect());
+		registerHandler(new ShiftTarget());
+		registerHandler(new Sow());
+		registerHandler(new StealBuffs());
+		registerHandler(new StrSiegeAssault());
+		registerHandler(new SummonFriend());
+		registerHandler(new TakeCastle());
+		registerHandler(new TakeFort());
+		registerHandler(new TransformDispel());
+		registerHandler(new Trap());
+		registerHandler(new Unlock());
 	}
 	
 	@Override

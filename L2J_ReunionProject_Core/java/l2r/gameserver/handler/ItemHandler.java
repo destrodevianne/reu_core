@@ -22,6 +22,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 import l2r.gameserver.model.items.L2EtcItem;
+import l2r.gameserver.scripts.handlers.itemhandlers.AioItemBuff;
+import l2r.gameserver.scripts.handlers.itemhandlers.AioItemNpcs;
+import l2r.gameserver.scripts.handlers.itemhandlers.BeastSoulShot;
+import l2r.gameserver.scripts.handlers.itemhandlers.BeastSpice;
+import l2r.gameserver.scripts.handlers.itemhandlers.BeastSpiritShot;
+import l2r.gameserver.scripts.handlers.itemhandlers.BlessedSpiritShot;
+import l2r.gameserver.scripts.handlers.itemhandlers.Book;
+import l2r.gameserver.scripts.handlers.itemhandlers.Bypass;
+import l2r.gameserver.scripts.handlers.itemhandlers.Calculator;
+import l2r.gameserver.scripts.handlers.itemhandlers.ChristmasTree;
+import l2r.gameserver.scripts.handlers.itemhandlers.Disguise;
+import l2r.gameserver.scripts.handlers.itemhandlers.Elixir;
+import l2r.gameserver.scripts.handlers.itemhandlers.EnchantAttribute;
+import l2r.gameserver.scripts.handlers.itemhandlers.EnchantScrolls;
+import l2r.gameserver.scripts.handlers.itemhandlers.EnergyStarStone;
+import l2r.gameserver.scripts.handlers.itemhandlers.EventItem;
+import l2r.gameserver.scripts.handlers.itemhandlers.ExtractableItems;
+import l2r.gameserver.scripts.handlers.itemhandlers.FishShots;
+import l2r.gameserver.scripts.handlers.itemhandlers.Harvester;
+import l2r.gameserver.scripts.handlers.itemhandlers.ItemSkills;
+import l2r.gameserver.scripts.handlers.itemhandlers.ItemSkillsTemplate;
+import l2r.gameserver.scripts.handlers.itemhandlers.ManaPotion;
+import l2r.gameserver.scripts.handlers.itemhandlers.Maps;
+import l2r.gameserver.scripts.handlers.itemhandlers.MercTicket;
+import l2r.gameserver.scripts.handlers.itemhandlers.NicknameColor;
+import l2r.gameserver.scripts.handlers.itemhandlers.PaganKeys;
+import l2r.gameserver.scripts.handlers.itemhandlers.PetFood;
+import l2r.gameserver.scripts.handlers.itemhandlers.QuestItems;
+import l2r.gameserver.scripts.handlers.itemhandlers.Recipes;
+import l2r.gameserver.scripts.handlers.itemhandlers.RollingDice;
+import l2r.gameserver.scripts.handlers.itemhandlers.ScrollOfResurrection;
+import l2r.gameserver.scripts.handlers.itemhandlers.Seed;
+import l2r.gameserver.scripts.handlers.itemhandlers.SevenSignsRecord;
+import l2r.gameserver.scripts.handlers.itemhandlers.SoulShots;
+import l2r.gameserver.scripts.handlers.itemhandlers.SpecialXMas;
+import l2r.gameserver.scripts.handlers.itemhandlers.SpiritShot;
+import l2r.gameserver.scripts.handlers.itemhandlers.SummonItems;
+import l2r.gameserver.scripts.handlers.itemhandlers.TeleportBookmark;
+import gr.reunion.configs.AioBufferConfigs;
+import gr.reunion.configs.AioItemsConfigs;
 
 /**
  * This class manages handlers of items
@@ -37,6 +77,51 @@ public class ItemHandler implements IHandler<IItemHandler, L2EtcItem>
 	protected ItemHandler()
 	{
 		_datatable = new HashMap<>();
+		
+		if (AioBufferConfigs.ENABLE_AIO_BUFFER)
+		{
+			registerHandler(new AioItemBuff());
+		}
+		if (AioItemsConfigs.ENABLE_AIO_NPCS)
+		{
+			registerHandler(new AioItemNpcs());
+		}
+		registerHandler(new BeastSoulShot());
+		registerHandler(new BeastSpice());
+		registerHandler(new BeastSpiritShot());
+		registerHandler(new BlessedSpiritShot());
+		registerHandler(new Book());
+		registerHandler(new Bypass());
+		registerHandler(new Calculator());
+		registerHandler(new ChristmasTree());
+		registerHandler(new Disguise());
+		registerHandler(new Elixir());
+		registerHandler(new EnchantAttribute());
+		registerHandler(new EnchantScrolls());
+		registerHandler(new EnergyStarStone());
+		registerHandler(new EventItem());
+		registerHandler(new ExtractableItems());
+		registerHandler(new FishShots());
+		registerHandler(new Harvester());
+		registerHandler(new ItemSkills());
+		registerHandler(new ItemSkillsTemplate());
+		registerHandler(new ManaPotion());
+		registerHandler(new Maps());
+		registerHandler(new MercTicket());
+		registerHandler(new NicknameColor());
+		registerHandler(new PaganKeys());
+		registerHandler(new PetFood());
+		registerHandler(new QuestItems());
+		registerHandler(new Recipes());
+		registerHandler(new RollingDice());
+		registerHandler(new ScrollOfResurrection());
+		registerHandler(new Seed());
+		registerHandler(new SevenSignsRecord());
+		registerHandler(new SoulShots());
+		registerHandler(new SpecialXMas());
+		registerHandler(new SpiritShot());
+		registerHandler(new SummonItems());
+		registerHandler(new TeleportBookmark());
 	}
 	
 	/**

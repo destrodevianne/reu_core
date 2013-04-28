@@ -332,19 +332,8 @@ public class GameServer
 		FortManager.getInstance().activateInstances();
 		MerchantPriceConfigTable.getInstance().updateReferences();
 		
-		try
-		{
-			_log.info(getClass().getSimpleName() + ": Loading Server Scripts");
-			File scripts = new File(Config.DATAPACK_ROOT, "data/scripts.cfg");
-			if (!Config.ALT_DEV_NO_HANDLERS || !Config.ALT_DEV_NO_QUESTS)
-			{
-				L2ScriptEngineManager.getInstance().executeScriptList(scripts);
-			}
-		}
-		catch (IOException ioe)
-		{
-			_log.severe(getClass().getSimpleName() + ": Failed loading scripts.cfg, no script going to be loaded");
-		}
+		_log.info("Loading Server Core and data Scripts");
+		L2ScriptEngineManager.getInstance().executeScriptList();
 		
 		QuestManager.getInstance().report();
 		TransformationManager.getInstance().report();
@@ -414,8 +403,7 @@ public class GameServer
 		}
 		System.gc();
 		// maxMemory is the upper limit the jvm can use, totalMemory the size of
-		// the current allocation pool, freeMemory the unused memory in the
-		// allocation pool
+		// the current allocation pool, freeMemory the unused memory in the allocation pool
 		long freeMem = ((Runtime.getRuntime().maxMemory() - Runtime.getRuntime().totalMemory()) + Runtime.getRuntime().freeMemory()) / 1048576;
 		long totalMem = Runtime.getRuntime().maxMemory() / 1048576;
 		_log.info(getClass().getSimpleName() + ": Started, free memory " + freeMem + " Mb of " + totalMem + " Mb");
@@ -459,10 +447,10 @@ public class GameServer
 			System.exit(1);
 		}
 		_selectorThread.start();
-		_log.info("Maximum Numbers of Connected Players: " + Config.MAXIMUM_ONLINE_USERS);
+		_log.info("Maximum Numbers of Connected players: " + Config.MAXIMUM_ONLINE_USERS);
 		L2World.prepare();
 		long serverLoadEnd = System.currentTimeMillis();
-		_log.info("Server Loaded in " + ((serverLoadEnd - serverLoadStart) / 1000) + " seconds");
+		_log.info("Server loaded in " + ((serverLoadEnd - serverLoadStart) / 1000) + " seconds.");
 		
 		AutoAnnounceTaskManager.getInstance();
 		

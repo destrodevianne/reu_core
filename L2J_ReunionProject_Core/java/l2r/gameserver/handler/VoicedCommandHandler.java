@@ -21,6 +21,33 @@ package l2r.gameserver.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import l2r.Config;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.AioItemVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Antibot;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Banking;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.CcpVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.ChangePassword;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.ChatAdmin;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Debug;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.EvenlyDistributeItems;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Hellbound;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.ItemBufferVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Lang;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.OnlineVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.PremiumVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.PvpZoneVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.RepairVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.TeleportsVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.VotePanelVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.VoteVCmd;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Wedding;
+import gr.reunion.configs.AioBufferConfigs;
+import gr.reunion.configs.AioItemsConfigs;
+import gr.reunion.configs.AntibotConfigs;
+import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configs.PremiumServiceConfigs;
+import gr.reunion.configs.VoteSystemConfigs;
+
 /**
  * @author UnAfraid
  */
@@ -31,6 +58,102 @@ public class VoicedCommandHandler implements IHandler<IVoicedCommandHandler, Str
 	protected VoicedCommandHandler()
 	{
 		_datatable = new HashMap<>();
+		
+		registerHandler(new VoteVCmd());
+		
+		if (CustomServerConfigs.ENABLE_CHARACTER_CONTROL_PANEL)
+		{
+			registerHandler(new CcpVCmd());
+		}
+		
+		if (PremiumServiceConfigs.USE_PREMIUM_SERVICE)
+		{
+			registerHandler(new PremiumVCmd());
+		}
+		
+		if (AntibotConfigs.ENABLE_ANTIBOT_SYSTEMS)
+		{
+			registerHandler(new Antibot());
+		}
+		
+		if (CustomServerConfigs.ENABLE_CHAOTIC_ZONE)
+		{
+			registerHandler(new PvpZoneVCmd());
+		}
+		
+		if (AioBufferConfigs.ENABLE_AIO_BUFFER && PremiumServiceConfigs.USE_PREMIUM_SERVICE)
+		{
+			registerHandler(new ItemBufferVCmd());
+		}
+		
+		if (VoteSystemConfigs.ENABLE_VOTE_SYSTEM)
+		{
+			registerHandler(new VotePanelVCmd());
+		}
+		
+		if (CustomServerConfigs.ALLOW_ONLINE_COMMAND)
+		{
+			registerHandler(new OnlineVCmd());
+		}
+		
+		if (CustomServerConfigs.ALLOW_REPAIR_COMMAND)
+		{
+			registerHandler(new RepairVCmd());
+		}
+		
+		if (CustomServerConfigs.ALLOW_TELEPORTS_COMMAND)
+		{
+			registerHandler(new TeleportsVCmd());
+		}
+		
+		if (Config.BANKING_SYSTEM_ENABLED)
+		{
+			registerHandler(new Banking());
+		}
+		
+		if (CustomServerConfigs.EVENLY_DISTRIBUTED_ITEMS)
+		{
+			registerHandler(new EvenlyDistributeItems());
+		}
+		
+		if (AioItemsConfigs.ALLOW_AIO_ITEM_COMMAND && AioItemsConfigs.ENABLE_AIO_NPCS)
+		{
+			registerHandler(new AioItemVCmd());
+		}
+		
+		if (Config.L2JMOD_ALLOW_CHANGE_PASSWORD)
+		{
+			registerHandler(new ChangePassword());
+		}
+		if (Config.L2JMOD_CHAT_ADMIN)
+		{
+			registerHandler(new ChatAdmin());
+		}
+		
+		if (Config.L2JMOD_MULTILANG_ENABLE && Config.L2JMOD_MULTILANG_VOICED_ALLOW)
+		{
+			registerHandler(new Lang());
+		}
+		
+		if (Config.L2JMOD_DEBUG_VOICE_COMMAND)
+		{
+			registerHandler(new Debug());
+		}
+		
+		if (Config.L2JMOD_HELLBOUND_STATUS)
+		{
+			registerHandler(new Hellbound());
+		}
+		
+		if ((Config.L2JMOD_MULTILANG_ENABLE) && (Config.L2JMOD_MULTILANG_VOICED_ALLOW))
+		{
+			registerHandler(new Lang());
+		}
+		
+		if (Config.L2JMOD_ALLOW_WEDDING)
+		{
+			registerHandler(new Wedding());
+		}
 	}
 	
 	@Override

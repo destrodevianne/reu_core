@@ -30,7 +30,6 @@ import l2r.gameserver.model.actor.status.FolkStatus;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.AcquireSkillType;
 import l2r.gameserver.model.base.ClassId;
-import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AcquireSkillList;
@@ -57,22 +56,6 @@ public class L2NpcInstance extends L2Npc
 	public void initCharStatus()
 	{
 		setStatus(new FolkStatus(this));
-	}
-	
-	@Override
-	public void addEffect(L2Effect newEffect)
-	{
-		if (newEffect != null)
-		{
-			if (newEffect.isBuffEffect() || newEffect.isDebuffEffect())
-			{
-				super.addEffect(newEffect);
-			}
-			else
-			{
-				newEffect.stopEffectTask();
-			}
-		}
 	}
 	
 	public List<ClassId> getClassesToTeach()

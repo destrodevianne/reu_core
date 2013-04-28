@@ -21,6 +21,15 @@ package l2r.gameserver.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import l2r.gameserver.scripts.handlers.telnethandlers.ChatsHandler;
+import l2r.gameserver.scripts.handlers.telnethandlers.DebugHandler;
+import l2r.gameserver.scripts.handlers.telnethandlers.HelpHandler;
+import l2r.gameserver.scripts.handlers.telnethandlers.PlayerHandler;
+import l2r.gameserver.scripts.handlers.telnethandlers.ReloadHandler;
+import l2r.gameserver.scripts.handlers.telnethandlers.ServerHandler;
+import l2r.gameserver.scripts.handlers.telnethandlers.StatusHandler;
+import l2r.gameserver.scripts.handlers.telnethandlers.ThreadHandler;
+
 /**
  * @author UnAfraid
  */
@@ -31,6 +40,15 @@ public class TelnetHandler implements IHandler<ITelnetHandler, String>
 	protected TelnetHandler()
 	{
 		_telnetHandlers = new HashMap<>();
+		
+		registerHandler(new ChatsHandler());
+		registerHandler(new DebugHandler());
+		registerHandler(new HelpHandler());
+		registerHandler(new PlayerHandler());
+		registerHandler(new ReloadHandler());
+		registerHandler(new ServerHandler());
+		registerHandler(new StatusHandler());
+		registerHandler(new ThreadHandler());
 	}
 	
 	@Override

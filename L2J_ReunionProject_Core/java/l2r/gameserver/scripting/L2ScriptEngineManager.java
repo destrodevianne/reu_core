@@ -21,13 +21,24 @@ package l2r.gameserver.scripting;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +52,9 @@ import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
 
 import javolution.util.FastMap;
+import javolution.util.FastSet;
 import l2r.Config;
+import l2r.gameserver.model.quest.Quest;
 
 import com.l2jserver.script.jython.JythonScriptEngine;
 
@@ -54,6 +67,19 @@ public final class L2ScriptEngineManager
 	private static final Logger _log = Logger.getLogger(L2ScriptEngineManager.class.getName());
 	
 	public static final File SCRIPT_FOLDER = new File(Config.DATAPACK_ROOT.getAbsolutePath(), "data/scripts");
+	private static final String[] SCRIPT_PKGS =
+	{
+		"ai",
+		"clanhallsiege",
+		"custom",
+		"quests",
+		"events",
+		"teleports",
+		"village_master",
+		"instances",
+		"hellbound",
+		"vehicles"
+	};
 	
 	public static L2ScriptEngineManager getInstance()
 	{
@@ -165,6 +191,7 @@ public final class L2ScriptEngineManager
 	public void executeScriptList(File list) throws IOException
 	{
 		File file;
+		executeCoreScripts();
 		
 		if (!Config.ALT_DEV_NO_HANDLERS && Config.ALT_DEV_NO_QUESTS)
 		{
@@ -531,4 +558,284 @@ public final class L2ScriptEngineManager
 	{
 		protected static final L2ScriptEngineManager _instance = new L2ScriptEngineManager();
 	}
+	
+	private static void addScript(Collection<Class<?>> classes, String name)
+	{
+		try
+		{
+			Class<?> cl = Class.forName(name);
+			if ((cl != null) && (Quest.class.isAssignableFrom(cl)))
+			{
+				classes.add(cl);
+			}
+		}
+		catch (ClassNotFoundException e)
+		{
+			_log.log(Level.WARNING, "" + e.getMessage(), e);
+		}
+		catch (Throwable t)
+		{
+			_log.warning(t.getMessage());
+		}
+	}
+	
+	private static Collection<Class<?>> getClassesForPackageInDir(File directory, String packageName, Collection<Class<?>> classes)
+	{
+		if (!directory.exists())
+		{
+			return classes;
+		}
+		File[] files = directory.listFiles();
+		for (File file : files)
+		{
+			if (file.isDirectory())
+			{
+				getClassesForPackageInDir(file, packageName + "." + file.getName(), classes);
+			}
+			else if (file.getName().endsWith(".class"))
+			{
+				addScript(classes, packageName + '.' + file.getName().substring(0, file.getName().length() - 6));
+			}
+		}
+		return classes;
+	}
+	
+	private void getClassesForPackageInJar(URL url, String packagePath, Collection<Class<?>> classes)
+	{
+		JarInputStream stream = null;
+		try
+		{
+			stream = new JarInputStream(url.openStream()); // may want better way to open url connections
+			JarEntry entry = stream.getNextJarEntry();
+			while (entry != null)
+			{
+				String name = entry.getName();
+				int i = name.lastIndexOf("/");
+				if ((i > 0) && name.endsWith(".class") && name.substring(0, i).startsWith(packagePath))
+				{
+					addScript(classes, name.substring(0, name.length() - 6).replace("/", "."));
+				}
+				entry = stream.getNextJarEntry();
+			}
+			stream.close();
+		}
+		catch (IOException e)
+		{
+			_log.warning("Can't get classes for url " + url + ": " + e.getMessage());
+		}
+	}
+	
+	public Collection<Class<?>> getClassesForPackage(String packageName)
+	{
+		String packagePath = packageName.replace(".", "/");
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		Collection<Class<?>> classes = new FastSet<>();
+		try
+		{
+			Enumeration<URL> resources = classLoader.getResources(packagePath);
+			ArrayList<File> dirs = new ArrayList<>();
+			while (resources.hasMoreElements())
+			{
+				URL resource = resources.nextElement();
+				dirs.add(new File(resource.getFile()));
+			}
+			for (File directory : dirs)
+			{
+				getClassesForPackageInDir(directory, packageName, classes);
+			}
+		}
+		catch (IOException e)
+		{
+			_log.log(Level.WARNING, "" + e.getMessage(), e);
+		}
+		ArrayList<URL> jarUrls = new ArrayList<>();
+		while (classLoader != null)
+		{
+			if (classLoader instanceof URLClassLoader)
+			{
+				for (URL url : ((URLClassLoader) classLoader).getURLs())
+				{
+					if (url.getFile().endsWith(".jar"))
+					{
+						jarUrls.add(url);
+					}
+				}
+			}
+			classLoader = classLoader.getParent();
+		}
+		for (URL url : jarUrls)
+		{
+			getClassesForPackageInJar(url, packagePath, classes);
+		}
+		return classes;
+	}
+	
+	public void executeCoreScripts()
+	{
+		for (String pkg : SCRIPT_PKGS)
+		{
+			Collection<Class<?>> classes = getClassesForPackage("l2r.gameserver.scripts." + pkg);
+			for (Class<?> cls : classes)
+			{
+				try
+				{
+					Method m = cls.getMethod("main", new Class[]
+					{
+						String[].class
+					});
+					if (m.getDeclaringClass().equals(cls))
+					{
+						m.invoke(cls, new Object[]
+						{
+							new String[] {}
+						});
+					}
+					continue;
+				}
+				catch (NoSuchMethodException e)
+				{
+				}
+				catch (InvocationTargetException e)
+				{
+					_log.log(Level.WARNING, e.getMessage(), e);
+				}
+				catch (IllegalAccessException e)
+				{
+					_log.log(Level.WARNING, e.getMessage(), e);
+				}
+				try
+				{
+					Constructor<?> c = cls.getConstructor(new Class[] {});
+					Quest q = (Quest) c.newInstance();
+					q.setAltMethodCall(true);
+				}
+				catch (NoSuchMethodException e)
+				{
+					// _log.log(Level.WARNING, e.getMessage(), e);
+				}
+				catch (InvocationTargetException e)
+				{
+					_log.log(Level.WARNING, e.getMessage(), e);
+				}
+				catch (IllegalAccessException e)
+				{
+					_log.log(Level.WARNING, e.getMessage(), e);
+				}
+				catch (InstantiationException e)
+				{
+					_log.log(Level.WARNING, e.getMessage(), e);
+				}
+				
+			}
+		}
+	}
+	
+	public void executeScriptList()
+	{
+		_log.info("Load core and darapack scripts.");
+		executeCoreScripts();
+		File scripts = new File(Config.DATAPACK_ROOT + "/data/scripts.ini");
+		try
+		{
+			executeDataScripts(scripts);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @param list
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	private void executeDataScripts(File list) throws IOException
+	{
+		File file;
+		
+		if ((!Config.ALT_DEV_NO_HANDLERS) && (Config.ALT_DEV_NO_QUESTS))
+		{
+			file = new File(SCRIPT_FOLDER, "handlers/MasterHandler.java");
+			try
+			{
+				executeScript(file);
+				_log.info("Handlers loaded, all other scripts skipped");
+				return;
+			}
+			catch (ScriptException se)
+			{
+				_log.log(Level.WARNING, "", se);
+			}
+		}
+		
+		if (Config.ALT_DEV_NO_QUESTS)
+		{
+			return;
+		}
+		
+		if (list.isFile())
+		{
+			try (FileInputStream fis = new FileInputStream(list);
+				InputStreamReader isr = new InputStreamReader(fis);
+				LineNumberReader lnr = new LineNumberReader(isr))
+			{
+				String line;
+				while ((line = lnr.readLine()) != null)
+				{
+					if (Config.ALT_DEV_NO_HANDLERS && line.contains("MasterHandler.java"))
+					{
+						continue;
+					}
+					
+					String[] parts = line.trim().split("#");
+					
+					if ((parts.length > 0) && !parts[0].isEmpty() && (parts[0].charAt(0) != '#'))
+					{
+						line = parts[0];
+						
+						if (line.endsWith("/**"))
+						{
+							line = line.substring(0, line.length() - 3);
+						}
+						else if (line.endsWith("/*"))
+						{
+							line = line.substring(0, line.length() - 2);
+						}
+						
+						file = new File(SCRIPT_FOLDER, line);
+						
+						if (file.isDirectory() && parts[0].endsWith("/**"))
+						{
+							executeAllScriptsInDirectory(file, true, 32);
+						}
+						else if (file.isDirectory() && parts[0].endsWith("/*"))
+						{
+							executeAllScriptsInDirectory(file);
+						}
+						else if (file.isFile())
+						{
+							try
+							{
+								executeScript(file);
+							}
+							catch (ScriptException e)
+							{
+								reportScriptFileError(file, e);
+							}
+						}
+						else
+						{
+							_log.warning("Failed loading: (" + file.getCanonicalPath() + ") @ " + list.getName() + ":" + lnr.getLineNumber() + " - Reason: doesnt exists or is not a file.");
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			throw new IllegalArgumentException("Argument must be an file containing a list of scripts to be loaded");
+		}
+	}
+	
 }
