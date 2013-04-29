@@ -44,7 +44,6 @@ import java.util.logging.Level;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.Announcements;
@@ -304,7 +303,7 @@ import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 import l2r.util.L2FastList;
 import l2r.util.Rnd;
-
+import gnu.trove.list.array.TIntArrayList;
 import gr.reunion.achievementSystem.AchievementsManager;
 import gr.reunion.configs.AntibotConfigs;
 import gr.reunion.configs.CustomServerConfigs;
@@ -318,7 +317,6 @@ import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
 import gr.reunion.main.NamePrefix;
 import gr.reunion.spreeSystem.SpreeHandler;
-import gnu.trove.list.array.TIntArrayList;
 
 /**
  * This class represents all player characters in the world.<br>
@@ -12121,7 +12119,7 @@ public final class L2PcInstance extends L2Playable
 		// If character refuses a PhoenixBless autoress, cancel all buffs he had
 		if ((answer == 0) && isPhoenixBlessed())
 		{
-			stopPhoenixBlessing(null);
+			stopEffects(L2EffectType.NOBLESSE_BLESSING);
 			stopAllEffectsExceptThoseThatLastThroughDeath();
 		}
 		if (answer == 1)
@@ -14284,7 +14282,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public void calculateDeathPenaltyBuffLevel(L2Character killer)
 	{
-		if (((getKarma() > 0) || (Rnd.get(1, 100) <= Config.DEATH_PENALTY_CHANCE)) && !(killer instanceof L2PcInstance) && !(canOverrideCond(PcCondOverride.DEATH_PENALTY)) && !(getCharmOfLuck() && killer.isRaid()) && !isPhoenixBlessed() && !isLucky() && !(isInsideZone(ZoneId.PVP) || isInsideZone(ZoneId.SIEGE)))
+		if (((getKarma() > 0) || (Rnd.get(1, 100) <= Config.DEATH_PENALTY_CHANCE)) && !(killer instanceof L2PcInstance) && !(canOverrideCond(PcCondOverride.DEATH_PENALTY)) && !(isCharmOfLuckAffected() && killer.isRaid()) && !isPhoenixBlessed() && !isLucky() && !(isInsideZone(ZoneId.PVP) || isInsideZone(ZoneId.SIEGE)))
 		{
 			increaseDeathPenaltyBuffLevel();
 		}
