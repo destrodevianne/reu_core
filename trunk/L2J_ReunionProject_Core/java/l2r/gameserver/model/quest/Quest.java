@@ -60,6 +60,7 @@ import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2TrapInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.base.AcquireSkillType;
 import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.interfaces.IL2Procedure;
@@ -839,9 +840,10 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
-	 * @param npc
-	 * @param player
-	 * @param skill
+	 * Notify the quest engine that an skill info has been acquired.
+	 * @param npc the NPC
+	 * @param player the player
+	 * @param skill the skill
 	 */
 	public final void notifyAcquireSkillInfo(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
@@ -858,16 +860,18 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
-	 * @param npc
-	 * @param player
-	 * @param skill
+	 * Notify the quest engine that an skill has been acquired.
+	 * @param npc the NPC
+	 * @param player the player
+	 * @param skill the skill
+	 * @param type the skill learn type
 	 */
-	public final void notifyAcquireSkill(L2Npc npc, L2PcInstance player, L2Skill skill)
+	public final void notifyAcquireSkill(L2Npc npc, L2PcInstance player, L2Skill skill, AcquireSkillType type)
 	{
 		String res = null;
 		try
 		{
-			res = onAcquireSkill(npc, player, skill);
+			res = onAcquireSkill(npc, player, skill, type);
 		}
 		catch (Exception e)
 		{
@@ -1312,8 +1316,7 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
-	 * This function is called whenever a player request a skill info.<br>
-	 * TODO: Re-implement, since Skill Trees rework it's support was removed.
+	 * This function is called whenever a player request a skill info.
 	 * @param npc this parameter contains a reference to the exact instance of the NPC that the player requested the skill info.
 	 * @param player this parameter contains a reference to the exact instance of the player who requested the skill info.
 	 * @param skill this parameter contains a reference to the skill that the player requested its info.
@@ -1330,9 +1333,10 @@ public class Quest extends ManagedScript
 	 * @param npc this parameter contains a reference to the exact instance of the NPC that the player requested the skill.
 	 * @param player this parameter contains a reference to the exact instance of the player who requested the skill.
 	 * @param skill this parameter contains a reference to the skill that the player requested.
+	 * @param type the skill learn type
 	 * @return
 	 */
-	public String onAcquireSkill(L2Npc npc, L2PcInstance player, L2Skill skill)
+	public String onAcquireSkill(L2Npc npc, L2PcInstance player, L2Skill skill, AcquireSkillType type)
 	{
 		return null;
 	}
@@ -2626,7 +2630,7 @@ public class Quest extends ManagedScript
 	 * @param cha
 	 * @return instance of newly spawned npc
 	 */
-	public L2Npc addSpawn(int npcId, L2Character cha)
+	public static L2Npc addSpawn(int npcId, L2Character cha)
 	{
 		return addSpawn(npcId, cha.getX(), cha.getY(), cha.getZ(), cha.getHeading(), false, 0, false, 0);
 	}
@@ -2638,7 +2642,7 @@ public class Quest extends ManagedScript
 	 * @param isSummonSpawn
 	 * @return instance of newly spawned npc with summon animation
 	 */
-	public L2Npc addSpawn(int npcId, L2Character cha, boolean isSummonSpawn)
+	public static L2Npc addSpawn(int npcId, L2Character cha, boolean isSummonSpawn)
 	{
 		return addSpawn(npcId, cha.getX(), cha.getY(), cha.getZ(), cha.getHeading(), false, 0, isSummonSpawn, 0);
 	}
@@ -2653,7 +2657,7 @@ public class Quest extends ManagedScript
 	 * @param despawnDelay
 	 * @return
 	 */
-	public L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffSet, long despawnDelay)
+	public static L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffSet, long despawnDelay)
 	{
 		return addSpawn(npcId, x, y, z, heading, randomOffSet, despawnDelay, false, 0);
 	}
@@ -2665,7 +2669,7 @@ public class Quest extends ManagedScript
 	 * @param despawnDelay
 	 * @return
 	 */
-	public L2Npc addSpawn(int npcId, Location loc, boolean randomOffSet, long despawnDelay)
+	public static L2Npc addSpawn(int npcId, Location loc, boolean randomOffSet, long despawnDelay)
 	{
 		return addSpawn(npcId, loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), randomOffSet, despawnDelay, false, 0);
 	}
@@ -2679,7 +2683,7 @@ public class Quest extends ManagedScript
 	 * @param instanceId
 	 * @return
 	 */
-	public L2Npc addSpawn(int npcId, Location loc, boolean randomOffset, long despawnDelay, boolean isSummonSpawn, int instanceId)
+	public static L2Npc addSpawn(int npcId, Location loc, boolean randomOffset, long despawnDelay, boolean isSummonSpawn, int instanceId)
 	{
 		return addSpawn(npcId, loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), randomOffset, despawnDelay, isSummonSpawn, instanceId);
 	}
@@ -2695,7 +2699,7 @@ public class Quest extends ManagedScript
 	 * @param isSummonSpawn
 	 * @return
 	 */
-	public L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, long despawnDelay, boolean isSummonSpawn)
+	public static L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, long despawnDelay, boolean isSummonSpawn)
 	{
 		return addSpawn(npcId, x, y, z, heading, randomOffset, despawnDelay, isSummonSpawn, 0);
 	}
@@ -2708,7 +2712,7 @@ public class Quest extends ManagedScript
 	 * @param isSummonSpawn
 	 * @return
 	 */
-	public L2Npc addSpawn(int npcId, Location loc, boolean randomOffset, long despawnDelay, boolean isSummonSpawn)
+	public static L2Npc addSpawn(int npcId, Location loc, boolean randomOffset, long despawnDelay, boolean isSummonSpawn)
 	{
 		return addSpawn(npcId, loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), randomOffset, despawnDelay, isSummonSpawn, 0);
 	}
@@ -2725,7 +2729,7 @@ public class Quest extends ManagedScript
 	 * @param instanceId
 	 * @return
 	 */
-	public L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, long despawnDelay, boolean isSummonSpawn, int instanceId)
+	public static L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, long despawnDelay, boolean isSummonSpawn, int instanceId)
 	{
 		L2Npc result = null;
 		try
@@ -2996,7 +3000,7 @@ public class Quest extends ManagedScript
 	 * @param itemId the Id of the item whose amount to get
 	 * @return the amount of the specified item in player's inventory
 	 */
-	public long getQuestItemsCount(L2PcInstance player, int itemId)
+	public static long getQuestItemsCount(L2PcInstance player, int itemId)
 	{
 		return player.getInventory().getInventoryItemCount(itemId, -1);
 	}
@@ -3038,7 +3042,7 @@ public class Quest extends ManagedScript
 	 * @param itemId the Id of the item to check for
 	 * @return {@code true} if the item exists in player's inventory, {@code false} otherwise
 	 */
-	public boolean hasQuestItems(L2PcInstance player, int itemId)
+	public static boolean hasQuestItems(L2PcInstance player, int itemId)
 	{
 		return player.getInventory().getItemByItemId(itemId) != null;
 	}
@@ -3049,7 +3053,7 @@ public class Quest extends ManagedScript
 	 * @param itemIds a list of item Ids to check for
 	 * @return {@code true} if all items exist in player's inventory, {@code false} otherwise
 	 */
-	public boolean hasQuestItems(L2PcInstance player, int... itemIds)
+	public static boolean hasQuestItems(L2PcInstance player, int... itemIds)
 	{
 		final PcInventory inv = player.getInventory();
 		for (int itemId : itemIds)
@@ -3087,9 +3091,9 @@ public class Quest extends ManagedScript
 	 * @param itemId the Id of the item whose enchantment level to get
 	 * @return the enchantment level of the item or 0 if the item was not found
 	 */
-	public int getEnchantLevel(L2PcInstance player, int itemId)
+	public static int getEnchantLevel(L2PcInstance player, int itemId)
 	{
-		L2ItemInstance enchantedItem = player.getInventory().getItemByItemId(itemId);
+		final L2ItemInstance enchantedItem = player.getInventory().getItemByItemId(itemId);
 		if (enchantedItem == null)
 		{
 			return 0;
@@ -3121,15 +3125,14 @@ public class Quest extends ManagedScript
 	 * @param itemId the Id of the item to give
 	 * @param count the amount of items to give
 	 */
-	public void rewardItems(L2PcInstance player, int itemId, long count)
+	public static void rewardItems(L2PcInstance player, int itemId, long count)
 	{
 		if (count <= 0)
 		{
 			return;
 		}
 		
-		L2ItemInstance _tmpItem = ItemTable.getInstance().createDummyItem(itemId);
-		
+		final L2ItemInstance _tmpItem = ItemTable.getInstance().createDummyItem(itemId);
 		if (_tmpItem == null)
 		{
 			return;
@@ -3192,7 +3195,7 @@ public class Quest extends ManagedScript
 	 * @param item the item obtain by the player
 	 * @param count the item count
 	 */
-	private void sendItemGetMessage(L2PcInstance player, L2ItemInstance item, long count)
+	private static void sendItemGetMessage(L2PcInstance player, L2ItemInstance item, long count)
 	{
 		// If item for reward is gold, send message of gold reward to client
 		if (item.getItemId() == PcInventory.ADENA_ID)
@@ -3251,7 +3254,7 @@ public class Quest extends ManagedScript
 	 * @param count
 	 * @param enchantlevel
 	 */
-	public void giveItems(L2PcInstance player, int itemId, long count, int enchantlevel)
+	public static void giveItems(L2PcInstance player, int itemId, long count, int enchantlevel)
 	{
 		if (count <= 0)
 		{
@@ -3265,7 +3268,7 @@ public class Quest extends ManagedScript
 		}
 		
 		// Add items to player's inventory
-		L2ItemInstance item = player.getInventory().addItem("Quest", itemId, count, player, player.getTarget());
+		final L2ItemInstance item = player.getInventory().addItem("Quest", itemId, count, player, player.getTarget());
 		if (item == null)
 		{
 			return;
@@ -3287,7 +3290,7 @@ public class Quest extends ManagedScript
 	 * @param attributeId
 	 * @param attributeLevel
 	 */
-	public void giveItems(L2PcInstance player, int itemId, long count, byte attributeId, int attributeLevel)
+	public static void giveItems(L2PcInstance player, int itemId, long count, byte attributeId, int attributeLevel)
 	{
 		if (count <= 0)
 		{
@@ -3295,8 +3298,7 @@ public class Quest extends ManagedScript
 		}
 		
 		// Add items to player's inventory
-		L2ItemInstance item = player.getInventory().addItem("Quest", itemId, count, player, player.getTarget());
-		
+		final L2ItemInstance item = player.getInventory().addItem("Quest", itemId, count, player, player.getTarget());
 		if (item == null)
 		{
 			return;
@@ -3344,7 +3346,7 @@ public class Quest extends ManagedScript
 	 * @param sound
 	 * @return
 	 */
-	public boolean dropQuestItems(L2PcInstance player, int itemId, int minCount, int maxCount, long neededCount, int dropChance, boolean sound)
+	public static boolean dropQuestItems(L2PcInstance player, int itemId, int minCount, int maxCount, long neededCount, int dropChance, boolean sound)
 	{
 		dropChance *= Config.RATE_QUEST_DROP / ((player.getParty() != null) ? player.getParty().getMemberCount() : 1);
 		long currentCount = getQuestItemsCount(player, itemId);
@@ -3415,10 +3417,10 @@ public class Quest extends ManagedScript
 	 * @param amount the amount to take
 	 * @return {@code true} if any items were taken, {@code false} otherwise
 	 */
-	public boolean takeItems(L2PcInstance player, int itemId, long amount)
+	public static boolean takeItems(L2PcInstance player, int itemId, long amount)
 	{
 		// Get object item from player's inventory list
-		L2ItemInstance item = player.getInventory().getItemByItemId(itemId);
+		final L2ItemInstance item = player.getInventory().getItemByItemId(itemId);
 		if (item == null)
 		{
 			return false;
@@ -3433,7 +3435,7 @@ public class Quest extends ManagedScript
 		// Destroy the quantity of items wanted
 		if (item.isEquipped())
 		{
-			L2ItemInstance[] unequiped = player.getInventory().unEquipItemInBodySlotAndRecord(item.getItem().getBodyPart());
+			final L2ItemInstance[] unequiped = player.getInventory().unEquipItemInBodySlotAndRecord(item.getItem().getBodyPart());
 			InventoryUpdate iu = new InventoryUpdate();
 			for (L2ItemInstance itm : unequiped)
 			{
@@ -3451,7 +3453,7 @@ public class Quest extends ManagedScript
 	 * @param holder
 	 * @return {@code true} if any items were taken, {@code false} otherwise
 	 */
-	protected boolean takeItems(L2PcInstance player, ItemHolder holder)
+	protected static boolean takeItems(L2PcInstance player, ItemHolder holder)
 	{
 		return takeItems(player, holder.getId(), holder.getCount());
 	}
@@ -3463,7 +3465,7 @@ public class Quest extends ManagedScript
 	 * @param itemIds a list or an array of Ids of the items to take
 	 * @return {@code true} if all items were taken, {@code false} otherwise
 	 */
-	public boolean takeItems(L2PcInstance player, int amount, int... itemIds)
+	public static boolean takeItems(L2PcInstance player, int amount, int... itemIds)
 	{
 		boolean check = true;
 		if (itemIds != null)
@@ -3490,7 +3492,7 @@ public class Quest extends ManagedScript
 	 * @param player the player whom to send the packet
 	 * @param sound the name of the sound to play
 	 */
-	public void playSound(L2PcInstance player, String sound)
+	public static void playSound(L2PcInstance player, String sound)
 	{
 		player.sendPacket(QuestSound.getSound(sound));
 	}
@@ -3500,7 +3502,7 @@ public class Quest extends ManagedScript
 	 * @param player the player whom to send the packet
 	 * @param sound the {@link QuestSound} object of the sound to play
 	 */
-	public void playSound(L2PcInstance player, QuestSound sound)
+	public static void playSound(L2PcInstance player, QuestSound sound)
 	{
 		player.sendPacket(sound.getPacket());
 	}
@@ -3511,7 +3513,7 @@ public class Quest extends ManagedScript
 	 * @param exp the amount of EXP to give to the player
 	 * @param sp the amount of SP to give to the player
 	 */
-	public void addExpAndSp(L2PcInstance player, long exp, int sp)
+	public static void addExpAndSp(L2PcInstance player, long exp, int sp)
 	{
 		player.addExpAndSp((long) player.calcStat(Stats.EXPSP_RATE, exp * Config.RATE_QUEST_REWARD_XP, null, null), (int) player.calcStat(Stats.EXPSP_RATE, sp * Config.RATE_QUEST_REWARD_SP, null, null));
 	}
@@ -3554,7 +3556,7 @@ public class Quest extends ManagedScript
 	 * @param slot the location in the player's inventory to check
 	 * @return the Id of the item equipped in the specified inventory slot or 0 if the slot is empty or item is {@code null}.
 	 */
-	public int getItemEquipped(L2PcInstance player, int slot)
+	public static int getItemEquipped(L2PcInstance player, int slot)
 	{
 		return player.getInventory().getPaperdollItemId(slot);
 	}
@@ -3562,7 +3564,7 @@ public class Quest extends ManagedScript
 	/**
 	 * @return the number of ticks from the {@link l2r.gameserver.GameTimeController}.
 	 */
-	public int getGameTicks()
+	public static int getGameTicks()
 	{
 		return GameTimeController.getInstance().getGameTicks();
 	}

@@ -616,7 +616,7 @@ public final class QuestState
 	 */
 	public long getQuestItemsCount(int itemId)
 	{
-		return getQuest().getQuestItemsCount(getPlayer(), itemId);
+		return Quest.getQuestItemsCount(getPlayer(), itemId);
 	}
 	
 	/**
@@ -625,7 +625,7 @@ public final class QuestState
 	 */
 	public boolean hasQuestItems(int itemId)
 	{
-		return getQuest().hasQuestItems(getPlayer(), itemId);
+		return Quest.hasQuestItems(getPlayer(), itemId);
 	}
 	
 	/**
@@ -634,7 +634,7 @@ public final class QuestState
 	 */
 	public boolean hasQuestItems(int... itemIds)
 	{
-		return getQuest().hasQuestItems(getPlayer(), itemIds);
+		return Quest.hasQuestItems(getPlayer(), itemIds);
 	}
 	
 	/**
@@ -644,7 +644,7 @@ public final class QuestState
 	 */
 	public int getEnchantLevel(int itemId)
 	{
-		return getQuest().getEnchantLevel(getPlayer(), itemId);
+		return Quest.getEnchantLevel(getPlayer(), itemId);
 	}
 	
 	/**
@@ -664,7 +664,7 @@ public final class QuestState
 	 */
 	public void rewardItems(int itemId, long count)
 	{
-		getQuest().rewardItems(getPlayer(), itemId, count);
+		Quest.rewardItems(getPlayer(), itemId, count);
 	}
 	
 	/**
@@ -684,12 +684,12 @@ public final class QuestState
 	
 	public void giveItems(int itemId, long count, int enchantlevel)
 	{
-		getQuest().giveItems(getPlayer(), itemId, count, enchantlevel);
+		Quest.giveItems(getPlayer(), itemId, count, enchantlevel);
 	}
 	
 	public void giveItems(int itemId, long count, byte attributeId, int attributeLevel)
 	{
-		getQuest().giveItems(getPlayer(), itemId, count, attributeId, attributeLevel);
+		Quest.giveItems(getPlayer(), itemId, count, attributeId, attributeLevel);
 	}
 	
 	/**
@@ -708,7 +708,7 @@ public final class QuestState
 	
 	public boolean dropQuestItems(int itemId, int minCount, int maxCount, long neededCount, int dropChance, boolean sound)
 	{
-		return getQuest().dropQuestItems(getPlayer(), itemId, minCount, maxCount, neededCount, dropChance, sound);
+		return Quest.dropQuestItems(getPlayer(), itemId, minCount, maxCount, neededCount, dropChance, sound);
 	}
 	
 	// TODO: More radar functions need to be added when the radar class is complete.
@@ -742,7 +742,7 @@ public final class QuestState
 	 */
 	public void takeItems(int itemId, long count)
 	{
-		getQuest().takeItems(getPlayer(), itemId, count);
+		Quest.takeItems(getPlayer(), itemId, count);
 	}
 	
 	/**
@@ -751,7 +751,7 @@ public final class QuestState
 	 */
 	public void playSound(String sound)
 	{
-		getQuest().playSound(getPlayer(), sound);
+		Quest.playSound(getPlayer(), sound);
 	}
 	
 	/**
@@ -760,7 +760,7 @@ public final class QuestState
 	 */
 	public void playSound(QuestSound sound)
 	{
-		getQuest().playSound(getPlayer(), sound);
+		Quest.playSound(getPlayer(), sound);
 	}
 	
 	/**
@@ -770,7 +770,7 @@ public final class QuestState
 	 */
 	public void addExpAndSp(int exp, int sp)
 	{
-		getQuest().addExpAndSp(getPlayer(), exp, sp);
+		Quest.addExpAndSp(getPlayer(), exp, sp);
 		PcCafePointsManager.getInstance().givePcCafePoint(getPlayer(), (long) (exp * Config.RATE_QUEST_REWARD_XP));
 	}
 	
@@ -785,16 +785,7 @@ public final class QuestState
 	 */
 	public int getItemEquipped(int loc)
 	{
-		return getQuest().getItemEquipped(getPlayer(), loc);
-	}
-	
-	/**
-	 * Return the number of ticks from the GameTimeController
-	 * @return int
-	 */
-	public int getGameTicks()
-	{
-		return getQuest().getGameTicks();
+		return Quest.getItemEquipped(getPlayer(), loc);
 	}
 	
 	/**
@@ -1002,7 +993,7 @@ public final class QuestState
 	 */
 	public L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, int despawnDelay, boolean isSummonSpawn)
 	{
-		return getQuest().addSpawn(npcId, x, y, z, heading, randomOffset, despawnDelay, isSummonSpawn);
+		return Quest.addSpawn(npcId, x, y, z, heading, randomOffset, despawnDelay, isSummonSpawn);
 	}
 	
 	/**
