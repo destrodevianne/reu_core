@@ -41,6 +41,7 @@ import l2r.gameserver.model.actor.knownlist.SummonKnownList;
 import l2r.gameserver.model.actor.stat.SummonStat;
 import l2r.gameserver.model.actor.status.SummonStatus;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.itemcontainer.PetInventory;
 import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Weapon;
@@ -317,7 +318,7 @@ public abstract class L2Summon extends L2Playable
 	{
 		if (isNoblesseBlessed())
 		{
-			stopNoblesseBlessing(null);
+			stopEffects(L2EffectType.NOBLESSE_BLESSING);
 			storeEffect(true);
 		}
 		else
