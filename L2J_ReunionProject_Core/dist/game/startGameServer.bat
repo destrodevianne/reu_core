@@ -5,7 +5,7 @@ color 0B
 echo Starting L2J Game Server.
 echo.
 
-java -version:1.7 -server -Dfile.encoding=UTF-8 -Xmx3G -Xbootclasspath/p:./../libs/l2ft.jar -cp ./../libs/*;l2reunion.jar l2r.gameserver.GameServer
+java -Djava.util.logging.manager=l2r.util.L2LogManager -Xmx3G -Xbootclasspath/p:./../libs/l2ft.jar -cp ./../libs/*;l2reunion.jar l2r.gameserver.GameServer
 
 REM NOTE: If you have a powerful machine, you could modify/add some extra parameters for performance, like:
 REM -Xms1536m
