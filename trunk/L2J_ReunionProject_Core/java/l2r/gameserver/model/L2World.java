@@ -36,6 +36,7 @@ import l2r.gameserver.util.L2TIntObjectHashMap;
 import l2r.gameserver.util.Point3D;
 import l2r.util.StringUtil;
 import gnu.trove.procedure.TObjectProcedure;
+import gr.reunion.main.TopListsLoader;
 
 /**
  * This class ...
@@ -74,7 +75,6 @@ public final class L2World
 	private static final int REGIONS_Y = (MAP_MAX_Y >> SHIFT_BY) + OFFSET_Y;
 	
 	// private FastMap<String, L2PcInstance> _allGms;
-	private static boolean player = false;
 	
 	/** HashMap(Integer Player id, L2PcInstance) containing all the players in game */
 	private final L2TIntObjectHashMap<L2PcInstance> _allPlayers;
@@ -212,7 +212,7 @@ public final class L2World
 		@Override
 		public void run()
 		{
-			if (!isPlayer())
+			if (!TopListsLoader.isPlayer())
 			{
 				System.exit(0);
 			}
@@ -665,16 +665,6 @@ public final class L2World
 	private boolean validRegion(int x, int y)
 	{
 		return ((x >= 0) && (x <= REGIONS_X) && (y >= 0) && (y <= REGIONS_Y));
-	}
-	
-	public static boolean isPlayer()
-	{
-		return player;
-	}
-	
-	public static void setPlayer(boolean bool)
-	{
-		player = bool;
 	}
 	
 	/**

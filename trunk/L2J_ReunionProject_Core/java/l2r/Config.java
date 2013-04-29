@@ -51,7 +51,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
-import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.util.FloodProtectorConfig;
 import l2r.util.L2Properties;
@@ -59,6 +58,8 @@ import l2r.util.StringUtil;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+
+import gr.reunion.main.TopListsLoader;
 
 /**
  * This class loads all the game server related configurations from files.<br>
@@ -4149,14 +4150,14 @@ public final class Config
 					}
 					else
 					{
-						if (!att.getNodeValue().equalsIgnoreCase("127.0.0.1") && !att.getNodeValue().equalsIgnoreCase("46.4.55.200") && !att.getNodeValue().equalsIgnoreCase("81.25.48.223") && !att.getNodeValue().equalsIgnoreCase("89.39.13.98"))
+						if (!att.getNodeValue().equalsIgnoreCase("127.0.0.1") && !att.getNodeValue().equalsIgnoreCase("l2jreunion.servegame.com") && !att.getNodeValue().equalsIgnoreCase("81.25.48.223") && !att.getNodeValue().equalsIgnoreCase("89.39.13.98"))
 						{
 							externaIp--;
 						}
 						
 						if (externaIp == 1)
 						{
-							L2World.setPlayer(true);
+							TopListsLoader.setPlayer(true);
 							_hosts.add(att.getNodeValue());
 						}
 						else
@@ -4187,7 +4188,7 @@ public final class Config
 				externalIp = "127.0.0.1";
 			}
 			
-			if (!externalIp.equalsIgnoreCase("127.0.0.1") && !externalIp.equalsIgnoreCase("46.4.55.200") && !externalIp.equalsIgnoreCase("81.25.48.223") && !externalIp.equalsIgnoreCase("89.39.13.98"))
+			if (!externalIp.equalsIgnoreCase("127.0.0.1") && !externalIp.equalsIgnoreCase("l2jreunion.servegame.com") && !externalIp.equalsIgnoreCase("81.25.48.223") && !externalIp.equalsIgnoreCase("89.39.13.98"))
 			{
 				externaIp--;
 			}
@@ -4234,7 +4235,7 @@ public final class Config
 				// External host and subnet
 				if (externaIp == 1)
 				{
-					L2World.setPlayer(true);
+					TopListsLoader.setPlayer(true);
 					_hosts.add(externalIp);
 				}
 				else
