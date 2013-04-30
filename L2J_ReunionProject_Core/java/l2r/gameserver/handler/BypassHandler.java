@@ -47,7 +47,6 @@ import l2r.gameserver.scripts.handlers.bypasshandlers.ReceivePremium;
 import l2r.gameserver.scripts.handlers.bypasshandlers.ReleaseAttribute;
 import l2r.gameserver.scripts.handlers.bypasshandlers.RemoveDeathPenalty;
 import l2r.gameserver.scripts.handlers.bypasshandlers.RentPet;
-import l2r.gameserver.scripts.handlers.bypasshandlers.RideWyvern;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Rift;
 import l2r.gameserver.scripts.handlers.bypasshandlers.SkillList;
 import l2r.gameserver.scripts.handlers.bypasshandlers.SupportBlessing;
@@ -93,7 +92,6 @@ public class BypassHandler implements IHandler<IBypassHandler, String>
 		registerHandler(new ReleaseAttribute());
 		registerHandler(new RemoveDeathPenalty());
 		registerHandler(new RentPet());
-		registerHandler(new RideWyvern());
 		registerHandler(new Rift());
 		registerHandler(new SkillList());
 		registerHandler(new SupportBlessing());
