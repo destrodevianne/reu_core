@@ -21,7 +21,6 @@ package l2r.gameserver.model;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import l2r.gameserver.handler.ActionHandler;
 import l2r.gameserver.handler.ActionShiftHandler;
 import l2r.gameserver.handler.IActionHandler;
@@ -162,7 +161,6 @@ public abstract class L2Object
 		L2TrainerInstance(L2NpcInstance),
 		L2TrainerHealersInstance(L2TrainerInstance),
 		L2VillageMasterInstance(L2NpcInstance),
-		L2WyvernManagerInstance(L2NpcInstance),
 		// Doormens
 		L2DoormenInstance(L2NpcInstance),
 		L2CastleDoormenInstance(L2DoormenInstance),
