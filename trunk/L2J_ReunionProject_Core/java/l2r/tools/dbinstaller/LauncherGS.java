@@ -33,7 +33,7 @@ public class LauncherGS
 {
 	public static void main(String[] args)
 	{
-		String mode = "l2jgs";
+		String mode = "l2jreuniongs";
 		String dir = "../sql/game/";
 		String cleanUp = "gs_cleanup.sql";
 		

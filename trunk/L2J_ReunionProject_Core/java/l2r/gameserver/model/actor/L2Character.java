@@ -3424,34 +3424,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	}
 	
 	/**
-	 * Stop a specified/all Confused abnormal L2Effect.<br>
-	 * <B><U>Actions</U>:</B>
-	 * <ul>
-	 * <li>Delete a specified/all (if effect=null) Confused abnormal L2Effect from L2Character and update client magic icon</li>
-	 * <li>Set the abnormal effect flag _confused to False</li>
-	 * <li>Notify the L2Character AI</li>
-	 * <li>Send Server->Client UserInfo/CharInfo packet</li>
-	 * </ul>
-	 * @param effect
-	 */
-	public final void stopConfused(L2Effect effect)
-	{
-		if (effect == null)
-		{
-			stopEffects(L2EffectType.CONFUSION);
-		}
-		else
-		{
-			_effectList.remove(effect);
-		}
-		if (!isPlayer())
-		{
-			getAI().notifyEvent(CtrlEvent.EVT_THINK);
-		}
-		updateAbnormalEffect();
-	}
-	
-	/**
 	 * Stop and remove the L2Effects corresponding to the L2Skill Identifier and update client magic icon.<br>
 	 * <B><U>Concept</U>:</B><br>
 	 * All active skills effects in progress on the L2Character are identified in ConcurrentHashMap(Integer,L2Effect) <B>_effects</B>.<br>
@@ -3655,19 +3627,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			getAI().notifyEvent(CtrlEvent.EVT_THINK);
 		}
 		updateAbnormalEffect();
-	}
-	
-	public final void stopParalyze(boolean removeEffects)
-	{
-		if (removeEffects)
-		{
-			stopEffects(L2EffectType.PARALYZE);
-		}
-		
-		if (!isPlayer())
-		{
-			getAI().notifyEvent(CtrlEvent.EVT_THINK);
-		}
 	}
 	
 	/**
