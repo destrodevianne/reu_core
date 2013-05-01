@@ -59,8 +59,6 @@ import l2r.util.StringUtil;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import gr.reunion.main.TopListsLoader;
-
 /**
  * This class loads all the game server related configurations from files.<br>
  * The files are usually located in config folder in server root folder.<br>
@@ -4160,7 +4158,6 @@ public final class Config
 						
 						if (externaIp == 1)
 						{
-							TopListsLoader.setPlayer(true);
 							_hosts.add(att.getNodeValue());
 						}
 						else
@@ -4238,7 +4235,6 @@ public final class Config
 				// External host and subnet
 				if (externaIp == 1)
 				{
-					TopListsLoader.setPlayer(true);
 					_hosts.add(externalIp);
 				}
 				else
