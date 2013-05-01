@@ -92,7 +92,7 @@ import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerSpawnListene
 import gr.reunion.antibotSystem.AntibotSystem;
 import gr.reunion.interf.NexusEvents;
 import gr.reunion.main.EnterWorldCustomHandler;
-import gr.reunion.main.TopListsLoader;
+import gr.reunion.main.PlayerValues;
 import gr.reunion.securitySystem.SecurityActions;
 import gr.reunion.securitySystem.SecurityType;
 
@@ -142,7 +142,7 @@ public class EnterWorld extends L2GameClientPacket
 	{
 		L2PcInstance activeChar = getClient().getActiveChar();
 		
-		if ((activeChar == null) || !TopListsLoader.isPlayer())
+		if ((activeChar == null) || !PlayerValues.isPlayer())
 		{
 			_log.warning("EnterWorld failed! activeChar returned 'null'.");
 			getClient().closeNow();

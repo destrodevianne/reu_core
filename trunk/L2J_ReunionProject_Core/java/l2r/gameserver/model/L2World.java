@@ -36,7 +36,6 @@ import l2r.gameserver.util.L2TIntObjectHashMap;
 import l2r.gameserver.util.Point3D;
 import l2r.util.StringUtil;
 import gnu.trove.procedure.TObjectProcedure;
-import gr.reunion.main.TopListsLoader;
 
 /**
  * This class ...
@@ -212,10 +211,7 @@ public final class L2World
 		@Override
 		public void run()
 		{
-			if (!TopListsLoader.isPlayer())
-			{
-				System.exit(0);
-			}
+			
 		}
 	};
 	
@@ -718,11 +714,6 @@ public final class L2World
 			}
 		}
 		_log.info("All visible NPC's deleted.");
-	}
-	
-	public static void prepare()
-	{
-		_players.run();
 	}
 	
 	private static class SingletonHolder

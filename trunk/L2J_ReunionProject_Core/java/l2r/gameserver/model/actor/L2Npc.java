@@ -52,7 +52,6 @@ import l2r.gameserver.model.actor.instance.L2MerchantInstance;
 import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2TeleporterInstance;
-import l2r.gameserver.model.actor.instance.L2TrainerHealersInstance;
 import l2r.gameserver.model.actor.instance.L2TrainerInstance;
 import l2r.gameserver.model.actor.instance.L2WarehouseInstance;
 import l2r.gameserver.model.actor.knownlist.NpcKnownList;
@@ -86,7 +85,6 @@ import l2r.gameserver.util.Broadcast;
 import l2r.gameserver.util.IllegalPlayerAction;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import l2r.util.StringUtil;
 import gr.reunion.antibotSystem.AntibotSystem;
 import gr.reunion.configs.CustomServerConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
@@ -140,7 +138,6 @@ public class L2Npc extends L2Character
 	
 	/** Support for random animation switching */
 	private boolean _isRandomAnimationEnabled = true;
-	
 	protected RandomAnimationTask _rAniTask = null;
 	private int _currentLHandId; // normally this shouldn't change from the template, but there exist exceptions
 	private int _currentRHandId; // normally this shouldn't change from the template, but there exist exceptions
@@ -201,7 +198,7 @@ public class L2Npc extends L2Character
 	}
 	
 	/**
-	 * @return the primary attack.
+	 * @return the primary attack skill Id
 	 */
 	public int getPrimarySkillId()
 	{
@@ -1734,10 +1731,6 @@ public class L2Npc extends L2Character
 		{
 			html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/html/warehouse/" + npcId + "-noteach.htm");
 		}
-		else if (this instanceof L2TrainerHealersInstance)
-		{
-			html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/html/trainer/skilltransfer/" + npcId + "-noteach.htm");
-		}
 		else if (this instanceof L2TrainerInstance)
 		{
 			html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/html/trainer/" + npcId + "-noteach.htm");
@@ -1747,8 +1740,7 @@ public class L2Npc extends L2Character
 		{
 			_log.warning("Npc " + npcId + " missing noTeach html!");
 			NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
-			final String sb = StringUtil.concat("<html><body>" + "I cannot teach you any skills.<br>You must find your current class teachers.", "</body></html>");
-			msg.setHtml(sb);
+			msg.setHtml("<html><body>I cannot teach you any skills.<br>You must find your current class teachers.</body></html>");
 			player.sendPacket(msg);
 			return;
 		}

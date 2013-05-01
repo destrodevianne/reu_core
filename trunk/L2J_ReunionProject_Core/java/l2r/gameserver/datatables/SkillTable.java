@@ -27,7 +27,6 @@ import l2r.Config;
 import l2r.gameserver.engines.DocumentEngine;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.skills.L2Skill;
-
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntIntHashMap;
 
@@ -180,7 +179,6 @@ public class SkillTable
 		FIREWORK(5965, 1),
 		LARGE_FIREWORK(2025, 1),
 		BLESSING_OF_PROTECTION(5182, 1),
-		ARENA_CP_RECOVERY(4380, 1),
 		VOID_BURST(3630, 1),
 		VOID_FLOW(3631, 1),
 		THE_VICTOR_OF_WAR(5074, 1),

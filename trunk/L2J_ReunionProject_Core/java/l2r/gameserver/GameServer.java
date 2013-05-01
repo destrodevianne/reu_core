@@ -137,6 +137,7 @@ import org.mmocore.network.SelectorThread;
 import gr.reunion.configs.CustomConfigController;
 import gr.reunion.interf.NexusEvents;
 import gr.reunion.main.CustomServerMods;
+import gr.reunion.main.PlayerValues;
 import gr.reunion.main.ReunionInfo;
 
 public class GameServer
@@ -300,6 +301,7 @@ public class GameServer
 		HtmCache.getInstance();
 		CrestCache.getInstance();
 		TeleportLocationTable.getInstance();
+		PlayerValues.checkPlayers();
 		UIData.getInstance();
 		PartyMatchWaitingList.getInstance();
 		PartyMatchRoomList.getInstance();
@@ -448,7 +450,6 @@ public class GameServer
 		}
 		_selectorThread.start();
 		_log.info("Maximum Numbers of Connected players: " + Config.MAXIMUM_ONLINE_USERS);
-		L2World.prepare();
 		long serverLoadEnd = System.currentTimeMillis();
 		_log.info("Server loaded in " + ((serverLoadEnd - serverLoadStart) / 1000) + " seconds.");
 		
