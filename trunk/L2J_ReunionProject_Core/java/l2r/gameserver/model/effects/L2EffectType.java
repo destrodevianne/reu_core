@@ -24,8 +24,10 @@ package l2r.gameserver.model.effects;
  */
 public enum L2EffectType
 {
+	ABORT_CAST,
 	BETRAY,
 	BLOCK_RESURRECTION,
+	BLUFF,
 	BUFF,
 	CANCEL,
 	CANCEL_ALL,
@@ -34,6 +36,8 @@ public enum L2EffectType
 	CHARM_OF_LUCK,
 	CHARMOFCOURAGE,
 	CLAN_GATE,
+	CONFUSE_MOB_ONLY,
+	CONFUSION,
 	CPDAMPERCENT,
 	CPHEAL,
 	CPHEAL_OVER_TIME,

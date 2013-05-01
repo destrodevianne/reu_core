@@ -3492,7 +3492,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		else if (_waitTypeSitting && !isInStoreMode() && !isAlikeDead())
 		{
-			if (getEffectList().isAffected(EffectFlag.RELAXING))
+			if (_effects.isAffected(EffectFlag.RELAXING))
 			{
 				stopEffects(L2EffectType.RELAXING);
 			}
@@ -8667,7 +8667,7 @@ public final class L2PcInstance extends L2Playable
 					
 					storedSkills.add(skill.getReuseHashCode());
 					
-					if (effect.isInUse() && !skill.isToggle())
+					if (effect.getInUse() && !skill.isToggle())
 					{
 						statement.setInt(1, getObjectId());
 						statement.setInt(2, skill.getId());
@@ -9015,24 +9015,22 @@ public final class L2PcInstance extends L2Playable
 					 */
 					if (skill.hasEffects())
 					{
-						final Env env = new Env();
+						Env env = new Env();
 						env.setCharacter(this);
 						env.setTarget(this);
 						env.setSkill(skill);
-						final L2Effect[] effects = new L2Effect[skill.getEffectTemplates().size()];
-						int index = 0;
+						
+						L2Effect ef;
 						for (EffectTemplate et : skill.getEffectTemplates())
 						{
-							L2Effect effect = et.getEffect(env);
-							if (effect != null)
+							ef = et.getEffect(env);
+							if (ef != null)
 							{
-								effect.setCount(effectCount);
-								effect.setFirstTime(effectCurTime);
-								effect.scheduleEffect();
-								effects[index++] = effect;
+								ef.setCount(effectCount);
+								ef.setFirstTime(effectCurTime);
+								ef.scheduleEffect();
 							}
 						}
-						getEffectList().add(effects);
 					}
 				}
 			}
@@ -10434,7 +10432,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public final void stopAllEffectsNotStayOnSubclassChange()
 	{
-		for (L2Effect effect : getEffectList().getAllEffects())
+		for (L2Effect effect : _effects.getAllEffects())
 		{
 			if ((effect != null) && !effect.getSkill().isStayOnSubclassChange())
 			{
@@ -10449,7 +10447,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public final void stopAllToggles()
 	{
-		getEffectList().stopAllToggles();
+		_effects.stopAllToggles();
 	}
 	
 	public final void stopCubics()

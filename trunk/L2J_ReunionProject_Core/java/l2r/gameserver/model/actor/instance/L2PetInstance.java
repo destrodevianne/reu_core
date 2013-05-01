@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
@@ -1103,7 +1102,7 @@ public class L2PetInstance extends L2Summon
 					
 					storedSkills.add(skill.getReuseHashCode());
 					
-					if (effect.isInUse() && !skill.isToggle())
+					if (effect.getInUse() && !skill.isToggle())
 					{
 						ps2.setInt(1, getControlObjectId());
 						ps2.setInt(2, skill.getId());
@@ -1183,26 +1182,20 @@ public class L2PetInstance extends L2Summon
 			{
 				if ((se != null) && se.getSkill().hasEffects())
 				{
-					if (se.getSkill().hasEffects())
+					Env env = new Env();
+					env.setCharacter(this);
+					env.setTarget(this);
+					env.setSkill(se.getSkill());
+					L2Effect ef;
+					for (EffectTemplate et : se.getSkill().getEffectTemplates())
 					{
-						final Env env = new Env();
-						env.setCharacter(this);
-						env.setTarget(this);
-						env.setSkill(se.getSkill());
-						final L2Effect[] effects = new L2Effect[se.getSkill().getEffectTemplates().size()];
-						int index = 0;
-						for (EffectTemplate et : se.getSkill().getEffectTemplates())
+						ef = et.getEffect(env);
+						if (ef != null)
 						{
-							L2Effect effect = et.getEffect(env);
-							if (effect != null)
-							{
-								effect.setCount(se.getEffectCount());
-								effect.setFirstTime(se.getEffectCurTime());
-								effect.scheduleEffect();
-								effects[index++] = effect;
-							}
+							ef.setCount(se.getEffectCount());
+							ef.setFirstTime(se.getEffectCurTime());
+							ef.scheduleEffect();
 						}
-						getEffectList().add(effects);
 					}
 				}
 			}

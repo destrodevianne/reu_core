@@ -19,7 +19,6 @@
 package l2r.gameserver.model.effects;
 
 /**
- * Effect state enum.
  * @author Zoey76
  */
 public enum EffectState
