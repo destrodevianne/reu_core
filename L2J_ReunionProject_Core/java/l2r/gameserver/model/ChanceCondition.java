@@ -30,8 +30,7 @@ import l2r.util.Rnd;
  */
 public final class ChanceCondition
 {
-	private static final Logger _log = Logger.getLogger(ChanceCondition.class.getName());
-	
+	protected static final Logger _log = Logger.getLogger(ChanceCondition.class.getName());
 	public static final int EVT_HIT = 1;
 	public static final int EVT_CRIT = 2;
 	public static final int EVT_CAST = 4;

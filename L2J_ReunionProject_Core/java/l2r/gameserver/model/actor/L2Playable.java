@@ -42,7 +42,6 @@ import l2r.gameserver.model.skills.L2Skill;
 public abstract class L2Playable extends L2Character
 {
 	private L2Character _lockedTarget = null;
-	private L2PcInstance transferDmgTo = null;
 	
 	/**
 	 * Constructor of L2Playable.<br>
@@ -270,16 +269,17 @@ public abstract class L2Playable extends L2Character
 		return true;
 	}
 	
-	// Support for Noblesse Blessing skill, where buffs are retained after resurrect
+	// Support for Noblesse Blessing skill, where buffs are retained
+	// after resurrect
 	public final boolean isNoblesseBlessed()
 	{
-		return isAffected(EffectFlag.NOBLESS_BLESSING);
+		return _effects.isAffected(EffectFlag.NOBLESS_BLESSING);
 	}
 	
 	// Support for Soul of the Phoenix and Salvation skills
 	public final boolean isPhoenixBlessed()
 	{
-		return isAffected(EffectFlag.PHOENIX_BLESSING);
+		return _effects.isAffected(EffectFlag.PHOENIX_BLESSING);
 	}
 	
 	/**
@@ -287,7 +287,7 @@ public abstract class L2Playable extends L2Character
 	 */
 	public boolean isSilentMoving()
 	{
-		return isAffected(EffectFlag.SILENT_MOVE);
+		return _effects.isAffected(EffectFlag.SILENT_MOVE);
 	}
 	
 	/**
@@ -296,7 +296,7 @@ public abstract class L2Playable extends L2Character
 	 */
 	public final boolean isProtectionBlessingAffected()
 	{
-		return isAffected(EffectFlag.PROTECTION_BLESSING);
+		return _effects.isAffected(EffectFlag.PROTECTION_BLESSING);
 	}
 	
 	/**
@@ -305,13 +305,13 @@ public abstract class L2Playable extends L2Character
 	 */
 	public final boolean isCharmOfLuckAffected()
 	{
-		return isAffected(EffectFlag.CHARM_OF_LUCK);
+		return _effects.isAffected(EffectFlag.CHARM_OF_LUCK);
 	}
 	
 	@Override
 	public void updateEffectIcons(boolean partyOnly)
 	{
-		getEffectList().updateEffectIcons(partyOnly);
+		_effects.updateEffectIcons(partyOnly);
 	}
 	
 	public boolean isLockedTarget()
@@ -328,6 +328,8 @@ public abstract class L2Playable extends L2Character
 	{
 		_lockedTarget = cha;
 	}
+	
+	L2PcInstance transferDmgTo;
 	
 	public void setTransferDamageTo(L2PcInstance val)
 	{

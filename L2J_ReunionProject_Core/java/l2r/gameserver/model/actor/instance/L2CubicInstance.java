@@ -561,7 +561,9 @@ public final class L2CubicInstance
 				
 				if ((_id >= SMART_CUBIC_EVATEMPLAR) && (_id <= SMART_CUBIC_SPECTRALMASTER))
 				{
-					for (L2Effect e : _owner.getAllEffects())
+					L2Effect[] effects = _owner.getAllEffects();
+					
+					for (L2Effect e : effects)
 					{
 						if ((e != null) && e.getSkill().isDebuff() && e.getSkill().canBeDispeled())
 						{
@@ -769,7 +771,7 @@ public final class L2CubicInstance
 					target.stopSkillEffects(skill.getId());
 					if (target.getFirstEffect(skill) != null)
 					{
-						target.getEffectList().remove(target.getFirstEffect(skill));
+						target.removeEffect(target.getFirstEffect(skill));
 					}
 					if (Formulas.calcCubicSkillSuccess(activeCubic, target, skill, shld))
 					{

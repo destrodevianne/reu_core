@@ -21,7 +21,6 @@ package l2r.gameserver.network.clientpackets;
 import l2r.Config;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.skills.AbnormalType;
 import l2r.gameserver.model.skills.L2Skill;
 
 /**
@@ -64,7 +63,7 @@ public class RequestDispel extends L2GameClientPacket
 		{
 			return;
 		}
-		if (skill.getAbnormalType() == AbnormalType.TRANSFORM)
+		if (skill.getTransformId() > 0)
 		{
 			return;
 		}
