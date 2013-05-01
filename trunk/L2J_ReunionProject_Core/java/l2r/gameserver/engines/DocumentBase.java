@@ -328,10 +328,10 @@ public abstract class DocumentBase
 					{
 						abnormalTime = Config.SKILL_DURATION_LIST.get(((L2Skill) template).getId());
 					}
-					// if (Config.DEBUG)
-					// {
-					_log.info("*** Skill " + ((L2Skill) template).getName() + " (" + ((L2Skill) template).getLevel() + ") changed duration to " + abnormalTime + " seconds.");
-					// }
+					if (Config.DEBUG)
+					{
+						_log.info("*** Skill " + ((L2Skill) template).getName() + " (" + ((L2Skill) template).getLevel() + ") changed duration to " + abnormalTime + " seconds.");
+					}
 				}
 			}
 		}
