@@ -70,15 +70,15 @@ public final class L2ScriptEngineManager
 	private static final String[] SCRIPT_PKGS =
 	{
 		"ai",
-		"clanhallsiege",
+		"conquerablehalls",
 		"custom",
-		"quests",
 		"events",
-		"teleports",
-		"village_master",
-		"instances",
 		"hellbound",
-		"vehicles"
+		"instances",
+		"quests",
+		"transformations",
+		"vehicles",
+		"village_master"
 	};
 	
 	public static L2ScriptEngineManager getInstance()
