@@ -324,13 +324,10 @@ public class GameServer
 		printSection("Leaderboards");
 		CustomServerMods.getInstance().checkLeaderboardsMod();
 		
-		printSection("Transformations");
-		TransformHandler.getInstance();
-		TransformationManager.getInstance();
-		TransformationManager.getInstance().report();
-		
 		printSection("Scripts");
 		QuestManager.getInstance();
+		TransformHandler.getInstance();
+		TransformationManager.getInstance();
 		BoatManager.getInstance();
 		AirShipManager.getInstance();
 		GraciaSeedsManager.getInstance();
@@ -343,6 +340,7 @@ public class GameServer
 		L2ScriptEngineManager.getInstance().executeScriptList();
 		
 		QuestManager.getInstance().report();
+		TransformationManager.getInstance().report();
 		
 		if (Config.SAVE_DROPPED_ITEM)
 		{
