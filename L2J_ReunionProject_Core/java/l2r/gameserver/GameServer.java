@@ -76,6 +76,7 @@ import l2r.gameserver.datatables.TeleportLocationTable;
 import l2r.gameserver.datatables.UIData;
 import l2r.gameserver.geoeditorcon.GeoEditorListener;
 import l2r.gameserver.handler.EffectHandler;
+import l2r.gameserver.handler.TransformHandler;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.AirShipManager;
 import l2r.gameserver.instancemanager.AntiFeedManager;
@@ -323,9 +324,13 @@ public class GameServer
 		printSection("Leaderboards");
 		CustomServerMods.getInstance().checkLeaderboardsMod();
 		
+		printSection("Transformations");
+		TransformHandler.getInstance();
+		TransformationManager.getInstance();
+		TransformationManager.getInstance().report();
+		
 		printSection("Scripts");
 		QuestManager.getInstance();
-		TransformationManager.getInstance();
 		BoatManager.getInstance();
 		AirShipManager.getInstance();
 		GraciaSeedsManager.getInstance();
@@ -338,7 +343,6 @@ public class GameServer
 		L2ScriptEngineManager.getInstance().executeScriptList();
 		
 		QuestManager.getInstance().report();
-		TransformationManager.getInstance().report();
 		
 		if (Config.SAVE_DROPPED_ITEM)
 		{
