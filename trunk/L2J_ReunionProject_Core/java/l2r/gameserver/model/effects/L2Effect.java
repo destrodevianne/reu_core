@@ -115,7 +115,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 		}
 	}
 	
-	private ScheduledFuture<?> _currentFuture;
+	private volatile ScheduledFuture<?> _currentFuture;
 	
 	/** The Identifier of the stack group */
 	private final String _abnormalType;
@@ -331,7 +331,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 		return _lambda.calc(env);
 	}
 	
-	private final synchronized void startEffectTask()
+	private final void startEffectTask()
 	{
 		if (_abnormalTime > 0)
 		{
@@ -387,7 +387,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	 * <li>Stop and remove L2Effect from L2Character and update client magic icon</li>
 	 * </ul>
 	 */
-	public final synchronized void stopEffectTask()
+	public final void stopEffectTask()
 	{
 		if (_currentFuture != null)
 		{
