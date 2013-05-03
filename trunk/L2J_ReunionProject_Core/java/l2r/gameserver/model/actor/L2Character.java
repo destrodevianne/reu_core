@@ -7721,18 +7721,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		abortAttack();
 	}
 	
-	public final void stopPhysicalAttackMuted(L2Effect effect)
-	{
-		if (effect == null)
-		{
-			stopEffects(L2EffectType.PHYSICAL_ATTACK_MUTE);
-		}
-		else
-		{
-			removeEffect(effect);
-		}
-	}
-	
 	public void disableCoreAI(boolean val)
 	{
 		_AIdisabled = val;
