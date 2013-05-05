@@ -303,12 +303,14 @@ import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 import l2r.util.L2FastList;
 import l2r.util.Rnd;
+import pvpRewardSystem.pvpRewardHandler;
 import gnu.trove.list.array.TIntArrayList;
 import gr.reunion.achievementSystem.AchievementsManager;
 import gr.reunion.configs.AntibotConfigs;
 import gr.reunion.configs.CustomServerConfigs;
 import gr.reunion.configs.LeaderboardsConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
+import gr.reunion.configs.PvpRewardSystemConfigs;
 import gr.reunion.datatables.AdventTable;
 import gr.reunion.datatables.CustomTable;
 import gr.reunion.interf.NexusEvents;
@@ -6436,6 +6438,14 @@ public final class L2PcInstance extends L2Playable
 				{
 					spreeKills++;
 					SpreeHandler.getInstance().spreeSystem(this, spreeKills);
+				}
+				
+				if (PvpRewardSystemConfigs.ENABLE_PVP_REWARD_SYSTEM)
+				{
+					if (target.isPlayer())
+					{
+						pvpRewardHandler.pvpRewardSystem(this, target.getActingPlayer());
+					}
 				}
 				
 				// Add karma to attacker and increase its PK counter
