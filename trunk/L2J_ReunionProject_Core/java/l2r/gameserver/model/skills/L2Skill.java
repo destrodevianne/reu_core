@@ -79,6 +79,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	public static final int SKILL_NPC_RACE = 4416;
 	public static final int SKILL_ONYX_BEAST_TRANSFORMATION = 617;
 	
+	public static final int SKILL_SOUL_MASTERY = 467;
 	public static final boolean geoEnabled = Config.GEODATA > 0;
 	
 	// conditional values

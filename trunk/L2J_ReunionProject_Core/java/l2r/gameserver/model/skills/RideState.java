@@ -16,47 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.skills.targets;
+package l2r.gameserver.model.skills;
 
 /**
+ * Ride state enumerated.
  * @author Zoey76
  */
-public enum L2TargetType
+public enum RideState
 {
-	AREA,
-	AREA_CORPSE_MOB,
-	AREA_FRIENDLY,
-	AREA_SUMMON,
-	AREA_UNDEAD,
-	AURA,
-	AURA_CORPSE_MOB,
-	BEHIND_AREA,
-	BEHIND_AURA,
-	CLAN,
-	CLAN_MEMBER,
-	CORPSE,
-	CORPSE_CLAN,
-	CORPSE_MOB,
-	CORPSE_PET,
-	CORPSE_PLAYER,
-	ENEMY_SUMMON,
-	FLAGPOLE,
-	FRONT_AREA,
-	FRONT_AURA,
-	GROUND,
-	HOLY,
+	/** Riding nothing. */
 	NONE,
-	ONE,
-	OWNER_PET,
-	PARTY,
-	PARTY_CLAN,
-	PARTY_MEMBER,
-	PARTY_NOTME,
-	PARTY_OTHER,
-	PET,
-	SELF,
-	SERVITOR,
-	SUMMON,
-	UNDEAD,
-	UNLOCKABLE
+	/** Riding a strider. */
+	STRIDER,
+	/** Riding a wolf. */
+	WOLF,
+	/** Riding a wyvern. */
+	WYVERN,
 }
