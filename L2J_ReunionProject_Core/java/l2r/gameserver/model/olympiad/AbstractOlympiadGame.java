@@ -35,7 +35,6 @@ import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
@@ -46,7 +45,6 @@ import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-
 import gr.reunion.interf.NexusEvents;
 
 /**
@@ -281,7 +279,7 @@ public abstract class AbstractOlympiadGame
 				summon.abortAttack();
 				summon.abortCast();
 				
-				if (summon instanceof L2PetInstance)
+				if (summon.isPet())
 				{
 					summon.unSummon(player);
 				}

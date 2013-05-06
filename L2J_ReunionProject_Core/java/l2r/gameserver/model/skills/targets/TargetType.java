@@ -19,44 +19,45 @@
 package l2r.gameserver.model.skills.targets;
 
 /**
+ * Target type enumerated.
  * @author Zoey76
  */
-public enum L2TargetType
+public enum TargetType
 {
-	AREA,
-	AREA_CORPSE_MOB,
-	AREA_FRIENDLY,
-	AREA_SUMMON,
-	AREA_UNDEAD,
-	AURA,
-	AURA_CORPSE_MOB,
-	BEHIND_AREA,
-	BEHIND_AURA,
-	CLAN,
-	CLAN_MEMBER,
-	CORPSE,
-	CORPSE_CLAN,
-	CORPSE_MOB,
-	CORPSE_PET,
-	CORPSE_PLAYER,
-	ENEMY_SUMMON,
-	FLAGPOLE,
-	FRONT_AREA,
-	FRONT_AURA,
+	/** Advance Head Quarters (Outposts). */
+	ADVANCE_BASE,
+	/** Enemies in high terrain or protected by castle walls and doors. */
+	ARTILLERY,
+	/** Doors or treasure chests. */
+	DOOR_TREASURE,
+	/** Any enemies (included allies). */
+	ENEMY,
+	/** Friendly. */
+	ENEMY_NOT,
+	/** Only enemies (not included allies). */
+	ENEMY_ONLY,
+	/** Fortress's Flagpole. */
+	FORTRESS_FLAGPOLE,
+	/** Ground. */
 	GROUND,
-	HOLY,
+	/** Holy Artifacts from sieges. */
+	HOLYTHING,
+	/** Items. */
+	ITEM,
+	/** Nothing. */
 	NONE,
-	ONE,
-	OWNER_PET,
-	PARTY,
-	PARTY_CLAN,
-	PARTY_MEMBER,
-	PARTY_NOTME,
-	PARTY_OTHER,
-	PET,
+	/** NPC corpses. */
+	NPC_BODY,
+	/** Others, except caster. */
+	OTHERS,
+	/** Player corpses. */
+	PC_BODY,
+	/** Self. */
 	SELF,
-	SERVITOR,
+	/** Servitor, not pet. */
 	SUMMON,
-	UNDEAD,
-	UNLOCKABLE
+	/** Anything targetable. */
+	TARGET,
+	/** Wyverns. */
+	WYVERN_TARGET;
 }

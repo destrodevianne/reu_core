@@ -1712,6 +1712,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				break;
 			case SELF:
 			case PET:
+			case SERVITOR:
 			case SUMMON:
 			case OWNER_PET:
 			case PARTY:
@@ -2770,9 +2771,25 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	/**
 	 * @return {@code true} if the character has a summon, {@code false} otherwise
 	 */
-	public boolean hasSummon()
+	public final boolean hasSummon()
 	{
 		return getSummon() != null;
+	}
+	
+	/**
+	 * @return {@code true} if the character has a pet, {@code false} otherwise
+	 */
+	public final boolean hasPet()
+	{
+		return hasSummon() && getSummon().isPet();
+	}
+	
+	/**
+	 * @return {@code true} if the character has a servitor, {@code false} otherwise
+	 */
+	public final boolean hasServitor()
+	{
+		return hasSummon() && getSummon().isServitor();
 	}
 	
 	public final boolean isRooted()
