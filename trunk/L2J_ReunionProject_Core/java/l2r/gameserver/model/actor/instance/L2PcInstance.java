@@ -303,7 +303,6 @@ import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 import l2r.util.L2FastList;
 import l2r.util.Rnd;
-import pvpRewardSystem.pvpRewardHandler;
 import gnu.trove.list.array.TIntArrayList;
 import gr.reunion.achievementSystem.AchievementsManager;
 import gr.reunion.configs.AntibotConfigs;
@@ -318,6 +317,7 @@ import gr.reunion.interf.PlayerEventInfo;
 import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
 import gr.reunion.main.NamePrefix;
+import gr.reunion.pvpRewardSystem.pvpRewardHandler;
 import gr.reunion.spreeSystem.SpreeHandler;
 
 /**
@@ -17797,5 +17797,17 @@ public final class L2PcInstance extends L2Playable
 	{
 		setPrivateStoreType(0);
 		isInCraftMode(false);
+	}
+	
+	private final FastList<L2Effect> removedBuffs = new FastList<>();
+	
+	public FastList<L2Effect> getRemovedBuffs()
+	{
+		return removedBuffs;
+	}
+	
+	public void addRemovedBuff(L2Effect eff)
+	{
+		removedBuffs.add(eff);
 	}
 }
