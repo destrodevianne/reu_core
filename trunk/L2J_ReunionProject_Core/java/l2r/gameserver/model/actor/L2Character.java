@@ -1225,7 +1225,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			crit1 = Formulas.calcCrit(getStat().getCriticalHit(target, null), false, target);
 			
 			// Calculate physical damages
-			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, false, attack.soulshot);
+			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, false, attack.hasSoulshot());
 			
 			// Bows Ranged Damage Formula (Damage gradually decreases when 60% or lower than full hit range, and increases when 60% or higher).
 			// full hit range is 500 which is the base bow range, and the 60% of this is 800.
@@ -1244,13 +1244,13 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// Create a new hit task with Medium priority
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk);
+		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk);
 		
 		// Calculate and set the disable delay of the bow in function of the Attack Speed
 		_disableBowAttackEndTime = ((sAtk + reuse) / GameTimeController.MILLIS_IN_TICK) + GameTimeController.getInstance().getGameTicks();
 		
 		// Add this hit to the Server-Client packet Attack
-		attack.hit(attack.createHit(target, damage1, miss1, crit1, shld1));
+		attack.addHit(target, damage1, miss1, crit1, shld1);
 		
 		// Return true if hit isn't missed
 		return !miss1;
@@ -1299,7 +1299,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			crit1 = Formulas.calcCrit(getStat().getCriticalHit(target, null), false, target);
 			
 			// Calculate physical damages
-			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, false, attack.soulshot);
+			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, false, attack.hasSoulshot());
 		}
 		
 		// Check if the L2Character is a L2PcInstance
@@ -1314,13 +1314,13 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// Create a new hit task with Medium priority
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk);
+		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk);
 		
 		// Calculate and set the disable delay of the bow in function of the Attack Speed
 		_disableCrossBowAttackEndTime = ((sAtk + reuse) / GameTimeController.MILLIS_IN_TICK) + GameTimeController.getInstance().getGameTicks();
 		
 		// Add this hit to the Server-Client packet Attack
-		attack.hit(attack.createHit(target, damage1, miss1, crit1, shld1));
+		attack.addHit(target, damage1, miss1, crit1, shld1);
 		
 		// Return true if hit isn't missed
 		return !miss1;
@@ -1365,7 +1365,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			crit1 = Formulas.calcCrit(getStat().getCriticalHit(target, null), false, target);
 			
 			// Calculate physical damages of hit 1
-			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, true, attack.soulshot);
+			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, true, attack.hasSoulshot());
 			damage1 /= 2;
 		}
 		
@@ -1379,18 +1379,19 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			crit2 = Formulas.calcCrit(getStat().getCriticalHit(target, null), false, target);
 			
 			// Calculate physical damages of hit 2
-			damage2 = (int) Formulas.calcPhysDam(this, target, null, shld2, crit2, true, attack.soulshot);
+			damage2 = (int) Formulas.calcPhysDam(this, target, null, shld2, crit2, true, attack.hasSoulshot());
 			damage2 /= 2;
 		}
 		
 		// Create a new hit task with Medium priority for hit 1
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk / 2);
+		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk / 2);
 		
 		// Create a new hit task with Medium priority for hit 2 with a higher delay
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage2, crit2, miss2, attack.soulshot, shld2), sAtk);
+		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage2, crit2, miss2, attack.hasSoulshot(), shld2), sAtk);
 		
 		// Add those hits to the Server-Client packet Attack
-		attack.hit(attack.createHit(target, damage1, miss1, crit1, shld1), attack.createHit(target, damage2, miss2, crit2, shld2));
+		attack.addHit(target, damage1, miss1, crit1, shld1);
+		attack.addHit(target, damage2, miss2, crit2, shld2);
 		
 		// Return true if hit 1 or hit 2 isn't missed
 		return (!miss1 || !miss2);
@@ -1559,7 +1560,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			crit1 = Formulas.calcCrit(getStat().getCriticalHit(target, null), false, target);
 			
 			// Calculate physical damages
-			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, false, attack.soulshot);
+			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, false, attack.hasSoulshot());
 			
 			if (attackpercent != 100)
 			{
@@ -1568,10 +1569,10 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// Create a new hit task with Medium priority
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk);
+		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk);
 		
 		// Add this hit to the Server-Client packet Attack
-		attack.hit(attack.createHit(target, damage1, miss1, crit1, shld1));
+		attack.addHit(target, damage1, miss1, crit1, shld1);
 		
 		// Return true if hit isn't missed
 		return !miss1;

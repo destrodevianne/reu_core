@@ -21,10 +21,11 @@ package l2r.gameserver.network.serverpackets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.mmocore.network.SendablePacket;
-
 import l2r.Config;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.network.L2GameClient;
+
+import org.mmocore.network.SendablePacket;
 
 /**
  * @author KenM
@@ -51,6 +52,17 @@ public abstract class L2GameServerPacket extends SendablePacket<L2GameClient>
 	public void setInvisible(boolean b)
 	{
 		_invisible = b;
+	}
+	
+	/**
+	 * Writes 3 D (int32) with current location x, y, z
+	 * @param loc
+	 */
+	protected void writeLoc(Location loc)
+	{
+		writeD(loc.getX());
+		writeD(loc.getY());
+		writeD(loc.getZ());
 	}
 	
 	@Override
