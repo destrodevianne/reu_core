@@ -695,7 +695,15 @@ public class L2Attackable extends L2Npc
 							// mob = 24, atk = 50, diff = 26 (no xp)
 							levelDiff = attacker.getLevel() - getLevel();
 							
-							tmp = calculateExpAndSp(levelDiff, damage, ((L2PcInstance) attacker).isPremium());
+							if (attacker.isPlayer())
+							{
+								tmp = calculateExpAndSp(levelDiff, damage, ((L2PcInstance) attacker).isPremium());
+							}
+							else
+							{
+								tmp = calculateExpAndSp(levelDiff, damage, false);
+							}
+							
 							exp = tmp[0];
 							exp *= 1 - penalty;
 							sp = tmp[1];
@@ -841,7 +849,14 @@ public class L2Attackable extends L2Npc
 						levelDiff = partyLvl - getLevel();
 						
 						// Calculate Exp and SP rewards
-						tmp = calculateExpAndSp(levelDiff, partyDmg, ((L2PcInstance) attacker).isPremium());
+						if (attacker.isPlayer())
+						{
+							tmp = calculateExpAndSp(levelDiff, partyDmg, ((L2PcInstance) attacker).isPremium());
+						}
+						else
+						{
+							tmp = calculateExpAndSp(levelDiff, partyDmg, false);
+						}
 						exp_premium = tmp[0];
 						sp_premium = tmp[1];
 						exp = tmp[0];
