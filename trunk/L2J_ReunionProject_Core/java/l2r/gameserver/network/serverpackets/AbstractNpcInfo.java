@@ -20,8 +20,6 @@ package l2r.gameserver.network.serverpackets;
 
 import java.text.DecimalFormat;
 
-import gr.reunion.datatables.FakePcsTable;
-
 import l2r.Config;
 import l2r.gameserver.datatables.CharTemplateTable;
 import l2r.gameserver.datatables.ClanTable;
@@ -40,7 +38,9 @@ import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.effects.AbnormalEffect;
+import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.zone.ZoneId;
+import gr.reunion.datatables.FakePcsTable;
 
 public abstract class AbstractNpcInfo extends L2GameServerPacket
 {
@@ -73,8 +73,8 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 		_heading = cha.getHeading();
 		_mAtkSpd = cha.getMAtkSpd();
 		_pAtkSpd = cha.getPAtkSpd();
-		_runSpd = cha.getTemplate().getBaseRunSpd();
-		_walkSpd = cha.getTemplate().getBaseWalkSpd();
+		_runSpd = cha.getTemplate().getBaseMoveSpd(MoveType.RUN);
+		_walkSpd = cha.getTemplate().getBaseMoveSpd(MoveType.WALK);
 	}
 	
 	/**

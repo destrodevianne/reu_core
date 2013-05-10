@@ -1767,10 +1767,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	
 	private void beginCast(L2Skill skill, boolean simultaneously, L2Character target, L2Object[] targets)
 	{
-		if (!fireSkillCastListeners(skill, simultaneously, target, targets))
-		{
-			return;
-		}
 		if (target == null)
 		{
 			if (simultaneously)
@@ -1788,6 +1784,12 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			}
 			return;
 		}
+		
+		if (!fireSkillCastListeners(skill, simultaneously, target, targets))
+		{
+			return;
+		}
+		
 		if (skill.getSkillType() == L2SkillType.RESURRECT)
 		{
 			if (isResurrectionBlocked() || target.isResurrectionBlocked())
@@ -4310,7 +4312,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				{
 					su.addAttribute(StatusUpdate.CAST_SPD, getMAtkSpd());
 				}
-				else if (stat == Stats.RUN_SPEED)
+				else if (stat == Stats.MOVE_SPEED)
 				{
 					broadcastFull = true;
 				}
@@ -7262,9 +7264,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	/**
 	 * @return the Level Modifier ((level + 89) / 100).
 	 */
-	public float getLevelMod()
+	public double getLevelMod()
 	{
-		return ((getLevel() + 89) / 100f);
+		return ((getLevel() + 89) / 100d);
 	}
 	
 	public final void setSkillCast(Future<?> newSkillCast)

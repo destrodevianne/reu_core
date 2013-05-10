@@ -14981,9 +14981,15 @@ public final class L2PcInstance extends L2Playable
 	
 	public void setCurrentFeed(int num)
 	{
+		boolean lastHungryState = isHungry();
 		_curFeed = num > getMaxFeed() ? getMaxFeed() : num;
 		SetupGauge sg = new SetupGauge(3, (getCurrentFeed() * 10000) / getFeedConsume(), (getMaxFeed() * 10000) / getFeedConsume());
 		sendPacket(sg);
+		// broadcast move speed change when strider becomes hungry / full 
+		if (lastHungryState != isHungry())
+		{
+			broadcastUserInfo();
+		}
 	}
 	
 	private int getMaxFeed()
@@ -14991,7 +14997,7 @@ public final class L2PcInstance extends L2Playable
 		return getPetLevelData(_mountNpcId).getPetMaxFeed();
 	}
 	
-	protected boolean isHungry()
+	public boolean isHungry()
 	{
 		return _canFeed ? (getCurrentFeed() < ((getPetData(getMountNpcId()).getHungryLimit() / 100f) * getPetLevelData(getMountNpcId()).getPetMaxFeed())) : false;
 	}
@@ -15835,12 +15841,12 @@ public final class L2PcInstance extends L2Playable
 	
 	public double getCollisionRadius()
 	{
-		return getMountType() != 0 ? (NpcTable.getInstance().getTemplate(getMountNpcId()).getfCollisionRadius()) : (isTransformed() && !getTransformation().isStance() ? getTransformation().getCollisionRadius() : (getAppearance().getSex() ? getBaseTemplate().getFCollisionRadiusFemale() : getBaseTemplate().getfCollisionRadius()));
+		return isMounted() ? (NpcTable.getInstance().getTemplate(getMountNpcId()).getfCollisionRadius()) : (isTransformed() && !getTransformation().isStance() ? getTransformation().getCollisionRadius() : (getAppearance().getSex() ? getBaseTemplate().getFCollisionRadiusFemale() : getBaseTemplate().getfCollisionRadius()));
 	}
 	
 	public double getCollisionHeight()
 	{
-		return getMountType() != 0 ? (NpcTable.getInstance().getTemplate(getMountNpcId()).getfCollisionHeight()) : (isTransformed() && !getTransformation().isStance() ? getTransformation().getCollisionHeight() : (getAppearance().getSex() ? getBaseTemplate().getFCollisionHeightFemale() : getBaseTemplate().getfCollisionHeight()));
+		return isMounted() ? (NpcTable.getInstance().getTemplate(getMountNpcId()).getfCollisionHeight()) : (isTransformed() && !getTransformation().isStance() ? getTransformation().getCollisionHeight() : (getAppearance().getSex() ? getBaseTemplate().getFCollisionHeightFemale() : getBaseTemplate().getfCollisionHeight()));
 	}
 	
 	public final int getClientX()
@@ -15900,7 +15906,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		final int deltaZ = getZ() - z;
-		if (deltaZ <= getBaseTemplate().getFallHeight())
+		if (deltaZ <= getBaseTemplate().getSafeFallHeight())
 		{
 			return false;
 		}
