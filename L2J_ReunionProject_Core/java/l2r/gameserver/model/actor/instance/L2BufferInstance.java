@@ -1,5 +1,19 @@
 package l2r.gameserver.model.actor.instance;
 
+import javolution.text.TextBuilder;
+import javolution.util.FastList;
+import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.model.actor.FakePc;
+import l2r.gameserver.model.actor.L2Npc;
+import l2r.gameserver.model.actor.L2Summon;
+import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.skills.L2Skill;
+import l2r.gameserver.model.zone.ZoneId;
+import l2r.gameserver.network.SystemMessageId;
+import l2r.gameserver.network.serverpackets.ActionFailed;
+import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
+import l2r.gameserver.network.serverpackets.SystemMessage;
 import gr.reunion.buffItem.AutoBuff;
 import gr.reunion.buffItem.BuffCategories;
 import gr.reunion.buffItem.BuffInstance;
@@ -9,22 +23,6 @@ import gr.reunion.datatables.CustomTable;
 import gr.reunion.main.Conditions;
 import gr.reunion.securitySystem.SecurityActions;
 import gr.reunion.securitySystem.SecurityType;
-import javolution.text.TextBuilder;
-import javolution.util.FastList;
-
-import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
-import l2r.gameserver.model.actor.FakePc;
-import l2r.gameserver.model.actor.L2Npc;
-import l2r.gameserver.model.actor.L2Summon;
-import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.olympiad.OlympiadManager;
-import l2r.gameserver.model.skills.L2Skill;
-import l2r.gameserver.model.zone.ZoneId;
-import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.serverpackets.ActionFailed;
-import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
-import l2r.gameserver.network.serverpackets.SystemMessage;
 
 public class L2BufferInstance extends L2Npc
 {
@@ -99,13 +97,6 @@ public class L2BufferInstance extends L2Npc
 		// No null pointers
 		if (player == null)
 		{
-			return;
-		}
-		
-		// Restrictions added here
-		if (player.isInOlympiadMode() || player.inObserverMode() || OlympiadManager.getInstance().isRegistered(player))
-		{
-			player.sendMessage("Cannot use while in Olympiad.");
 			return;
 		}
 		
