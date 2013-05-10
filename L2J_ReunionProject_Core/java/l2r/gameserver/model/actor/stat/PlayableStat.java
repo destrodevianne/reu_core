@@ -27,6 +27,7 @@ import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
+import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.model.zone.type.L2SwampZone;
 import l2r.gameserver.network.communityserver.CommunityServerThread;
@@ -228,14 +229,14 @@ public class PlayableStat extends CharStat
 		return level;
 	}
 	
+	/**
+	 * @param mt movement type
+	 * @return the base move speed of given movement type.
+	 */
 	@Override
-	public int getRunSpeed()
+	protected double getBaseMoveSpeed(MoveType mt)
 	{
-		int val = super.getRunSpeed();
-		if (getActiveChar().isInsideZone(ZoneId.WATER))
-		{
-			val /= 2;
-		}
+		double val = super.getBaseMoveSpeed(mt);
 		
 		if (getActiveChar().isInsideZone(ZoneId.SWAMP))
 		{

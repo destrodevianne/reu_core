@@ -26,10 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import gr.reunion.configs.CustomServerConfigs;
-
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.CharTemplateTable;
@@ -39,10 +36,12 @@ import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2ShortCut;
 import l2r.gameserver.model.L2SkillLearn;
 import l2r.gameserver.model.L2World;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.appearance.PcAppearance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.stat.PcStat;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
+import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.items.PcItemTemplate;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.quest.Quest;
@@ -55,6 +54,7 @@ import l2r.gameserver.network.serverpackets.CharSelectionInfo;
 import l2r.gameserver.scripting.scriptengine.events.PlayerEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerListener;
 import l2r.gameserver.util.Util;
+import gr.reunion.configs.CustomServerConfigs;
 
 @SuppressWarnings("unused")
 public final class CharacterCreate extends L2GameClientPacket
@@ -189,7 +189,7 @@ public final class CharacterCreate extends L2GameClientPacket
 			}
 			
 			template = CharTemplateTable.getInstance().getTemplate(_classId);
-			if ((template == null) || (template.getClassBaseLevel() > 1))
+			if ((template == null) || (ClassId.getClassId(_classId).level() > 0))
 			{
 				if (Config.DEBUG)
 				{
@@ -258,9 +258,9 @@ public final class CharacterCreate extends L2GameClientPacket
 			newChar.addAdena("Init", Config.STARTING_ADENA, null, false);
 		}
 		
-		// TODO: Make it random.
 		final L2PcTemplate template = newChar.getTemplate();
-		newChar.setXYZInvisible(template.getSpawnX(), template.getSpawnY(), template.getSpawnZ());
+		Location createLoc = template.getCreationPoint();
+		newChar.setXYZInvisible(createLoc.getX(), createLoc.getY(), createLoc.getZ());
 		if (CustomServerConfigs.ENABLE_STARTING_TITLE)
 		{
 			newChar.setTitle(CustomServerConfigs.STARTING_TITLE);
