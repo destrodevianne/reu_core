@@ -18,6 +18,7 @@ import gr.reunion.datatables.CustomTable;
 import gr.reunion.javaBuffer.AutoBuff;
 import gr.reunion.javaBuffer.BuffCategories;
 import gr.reunion.javaBuffer.BuffInstance;
+import gr.reunion.javaBuffer.PlayerMethods;
 import gr.reunion.javaBuffer.buffItem.runnable.BuffItemDelay;
 import gr.reunion.javaBuffer.buffNpc.dynamicHtmls.GenerateHtmls;
 import gr.reunion.javaBuffer.buffNpc.dynamicHtmls.GenerateHtmls.Packet;
@@ -93,7 +94,7 @@ public class L2BufferInstance extends L2Npc
 		// Send buffs from profile to player or party or pet
 		else if (command.startsWith("bufffor"))
 		{
-			FastList<Integer> buffIds = player.getProfileBuffs(subCommand[1]);
+			FastList<Integer> buffIds = PlayerMethods.getProfileBuffs(subCommand[1], player);
 			int priceCount = buffIds.size();
 			
 			if (AioBufferConfigs.AIO_BUFFER_ENABLE_DELAY && BuffItemDelay._delayers.contains(player))
@@ -315,7 +316,7 @@ public class L2BufferInstance extends L2Npc
 		{
 			try
 			{
-				if (!player.createProfile(subCommand[1]))
+				if (!PlayerMethods.createProfile(subCommand[1], player))
 				{
 					return;
 				}
@@ -415,7 +416,7 @@ public class L2BufferInstance extends L2Npc
 		// Scheme removals
 		else if (command.startsWith("deleteProfile"))
 		{
-			player.delProfile(subCommand[1]);
+			PlayerMethods.delProfile(subCommand[1], player);
 		}
 		else if (command.startsWith("showBuffsToDelete"))
 		{
@@ -433,7 +434,7 @@ public class L2BufferInstance extends L2Npc
 	
 	private boolean checkDanceAmount(L2PcInstance player, String profile, BuffCategories category)
 	{
-		if (player.getDanceSongCount(profile) == _maxDance)
+		if (PlayerMethods.getDanceSongCount(profile, player) == _maxDance)
 		{
 			player.sendMessage("You cannot add more than " + _maxDance + " dances-songs.");
 			GenerateHtmls.callBuffToAdd(category, player, profile, getObjectId());
@@ -444,7 +445,7 @@ public class L2BufferInstance extends L2Npc
 	
 	private boolean checkBuffsAmount(L2PcInstance player, String profile, BuffCategories category)
 	{
-		if (player.getOtherBuffCount(profile) == _maxBuffs)
+		if (PlayerMethods.getOtherBuffCount(profile, player) == _maxBuffs)
 		{
 			player.sendMessage("You cannot add more than " + _maxBuffs + " buffs.");
 			GenerateHtmls.callBuffToAdd(category, player, profile, getObjectId());

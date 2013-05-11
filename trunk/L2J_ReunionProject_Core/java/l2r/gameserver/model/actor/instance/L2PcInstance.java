@@ -311,9 +311,9 @@ import gr.reunion.configs.LeaderboardsConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.configs.PvpRewardSystemConfigs;
 import gr.reunion.datatables.AdventTable;
-import gr.reunion.datatables.CustomTable;
 import gr.reunion.interf.NexusEvents;
 import gr.reunion.interf.PlayerEventInfo;
+import gr.reunion.javaBuffer.PlayerMethods;
 import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
 import gr.reunion.main.NamePrefix;
@@ -632,41 +632,7 @@ public final class L2PcInstance extends L2Playable
 	private boolean _enchantAnimation = false;
 	private boolean _onEnterLoadSS = false;
 	
-	private FastMap<String, FastList<Integer>> _profileBuffs;
-	private final int[] danceSongList =
-	{
-		264,
-		265,
-		266,
-		267,
-		268,
-		269,
-		270,
-		271,
-		272,
-		273,
-		274,
-		275,
-		276,
-		277,
-		304,
-		305,
-		306,
-		307,
-		308,
-		309,
-		310,
-		311,
-		349,
-		363,
-		364,
-		365,
-		366,
-		529,
-		530,
-		914,
-		915
-	};
+	public FastMap<String, FastList<Integer>> _profileBuffs = new FastMap<String, FastList<Integer>>().shared();
 	
 	/** Premium Items */
 	private final Map<Integer, L2PremiumItem> _premiumItems = new FastMap<>();
@@ -11994,7 +11960,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Load the saved categorized buffs
-		loadProfileBuffs();
+		PlayerMethods.loadProfileBuffs(this);
 		
 		// Load achievements data
 		getAchievemntData();
@@ -13124,7 +13090,7 @@ public final class L2PcInstance extends L2Playable
 			_log.log(Level.WARNING, "Exception on deleteMe() notifyFriends: " + e.getMessage(), e);
 		}
 		// Clear profile buffs list
-		clearProfiles();
+		PlayerMethods.clearProfiles(this);
 		
 		// Clean achievement data list
 		clearAchievementData();
@@ -14985,7 +14951,7 @@ public final class L2PcInstance extends L2Playable
 		_curFeed = num > getMaxFeed() ? getMaxFeed() : num;
 		SetupGauge sg = new SetupGauge(3, (getCurrentFeed() * 10000) / getFeedConsume(), (getMaxFeed() * 10000) / getFeedConsume());
 		sendPacket(sg);
-		// broadcast move speed change when strider becomes hungry / full 
+		// broadcast move speed change when strider becomes hungry / full
 		if (lastHungryState != isHungry())
 		{
 			broadcastUserInfo();
@@ -17006,198 +16972,6 @@ public final class L2PcInstance extends L2Playable
 	public int getTries()
 	{
 		return Tries;
-	}
-	
-	// XXX: Buffer Methods and loads
-	public void reloadProfileBuffs()
-	{
-		clearProfiles();
-		_profileBuffs = null;
-		
-		loadProfileBuffs();
-	}
-	
-	// Returns the buffs of the specified profile
-	public void loadProfileBuffs()
-	{
-		if (_profileBuffs == null)
-		{
-			_profileBuffs = new FastMap<>();
-		}
-		
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			PreparedStatement statement = con.prepareStatement("SELECT buff_id, profile FROM aio_scheme_profiles_buffs WHERE charId = ?");
-			statement.setInt(1, this.getObjectId());
-			
-			ResultSet rset = statement.executeQuery();
-			while (rset.next())
-			{
-				String profileName = rset.getString("profile");
-				int buffId = rset.getInt("buff_id");
-				
-				addBuffToProfile(profileName, buffId, false);
-			}
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public void addBuffToProfile(String profileName, int buffId)
-	{
-		addBuffToProfile(profileName, buffId, true);
-	}
-	
-	public void addBuffToProfile(String profileName, int buffId, boolean updateDB)
-	{
-		FastList<Integer> buffList = _profileBuffs.get(profileName);
-		
-		if (buffList == null)
-		{
-			buffList = new FastList<>();
-		}
-		
-		buffList.add(buffId);
-		
-		addProfile(profileName, buffList);
-		
-		if (updateDB)
-		{
-			CustomTable.getInstance().saveBuff(this, profileName, buffId);
-		}
-	}
-	
-	public void delBuffFromProfile(String profileName, int buffId)
-	{
-		FastList<Integer> buffList = _profileBuffs.get(profileName);
-		
-		if (buffList == null)
-		{
-			buffList = new FastList<>();
-		}
-		
-		buffList.remove(new Integer(buffId));
-		
-		addProfile(profileName, buffList);
-		
-		CustomTable.getInstance().deleteBuff(this, profileName, buffId);
-	}
-	
-	public boolean createProfile(String profileName)
-	{
-		if (!CustomTable.getInstance().saveProfile(this, profileName))
-		{
-			return false;
-		}
-		
-		addProfile(profileName, new FastList<Integer>());
-		
-		return true;
-	}
-	
-	public void addProfile(String profileName, FastList<Integer> list)
-	{
-		_profileBuffs.put(profileName, list);
-	}
-	
-	private void clearProfiles()
-	{
-		if (_profileBuffs != null)
-		{
-			for (String profileName : _profileBuffs.keySet())
-			{
-				delProfile(profileName, false, false);
-			}
-			
-			_profileBuffs.clear();
-		}
-	}
-	
-	public void delProfile(String profileName)
-	{
-		delProfile(profileName, true, true);
-	}
-	
-	public void delProfile(String profileName, boolean delete, boolean updateDB)
-	{
-		FastList<Integer> buffList = _profileBuffs.get(profileName);
-		
-		if (buffList != null)
-		{
-			buffList.clear();
-			
-			if (delete)
-			{
-				_profileBuffs.remove(profileName);
-			}
-			
-			if (updateDB)
-			{
-				CustomTable.getInstance().deleteProfile(this, profileName);
-			}
-		}
-	}
-	
-	public FastList<String> getProfiles()
-	{
-		FastList<String> returnProfiles = new FastList<>();
-		
-		for (String profileName : _profileBuffs.keySet())
-		{
-			returnProfiles.add(profileName);
-		}
-		
-		return returnProfiles;
-	}
-	
-	public int getProfileSize(String profile)
-	{
-		if (!hasProfile(profile))
-		{
-			return 0;
-		}
-		
-		return getProfileBuffs(profile).size();
-	}
-	
-	public int getDanceSongCount(String profile)
-	{
-		int buffCount = 0;
-		
-		for (int buffCounter : danceSongList)
-		{
-			if (_profileBuffs.get(profile).contains(buffCounter))
-			{
-				buffCount = (buffCount + 1);
-			}
-		}
-		return buffCount;
-	}
-	
-	public int getOtherBuffCount(String profile)
-	{
-		int buffCount = getProfileSize(profile);
-		
-		for (int buffCounter : danceSongList)
-		{
-			if (_profileBuffs.get(profile).contains(buffCounter))
-			{
-				buffCount = (buffCount - 1);
-			}
-		}
-		return buffCount;
-	}
-	
-	public boolean hasProfile(String profile)
-	{
-		return _profileBuffs.containsKey(profile);
-	}
-	
-	public FastList<Integer> getProfileBuffs(String profile)
-	{
-		return _profileBuffs.get(profile);
 	}
 	
 	public void setIsUsingAioMultisell(boolean b)
