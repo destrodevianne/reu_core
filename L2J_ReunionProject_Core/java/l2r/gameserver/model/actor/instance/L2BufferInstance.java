@@ -18,6 +18,7 @@ import gr.reunion.datatables.CustomTable;
 import gr.reunion.javaBuffer.AutoBuff;
 import gr.reunion.javaBuffer.BuffCategories;
 import gr.reunion.javaBuffer.BuffInstance;
+import gr.reunion.javaBuffer.JavaBufferHandler;
 import gr.reunion.javaBuffer.PlayerMethods;
 import gr.reunion.javaBuffer.buffItem.runnable.BuffItemDelay;
 import gr.reunion.javaBuffer.buffNpc.dynamicHtmls.GenerateHtmls;
@@ -25,8 +26,6 @@ import gr.reunion.javaBuffer.buffNpc.dynamicHtmls.GenerateHtmls.Packet;
 import gr.reunion.javaBuffer.buffNpc.runnable.BuffNpcDeleter;
 import gr.reunion.javaBuffer.buffNpc.runnable.BuffNpcSaver;
 import gr.reunion.main.Conditions;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
 
 public class L2BufferInstance extends L2Npc
 {
@@ -245,70 +244,7 @@ public class L2BufferInstance extends L2Npc
 		}
 		else if (command.startsWith("buff"))
 		{
-			if ((player.getInventory().getItemByItemId(_coinperbuff) == null) || (player.getInventory().getItemByItemId(_coinperbuff).getCount() < _buffprice))
-			{
-				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.NOT_ENOUGH_REQUIRED_ITEMS));
-				return;
-			}
-			
-			player.destroyItemByItemId("Buffer", _coinperbuff, _buffprice, player, true);
-			int buffId = Integer.parseInt(subCommand[1]);
-			
-			BuffInstance buff = CustomTable.getInstance().getBuff(buffId);
-			
-			if (buff == null)
-			{
-				SecurityActions.startSecurity(player, SecurityType.NPC_BUFFER);
-				return;
-			}
-			
-			int buffLevel = buff.getLevel();
-			
-			if ((player.getInventory().getItemByItemId(AioBufferConfigs.BUFF_ITEM_ID) != null) || (player.isPremium()))
-			{
-				buffLevel = buff.getCustomLevel();
-			}
-			
-			L2Skill skill = SkillTable.getInstance().getInfo(buffId, buffLevel);
-			
-			if (skill != null)
-			{
-				skill.getEffects(player, player);
-			}
-			else
-			{
-				SecurityActions.startSecurity(player, SecurityType.NPC_BUFFER);
-			}
-			
-			switch (subCommand[0])
-			{
-				case "buffdance":
-					GenerateHtmls.sendPacket(player, "555-3.htm", Packet.FILE, getObjectId());
-					break;
-				case "buffsong":
-					GenerateHtmls.sendPacket(player, "555-4.htm", Packet.FILE, getObjectId());
-					break;
-				case "buffprop":
-					GenerateHtmls.sendPacket(player, "555-5.htm", Packet.FILE, getObjectId());
-					break;
-				case "buffover":
-					GenerateHtmls.sendPacket(player, "555-6.htm", Packet.FILE, getObjectId());
-					break;
-				case "buffdwarf":
-					GenerateHtmls.sendPacket(player, "555-7.htm", Packet.FILE, getObjectId());
-					break;
-				case "buffwar":
-					GenerateHtmls.sendPacket(player, "555-8.htm", Packet.FILE, getObjectId());
-					break;
-				case "buffmisc":
-					GenerateHtmls.sendPacket(player, "555-9.htm", Packet.FILE, getObjectId());
-					break;
-				case "buffelder":
-					GenerateHtmls.sendPacket(player, "555-10.htm", Packet.FILE, getObjectId());
-					break;
-				default:
-					break;
-			}
+			JavaBufferHandler.callBuffCommand(player, subCommand[1], subCommand[0], getObjectId());
 		}
 		
 		// Scheme adds reached
