@@ -151,6 +151,7 @@ import l2r.gameserver.model.actor.appearance.PcAppearance;
 import l2r.gameserver.model.actor.knownlist.PcKnownList;
 import l2r.gameserver.model.actor.position.PcPosition;
 import l2r.gameserver.model.actor.stat.PcStat;
+import l2r.gameserver.model.actor.stat.Rates;
 import l2r.gameserver.model.actor.status.PcStatus;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.base.ClassId;
@@ -317,6 +318,7 @@ import gr.reunion.javaBuffer.PlayerMethods;
 import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
 import gr.reunion.main.NamePrefix;
+import gr.reunion.premiumSystem.PremiumHandler;
 import gr.reunion.pvpRewardSystem.pvpRewardHandler;
 import gr.reunion.spreeSystem.SpreeHandler;
 
@@ -368,11 +370,6 @@ public final class L2PcInstance extends L2Playable
 	
 	// Character Shortcut SQL String Definitions:
 	private static final String DELETE_CHAR_SHORTCUTS = "DELETE FROM character_shortcuts WHERE charId=? AND class_index=?";
-	
-	// Character PremiumService String Definitions:
-	private static final String INSERT_PREMIUMSERVICE = "INSERT INTO characters_premium (account_name,premium_service,enddate) values(?,?,?) ON DUPLICATE KEY UPDATE premium_service = ?, enddate = ?";
-	private static final String RESTORE_PREMIUMSERVICE = "SELECT premium_service,enddate FROM characters_premium WHERE account_name=?";
-	private static final String UPDATE_PREMIUMSERVICE = "INSERT INTO characters_premium (account_name,premium_service,enddate) values(?,?,?) ON DUPLICATE KEY UPDATE premium_service = ?, enddate = ?";
 	
 	// Character Transformation SQL String Definitions:
 	private static final String SELECT_CHAR_TRANSFORM = "SELECT transform_id FROM characters WHERE charId=?";
@@ -436,7 +433,7 @@ public final class L2PcInstance extends L2Playable
 	
 	private L2GameClient _client;
 	
-	private String _accountName;
+	public String _accountName;
 	private long _deleteTimer;
 	private Calendar _createDate = Calendar.getInstance();
 	
@@ -7915,7 +7912,7 @@ public final class L2PcInstance extends L2Playable
 					
 					player = new L2PcInstance(objectId, template, rset.getString("account_name"), app);
 					player.setName(rset.getString("char_name"));
-					restorePremServiceData(player, rset.getString("account_name"));
+					PremiumHandler.restorePremServiceData(player, rset.getString("account_name"));
 					player._lastAccess = rset.getLong("lastAccess");
 					
 					player.getStat().setExp(rset.getLong("exp"));
@@ -17226,84 +17223,6 @@ public final class L2PcInstance extends L2Playable
 	
 	// Add NevitAdvent by pmq End
 	
-	// ============================================== //
-	// Premium Engine By L2Total Team //
-	// ============================================== //
-	private void createPSdb()
-	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			PreparedStatement statement = con.prepareStatement(INSERT_PREMIUMSERVICE);
-			statement.setString(1, _accountName);
-			statement.setInt(2, 0);
-			statement.setLong(3, 0);
-			statement.setInt(4, 0);
-			statement.setLong(5, 0);
-			statement.executeUpdate();
-		}
-		catch (Exception e)
-		{
-			_log.warning("Could not insert char data: " + e);
-			e.printStackTrace();
-			return;
-		}
-	}
-	
-	private static void PStimeOver(String account)
-	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			PreparedStatement statement = con.prepareStatement(UPDATE_PREMIUMSERVICE);
-			statement.setString(1, account);
-			statement.setInt(2, 0);
-			statement.setLong(3, 0);
-			statement.setInt(4, 0);
-			statement.setLong(5, 0);
-			statement.execute();
-		}
-		catch (SQLException e)
-		{
-			_log.warning("PremiumService:  Could not increase data");
-		}
-	}
-	
-	private static void restorePremServiceData(L2PcInstance player, String account)
-	{
-		boolean sucess = false;
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			PreparedStatement statement = con.prepareStatement(RESTORE_PREMIUMSERVICE);
-			statement.setString(1, account);
-			ResultSet rset = statement.executeQuery();
-			while (rset.next())
-			{
-				sucess = true;
-				if (PremiumServiceConfigs.USE_PREMIUM_SERVICE)
-				{
-					if (rset.getLong("enddate") <= System.currentTimeMillis())
-					{
-						PStimeOver(account);
-						player.setPremiumService(false);
-					}
-					else
-					{
-						player.setPremiumService(rset.getInt("premium_service") == 1);
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			_log.warning("PremiumService: Could not restore PremiumService data for:" + account + "." + e);
-			e.printStackTrace();
-		}
-		if (sucess == false)
-		{
-			player.createPSdb();
-			player.setPremiumService(false);
-		}
-	}
-	
 	public void setPremiumService(boolean premiumService)
 	{
 		_premiumService = premiumService;
@@ -17589,5 +17508,92 @@ public final class L2PcInstance extends L2Playable
 	public void addRemovedBuff(L2Effect eff)
 	{
 		removedBuffs.add(eff);
+	}
+	
+	// Alternative rate system
+	/**
+	 * @param rateType type of rate to check
+	 * @param itemId item id to check
+	 * @param isRaid {@code true} if rate should be calculated against Raid boss
+	 * @return rate value for given rate type and item id
+	 */
+	public float getRate(Rates rateType, int itemId, boolean isRaid)
+	{
+		switch (rateType)
+		{
+			case PREMIUM_BONUS_EXP:
+				return isPremium() ? PremiumServiceConfigs.PREMIUM_RATE_XP : 1;
+			case PREMIUM_BONUS_SP:
+				return isPremium() ? PremiumServiceConfigs.PREMIUM_RATE_SP : 1;
+			case SPOIL:
+			case DROP_ITEM:
+				// check for premium owner in party, if enabled by config
+				boolean hasPremium = false;
+				
+				// TODO Implement later
+				/**
+				 * if (PremiumServiceConfigs.PREMIUM_PARTY_DROPSPOIL && !isPremium() && isInParty()) { for (L2PcInstance pl : getParty().getMembers()) { if (pl.isPremium() && Util.checkIfInRange(Config.ALT_PARTY_RANGE, this, pl, true)) { hasPremium = true; break; } } } else
+				 */
+				hasPremium = isPremium();
+				
+				switch (rateType)
+				{
+					case SPOIL:
+						if (hasPremium)
+						{
+							if (PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.containsKey(itemId)) // check for overriden rate in premium list first
+							{
+								return PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.get(itemId);
+							}
+							else if (Config.RATE_DROP_ITEMS_ID.containsKey(itemId)) // then check for overriden rate in general list
+							{
+								return Config.RATE_DROP_ITEMS_ID.get(itemId);
+							}
+							else
+							// return common premium rate, if it isn't overriden anywhere
+							{
+								return PremiumServiceConfigs.PREMIUM_RATE_DROP_SPOIL;
+							}
+						}
+						return Config.RATE_DROP_ITEMS_ID.containsKey(itemId) ? Config.RATE_DROP_ITEMS_ID.get(itemId) : Config.RATE_DROP_SPOIL;
+					case DROP_ITEM:
+						if (hasPremium)
+						{
+							if (PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.containsKey(itemId)) // check for overriden rate in premium list first
+							{
+								return PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.get(itemId);
+							}
+							else if (Config.RATE_DROP_ITEMS_ID.containsKey(itemId)) // then check for overriden rate in general list
+							{
+								return Config.RATE_DROP_ITEMS_ID.get(itemId);
+							}
+							else
+							// return premium rate, either for raid, or normal mob, if it isn't overriden anywhere
+							{
+								return isRaid ? PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS_BY_RAID : PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS;
+							}
+						}
+						else if (Config.RATE_DROP_ITEMS_ID.containsKey(itemId)) // check for overriden rate in general list first
+						{
+							return Config.RATE_DROP_ITEMS_ID.get(itemId);
+						}
+						else
+						// return general rate, either for raid, or normal mob, if it isn't overriden anywhere
+						{
+							return isRaid ? Config.RATE_DROP_ITEMS_BY_RAID : Config.RATE_DROP_ITEMS;
+						}
+				}
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * @param rateType type of rate to check
+	 * @return rate value for given rate type
+	 */
+	public float getRate(Rates rateType)
+	{
+		return getRate(rateType, -1, false);
 	}
 }

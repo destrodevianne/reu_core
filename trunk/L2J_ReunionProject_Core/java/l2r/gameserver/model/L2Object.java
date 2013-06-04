@@ -171,7 +171,7 @@ public abstract class L2Object
 		L2BufferInstance(L2Npc),
 		L2ClanRepFameInstance(L2Npc),
 		L2AioNpcInstance(L2Npc),
-		L2ServicesManagerInstance(L2Npc),
+		L2ServicesManagerInstance(L2NpcInstance),
 		L2DonateManagerInstance(L2Npc),
 		L2ReunionGkInstance(L2Npc);
 		

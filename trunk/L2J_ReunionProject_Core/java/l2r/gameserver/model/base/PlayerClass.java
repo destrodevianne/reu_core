@@ -201,14 +201,43 @@ public enum PlayerClass
 	private ClassType _type;
 	
 	private static final Set<PlayerClass> mainSubclassSet;
+	private static final Set<PlayerClass> neverSubclassed = EnumSet.of(Overlord, Warsmith);
+	
+	private static final Set<PlayerClass> subclasseSet1 = EnumSet.of(DarkAvenger, Paladin, TempleKnight, ShillienKnight);
+	private static final Set<PlayerClass> subclasseSet2 = EnumSet.of(TreasureHunter, AbyssWalker, Plainswalker);
+	private static final Set<PlayerClass> subclasseSet3 = EnumSet.of(Hawkeye, SilverRanger, PhantomRanger);
+	private static final Set<PlayerClass> subclasseSet4 = EnumSet.of(Warlock, ElementalSummoner, PhantomSummoner);
+	private static final Set<PlayerClass> subclasseSet5 = EnumSet.of(Sorceror, Spellsinger, Spellhowler);
 	
 	private static final EnumMap<PlayerClass, Set<PlayerClass>> subclassSetMap = new EnumMap<>(PlayerClass.class);
 	
 	static
 	{
 		Set<PlayerClass> subclasses = getSet(null, Third);
+		subclasses.removeAll(neverSubclassed);
 		
 		mainSubclassSet = subclasses;
+		
+		subclassSetMap.put(DarkAvenger, subclasseSet1);
+		subclassSetMap.put(Paladin, subclasseSet1);
+		subclassSetMap.put(TempleKnight, subclasseSet1);
+		subclassSetMap.put(ShillienKnight, subclasseSet1);
+		
+		subclassSetMap.put(TreasureHunter, subclasseSet2);
+		subclassSetMap.put(AbyssWalker, subclasseSet2);
+		subclassSetMap.put(Plainswalker, subclasseSet2);
+		
+		subclassSetMap.put(Hawkeye, subclasseSet3);
+		subclassSetMap.put(SilverRanger, subclasseSet3);
+		subclassSetMap.put(PhantomRanger, subclasseSet3);
+		
+		subclassSetMap.put(Warlock, subclasseSet4);
+		subclassSetMap.put(ElementalSummoner, subclasseSet4);
+		subclassSetMap.put(PhantomSummoner, subclasseSet4);
+		
+		subclassSetMap.put(Sorceror, subclasseSet5);
+		subclassSetMap.put(Spellsinger, subclasseSet5);
+		subclassSetMap.put(Spellhowler, subclasseSet5);
 	}
 	
 	PlayerClass(Race pRace, ClassType pType, ClassLevel pLevel)
@@ -230,6 +259,16 @@ public enum PlayerClass
 				
 				subclasses.remove(this);
 				
+				switch (player.getRace())
+				{
+					case Elf:
+						subclasses.removeAll(getSet(DarkElf, Third));
+						break;
+					case DarkElf:
+						subclasses.removeAll(getSet(Elf, Third));
+						break;
+				}
+				
 				subclasses.removeAll(getSet(Kamael, Third));
 				
 				Set<PlayerClass> unavailableClasses = subclassSetMap.get(this);
@@ -249,10 +288,18 @@ public enum PlayerClass
 				// So, in that situation we must skip sex check
 				if (Config.MAX_SUBCLASS <= 3)
 				{
-					if (!player.getSubClasses().containsKey(2) || (player.getSubClasses().get(2).getLevel() < 75))
+					if (player.getAppearance().getSex())
 					{
-						subclasses.removeAll(EnumSet.of(inspector));
+						subclasses.removeAll(EnumSet.of(femaleSoulbreaker));
 					}
+					else
+					{
+						subclasses.removeAll(EnumSet.of(maleSoulbreaker));
+					}
+				}
+				if (!player.getSubClasses().containsKey(2) || (player.getSubClasses().get(2).getLevel() < 75))
+				{
+					subclasses.removeAll(EnumSet.of(inspector));
 				}
 			}
 		}

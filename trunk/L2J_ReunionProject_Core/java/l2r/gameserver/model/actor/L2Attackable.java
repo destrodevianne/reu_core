@@ -53,8 +53,10 @@ import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2ServitorInstance;
 import l2r.gameserver.model.actor.knownlist.AttackableKnownList;
+import l2r.gameserver.model.actor.stat.Rates;
 import l2r.gameserver.model.actor.status.AttackableStatus;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.holders.ItemHolder;
@@ -703,7 +705,6 @@ public class L2Attackable extends L2Npc
 							{
 								tmp = calculateExpAndSp(levelDiff, damage, false);
 							}
-							
 							exp = tmp[0];
 							exp *= 1 - penalty;
 							sp = tmp[1];
@@ -743,6 +744,17 @@ public class L2Attackable extends L2Npc
 										((L2PcInstance) attacker).updateVitalityPoints(getVitalityPoints(damage), true, false);
 										PcCafePointsManager.getInstance().givePcCafePoint(((L2PcInstance) attacker), addexp);
 									}
+								}
+								
+								// Temp FIX GodFather
+								if (attacker.isServitor())
+								{
+									((L2ServitorInstance) attacker).getSummon().getOwner().addExpAndSp(addexp, addsp, useVitalityRate());
+								}
+								else if (attacker.isPet())
+								{
+									((L2PetInstance) attacker).getSummon().getOwner().addExpAndSp(addexp, addsp, useVitalityRate());
+									((L2PetInstance) attacker).addExpAndSp(addexp, addsp);
 								}
 								else
 								{
@@ -1251,7 +1263,7 @@ public class L2Attackable extends L2Npc
 				deepBlueDrop = 3;
 				if (drop.getItemId() == PcInventory.ADENA_ID)
 				{
-					deepBlueDrop *= isRaid() && !isRaidMinion() ? (int) Config.RATE_DROP_ITEMS_BY_RAID : (int) Config.RATE_DROP_ITEMS;
+					deepBlueDrop *= (int) lastAttacker.getRate(Rates.DROP_ITEM, PcInventory.ADENA_ID, (isRaid() && !isRaidMinion()));
 				}
 			}
 		}
@@ -1268,40 +1280,8 @@ public class L2Attackable extends L2Npc
 			dropChance = ((drop.getChance() - ((drop.getChance() * levelModifier) / 100)) / deepBlueDrop);
 		}
 		
-		if (lastAttacker.isPremium())
-		{
-			if (PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.containsKey(drop.getItemId())) // check for overriden rate in premium list first
-			{
-				dropChance *= PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.get(drop.getItemId());
-			}
-			else if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getItemId()))
-			{
-				dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getItemId());
-			}
-			else if (isSweep)
-			{
-				dropChance *= PremiumServiceConfigs.PREMIUM_RATE_DROP_SPOIL;
-			}
-			else
-			{
-				dropChance *= isRaid() && !isRaidMinion() ? PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS_BY_RAID : PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS;
-			}
-		}
-		else
-		{
-			if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getItemId()))
-			{
-				dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getItemId());
-			}
-			else if (isSweep)
-			{
-				dropChance *= Config.RATE_DROP_SPOIL;
-			}
-			else
-			{
-				dropChance *= isRaid() && !isRaidMinion() ? Config.RATE_DROP_ITEMS_BY_RAID : Config.RATE_DROP_ITEMS;
-			}
-		}
+		// Applies Drop rates
+		dropChance *= lastAttacker.getRate(isSweep ? Rates.SPOIL : Rates.DROP_ITEM, drop.getItemId(), (isRaid() && !isRaidMinion()));
 		
 		if (Config.L2JMOD_CHAMPION_ENABLE && isChampion())
 		{
@@ -1419,14 +1399,7 @@ public class L2Attackable extends L2Npc
 		}
 		
 		// Applies Drop rates
-		if (lastAttacker.isPremium())
-		{
-			categoryDropChance *= isRaid() && !isRaidMinion() ? PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS_BY_RAID : PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS;
-		}
-		else
-		{
-			categoryDropChance *= isRaid() && !isRaidMinion() ? Config.RATE_DROP_ITEMS_BY_RAID : Config.RATE_DROP_ITEMS;
-		}
+		categoryDropChance *= lastAttacker.getRate(Rates.DROP_ITEM, -1, (isRaid() && !isRaidMinion()));
 		
 		if (Config.L2JMOD_CHAMPION_ENABLE && isChampion())
 		{
@@ -1461,7 +1434,7 @@ public class L2Attackable extends L2Npc
 			// At least 1 item will be dropped for sure. So the chance will be adjusted to 100%
 			// if smaller.
 			
-			double dropChance = drop.getChance();
+			double dropChance = drop.getChance() * lastAttacker.getRate(Rates.DROP_ITEM, drop.getItemId(), (isRaid() && !isRaidMinion()));
 			
 			if (lastAttacker.isPremium())
 			{

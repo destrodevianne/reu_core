@@ -18,13 +18,14 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
 import l2r.Config;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
+import l2r.gameserver.util.Util;
+import gr.reunion.securitySystem.SecurityActions;
+import gr.reunion.securitySystem.SecurityType;
 
 /**
  * This class ...
@@ -48,7 +49,7 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 	protected void runImpl()
 	{
 		final L2PcInstance player = getClient().getActiveChar();
-		if ((player == null) || !player.hasPet())
+		if ((_amount <= 0) || (player == null) || !player.hasPet())
 		{
 			return;
 		}
@@ -87,6 +88,12 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 			return;
 		}
 		
+		if (_amount > item.getCount())
+		{
+			Util.handleIllegalPlayerAction(player, getClass().getSimpleName() + ": Character " + player.getName() + " of account " + player.getAccountName() + " tried to get item with oid " + _objectId + " from pet but has invalid count " + _amount + " item count: " + item.getCount(), Config.DEFAULT_PUNISH);
+			return;
+		}
+		
 		if (item.isAugmented())
 		{
 			return;
@@ -102,11 +109,6 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 		if (pet.isDead())
 		{
 			player.sendPacket(SystemMessageId.CANNOT_GIVE_ITEMS_TO_DEAD_PET);
-			return;
-		}
-		
-		if (_amount < 0)
-		{
 			return;
 		}
 		

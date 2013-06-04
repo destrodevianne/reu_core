@@ -1,6 +1,5 @@
 package l2r.gameserver.instancemanager;
 
-import gr.reunion.configs.PcBangConfigs;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.zone.ZoneId;
@@ -8,6 +7,7 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPCCafePointInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
+import gr.reunion.configs.PcBangConfigs;
 
 public class PcCafePointsManager
 {
@@ -45,8 +45,8 @@ public class PcCafePointsManager
 			return;
 		}
 		// Retail values
-		// int _points = (int) (givedexp * 0.0001 * PcBangConfigs.PC_BANG_POINT_RATE);
-		int _points = (int) (((givedexp * 0.00001) - 60) * PcBangConfigs.PC_BANG_POINT_RATE);
+		int _points = (int) (givedexp * 0.0001 * PcBangConfigs.PC_BANG_POINT_RATE);
+		// int _points = (int) (((givedexp * 0.00001) - 60) * PcBangConfigs.PC_BANG_POINT_RATE);
 		if ((player.getActiveClass() == ClassId.archmage.getId()) || (player.getActiveClass() == ClassId.soultaker.getId()) || (player.getActiveClass() == ClassId.stormScreamer.getId()) || (player.getActiveClass() == ClassId.mysticMuse.getId()))
 		{
 			_points /= 2;
