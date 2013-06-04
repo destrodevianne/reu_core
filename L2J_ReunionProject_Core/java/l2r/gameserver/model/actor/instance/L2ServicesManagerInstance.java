@@ -28,7 +28,6 @@ import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.actor.FakePc;
-import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.PlayerClass;
 import l2r.gameserver.model.base.Race;
@@ -63,7 +62,7 @@ import gr.reunion.securitySystem.SecurityType;
 /**
  * @author -=DoctorNo=-
  */
-public final class L2ServicesManagerInstance extends L2Npc
+public final class L2ServicesManagerInstance extends L2NpcInstance
 {
 	/**
 	 * @param objectId

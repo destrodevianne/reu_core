@@ -923,6 +923,9 @@ public class PcStat extends PlayableStat
 			bonus += (bonusExp - 1);
 		}
 		
+		// Apply premium bonus
+		bonus *= getActiveChar().getRate(Rates.PREMIUM_BONUS_EXP);
+		
 		// Check for abnormal bonuses
 		bonus = Math.max(bonus, 1);
 		bonus = Math.min(bonus, Config.MAX_BONUS_EXP);
@@ -966,6 +969,9 @@ public class PcStat extends PlayableStat
 		{
 			bonus += (bonusSp - 1);
 		}
+		
+		// Apply premium bonus
+		bonus *= getActiveChar().getRate(Rates.PREMIUM_BONUS_SP);
 		
 		// Check for abnormal bonuses
 		bonus = Math.max(bonus, 1);

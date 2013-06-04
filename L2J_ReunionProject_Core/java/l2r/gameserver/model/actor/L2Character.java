@@ -7796,33 +7796,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		return _effects.isAffected(flag);
 	}
 	
-	public int getMinShopDistanceNPC()
-	{
-		return 0;
-	}
-	
-	public int getMinShopDistancePlayer()
-	{
-		return 0;
-	}
-	
-	public void setProtectedPlayer(boolean prot)
-	{
-		if (prot == true)
-		{
-			_protected = true;
-		}
-		else
-		{
-			_protected = false;
-		}
-	}
-	
-	public boolean isProtected()
-	{
-		return _protected;
-	}
-	
 	public void broadcastSocialAction(int id)
 	{
 		broadcastPacket(new SocialAction(getObjectId(), id));
@@ -8255,5 +8228,25 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public void setSsAnimation(boolean ssAnimation)
 	{
 		_ssAnimation = ssAnimation;
+	}
+	
+	public int getMinShopDistanceNPC()
+	{
+		return 0;
+	}
+	
+	public int getMinShopDistancePlayer()
+	{
+		return 0;
+	}
+	
+	public void setProtectedPlayer(boolean prot)
+	{
+		_protected = prot;
+	}
+	
+	public boolean isProtected()
+	{
+		return _protected;
 	}
 }

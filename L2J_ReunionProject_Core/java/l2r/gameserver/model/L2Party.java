@@ -24,11 +24,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.configs.PremiumServiceConfigs;
-
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.SevenSignsFestival;
@@ -36,6 +32,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.instancemanager.DuelManager;
+import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
@@ -65,6 +62,8 @@ import l2r.gameserver.network.serverpackets.PartySmallWindowDeleteAll;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
+import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configs.PremiumServiceConfigs;
 
 /**
  * This class serves as a container for player parties.
@@ -822,8 +821,6 @@ public class L2Party extends AbstractPlayerGroup
 		long temp_exp;
 		double preCalculation;
 		
-		xpReward *= getExpBonus(validMembers.size());
-		spReward *= getSpBonus(validMembers.size());
 		xpReward_pr *= getExpBonus(validMembers.size());
 		spReward_pr *= getSpBonus(validMembers.size());
 		temp_exp = xpReward;
@@ -848,10 +845,18 @@ public class L2Party extends AbstractPlayerGroup
 					continue;
 				}
 				
-				if (((L2PcInstance) member).isPremium() && PremiumServiceConfigs.USE_PREMIUM_SERVICE)
+				if (member.isPlayer())
 				{
-					xpReward = xpReward_pr;
-					spReward = spReward_pr;
+					if (((L2PcInstance) member).isPremium() && PremiumServiceConfigs.USE_PREMIUM_SERVICE)
+					{
+						xpReward = xpReward_pr;
+						spReward = spReward_pr;
+					}
+					else
+					{
+						xpReward = temp_exp;
+						spReward = temp_sp;
+					}
 				}
 				else
 				{
@@ -901,6 +906,7 @@ public class L2Party extends AbstractPlayerGroup
 						if (addexp > 0)
 						{
 							member.getActingPlayer().updateVitalityPoints(vitalityPoints, true, false);
+							PcCafePointsManager.getInstance().givePcCafePoint(((L2PcInstance) member), addexp);
 						}
 					}
 					else
