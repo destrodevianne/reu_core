@@ -42,7 +42,17 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 	protected void readImpl()
 	{
 		_objectId = readD();
-		_amount = readQ();
+		long amount = readQ();
+		if (amount < 0)
+		{
+			String msgErr = "[RequestGiveItemToPet] player " + getClient().getActiveChar().getName() + " tried an overflow exploit, ban this player!";
+			Util.handleIllegalPlayerAction(getClient().getActiveChar(), msgErr, Config.DEFAULT_PUNISH);
+			_amount = 0;
+		}
+		else
+		{
+			_amount = amount;
+		}
 	}
 	
 	@Override
