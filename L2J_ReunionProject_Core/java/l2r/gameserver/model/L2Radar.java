@@ -19,7 +19,6 @@
 package l2r.gameserver.model;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.RadarControl;
 
@@ -58,9 +57,12 @@ public final class L2Radar
 	
 	public void removeAllMarkers()
 	{
-		for (RadarMarker tempMarker : _markers)
+		if (_markers != null)
 		{
-			_player.sendPacket(new RadarControl(2, 2, tempMarker._x, tempMarker._y, tempMarker._z));
+			for (RadarMarker tempMarker : _markers)
+			{
+				_player.sendPacket(new RadarControl(2, 2, tempMarker._x, tempMarker._y, tempMarker._z));
+			}
 		}
 		
 		_markers.clear();
