@@ -46,7 +46,10 @@ public class QuestTimer
 				{
 					cancelAndRemove();
 				}
-				getQuest().notifyEvent(getName(), getNpc(), getPlayer());
+				if ((getQuest() != null) && (getName() != null) && (getNpc() != null) && (getPlayer() != null))
+				{
+					getQuest().notifyEvent(getName(), getNpc(), getPlayer());
+				}
 			}
 			catch (Exception e)
 			{
