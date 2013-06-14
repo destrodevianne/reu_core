@@ -4312,7 +4312,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				{
 					su.addAttribute(StatusUpdate.CAST_SPD, getMAtkSpd());
 				}
-				else if (stat == Stats.MOVE_SPEED)
+				else if (stat == Stats.RUN_SPEED)
 				{
 					broadcastFull = true;
 				}

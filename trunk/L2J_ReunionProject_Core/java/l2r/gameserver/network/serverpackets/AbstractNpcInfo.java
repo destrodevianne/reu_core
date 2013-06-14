@@ -38,7 +38,6 @@ import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.effects.AbnormalEffect;
-import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.zone.ZoneId;
 import gr.reunion.datatables.FakePcsTable;
 
@@ -73,8 +72,8 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 		_heading = cha.getHeading();
 		_mAtkSpd = cha.getMAtkSpd();
 		_pAtkSpd = cha.getPAtkSpd();
-		_runSpd = cha.getTemplate().getBaseMoveSpd(MoveType.RUN);
-		_walkSpd = cha.getTemplate().getBaseMoveSpd(MoveType.WALK);
+		_runSpd = cha.getTemplate().getBaseRunSpd();
+		_walkSpd = cha.getTemplate().getBaseWalkSpd();
 	}
 	
 	/**

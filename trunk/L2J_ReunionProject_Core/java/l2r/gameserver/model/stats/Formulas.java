@@ -162,8 +162,8 @@ public final class Formulas
 		std[Stats.MAGIC_ATTACK_SPEED.ordinal()] = new Calculator();
 		std[Stats.MAGIC_ATTACK_SPEED.ordinal()].addFunc(FuncMAtkSpeed.getInstance());
 		
-		std[Stats.MOVE_SPEED.ordinal()] = new Calculator();
-		std[Stats.MOVE_SPEED.ordinal()].addFunc(FuncMoveSpeed.getInstance());
+		std[Stats.RUN_SPEED.ordinal()] = new Calculator();
+		std[Stats.RUN_SPEED.ordinal()].addFunc(FuncMoveSpeed.getInstance());
 		
 		return std;
 	}

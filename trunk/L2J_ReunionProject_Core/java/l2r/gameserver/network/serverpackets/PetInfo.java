@@ -21,7 +21,6 @@ package l2r.gameserver.network.serverpackets;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2ServitorInstance;
-import l2r.gameserver.model.stats.MoveType;
 
 public class PetInfo extends L2GameServerPacket
 {
@@ -54,8 +53,8 @@ public class PetInfo extends L2GameServerPacket
 		_mAtkSpd = _summon.getMAtkSpd();
 		_pAtkSpd = _summon.getPAtkSpd();
 		_multiplier = _summon.getMovementSpeedMultiplier();
-		_runSpd = _summon.getTemplate().getBaseMoveSpd(MoveType.RUN);
-		_walkSpd = _summon.getTemplate().getBaseMoveSpd(MoveType.WALK);
+		_runSpd = _summon.getTemplate().getBaseRunSpd();
+		_walkSpd = _summon.getTemplate().getBaseWalkSpd();
 		_swimRunSpd = _flRunSpd = _flyRunSpd = _runSpd;
 		_swimWalkSpd = _flWalkSpd = _flyWalkSpd = _walkSpd;
 		_maxHp = _summon.getMaxHp();
