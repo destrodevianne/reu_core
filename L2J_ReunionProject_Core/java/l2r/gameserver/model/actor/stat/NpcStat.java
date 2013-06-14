@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor.stat;
 
 import l2r.gameserver.model.actor.L2Npc;
-import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.stats.Stats;
 
 public class NpcStat extends CharStat
@@ -44,7 +43,7 @@ public class NpcStat extends CharStat
 	@Override
 	public int getWalkSpeed()
 	{
-		return (int) calcStat(Stats.MOVE_SPEED, getActiveChar().getTemplate().getBaseMoveSpd(MoveType.WALK), null, null);
+		return (int) calcStat(Stats.WALK_SPEED, getActiveChar().getTemplate().getBaseWalkSpd(), null, null);
 	}
 	
 	@Override
@@ -54,7 +53,10 @@ public class NpcStat extends CharStat
 		{
 			return 1;
 		}
-		
-		return (getWalkSpeed() * 1f) / getActiveChar().getTemplate().getBaseMoveSpd(getActiveChar().isRunning() ? MoveType.RUN : MoveType.WALK);
+		if (getActiveChar().isRunning())
+		{
+			return (getRunSpeed() * 1f) / getActiveChar().getTemplate().getBaseRunSpd();
+		}
+		return (getWalkSpeed() * 1f) / getActiveChar().getTemplate().getBaseWalkSpd();
 	}
 }

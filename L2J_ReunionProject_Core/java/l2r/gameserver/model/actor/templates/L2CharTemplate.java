@@ -22,7 +22,6 @@ import java.util.Map;
 
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.skills.L2Skill;
-import l2r.gameserver.model.stats.MoveType;
 
 /**
  * @author Zoey76
@@ -453,17 +452,20 @@ public class L2CharTemplate
 		return _baseMCritRate;
 	}
 	
-	public int getBaseMoveSpd(MoveType mt)
+	/**
+	 * @return the baseWalkSpd
+	 */
+	public int getBaseWalkSpd()
 	{
-		switch (mt)
-		{
-			case WALK:
-				return _baseWalkSpd;
-			case RUN:
-				return _baseRunSpd;
-		}
-		
-		return 0;
+		return _baseWalkSpd;
+	}
+	
+	/**
+	 * @return the baseRunSpd
+	 */
+	public int getBaseRunSpd()
+	{
+		return _baseRunSpd;
 	}
 	
 	/**

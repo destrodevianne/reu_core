@@ -94,7 +94,8 @@ public enum Stats
 	POWER_ATTACK_ANGLE("pAtkAngle"),
 	ATTACK_COUNT_MAX("atkCountMax"),
 	// Run speed, walk & escape speed are calculated proportionally, magic speed is a buff
-	MOVE_SPEED("runSpd"),
+	RUN_SPEED("runSpd"),
+	WALK_SPEED("walkSpd"),
 	
 	// BASIC STATS
 	STAT_STR("STR"),

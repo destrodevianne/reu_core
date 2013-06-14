@@ -28,7 +28,6 @@ import l2r.gameserver.model.items.type.L2WeaponType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Calculator;
 import l2r.gameserver.model.stats.Env;
-import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.stats.Stats;
 
 public class CharStat
@@ -441,16 +440,7 @@ public class CharStat
 			return 1;
 		}
 		
-		return getWalkSpeed() / (float) _activeChar.getTemplate().getBaseMoveSpd(MoveType.WALK);
-	}
-	
-	/**
-	 * @param mt movement type
-	 * @return the base move speed of given movement type.
-	 */
-	protected double getBaseMoveSpeed(MoveType mt)
-	{
-		return _activeChar.getTemplate().getBaseMoveSpd(mt);
+		return getRunSpeed() / (float) _activeChar.getTemplate().getBaseRunSpd();
 	}
 	
 	/**
@@ -463,7 +453,11 @@ public class CharStat
 			return 1;
 		}
 		
-		return _activeChar.isRunning() ? getRunSpeed() : getWalkSpeed();
+		if (_activeChar.isRunning())
+		{
+			return getRunSpeed();
+		}
+		return getWalkSpeed();
 	}
 	
 	/**
@@ -706,14 +700,14 @@ public class CharStat
 		
 		// err we should be adding TO the persons run speed
 		// not making it a constant
-		double baseRunSpd = getBaseMoveSpeed(MoveType.RUN);
+		double baseRunSpd = _activeChar.getTemplate().getBaseRunSpd();
 		
 		if (baseRunSpd == 0)
 		{
 			return 0;
 		}
 		
-		return (int) Math.round(calcStat(Stats.MOVE_SPEED, baseRunSpd, null, null));
+		return (int) Math.round(calcStat(Stats.RUN_SPEED, baseRunSpd, null, null));
 	}
 	
 	/**
@@ -757,14 +751,14 @@ public class CharStat
 			return 1;
 		}
 		
-		double baseWalkSpd = getBaseMoveSpeed(MoveType.WALK);
+		double baseWalkSpd = _activeChar.getTemplate().getBaseWalkSpd();
 		
 		if (baseWalkSpd == 0)
 		{
 			return 0;
 		}
 		
-		return (int) calcStat(Stats.MOVE_SPEED, baseWalkSpd);
+		return (int) calcStat(Stats.WALK_SPEED, baseWalkSpd);
 	}
 	
 	/**
