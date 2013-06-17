@@ -185,6 +185,8 @@ public class L2GuardInstance extends L2Attackable
 			return;
 		}
 		
+		player.setLastFolkNPC(this);
+		
 		// Check if the L2PcInstance already target the L2GuardInstance
 		if (getObjectId() != player.getTargetId())
 		{
