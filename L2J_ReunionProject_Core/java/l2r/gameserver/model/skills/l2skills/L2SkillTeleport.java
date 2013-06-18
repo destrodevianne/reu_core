@@ -18,7 +18,6 @@
  */
 package l2r.gameserver.model.skills.l2skills;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 
 import l2r.gameserver.instancemanager.GrandBossManager;
@@ -34,75 +33,12 @@ import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
-
 import gr.reunion.interf.NexusEvents;
 
 public class L2SkillTeleport extends L2Skill
 {
 	private final String _recallType;
 	private final Location _loc;
-	public static ArrayList<String> SpawnList = new ArrayList<>();
-	public static String[] SplitIt;
-	public static int x;
-	public static int y;
-	public static int z;
-	
-	public static void AddSpawnInfo(String name, int _x, int _y, int _z)
-	{
-		if (!CheckSpawnInfo(name))
-		{
-			String temp = name + ":" + Integer.toString(_x) + ":" + Integer.toString(_y) + ":" + Integer.toString(_z);
-			SpawnList.add(temp);
-		}
-		else
-		{
-			Object[] elements = SpawnList.toArray();
-			for (int i = 0; i < elements.length; i++)
-			{
-				SplitIt = ((String) elements[i]).split(":");
-				String nameVal = SplitIt[0];
-				if (name.equals(nameVal))
-				{
-					SpawnList.remove(i);
-					String temp = name + ":" + Integer.toString(_x) + ":" + Integer.toString(_y) + ":" + Integer.toString(_z);
-					SpawnList.add(temp);
-				}
-			}
-		}
-	}
-	
-	private static boolean CheckSpawnInfo(String name)
-	{
-		Object[] elements = SpawnList.toArray();
-		for (Object element : elements)
-		{
-			SplitIt = ((String) element).split(":");
-			String nameVal = SplitIt[0];
-			if (name.equals(nameVal))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private void GetSpawnInfo(String name)
-	{
-		
-		Object[] elements = SpawnList.toArray();
-		for (int i = 0; i < elements.length; i++)
-		{
-			SplitIt = ((String) elements[i]).split(":");
-			String nameVal = SplitIt[0];
-			if (name.equals(nameVal))
-			{
-				x = Integer.parseInt(SplitIt[1]);
-				y = Integer.parseInt(SplitIt[2]);
-				z = Integer.parseInt(SplitIt[3]);
-				SpawnList.remove(i);
-			}
-		}
-	}
 	
 	public L2SkillTeleport(StatsSet set)
 	{
@@ -224,17 +160,6 @@ public class L2SkillTeleport extends L2Skill
 					else if (_recallType.equalsIgnoreCase("Fortress"))
 					{
 						loc = MapRegionManager.getInstance().getTeleToLocation(target, MapRegionManager.TeleportWhereType.Fortress);
-					}
-					else if (_recallType.equalsIgnoreCase("AIO"))
-					{
-						target.setInstanceId(0);
-						if (target instanceof L2PcInstance)
-						{
-							((L2PcInstance) target).setIsIn7sDungeon(false);
-						}
-						GetSpawnInfo(target.getName());
-						target.teleToLocation(x, y, z);
-						return;
 					}
 					else
 					{
