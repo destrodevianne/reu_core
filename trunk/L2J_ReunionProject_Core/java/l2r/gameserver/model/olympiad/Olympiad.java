@@ -34,7 +34,6 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.Announcements;
@@ -47,8 +46,8 @@ import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.L2FastList;
-
 import gnu.trove.map.hash.TIntIntHashMap;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * @author godson
@@ -590,13 +589,41 @@ public class Olympiad
 		Announcements.getInstance().announceToAll(sm);
 		
 		Calendar currentTime = Calendar.getInstance();
-		currentTime.add(Calendar.MONTH, 1);
-		currentTime.set(Calendar.DAY_OF_MONTH, 1);
-		currentTime.set(Calendar.AM_PM, Calendar.AM);
-		currentTime.set(Calendar.HOUR, 12);
-		currentTime.set(Calendar.MINUTE, 0);
-		currentTime.set(Calendar.SECOND, 0);
-		_olympiadEnd = currentTime.getTimeInMillis();
+		
+		if (CustomServerConfigs.ENABLE_CUSTOM_PERIOD)
+		{
+			int nearest = 0;
+			Calendar[] cals = new Calendar[CustomServerConfigs.ALT_OLY_END_DATE.length];
+			for (int i = 0; i < cals.length; i++)
+			{
+				cals[i] = Calendar.getInstance();
+				cals[i].set(Calendar.DAY_OF_MONTH, CustomServerConfigs.ALT_OLY_END_DATE[i]);
+				if (cals[i].before(currentTime))
+				{
+					cals[i].add(Calendar.MONTH, 1);
+				}
+				
+				if (cals[i].before(cals[nearest]))
+				{
+					nearest = i;
+				}
+			}
+			
+			cals[nearest].set(Calendar.HOUR_OF_DAY, CustomServerConfigs.ALT_OLY_END_HOUR[0]);
+			cals[nearest].set(Calendar.MINUTE, CustomServerConfigs.ALT_OLY_END_HOUR[1]);
+			cals[nearest].set(Calendar.SECOND, CustomServerConfigs.ALT_OLY_END_HOUR[2]);
+			_olympiadEnd = cals[nearest].getTimeInMillis();
+		}
+		else
+		{
+			currentTime.add(Calendar.MONTH, 1);
+			currentTime.set(Calendar.DAY_OF_MONTH, 1);
+			currentTime.set(Calendar.AM_PM, Calendar.AM);
+			currentTime.set(Calendar.HOUR, 12);
+			currentTime.set(Calendar.MINUTE, 0);
+			currentTime.set(Calendar.SECOND, 0);
+			_olympiadEnd = currentTime.getTimeInMillis();
+		}
 		
 		Calendar nextChange = Calendar.getInstance();
 		_nextWeeklyChange = nextChange.getTimeInMillis() + WEEKLY_PERIOD;
