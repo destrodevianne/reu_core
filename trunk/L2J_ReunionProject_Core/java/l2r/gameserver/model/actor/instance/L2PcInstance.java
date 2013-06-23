@@ -608,6 +608,9 @@ public final class L2PcInstance extends L2Playable
 	public boolean _TopZoneDone = false;
 	private int _tries;
 	
+	/** Antifeed System */
+	private boolean _antifeedProtection = false;
+	
 	/** Anti Bot System */
 	private String _botAnswer;
 	private String _farmBotCode;
@@ -16857,7 +16860,9 @@ public final class L2PcInstance extends L2Playable
 		globalProfessionChangeListeners.remove(listener);
 	}
 	
-	// XXX: Donate Getters and Setters
+	// ============================================== //
+	// Donate Engine By L][Reunion Team //
+	// ============================================== //
 	public void setDonateCode(StringBuilder finalString)
 	{
 		donateCode = finalString.toString();
@@ -16878,7 +16883,9 @@ public final class L2PcInstance extends L2Playable
 		return donateCodeRight;
 	}
 	
-	// XXX: Antibot Getters and Setters
+	// ============================================== //
+	// Antibot Engine By L][Reunion Team //
+	// ============================================== //
 	public String getBotAnswer()
 	{
 		return _botAnswer;
@@ -16991,6 +16998,9 @@ public final class L2PcInstance extends L2Playable
 		return _isUsingAioWh;
 	}
 	
+	// ============================================== //
+	// Vote Engine By L][Reunion Team //
+	// ============================================== //
 	public boolean isHopZoneDone()
 	{
 		return _HopZoneDone;
@@ -17081,7 +17091,9 @@ public final class L2PcInstance extends L2Playable
 		return false;
 	}
 	
-	// Add NevitAdvent by pmq Start
+	// ============================================== //
+	// Nevit Blessing Engine By L][Reunion Team //
+	// ============================================== //
 	/** Advent 4h task **/
 	private ScheduledFuture<?> _adventBonusTask;
 	/** Advent Blessing task **/
@@ -17221,8 +17233,9 @@ public final class L2PcInstance extends L2Playable
 		}
 	}
 	
-	// Add NevitAdvent by pmq End
-	
+	// ============================================== //
+	// Premium Engine By L][Reunion Team //
+	// ============================================== //
 	public void setPremiumService(boolean premiumService)
 	{
 		_premiumService = premiumService;
@@ -17232,8 +17245,6 @@ public final class L2PcInstance extends L2Playable
 	{
 		return _premiumService;
 	}
-	
-	// Premium Engine end
 	
 	// ============================================== //
 	// Achievements Engine By L][Reunion Team //
@@ -17326,9 +17337,9 @@ public final class L2PcInstance extends L2Playable
 		return _completedAchievements;
 	}
 	
-	// Achievement system end
-	
-	// User panel system start
+	// ============================================== //
+	// Player Panel Engine By L][Reunion Team //
+	// ============================================== //
 	public void setExpOn(boolean expOn)
 	{
 		_expGainOn = expOn;
@@ -17364,8 +17375,9 @@ public final class L2PcInstance extends L2Playable
 		_onEnterLoadSS = onEnterLoadSS;
 	}
 	
-	// User panel system end
-	
+	// ============================================== //
+	// Name Prefix Engine By L][Reunion Team //
+	// ============================================== //
 	public void loadNamePrefix()
 	{
 		NamePrefix.namePrefixCategories(this, getNamePrefixCategory());
@@ -17391,11 +17403,14 @@ public final class L2PcInstance extends L2Playable
 		namePrefix = prefix;
 	}
 	
-	// Reunion Event Engine Start
+	// ============================================== //
+	// Reunion Event Engine By L][Reunion Team //
+	// ============================================== //
 	private final PlayerEventInfo _eventInfo = new PlayerEventInfo(this);
 	
-	// Reunion Events antifeed protection
-	
+	// ============================================== //
+	// Antifeed Protection Engine By L][Reunion Team //
+	// ============================================== //
 	private L2PcTemplate _antifeedTemplate = null;
 	private boolean _antifeedSex;
 	
@@ -17445,6 +17460,11 @@ public final class L2PcInstance extends L2Playable
 			getAppearance().setVisibleName("Unknown");
 			createRandomAntifeedTemplate();
 		}
+		
+		if (broadcast)
+		{
+			broadcastUserInfo();
+		}
 	}
 	
 	public L2PcTemplate getAntifeedTemplate()
@@ -17457,7 +17477,15 @@ public final class L2PcInstance extends L2Playable
 		return _antifeedSex;
 	}
 	
-	// Reunion Events antifeed protection end
+	public boolean hasAntifeedProtection()
+	{
+		return _antifeedProtection;
+	}
+	
+	public void setAntiFeedProtection(boolean antiFeedProtection)
+	{
+		_antifeedProtection = antiFeedProtection;
+	}
 	
 	public void registerShortCut(L2ShortCut shortcut, boolean storeToDb)
 	{

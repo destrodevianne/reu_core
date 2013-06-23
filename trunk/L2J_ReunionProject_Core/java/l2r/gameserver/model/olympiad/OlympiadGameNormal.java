@@ -39,6 +39,7 @@ import l2r.gameserver.network.serverpackets.ExOlympiadUserInfo;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
+import gr.reunion.utils.PcDualBoxCheck;
 
 /**
  * @author GodKratos, Pere, DS
@@ -171,34 +172,10 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 	protected final boolean makeCompetitionStart()
 	{
 		// Dual Box Check pcIp based in Olys.
-		String ip_net1 = _playerOne.getPlayer().getClient().getConnection().getInetAddress().getHostAddress();
-		String ip_net2 = _playerTwo.getPlayer().getClient().getConnection().getInetAddress().getHostAddress();
-		String ip_pc1 = "";
-		String ip_pc2 = "";
-		int[][] trace1 = _playerOne.getPlayer().getClient().getTrace();
-		for (int o = 0; o < trace1[0].length; o++)
-		{
-			ip_pc1 = ip_pc1 + trace1[0][o];
-			if (o != (trace1[0].length - 1))
-			{
-				ip_pc1 = ip_pc1 + ".";
-			}
-		}
-		int[][] trace2 = _playerTwo.getPlayer().getClient().getTrace();
-		for (int u = 0; u < trace2[0].length; u++)
-		{
-			ip_pc2 = ip_pc2 + trace2[0][u];
-			if (u != (trace2[0].length - 1))
-			{
-				ip_pc2 = ip_pc2 + ".";
-			}
-		}
-		if (ip_net1.equals(ip_net2) && ip_pc1.equals(ip_pc2))
+		if (PcDualBoxCheck.isDualBox(_playerOne.getPlayer(), _playerTwo.getPlayer()))
 		{
 			_playerOne.getPlayer().sendMessage("Competiton canceled, Dual Box detected!");
 			_playerTwo.getPlayer().sendMessage("Competiton canceled, Dual Box detected!");
-			_log.log(Level.WARNING, "Olympiad System: " + _playerOne.getPlayer().getName() + " (" + ip_net1 + "/ " + ip_pc1 + ") Dual Box Detected!");
-			_log.log(Level.WARNING, "Olympiad System: " + _playerTwo.getPlayer().getName() + " (" + ip_net2 + "/ " + ip_pc2 + ") Dual Box Detected!");
 			return false;
 		}
 		
