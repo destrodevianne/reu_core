@@ -17517,8 +17517,6 @@ public final class L2PcInstance extends L2Playable
 		return _eventInfo;
 	}
 	
-	// Reunion Event Engine End
-	
 	// DUPE items fix
 	public void resetOfflineShop()
 	{
