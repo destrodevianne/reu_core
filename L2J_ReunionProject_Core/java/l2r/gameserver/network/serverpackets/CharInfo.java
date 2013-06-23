@@ -116,6 +116,11 @@ public class CharInfo extends L2GameServerPacket
 			antifeed = false;
 		}
 		
+		if (_activeChar.hasAntifeedProtection())
+		{
+			antifeed = true;
+		}
+		
 		if (_invisible)
 		{
 			L2PcInstance tmp = getClient().getActiveChar();
