@@ -57,6 +57,7 @@ import l2r.gameserver.model.entity.Siege;
 import l2r.gameserver.model.entity.clanhall.AuctionableHall;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.QuestState;
 import l2r.gameserver.model.zone.ZoneId;
@@ -587,6 +588,12 @@ public class EnterWorld extends L2GameClientPacket
 		EnterWorldCustomHandler.getInstance().loadStaticImages(activeChar);
 		EnterWorldCustomHandler.getInstance().checkIfBot(activeChar);
 		AntibotSystem.checkOnEnterBot(activeChar);
+		if (Olympiad.getInstance().playerInStadia(activeChar))
+		{
+			activeChar.doRevive();
+			activeChar.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+			activeChar.sendMessage("You have been teleported to the nearest town due to you being in an Olympiad Stadium");
+		}
 		/** End of Custom Section */
 		
 		L2ClassMasterInstance.showQuestionMark(activeChar);
