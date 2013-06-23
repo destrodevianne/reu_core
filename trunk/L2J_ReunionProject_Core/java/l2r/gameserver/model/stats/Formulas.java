@@ -605,10 +605,11 @@ public final class Formulas
 		
 		boolean isPvP = attacker.isPlayable() && target.isPlayer();
 		boolean isPvE = attacker.isPlayable() && target.isL2Attackable();
-		double damage = attacker.getPAtk(target);
+		double power = skill.getPower(isPvP, isPvE);
+		double damage = 0;
 		double proximityBonus = 1;
 		double graciaPhysSkillBonus = skill.isMagic() ? 1 : 1.10113; // Gracia final physical skill bonus 10.113%
-		double ssboost = ss ? 2.04 : 1; // 104% bonus with SS
+		double ssboost = ss ? (skill.getSSBoost() > 0 ? skill.getSSBoost() : 2.04) : 1; // 104% bonus with SS
 		double pvpBonus = 1;
 		
 		if (attacker.isPlayable() && target.isPlayable())
@@ -619,13 +620,22 @@ public final class Formulas
 			defence *= target.calcStat(Stats.PVP_PHYS_SKILL_DEF, 1, null, null);
 		}
 		
-		// Behind: +20% - Side: +10% (TODO: values are unconfirmed, possibly custom, remove or update when confirmed)
-		proximityBonus = attacker.isBehindTarget() ? 1.2 : attacker.isInFrontOfTarget() ? 1 : 1.1;
+		// Behind: 20% - Front: 10% (TODO: values are unconfirmed, possibly custom, remove or update when confirmed)
+		proximityBonus = attacker.isBehindTarget() ? 1.2 : attacker.isInFrontOfTarget() ? 1.1 : 1;
 		
 		damage *= calcValakasTrait(attacker, target, skill);
 		double element = calcElemental(attacker, target, skill);
 		
-		damage += (((70. * graciaPhysSkillBonus * (skill.getPower(isPvP, isPvE) + (damage * ssboost))) / defence) * (attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill)) * (target.calcStat(Stats.CRIT_VULN, 1, target, skill)) * proximityBonus * element * pvpBonus) + (((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1 * 70) / defence) * graciaPhysSkillBonus);
+		// SSBoost > 0 have different calculation
+		if (skill.getSSBoost() > 0)
+		{
+			damage += (((70. * graciaPhysSkillBonus * (attacker.getPAtk(target) + power)) / defence) * (attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill)) * (target.calcStat(Stats.CRIT_VULN, 1, target, skill)) * ssboost * proximityBonus * element * pvpBonus) + (((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1 * 70) / defence) * graciaPhysSkillBonus);
+		}
+		else
+		{
+			damage += (((70. * graciaPhysSkillBonus * (power + (attacker.getPAtk(target) * ssboost))) / defence) * (attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill)) * (target.calcStat(Stats.CRIT_VULN, 1, target, skill)) * proximityBonus * element * pvpBonus) + (((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1 * 70) / defence) * graciaPhysSkillBonus);
+		}
+		
 		damage += target.calcStat(Stats.CRIT_ADD_VULN, 0, target, skill) * 6.1;
 		// get the vulnerability for the instance due to skills (buffs, passives, toggles, etc)
 		damage = target.calcStat(Stats.DAGGER_WPN_VULN, damage, target, null);
