@@ -1,8 +1,5 @@
 package l2r.gameserver.model.actor.instance;
 
-import gr.reunion.datatables.CustomTable;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Character;
@@ -12,6 +9,10 @@ import l2r.gameserver.model.zone.L2ZoneType;
 import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
+import gr.reunion.datatables.CustomTable;
+import gr.reunion.main.Conditions;
+import gr.reunion.securitySystem.SecurityActions;
+import gr.reunion.securitySystem.SecurityType;
 
 /**
  * @author -=DoctorNo=-
@@ -120,9 +121,8 @@ public final class L2ReunionGkInstance extends L2Npc
 			int itemIdToGet = 57;
 			int price = 1000;
 			
-			if ((player.getInventory().getItemByItemId(itemIdToGet) != null) && (player.getInventory().getItemByItemId(itemIdToGet).getCount() < price))
+			if (!Conditions.checkPlayerItemCount(player, itemIdToGet, price))
 			{
-				player.sendMessage("Not enough adena.");
 				return;
 			}
 			
