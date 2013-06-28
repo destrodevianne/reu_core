@@ -23,11 +23,8 @@ import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
 import java.util.List;
 import java.util.logging.Logger;
 
-import gr.reunion.configs.CustomServerConfigs;
-
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -40,6 +37,7 @@ import l2r.gameserver.network.serverpackets.ItemList;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * @author Advi
@@ -815,7 +813,7 @@ public class TradeList
 			final L2ItemInstance adenaItem = playerInventory.getFAdenaInstance();
 			if (!playerInventory.reduceFAdena("PrivateStore", totalPrice, player, _owner))
 			{
-				player.sendPacket(SystemMessageId.YOU_NOT_ENOUGH_ADENA);
+				player.sendMessage("You do not have enough " + ItemTable.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + ".");
 				return 1;
 			}
 			playerIU.addItem(adenaItem);
