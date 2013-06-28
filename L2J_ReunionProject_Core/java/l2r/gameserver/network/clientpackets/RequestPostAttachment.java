@@ -19,8 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
-import gr.reunion.configs.CustomServerConfigs;
-
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.instancemanager.MailManager;
@@ -38,6 +36,7 @@ import l2r.gameserver.network.serverpackets.ItemList;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * @author Migi, DS
@@ -185,7 +184,7 @@ public final class RequestPostAttachment extends L2GameClientPacket
 		{
 			if ((adena > 0) && !activeChar.reduceFAdena("PayMail", adena, null, true))
 			{
-				activeChar.sendPacket(SystemMessageId.CANT_RECEIVE_NO_ADENA);
+				activeChar.sendMessage("You cannot receive because you don't have enough " + ItemTable.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + ".");
 				return;
 			}
 		}

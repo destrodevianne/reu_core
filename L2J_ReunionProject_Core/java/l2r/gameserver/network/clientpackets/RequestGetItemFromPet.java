@@ -41,8 +41,15 @@ public final class RequestGetItemFromPet extends L2GameClientPacket
 	protected void readImpl()
 	{
 		_objectId = readD();
-		_amount = readQ();
+		long amount = readQ();
 		_unknown = readD();// = 0 for most trades
+		if (amount < 0)
+		{
+			String msgErr = "[RequestGetItemFromPet] player " + getClient().getActiveChar().getName() + " tried an overflow exploit, ban this player!";
+			Util.handleIllegalPlayerAction(getClient().getActiveChar(), msgErr, Config.DEFAULT_PUNISH);
+			_amount = 0;
+		}
+		_amount = amount;
 	}
 	
 	@Override
