@@ -312,6 +312,7 @@ import gr.reunion.configs.LeaderboardsConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.configs.PvpRewardSystemConfigs;
 import gr.reunion.datatables.AdventTable;
+import gr.reunion.extra.FlagZoneHandler;
 import gr.reunion.interf.NexusEvents;
 import gr.reunion.interf.PlayerEventInfo;
 import gr.reunion.javaBuffer.PlayerMethods;
@@ -6328,7 +6329,7 @@ public final class L2PcInstance extends L2Playable
 		
 		if (isInsideZone(ZoneId.FLAG) && targetPlayer.isInsideZone(ZoneId.FLAG) && FlagZoneConfigs.ENABLE_FLAG_ZONE)
 		{
-			// FlagZoneHandler.validateRewardConditions(this, targetPlayer);
+			FlagZoneHandler.validateRewardConditions(this, targetPlayer);
 		}
 		
 		// If in Arena, do nothing
