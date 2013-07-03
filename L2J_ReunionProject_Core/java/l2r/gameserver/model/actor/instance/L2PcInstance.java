@@ -307,6 +307,7 @@ import gnu.trove.list.array.TIntArrayList;
 import gr.reunion.achievementSystem.AchievementsManager;
 import gr.reunion.configs.AntibotConfigs;
 import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configs.FlagZoneConfigs;
 import gr.reunion.configs.LeaderboardsConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.configs.PvpRewardSystemConfigs;
@@ -6323,6 +6324,11 @@ public final class L2PcInstance extends L2Playable
 		if (isInDuel() && targetPlayer.isInDuel())
 		{
 			return;
+		}
+		
+		if (isInsideZone(ZoneId.FLAG) && targetPlayer.isInsideZone(ZoneId.FLAG) && FlagZoneConfigs.ENABLE_FLAG_ZONE)
+		{
+			// FlagZoneHandler.validateRewardConditions(this, targetPlayer);
 		}
 		
 		// If in Arena, do nothing
@@ -17383,6 +17389,37 @@ public final class L2PcInstance extends L2Playable
 	public void setNamePrefix(String prefix)
 	{
 		namePrefix = prefix;
+	}
+	
+	// ============================================== //
+	// Reunion FlagZone Engine By L][Reunion Team //
+	// ============================================== //
+	private int sameTargetCounter = 0;
+	private long previousVictimId = 0;
+	
+	public int getSameTargetCounter()
+	{
+		return sameTargetCounter;
+	}
+	
+	public void setSameTargetCounter(int count)
+	{
+		sameTargetCounter = count;
+	}
+	
+	public void increaseSameTargetCounter()
+	{
+		sameTargetCounter++;
+	}
+	
+	public long getPreviousVictimId()
+	{
+		return previousVictimId;
+	}
+	
+	public void setPreviousVictimId(int objectId)
+	{
+		previousVictimId = objectId;
 	}
 	
 	// ============================================== //
