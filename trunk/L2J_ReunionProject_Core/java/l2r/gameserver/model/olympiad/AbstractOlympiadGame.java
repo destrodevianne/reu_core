@@ -210,12 +210,12 @@ public abstract class AbstractOlympiadGame
 			player.setOlympiadSide(par.getSide());
 			player.olyBuff = 5;
 			loc.setInstanceId(OlympiadGameManager.getInstance().getOlympiadTask(id).getZone().getInstanceId());
-			player.teleToLocation(loc, false);
 			if (CustomServerConfigs.ENABLE_OLY_ANTIFEED)
 			{
 				player.setAntiFeedProtection(true);
 				player.startAntifeedProtection(true, true);
 			}
+			player.teleToLocation(loc, false);
 			player.sendPacket(new ExOlympiadMode(2));
 		}
 		catch (Exception e)
@@ -453,12 +453,12 @@ public abstract class AbstractOlympiadGame
 		}
 		
 		player.setInstanceId(0);
-		player.teleToLocation(player.getLastX(), player.getLastY(), player.getLastZ());
 		if (CustomServerConfigs.ENABLE_OLY_ANTIFEED)
 		{
 			player.setAntiFeedProtection(false);
 			player.startAntifeedProtection(false, true);
 		}
+		player.teleToLocation(player.getLastX(), player.getLastY(), player.getLastZ());
 		player.setLastCords(0, 0, 0);
 	}
 	
