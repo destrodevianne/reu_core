@@ -14,19 +14,21 @@
  */
 package l2r.gameserver.model.zone.type;
 
-import gr.reunion.configs.CustomServerConfigs;
+import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.ZoneId;
+import l2r.util.Rnd;
+import gr.reunion.configs.ChaoticZoneConfigs;
 
 /**
- * @author -=DoctorNo=-
+ * @author -=GodFather=-
  */
 public class L2ChaoticZone extends L2RespawnZone
 {
 	// Chaotic Zone Revive Spots
-	public static int[] _x =
+	protected static int[] _x =
 	{
 		-76063,
 		-78299,
@@ -34,7 +36,7 @@ public class L2ChaoticZone extends L2RespawnZone
 		-87738,
 		-81864
 	};
-	public static int[] _y =
+	protected static int[] _y =
 	{
 		-47285,
 		-54143,
@@ -42,7 +44,7 @@ public class L2ChaoticZone extends L2RespawnZone
 		-47331,
 		-43048
 	};
-	public static int[] _z =
+	protected static int[] _z =
 	{
 		-10682,
 		-10682,
@@ -65,7 +67,7 @@ public class L2ChaoticZone extends L2RespawnZone
 		character.setInsideZone(ZoneId.NO_BOOKMARK, true);
 		character.setInsideZone(ZoneId.NO_ITEM_DROP, true);
 		
-		if (character instanceof L2PcInstance)
+		if (character.isPlayer())
 		{
 			((L2PcInstance) character).setPvpFlag(1);
 			((L2PcInstance) character).sendMessage("You entered the Chaotic Zone.");
@@ -82,12 +84,12 @@ public class L2ChaoticZone extends L2RespawnZone
 		character.setInsideZone(ZoneId.NO_BOOKMARK, false);
 		character.setInsideZone(ZoneId.NO_ITEM_DROP, false);
 		
-		if (character instanceof L2PcInstance)
+		if (character.isPlayer())
 		{
 			((L2PcInstance) character).sendMessage("You left the Chaotic Zone.");
-			if (CustomServerConfigs.ENABLE_CHAOTIC_ZONE_SKILL)
+			if (ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_SKILL)
 			{
-				((L2PcInstance) character).stopSkillEffects(CustomServerConfigs.CHAOTIC_ZONE_SKILL_ID);
+				((L2PcInstance) character).stopSkillEffects(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID);
 			}
 			((L2PcInstance) character).setPvpFlag(0);
 			((L2PcInstance) character).broadcastUserInfo();
@@ -95,23 +97,36 @@ public class L2ChaoticZone extends L2RespawnZone
 	}
 	
 	@Override
-	public void onDieInside(L2Character character)
+	public void onDieInside(final L2Character character)
 	{
-		if (character instanceof L2PcInstance)
+		if (character.isPlayer() && ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_AUTO_REVIVE)
 		{
-			// Don nothing
+			character.sendMessage("Get ready! You will be revive in " + ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY + " seconds!");
+			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					int r = Rnd.get(5);
+					character.teleToLocation(L2ChaoticZone._x[r], L2ChaoticZone._y[r], L2ChaoticZone._z[r]);
+					character.doRevive();
+				}
+			}, ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY * 1000);
 		}
 	}
 	
 	@Override
 	public void onReviveInside(L2Character character)
 	{
-		SkillTable.getInstance().getInfo(1323, 1).getEffects(character, character);
-		character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
-		character.setCurrentCp(character.getMaxCp());
-		if (CustomServerConfigs.ENABLE_CHAOTIC_ZONE_SKILL)
+		if (character.isPlayer())
 		{
-			SkillTable.getInstance().getInfo(CustomServerConfigs.CHAOTIC_ZONE_SKILL_ID, 1).getEffects(character, character);
+			SkillTable.getInstance().getInfo(1323, 1).getEffects(character, character);
+			character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
+			character.setCurrentCp(character.getMaxCp());
+			if (ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_SKILL)
+			{
+				SkillTable.getInstance().getInfo(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID, 1).getEffects(character, character);
+			}
 		}
 	}
 }

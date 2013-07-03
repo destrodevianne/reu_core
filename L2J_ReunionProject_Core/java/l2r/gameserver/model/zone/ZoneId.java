@@ -48,7 +48,8 @@ public enum ZoneId
 	NO_ITEM_DROP(21),
 	NO_RESTART(22),
 	ZONE_CHAOTIC(23),
-	QUEEN_ANT(24);
+	QUEEN_ANT(24),
+	FLAG(25);
 	
 	private final int _id;
 	

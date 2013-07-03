@@ -44,6 +44,7 @@ import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Wedding;
 import gr.reunion.configs.AioBufferConfigs;
 import gr.reunion.configs.AioItemsConfigs;
 import gr.reunion.configs.AntibotConfigs;
+import gr.reunion.configs.ChaoticZoneConfigs;
 import gr.reunion.configs.CustomServerConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.configs.VoteSystemConfigs;
@@ -76,7 +77,7 @@ public class VoicedCommandHandler implements IHandler<IVoicedCommandHandler, Str
 			registerHandler(new Antibot());
 		}
 		
-		if (CustomServerConfigs.ENABLE_CHAOTIC_ZONE)
+		if (ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE)
 		{
 			registerHandler(new PvpZoneVCmd());
 		}
