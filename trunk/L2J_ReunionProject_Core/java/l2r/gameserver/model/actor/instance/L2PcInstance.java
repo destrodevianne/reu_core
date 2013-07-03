@@ -211,7 +211,6 @@ import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.model.zone.L2ZoneType;
 import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.model.zone.type.L2BossZone;
-import l2r.gameserver.model.zone.type.L2ChaoticZone;
 import l2r.gameserver.model.zone.type.L2NoRestartZone;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.SystemMessageId;
@@ -6015,23 +6014,6 @@ public final class L2PcInstance extends L2Playable
 					{
 						Announcements.getInstance().announceToAll(msg);
 					}
-				}
-			}
-			
-			if (isInsideZone(ZoneId.ZONE_CHAOTIC))
-			{
-				{
-					sendMessage("Get ready! You will be revive in " + CustomServerConfigs.CHAOTIC_ZONE_REVIVE_DELAY + " seconds!");
-					ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							int r = Rnd.get(5);
-							teleToLocation(L2ChaoticZone._x[r], L2ChaoticZone._y[r], L2ChaoticZone._z[r]);
-							doRevive();
-						}
-					}, CustomServerConfigs.CHAOTIC_ZONE_REVIVE_DELAY * 1000);
 				}
 			}
 			
