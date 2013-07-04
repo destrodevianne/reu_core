@@ -21,7 +21,6 @@ package l2r.gameserver.instancemanager;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.L2World;
@@ -31,7 +30,6 @@ import l2r.gameserver.model.actor.instance.L2BoatInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
-
 import gnu.trove.procedure.TObjectProcedure;
 
 public class BoatManager

@@ -21,7 +21,6 @@ package l2r.gameserver.network.clientpackets;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.network.serverpackets.ExCursedWeaponList;

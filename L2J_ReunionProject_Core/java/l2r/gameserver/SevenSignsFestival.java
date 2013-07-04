@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ai.CtrlIntention;
@@ -63,7 +62,6 @@ import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-
 import gnu.trove.procedure.TObjectProcedure;
 
 /**

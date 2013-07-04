@@ -11,15 +11,14 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import javolution.util.FastMap;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance.ItemLocation;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid

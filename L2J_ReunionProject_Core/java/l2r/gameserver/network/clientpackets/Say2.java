@@ -23,7 +23,6 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.handler.ChatHandler;
 import l2r.gameserver.handler.IChatHandler;
@@ -39,7 +38,6 @@ import l2r.gameserver.scripting.scriptengine.listeners.talk.ChatFilterListener;
 import l2r.gameserver.scripting.scriptengine.listeners.talk.ChatListener;
 import l2r.gameserver.util.Broadcast;
 import l2r.gameserver.util.Util;
-
 import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.interf.NexusEvents;
 
@@ -226,7 +224,7 @@ public final class Say2 extends L2GameClientPacket
 			return;
 		}
 		
-		if (activeChar.isInJail() && Config.JAIL_DISABLE_CHAT)
+		if (activeChar.isJailed() && Config.JAIL_DISABLE_CHAT)
 		{
 			if ((_type == TELL) || (_type == SHOUT) || (_type == TRADE) || (_type == HERO_VOICE))
 			{

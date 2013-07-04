@@ -19,7 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ExSendManorList;
 

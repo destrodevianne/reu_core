@@ -43,7 +43,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.L2World;
@@ -755,6 +754,11 @@ public class LoginServerThread extends Thread
 			default:
 				throw new IllegalArgumentException("Status does not exists:" + status);
 		}
+	}
+	
+	public L2GameClient getClient(String name)
+	{
+		return name != null ? _accountsInGameServer.get(name) : null;
 	}
 	
 	public static class SessionKey

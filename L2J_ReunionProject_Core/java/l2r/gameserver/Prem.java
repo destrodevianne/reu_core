@@ -19,9 +19,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import gr.reunion.configs.PremiumServiceConfigs;
-
 import l2r.L2DatabaseFactory;
+import gr.reunion.configs.PremiumServiceConfigs;
 
 public class Prem
 {

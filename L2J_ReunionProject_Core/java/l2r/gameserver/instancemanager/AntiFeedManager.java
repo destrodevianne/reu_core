@@ -21,7 +21,6 @@ package l2r.gameserver.instancemanager;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

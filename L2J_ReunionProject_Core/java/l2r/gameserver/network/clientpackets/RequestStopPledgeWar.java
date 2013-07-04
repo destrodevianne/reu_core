@@ -26,7 +26,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
-
 import gnu.trove.procedure.TObjectProcedure;
 
 public final class RequestStopPledgeWar extends L2GameClientPacket

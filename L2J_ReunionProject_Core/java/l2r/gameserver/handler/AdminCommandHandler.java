@@ -24,7 +24,6 @@ import java.util.Map;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminAdmin;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminAnnouncements;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminBBS;
-import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminBan;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminBuffs;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminCHSiege;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminCache;
@@ -75,6 +74,7 @@ import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminPetition;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminPledge;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminPolymorph;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminPremium;
+import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminPunishment;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminQuest;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminRepairChar;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminRes;
@@ -109,7 +109,6 @@ public class AdminCommandHandler implements IHandler<IAdminCommandHandler, Strin
 		
 		registerHandler(new AdminAdmin());
 		registerHandler(new AdminAnnouncements());
-		registerHandler(new AdminBan());
 		registerHandler(new AdminBBS());
 		registerHandler(new AdminBuffs());
 		registerHandler(new AdminCache());
@@ -161,6 +160,7 @@ public class AdminCommandHandler implements IHandler<IAdminCommandHandler, Strin
 		registerHandler(new AdminPledge());
 		registerHandler(new AdminPolymorph());
 		registerHandler(new AdminPremium());
+		registerHandler(new AdminPunishment());
 		registerHandler(new AdminQuest());
 		registerHandler(new AdminRepairChar());
 		registerHandler(new AdminRes());

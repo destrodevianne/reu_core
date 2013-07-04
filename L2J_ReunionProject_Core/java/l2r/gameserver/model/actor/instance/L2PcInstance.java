@@ -98,6 +98,7 @@ import l2r.gameserver.instancemanager.HandysBlockCheckerManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.ItemsOnGroundManager;
 import l2r.gameserver.instancemanager.MapRegionManager;
+import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.SiegeManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
@@ -153,6 +154,26 @@ import l2r.gameserver.model.actor.position.PcPosition;
 import l2r.gameserver.model.actor.stat.PcStat;
 import l2r.gameserver.model.actor.stat.Rates;
 import l2r.gameserver.model.actor.status.PcStatus;
+import l2r.gameserver.model.actor.tasks.player.DismountTask;
+import l2r.gameserver.model.actor.tasks.player.FameTask;
+import l2r.gameserver.model.actor.tasks.player.GameGuardCheckTask;
+import l2r.gameserver.model.actor.tasks.player.HerbTask;
+import l2r.gameserver.model.actor.tasks.player.InventoryEnableTask;
+import l2r.gameserver.model.actor.tasks.player.LookingForFishTask;
+import l2r.gameserver.model.actor.tasks.player.PetFeedTask;
+import l2r.gameserver.model.actor.tasks.player.PvPFlagTask;
+import l2r.gameserver.model.actor.tasks.player.RecoBonusTaskEnd;
+import l2r.gameserver.model.actor.tasks.player.RecoGiveTask;
+import l2r.gameserver.model.actor.tasks.player.RentPetTask;
+import l2r.gameserver.model.actor.tasks.player.ResetChargesTask;
+import l2r.gameserver.model.actor.tasks.player.ResetSoulsTask;
+import l2r.gameserver.model.actor.tasks.player.ShortBuffTask;
+import l2r.gameserver.model.actor.tasks.player.SitDownTask;
+import l2r.gameserver.model.actor.tasks.player.StandUpTask;
+import l2r.gameserver.model.actor.tasks.player.TeleportWatchdogTask;
+import l2r.gameserver.model.actor.tasks.player.VitalityTask;
+import l2r.gameserver.model.actor.tasks.player.WarnUserTakeBreakTask;
+import l2r.gameserver.model.actor.tasks.player.WaterTask;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.base.ClassLevel;
@@ -195,6 +216,8 @@ import l2r.gameserver.model.multisell.PreparedListContainer;
 import l2r.gameserver.model.olympiad.OlympiadGameManager;
 import l2r.gameserver.model.olympiad.OlympiadGameTask;
 import l2r.gameserver.model.olympiad.OlympiadManager;
+import l2r.gameserver.model.punishment.PunishmentAffect;
+import l2r.gameserver.model.punishment.PunishmentType;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.quest.QuestState;
@@ -240,7 +263,6 @@ import l2r.gameserver.network.serverpackets.ExSpawnEmitter;
 import l2r.gameserver.network.serverpackets.ExStartScenePlayer;
 import l2r.gameserver.network.serverpackets.ExStorageMaxCount;
 import l2r.gameserver.network.serverpackets.ExUseSharedGroupItem;
-import l2r.gameserver.network.serverpackets.ExVitalityPointInfo;
 import l2r.gameserver.network.serverpackets.ExVoteSystemInfo;
 import l2r.gameserver.network.serverpackets.FriendStatusPacket;
 import l2r.gameserver.network.serverpackets.GameGuardQuery;
@@ -348,8 +370,8 @@ public final class L2PcInstance extends L2Playable
 	
 	// Character Character SQL String Definitions:
 	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,charId,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,karma,fame,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,title_color,accesslevel,online,isin7sdungeon,clan_privs,wantspeace,base_class,newbie,nobless,power_grade,createDate) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,fame=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,punish_level=?,punish_timer=?,newbie=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,bookmarkslot=?,vitality_points=?,pccafe_points=?,language=?,exp_activation=?,prefix_category=?,enchant_animation=?,hide_private_stores=?,load_soulshots=?,soulshot_animation=?,bad_buff_protection=?,enchant_bot=?,enchant_chance=?,tries=?,hopzonedone=?,topzonedone=? WHERE charId=?";
-	private static final String RESTORE_CHARACTER = "SELECT account_name, charId, char_name, level, maxHp, curHp, maxCp, curCp, maxMp, curMp, face, hairStyle, hairColor, sex, heading, x, y, z, exp, expBeforeDeath, sp, karma, fame, pvpkills, pkkills, clanid, race, classid, deletetime, cancraft, title, title_color, accesslevel, online, char_slot, lastAccess, clan_privs, wantspeace, base_class, onlinetime, isin7sdungeon, punish_level, punish_timer, newbie, nobless, power_grade, subpledge, lvl_joined_academy, apprentice, sponsor, clan_join_expiry_time,clan_create_expiry_time,death_penalty_level,bookmarkslot,vitality_points,pccafe_points,createDate,language,lastVoteHopzone,lastVoteTopzone,exp_activation,prefix_category,enchant_animation,hide_private_stores,load_soulshots,soulshot_animation,bad_buff_protection,enchant_bot,enchant_chance,tries,hopzonedone,topzonedone FROM characters WHERE charId=?";
+	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,fame=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,newbie=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,bookmarkslot=?,vitality_points=?,pccafe_points=?,language=?,exp_activation=?,prefix_category=?,enchant_animation=?,hide_private_stores=?,load_soulshots=?,soulshot_animation=?,bad_buff_protection=?,enchant_bot=?,enchant_chance=?,tries=?,hopzonedone=?,topzonedone=? WHERE charId=?";
+	private static final String RESTORE_CHARACTER = "SELECT * FROM characters WHERE charId=?";
 	
 	// Character Teleport Bookmark:
 	private static final String INSERT_TP_BOOKMARK = "INSERT INTO character_tpbookmark (charId,Id,x,y,z,icon,tag,name) values (?,?,?,?,?,?,?,?)";
@@ -513,41 +535,9 @@ public final class L2PcInstance extends L2Playable
 	
 	private List<TeleportBookmark> tpbookmark = new FastList<>();
 	
-	private PunishLevel _punishLevel = PunishLevel.NONE;
-	private long _punishTimer = 0;
-	private ScheduledFuture<?> _punishTask;
-	
 	private boolean _canFeed;
 	private boolean _isInSiege;
 	private boolean _isInHideoutSiege = false;
-	
-	public enum PunishLevel
-	{
-		NONE(0, ""),
-		CHAT(1, "chat banned"),
-		JAIL(2, "jailed"),
-		CHAR(3, "banned"),
-		ACC(4, "banned");
-		
-		private final int punValue;
-		private final String punString;
-		
-		PunishLevel(int value, String string)
-		{
-			punValue = value;
-			punString = string;
-		}
-		
-		public int value()
-		{
-			return punValue;
-		}
-		
-		public String string()
-		{
-			return punString;
-		}
-	}
 	
 	/** Olympiad */
 	private boolean _inOlympiadMode = false;
@@ -835,7 +825,7 @@ public final class L2PcInstance extends L2Playable
 	private L2ItemInstance _activeEnchantAttrItem = null;
 	private long _activeEnchantTimestamp = 0;
 	
-	protected boolean _inventoryDisable = false;
+	public boolean _inventoryDisable = false;
 	
 	private final FastMap<Integer, L2CubicInstance> _cubics = new FastMap<>();
 	
@@ -941,7 +931,7 @@ public final class L2PcInstance extends L2Playable
 		
 		if (_PvPRegTask == null)
 		{
-			_PvPRegTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new PvPFlag(), 1000, 1000);
+			_PvPRegTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new PvPFlagTask(this), 1000, 1000);
 		}
 	}
 	
@@ -963,86 +953,14 @@ public final class L2PcInstance extends L2Playable
 		_PvPRegTask = null;
 	}
 	
-	/** Task launching the function stopPvPFlag() */
-	protected class PvPFlag implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			try
-			{
-				if (System.currentTimeMillis() > getPvpFlagLasts())
-				{
-					stopPvPFlag();
-				}
-				else if (System.currentTimeMillis() > (getPvpFlagLasts() - 20000))
-				{
-					updatePvPFlag(2);
-				}
-				else
-				{
-					updatePvPFlag(1);
-					// Start a new PvP timer check
-					// checkPvPFlag();
-				}
-			}
-			catch (Exception e)
-			{
-				_log.log(Level.WARNING, "error in pvp flag task:", e);
-			}
-		}
-	}
-	
 	// Character UI
 	private UIKeysSettings _uiKeySettings;
 	
 	/** Herbs Task Time **/
 	private int _herbstask = 0;
 	
-	/** Task for Herbs */
-	private class HerbTask implements Runnable
-	{
-		private final String _process;
-		private final int _itemId;
-		private final long _count;
-		private final L2Object _reference;
-		private final boolean _sendMessage;
-		
-		HerbTask(String process, int itemId, long count, L2Object reference, boolean sendMessage)
-		{
-			_process = process;
-			_itemId = itemId;
-			_count = count;
-			_reference = reference;
-			_sendMessage = sendMessage;
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				addItem(_process, _itemId, _count, _reference, _sendMessage);
-			}
-			catch (Exception e)
-			{
-				_log.log(Level.WARNING, "", e);
-			}
-		}
-	}
-	
 	/** ShortBuff clearing Task */
 	ScheduledFuture<?> _shortBuffTask = null;
-	
-	protected class ShortBuffTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			sendPacket(new ShortBuffStatusUpdate(0, 0, 0));
-			setShortBuffTaskSkillId(0);
-		}
-	}
 	
 	// L2JMOD Wedding
 	private boolean _married = false;
@@ -3420,33 +3338,8 @@ public final class L2PcInstance extends L2Playable
 			getAI().setIntention(CtrlIntention.AI_INTENTION_REST);
 			broadcastPacket(new ChangeWaitType(this, ChangeWaitType.WT_SITTING));
 			// Schedule a sit down task to wait for the animation to finish
-			ThreadPoolManager.getInstance().scheduleGeneral(new SitDownTask(), 2500);
+			ThreadPoolManager.getInstance().scheduleGeneral(new SitDownTask(this), 2500);
 			setIsParalyzed(true);
-		}
-	}
-	
-	/**
-	 * Sit down Task
-	 */
-	protected class SitDownTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			setIsParalyzed(false);
-		}
-	}
-	
-	/**
-	 * Stand up Task
-	 */
-	protected class StandUpTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			setIsSitting(false);
-			getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		}
 	}
 	
@@ -3468,7 +3361,7 @@ public final class L2PcInstance extends L2Playable
 			
 			broadcastPacket(new ChangeWaitType(this, ChangeWaitType.WT_STANDING));
 			// Schedule a stand up task to wait for the animation to finish
-			ThreadPoolManager.getInstance().scheduleGeneral(new StandUpTask(), 2500);
+			ThreadPoolManager.getInstance().scheduleGeneral(new StandUpTask(this), 2500);
 		}
 	}
 	
@@ -4015,7 +3908,7 @@ public final class L2PcInstance extends L2Playable
 				else
 				{
 					_herbstask += 100;
-					ThreadPoolManager.getInstance().scheduleAi(new HerbTask(process, itemId, count, reference, sendMessage), _herbstask);
+					ThreadPoolManager.getInstance().scheduleAi(new HerbTask(this, process, itemId, count, reference, sendMessage), _herbstask);
 				}
 			}
 			else
@@ -4697,6 +4590,16 @@ public final class L2PcInstance extends L2Playable
 		_client = client;
 	}
 	
+	public String getIPAddress()
+	{
+		String ip = "N/A";
+		if ((_client != null) && (_client.getConnectionAddress() != null))
+		{
+			ip = _client.getConnectionAddress().getHostAddress();
+		}
+		return ip;
+	}
+	
 	/**
 	 * Close the active connection with the client.
 	 * @param closeClient
@@ -5056,22 +4959,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		if (Config.GAMEGUARD_ENFORCE)
 		{
-			ThreadPoolManager.getInstance().scheduleGeneral(new GameGuardCheck(), 30 * 1000);
-		}
-	}
-	
-	protected class GameGuardCheck implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			L2GameClient client = getClient();
-			if ((client != null) && !client.isAuthedGG() && isOnline())
-			{
-				AdminTable.getInstance().broadcastMessageToGMs("Client " + client + " failed to reply GameGuard query and is being kicked!");
-				_log.info("Client " + client + " failed to reply GameGuard query and is being kicked!");
-				client.close(LeaveWorld.STATIC_PACKET);
-			}
+			ThreadPoolManager.getInstance().scheduleGeneral(new GameGuardCheckTask(this), 30 * 1000);
 		}
 	}
 	
@@ -6740,7 +6628,6 @@ public final class L2PcInstance extends L2Playable
 		storePetFood(_mountNpcId);
 		stopRentPet();
 		stopPvpRegTask();
-		stopPunishTask(true);
 		stopSoulTask();
 		stopChargeTask();
 		stopFameTask();
@@ -8043,15 +7930,6 @@ public final class L2PcInstance extends L2Playable
 					player.setSponsor(rset.getInt("sponsor"));
 					player.setLvlJoinedAcademy(rset.getInt("lvl_joined_academy"));
 					player.setIsIn7sDungeon(rset.getInt("isin7sdungeon") == 1);
-					player.setPunishLevel(rset.getInt("punish_level"));
-					if (player.getPunishLevel() != PunishLevel.NONE)
-					{
-						player.setPunishTimer(rset.getLong("punish_timer"));
-					}
-					else
-					{
-						player.setPunishTimer(0);
-					}
 					
 					CursedWeaponsManager.getInstance().checkPlayer(player);
 					
@@ -8506,36 +8384,34 @@ public final class L2PcInstance extends L2Playable
 			}
 			
 			statement.setLong(35, totalOnlineTime);
-			statement.setInt(36, getPunishLevel().value());
-			statement.setLong(37, getPunishTimer());
-			statement.setInt(38, getNewbie());
-			statement.setInt(39, isNoble() ? 1 : 0);
-			statement.setInt(40, getPowerGrade());
-			statement.setInt(41, getPledgeType());
-			statement.setInt(42, getLvlJoinedAcademy());
-			statement.setLong(43, getApprentice());
-			statement.setLong(44, getSponsor());
-			statement.setLong(45, getClanJoinExpiryTime());
-			statement.setLong(46, getClanCreateExpiryTime());
-			statement.setString(47, getName());
-			statement.setLong(48, getDeathPenaltyBuffLevel());
-			statement.setInt(49, getBookMarkSlot());
-			statement.setInt(50, getVitalityPoints());
-			statement.setInt(51, getPcBangPoints());
-			statement.setString(52, getLang());
-			statement.setInt(53, getExpOn() ? 1 : 0);
-			statement.setInt(54, getNamePrefixCategory());
-			statement.setInt(55, isEnchantAnimation() ? 1 : 0);
-			statement.setInt(56, isHideStores() ? 1 : 0);
-			statement.setInt(57, isOnEnterLoadSS() ? 1 : 0);
-			statement.setInt(58, isSsAnimationBlocked() ? 1 : 0);
-			statement.setInt(59, isProtected() ? 1 : 0);
-			statement.setInt(60, isEnchantBot() ? 1 : 0);
-			statement.setDouble(61, getEnchantChance());
-			statement.setInt(62, getVoteTries());
-			statement.setInt(63, isHopZoneDone() ? 1 : 0);
-			statement.setInt(64, isTopZoneDone() ? 1 : 0);
-			statement.setInt(65, getObjectId());
+			statement.setInt(36, getNewbie());
+			statement.setInt(37, isNoble() ? 1 : 0);
+			statement.setInt(38, getPowerGrade());
+			statement.setInt(39, getPledgeType());
+			statement.setInt(40, getLvlJoinedAcademy());
+			statement.setLong(41, getApprentice());
+			statement.setLong(42, getSponsor());
+			statement.setLong(43, getClanJoinExpiryTime());
+			statement.setLong(44, getClanCreateExpiryTime());
+			statement.setString(45, getName());
+			statement.setLong(46, getDeathPenaltyBuffLevel());
+			statement.setInt(47, getBookMarkSlot());
+			statement.setInt(48, getVitalityPoints());
+			statement.setInt(49, getPcBangPoints());
+			statement.setString(50, getLang());
+			statement.setInt(51, getExpOn() ? 1 : 0);
+			statement.setInt(52, getNamePrefixCategory());
+			statement.setInt(53, isEnchantAnimation() ? 1 : 0);
+			statement.setInt(54, isHideStores() ? 1 : 0);
+			statement.setInt(55, isOnEnterLoadSS() ? 1 : 0);
+			statement.setInt(56, isSsAnimationBlocked() ? 1 : 0);
+			statement.setInt(57, isProtected() ? 1 : 0);
+			statement.setInt(58, isEnchantBot() ? 1 : 0);
+			statement.setDouble(59, getEnchantChance());
+			statement.setInt(60, getVoteTries());
+			statement.setInt(61, isHopZoneDone() ? 1 : 0);
+			statement.setInt(62, isTopZoneDone() ? 1 : 0);
+			statement.setInt(63, getObjectId());
 			
 			statement.execute();
 			statement.close();
@@ -10481,7 +10357,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		_inventoryDisable = true;
 		
-		ThreadPoolManager.getInstance().scheduleGeneral(new InventoryEnable(), 1500);
+		ThreadPoolManager.getInstance().scheduleGeneral(new InventoryEnableTask(this), 1500);
 	}
 	
 	/**
@@ -10490,15 +10366,6 @@ public final class L2PcInstance extends L2Playable
 	public boolean isInventoryDisabled()
 	{
 		return _inventoryDisable;
-	}
-	
-	protected class InventoryEnable implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			_inventoryDisable = false;
-		}
 	}
 	
 	public FastMap<Integer, L2CubicInstance> getCubics()
@@ -10694,90 +10561,6 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	private ScheduledFuture<?> _taskWarnUserTakeBreak;
-	
-	protected class WarnUserTakeBreak implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			if (isOnline())
-			{
-				sendPacket(SystemMessageId.PLAYING_FOR_LONG_TIME);
-			}
-			else
-			{
-				stopWarnUserTakeBreak();
-			}
-		}
-	}
-	
-	protected class RentPetTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			stopRentPet();
-		}
-	}
-	
-	protected class WaterTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			double reduceHp = getMaxHp() / 100.0;
-			
-			if (reduceHp < 1)
-			{
-				reduceHp = 1;
-			}
-			
-			reduceCurrentHp(reduceHp, L2PcInstance.this, false, false, null);
-			// reduced hp, becouse not rest
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.DROWN_DAMAGE_S1);
-			sm.addNumber((int) reduceHp);
-			sendPacket(sm);
-			
-		}
-	}
-	
-	private class LookingForFishTask implements Runnable
-	{
-		boolean _isNoob, _isUpperGrade;
-		int _fishGroup;
-		double _fishGutsCheck;
-		long _endTaskTime;
-		
-		protected LookingForFishTask(int startCombatTime, double fishGutsCheck, int fishGroup, boolean isNoob, boolean isUpperGrade)
-		{
-			_fishGutsCheck = fishGutsCheck;
-			_endTaskTime = System.currentTimeMillis() + (startCombatTime * 1000) + 10000;
-			_fishGroup = fishGroup;
-			_isNoob = isNoob;
-			_isUpperGrade = isUpperGrade;
-		}
-		
-		@Override
-		public void run()
-		{
-			if (System.currentTimeMillis() >= _endTaskTime)
-			{
-				endFishing(false);
-				return;
-			}
-			if (_fishGroup == -1)
-			{
-				return;
-			}
-			int check = Rnd.get(100);
-			if (_fishGutsCheck > check)
-			{
-				stopLookingForFishTask();
-				startFishCombat(_isNoob, _isUpperGrade);
-			}
-		}
-		
-	}
 	
 	public int getClanPrivileges()
 	{
@@ -11196,7 +10979,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public boolean canDuel()
 	{
-		if (isInCombat() || (getPunishLevel() == PunishLevel.JAIL))
+		if (isInCombat() || isJailed())
 		{
 			_noDuelReason = SystemMessageId.C1_CANNOT_DUEL_BECAUSE_C1_IS_CURRENTLY_ENGAGED_IN_BATTLE;
 			return false;
@@ -11789,7 +11572,6 @@ public final class L2PcInstance extends L2Playable
 		if (_taskWarnUserTakeBreak != null)
 		{
 			_taskWarnUserTakeBreak.cancel(true);
-			// ThreadPoolManager.getInstance().removeGeneral((Runnable)_taskWarnUserTakeBreak);
 			_taskWarnUserTakeBreak = null;
 		}
 	}
@@ -11798,7 +11580,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (_taskWarnUserTakeBreak == null)
 		{
-			_taskWarnUserTakeBreak = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new WarnUserTakeBreak(), 7200000, 7200000);
+			_taskWarnUserTakeBreak = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new WarnUserTakeBreakTask(this), 7200000, 7200000);
 		}
 	}
 	
@@ -11824,7 +11606,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (_taskRentPet == null)
 		{
-			_taskRentPet = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new RentPetTask(), seconds * 1000L, seconds * 1000L);
+			_taskRentPet = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new RentPetTask(this), seconds * 1000L, seconds * 1000L);
 		}
 	}
 	
@@ -11855,7 +11637,7 @@ public final class L2PcInstance extends L2Playable
 			int timeinwater = (int) calcStat(Stats.BREATH, 60000, this, null);
 			
 			sendPacket(new SetupGauge(2, timeinwater));
-			_taskWater = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new WaterTask(), timeinwater, 1000);
+			_taskWater = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new WaterTask(this), timeinwater, 1000);
 		}
 	}
 	
@@ -11903,9 +11685,6 @@ public final class L2PcInstance extends L2Playable
 				sendMessage("You have been teleported to the nearest town because you have not signed for any cabal.");
 			}
 		}
-		
-		// jail task
-		updatePunishState();
 		
 		if (isGM())
 		{
@@ -12247,7 +12026,7 @@ public final class L2PcInstance extends L2Playable
 				{
 					if (_teleportWatchdog == null)
 					{
-						_teleportWatchdog = ThreadPoolManager.getInstance().scheduleGeneral(new TeleportWatchdog(), Config.TELEPORT_WATCHDOG_TIMEOUT * 1000);
+						_teleportWatchdog = ThreadPoolManager.getInstance().scheduleGeneral(new TeleportWatchdogTask(this), Config.TELEPORT_WATCHDOG_TIMEOUT * 1000);
 					}
 				}
 			}
@@ -12257,34 +12036,8 @@ public final class L2PcInstance extends L2Playable
 			if (_teleportWatchdog != null)
 			{
 				_teleportWatchdog.cancel(false);
-				// ThreadPoolManager.getInstance().removeGeneral((Runnable)_teleportWatchdog);
 				_teleportWatchdog = null;
 			}
-		}
-	}
-	
-	private class TeleportWatchdog implements Runnable
-	{
-		private final L2PcInstance _player;
-		
-		TeleportWatchdog()
-		{
-			_player = L2PcInstance.this;
-		}
-		
-		@Override
-		public void run()
-		{
-			if ((_player == null) || !_player.isTeleporting())
-			{
-				return;
-			}
-			
-			if (Config.DEBUG)
-			{
-				_log.warning("Player " + _player.getName() + " teleport timeout expired");
-			}
-			_player.onTeleported();
 		}
 	}
 	
@@ -13164,7 +12917,7 @@ public final class L2PcInstance extends L2Playable
 					checkDelay = _fish.getGutsCheckTime() * 66;
 				}
 			}
-			_taskforfish = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new LookingForFishTask(_fish.getStartCombatTime(), _fish.getFishGuts(), _fish.getFishGroup(), isNoob, isUpperGrade), 10000, checkDelay);
+			_taskforfish = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new LookingForFishTask(this, _fish.getStartCombatTime(), _fish.getFishGuts(), _fish.getFishGroup(), isNoob, isUpperGrade), 10000, checkDelay);
 		}
 	}
 	
@@ -13688,253 +13441,19 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * returns punishment level of player
-	 * @return
+	 * @return {@code true} if player is jailed, {@code false} otherwise.
 	 */
-	public PunishLevel getPunishLevel()
+	public boolean isJailed()
 	{
-		return _punishLevel;
+		return PunishmentManager.getInstance().hasPunishment(getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.JAIL) || PunishmentManager.getInstance().hasPunishment(getAccountName(), PunishmentAffect.ACCOUNT, PunishmentType.JAIL) || PunishmentManager.getInstance().hasPunishment(getIPAddress(), PunishmentAffect.IP, PunishmentType.JAIL);
 	}
 	
 	/**
-	 * @return True if player is jailed
-	 */
-	public boolean isInJail()
-	{
-		return _punishLevel == PunishLevel.JAIL;
-	}
-	
-	/**
-	 * @return True if player is chat banned
+	 * @return {@code true} if player is chat banned, {@code false} otherwise.
 	 */
 	public boolean isChatBanned()
 	{
-		return _punishLevel == PunishLevel.CHAT;
-	}
-	
-	public void setPunishLevel(int state)
-	{
-		switch (state)
-		{
-			case 0:
-			{
-				_punishLevel = PunishLevel.NONE;
-				break;
-			}
-			case 1:
-			{
-				_punishLevel = PunishLevel.CHAT;
-				break;
-			}
-			case 2:
-			{
-				_punishLevel = PunishLevel.JAIL;
-				break;
-			}
-			case 3:
-			{
-				_punishLevel = PunishLevel.CHAR;
-				break;
-			}
-			case 4:
-			{
-				_punishLevel = PunishLevel.ACC;
-				break;
-			}
-		}
-	}
-	
-	/**
-	 * Sets punish level for player based on delay
-	 * @param state
-	 * @param delayInMinutes 0 - Indefinite
-	 */
-	public void setPunishLevel(PunishLevel state, int delayInMinutes)
-	{
-		long delayInMilliseconds = delayInMinutes * 60000L;
-		switch (state)
-		{
-			case NONE: // Remove Punishments
-			{
-				switch (_punishLevel)
-				{
-					case CHAT:
-					{
-						_punishLevel = state;
-						stopPunishTask(true);
-						sendPacket(new EtcStatusUpdate(this));
-						sendMessage("Your Chat ban has been lifted");
-						break;
-					}
-					case JAIL:
-					{
-						_punishLevel = state;
-						// Open a Html message to inform the player
-						NpcHtmlMessage htmlMsg = new NpcHtmlMessage(0);
-						String jailInfos = HtmCache.getInstance().getHtm(getHtmlPrefix(), "data/html/jail_out.htm");
-						if (jailInfos != null)
-						{
-							htmlMsg.setHtml(jailInfos);
-						}
-						else
-						{
-							htmlMsg.setHtml("<html><body>You are free for now, respect server rules!</body></html>");
-						}
-						sendPacket(htmlMsg);
-						stopPunishTask(true);
-						teleToLocation(17836, 170178, -3507, true); // Floran
-						break;
-					}
-				}
-				break;
-			}
-			case CHAT: // Chat Ban
-			{
-				// not allow player to escape jail using chat ban
-				if (_punishLevel == PunishLevel.JAIL)
-				{
-					break;
-				}
-				_punishLevel = state;
-				_punishTimer = 0;
-				sendPacket(new EtcStatusUpdate(this));
-				// Remove the task if any
-				stopPunishTask(false);
-				
-				if (delayInMinutes > 0)
-				{
-					_punishTimer = delayInMilliseconds;
-					
-					// start the countdown
-					_punishTask = ThreadPoolManager.getInstance().scheduleGeneral(new PunishTask(), _punishTimer);
-					sendMessage("You are chat banned for " + delayInMinutes + " minutes.");
-				}
-				else
-				{
-					sendMessage("You have been chat banned");
-				}
-				break;
-				
-			}
-			case JAIL: // Jail Player
-			{
-				_punishLevel = state;
-				_punishTimer = 0;
-				// Remove the task if any
-				stopPunishTask(false);
-				
-				if (delayInMinutes > 0)
-				{
-					_punishTimer = delayInMilliseconds;
-					
-					// start the countdown
-					_punishTask = ThreadPoolManager.getInstance().scheduleGeneral(new PunishTask(), _punishTimer);
-					sendMessage("You are in jail for " + delayInMinutes + " minutes.");
-				}
-				
-				if (OlympiadManager.getInstance().isRegisteredInComp(this))
-				{
-					OlympiadManager.getInstance().removeDisconnectedCompetitor(this);
-				}
-				
-				// Open a Html message to inform the player
-				NpcHtmlMessage htmlMsg = new NpcHtmlMessage(0);
-				String jailInfos = HtmCache.getInstance().getHtm(getHtmlPrefix(), "data/html/jail_in.htm");
-				if (jailInfos != null)
-				{
-					htmlMsg.setHtml(jailInfos);
-				}
-				else
-				{
-					htmlMsg.setHtml("<html><body>You have been put in jail by an admin.</body></html>");
-				}
-				sendPacket(htmlMsg);
-				setInstanceId(0);
-				setIsIn7sDungeon(false);
-				
-				teleToLocation(-114356, -249645, -2984, false); // Jail
-				break;
-			}
-			case CHAR: // Ban Character
-			{
-				setAccessLevel(-1);
-				logout();
-				break;
-			}
-			case ACC: // Ban Account
-			{
-				setAccountAccesslevel(-1);
-				logout();
-				break;
-			}
-			default:
-			{
-				_punishLevel = state;
-				break;
-			}
-		}
-		
-		// store in database
-		storeCharBase();
-	}
-	
-	public long getPunishTimer()
-	{
-		return _punishTimer;
-	}
-	
-	public void setPunishTimer(long time)
-	{
-		_punishTimer = time;
-	}
-	
-	private void updatePunishState()
-	{
-		if (getPunishLevel() != PunishLevel.NONE)
-		{
-			// If punish timer exists, restart punishtask.
-			if (_punishTimer > 0)
-			{
-				_punishTask = ThreadPoolManager.getInstance().scheduleGeneral(new PunishTask(), _punishTimer);
-				sendMessage("You are still " + getPunishLevel().string() + " for " + Math.round(_punishTimer / 60000f) + " minutes.");
-			}
-			if (getPunishLevel() == PunishLevel.JAIL)
-			{
-				// If player escaped, put him back in jail
-				if (!isInsideZone(ZoneId.JAIL))
-				{
-					teleToLocation(-114356, -249645, -2984, true);
-				}
-			}
-		}
-	}
-	
-	public void stopPunishTask(boolean save)
-	{
-		if (_punishTask != null)
-		{
-			if (save)
-			{
-				long delay = _punishTask.getDelay(TimeUnit.MILLISECONDS);
-				if (delay < 0)
-				{
-					delay = 0;
-				}
-				setPunishTimer(delay);
-			}
-			_punishTask.cancel(false);
-			// ThreadPoolManager.getInstance().removeGeneral((Runnable)_punishTask);
-			_punishTask = null;
-		}
-	}
-	
-	protected class PunishTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			L2PcInstance.this.setPunishLevel(PunishLevel.NONE, 0);
-		}
+		return PunishmentManager.getInstance().hasPunishment(getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.CHAT_BAN) || PunishmentManager.getInstance().hasPunishment(getAccountName(), PunishmentAffect.ACCOUNT, PunishmentType.CHAT_BAN) || PunishmentManager.getInstance().hasPunishment(getIPAddress(), PunishmentAffect.IP, PunishmentType.CHAT_BAN);
 	}
 	
 	public void startFameTask(long delay, int fameFixRate)
@@ -13945,7 +13464,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		if (_fameTask == null)
 		{
-			_fameTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new FameTask(fameFixRate), delay, delay);
+			_fameTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new FameTask(this, fameFixRate), delay, delay);
 		}
 	}
 	
@@ -13954,38 +13473,7 @@ public final class L2PcInstance extends L2Playable
 		if (_fameTask != null)
 		{
 			_fameTask.cancel(false);
-			// ThreadPoolManager.getInstance().removeGeneral((Runnable)_fameTask);
 			_fameTask = null;
-		}
-	}
-	
-	private class FameTask implements Runnable
-	{
-		private final L2PcInstance _player;
-		private final int _value;
-		
-		protected FameTask(int value)
-		{
-			_player = L2PcInstance.this;
-			_value = value;
-		}
-		
-		@Override
-		public void run()
-		{
-			if ((_player == null) || (_player.isDead() && !Config.FAME_FOR_DEAD_PLAYERS))
-			{
-				return;
-			}
-			if (((_player.getClient() == null) || _player.getClient().isDetached()) && !Config.OFFLINE_FAME)
-			{
-				return;
-			}
-			_player.setFame(_player.getFame() + _value);
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.ACQUIRED_S1_REPUTATION_SCORE);
-			sm.addNumber(_value);
-			_player.sendPacket(sm);
-			_player.sendPacket(new UserInfo(_player));
 		}
 	}
 	
@@ -14002,35 +13490,7 @@ public final class L2PcInstance extends L2Playable
 		if (_vitalityTask != null)
 		{
 			_vitalityTask.cancel(false);
-			// ThreadPoolManager.getInstance().removeGeneral((Runnable)_vitalityTask);
 			_vitalityTask = null;
-		}
-	}
-	
-	private class VitalityTask implements Runnable
-	{
-		private final L2PcInstance _player;
-		
-		protected VitalityTask(L2PcInstance player)
-		{
-			_player = player;
-		}
-		
-		@Override
-		public void run()
-		{
-			if (!_player.isInsideZone(ZoneId.PEACE))
-			{
-				return;
-			}
-			
-			if (_player.getVitalityPoints() >= PcStat.MAX_VITALITY_POINTS)
-			{
-				return;
-			}
-			
-			_player.updateVitalityPoints(Config.RATE_RECOVERY_VITALITY_PEACE_ZONE, false, false);
-			_player.sendPacket(new ExVitalityPointInfo(getVitalityPoints()));
 		}
 	}
 	
@@ -14174,15 +13634,12 @@ public final class L2PcInstance extends L2Playable
 	 */
 	private void restartSoulTask()
 	{
-		synchronized (this)
+		if (_soulTask != null)
 		{
-			if (_soulTask != null)
-			{
-				_soulTask.cancel(false);
-				_soulTask = null;
-			}
-			_soulTask = ThreadPoolManager.getInstance().scheduleGeneral(new SoulTask(), 600000);
+			_soulTask.cancel(false);
+			_soulTask = null;
 		}
+		_soulTask = ThreadPoolManager.getInstance().scheduleGeneral(new ResetSoulsTask(this), 600000);
 	}
 	
 	/**
@@ -14194,15 +13651,6 @@ public final class L2PcInstance extends L2Playable
 		{
 			_soulTask.cancel(false);
 			_soulTask = null;
-		}
-	}
-	
-	protected class SoulTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			clearSouls();
 		}
 	}
 	
@@ -14218,7 +13666,7 @@ public final class L2PcInstance extends L2Playable
 			_shortBuffTask.cancel(false);
 			_shortBuffTask = null;
 		}
-		_shortBuffTask = ThreadPoolManager.getInstance().scheduleGeneral(new ShortBuffTask(), time * 1000);
+		_shortBuffTask = ThreadPoolManager.getInstance().scheduleGeneral(new ShortBuffTask(this), time * 1000);
 		setShortBuffTaskSkillId(magicId);
 		
 		sendPacket(new ShortBuffStatusUpdate(magicId, level, time));
@@ -14795,70 +14243,7 @@ public final class L2PcInstance extends L2Playable
 		return false;
 	}
 	
-	/** Section for mounted pets */
-	protected class FeedTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			try
-			{
-				if (!isMounted())
-				{
-					stopFeed();
-					return;
-				}
-				
-				if (getCurrentFeed() > getFeedConsume())
-				{
-					// eat
-					setCurrentFeed(getCurrentFeed() - getFeedConsume());
-				}
-				else
-				{
-					// go back to pet control item, or simply said, unsummon it
-					setCurrentFeed(0);
-					stopFeed();
-					dismount();
-					sendPacket(SystemMessageId.OUT_OF_FEED_MOUNT_CANCELED);
-				}
-				
-				List<Integer> foodIds = getPetData(getMountNpcId()).getFood();
-				if (foodIds.isEmpty())
-				{
-					return;
-				}
-				L2ItemInstance food = null;
-				for (int id : foodIds)
-				{
-					// TODO: possibly pet inv?
-					food = getInventory().getItemByItemId(id);
-					if (food != null)
-					{
-						break;
-					}
-				}
-				
-				if ((food != null) && isHungry())
-				{
-					IItemHandler handler = ItemHandler.getInstance().getHandler(food.getEtcItem());
-					if (handler != null)
-					{
-						handler.useItem(L2PcInstance.this, food, false);
-						SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.PET_TOOK_S1_BECAUSE_HE_WAS_HUNGRY);
-						sm.addItemName(food.getItemId());
-						sendPacket(sm);
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				_log.log(Level.SEVERE, "Mounted Pet [NpcId: " + getMountNpcId() + "] a feed task error has occurred", e);
-			}
-		}
-	}
-	
-	protected synchronized void startFeed(int npcId)
+	protected void startFeed(int npcId)
 	{
 		_canFeed = npcId > 0;
 		if (!isMounted())
@@ -14872,7 +14257,7 @@ public final class L2PcInstance extends L2Playable
 			sendPacket(new SetupGauge(3, (getCurrentFeed() * 10000) / getFeedConsume(), (getMaxFeed() * 10000) / getFeedConsume()));
 			if (!isDead())
 			{
-				_mountFeedTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new FeedTask(), 10000, 10000);
+				_mountFeedTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new PetFeedTask(this), 10000, 10000);
 			}
 		}
 		else if (_canFeed)
@@ -14882,12 +14267,12 @@ public final class L2PcInstance extends L2Playable
 			sendPacket(sg);
 			if (!isDead())
 			{
-				_mountFeedTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new FeedTask(), 10000, 10000);
+				_mountFeedTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new PetFeedTask(this), 10000, 10000);
 			}
 		}
 	}
 	
-	protected synchronized void stopFeed()
+	public void stopFeed()
 	{
 		if (_mountFeedTask != null)
 		{
@@ -14901,7 +14286,7 @@ public final class L2PcInstance extends L2Playable
 		_data = null;
 	}
 	
-	protected final L2PetData getPetData(int npcId)
+	public final L2PetData getPetData(int npcId)
 	{
 		if (_data == null)
 		{
@@ -14924,7 +14309,7 @@ public final class L2PcInstance extends L2Playable
 		return _curFeed;
 	}
 	
-	protected int getFeedConsume()
+	public int getFeedConsume()
 	{
 		// if pet is attacking
 		if (isAttackingNow())
@@ -14957,25 +14342,9 @@ public final class L2PcInstance extends L2Playable
 		return _canFeed ? (getCurrentFeed() < ((getPetData(getMountNpcId()).getHungryLimit() / 100f) * getPetLevelData(getMountNpcId()).getPetMaxFeed())) : false;
 	}
 	
-	protected class Dismount implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			try
-			{
-				dismount();
-			}
-			catch (Exception e)
-			{
-				_log.log(Level.WARNING, "Exception on dismount(): " + e.getMessage(), e);
-			}
-		}
-	}
-	
 	public void enteredNoLanding(int delay)
 	{
-		_dismountTask = ThreadPoolManager.getInstance().scheduleGeneral(new Dismount(), delay * 1000);
+		_dismountTask = ThreadPoolManager.getInstance().scheduleGeneral(new DismountTask(this), delay * 1000);
 	}
 	
 	public void exitedNoLanding()
@@ -15127,7 +14496,7 @@ public final class L2PcInstance extends L2Playable
 			_chargeTask.cancel(false);
 			_chargeTask = null;
 		}
-		_chargeTask = ThreadPoolManager.getInstance().scheduleGeneral(new ChargeTask(), 600000);
+		_chargeTask = ThreadPoolManager.getInstance().scheduleGeneral(new ResetChargesTask(this), 600000);
 	}
 	
 	/**
@@ -15139,15 +14508,6 @@ public final class L2PcInstance extends L2Playable
 		{
 			_chargeTask.cancel(false);
 			_chargeTask = null;
-		}
-	}
-	
-	protected class ChargeTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			clearCharges();
 		}
 	}
 	
@@ -16392,20 +15752,23 @@ public final class L2PcInstance extends L2Playable
 	public void checkRecoBonusTask()
 	{
 		// Load data
-		long _task_time = loadRecommendations();
+		long taskTime = loadRecommendations();
 		
-		if (_task_time > 0)
+		if (taskTime > 0)
 		{
 			// Add 20 recos on first login
-			if (_task_time == 3600000)
+			if (taskTime == 3600000)
 			{
 				setRecomLeft(getRecomLeft() + 20);
 			}
+			
 			// If player have some timeleft, start bonus task
-			_recoBonusTask = ThreadPoolManager.getInstance().scheduleGeneral(new RecoBonusTaskEnd(), _task_time);
+			_recoBonusTask = ThreadPoolManager.getInstance().scheduleGeneral(new RecoBonusTaskEnd(this), taskTime);
 		}
+		
 		// Create task to give new recommendations
-		_recoGiveTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new RecoGiveTask(), 7200000, 3600000);
+		_recoGiveTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new RecoGiveTask(this), 7200000, 3600000);
+		
 		// Store new data
 		storeRecommendations();
 	}
@@ -16428,41 +15791,14 @@ public final class L2PcInstance extends L2Playable
 		}
 	}
 	
-	protected class RecoGiveTask implements Runnable
+	public boolean isRecoTwoHoursGiven()
 	{
-		@Override
-		public void run()
-		{
-			int reco_to_give;
-			// 10 recommendations to give out after 2 hours of being logged in
-			// 1 more recommendation to give out every hour after that.
-			if (_recoTwoHoursGiven)
-			{
-				reco_to_give = 1;
-			}
-			else
-			{
-				reco_to_give = 10;
-			}
-			
-			_recoTwoHoursGiven = true;
-			
-			setRecomLeft(getRecomLeft() + reco_to_give);
-			
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_OBTAINED_S1_RECOMMENDATIONS);
-			sm.addNumber(reco_to_give);
-			L2PcInstance.this.sendPacket(sm);
-			L2PcInstance.this.sendPacket(new UserInfo(L2PcInstance.this));
-		}
+		return _recoTwoHoursGiven;
 	}
 	
-	protected class RecoBonusTaskEnd implements Runnable
+	public void setRecoTwoHoursGiven(boolean val)
 	{
-		@Override
-		public void run()
-		{
-			sendPacket(new ExVoteSystemInfo(L2PcInstance.this));
-		}
+		_recoTwoHoursGiven = val;
 	}
 	
 	public int getRecomBonusTime()
@@ -17117,7 +16453,7 @@ public final class L2PcInstance extends L2Playable
 		@Override
 		public void run()
 		{
-			L2PcInstance.this.incAdventPoints(20, true);
+			incAdventPoints(20, true);
 		}
 	}
 	
@@ -17139,10 +16475,10 @@ public final class L2PcInstance extends L2Playable
 		@Override
 		public void run()
 		{
-			L2PcInstance.this.stopSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING);
-			L2PcInstance.this.sendPacket(new ExNevitAdventEffect(0));
-			L2PcInstance.this.sendPacket(new ExNevitAdventPointInfoPacket(L2PcInstance.this));
-			L2PcInstance.this.sendPacket(SystemMessageId.NEVITS_ADVENT_BLESSING_HAS_ENDED);
+			stopSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING);
+			sendPacket(new ExNevitAdventEffect(0));
+			sendPacket(new ExNevitAdventPointInfoPacket(L2PcInstance.this));
+			sendPacket(SystemMessageId.NEVITS_ADVENT_BLESSING_HAS_ENDED);
 			
 			_adventBlessingTask = null;
 		}

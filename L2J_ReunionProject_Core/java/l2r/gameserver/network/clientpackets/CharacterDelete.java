@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.network.serverpackets.CharDeleteFail;
 import l2r.gameserver.network.serverpackets.CharDeleteSuccess;

@@ -22,8 +22,6 @@ import java.nio.BufferUnderflowException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.mmocore.network.ReceivablePacket;
-
 import l2r.Config;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.L2GameClient;
@@ -31,6 +29,8 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
+
+import org.mmocore.network.ReceivablePacket;
 
 /**
  * Packets received by the game server from clients

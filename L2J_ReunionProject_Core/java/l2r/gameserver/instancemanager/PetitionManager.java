@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.idfactory.IdFactory;

@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import gr.reunion.configs.LeaderboardsConfigs;
 import gr.reunion.leaderboards.FishermanLeaderboard;
-import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
  * Format: (ch) just a trigger

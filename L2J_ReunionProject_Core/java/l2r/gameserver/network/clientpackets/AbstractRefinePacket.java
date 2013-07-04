@@ -22,8 +22,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import gr.reunion.configs.CustomServerConfigs;
-
 import l2r.Config;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Armor;
@@ -31,6 +29,7 @@ import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
+import gr.reunion.configs.CustomServerConfigs;
 
 public abstract class AbstractRefinePacket extends L2GameClientPacket
 {

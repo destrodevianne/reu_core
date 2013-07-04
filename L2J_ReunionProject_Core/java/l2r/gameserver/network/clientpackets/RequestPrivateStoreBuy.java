@@ -20,7 +20,6 @@ package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.actor.L2Npc.INTERACTION_DISTANCE;
 import javolution.util.FastSet;
-
 import l2r.Config;
 import l2r.gameserver.model.ItemRequest;
 import l2r.gameserver.model.L2Object;

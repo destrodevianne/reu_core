@@ -23,11 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import gr.reunion.configs.LeaderboardsConfigs;
-import gr.reunion.leaderboards.CraftLeaderboard;
-
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.RecipeData;
@@ -54,6 +50,8 @@ import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
+import gr.reunion.configs.LeaderboardsConfigs;
+import gr.reunion.leaderboards.CraftLeaderboard;
 
 public class RecipeController
 {
