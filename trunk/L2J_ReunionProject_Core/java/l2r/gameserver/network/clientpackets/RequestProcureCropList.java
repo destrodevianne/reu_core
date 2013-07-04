@@ -20,7 +20,6 @@ package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.actor.L2Npc.INTERACTION_DISTANCE;
 import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
-
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.ManorData;

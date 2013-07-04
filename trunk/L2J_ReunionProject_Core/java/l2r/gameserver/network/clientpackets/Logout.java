@@ -31,7 +31,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
-
 import gr.reunion.configs.AntibotConfigs;
 import gr.reunion.interf.NexusEvents;
 

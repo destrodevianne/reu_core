@@ -23,7 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.gameserver.ai.CtrlEvent;
 import l2r.gameserver.ai.L2CharacterAI;

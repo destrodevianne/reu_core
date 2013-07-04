@@ -23,9 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.engines.DocumentParser;
@@ -43,6 +40,9 @@ import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
 import l2r.gameserver.model.zone.type.L2ClanHallZone;
 import l2r.gameserver.model.zone.type.L2RespawnZone;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * @author Nyaran

@@ -31,7 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.SkillTable;
@@ -50,7 +49,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SSQInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Broadcast;
-
 import gnu.trove.procedure.TObjectProcedure;
 
 /**

@@ -22,8 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import gr.reunion.configs.CustomServerConfigs;
-
 import l2r.Config;
 import l2r.gameserver.datatables.EnchantGroupsData;
 import l2r.gameserver.datatables.SkillTable;
@@ -41,6 +39,7 @@ import l2r.gameserver.network.serverpackets.ExEnchantSkillResult;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.util.Rnd;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * Format (ch) dd c: (id) 0xD0 h: (subid) 0x06 d: skill id d: skill lvl

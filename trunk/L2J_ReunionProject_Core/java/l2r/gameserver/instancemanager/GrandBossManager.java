@@ -29,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.datatables.NpcTable;
@@ -41,7 +40,6 @@ import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.type.L2BossZone;
 import l2r.util.L2FastList;
-
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 

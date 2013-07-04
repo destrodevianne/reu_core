@@ -21,7 +21,6 @@ package l2r.gameserver.network.clientpackets;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.network.serverpackets.CharSelectionInfo;
 import l2r.gameserver.scripting.scriptengine.events.PlayerEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerListener;

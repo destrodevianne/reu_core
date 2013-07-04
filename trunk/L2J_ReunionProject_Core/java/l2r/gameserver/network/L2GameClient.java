@@ -33,10 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import org.mmocore.network.MMOClient;
-import org.mmocore.network.MMOConnection;
-import org.mmocore.network.ReceivablePacket;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.LoginServerThread;
@@ -57,6 +53,10 @@ import l2r.gameserver.network.serverpackets.ServerClose;
 import l2r.gameserver.security.SecondaryPasswordAuth;
 import l2r.gameserver.util.FloodProtectors;
 import l2r.gameserver.util.Util;
+
+import org.mmocore.network.MMOClient;
+import org.mmocore.network.MMOConnection;
+import org.mmocore.network.ReceivablePacket;
 
 import gr.reunion.interf.NexusEvents;
 import gr.reunion.securitySystem.SecurityActions;
@@ -806,7 +806,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	protected boolean offlineMode(L2PcInstance player)
 	{
 		boolean canSetShop = false;
-		if (player.isInOlympiadMode() || player.isFestivalParticipant() || player.isInJail() || (player.getVehicle() != null))
+		if (player.isInOlympiadMode() || player.isFestivalParticipant() || player.isJailed() || (player.getVehicle() != null))
 		{
 			return false;
 		}

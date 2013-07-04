@@ -49,7 +49,6 @@ import l2r.gameserver.network.serverpackets.ExUseSharedGroupItem;
 import l2r.gameserver.network.serverpackets.ItemList;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
-
 import gr.reunion.interf.NexusEvents;
 
 /**

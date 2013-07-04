@@ -105,6 +105,7 @@ import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.instancemanager.MercTicketManager;
 import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.instancemanager.PetitionManager;
+import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.RaidBossPointsManager;
 import l2r.gameserver.instancemanager.RaidBossSpawnManager;
@@ -383,6 +384,8 @@ public class GameServer
 		{
 			GeoEditorListener.getInstance();
 		}
+		
+		PunishmentManager.getInstance();
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		

@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import l2r.Config;
 import l2r.util.StringUtil;
 

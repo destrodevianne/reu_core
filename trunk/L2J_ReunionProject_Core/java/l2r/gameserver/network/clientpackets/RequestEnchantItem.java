@@ -23,8 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import gr.reunion.antibotSystem.AntibotSystem;
-
 import l2r.Config;
 import l2r.gameserver.datatables.EnchantItemData;
 import l2r.gameserver.datatables.SkillTable;
@@ -48,6 +46,7 @@ import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
+import gr.reunion.antibotSystem.AntibotSystem;
 
 public final class RequestEnchantItem extends L2GameClientPacket
 {
@@ -158,7 +157,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			activeChar.sendMessage("Your trade cancelled.");
 			return;
 		}
-		if (activeChar.isInJail())
+		if (activeChar.isJailed())
 		{
 			activeChar.setActiveEnchantItem(null);
 			activeChar.sendMessage("Can't enchant in jail.");

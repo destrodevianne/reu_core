@@ -21,7 +21,6 @@ package l2r.gameserver;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.instancemanager.ItemsOnGroundManager;
 import l2r.gameserver.model.L2World;

@@ -27,7 +27,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AskJoinParty;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-
 import gr.reunion.interf.NexusEvents;
 
 /**
@@ -106,7 +105,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			return;
 		}
 		
-		if (target.isInJail() || requestor.isInJail())
+		if (target.isJailed() || requestor.isJailed())
 		{
 			requestor.sendMessage("You cannot invite a player while is in Jail.");
 			return;

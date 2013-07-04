@@ -24,7 +24,11 @@ import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.punishment.PunishmentAffect;
+import l2r.gameserver.model.punishment.PunishmentTask;
+import l2r.gameserver.model.punishment.PunishmentType;
 
 /**
  * This class ...
@@ -92,10 +96,10 @@ public final class IllegalPlayerAction implements Runnable
 					_actor.logout(false);
 					break;
 				case PUNISH_KICKBAN:
-					_actor.logout();
+					PunishmentManager.getInstance().startPunishment(new PunishmentTask(_actor.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.BAN, System.currentTimeMillis() + (Config.DEFAULT_PUNISH_PARAM * 1000), _message, getClass().getSimpleName()));
 					break;
 				case PUNISH_JAIL:
-					_actor.setPunishLevel(L2PcInstance.PunishLevel.JAIL, Config.DEFAULT_PUNISH_PARAM);
+					PunishmentManager.getInstance().startPunishment(new PunishmentTask(_actor.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.JAIL, System.currentTimeMillis() + (Config.DEFAULT_PUNISH_PARAM * 1000), _message, getClass().getSimpleName()));
 					break;
 			}
 		}

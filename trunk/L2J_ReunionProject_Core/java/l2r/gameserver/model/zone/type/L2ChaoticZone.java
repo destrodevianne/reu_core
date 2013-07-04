@@ -28,7 +28,7 @@ import gr.reunion.configs.ChaoticZoneConfigs;
 public class L2ChaoticZone extends L2RespawnZone
 {
 	// Chaotic Zone Revive Spots
-	protected static int[] _x =
+	public static int[] _x =
 	{
 		-76063,
 		-78299,
@@ -36,7 +36,7 @@ public class L2ChaoticZone extends L2RespawnZone
 		-87738,
 		-81864
 	};
-	protected static int[] _y =
+	public static int[] _y =
 	{
 		-47285,
 		-54143,
@@ -44,7 +44,7 @@ public class L2ChaoticZone extends L2RespawnZone
 		-47331,
 		-43048
 	};
-	protected static int[] _z =
+	public static int[] _z =
 	{
 		-10682,
 		-10682,

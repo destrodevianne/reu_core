@@ -25,15 +25,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.instancezone.InstanceWorld;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * @author evill33t, GodKratos

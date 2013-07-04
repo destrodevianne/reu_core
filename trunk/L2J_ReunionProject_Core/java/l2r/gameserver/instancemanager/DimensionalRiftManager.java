@@ -30,11 +30,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import javolution.util.FastList;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.NpcTable;
@@ -48,6 +43,10 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import gnu.trove.map.hash.TByteObjectHashMap;
 

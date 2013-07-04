@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

@@ -19,8 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
-import gr.reunion.configs.CustomServerConfigs;
-
 import l2r.Config;
 import l2r.gameserver.model.TradeList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -32,6 +30,7 @@ import l2r.gameserver.network.serverpackets.PrivateStoreManageListSell;
 import l2r.gameserver.network.serverpackets.PrivateStoreMsgSell;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.gameserver.util.Util;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * This class ...

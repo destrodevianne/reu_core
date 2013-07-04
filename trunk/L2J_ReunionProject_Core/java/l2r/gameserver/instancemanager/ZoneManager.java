@@ -27,9 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
@@ -45,6 +42,9 @@ import l2r.gameserver.model.zone.form.ZoneNPoly;
 import l2r.gameserver.model.zone.type.L2ArenaZone;
 import l2r.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import l2r.gameserver.model.zone.type.L2RespawnZone;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * This class manages the zones

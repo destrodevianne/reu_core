@@ -23,8 +23,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.gameserver.GameTimeController;
+import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.model.PcCondOverride;
-import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.punishment.PunishmentAffect;
+import l2r.gameserver.model.punishment.PunishmentTask;
+import l2r.gameserver.model.punishment.PunishmentType;
 import l2r.gameserver.network.L2GameClient;
 import l2r.util.StringUtil;
 
@@ -160,20 +163,10 @@ public final class FloodProtectorAction
 	 */
 	private void banAccount()
 	{
-		if (_client.getActiveChar() != null)
+		PunishmentManager.getInstance().startPunishment(new PunishmentTask(_client.getAccountName(), PunishmentAffect.ACCOUNT, PunishmentType.BAN, System.currentTimeMillis() + _config.PUNISHMENT_TIME, "", getClass().getSimpleName()));
+		if (_log.isLoggable(Level.WARNING))
 		{
-			_client.getActiveChar().setPunishLevel(L2PcInstance.PunishLevel.ACC, _config.PUNISHMENT_TIME);
-			
-			if (_log.isLoggable(Level.WARNING))
-			{
-				log(" banned for flooding ", _config.PUNISHMENT_TIME <= 0 ? "forever" : "for " + _config.PUNISHMENT_TIME + " mins");
-			}
-			
-			_client.getActiveChar().logout();
-		}
-		else
-		{
-			log(" unable to ban account: no active player");
+			log(" banned for flooding ", _config.PUNISHMENT_TIME <= 0 ? "forever" : "for " + _config.PUNISHMENT_TIME + " mins");
 		}
 	}
 	
@@ -184,16 +177,16 @@ public final class FloodProtectorAction
 	{
 		if (_client.getActiveChar() != null)
 		{
-			_client.getActiveChar().setPunishLevel(L2PcInstance.PunishLevel.JAIL, _config.PUNISHMENT_TIME);
+			int charId = _client.getActiveChar().getObjectId();
+			if (charId > 0)
+			{
+				PunishmentManager.getInstance().startPunishment(new PunishmentTask(charId, PunishmentAffect.CHARACTER, PunishmentType.JAIL, System.currentTimeMillis() + _config.PUNISHMENT_TIME, "", getClass().getSimpleName()));
+			}
 			
 			if (_log.isLoggable(Level.WARNING))
 			{
 				log(" jailed for flooding ", _config.PUNISHMENT_TIME <= 0 ? "forever" : "for " + _config.PUNISHMENT_TIME + " mins");
 			}
-		}
-		else
-		{
-			log(" unable to jail: no active player");
 		}
 	}
 	

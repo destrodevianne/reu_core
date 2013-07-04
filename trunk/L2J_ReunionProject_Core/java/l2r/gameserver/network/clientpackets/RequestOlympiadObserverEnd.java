@@ -19,7 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-
 import gr.reunion.interf.NexusEvents;
 
 /**

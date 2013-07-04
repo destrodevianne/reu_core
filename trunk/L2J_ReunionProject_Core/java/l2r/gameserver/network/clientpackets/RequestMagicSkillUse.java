@@ -28,7 +28,6 @@ import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
-
 import gr.reunion.interf.NexusEvents;
 
 public final class RequestMagicSkillUse extends L2GameClientPacket

@@ -21,7 +21,6 @@ package l2r.gameserver.network.clientpackets;
 import java.util.ArrayList;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.datatables.MultiSell;
 import l2r.gameserver.model.Elementals;

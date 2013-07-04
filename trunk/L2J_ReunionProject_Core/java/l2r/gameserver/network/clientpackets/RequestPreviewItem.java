@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.TradeController;

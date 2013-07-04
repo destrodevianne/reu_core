@@ -24,7 +24,6 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.instancemanager.AntiFeedManager;
@@ -38,7 +37,6 @@ import l2r.gameserver.network.serverpackets.CharSelectionInfo;
 import l2r.gameserver.network.serverpackets.RestartResponse;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerDespawnListener;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
-
 import gr.reunion.configs.AntibotConfigs;
 import gr.reunion.interf.NexusEvents;
 
