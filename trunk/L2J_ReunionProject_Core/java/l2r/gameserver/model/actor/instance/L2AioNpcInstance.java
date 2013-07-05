@@ -21,27 +21,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gr.reunion.achievementSystem.AchievementsManager;
-import gr.reunion.achievementSystem.base.Achievement;
-import gr.reunion.achievementSystem.base.Condition;
-import gr.reunion.aioItem.PlayersTopData;
-import gr.reunion.aioItem.runnable.TransformFinalizer;
-import gr.reunion.configs.AioItemsConfigs;
-import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.configs.LeaderboardsConfigs;
-import gr.reunion.datatables.CustomTable;
-import gr.reunion.donateSystem.DonateHandler;
-import gr.reunion.imageGeneratorSystem.GenerateLogos;
-import gr.reunion.leaderboards.ArenaLeaderboard;
-import gr.reunion.leaderboards.CraftLeaderboard;
-import gr.reunion.leaderboards.FishermanLeaderboard;
-import gr.reunion.leaderboards.TvTLeaderboard;
-import gr.reunion.main.Conditions;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
-
 import javolution.text.TextBuilder;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.communitybbs.Manager.RegionBBSManager;
@@ -57,6 +37,7 @@ import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.GrandBossManager;
 import l2r.gameserver.instancemanager.TransformationManager;
+import l2r.gameserver.model.L2Augmentation;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Npc;
@@ -92,6 +73,24 @@ import l2r.gameserver.network.serverpackets.WareHouseDepositList;
 import l2r.gameserver.network.serverpackets.WareHouseWithdrawalList;
 import l2r.gameserver.util.Util;
 import l2r.util.StringUtil;
+import gr.reunion.achievementSystem.AchievementsManager;
+import gr.reunion.achievementSystem.base.Achievement;
+import gr.reunion.achievementSystem.base.Condition;
+import gr.reunion.aioItem.PlayersTopData;
+import gr.reunion.aioItem.runnable.TransformFinalizer;
+import gr.reunion.configs.AioItemsConfigs;
+import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configs.LeaderboardsConfigs;
+import gr.reunion.datatables.CustomTable;
+import gr.reunion.donateSystem.DonateHandler;
+import gr.reunion.imageGeneratorSystem.GenerateLogos;
+import gr.reunion.leaderboards.ArenaLeaderboard;
+import gr.reunion.leaderboards.CraftLeaderboard;
+import gr.reunion.leaderboards.FishermanLeaderboard;
+import gr.reunion.leaderboards.TvTLeaderboard;
+import gr.reunion.main.Conditions;
+import gr.reunion.securitySystem.SecurityActions;
+import gr.reunion.securitySystem.SecurityType;
 
 /**
  * @author -=DoctorNo=- Version 3.3 Last Edit: 19-10-2012
@@ -118,10 +117,6 @@ public final class L2AioNpcInstance extends L2Npc
 	private static int itemIdToGet;
 	// Global Variable
 	private static int price;
-	@SuppressWarnings("unused")
-	private static int value;
-	@SuppressWarnings("unused")
-	private static int pskill;
 	private static Logger _log = Logger.getLogger(L2AioNpcInstance.class.getName());
 	private static final int[] BOSSES =
 	{
@@ -1049,54 +1044,58 @@ public final class L2AioNpcInstance extends L2Npc
 		// Method to add specific augment to a weapon
 		else if (command.startsWith("addaugment"))
 		{
+			int value = 0;
+			int pskill = 0;
+			
 			String[] stats = command.split(" "); // str, int, men, con
 			
 			if (stats[1].equals("STR+1"))
 			{
-				value = 1070927332;
+				value = 16341;
 			}
 			else if (stats[1].equals("INT+1"))
 			{
-				value = 1071062041;
+				value = 16343;
 			}
 			else if (stats[1].equals("MEN+1"))
 			{
-				value = 1071123936;
+				value = 16344;
 			}
 			else if (stats[1].equals("CON+1"))
 			{
-				value = 1070996505;
+				value = 16342;
 			}
 			
-			if (stats[2].equals("Might"))
+			if (stats[2].equals("Heal_Empower"))
 			{
-				pskill = 3240;
-			}
-			else if (stats[2].equals("Duel_Might"))
-			{
-				pskill = 3243;
-			}
-			else if (stats[2].equals("Shield"))
-			{
-				pskill = 3244;
-			}
-			else if (stats[2].equals("Magic_Barrier"))
-			{
-				pskill = 3245;
-			}
-			else if (stats[2].equals("Empower"))
-			{
-				pskill = 3241;
-			}
-			else if (stats[2].equals("Heal_Empower"))
-			{
-				pskill = 3246;
+				pskill = 16279;
 			}
 			else if (stats[2].equals("Wild_Magic"))
 			{
-				pskill = 3250;
+				pskill = 16336;
+			}
+			else if (stats[2].equals("Empower"))
+			{
+				pskill = 16281;
+			}
+			else if (stats[2].equals("Magic_Barrier"))
+			{
+				pskill = 16282;
+			}
+			else if (stats[2].equals("Might"))
+			{
+				pskill = 16283;
+			}
+			else if (stats[2].equals("Shield"))
+			{
+				pskill = 16284;
+			}
+			else if (stats[2].equals("Duel_Might"))
+			{
+				pskill = 16285;
 			}
 			
+			pskill = pskill + 8358;
 			int armorType = -1;
 			armorType = Inventory.PAPERDOLL_RHAND;
 			itemIdToGet = AioItemsConfigs.AUGMENT_COIN;
@@ -1134,8 +1133,7 @@ public final class L2AioNpcInstance extends L2Npc
 				// set augment skill
 				player.destroyItemByItemId("augment", itemIdToGet, price, player, true);
 				player.getInventory().unEquipItemInSlot(armorType);
-				// FIXME
-				// itemInstance.setAugmentation(new L2Augmentation(value, pskill, 10));
+				itemInstance.setAugmentation(new L2Augmentation(((pskill << 16) + value)));
 				player.getInventory().equipItem(itemInstance);
 				player.sendPacket(SystemMessageId.THE_ITEM_WAS_SUCCESSFULLY_AUGMENTED);
 				

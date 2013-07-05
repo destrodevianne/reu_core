@@ -28,10 +28,6 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.model.L2Augmentation;
 import l2r.gameserver.model.holders.SkillHolder;
@@ -41,6 +37,10 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.options.Options;
 import l2r.gameserver.network.clientpackets.AbstractRefinePacket;
 import l2r.util.Rnd;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * This class manages the augmentation data and can also create new augmentations.
@@ -706,6 +706,10 @@ public class AugmentationData
 					}
 				}
 			}
+			
+			// Lets keep this for future usage ;)
+			// stat12 = Rnd.get(BASESTAT_STR, BASESTAT_MEN);
+			
 			return new L2Augmentation(((stat34 << 16) + stat12));
 		}
 		boolean generateSkill = false;
