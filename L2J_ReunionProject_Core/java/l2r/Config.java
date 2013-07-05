@@ -96,12 +96,26 @@ public final class Config
 	public static final String MMO_CONFIG_FILE = "./config/main/MMO.ini";
 	public static final String OLYMPIAD_CONFIG_FILE = "./config/main/Olympiad.ini";
 	public static final String COMMUNITY_CONFIGURATION_FILE = "./config/main/CommunityServer.ini";
-	public static final String GRANDBOSS_CONFIG_FILE = "./config/main/GrandBoss.ini";
 	public static final String GRACIASEEDS_CONFIG_FILE = "./config/main/GraciaSeeds.ini";
 	public static final String CHAT_FILTER_FILE = "./config/main/chatfilter.txt";
 	public static final String SECURITY_CONFIG_FILE = "./config/main/Security.ini";
 	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini";
 	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
+	// Bosses/
+	public static final String ANTHARAS_CONFIG = "./config/bosses/Antharas.ini";
+	public static final String VALAKAS_CONFIG = "./config/bosses/Valakas.ini";
+	public static final String BAIUM_CONFIG = "./config/bosses/Baium.ini";
+	public static final String BELETH_CONFIG = "./config/bosses/Beleth.ini";
+	public static final String CORE_CONFIG = "./config/bosses/Core.ini";
+	public static final String EKIMUS_CONFIG = "./config/bosses/Ekimus.ini";
+	public static final String FRINTEZZA_CONFIG = "./config/bosses/Frintezza.ini";
+	public static final String FREYA_EASY_CONFIG = "./config/bosses/FreyaEasy.ini";
+	public static final String FREYA_HARDCORE_CONFIG = "./config/bosses/FreyaHardCore.ini";
+	public static final String ORFEN_CONFIG = "./config/bosses/Orfen.ini";
+	public static final String QUEEN_ANT_CONFIG = "./config/bosses/QueenAnt.ini";
+	public static final String SAILREN_CONFIG = "./config/bosses/Sailren.ini";
+	public static final String ZAKEN_CONFIG = "./config/bosses/Zaken.ini";
+	public static final String DESTRUCTION_BOSSES_CONFIG = "./config/bosses/DestructionBosses.ini";
 	// --------------------------------------------------
 	// L2J Variable Definitions
 	// --------------------------------------------------
@@ -1053,16 +1067,36 @@ public final class Config
 	public static int QUEEN_ANT_SPAWN_RANDOM;
 	
 	// Zaken
-	public static int ZAKEN_SPAWN_INTERVAL;
-	public static int ZAKEN_SPAWN_RANDOM;
+	public static int ZAKEN_MINLEVEL_DAYTIME;
+	public static int ZAKEN_MINLEVEL_DAYTIME83;
+	public static int ZAKEN_MINMEMBERS_DAYTIME;
+	public static int ZAKEN_MINMEMBERS_NIGHTTIME;
+	public static int ZAKEN_MAXMEMBERS_DAYTIME;
+	public static int ZAKEN_MAXMEMBERS_NIGHTTIME;
 	
 	// Beleth
 	public static int BELETH_MIN_PLAYERS;
 	public static int BELETH_SPAWN_INTERVAL;
 	public static int BELETH_SPAWN_RANDOM;
+	
+	// Sailren
 	public static int INTERVAL_OF_SAILREN_SPAWN;
 	public static int RANDOM_OF_SAILREN_SPAWN;
 	
+	// Freya
+	public static int MIN_PLAYERS_TO_HARD;
+	public static int MAX_PLAYERS_TO_HARD;
+	public static int MIN_PLAYERS_TO_EASY;
+	public static int MAX_PLAYERS_TO_EASY;
+	public static int MIN_PLAYER_LEVEL_TO_HARD;
+	public static int MIN_PLAYER_LEVEL_TO_EASY;
+	
+	// Frintezza
+	public static int MIN_PLAYER_TO_FE;
+	public static int MAX_PLAYER_TO_FE;
+	public static int MIN_LEVEL_TO_FE;
+	
+	// Ekimus
 	public static int SOI_EKIMUS_KILL_COUNT;
 	public static int EROSION_ATTACK_MIN_PLAYERS;
 	public static int EROSION_ATTACK_MAX_PLAYERS;
@@ -2671,73 +2705,234 @@ public final class Config
 				_log.warning("Could not load HexID file (" + HEXID_FILE + "). Hopefully login will give us one.");
 			}
 			
-			// Grand bosses
-			L2Properties GrandBossSettings = new L2Properties();
-			final File grandboss = new File(GRANDBOSS_CONFIG_FILE);
-			try (InputStream is = new FileInputStream(grandboss))
+			// Bosses
+			// Load ANTHARAS_CONFIG L2Properties file (if exists)
+			final File antharas = new File(ANTHARAS_CONFIG);
+			try (InputStream is = new FileInputStream(antharas))
 			{
-				GrandBossSettings.load(is);
+				L2Properties antharas_load = new L2Properties();
+				antharas_load.load(is);
+				ANTHARAS_WAIT_TIME = Integer.parseInt(antharas_load.getProperty("AntharasWaitTime", "30"));
+				ANTHARAS_SPAWN_INTERVAL = Integer.parseInt(antharas_load.getProperty("IntervalOfAntharasSpawn", "264"));
+				ANTHARAS_SPAWN_RANDOM = Integer.parseInt(antharas_load.getProperty("RandomOfAntharasSpawn", "72"));
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Error while loading Grand Bosses settings!", e);
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + ANTHARAS_CONFIG + " File.");
 			}
 			
-			ANTHARAS_WAIT_TIME = Integer.parseInt(GrandBossSettings.getProperty("AntharasWaitTime", "30"));
-			ANTHARAS_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfAntharasSpawn", "264"));
-			ANTHARAS_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfAntharasSpawn", "72"));
-			
-			VALAKAS_WAIT_TIME = Integer.parseInt(GrandBossSettings.getProperty("ValakasWaitTime", "30"));
-			VALAKAS_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfValakasSpawn", "264"));
-			VALAKAS_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfValakasSpawn", "72"));
-			
-			BAIUM_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfBaiumSpawn", "168"));
-			BAIUM_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfBaiumSpawn", "48"));
-			
-			CORE_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfCoreSpawn", "60"));
-			CORE_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfCoreSpawn", "24"));
-			
-			ORFEN_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfOrfenSpawn", "48"));
-			ORFEN_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfOrfenSpawn", "20"));
-			
-			QUEEN_ANT_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfQueenAntSpawn", "36"));
-			QUEEN_ANT_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfQueenAntSpawn", "17"));
-			
-			ZAKEN_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfZakenSpawn", "60"));
-			ZAKEN_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfZakenSpawn", "20"));
-			
-			BELETH_SPAWN_INTERVAL = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfBelethSpawn", "192"));
-			BELETH_SPAWN_RANDOM = Integer.parseInt(GrandBossSettings.getProperty("RandomOfBelethSpawn", "148"));
-			BELETH_MIN_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("BelethMinPlayers", "36"));
-			
-			INTERVAL_OF_SAILREN_SPAWN = Integer.parseInt(GrandBossSettings.getProperty("IntervalOfSailrenSpawn", "12"));
-			if ((INTERVAL_OF_SAILREN_SPAWN < 1) || (INTERVAL_OF_SAILREN_SPAWN > 192))
+			// Load VALAKAS_CONFIG L2Properties file (if exists)
+			final File valakas = new File(VALAKAS_CONFIG);
+			try (InputStream is = new FileInputStream(valakas))
 			{
-				INTERVAL_OF_SAILREN_SPAWN = 12;
+				L2Properties valakas_load = new L2Properties();
+				valakas_load.load(is);
+				VALAKAS_WAIT_TIME = Integer.parseInt(valakas_load.getProperty("ValakasWaitTime", "30"));
+				VALAKAS_SPAWN_INTERVAL = Integer.parseInt(valakas_load.getProperty("IntervalOfValakasSpawn", "264"));
+				VALAKAS_SPAWN_RANDOM = Integer.parseInt(valakas_load.getProperty("RandomOfValakasSpawn", "72"));
 			}
-			INTERVAL_OF_SAILREN_SPAWN = INTERVAL_OF_SAILREN_SPAWN * 3600000;
-			
-			RANDOM_OF_SAILREN_SPAWN = Integer.parseInt(GrandBossSettings.getProperty("RandomOfSailrenSpawn", "24"));
-			if ((RANDOM_OF_SAILREN_SPAWN < 1) || (RANDOM_OF_SAILREN_SPAWN > 192))
+			catch (Exception e)
 			{
-				RANDOM_OF_SAILREN_SPAWN = 24;
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + VALAKAS_CONFIG + " File.");
 			}
-			RANDOM_OF_SAILREN_SPAWN = RANDOM_OF_SAILREN_SPAWN * 3600000;
 			
-			SOI_EKIMUS_KILL_COUNT = Integer.parseInt(GrandBossSettings.getProperty("EkimusKillCount", "5"));
-			EROSION_ATTACK_MIN_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MinEroAttPlayers", "18"));
-			EROSION_ATTACK_MAX_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MaxEroAttPlayers", "27"));
-			EROSION_DEFENCE_MIN_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MinEroDefPlayers", "18"));
-			EROSION_DEFENCE_MAX_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MaxEroDefPlayers", "27"));
-			HEART_ATTACK_MIN_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MinHeaAttPlayers", "18"));
-			HEART_ATTACK_MAX_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MaxHeaAttPlayers", "27"));
-			HEART_DEFENCE_MIN_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MinHeaDefPlayers", "18"));
-			HEART_DEFENCE_MAX_PLAYERS = Integer.parseInt(GrandBossSettings.getProperty("MaxHeaDefPlayers", "27"));
+			// Load BAIUM_CONFIG L2Properties file (if exists)
+			final File baium = new File(BAIUM_CONFIG);
+			try (InputStream is = new FileInputStream(baium))
+			{
+				L2Properties baium_load = new L2Properties();
+				baium_load.load(is);
+				BAIUM_SPAWN_INTERVAL = Integer.parseInt(baium_load.getProperty("IntervalOfBaiumSpawn", "168"));
+				BAIUM_SPAWN_RANDOM = Integer.parseInt(baium_load.getProperty("RandomOfBaiumSpawn", "48"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + BAIUM_CONFIG + " File.");
+			}
 			
-			// Blood Altars
-			CHANGE_STATUS = Integer.parseInt(GrandBossSettings.getProperty("ChangeStatus", "30"));
-			CHANCE_SPAWN = Integer.parseInt(GrandBossSettings.getProperty("ChanceSpawn", "50"));
-			RESPAWN_TIME = Integer.parseInt(GrandBossSettings.getProperty("RespawnTime", "720"));
+			// Load CORE_CONFIG L2Properties file (if exists)
+			final File core = new File(CORE_CONFIG);
+			try (InputStream is = new FileInputStream(core))
+			{
+				L2Properties core_load = new L2Properties();
+				core_load.load(is);
+				CORE_SPAWN_INTERVAL = Integer.parseInt(core_load.getProperty("IntervalOfCoreSpawn", "60"));
+				CORE_SPAWN_RANDOM = Integer.parseInt(core_load.getProperty("RandomOfCoreSpawn", "24"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + CORE_CONFIG + " File.");
+			}
+			
+			// Load FREYA_EASY_CONFIG L2Properties file (if exists)
+			final File freyaeasy = new File(FREYA_EASY_CONFIG);
+			try (InputStream is = new FileInputStream(freyaeasy))
+			{
+				L2Properties freyaeasy_load = new L2Properties();
+				freyaeasy_load.load(is);
+				MIN_PLAYER_LEVEL_TO_EASY = Integer.parseInt(freyaeasy_load.getProperty("MinLevel", "78"));
+				MIN_PLAYERS_TO_EASY = Integer.parseInt(freyaeasy_load.getProperty("MinPlayers", "18"));
+				MAX_PLAYERS_TO_EASY = Integer.parseInt(freyaeasy_load.getProperty("MaxPlayers", "27"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + FREYA_EASY_CONFIG + " File.");
+			}
+			
+			// Load FREYA_HARDCORE_CONFIG L2Properties file (if exists)
+			final File freyahardcore = new File(FREYA_HARDCORE_CONFIG);
+			try (InputStream is = new FileInputStream(freyahardcore))
+			{
+				L2Properties freyahardcore_load = new L2Properties();
+				freyahardcore_load.load(is);
+				MIN_PLAYER_LEVEL_TO_HARD = Integer.parseInt(freyahardcore_load.getProperty("MinLevel", "82"));
+				MIN_PLAYERS_TO_HARD = Integer.parseInt(freyahardcore_load.getProperty("MinPlayers", "36"));
+				MAX_PLAYERS_TO_HARD = Integer.parseInt(freyahardcore_load.getProperty("MaxPlayers", "45"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + FREYA_HARDCORE_CONFIG + " File.");
+			}
+			
+			// Load ORFEN_CONFIG L2Properties file (if exists)
+			final File orfen = new File(ORFEN_CONFIG);
+			try (InputStream is = new FileInputStream(orfen))
+			{
+				L2Properties orfen_load = new L2Properties();
+				orfen_load.load(is);
+				ORFEN_SPAWN_INTERVAL = Integer.parseInt(orfen_load.getProperty("IntervalOfOrfenSpawn", "48"));
+				ORFEN_SPAWN_RANDOM = Integer.parseInt(orfen_load.getProperty("RandomOfOrfenSpawn", "20"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + ORFEN_CONFIG + " File.");
+			}
+			
+			// Load QUEEN_ANT_CONFIG L2Properties file (if exists)
+			final File queen = new File(QUEEN_ANT_CONFIG);
+			try (InputStream is = new FileInputStream(queen))
+			{
+				L2Properties queen_load = new L2Properties();
+				queen_load.load(is);
+				QUEEN_ANT_SPAWN_INTERVAL = Integer.parseInt(queen_load.getProperty("IntervalOfQueenAntSpawn", "36"));
+				QUEEN_ANT_SPAWN_RANDOM = Integer.parseInt(queen_load.getProperty("RandomOfQueenAntSpawn", "17"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + QUEEN_ANT_CONFIG + " File.");
+			}
+			
+			// Load BELETH_CONFIG L2Properties file (if exists)
+			final File beleth = new File(BELETH_CONFIG);
+			try (InputStream is = new FileInputStream(beleth))
+			{
+				L2Properties beleth_load = new L2Properties();
+				beleth_load.load(is);
+				BELETH_SPAWN_INTERVAL = Integer.parseInt(beleth_load.getProperty("IntervalOfBelethSpawn", "192"));
+				BELETH_SPAWN_RANDOM = Integer.parseInt(beleth_load.getProperty("RandomOfBelethSpawn", "148"));
+				BELETH_MIN_PLAYERS = Integer.parseInt(beleth_load.getProperty("BelethMinPlayers", "36"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + BELETH_CONFIG + " File.");
+			}
+			
+			// Load FRINTEZZA_CONFIG L2Properties file (if exists)
+			final File frintezza = new File(FRINTEZZA_CONFIG);
+			try (InputStream is = new FileInputStream(frintezza))
+			{
+				L2Properties frintezza_load = new L2Properties();
+				frintezza_load.load(is);
+				MIN_PLAYER_TO_FE = Integer.parseInt(frintezza_load.getProperty("MinPlayers", "36"));
+				MAX_PLAYER_TO_FE = Integer.parseInt(frintezza_load.getProperty("MaxPlayers", "45"));
+				MIN_LEVEL_TO_FE = Integer.parseInt(frintezza_load.getProperty("MinLevel", "80"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + FRINTEZZA_CONFIG + " File.");
+			}
+			
+			// Load SAILREN_CONFIG L2Properties file (if exists)
+			final File sailren = new File(SAILREN_CONFIG);
+			try (InputStream is = new FileInputStream(sailren))
+			{
+				L2Properties sailren_load = new L2Properties();
+				sailren_load.load(is);
+				INTERVAL_OF_SAILREN_SPAWN = Integer.parseInt(sailren_load.getProperty("IntervalOfSailrenSpawn", "12"));
+				RANDOM_OF_SAILREN_SPAWN = Integer.parseInt(sailren_load.getProperty("RandomOfSailrenSpawn", "24"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + SAILREN_CONFIG + " File.");
+			}
+			
+			// Load ZAKEN_CONFIG L2Properties file (if exists)
+			final File zaken = new File(ZAKEN_CONFIG);
+			try (InputStream is = new FileInputStream(zaken))
+			{
+				L2Properties zaken_load = new L2Properties();
+				zaken_load.load(is);
+				ZAKEN_MINLEVEL_DAYTIME = Integer.parseInt(zaken_load.getProperty("ZakenMinLevelDaytime", "55"));
+				ZAKEN_MINLEVEL_DAYTIME83 = Integer.parseInt(zaken_load.getProperty("ZakenMinLevelDaytime83", "78"));
+				ZAKEN_MINMEMBERS_DAYTIME = Integer.parseInt(zaken_load.getProperty("ZakenMinMembersDaytime", "9"));
+				ZAKEN_MINMEMBERS_NIGHTTIME = Integer.parseInt(zaken_load.getProperty("ZakenMinMembersNighttime", "72"));
+				ZAKEN_MAXMEMBERS_DAYTIME = Integer.parseInt(zaken_load.getProperty("ZakenMaxMembersDaytime", "27"));
+				ZAKEN_MAXMEMBERS_NIGHTTIME = Integer.parseInt(zaken_load.getProperty("ZakenMaxMembersNighttime", "450"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + ZAKEN_CONFIG + " File.");
+			}
+			
+			// Load DESTRUCTION_BOSSES_CONFIG L2Properties file (if exists)
+			final File destr = new File(DESTRUCTION_BOSSES_CONFIG);
+			try (InputStream is = new FileInputStream(destr))
+			{
+				L2Properties destr_load = new L2Properties();
+				destr_load.load(is);
+				CHANGE_STATUS = Integer.parseInt(destr_load.getProperty("ChangeStatus", "30"));
+				CHANCE_SPAWN = Integer.parseInt(destr_load.getProperty("ChanceSpawn", "50"));
+				RESPAWN_TIME = Integer.parseInt(destr_load.getProperty("RespawnTime", "720"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + DESTRUCTION_BOSSES_CONFIG + " File.");
+			}
+			
+			// Load EKIMUS_CONFIG L2Properties file (if exists)
+			final File soi = new File(EKIMUS_CONFIG);
+			try (InputStream is = new FileInputStream(soi))
+			{
+				L2Properties soi_load = new L2Properties();
+				soi_load.load(is);
+				SOI_EKIMUS_KILL_COUNT = Integer.parseInt(soi_load.getProperty("EkimusKillCount", "5"));
+				EROSION_ATTACK_MIN_PLAYERS = Integer.parseInt(soi_load.getProperty("MinEroAttPlayers", "18"));
+				EROSION_ATTACK_MAX_PLAYERS = Integer.parseInt(soi_load.getProperty("MaxEroAttPlayers", "27"));
+				EROSION_DEFENCE_MIN_PLAYERS = Integer.parseInt(soi_load.getProperty("MinEroDefPlayers", "18"));
+				EROSION_DEFENCE_MAX_PLAYERS = Integer.parseInt(soi_load.getProperty("MaxEroDefPlayers", "27"));
+				HEART_ATTACK_MIN_PLAYERS = Integer.parseInt(soi_load.getProperty("MinHeaAttPlayers", "18"));
+				HEART_ATTACK_MAX_PLAYERS = Integer.parseInt(soi_load.getProperty("MaxHeaAttPlayers", "27"));
+				HEART_DEFENCE_MIN_PLAYERS = Integer.parseInt(soi_load.getProperty("MinHeaDefPlayers", "18"));
+				HEART_DEFENCE_MAX_PLAYERS = Integer.parseInt(soi_load.getProperty("MaxHeaDefPlayers", "27"));
+			}
+			catch (Exception e)
+			{
+				_log.warning("Config: " + e.getMessage());
+				throw new Error("Failed to Load " + EKIMUS_CONFIG + " File.");
+			}
 			
 			// Gracia Seeds
 			L2Properties GraciaSeedsSettings = new L2Properties();
