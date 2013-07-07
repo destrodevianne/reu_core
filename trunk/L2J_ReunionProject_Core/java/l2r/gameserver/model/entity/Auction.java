@@ -30,10 +30,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gr.reunion.configs.CustomServerConfigs;
-
 import javolution.util.FastMap;
-
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ClanTable;
@@ -44,6 +41,7 @@ import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
+import gr.reunion.configs.CustomServerConfigs;
 
 public class Auction
 {

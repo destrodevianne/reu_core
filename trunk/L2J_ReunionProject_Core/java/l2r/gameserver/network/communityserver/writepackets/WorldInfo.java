@@ -21,12 +21,11 @@ package l2r.gameserver.network.communityserver.writepackets;
 import java.util.List;
 
 import javolution.util.FastList;
-
-import org.netcon.BaseWritePacket;
-
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+
+import org.netcon.BaseWritePacket;
 
 /**
  * @authors Forsaiken, Gigiikun

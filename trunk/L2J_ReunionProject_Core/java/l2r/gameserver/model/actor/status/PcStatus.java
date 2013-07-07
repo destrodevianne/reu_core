@@ -35,7 +35,6 @@ import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-
 import gr.reunion.interf.NexusEvents;
 
 public class PcStatus extends PlayableStatus

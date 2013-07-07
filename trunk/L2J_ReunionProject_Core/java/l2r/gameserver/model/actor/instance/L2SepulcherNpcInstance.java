@@ -42,7 +42,6 @@ import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.ValidateLocation;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-
 import gnu.trove.procedure.TObjectProcedure;
 
 /**

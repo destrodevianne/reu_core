@@ -21,7 +21,6 @@ package l2r.gameserver.network.serverpackets;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.L2Object;
 
 /**

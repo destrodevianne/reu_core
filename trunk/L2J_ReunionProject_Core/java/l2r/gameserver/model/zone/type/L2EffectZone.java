@@ -21,7 +21,6 @@ package l2r.gameserver.model.zone.type;
 import java.util.Map.Entry;
 
 import javolution.util.FastMap;
-
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.instancemanager.ZoneManager;

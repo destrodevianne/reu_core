@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.CtrlEvent;
@@ -48,7 +47,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.util.Rnd;
-
 import gr.reunion.interf.NexusEvents;
 
 public final class L2CubicInstance

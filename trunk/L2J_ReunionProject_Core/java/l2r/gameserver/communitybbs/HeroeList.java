@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javolution.text.TextBuilder;
 import javolution.util.FastMap;
-
 import l2r.L2DatabaseFactory;
 
 public class HeroeList

@@ -20,13 +20,13 @@ package l2r.gameserver.network.communityserver.readpackets;
 
 import java.util.logging.Logger;
 
-import org.netcon.BaseReadPacket;
-
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExMailArrived;
 import l2r.gameserver.network.serverpackets.SystemMessage;
+
+import org.netcon.BaseReadPacket;
 
 /**
  * @authors Forsaiken, Gigiikun

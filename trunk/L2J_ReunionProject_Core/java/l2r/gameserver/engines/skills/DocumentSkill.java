@@ -23,17 +23,16 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javolution.util.FastList;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.gameserver.datatables.EnchantGroupsData;
 import l2r.gameserver.engines.DocumentBase;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * @author mkizub

@@ -19,7 +19,6 @@
 package l2r.gameserver.network.gameserverpackets;
 
 import javolution.util.FastList;
-
 import l2r.util.network.BaseSendablePacket;
 
 /**

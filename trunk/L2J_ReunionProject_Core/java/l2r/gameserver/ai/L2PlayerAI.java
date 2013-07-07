@@ -25,7 +25,6 @@ import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_INTERACT;
 import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_MOVE_TO;
 import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_PICK_UP;
 import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_REST;
-
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;

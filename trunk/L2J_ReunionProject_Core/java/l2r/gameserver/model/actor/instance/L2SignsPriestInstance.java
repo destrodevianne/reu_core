@@ -22,7 +22,6 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 
 import javolution.text.TextBuilder;
-
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.cache.HtmCache;

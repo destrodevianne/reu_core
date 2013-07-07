@@ -5,7 +5,6 @@ import java.util.List;
 import javolution.text.TextBuilder;
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.NpcTable;

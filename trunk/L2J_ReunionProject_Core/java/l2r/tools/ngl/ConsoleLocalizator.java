@@ -26,6 +26,7 @@ import java.util.Scanner;
 
 import l2r.util.osnative.CodePage;
 import l2r.util.osnative.WinConsole;
+
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;

@@ -18,10 +18,10 @@
  */
 package l2r.gameserver.taskmanager.tasks;
 
-import org.python.util.PythonInterpreter;
-
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
+
+import org.python.util.PythonInterpreter;
 
 /**
  * @author Layane

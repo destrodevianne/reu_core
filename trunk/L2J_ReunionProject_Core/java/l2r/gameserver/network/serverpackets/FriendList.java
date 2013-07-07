@@ -21,7 +21,6 @@ package l2r.gameserver.network.serverpackets;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

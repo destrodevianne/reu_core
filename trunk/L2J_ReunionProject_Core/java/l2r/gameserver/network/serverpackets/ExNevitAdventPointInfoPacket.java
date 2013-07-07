@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import gr.reunion.datatables.AdventTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import gr.reunion.datatables.AdventTable;
 
 /**
  * @author mochitto

@@ -2,13 +2,12 @@ package l2r.gameserver.taskmanager.tasks;
 
 import java.util.logging.Logger;
 
-import gr.reunion.datatables.AdventTable;
-
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskTypes;
+import gr.reunion.datatables.AdventTable;
 
 public class TaskAdvent extends Task
 {

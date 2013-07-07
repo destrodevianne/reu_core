@@ -24,8 +24,6 @@ import java.util.logging.Logger;
 
 import javax.script.ScriptContext;
 
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.script.DateRange;
@@ -33,6 +31,8 @@ import l2r.gameserver.script.IntList;
 import l2r.gameserver.script.Parser;
 import l2r.gameserver.script.ParserFactory;
 import l2r.gameserver.script.ScriptEngine;
+
+import org.w3c.dom.Node;
 
 /**
  * @author Luis Arias

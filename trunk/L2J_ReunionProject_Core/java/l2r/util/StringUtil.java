@@ -19,7 +19,6 @@
 package l2r.util;
 
 import javolution.text.TextBuilder;
-
 import l2r.Config;
 
 /**

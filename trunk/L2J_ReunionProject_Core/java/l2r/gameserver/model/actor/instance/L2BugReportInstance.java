@@ -20,7 +20,6 @@ import java.io.FileWriter;
 import java.util.StringTokenizer;
 
 import javolution.text.TextBuilder;
-
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Npc;

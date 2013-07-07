@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.model.L2Object;

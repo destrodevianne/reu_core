@@ -22,7 +22,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.funcs.FuncAdd;
 import l2r.gameserver.model.skills.funcs.LambdaConst;
 import l2r.gameserver.model.stats.Stats;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public final class Elementals

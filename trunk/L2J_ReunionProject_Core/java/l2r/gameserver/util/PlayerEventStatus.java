@@ -21,7 +21,6 @@ package l2r.gameserver.util;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

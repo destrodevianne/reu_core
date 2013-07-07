@@ -21,10 +21,10 @@ package l2r.gameserver.datatables;
 import java.util.HashMap;
 import java.util.Map;
 
+import l2r.gameserver.engines.DocumentParser;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-
-import l2r.gameserver.engines.DocumentParser;
 
 /**
  * This class holds the Experience points for each level for players and pets.

@@ -63,7 +63,6 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
 import javolution.util.FastList;
-
 import l2r.tools.configurator.ConfigUserInterface.ConfigFile.ConfigComment;
 import l2r.tools.configurator.ConfigUserInterface.ConfigFile.ConfigProperty;
 import l2r.tools.i18n.LanguageControl;

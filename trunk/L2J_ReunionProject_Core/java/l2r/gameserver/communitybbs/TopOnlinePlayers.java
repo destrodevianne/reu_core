@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import gr.reunion.configs.SmartCommunityConfigs;
-
 import javolution.text.TextBuilder;
-
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.model.L2Clan;
+import gr.reunion.configs.SmartCommunityConfigs;
 
 public class TopOnlinePlayers
 {

@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javolution.util.FastMap;
-
 import l2r.gameserver.communitybbs.BB.Forum;
 import l2r.gameserver.communitybbs.BB.Post;
 import l2r.gameserver.communitybbs.BB.Post.CPost;

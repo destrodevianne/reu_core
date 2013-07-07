@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

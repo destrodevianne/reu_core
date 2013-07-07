@@ -21,7 +21,6 @@ package l2r.util;
 import java.util.Collection;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.interfaces.IL2Procedure;
 
 /**

@@ -2,16 +2,14 @@ package l2r.gameserver.model.actor.instance;
 
 import java.util.StringTokenizer;
 
+import javolution.text.TextBuilder;
+import l2r.gameserver.model.actor.L2Npc;
+import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import gr.reunion.achievementSystem.AchievementsManager;
 import gr.reunion.achievementSystem.base.Achievement;
 import gr.reunion.achievementSystem.base.Condition;
 import gr.reunion.main.Conditions;
-
-import javolution.text.TextBuilder;
-
-import l2r.gameserver.model.actor.L2Npc;
-import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class L2AchievementManagerInstance extends L2Npc
 {

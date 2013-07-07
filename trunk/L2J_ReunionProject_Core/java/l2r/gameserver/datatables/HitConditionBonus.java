@@ -18,13 +18,13 @@
  */
 package l2r.gameserver.datatables;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.actor.L2Character;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * This class load, holds and calculates the hit condition bonuses.

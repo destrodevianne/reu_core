@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.instancemanager.DayNightSpawnManager;

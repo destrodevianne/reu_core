@@ -26,7 +26,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 
 /**

@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.gameserver.GameServer;
 import l2r.gameserver.datatables.ClassListData;
@@ -42,7 +41,6 @@ import l2r.gameserver.network.serverpackets.CreatureSay;
 import l2r.gameserver.network.serverpackets.ShowBoard;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.StringUtil;
-
 import gnu.trove.iterator.TIntObjectIterator;
 
 public class RegionBBSManager extends BaseBBSManager

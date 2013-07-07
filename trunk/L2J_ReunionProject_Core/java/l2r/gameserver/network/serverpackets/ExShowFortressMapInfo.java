@@ -19,7 +19,6 @@
 package l2r.gameserver.network.serverpackets;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.FortSiegeManager.SiegeSpawn;
 import l2r.gameserver.model.L2Spawn;

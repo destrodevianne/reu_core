@@ -19,7 +19,6 @@
 package l2r.gameserver.network.serverpackets;
 
 import static l2r.gameserver.datatables.MultiSell.PAGE_SIZE;
-
 import l2r.gameserver.model.multisell.Entry;
 import l2r.gameserver.model.multisell.Ingredient;
 import l2r.gameserver.model.multisell.ListContainer;

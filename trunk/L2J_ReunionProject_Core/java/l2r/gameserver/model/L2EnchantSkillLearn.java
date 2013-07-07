@@ -20,7 +20,6 @@ package l2r.gameserver.model;
 
 import l2r.gameserver.datatables.EnchantGroupsData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
-
 import gnu.trove.map.hash.TIntIntHashMap;
 
 /**

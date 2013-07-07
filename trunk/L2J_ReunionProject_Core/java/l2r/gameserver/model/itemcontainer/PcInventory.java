@@ -25,10 +25,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gr.reunion.configs.CustomServerConfigs;
-
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.ItemTable;
@@ -49,6 +46,7 @@ import l2r.gameserver.scripting.scriptengine.events.ItemDropEvent;
 import l2r.gameserver.scripting.scriptengine.events.ItemTransferEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.ItemTracker;
 import l2r.gameserver.util.Util;
+import gr.reunion.configs.CustomServerConfigs;
 
 public class PcInventory extends Inventory
 {

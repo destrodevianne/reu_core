@@ -39,7 +39,6 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.skills.l2skills.L2SkillSummon;
 import l2r.gameserver.network.serverpackets.PetItemList;
-
 import gnu.trove.map.hash.TIntIntHashMap;
 
 /**

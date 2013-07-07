@@ -32,9 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.mmocore.network.SelectorConfig;
-import org.mmocore.network.SelectorThread;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.Server;
@@ -42,6 +39,9 @@ import l2r.loginserver.mail.MailSystem;
 import l2r.loginserver.network.L2LoginClient;
 import l2r.loginserver.network.L2LoginPacketHandler;
 import l2r.status.Status;
+
+import org.mmocore.network.SelectorConfig;
+import org.mmocore.network.SelectorThread;
 
 /**
  * @author KenM

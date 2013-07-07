@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.FortUpdater;
@@ -63,7 +62,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.PledgeShowInfoUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.procedure.TObjectProcedure;
 
