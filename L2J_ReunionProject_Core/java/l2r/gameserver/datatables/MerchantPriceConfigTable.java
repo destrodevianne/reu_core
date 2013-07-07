@@ -28,16 +28,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import javolution.util.FastMap;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
 import l2r.Config;
 import l2r.gameserver.InstanceListManager;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.actor.instance.L2MerchantInstance;
 import l2r.gameserver.model.entity.Castle;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  * @author KenM

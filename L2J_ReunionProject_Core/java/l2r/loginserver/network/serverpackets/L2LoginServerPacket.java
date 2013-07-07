@@ -18,9 +18,9 @@
  */
 package l2r.loginserver.network.serverpackets;
 
-import org.mmocore.network.SendablePacket;
-
 import l2r.loginserver.network.L2LoginClient;
+
+import org.mmocore.network.SendablePacket;
 
 /**
  * @author KenM

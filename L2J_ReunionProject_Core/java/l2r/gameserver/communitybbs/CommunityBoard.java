@@ -28,7 +28,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ShowBoard;
-
 import gr.reunion.interf.NexusEvents;
 
 public class CommunityBoard

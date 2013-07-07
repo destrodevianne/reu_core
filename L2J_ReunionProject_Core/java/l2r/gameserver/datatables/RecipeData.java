@@ -23,15 +23,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.L2RecipeInstance;
 import l2r.gameserver.model.L2RecipeList;
 import l2r.gameserver.model.L2RecipeStatInstance;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * The Class RecipeData.

@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.w3c.dom.Node;
-
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.options.EnchantOptions;
 import l2r.gameserver.util.Util;
+
+import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid

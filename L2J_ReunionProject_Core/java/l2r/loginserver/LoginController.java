@@ -39,7 +39,6 @@ import java.util.logging.Logger;
 import javax.crypto.Cipher;
 
 import javolution.util.FastMap;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.loginserver.GameServerTable.GameServerInfo;

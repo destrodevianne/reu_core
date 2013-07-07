@@ -21,7 +21,6 @@ package l2r.gameserver.model;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.actor.L2Npc;
 
 public class L2SiegeClan

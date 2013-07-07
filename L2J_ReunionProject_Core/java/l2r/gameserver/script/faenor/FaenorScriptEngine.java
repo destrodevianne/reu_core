@@ -27,14 +27,14 @@ import java.util.logging.Logger;
 
 import javax.script.ScriptContext;
 
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.script.Parser;
 import l2r.gameserver.script.ParserNotCreatedException;
 import l2r.gameserver.script.ScriptDocument;
 import l2r.gameserver.script.ScriptEngine;
 import l2r.util.file.filter.XMLFilter;
+
+import org.w3c.dom.Node;
 
 /**
  * @author Luis Arias

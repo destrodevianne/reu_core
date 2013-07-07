@@ -21,7 +21,6 @@ package l2r.gameserver.model.actor.instance;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Trap;

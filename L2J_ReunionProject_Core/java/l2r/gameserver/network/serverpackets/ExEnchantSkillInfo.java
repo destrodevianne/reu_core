@@ -19,7 +19,6 @@
 package l2r.gameserver.network.serverpackets;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.datatables.EnchantGroupsData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 import l2r.gameserver.model.L2EnchantSkillLearn;

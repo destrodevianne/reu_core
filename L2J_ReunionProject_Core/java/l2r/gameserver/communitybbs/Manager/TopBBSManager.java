@@ -21,8 +21,6 @@ package l2r.gameserver.communitybbs.Manager;
 import java.io.File;
 import java.util.StringTokenizer;
 
-import gr.reunion.configs.SmartCommunityConfigs;
-
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.cache.HtmCache;
@@ -37,6 +35,7 @@ import l2r.gameserver.communitybbs.TopPvpPlayers;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ShowBoard;
+import gr.reunion.configs.SmartCommunityConfigs;
 
 public class TopBBSManager extends BaseBBSManager
 {

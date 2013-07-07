@@ -23,7 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.instancemanager.DuelManager;

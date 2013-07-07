@@ -30,7 +30,6 @@ import l2r.gameserver.network.serverpackets.CharInfo;
 import l2r.gameserver.network.serverpackets.CreatureSay;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.RelationChanged;
-
 import gnu.trove.procedure.TObjectProcedure;
 
 /**

@@ -33,9 +33,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
@@ -49,6 +46,9 @@ import l2r.gameserver.model.items.instance.L2ItemInstance.ItemLocation;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 

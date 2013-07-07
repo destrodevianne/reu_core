@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor.instance;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.CtrlIntention;

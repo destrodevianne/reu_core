@@ -22,14 +22,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * This class loads and holds all static object data.

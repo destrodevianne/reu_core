@@ -28,9 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.L2Clan;
@@ -48,6 +45,9 @@ import l2r.gameserver.model.holders.PlayerSkillHolder;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.interfaces.ISkillsHolder;
 import l2r.gameserver.model.skills.L2Skill;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 

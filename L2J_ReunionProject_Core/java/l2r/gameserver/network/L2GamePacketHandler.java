@@ -21,16 +21,16 @@ package l2r.gameserver.network;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
+import l2r.Config;
+import l2r.gameserver.network.L2GameClient.GameClientState;
+import l2r.gameserver.network.clientpackets.*;
+import l2r.util.Util;
+
 import org.mmocore.network.IClientFactory;
 import org.mmocore.network.IMMOExecutor;
 import org.mmocore.network.IPacketHandler;
 import org.mmocore.network.MMOConnection;
 import org.mmocore.network.ReceivablePacket;
-
-import l2r.Config;
-import l2r.gameserver.network.L2GameClient.GameClientState;
-import l2r.gameserver.network.clientpackets.*;
-import l2r.util.Util;
 
 /**
  * Stateful Packet Handler<BR>

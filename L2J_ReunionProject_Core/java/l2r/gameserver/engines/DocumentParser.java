@@ -24,14 +24,14 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import l2r.Config;
+import l2r.util.file.filter.XMLFilter;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
-
-import l2r.Config;
-import l2r.util.file.filter.XMLFilter;
 
 /**
  * Abstract class for XML parsers.<br>

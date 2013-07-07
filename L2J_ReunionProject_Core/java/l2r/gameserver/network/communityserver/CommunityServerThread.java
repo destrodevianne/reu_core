@@ -23,11 +23,6 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.netcon.BaseReadPacket;
-import org.netcon.BaseWritePacket;
-import org.netcon.NetConnection;
-import org.netcon.NetConnectionConfig;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.network.communityserver.readpackets.AuthResponse;
@@ -37,6 +32,11 @@ import l2r.gameserver.network.communityserver.readpackets.InitCS;
 import l2r.gameserver.network.communityserver.readpackets.RequestPlayerShowBoard;
 import l2r.gameserver.network.communityserver.readpackets.RequestPlayerShowMessage;
 import l2r.gameserver.network.communityserver.readpackets.RequestWorldInfo;
+
+import org.netcon.BaseReadPacket;
+import org.netcon.BaseWritePacket;
+import org.netcon.NetConnection;
+import org.netcon.NetConnectionConfig;
 
 /**
  * @authors Forsaiken, Gigiikun

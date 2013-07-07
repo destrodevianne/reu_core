@@ -1,9 +1,9 @@
 package l2r.gameserver.communitybbs;
 
+import javolution.text.TextBuilder;
 import gr.reunion.aioItem.PlayersTopData;
 import gr.reunion.configs.SmartCommunityConfigs;
 import gr.reunion.datatables.CustomTable;
-import javolution.text.TextBuilder;
 
 
 public class TopPvpPlayers

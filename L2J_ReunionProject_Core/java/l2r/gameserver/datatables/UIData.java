@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.w3c.dom.Node;
-
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.ActionKey;
+
+import org.w3c.dom.Node;
 
 /**
  * UI Data parser.

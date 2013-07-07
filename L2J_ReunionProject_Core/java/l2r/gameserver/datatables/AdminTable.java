@@ -26,10 +26,6 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import javolution.util.FastMap;
-
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.L2AccessLevel;
@@ -39,6 +35,9 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid

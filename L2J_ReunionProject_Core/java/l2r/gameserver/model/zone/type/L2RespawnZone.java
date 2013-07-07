@@ -21,7 +21,6 @@ package l2r.gameserver.model.zone.type;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.base.Race;

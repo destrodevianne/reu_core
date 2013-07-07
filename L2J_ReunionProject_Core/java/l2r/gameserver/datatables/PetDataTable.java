@@ -21,13 +21,13 @@ package l2r.gameserver.datatables;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.L2PetData;
 import l2r.gameserver.model.L2PetLevelData;
 import l2r.gameserver.model.StatsSet;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * This class parse and hold all pet parameters.<br>

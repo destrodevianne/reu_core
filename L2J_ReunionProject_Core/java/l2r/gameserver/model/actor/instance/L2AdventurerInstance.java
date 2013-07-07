@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import gr.reunion.configs.PcBangConfigs;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import gr.reunion.configs.PcBangConfigs;
 
 /**
  * This class ...

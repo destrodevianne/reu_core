@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.model.Elementals;

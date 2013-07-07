@@ -3,14 +3,6 @@ package l2r.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 
-import gr.reunion.aioItem.runnable.TransformFinalizer;
-import gr.reunion.configs.DonateManagerConfigs;
-import gr.reunion.donateSystem.DonateHandler;
-import gr.reunion.imageGeneratorSystem.GenerateLogos;
-import gr.reunion.main.Conditions;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.communitybbs.Manager.RegionBBSManager;
@@ -31,6 +23,13 @@ import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.PartySmallWindowAll;
 import l2r.gameserver.network.serverpackets.PartySmallWindowDeleteAll;
 import l2r.gameserver.util.Util;
+import gr.reunion.aioItem.runnable.TransformFinalizer;
+import gr.reunion.configs.DonateManagerConfigs;
+import gr.reunion.donateSystem.DonateHandler;
+import gr.reunion.imageGeneratorSystem.GenerateLogos;
+import gr.reunion.main.Conditions;
+import gr.reunion.securitySystem.SecurityActions;
+import gr.reunion.securitySystem.SecurityType;
 
 public class L2DonateManagerInstance extends L2Npc
 {

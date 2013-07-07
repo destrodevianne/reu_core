@@ -19,7 +19,6 @@
 package l2r.gameserver.network.serverpackets;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager.Territory;

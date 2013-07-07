@@ -31,7 +31,6 @@ import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_REST;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.GeoData;

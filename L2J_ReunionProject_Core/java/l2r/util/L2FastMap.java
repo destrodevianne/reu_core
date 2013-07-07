@@ -21,7 +21,6 @@ package l2r.util;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import l2r.gameserver.model.interfaces.IL2EntryProcedure;
 import l2r.gameserver.model.interfaces.IL2Procedure;
 

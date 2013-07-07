@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javolution.text.TextBuilder;
-
 import l2r.L2DatabaseFactory;
 
 public class TopClan

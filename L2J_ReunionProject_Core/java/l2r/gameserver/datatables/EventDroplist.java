@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.script.DateRange;
 import l2r.gameserver.script.EventDrop;
 

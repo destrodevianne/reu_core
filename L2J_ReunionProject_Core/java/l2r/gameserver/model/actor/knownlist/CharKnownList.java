@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;

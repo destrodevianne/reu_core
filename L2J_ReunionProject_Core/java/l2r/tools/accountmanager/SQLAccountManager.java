@@ -28,7 +28,6 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.Server;

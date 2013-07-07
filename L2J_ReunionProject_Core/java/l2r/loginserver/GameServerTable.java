@@ -40,7 +40,6 @@ import java.util.logging.Logger;
 import javolution.io.UTF8StreamReader;
 import javolution.xml.stream.XMLStreamConstants;
 import javolution.xml.stream.XMLStreamReaderImpl;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.loginserver.network.gameserverpackets.ServerStatus;

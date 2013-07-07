@@ -23,7 +23,6 @@ import java.util.TimerTask;
 import java.util.concurrent.Future;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;

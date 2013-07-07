@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastSet;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.model.actor.L2Character;
@@ -32,7 +31,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.stat.CharStat;
 import l2r.gameserver.model.stats.Formulas;
 import l2r.util.Rnd;
-
 import gr.reunion.interf.NexusEvents;
 
 public class CharStatus

@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.MobGroup;
 import l2r.gameserver.model.MobGroupTable;

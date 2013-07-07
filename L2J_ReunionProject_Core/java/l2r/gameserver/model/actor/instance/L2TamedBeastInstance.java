@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.datatables.SkillTable;

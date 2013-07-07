@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.datatables.EventDroplist;

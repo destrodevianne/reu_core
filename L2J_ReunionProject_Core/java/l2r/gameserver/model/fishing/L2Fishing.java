@@ -20,9 +20,6 @@ package l2r.gameserver.model.fishing;
 
 import java.util.concurrent.Future;
 
-import gr.reunion.configs.LeaderboardsConfigs;
-import gr.reunion.leaderboards.FishermanLeaderboard;
-
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.FishingMonstersData;
 import l2r.gameserver.datatables.NpcTable;
@@ -35,6 +32,8 @@ import l2r.gameserver.network.serverpackets.ExFishingStartCombat;
 import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
+import gr.reunion.configs.LeaderboardsConfigs;
+import gr.reunion.leaderboards.FishermanLeaderboard;
 
 public class L2Fishing implements Runnable
 {

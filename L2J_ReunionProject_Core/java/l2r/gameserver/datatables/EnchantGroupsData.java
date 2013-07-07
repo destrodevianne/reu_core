@@ -22,9 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import l2r.Config;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.L2EnchantSkillGroup;
@@ -33,6 +30,9 @@ import l2r.gameserver.model.L2EnchantSkillLearn;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.L2Skill;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * This class holds the Enchant Groups information.

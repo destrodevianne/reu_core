@@ -26,15 +26,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
-import org.netcon.BaseWritePacket;
-
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.entity.Castle;
+
+import org.netcon.BaseWritePacket;
 
 /**
  * @authors Forsaiken, Gigiikun

@@ -29,7 +29,6 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import l2r.Config;
 import l2r.Server;
 import l2r.util.Rnd;

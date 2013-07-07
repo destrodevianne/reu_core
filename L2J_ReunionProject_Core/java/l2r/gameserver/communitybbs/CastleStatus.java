@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javolution.text.TextBuilder;
-
 import l2r.L2DatabaseFactory;
 
 public class CastleStatus

@@ -19,7 +19,6 @@
 package l2r.gameserver.network.serverpackets;
 
 import javolution.util.FastList;
-
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.L2Summon;

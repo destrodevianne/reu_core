@@ -28,13 +28,13 @@ import java.util.logging.Logger;
 
 import javax.crypto.Cipher;
 
-import org.netcon.BaseReadPacket;
-import org.netcon.crypt.NewCrypt;
-
 import l2r.gameserver.network.communityserver.CommunityServerThread;
 import l2r.gameserver.network.communityserver.writepackets.BlowFishKey;
 import l2r.gameserver.network.communityserver.writepackets.GameServerAuth;
 import l2r.util.Rnd;
+
+import org.netcon.BaseReadPacket;
+import org.netcon.crypt.NewCrypt;
 
 /**
  * @authors Forsaiken, Gigiikun

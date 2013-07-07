@@ -21,7 +21,6 @@ package l2r.gameserver.model.zone.type;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import l2r.gameserver.GameServer;
 import l2r.gameserver.instancemanager.GrandBossManager;
 import l2r.gameserver.instancemanager.MapRegionManager;

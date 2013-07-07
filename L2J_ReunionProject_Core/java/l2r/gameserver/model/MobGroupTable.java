@@ -21,7 +21,6 @@ package l2r.gameserver.model;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import l2r.gameserver.model.actor.instance.L2ControllableMobInstance;
 
 /**

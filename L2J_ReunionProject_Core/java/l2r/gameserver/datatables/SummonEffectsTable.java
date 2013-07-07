@@ -22,7 +22,6 @@ import java.util.List;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.L2Skill;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**

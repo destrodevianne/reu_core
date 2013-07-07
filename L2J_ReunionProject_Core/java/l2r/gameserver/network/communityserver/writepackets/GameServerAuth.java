@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.network.communityserver.writepackets;
 
-import org.netcon.BaseWritePacket;
-
 import l2r.Config;
+
+import org.netcon.BaseWritePacket;
 
 /**
  * @authors Forsaiken, Gigiikun
