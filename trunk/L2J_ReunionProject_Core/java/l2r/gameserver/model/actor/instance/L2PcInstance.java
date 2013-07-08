@@ -13919,7 +13919,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		else
 		{
-			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_GAVE_C2_DAMAGE_OF_S3);
+			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_DONE_S3_DAMAGE_TO_C2);
 			sm.addPcName(this);
 			sm.addCharName(target);
 			sm.addNumber(damage);
@@ -16977,5 +16977,22 @@ public final class L2PcInstance extends L2Playable
 	public float getRate(Rates rateType)
 	{
 		return getRate(rateType, -1, false);
+	}
+	
+	/**
+	 * @return {@code true} if {@link PlayerVariables} instance is attached to current player's scripts, {@code false} otherwise.
+	 */
+	public boolean hasVariables()
+	{
+		return getScript(PlayerVariables.class) != null;
+	}
+	
+	/**
+	 * @return {@link PlayerVariables} instance containing parameters regarding player.
+	 */
+	public PlayerVariables getVariables()
+	{
+		final PlayerVariables vars = getScript(PlayerVariables.class);
+		return vars != null ? vars : addScript(new PlayerVariables(getObjectId()));
 	}
 }

@@ -1285,6 +1285,7 @@ public final class SystemMessageId
 	 * ID: 209<br>
 	 * Message: The size of the image file is inappropriate. Please adjust to 16x12 pixels.
 	 */
+	public static final SystemMessageId THE_SIZE_OF_THE_IMAGE_FILE_IS_INAPPROPRIATE;
 	
 	/**
 	 * ID: 210<br>
@@ -13304,9 +13305,9 @@ public final class SystemMessageId
 	
 	/**
 	 * ID: 2261<br>
-	 * Message: $c1 has given $c2 damage of $s3.
+	 * Message: $c1 has done $s3 points of damage to $c2.
 	 */
-	public static final SystemMessageId C1_GAVE_C2_DAMAGE_OF_S3;
+	public static final SystemMessageId C1_DONE_S3_DAMAGE_TO_C2;
 	
 	/**
 	 * ID: 2262<br>
@@ -14007,9 +14008,9 @@ public final class SystemMessageId
 	
 	/**
 	 * ID: 2721<br>
-	 * Message: Boarding or cancellation of boarding on Airships is not allowed in the current area.
+	 * Message: You are too high to perform this action. Please lower your altitude and try again.
 	 */
-	public static final SystemMessageId BOARD_OR_CANCEL_NOT_POSSIBLE_HERE;
+	public static final SystemMessageId TOO_HIGH_TO_PERFORM_THIS_ACTION;
 	
 	/**
 	 * ID: 2722<br>
@@ -14557,6 +14558,12 @@ public final class SystemMessageId
 	public static final SystemMessageId YOU_CANT_CANCEL_RECEIVED_MAIL;
 	
 	/**
+	 * ID: 3031<br>
+	 * Message: By using the skill of Einhasad's holy sword, defeat the evil Lilims!
+	 */
+	public static final SystemMessageId USING_EINHASAD_HOLY_SWORD_DEFEAT_LILIMS;
+	
+	/**
 	 * ID: 3033<br>
 	 * Message: By using the invisible skill, sneak into the Dawn's document storage!
 	 */
@@ -14582,21 +14589,27 @@ public final class SystemMessageId
 	
 	/**
 	 * ID: 3039<br>
-	 * Message: _3039
+	 * Message: By using the holy water of Einhasad, open the door possessed by the curse of flames.
 	 */
-	public static final SystemMessageId _3039;
+	public static final SystemMessageId USING_EINHASAD_HOLY_WATER_TO_OPEN_DOOR;
 	
 	/**
 	 * ID: 3040<br>
-	 * Message: _3040
+	 * Message: By using the Court Magician's Magic Staff, open the door on which the magician's barrier is placed.
 	 */
-	public static final SystemMessageId _3040;
+	public static final SystemMessageId USING_COURT_MAGICIANS_STAFF_TO_OPEN_DOOR;
 	
 	/**
 	 * ID: 3059<br>
 	 * Message: $s1 did not receive it during the waiting time, so it was returned automatically.
 	 */
 	public static final SystemMessageId S1_NOT_RECEIVE_DURING_WAITING_TIME_MAIL_RETURNED;
+	
+	/**
+	 * ID: 3060<br>
+	 * Message: The sealing device glitters and moves. Activation complete normally!
+	 */
+	public static final SystemMessageId THE_SEALING_DEVICE_ACTIVATION_COMPLETE;
 	
 	/**
 	 * ID: 3062<br>
@@ -14831,6 +14844,12 @@ public final class SystemMessageId
 	 * Message: $c1 is currently dead and cannot be requested for a couple action.
 	 */
 	public static final SystemMessageId C1_IS_CURRENTLY_DEAD_AND_CANNOT_BE_REQUESTED_FOR_A_COUPLE_ACTION;
+	
+	/**
+	 * ID: 3140<br>
+	 * Message: The crest was successfully registered.
+	 */
+	public static final SystemMessageId CLAN_CREST_WAS_SUCCESSFULLY_REGISTRED;
 	
 	/**
 	 * ID: 3144<br>
@@ -15278,6 +15297,7 @@ public final class SystemMessageId
 		INCORRECT_CHARACTER_NAME_TRY_AGAIN = new SystemMessageId(205);
 		ENTER_CLAN_NAME_TO_DECLARE_WAR = new SystemMessageId(206);
 		S2_OF_THE_CLAN_S1_REQUESTS_WAR = new SystemMessageId(207);
+		THE_SIZE_OF_THE_IMAGE_FILE_IS_INAPPROPRIATE = new SystemMessageId(209);
 		YOU_ARE_NOT_A_CLAN_MEMBER = new SystemMessageId(212);
 		NOT_WORKING_PLEASE_TRY_AGAIN_LATER = new SystemMessageId(213);
 		TITLE_CHANGED = new SystemMessageId(214);
@@ -17276,7 +17296,7 @@ public final class SystemMessageId
 		YOU_HAVE_ALREADY_BOARDED_ANOTHER_AIRSHIP = new SystemMessageId(2258);
 		LOC_FANTASY_ISLAND_S1_S2_S3 = new SystemMessageId(2259);
 		PET_CAN_RUN_AWAY_WHEN_HUNGER_BELOW_10_PERCENT = new SystemMessageId(2260);
-		C1_GAVE_C2_DAMAGE_OF_S3 = new SystemMessageId(2261);
+		C1_DONE_S3_DAMAGE_TO_C2 = new SystemMessageId(2261);
 		C1_RECEIVED_DAMAGE_OF_S3_FROM_C2 = new SystemMessageId(2262);
 		C1_RECEIVED_DAMAGE_OF_S3_THROUGH_C2 = new SystemMessageId(2263);
 		C1_EVADED_C2_ATTACK = new SystemMessageId(2264);
@@ -17387,7 +17407,7 @@ public final class SystemMessageId
 		LOC_OUT_SEED_INFINITY_S1_S2_S3 = new SystemMessageId(2712);
 		LOC_CLEFT_S1_S2_S3 = new SystemMessageId(2716);
 		INSTANT_ZONE_S1_RESTRICTED = new SystemMessageId(2720);
-		BOARD_OR_CANCEL_NOT_POSSIBLE_HERE = new SystemMessageId(2721);
+		TOO_HIGH_TO_PERFORM_THIS_ACTION = new SystemMessageId(2721);
 		ANOTHER_AIRSHIP_ALREADY_SUMMONED = new SystemMessageId(2722);
 		YOU_CANNOT_BOARD_NOT_MEET_REQUEIREMENTS = new SystemMessageId(2727);
 		ACTION_PROHIBITED_WHILE_MOUNTED_OR_ON_AN_AIRSHIP = new SystemMessageId(2728);
@@ -17479,13 +17499,15 @@ public final class SystemMessageId
 		YOU_CANNOT_USE_SKILL_ENCHANT_ATTACKING_TRANSFORMED_BOAT = new SystemMessageId(3028);
 		S1_RETURNED_MAIL = new SystemMessageId(3029);
 		YOU_CANT_CANCEL_RECEIVED_MAIL = new SystemMessageId(3030);
+		USING_EINHASAD_HOLY_SWORD_DEFEAT_LILIMS = new SystemMessageId(3031);
 		SNEAK_INTO_DAWNS_DOCUMENT_STORAGE = new SystemMessageId(3033);
 		DOOR_IS_ENTRANCE_APPROACH_DEVICE = new SystemMessageId(3034);
 		MALE_GUARDS_CAN_DETECT_FEMALES_DONT = new SystemMessageId(3037);
 		FEMALE_GUARDS_NOTICE_BETTER_THAN_MALE = new SystemMessageId(3038);
-		_3039 = new SystemMessageId(3039);
-		_3040 = new SystemMessageId(3040);
+		USING_EINHASAD_HOLY_WATER_TO_OPEN_DOOR = new SystemMessageId(3039);
+		USING_COURT_MAGICIANS_STAFF_TO_OPEN_DOOR = new SystemMessageId(3040);
 		S1_NOT_RECEIVE_DURING_WAITING_TIME_MAIL_RETURNED = new SystemMessageId(3059);
+		THE_SEALING_DEVICE_ACTIVATION_COMPLETE = new SystemMessageId(3060);
 		DO_YOU_WANT_TO_PAY_S1_ADENA = new SystemMessageId(3062);
 		DO_YOU_WANT_TO_FORWARD = new SystemMessageId(3063);
 		UNREAD_MAIL = new SystemMessageId(3064);
@@ -17525,6 +17547,7 @@ public final class SystemMessageId
 		PARTY_LOOT_CHANGE_CANCELLED = new SystemMessageId(3137);
 		PARTY_LOOT_CHANGED_S1 = new SystemMessageId(3138);
 		C1_IS_CURRENTLY_DEAD_AND_CANNOT_BE_REQUESTED_FOR_A_COUPLE_ACTION = new SystemMessageId(3139);
+		CLAN_CREST_WAS_SUCCESSFULLY_REGISTRED = new SystemMessageId(3140);
 		THE_S2_ATTRIBUTE_WAS_SUCCESSFULLY_BESTOWED_ON_S1_RES_TO_S3_INCREASED = new SystemMessageId(3144);
 		YOU_WILL_BE_EXPELLED_IN_S1 = new SystemMessageId(3147);
 		YOU_HAVE_REQUESTED_COUPLE_ACTION_C1 = new SystemMessageId(3150);
