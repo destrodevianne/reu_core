@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.Server;
-import l2r.gameserver.cache.CrestCache;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.ArmorSetsData;
@@ -43,6 +42,7 @@ import l2r.gameserver.datatables.CharSummonTable;
 import l2r.gameserver.datatables.CharTemplateTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.ClassListData;
+import l2r.gameserver.datatables.CrestTable;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.datatables.EnchantGroupsData;
 import l2r.gameserver.datatables.EnchantHPBonusData;
@@ -201,7 +201,6 @@ public class GameServer
 		
 		ThreadPoolManager.getInstance();
 		
-		new File(Config.DATAPACK_ROOT, "data/crests").mkdirs();
 		new File("log/game").mkdirs();
 		
 		// load script engines
@@ -301,7 +300,7 @@ public class GameServer
 		// Call to load caches
 		printSection("Cache");
 		HtmCache.getInstance();
-		CrestCache.getInstance();
+		CrestTable.getInstance();
 		TeleportLocationTable.getInstance();
 		PlayerValues.checkPlayers();
 		UIData.getInstance();

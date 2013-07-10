@@ -21,7 +21,8 @@ package l2r.gameserver.network.clientpackets;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.cache.CrestCache;
+import l2r.gameserver.datatables.CrestTable;
+import l2r.gameserver.model.L2Crest;
 import l2r.gameserver.network.serverpackets.PledgeCrest;
 
 /**
@@ -46,21 +47,28 @@ public final class RequestPledgeCrest extends L2GameClientPacket
 	protected void runImpl()
 	{
 		if (_crestId == 0)
-			return;
-		if (Config.DEBUG)
-			_log.fine("crestid " + _crestId + " requested");
-		
-		byte[] data = CrestCache.getInstance().getPledgeCrest(_crestId);
-		
-		if (data != null)
 		{
-			PledgeCrest pc = new PledgeCrest(_crestId, data);
+			return;
+		}
+		if (Config.DEBUG)
+		{
+			_log.fine("crestid " + _crestId + " requested");
+		}
+		
+		final L2Crest crest = CrestTable.getInstance().getCrest(_crestId);
+		byte[] _data = crest != null ? crest.getData() : null;
+		
+		if (_data != null)
+		{
+			PledgeCrest pc = new PledgeCrest(_crestId, _data);
 			sendPacket(pc);
 		}
 		else
 		{
 			if (Config.DEBUG)
+			{
 				_log.fine("crest is missing:" + _crestId);
+			}
 		}
 	}
 	

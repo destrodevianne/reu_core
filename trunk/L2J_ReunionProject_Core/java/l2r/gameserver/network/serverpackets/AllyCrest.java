@@ -18,7 +18,8 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.cache.CrestCache;
+import l2r.gameserver.datatables.CrestTable;
+import l2r.gameserver.model.L2Crest;
 
 public class AllyCrest extends L2GameServerPacket
 {
@@ -28,13 +29,20 @@ public class AllyCrest extends L2GameServerPacket
 	public AllyCrest(int crestId)
 	{
 		_crestId = crestId;
-		_data = CrestCache.getInstance().getAllyCrest(_crestId);
+		final L2Crest crest = CrestTable.getInstance().getCrest(crestId);
+		_data = crest != null ? crest.getData() : null;
+	}
+	
+	public AllyCrest(int crestId, byte[] data)
+	{
+		_crestId = crestId;
+		_data = data;
 	}
 	
 	@Override
 	protected final void writeImpl()
 	{
-		writeC(0xaf);
+		writeC(0xAF);
 		writeD(_crestId);
 		if (_data != null)
 		{
