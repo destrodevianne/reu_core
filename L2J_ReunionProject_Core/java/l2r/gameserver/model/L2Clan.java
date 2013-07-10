@@ -32,11 +32,11 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.cache.CrestCache;
 import l2r.gameserver.communitybbs.BB.Forum;
 import l2r.gameserver.communitybbs.Manager.ForumsBBSManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.CrestTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
@@ -2934,7 +2934,7 @@ public class L2Clan
 	{
 		if (getCrestId() != 0)
 		{
-			CrestCache.getInstance().removePledgeCrest(getCrestId());
+			CrestTable.getInstance().removeCrest(getCrestId());
 		}
 		
 		setCrestId(crestId);
@@ -2970,7 +2970,7 @@ public class L2Clan
 		{
 			if (getAllyCrestId() != 0)
 			{
-				CrestCache.getInstance().removeAllyCrest(getAllyCrestId());
+				CrestTable.getInstance().removeCrest(getAllyCrestId());
 			}
 			sqlStatement = "UPDATE clan_data SET ally_crest_id = ? WHERE ally_id = ?";
 			allyId = getAllyId();
@@ -3017,7 +3017,7 @@ public class L2Clan
 	{
 		if (getCrestLargeId() != 0)
 		{
-			CrestCache.getInstance().removePledgeCrestLarge(getCrestLargeId());
+			CrestTable.getInstance().removeCrest(getCrestLargeId());
 		}
 		
 		setCrestLargeId(crestId);

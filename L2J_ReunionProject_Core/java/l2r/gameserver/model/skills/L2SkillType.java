@@ -132,8 +132,6 @@ public enum L2SkillType
 	REMOVE_TRAP,
 	SHIFT_TARGET,
 	
-	STEAL_BUFF,
-	
 	// Skill is done within the core.
 	COREDONE,
 	// Refuel airship

@@ -16,47 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.network.serverpackets;
+package l2r.gameserver.model.actor.tasks.character;
 
-import l2r.gameserver.datatables.CrestTable;
-import l2r.gameserver.model.L2Crest;
+import l2r.gameserver.ai.CtrlEvent;
+import l2r.gameserver.model.actor.L2Character;
 
 /**
- * @author -Wooden-
+ * Task dedicated to notify character's AI
+ * @author xban1x
  */
-public class ExPledgeCrestLarge extends L2GameServerPacket
+public final class NotifyAITask implements Runnable
 {
-	private final int _crestId;
-	private final byte[] _data;
+	private final L2Character _character;
+	private final CtrlEvent _event;
 	
-	public ExPledgeCrestLarge(int crestId)
+	public NotifyAITask(L2Character character, CtrlEvent event)
 	{
-		_crestId = crestId;
-		final L2Crest crest = CrestTable.getInstance().getCrest(crestId);
-		_data = crest != null ? crest.getData() : null;
-	}
-	
-	public ExPledgeCrestLarge(int crestId, byte[] data)
-	{
-		_crestId = crestId;
-		_data = data;
+		_character = character;
+		_event = event;
 	}
 	
 	@Override
-	protected void writeImpl()
+	public void run()
 	{
-		writeC(0xFE);
-		writeH(0x1B);
-		writeD(0x00);
-		writeD(_crestId);
-		if (_data != null)
+		if (_character != null)
 		{
-			writeD(_data.length);
-			writeB(_data);
-		}
-		else
-		{
-			writeD(0);
+			_character.getAI().notifyEvent(_event, null);
 		}
 	}
 }

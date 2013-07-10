@@ -46,7 +46,6 @@ import l2r.gameserver.scripts.handlers.skillhandlers.RefuelAirShip;
 import l2r.gameserver.scripts.handlers.skillhandlers.Resurrect;
 import l2r.gameserver.scripts.handlers.skillhandlers.ShiftTarget;
 import l2r.gameserver.scripts.handlers.skillhandlers.Sow;
-import l2r.gameserver.scripts.handlers.skillhandlers.StealBuffs;
 import l2r.gameserver.scripts.handlers.skillhandlers.StrSiegeAssault;
 import l2r.gameserver.scripts.handlers.skillhandlers.SummonFriend;
 import l2r.gameserver.scripts.handlers.skillhandlers.TakeCastle;
@@ -90,7 +89,6 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		registerHandler(new Resurrect());
 		registerHandler(new ShiftTarget());
 		registerHandler(new Sow());
-		registerHandler(new StealBuffs());
 		registerHandler(new StrSiegeAssault());
 		registerHandler(new SummonFriend());
 		registerHandler(new TakeCastle());

@@ -16,47 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.network.serverpackets;
+package l2r.gameserver.model.actor.tasks.character;
 
-import l2r.gameserver.datatables.CrestTable;
-import l2r.gameserver.model.L2Crest;
+import l2r.gameserver.model.actor.L2Character;
+import l2r.gameserver.model.skills.L2Skill;
 
 /**
- * @author -Wooden-
+ * Task dedicated to use potion of character
+ * @author xban1x
  */
-public class ExPledgeCrestLarge extends L2GameServerPacket
+public final class UsePotionTask implements Runnable
 {
-	private final int _crestId;
-	private final byte[] _data;
+	private final L2Character _character;
+	private final L2Skill _skill;
 	
-	public ExPledgeCrestLarge(int crestId)
+	public UsePotionTask(L2Character character, L2Skill skill)
 	{
-		_crestId = crestId;
-		final L2Crest crest = CrestTable.getInstance().getCrest(crestId);
-		_data = crest != null ? crest.getData() : null;
-	}
-	
-	public ExPledgeCrestLarge(int crestId, byte[] data)
-	{
-		_crestId = crestId;
-		_data = data;
+		_character = character;
+		_skill = skill;
 	}
 	
 	@Override
-	protected void writeImpl()
+	public void run()
 	{
-		writeC(0xFE);
-		writeH(0x1B);
-		writeD(0x00);
-		writeD(_crestId);
-		if (_data != null)
+		if (_character != null)
 		{
-			writeD(_data.length);
-			writeB(_data);
-		}
-		else
-		{
-			writeD(0);
+			_character.doSimultaneousCast(_skill);
 		}
 	}
 }
