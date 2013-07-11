@@ -83,6 +83,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import l2r.util.StringUtil;
+import gr.reunion.configs.BalanceConfigs;
 
 /**
  * Global calculations.
@@ -708,6 +709,7 @@ public final class Formulas
 		{
 			damage *= 2;
 		}
+		
 		if (skill != null)
 		{
 			double skillpower = skill.getPower(attacker, target, isPvP, isPvE);
@@ -937,6 +939,70 @@ public final class Formulas
 					}
 				}
 			}
+		}
+		
+		if (target.isPlayer() && (weapon != null) && (weapon.getItemType() == L2WeaponType.DAGGER) && (skill != null))
+		{
+			L2Armor armor = ((L2PcInstance) target).getActiveChestArmorItem();
+			if (armor != null)
+			{
+				if (((L2PcInstance) target).isWearingHeavyArmor())
+				{
+					damage /= BalanceConfigs.ALT_DAGGER_DMG_VS_HEAVY;
+				}
+				
+				if (((L2PcInstance) target).isWearingLightArmor())
+				{
+					damage /= BalanceConfigs.ALT_DAGGER_DMG_VS_LIGHT;
+				}
+				
+				if (((L2PcInstance) target).isWearingMagicArmor())
+				{
+					damage /= BalanceConfigs.ALT_DAGGER_DMG_VS_ROBE;
+				}
+			}
+		}
+		
+		if (target.isPlayer() && (weapon != null) && (weapon.getItemType() == L2WeaponType.BOW) && (skill != null))
+		{
+			L2Armor armor = ((L2PcInstance) target).getActiveChestArmorItem();
+			if (armor != null)
+			{
+				if (((L2PcInstance) target).isWearingHeavyArmor())
+				{
+					damage /= BalanceConfigs.ALT_BOW_DMG_VS_HEAVY;
+				}
+				
+				if (((L2PcInstance) target).isWearingLightArmor())
+				{
+					damage /= BalanceConfigs.ALT_BOW_DMG_VS_LIGHT;
+				}
+				
+				if (((L2PcInstance) target).isWearingMagicArmor())
+				{
+					damage /= BalanceConfigs.ALT_BOW_DMG_VS_ROBE;
+				}
+			}
+		}
+		
+		if (attacker.isPlayer())
+		{
+			if (((L2PcInstance) attacker).getClassId().isMage())
+			{
+				damage = damage * BalanceConfigs.ALT_MAGES_PHYSICAL_DAMAGE_MULTI;
+			}
+			else
+			{
+				damage = damage * BalanceConfigs.ALT_FIGHTERS_PHYSICAL_DAMAGE_MULTI;
+			}
+		}
+		else if (attacker.isSummon())
+		{
+			damage = damage * BalanceConfigs.ALT_PETS_PHYSICAL_DAMAGE_MULTI;
+		}
+		else if (attacker.isNpc())
+		{
+			damage = damage * BalanceConfigs.ALT_NPC_PHYSICAL_DAMAGE_MULTI;
 		}
 		
 		return damage;
