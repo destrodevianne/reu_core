@@ -291,16 +291,16 @@ public class L2DonateManagerInstance extends L2Npc
 			try
 			{
 				int multi = Integer.valueOf(subCommand[1]);
-				// TODO: Need fix?
-				for (int multisell : DonateManagerConfigs.MULTISELL_LIST)
+				
+				if (DonateManagerConfigs.MULTISELL_LIST.contains(multi))
 				{
-					if (multi != multisell)
-					{
-						return;
-					}
+					player.setIsUsingAioMultisell(true);
+					MultiSell.getInstance().separateAndSend(multi, player, null, false);
 				}
-				player.setIsUsingAioMultisell(true);
-				MultiSell.getInstance().separateAndSend(multi, player, null, false);
+				else
+				{
+					SecurityActions.startSecurity(player, SecurityType.DONATE_MANAGER);
+				}
 			}
 			catch (Exception e)
 			{
