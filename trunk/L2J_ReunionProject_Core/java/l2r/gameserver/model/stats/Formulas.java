@@ -985,6 +985,28 @@ public final class Formulas
 			}
 		}
 		
+		if (target.isPlayer() && (weapon != null) && (weapon.getItemType() == L2WeaponType.CROSSBOW) && (skill != null))
+		{
+			L2Armor armor = ((L2PcInstance) target).getActiveChestArmorItem();
+			if (armor != null)
+			{
+				if (((L2PcInstance) target).isWearingHeavyArmor())
+				{
+					damage /= BalanceConfigs.ALT_CROSSBOW_DMG_VS_HEAVY;
+				}
+				
+				if (((L2PcInstance) target).isWearingLightArmor())
+				{
+					damage /= BalanceConfigs.ALT_CROSSBOW_DMG_VS_LIGHT;
+				}
+				
+				if (((L2PcInstance) target).isWearingMagicArmor())
+				{
+					damage /= BalanceConfigs.ALT_CROSSBOW_DMG_VS_ROBE;
+				}
+			}
+		}
+		
 		if (attacker.isPlayer())
 		{
 			if (((L2PcInstance) attacker).getClassId().isMage())
