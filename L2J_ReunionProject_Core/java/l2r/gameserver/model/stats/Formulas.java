@@ -1958,41 +1958,25 @@ public final class Formulas
 			return true;
 		}
 		
-		// FIXME: Fix this LevelMod Formula.
-		int lvlDifference = (target.getLevel() - (skill.getMagicLevel() > 0 ? skill.getMagicLevel() : attacker.getLevel()));
-		double lvlModifier = Math.pow(1.3, lvlDifference);
-		float targetModifier = 1;
-		if (target.isL2Attackable() && !target.isRaid() && !target.isRaidMinion() && (target.getLevel() >= Config.MIN_NPC_LVL_MAGIC_PENALTY) && (attacker.getActingPlayer() != null) && ((target.getLevel() - attacker.getActingPlayer().getLevel()) >= 3))
+		int rate = 0;
+		double resModifier = 0;
+		double failureModifier = 0;
+		int mLevel = attacker.getLevel();// Gracia Epilogue + (skill.getMagicLevel() > 0 && skill.getMagicLevel() <= attacker.getLevel() ? skill.getMagicLevel() : attacker.getLevel());
+		int lvlDiff = target.getLevel() - mLevel;
+		double lvlModifier = Math.pow(1.3, lvlDiff);
+		if (lvlDiff > -4)
 		{
-			int lvlDiff = target.getLevel() - attacker.getActingPlayer().getLevel() - 2;
-			if (lvlDiff >= Config.NPC_SKILL_CHANCE_PENALTY.size())
-			{
-				targetModifier = Config.NPC_SKILL_CHANCE_PENALTY.get(Config.NPC_SKILL_CHANCE_PENALTY.size() - 1);
-			}
-			else
-			{
-				targetModifier = Config.NPC_SKILL_CHANCE_PENALTY.get(lvlDiff);
-			}
-		}
-		// general magic resist
-		final double resModifier = target.calcStat(Stats.MAGIC_SUCCESS_RES, 1, null, skill);
-		final double failureModifier = attacker.calcStat(Stats.MAGIC_FAILURE_RATE, 1, target, skill);
-		int rate = 100 - Math.round((float) (lvlModifier * targetModifier * resModifier * failureModifier));
-		
-		// FIXME: This have nothing to do with Magic Nukes.
-		if (rate > skill.getMaxChance())
-		{
-			rate = skill.getMaxChance();
-		}
-		else if (rate < skill.getMinChance())
-		{
-			rate = skill.getMinChance();
+			lvlDiff = Math.max(1, lvlDiff);
+			// general magic resist
+			resModifier = target.calcStat(Stats.MAGIC_SUCCESS_RES, 1, null, skill);
+			failureModifier = attacker.calcStat(Stats.MAGIC_FAILURE_RATE, 1, target, skill);
+			rate = (int) ((float) ((float) ((lvlModifier * 100) + 500) * resModifier * failureModifier)); // base failure chance 5% on level diff >-4
 		}
 		
 		if (attacker.isDebug() || Config.DEVELOPER)
 		{
 			final StringBuilder stat = new StringBuilder(100);
-			StringUtil.append(stat, skill.getName(), " lvlDiff:", String.valueOf(lvlDifference), " lvlMod:", String.format("%1.2f", lvlModifier), " res:", String.format("%1.2f", resModifier), " fail:", String.format("%1.2f", failureModifier), " tgt:", String.valueOf(targetModifier), " total:", String.valueOf(rate));
+			StringUtil.append(stat, skill.getName(), " lvlDiff:", String.valueOf(lvlDiff), " lvlMod:", String.format("%1.2f", lvlModifier), " res:", String.format("%1.2f", resModifier), " fail:", String.format("%1.2f", failureModifier), " total:", String.valueOf(rate));
 			final String result = stat.toString();
 			if (attacker.isDebug())
 			{
@@ -2003,7 +1987,7 @@ public final class Formulas
 				_log.info(result);
 			}
 		}
-		return (Rnd.get(100) < rate);
+		return (Rnd.get(10000) > rate);
 	}
 	
 	public static double calcManaDam(L2Character attacker, L2Character target, L2Skill skill, boolean ss, boolean bss)
