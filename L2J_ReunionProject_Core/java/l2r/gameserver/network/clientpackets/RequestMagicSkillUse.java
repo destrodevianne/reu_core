@@ -28,7 +28,7 @@ import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public final class RequestMagicSkillUse extends L2GameClientPacket
 {
@@ -81,9 +81,9 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 		boolean allow = true;
 		if (activeChar.isTransformed() || activeChar.isInStance())
 		{
-			if (NexusEvents.isInEvent(activeChar))
+			if (ReunionEvents.isInEvent(activeChar))
 			{
-				int allowSkill = NexusEvents.allowTransformationSkill(activeChar, skill);
+				int allowSkill = ReunionEvents.allowTransformationSkill(activeChar, skill);
 				
 				if (allowSkill == -1)
 				{

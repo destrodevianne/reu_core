@@ -32,7 +32,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public class Die extends L2GameServerPacket
 {
@@ -68,9 +68,9 @@ public class Die extends L2GameServerPacket
 		
 		if (cha.isPlayer())
 		{
-			if (NexusEvents.isInEvent((L2PcInstance) cha))
+			if (ReunionEvents.isInEvent((L2PcInstance) cha))
 			{
-				if (!NexusEvents.canShowToVillageWindow((L2PcInstance) cha))
+				if (!ReunionEvents.canShowToVillageWindow((L2PcInstance) cha))
 				{
 					_canTeleport = false;
 				}

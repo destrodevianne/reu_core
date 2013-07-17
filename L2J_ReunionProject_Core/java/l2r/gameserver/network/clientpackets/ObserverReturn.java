@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * This class ...
@@ -42,9 +42,9 @@ public final class ObserverReturn extends L2GameClientPacket
 		{
 			return;
 		}
-		if (NexusEvents.isObserving(activeChar))
+		if (ReunionEvents.isObserving(activeChar))
 		{
-			NexusEvents.endObserving(activeChar);
+			ReunionEvents.endObserving(activeChar);
 		}
 		else if (activeChar.inObserverMode())
 		{

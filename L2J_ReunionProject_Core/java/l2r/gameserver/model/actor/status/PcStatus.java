@@ -35,7 +35,7 @@ import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public class PcStatus extends PlayableStatus
 {
@@ -149,9 +149,9 @@ public class PcStatus extends PlayableStatus
 			
 			if (attackerPlayer != null)
 			{
-				if (NexusEvents.isInEvent(attackerPlayer))
+				if (ReunionEvents.isInEvent(attackerPlayer))
 				{
-					NexusEvents.onHit(attackerPlayer, getActiveChar(), fullValue, isDOT);
+					ReunionEvents.onHit(attackerPlayer, getActiveChar(), fullValue, isDOT);
 				}
 			}
 			

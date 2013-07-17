@@ -27,7 +27,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AskJoinParty;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * sample 29 42 00 00 10 01 00 00 00 format cdd
@@ -111,7 +111,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			return;
 		}
 		
-		if (NexusEvents.isInEvent(requestor) && !NexusEvents.canInviteToParty(requestor, target))
+		if (ReunionEvents.isInEvent(requestor) && !ReunionEvents.canInviteToParty(requestor, target))
 		{
 			requestor.sendMessage("You may not invite this player to the party.");
 			return;

@@ -26,7 +26,7 @@ import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * @author Zoey76
@@ -104,9 +104,9 @@ public class RequestUnEquipItem extends L2GameClientPacket
 			return;
 		}
 		
-		if (NexusEvents.isInEvent(activeChar))
+		if (ReunionEvents.isInEvent(activeChar))
 		{
-			if (!NexusEvents.canUseItem(activeChar, item))
+			if (!ReunionEvents.canUseItem(activeChar, item))
 			{
 				activeChar.sendMessage("Cannot use this item.");
 				return;

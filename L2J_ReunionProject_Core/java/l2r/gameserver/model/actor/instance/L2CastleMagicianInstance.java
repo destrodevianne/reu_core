@@ -37,7 +37,7 @@ import l2r.gameserver.network.serverpackets.AcquireSkillList;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.util.Rnd;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * @author Kerberos, ZaKaX
@@ -502,7 +502,7 @@ public class L2CastleMagicianInstance extends L2NpcInstance implements L2SquadTr
 				}
 			}
 		}
-		if (NexusEvents.isInEvent(player) || NexusEvents.isInEvent(clanLeader))
+		if (ReunionEvents.isInEvent(player) || ReunionEvents.isInEvent(clanLeader))
 		{
 			player.sendMessage("You or your CL is on an event. You cannot teleport!");
 			return false;

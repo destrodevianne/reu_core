@@ -58,7 +58,7 @@ import org.mmocore.network.MMOClient;
 import org.mmocore.network.MMOConnection;
 import org.mmocore.network.ReceivablePacket;
 
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 import gr.reunion.securitySystem.SecurityActions;
 import gr.reunion.securitySystem.SecurityType;
 
@@ -811,7 +811,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 			return false;
 		}
 		
-		if (NexusEvents.isInEvent(player))
+		if (ReunionEvents.isInEvent(player))
 		{
 			return false;
 		}

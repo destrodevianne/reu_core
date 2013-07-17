@@ -32,7 +32,7 @@ import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import gr.reunion.configs.AntibotConfigs;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * This class ...
@@ -106,7 +106,7 @@ public final class Logout extends L2GameClientPacket
 			return;
 		}
 		
-		if (NexusEvents.isInEvent(player))
+		if (ReunionEvents.isInEvent(player))
 		{
 			player.sendMessage("A superior power doesn't allow you to leave the event");
 			player.sendPacket(ActionFailed.STATIC_PACKET);
