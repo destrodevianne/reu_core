@@ -21,7 +21,7 @@ package l2r.gameserver.network.clientpackets;
 import l2r.gameserver.model.L2ShortCut;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ShortCutRegister;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * This class ...
@@ -67,9 +67,9 @@ public final class RequestShortCutReg extends L2GameClientPacket
 		
 		boolean saveToDb = true;
 		
-		if (NexusEvents.isInEvent(activeChar))
+		if (ReunionEvents.isInEvent(activeChar))
 		{
-			if (!NexusEvents.canSaveShortcuts(activeChar))
+			if (!ReunionEvents.canSaveShortcuts(activeChar))
 			{
 				saveToDb = false;
 			}

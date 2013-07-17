@@ -143,7 +143,7 @@ import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * Mother class of all character objects of the world (PC, NPC...)<br>
@@ -800,9 +800,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			L2PcInstance owner = getActingPlayer();
 			
-			if (NexusEvents.isInEvent(owner))
+			if (ReunionEvents.isInEvent(owner))
 			{
-				if (!NexusEvents.canAttack(owner, target))
+				if (!ReunionEvents.canAttack(owner, target))
 				{
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
@@ -1049,9 +1049,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			}
 		}
 		
-		if (NexusEvents.isInEvent(this) && NexusEvents.isInEvent(target))
+		if (ReunionEvents.isInEvent(this) && ReunionEvents.isInEvent(target))
 		{
-			if (!NexusEvents.onAttack(this, target))
+			if (!ReunionEvents.onAttack(this, target))
 			{
 				getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -1652,15 +1652,15 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			L2PcInstance owner = getActingPlayer();
 			
-			if (NexusEvents.isInEvent(owner) && (getTarget() instanceof L2Character))
+			if (ReunionEvents.isInEvent(owner) && (getTarget() instanceof L2Character))
 			{
-				if (!NexusEvents.isSkillNeutral(owner, skill))
+				if (!ReunionEvents.isSkillNeutral(owner, skill))
 				{
-					if (NexusEvents.isSkillOffensive(owner, skill) && !NexusEvents.canAttack(owner, (L2Character) getTarget()) && (owner != getTarget()))
+					if (ReunionEvents.isSkillOffensive(owner, skill) && !ReunionEvents.canAttack(owner, (L2Character) getTarget()) && (owner != getTarget()))
 					{
 						abort = true;
 					}
-					else if (!NexusEvents.isSkillOffensive(owner, skill) && !NexusEvents.canSupport(owner, (L2Character) getTarget()))
+					else if (!ReunionEvents.isSkillOffensive(owner, skill) && !ReunionEvents.canSupport(owner, (L2Character) getTarget()))
 					{
 						abort = true;
 					}
@@ -6461,9 +6461,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					}
 				}
 				
-				if (NexusEvents.isInEvent((L2PcInstance) this))
+				if (ReunionEvents.isInEvent((L2PcInstance) this))
 				{
-					NexusEvents.onUseSkill((L2PcInstance) this, skill);
+					ReunionEvents.onUseSkill((L2PcInstance) this, skill);
 				}
 			}
 			

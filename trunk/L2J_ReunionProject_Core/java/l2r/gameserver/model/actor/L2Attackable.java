@@ -76,7 +76,7 @@ import l2r.gameserver.util.L2TIntObjectHashMap;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import gr.reunion.configs.PremiumServiceConfigs;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public class L2Attackable extends L2Npc
 {
@@ -530,9 +530,9 @@ public class L2Attackable extends L2Npc
 			
 			if (player != null)
 			{
-				if (NexusEvents.isInEvent(player))
+				if (ReunionEvents.isInEvent(player))
 				{
-					NexusEvents.onKill(player, this);
+					ReunionEvents.onKill(player, this);
 				}
 				
 				if (getTemplate().getEventQuests(Quest.QuestEventType.ON_KILL) != null)

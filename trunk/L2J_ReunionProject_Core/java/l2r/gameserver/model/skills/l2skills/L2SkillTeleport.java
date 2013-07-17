@@ -33,7 +33,7 @@ import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public class L2SkillTeleport extends L2Skill
 {
@@ -70,7 +70,7 @@ public class L2SkillTeleport extends L2Skill
 				return;
 			}
 			
-			if (NexusEvents.isInEvent((L2PcInstance) activeChar))
+			if (ReunionEvents.isInEvent((L2PcInstance) activeChar))
 			{
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
@@ -110,7 +110,7 @@ public class L2SkillTeleport extends L2Skill
 						continue;
 					}
 					
-					if (NexusEvents.isInEvent(targetChar))
+					if (ReunionEvents.isInEvent(targetChar))
 					{
 						activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 						return;

@@ -53,7 +53,7 @@ import gr.reunion.aioItem.AioItemNpcs;
 import gr.reunion.configs.AioBufferConfigs;
 import gr.reunion.configs.AioItemsConfigs;
 import gr.reunion.configs.VoteSystemConfigs;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 import gr.reunion.javaBuffer.buffItem.AioItemBuffer;
 import gr.reunion.voteSystem.VoteHandler;
 
@@ -98,7 +98,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 		
 		try
 		{
-			if (NexusEvents.onBypass(activeChar, _command))
+			if (ReunionEvents.onBypass(activeChar, _command))
 			{
 				return;
 			}
@@ -126,7 +126,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 					return;
 				}
 				
-				if (NexusEvents.adminCommandRequiresConfirm(_command))
+				if (ReunionEvents.adminCommandRequiresConfirm(_command))
 				{
 					activeChar.setAdminConfirmCmd(_command);
 					ConfirmDlg dlg = new ConfirmDlg(SystemMessageId.S1);

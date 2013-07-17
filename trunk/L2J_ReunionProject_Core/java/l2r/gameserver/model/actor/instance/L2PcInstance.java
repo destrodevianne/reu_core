@@ -335,8 +335,8 @@ import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.configs.PvpRewardSystemConfigs;
 import gr.reunion.datatables.AdventTable;
 import gr.reunion.extra.FlagZoneHandler;
-import gr.reunion.interf.NexusEvents;
 import gr.reunion.interf.PlayerEventInfo;
+import gr.reunion.interf.ReunionEvents;
 import gr.reunion.javaBuffer.PlayerMethods;
 import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
@@ -3347,7 +3347,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void standUp()
 	{
-		if (NexusEvents.isInEvent(this) && getEventStatus().eventSitForced)
+		if (ReunionEvents.isInEvent(this) && getEventStatus().eventSitForced)
 		{
 			sendMessage("A dark force beyond your mortal understanding makes your knees to shake when you try to stand up...");
 		}
@@ -5830,12 +5830,12 @@ public final class L2PcInstance extends L2Playable
 		{
 			L2PcInstance pk = killer.getActingPlayer();
 			
-			if (NexusEvents.isInEvent(this))
+			if (ReunionEvents.isInEvent(this))
 			{
-				NexusEvents.onDie(this, killer);
-				if ((pk != null) && NexusEvents.isInEvent(pk))
+				ReunionEvents.onDie(this, killer);
+				if ((pk != null) && ReunionEvents.isInEvent(pk))
 				{
-					NexusEvents.onKill(pk, this);
+					ReunionEvents.onKill(pk, this);
 				}
 			}
 			
@@ -5990,7 +5990,7 @@ public final class L2PcInstance extends L2Playable
 		// Unsummon Cubics
 		if (!_cubics.isEmpty())
 		{
-			if (!NexusEvents.isInEvent(this) || NexusEvents.removeCubics())
+			if (!ReunionEvents.isInEvent(this) || ReunionEvents.removeCubics())
 			{
 				for (L2CubicInstance cubic : _cubics.values())
 				{
@@ -6041,7 +6041,7 @@ public final class L2PcInstance extends L2Playable
 	
 	private void onDieDropItem(L2Character killer)
 	{
-		if (NexusEvents.isInEvent(this))
+		if (ReunionEvents.isInEvent(this))
 		{
 			return;
 		}
@@ -6189,7 +6189,7 @@ public final class L2PcInstance extends L2Playable
 			return; // Target player is self
 		}
 		
-		if (NexusEvents.isInEvent(this) && NexusEvents.canAttack(this, target) && NexusEvents.gainPvpPointsOnEvents())
+		if (ReunionEvents.isInEvent(this) && ReunionEvents.canAttack(this, target) && ReunionEvents.gainPvpPointsOnEvents())
 		{
 			increasePvpKills(targetPlayer, true);
 			return;
@@ -6306,7 +6306,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void increasePkKillsAndKarma(L2Character target)
 	{
-		if (NexusEvents.isInEvent(this))
+		if (ReunionEvents.isInEvent(this))
 		{
 			return;
 		}
@@ -6563,7 +6563,7 @@ public final class L2PcInstance extends L2Playable
 			lostExp = Math.round(((getStat().getExpForLevel(ExperienceTable.getInstance().getMaxLevel()) - getStat().getExpForLevel(ExperienceTable.getInstance().getMaxLevel() - 1)) * percentLost) / 100);
 		}
 		
-		if (NexusEvents.isInEvent(this) || !getExpOn())
+		if (ReunionEvents.isInEvent(this) || !getExpOn())
 		{
 			lostExp = 0;
 		}
@@ -7166,9 +7166,9 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if (NexusEvents.isInEvent(this))
+		if (ReunionEvents.isInEvent(this))
 		{
-			if (!NexusEvents.canBeDisarmed(this))
+			if (!ReunionEvents.canBeDisarmed(this))
 			{
 				return false;
 			}
@@ -9275,9 +9275,9 @@ public final class L2PcInstance extends L2Playable
 			return true;
 		}
 		
-		if (NexusEvents.isInEvent(this))
+		if (ReunionEvents.isInEvent(this))
 		{
-			if (NexusEvents.canAttack(this, attacker))
+			if (ReunionEvents.canAttack(this, attacker))
 			{
 				return true;
 			}
@@ -9416,9 +9416,9 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if (NexusEvents.isInEvent(this))
+		if (ReunionEvents.isInEvent(this))
 		{
-			if (!NexusEvents.canUseSkill(this, skill))
+			if (!ReunionEvents.canUseSkill(this, skill))
 			{
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return false;
@@ -10110,21 +10110,21 @@ public final class L2PcInstance extends L2Playable
 		{
 			target = target.getActingPlayer();
 		}
-		if (NexusEvents.isInEvent(this) && (target != null) && (target instanceof L2PcInstance))
+		if (ReunionEvents.isInEvent(this) && (target != null) && (target instanceof L2PcInstance))
 		{
-			if (!NexusEvents.isInEvent((L2PcInstance) target))
+			if (!ReunionEvents.isInEvent((L2PcInstance) target))
 			{
 				return false;
 			}
 			
-			if (!NexusEvents.isSkillNeutral(this, skill))
+			if (!ReunionEvents.isSkillNeutral(this, skill))
 			{
-				if (NexusEvents.isSkillOffensive(this, skill) && !NexusEvents.canAttack(this, (L2Character) target))
+				if (ReunionEvents.isSkillOffensive(this, skill) && !ReunionEvents.canAttack(this, (L2Character) target))
 				{
 					return false;
 				}
 				
-				if (!NexusEvents.isSkillOffensive(this, skill) && !NexusEvents.canSupport(this, (L2Character) target))
+				if (!ReunionEvents.isSkillOffensive(this, skill) && !ReunionEvents.canSupport(this, (L2Character) target))
 				{
 					return false;
 				}
@@ -11132,9 +11132,9 @@ public final class L2PcInstance extends L2Playable
 			
 			if (_transformation != null)
 			{
-				if (NexusEvents.isInEvent(this))
+				if (ReunionEvents.isInEvent(this))
 				{
-					int canUseSkill = NexusEvents.allowTransformationSkill(this, s);
+					int canUseSkill = ReunionEvents.allowTransformationSkill(this, s);
 					
 					if (canUseSkill == -1)
 					{
@@ -11405,7 +11405,7 @@ public final class L2PcInstance extends L2Playable
 		
 		try
 		{
-			if (NexusEvents.isRegistered(this))
+			if (ReunionEvents.isRegistered(this))
 			{
 				return false;
 			}
@@ -12789,7 +12789,7 @@ public final class L2PcInstance extends L2Playable
 		
 		try
 		{
-			NexusEvents.onLogout(this);
+			ReunionEvents.onLogout(this);
 		}
 		catch (Exception e)
 		{

@@ -47,7 +47,7 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.util.Rnd;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public final class L2CubicInstance
 {
@@ -309,11 +309,11 @@ public final class L2CubicInstance
 				return;
 			}
 			
-			if (NexusEvents.isInEvent(_owner))
+			if (ReunionEvents.isInEvent(_owner))
 			{
 				if (ownerTarget instanceof L2Character)
 				{
-					if (NexusEvents.canAttack(_owner, (L2Character) ownerTarget))
+					if (ReunionEvents.canAttack(_owner, (L2Character) ownerTarget))
 					{
 						_target = (L2Character) ownerTarget;
 					}

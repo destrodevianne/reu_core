@@ -63,7 +63,7 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public abstract class L2Skill implements IChanceSkillTrigger
 {
@@ -1310,21 +1310,21 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					return false;
 				}
 				
-				if (NexusEvents.isInEvent(player))
+				if (ReunionEvents.isInEvent(player))
 				{
-					if (!NexusEvents.isInEvent(targetPlayer))
+					if (!ReunionEvents.isInEvent(targetPlayer))
 					{
 						return false;
 					}
 					
-					if (!NexusEvents.isSkillNeutral(player, skill))
+					if (!ReunionEvents.isSkillNeutral(player, skill))
 					{
-						if (NexusEvents.isSkillOffensive(player, skill) && !NexusEvents.canAttack(player, targetPlayer))
+						if (ReunionEvents.isSkillOffensive(player, skill) && !ReunionEvents.canAttack(player, targetPlayer))
 						{
 							return false;
 						}
 						
-						if (!NexusEvents.isSkillOffensive(player, skill) && !NexusEvents.canSupport(player, targetPlayer))
+						if (!ReunionEvents.isSkillOffensive(player, skill) && !ReunionEvents.canSupport(player, targetPlayer))
 						{
 							return false;
 						}

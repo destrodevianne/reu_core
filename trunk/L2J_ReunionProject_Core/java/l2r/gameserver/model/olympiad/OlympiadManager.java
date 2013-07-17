@@ -34,7 +34,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * @author DS
@@ -229,7 +229,7 @@ public class OlympiadManager
 			return false;
 		}
 		
-		if (NexusEvents.isRegistered(player))
+		if (ReunionEvents.isRegistered(player))
 		{
 			player.sendMessage("You may not join olympiad games since you're already on event.");
 			return false;

@@ -38,7 +38,7 @@ import l2r.gameserver.network.serverpackets.RestartResponse;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerDespawnListener;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import gr.reunion.configs.AntibotConfigs;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * This class ...
@@ -114,7 +114,7 @@ public final class RequestRestart extends L2GameClientPacket
 			return;
 		}
 		
-		if (NexusEvents.isInEvent(player) && !player.isGM())
+		if (ReunionEvents.isInEvent(player) && !player.isGM())
 		{
 			player.sendMessage("A superior power doesn't allow you to leave the event");
 			player.sendPacket(RestartResponse.valueOf(false));

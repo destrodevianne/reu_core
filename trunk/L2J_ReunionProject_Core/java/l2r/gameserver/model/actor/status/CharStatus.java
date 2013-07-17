@@ -31,7 +31,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.stat.CharStat;
 import l2r.gameserver.model.stats.Formulas;
 import l2r.util.Rnd;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 public class CharStatus
 {
@@ -167,9 +167,9 @@ public class CharStatus
 		
 		if (attacker != null)
 		{
-			if (NexusEvents.isInEvent(getActiveChar()) && NexusEvents.isInEvent(attacker))
+			if (ReunionEvents.isInEvent(getActiveChar()) && ReunionEvents.isInEvent(attacker))
 			{
-				NexusEvents.onDamageGive(getActiveChar(), attacker, (int) value, isDOT);
+				ReunionEvents.onDamageGive(getActiveChar(), attacker, (int) value, isDOT);
 			}
 		}
 		
@@ -189,9 +189,9 @@ public class CharStatus
 			}
 			
 			boolean allowDie = true;
-			if (NexusEvents.isInEvent(getActiveChar()))
+			if (ReunionEvents.isInEvent(getActiveChar()))
 			{
-				if (!NexusEvents.allowDie(getActiveChar(), attacker))
+				if (!ReunionEvents.allowDie(getActiveChar(), attacker))
 				{
 					allowDie = false;
 				}

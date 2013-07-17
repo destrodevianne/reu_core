@@ -46,7 +46,7 @@ import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * @author godson, GodKratos, Pere, DS
@@ -148,7 +148,7 @@ public abstract class AbstractOlympiadGame
 			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_DOES_NOT_MEET_THE_REQUIREMENTS_FOR_JOINING_THE_GAME);
 		}
 		
-		if (NexusEvents.isInEvent(player))
+		if (ReunionEvents.isInEvent(player))
 		{
 			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_DOES_NOT_MEET_THE_REQUIREMENTS_FOR_JOINING_THE_GAME);
 		}

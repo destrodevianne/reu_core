@@ -49,7 +49,7 @@ import l2r.gameserver.network.serverpackets.ExUseSharedGroupItem;
 import l2r.gameserver.network.serverpackets.ItemList;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * This class ...
@@ -87,9 +87,9 @@ public final class UseItem extends L2GameClientPacket
 			// Equip or unEquip
 			activeChar.useEquippableItem(item, false);
 			
-			if (NexusEvents.isInEvent(activeChar))
+			if (ReunionEvents.isInEvent(activeChar))
 			{
-				NexusEvents.onUseItem(activeChar, item);
+				ReunionEvents.onUseItem(activeChar, item);
 			}
 		}
 	}
@@ -160,9 +160,9 @@ public final class UseItem extends L2GameClientPacket
 			return;
 		}
 		
-		if (NexusEvents.isInEvent(activeChar))
+		if (ReunionEvents.isInEvent(activeChar))
 		{
-			if (!NexusEvents.canUseItem(activeChar, item))
+			if (!ReunionEvents.canUseItem(activeChar, item))
 			{
 				return;
 			}
@@ -414,9 +414,9 @@ public final class UseItem extends L2GameClientPacket
 			}
 		}
 		
-		if (NexusEvents.isInEvent(activeChar))
+		if (ReunionEvents.isInEvent(activeChar))
 		{
-			NexusEvents.onUseItem(activeChar, item);
+			ReunionEvents.onUseItem(activeChar, item);
 		}
 	}
 	

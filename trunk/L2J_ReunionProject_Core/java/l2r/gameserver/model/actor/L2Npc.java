@@ -89,7 +89,7 @@ import gr.reunion.antibotSystem.AntibotSystem;
 import gr.reunion.configs.CustomServerConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.datatables.FakePcsTable;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 
 /**
  * This class represents a Non-Player-Character in the world.<br>
@@ -1375,7 +1375,7 @@ public class L2Npc extends L2Character
 				break;
 		}
 		
-		if (NexusEvents.onNpcAction(player, this))
+		if (ReunionEvents.onNpcAction(player, this))
 		{
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;

@@ -50,7 +50,7 @@ import gnu.trove.procedure.TObjectProcedure;
 import gr.reunion.backupManager.DatabaseBackupManager;
 import gr.reunion.configs.BackupManagerConfigs;
 import gr.reunion.configs.LeaderboardsConfigs;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.CraftLeaderboard;
 import gr.reunion.leaderboards.FishermanLeaderboard;
@@ -593,7 +593,7 @@ public class Shutdown extends Thread
 		GlobalVariablesManager.getInstance().saveVars();
 		_log.info("Global Variables Manager: Variables saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		
-		NexusEvents.serverShutDown();
+		ReunionEvents.serverShutDown();
 		
 		// Save items on ground before closing
 		if (Config.SAVE_DROPPED_ITEM)

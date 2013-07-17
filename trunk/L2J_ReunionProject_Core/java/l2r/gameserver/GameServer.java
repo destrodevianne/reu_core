@@ -137,7 +137,7 @@ import org.mmocore.network.SelectorConfig;
 import org.mmocore.network.SelectorThread;
 
 import gr.reunion.configs.CustomConfigController;
-import gr.reunion.interf.NexusEvents;
+import gr.reunion.interf.ReunionEvents;
 import gr.reunion.main.CustomServerMods;
 import gr.reunion.main.PlayerValues;
 import gr.reunion.main.ReunionInfo;
@@ -372,7 +372,7 @@ public class GameServer
 		
 		AntiFeedManager.getInstance().registerEvent(AntiFeedManager.GAME_ID);
 		
-		NexusEvents.start();
+		ReunionEvents.start();
 		
 		if (Config.ALLOW_MAIL)
 		{
