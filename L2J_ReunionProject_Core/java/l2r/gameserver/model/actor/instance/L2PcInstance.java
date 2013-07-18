@@ -154,6 +154,8 @@ import l2r.gameserver.model.actor.position.PcPosition;
 import l2r.gameserver.model.actor.stat.PcStat;
 import l2r.gameserver.model.actor.stat.Rates;
 import l2r.gameserver.model.actor.status.PcStatus;
+import l2r.gameserver.model.actor.tasks.player.AdventBlessingEndTask;
+import l2r.gameserver.model.actor.tasks.player.AdventPointsTask;
 import l2r.gameserver.model.actor.tasks.player.DismountTask;
 import l2r.gameserver.model.actor.tasks.player.FameTask;
 import l2r.gameserver.model.actor.tasks.player.GameGuardCheckTask;
@@ -16452,15 +16454,6 @@ public final class L2PcInstance extends L2Playable
 		}
 	}
 	
-	public class AdventPoints implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			incAdventPoints(20, true);
-		}
-	}
-	
 	public void startAdventTask()
 	{
 		if (_adventBonusTask == null)
@@ -16468,23 +16461,9 @@ public final class L2PcInstance extends L2Playable
 			int advent_time = AdventTable.getInstance().getAdventTime(getObjectId());
 			if (advent_time < 14400)
 			{
-				_adventBonusTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new AdventPoints(), 60000, 60000);
+				_adventBonusTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new AdventPointsTask(this), 60000, 60000);
 				sendPacket(new ExNevitAdventTimeChange(getAdventTime(), true));
 			}
-		}
-	}
-	
-	public class AdventBlessingEnd implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			stopSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING);
-			sendPacket(new ExNevitAdventEffect(0));
-			sendPacket(new ExNevitAdventPointInfoPacket(L2PcInstance.this));
-			sendPacket(SystemMessageId.NEVITS_ADVENT_BLESSING_HAS_ENDED);
-			
-			_adventBlessingTask = null;
 		}
 	}
 	
@@ -16525,7 +16504,7 @@ public final class L2PcInstance extends L2Playable
 					// Abnormal
 					startSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING);
 					// Start 3 min Advent Blessing
-					_adventBlessingTask = ThreadPoolManager.getInstance().scheduleGeneral(new AdventBlessingEnd(), 180000);
+					_adventBlessingTask = ThreadPoolManager.getInstance().scheduleGeneral(new AdventBlessingEndTask(this), 180000);
 					// Display Sysmsg
 					sendPacket(SystemMessageId.THE_ANGEL_NEVIT_HAS_BLESSED_YOU_FROM_ABOVE);
 					// Show counter for player
