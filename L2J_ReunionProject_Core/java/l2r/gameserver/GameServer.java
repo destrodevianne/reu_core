@@ -37,6 +37,7 @@ import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.ArmorSetsData;
 import l2r.gameserver.datatables.AugmentationData;
+import l2r.gameserver.datatables.CategoryData;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.CharSummonTable;
 import l2r.gameserver.datatables.CharTemplateTable;
@@ -67,6 +68,7 @@ import l2r.gameserver.datatables.OfflineTradersTable;
 import l2r.gameserver.datatables.OptionsData;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.RecipeData;
+import l2r.gameserver.datatables.SkillLearnData;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.datatables.SpawnTable;
@@ -216,6 +218,9 @@ public class GameServer
 		Announcements.getInstance();
 		GlobalVariablesManager.getInstance();
 		
+		printSection("Data");
+		CategoryData.getInstance();
+		
 		printSection("Skills");
 		EffectHandler.getInstance().executeScript();
 		EnchantGroupsData.getInstance();
@@ -266,6 +271,7 @@ public class GameServer
 		
 		printSection("NPCs");
 		HerbDropTable.getInstance();
+		SkillLearnData.getInstance();
 		NpcTable.getInstance();
 		WalkingManager.getInstance();
 		StaticObjects.getInstance();
