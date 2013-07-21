@@ -16364,7 +16364,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean isInSameClan(L2PcInstance target)
 	{
-		return (getClanId() != 0) && (getClanId() == target.getClanId());
+		return (((getClan() != null) && (target != null) && (target.getClan() != null)) && (getClanId() == target.getClanId()));
 	}
 	
 	public boolean isInTwoSidedWar(L2PcInstance target)
@@ -16383,7 +16383,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public final boolean isInSameAlly(final L2PcInstance target)
 	{
-		return (getAllyId() != 0) && (getAllyId() == target.getAllyId());
+		return (((getAllyId() != 0) && (target != null) && (target.getAllyId() != 0)) && (getAllyId() == target.getAllyId()));
 	}
 	
 	public boolean isInSameParty(L2PcInstance target)
