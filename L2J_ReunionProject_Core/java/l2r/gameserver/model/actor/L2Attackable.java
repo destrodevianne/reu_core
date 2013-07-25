@@ -467,9 +467,13 @@ public class L2Attackable extends L2Npc
 		// Add damage and hate to the attacker AggroInfo of the L2Attackable _aggroList
 		if (attacker != null)
 		{
-			if (skill != null) // This shouldn't happend but l2j...
+			if (skill != null)
 			{
 				addDamage(attacker, (int) damage, skill);
+			}
+			else
+			{
+				addDamage(attacker, (int) damage);
 			}
 		}
 		
@@ -956,6 +960,54 @@ public class L2Attackable extends L2Npc
 						for (Quest quest : getTemplate().getEventQuests(Quest.QuestEventType.ON_ATTACK))
 						{
 							quest.notifyAttack(this, player, damage, attacker.isSummon(), skill);
+						}
+					}
+				}
+				// for now hard code damage hate caused by an L2Attackable
+				else
+				{
+					getAI().notifyEvent(CtrlEvent.EVT_ATTACKED, attacker);
+					addDamageHate(attacker, damage, (damage * 100) / (getLevel() + 7));
+				}
+			}
+			catch (Exception e)
+			{
+				_log.log(Level.SEVERE, "", e);
+			}
+		}
+	}
+	
+	/**
+	 * Add damage and hate to the attacker AggroInfo of the L2Attackable _aggroList.
+	 * @param attacker The L2Character that gave damages to this L2Attackable
+	 * @param damage The number of damages given by the attacker L2Character
+	 */
+	public void addDamage(L2Character attacker, int damage)
+	{
+		if (attacker == null)
+		{
+			return;
+		}
+		
+		// Notify the L2Attackable AI with EVT_ATTACKED
+		if (!isDead())
+		{
+			try
+			{
+				// If monster is on walk - stop it
+				if (isWalker() && !isCoreAIDisabled() && WalkingManager.getInstance().isOnWalk(this))
+				{
+					WalkingManager.getInstance().stopMoving(this, false, true);
+				}
+				
+				L2PcInstance player = attacker.getActingPlayer();
+				if (player != null)
+				{
+					if (getTemplate().getEventQuests(Quest.QuestEventType.ON_ATTACK) != null)
+					{
+						for (Quest quest : getTemplate().getEventQuests(Quest.QuestEventType.ON_ATTACK))
+						{
+							quest.notifyAttack(this, player, damage, attacker.isSummon());
 						}
 					}
 				}
