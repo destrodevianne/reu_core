@@ -52,6 +52,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.WareHouseDepositList;
 import l2r.gameserver.network.serverpackets.WareHouseWithdrawalList;
 import l2r.util.StringUtil;
+import gr.reunion.achievementSystem.AchievementsHandler;
 import gr.reunion.achievementSystem.AchievementsManager;
 import gr.reunion.achievementSystem.base.Achievement;
 import gr.reunion.achievementSystem.base.Condition;
@@ -277,7 +278,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 		
 		else if (command.startsWith("showMyAchievements"))
 		{
-			player.getAchievemntData();
+			AchievementsHandler.getAchievemntData(player);
 			showMyAchievements(player);
 		}
 		else if (command.startsWith("showAchievementInfo"))
@@ -309,7 +310,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 				}
 				
 				AchievementsManager.getInstance().rewardForAchievement(id, player);
-				player.saveAchievementData(id);
+				AchievementsHandler.saveAchievementData(player, id);
 				showMyAchievements(player);
 			}
 			catch (Exception e)
@@ -1067,7 +1068,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 		tb.append("<tr><td><button value=\"How it works?\" action=\"bypass -h npc_%objectId%_showAchievementHelp\" width=180 height=24 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr><br>");
 		tb.append("</table>");
 		tb.append("<br><img src=\"l2ui.SquareGray\" width=270 height=1><br1><table width=\"273\" bgcolor=\"151515\"><tr><td><center><font color=\"EBDF6C\"> Your Achievements Statistics</font></center></td></tr></table><br1><img src=\"l2ui.SquareGray\" width=270 height=1><br><br>");
-		player.getAchievemntData();
+		AchievementsHandler.getAchievemntData(player);
 		int completedCount = player.getCompletedAchievements().size();
 		
 		tb.append("<table width=\"280\"><tr><td>From here you will be informed how many achievements you have already completed.<br>You have completed: " + completedCount + "/<font color=\"EBDF6C\">" + AchievementsManager.getInstance().getAchievementList().size() + "</font></td></tr></table>");

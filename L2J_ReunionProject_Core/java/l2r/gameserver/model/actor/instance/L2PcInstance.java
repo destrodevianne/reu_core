@@ -23,7 +23,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -328,7 +327,7 @@ import l2r.gameserver.util.Util;
 import l2r.util.L2FastList;
 import l2r.util.Rnd;
 import gnu.trove.list.array.TIntArrayList;
-import gr.reunion.achievementSystem.AchievementsManager;
+import gr.reunion.achievementSystem.AchievementsHandler;
 import gr.reunion.configs.AntibotConfigs;
 import gr.reunion.configs.CustomServerConfigs;
 import gr.reunion.configs.FlagZoneConfigs;
@@ -11739,7 +11738,7 @@ public final class L2PcInstance extends L2Playable
 		PlayerMethods.loadProfileBuffs(this);
 		
 		// Load achievements data
-		getAchievemntData();
+		AchievementsHandler.getAchievemntData(this);
 		
 		// Load Master Name Prefix
 		loadNamePrefix();
@@ -16577,79 +16576,6 @@ public final class L2PcInstance extends L2Playable
 		if (_completedAchievements != null)
 		{
 			_completedAchievements.clear();
-		}
-	}
-	
-	public void getAchievemntData()
-	{
-		PreparedStatement statement;
-		PreparedStatement insertStatement;
-		ResultSet rs;
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			statement = con.prepareStatement("SELECT * from achievements WHERE owner_id=" + getObjectId());
-			
-			rs = statement.executeQuery();
-			
-			String values = "owner_id";
-			String in = Integer.toString(getObjectId());
-			String questionMarks = in;
-			int ilosc = AchievementsManager.getInstance().getAchievementList().size();
-			
-			if (rs.next())
-			{
-				_completedAchievements.clear();
-				for (int i = 1; i <= ilosc; i++)
-				{
-					int a = rs.getInt("a" + i);
-					
-					if (!_completedAchievements.contains(i))
-					{
-						if (a == 1)
-						{
-							_completedAchievements.add(i);
-						}
-					}
-				}
-			}
-			else
-			{
-				// Player hasnt entry in database, means we have to create it.
-				
-				for (int i = 1; i <= ilosc; i++)
-				{
-					values += ", a" + i;
-					questionMarks += ", 0";
-				}
-				
-				String s = "INSERT INTO achievements(" + values + ") VALUES (" + questionMarks + ")";
-				insertStatement = con.prepareStatement(s);
-				
-				insertStatement.execute();
-				insertStatement.close();
-			}
-		}
-		catch (SQLException e)
-		{
-			_log.warning("[ACHIEVEMENTS ENGINE GETDATA]" + e);
-		}
-	}
-	
-	public void saveAchievementData(int achievementID)
-	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			Statement statement = con.createStatement();
-			statement.executeUpdate("UPDATE achievements SET a" + achievementID + "=1 WHERE owner_id=" + getObjectId());
-			
-			if (!_completedAchievements.contains(achievementID))
-			{
-				_completedAchievements.add(achievementID);
-			}
-		}
-		catch (SQLException e)
-		{
-			_log.warning("[ACHIEVEMENTS SAVE GETDATA]" + e);
 		}
 	}
 	
