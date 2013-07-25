@@ -467,13 +467,9 @@ public class L2Attackable extends L2Npc
 		// Add damage and hate to the attacker AggroInfo of the L2Attackable _aggroList
 		if (attacker != null)
 		{
-			if (skill != null)
+			if (skill != null) // This shouldn't happend but l2j...
 			{
 				addDamage(attacker, (int) damage, skill);
-			}
-			else
-			{
-				_log.warning("SKILL SHOULD NOT BE NULL REPORT TO REUNION TEAM");
 			}
 		}
 		
