@@ -31,6 +31,7 @@ import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
+import gr.reunion.achievementSystem.AchievementsManager;
 
 /**
  * This class manages all RaidBoss.<br>
@@ -95,6 +96,12 @@ public class L2RaidBossInstance extends L2MonsterInstance
 		
 		if (player != null)
 		{
+			// TODO: Find Better way! (Achievement function)
+			if (getNpcId() == AchievementsManager.getInstance().getMobId())
+			{
+				player.setKilledSpecificMob(true);
+			}
+			
 			broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.RAID_WAS_SUCCESSFUL));
 			Announcements.getInstance().handleAnnounce("RaidBoss Manager: " + getName() + " defeated!", 0, true);
 			if (player.getParty() != null)

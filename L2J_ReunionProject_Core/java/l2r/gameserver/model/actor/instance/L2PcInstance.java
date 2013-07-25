@@ -372,7 +372,7 @@ public final class L2PcInstance extends L2Playable
 	
 	// Character Character SQL String Definitions:
 	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,charId,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,karma,fame,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,title_color,accesslevel,online,isin7sdungeon,clan_privs,wantspeace,base_class,newbie,nobless,power_grade,createDate) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,fame=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,newbie=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,bookmarkslot=?,vitality_points=?,pccafe_points=?,language=?,exp_activation=?,prefix_category=?,enchant_animation=?,hide_private_stores=?,load_soulshots=?,soulshot_animation=?,bad_buff_protection=?,enchant_bot=?,enchant_chance=?,tries=?,hopzonedone=?,topzonedone=? WHERE charId=?";
+	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,fame=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,newbie=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,bookmarkslot=?,vitality_points=?,pccafe_points=?,language=?,exp_activation=?,prefix_category=?,enchant_animation=?,hide_private_stores=?,load_soulshots=?,soulshot_animation=?,bad_buff_protection=?,enchant_bot=?,enchant_chance=?,tries=?,hopzonedone=?,topzonedone=?,achievementmobkilled=? WHERE charId=?";
 	private static final String RESTORE_CHARACTER = "SELECT * FROM characters WHERE charId=?";
 	
 	// Character Teleport Bookmark:
@@ -7823,6 +7823,7 @@ public final class L2PcInstance extends L2Playable
 					player.setVoteTries(rset.getInt("tries"));
 					player.setHopZoneDone(rset.getInt("hopzonedone") == 1);
 					player.setTopZoneDone(rset.getInt("topzonedone") == 1);
+					player.setKilledSpecificMob(rset.getInt("achievementmobkilled") == 1);
 					
 					player.setClanJoinExpiryTime(rset.getLong("clan_join_expiry_time"));
 					if (player.getClanJoinExpiryTime() < System.currentTimeMillis())
@@ -8412,7 +8413,8 @@ public final class L2PcInstance extends L2Playable
 			statement.setInt(60, getVoteTries());
 			statement.setInt(61, isHopZoneDone() ? 1 : 0);
 			statement.setInt(62, isTopZoneDone() ? 1 : 0);
-			statement.setInt(63, getObjectId());
+			statement.setInt(63, isKilledSpecificMob() ? 1 : 0);
+			statement.setInt(64, getObjectId());
 			
 			statement.execute();
 			statement.close();
@@ -16557,7 +16559,18 @@ public final class L2PcInstance extends L2Playable
 	// ============================================== //
 	// Achievements Engine By L][Reunion Team //
 	// ============================================== //
+	private boolean _killedSpecificMob = false;
 	public final List<Integer> _completedAchievements = new FastList<>();
+	
+	public boolean isKilledSpecificMob()
+	{
+		return _killedSpecificMob;
+	}
+	
+	public void setKilledSpecificMob(boolean haskilledSpecificMob)
+	{
+		_killedSpecificMob = haskilledSpecificMob;
+	}
 	
 	private void clearAchievementData()
 	{
