@@ -626,6 +626,27 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
+	 * @param npc the NPC that was attacked
+	 * @param attacker the attacking player
+	 * @param damage the damage dealt to the NPC by the player
+	 * @param isSummon if {@code true}, the attack was actually made by the player's summon
+	 */
+	public final void notifyAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isSummon)
+	{
+		String res = null;
+		try
+		{
+			res = onAttack(npc, attacker, damage, isSummon);
+		}
+		catch (Exception e)
+		{
+			showError(attacker, e);
+			return;
+		}
+		showResult(attacker, res);
+	}
+	
+	/**
 	 * @param killer the character that killed the {@code victim}
 	 * @param victim the character that was killed by the {@code killer}
 	 * @param qs the quest state object of the player to be notified of this event
