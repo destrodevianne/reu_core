@@ -28,6 +28,7 @@ import l2r.gameserver.model.actor.knownlist.MonsterKnownList;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.util.MinionList;
 import l2r.util.Rnd;
+import gr.reunion.achievementSystem.AchievementsManager;
 
 /**
  * This class manages all Monsters. L2MonsterInstance:
@@ -170,6 +171,15 @@ public class L2MonsterInstance extends L2Attackable
 		if (!super.doDie(killer))
 		{
 			return false;
+		}
+		
+		// TODO: Find Better way! (Achievement function)
+		if ((killer != null) && killer.isPlayer())
+		{
+			if (getNpcId() == AchievementsManager.getInstance().getMobId())
+			{
+				((L2PcInstance) killer).setKilledSpecificMob(true);
+			}
 		}
 		
 		if (_returnToSpawnTask != null)
