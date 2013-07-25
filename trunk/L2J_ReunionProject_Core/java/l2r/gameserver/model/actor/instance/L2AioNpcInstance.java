@@ -73,6 +73,7 @@ import l2r.gameserver.network.serverpackets.WareHouseDepositList;
 import l2r.gameserver.network.serverpackets.WareHouseWithdrawalList;
 import l2r.gameserver.util.Util;
 import l2r.util.StringUtil;
+import gr.reunion.achievementSystem.AchievementsHandler;
 import gr.reunion.achievementSystem.AchievementsManager;
 import gr.reunion.achievementSystem.base.Achievement;
 import gr.reunion.achievementSystem.base.Condition;
@@ -321,7 +322,7 @@ public final class L2AioNpcInstance extends L2Npc
 		
 		else if (command.startsWith("showMyAchievements"))
 		{
-			player.getAchievemntData();
+			AchievementsHandler.getAchievemntData(player);
 			showMyAchievements(player);
 		}
 		else if (command.startsWith("showAchievementInfo"))
@@ -353,7 +354,7 @@ public final class L2AioNpcInstance extends L2Npc
 				}
 				
 				AchievementsManager.getInstance().rewardForAchievement(id, player);
-				player.saveAchievementData(id);
+				AchievementsHandler.saveAchievementData(player, id);
 				showMyAchievements(player);
 			}
 			catch (Exception e)
@@ -1799,7 +1800,7 @@ public final class L2AioNpcInstance extends L2Npc
 		tb.append("Check your <font color=\"LEVEL\">Achievements </font>statistics:");
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1\"><br>");
 		
-		player.getAchievemntData();
+		AchievementsHandler.getAchievemntData(player);
 		int completedCount = player.getCompletedAchievements().size();
 		
 		tb.append("You have completed: " + completedCount + "/<font color=\"LEVEL\">" + AchievementsManager.getInstance().getAchievementList().size() + "</font>");
