@@ -106,7 +106,6 @@ import l2r.gameserver.model.BlockList;
 import l2r.gameserver.model.L2AccessLevel;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
-import l2r.gameserver.model.L2CommandChannel;
 import l2r.gameserver.model.L2ContactList;
 import l2r.gameserver.model.L2EnchantSkillLearn;
 import l2r.gameserver.model.L2Macro;
@@ -16394,33 +16393,12 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean isInSameChannel(L2PcInstance target)
 	{
-		final L2Party activeCharP = getParty();
-		final L2Party targetP = target.getParty();
-		if ((activeCharP != null) && (targetP != null))
-		{
-			final L2CommandChannel chan = activeCharP.getCommandChannel();
-			if ((chan != null) && (chan == targetP.getCommandChannel()))
-			{
-				return true;
-			}
-		}
-		
-		return false;
+		return (((getParty() != null) && (target != null) && (target.getParty() != null)) && (getParty().getCommandChannel() != null) && (target.getParty().getCommandChannel() != null) && (getParty().getCommandChannel() == target.getParty().getCommandChannel()));
 	}
 	
 	public boolean isInSameClanWar(L2PcInstance target)
 	{
-		final L2Clan aClan = getClan();
-		final L2Clan tClan = target.getClan();
-		
-		if ((aClan != null) && (tClan != null))
-		{
-			if (aClan.isAtWarWith(tClan.getClanId()) || tClan.isAtWarWith(aClan.getClanId()))
-			{
-				return true;
-			}
-		}
-		return false;
+		return (((getClan() != null) && (target != null) && (target.getClan() != null)) && (getClan().isAtWarWith(target.getClan()) || target.getClan().isAtWarWith(getClan())));
 	}
 	
 	// ============================================== //
