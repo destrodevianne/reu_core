@@ -108,7 +108,7 @@ public class TopBBSManager extends BaseBBSManager
 					content = content.replaceAll("%gboss%", gb.loadGrandBossList());
 					break;
 				case "stats":
-					content = content.replace("%online%", Integer.toString(L2World.getInstance().getAllPlayersCount()));
+					content = content.replace("%online%", Integer.toString(L2World.getInstance().getAllPlayersCount() + SmartCommunityConfigs.EXTRA_PLAYERS_COUNT));
 					content = content.replace("%servercapacity%", Integer.toString(Config.MAXIMUM_ONLINE_USERS));
 					content = content.replace("%serverruntime%", getServerRunTime());
 					if (SmartCommunityConfigs.ALLOW_REAL_ONLINE_STATS)
@@ -117,12 +117,11 @@ public class TopBBSManager extends BaseBBSManager
 					}
 					else
 					{
-						content = content.replace("%serveronline%", getRealOnline() + SmartCommunityConfigs.EXTRA_PLAYERS_COUNT);
+						content = content.replace("%serveronline%", "");
 					}
 					break;
 				default:
 					break;
-			
 			}
 			if (file.startsWith("raid"))
 			{
@@ -170,7 +169,16 @@ public class TopBBSManager extends BaseBBSManager
 				counter++;
 			}
 		}
-		String realOnline = "<table border=0 cellspacing=0 width=\"740\" cellpadding=2 bgcolor=111111><tr><td fixwidth=11></td><td FIXWIDTH=280>Players Active</td><td FIXWIDTH=470><font color=26e600>" + counter + "</font></td></tr></table><img src=\"l2ui.squaregray\" width=\"740\" height=\"1\"><table border=0 cellspacing=0 width=\"740\" cellpadding=2 bgcolor=111111><tr><td fixwidth=11></td><td FIXWIDTH=280>Players Shops</td><td FIXWIDTH=470><font color=26e600>" + (L2World.getInstance().getAllPlayersCount() - counter) + "</font></td></tr></table>";
+		
+		int allPlayers = L2World.getInstance().getAllPlayersCount();
+		
+		if (SmartCommunityConfigs.EXTRA_PLAYERS_COUNT > 0)
+		{
+			counter += SmartCommunityConfigs.EXTRA_PLAYERS_COUNT;
+			allPlayers += SmartCommunityConfigs.EXTRA_PLAYERS_COUNT;
+		}
+		
+		String realOnline = "<table border=0 cellspacing=0 width=\"740\" cellpadding=2 bgcolor=111111><tr><td fixwidth=11></td><td FIXWIDTH=280>Players Active</td><td FIXWIDTH=470><font color=26e600>" + counter + "</font></td></tr></table><img src=\"l2ui.squaregray\" width=\"740\" height=\"1\"><table border=0 cellspacing=0 width=\"740\" cellpadding=2 bgcolor=111111><tr><td fixwidth=11></td><td FIXWIDTH=280>Players Shops</td><td FIXWIDTH=470><font color=26e600>" + (allPlayers - counter) + "</font></td></tr></table>";
 		return realOnline;
 	}
 	
