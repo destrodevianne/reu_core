@@ -28,6 +28,7 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
 import gr.reunion.achievementSystem.AchievementsManager;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * This class manages all Grand Bosses.
@@ -91,7 +92,12 @@ public final class L2GrandBossInstance extends L2MonsterInstance
 			}
 			
 			broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.RAID_WAS_SUCCESSFUL));
-			Announcements.getInstance().handleAnnounce("RaidBoss Manager: " + getName() + " defeated!", 0, true);
+			
+			if (CustomServerConfigs.ANNOUNCE_DEATH_REVIVE_OF_RAIDS)
+			{
+				Announcements.getInstance().handleAnnounce("RaidBoss Manager: " + getName() + " defeated!", 0, true);
+			}
+			
 			if (player.getParty() != null)
 			{
 				for (L2PcInstance member : player.getParty().getMembers())
