@@ -117,7 +117,7 @@ public class TopBBSManager extends BaseBBSManager
 					}
 					else
 					{
-						content = content.replace("%serveronline%", "");
+						content = content.replace("%serveronline%", getRealOnline() + SmartCommunityConfigs.EXTRA_PLAYERS_COUNT);
 					}
 					break;
 				default:
