@@ -42,6 +42,7 @@ import l2r.gameserver.model.zone.type.L2BossZone;
 import l2r.util.L2FastList;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * @author DaRkRaGe Revised by Emperorc
@@ -267,7 +268,8 @@ public class GrandBossManager
 		_bossStatus.put(bossId, status);
 		_log.info(getClass().getSimpleName() + ": Updated " + NpcTable.getInstance().getTemplate(bossId).getName() + "(" + bossId + ") status to " + status);
 		updateDb(bossId, true);
-		if (status == 0)
+		
+		if ((status == 0) && CustomServerConfigs.ANNOUNCE_DEATH_REVIVE_OF_RAIDS)
 		{
 			Announcements.getInstance().handleAnnounce("RaidBoss Manager: " + NpcTable.getInstance().getTemplate(bossId).getName() + " has spawned!", 0, true);
 		}

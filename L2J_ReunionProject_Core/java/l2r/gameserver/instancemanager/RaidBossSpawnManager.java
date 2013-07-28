@@ -40,6 +40,7 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2RaidBossInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.util.Rnd;
+import gr.reunion.configs.CustomServerConfigs;
 
 /**
  * Raid Boss spawn manager.
@@ -167,8 +168,11 @@ public class RaidBossSpawnManager
 			}
 			
 			_schedules.remove(bossId);
-			if (raidboss != null)
+			
+			if ((raidboss != null) && CustomServerConfigs.ANNOUNCE_DEATH_REVIVE_OF_RAIDS)
+			{
 				Announcements.getInstance().handleAnnounce("RaidBoss Manager: " + raidboss.getName() + " has spawned!", 0, true);
+			}
 		}
 	}
 	
