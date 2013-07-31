@@ -2215,6 +2215,13 @@ public final class Formulas
 		// Check for non-reflected skilltypes, need additional retail check
 		switch (skill.getSkillType())
 		{
+		// vGodfather fixes
+			case FEAR:
+			case MUTE:
+			case PARALYZE:
+			case SLEEP:
+			case DEBUFF:
+				// vGodFather fixes End
 			case PDAM:
 			case MDAM:
 			case BLOW:
@@ -2232,7 +2239,9 @@ public final class Formulas
 				}
 				break;
 			default:
+			{
 				return SKILL_REFLECT_FAILED;
+			}
 		}
 		
 		final double reflectChance = target.calcStat(skill.isMagic() ? Stats.REFLECT_SKILL_MAGIC : Stats.REFLECT_SKILL_PHYSIC, 0, null, skill);
