@@ -2217,6 +2217,8 @@ public final class Formulas
 		{
 		// vGodfather fixes
 			case FEAR:
+			case ROOT:
+			case STUN:
 			case MUTE:
 			case PARALYZE:
 			case SLEEP:
