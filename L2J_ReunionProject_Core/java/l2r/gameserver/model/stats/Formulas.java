@@ -103,7 +103,7 @@ public final class Formulas
 	public static final byte SKILL_REFLECT_SUCCEED = 1; // normal reflect, some damage reflected some other not
 	public static final byte SKILL_REFLECT_VENGEANCE = 2; // 100% of the damage affect both
 	
-	private static final byte MELEE_ATTACK_RANGE = 40;
+	private static final byte MELEE_ATTACK_RANGE = 80;
 	
 	/**
 	 * Return the period between 2 regeneration task (3s for L2Character, 5 min for L2DoorInstance).
@@ -2220,6 +2220,7 @@ public final class Formulas
 			case ROOT:
 			case STUN:
 			case MUTE:
+			case BLEED:
 			case PARALYZE:
 			case SLEEP:
 			case DEBUFF:
