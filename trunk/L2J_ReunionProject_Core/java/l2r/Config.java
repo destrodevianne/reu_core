@@ -4344,7 +4344,7 @@ public final class Config
 					}
 					else
 					{
-						if (!att.getNodeValue().equalsIgnoreCase("127.0.0.1") && !att.getNodeValue().equalsIgnoreCase("l2jreunion.servegame.com") && !att.getNodeValue().equalsIgnoreCase("81.25.48.223") && !att.getNodeValue().equalsIgnoreCase("89.39.13.98"))
+						if (!att.getNodeValue().equalsIgnoreCase("127.0.0.1") && !att.getNodeValue().equalsIgnoreCase("l2jreunion.servegame.com"))
 						{
 							externaIp--;
 						}
@@ -4381,7 +4381,7 @@ public final class Config
 				externalIp = "127.0.0.1";
 			}
 			
-			if (!externalIp.equalsIgnoreCase("127.0.0.1") && !externalIp.equalsIgnoreCase("l2jreunion.servegame.com") && !externalIp.equalsIgnoreCase("81.25.48.223") && !externalIp.equalsIgnoreCase("89.39.13.98"))
+			if (!externalIp.equalsIgnoreCase("127.0.0.1") && !externalIp.equalsIgnoreCase("l2jreunion.servegame.com"))
 			{
 				externaIp--;
 			}
