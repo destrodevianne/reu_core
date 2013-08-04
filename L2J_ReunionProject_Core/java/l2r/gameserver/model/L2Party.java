@@ -63,6 +63,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configs.PcBangConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
 
 /**
@@ -906,7 +907,10 @@ public class L2Party extends AbstractPlayerGroup
 						if (addexp > 0)
 						{
 							member.getActingPlayer().updateVitalityPoints(vitalityPoints, true, false);
-							PcCafePointsManager.getInstance().givePcCafePoint(((L2PcInstance) member), addexp);
+							if (PcBangConfigs.PC_BANG_ENABLED)
+							{
+								PcCafePointsManager.getInstance().givePcCafePoint(((L2PcInstance) member), addexp);
+							}
 						}
 					}
 					else
