@@ -1156,6 +1156,26 @@ public final class Formulas
 			}
 		}
 		
+		if (attacker.isPlayer())
+		{
+			if (((L2PcInstance) attacker).getClassId().isMage())
+			{
+				damage = damage * BalanceConfigs.ALT_MAGES_MAGICAL_DAMAGE_MULTI;
+			}
+			else
+			{
+				damage = damage * BalanceConfigs.ALT_FIGHTERS_MAGICAL_DAMAGE_MULTI;
+			}
+		}
+		else if (attacker.isSummon())
+		{
+			damage = damage * BalanceConfigs.ALT_PETS_MAGICAL_DAMAGE_MULTI;
+		}
+		else if (attacker.isNpc())
+		{
+			damage = damage * BalanceConfigs.ALT_NPC_MAGICAL_DAMAGE_MULTI;
+		}
+		
 		return damage;
 	}
 	
