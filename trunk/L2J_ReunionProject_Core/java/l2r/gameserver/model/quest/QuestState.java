@@ -125,6 +125,7 @@ public final class QuestState
 	
 	/**
 	 * @return the current State of this QuestState
+	 * @see l2r.gameserver.model.quest.State
 	 */
 	public byte getState()
 	{
@@ -133,6 +134,7 @@ public final class QuestState
 	
 	/**
 	 * @return {@code true} if the State of this QuestState is CREATED, {@code false} otherwise
+	 * @see l2r.gameserver.model.quest.State
 	 */
 	public boolean isCreated()
 	{
@@ -141,6 +143,7 @@ public final class QuestState
 	
 	/**
 	 * @return {@code true} if the State of this QuestState is STARTED, {@code false} otherwise
+	 * @see l2r.gameserver.model.quest.State
 	 */
 	public boolean isStarted()
 	{
@@ -149,6 +152,7 @@ public final class QuestState
 	
 	/**
 	 * @return {@code true} if the State of this QuestState is COMPLETED, {@code false} otherwise
+	 * @see l2r.gameserver.model.quest.State
 	 */
 	public boolean isCompleted()
 	{
@@ -159,6 +163,7 @@ public final class QuestState
 	 * @param state the new state of the quest to set
 	 * @return {@code true} if state was changed, {@code false} otherwise
 	 * @see #setState(byte state, boolean saveInDb)
+	 * @see l2r.gameserver.model.quest.State
 	 */
 	public boolean setState(byte state)
 	{
@@ -170,6 +175,7 @@ public final class QuestState
 	 * @param state the new state of the quest to set
 	 * @param saveInDb if {@code true}, will save the state change in the database
 	 * @return {@code true} if state was changed, {@code false} otherwise
+	 * @see l2r.gameserver.model.quest.State
 	 */
 	public boolean setState(byte state, boolean saveInDb)
 	{
@@ -219,7 +225,7 @@ public final class QuestState
 	
 	public String set(String var, int val)
 	{
-		return set(var, String.valueOf(val));
+		return set(var, Integer.toString(val));
 	}
 	
 	/**
@@ -540,7 +546,7 @@ public final class QuestState
 	{
 		if (isStarted())
 		{
-			set("cond", String.valueOf(value));
+			set("cond", Integer.toString(value));
 		}
 		return this;
 	}
@@ -588,7 +594,7 @@ public final class QuestState
 		
 		if (playQuestMiddle)
 		{
-			playSound(QuestSound.ITEMSOUND_QUEST_MIDDLE);
+			Quest.playSound(_player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 		}
 		return this;
 	}
@@ -616,7 +622,7 @@ public final class QuestState
 	 */
 	public long getQuestItemsCount(int itemId)
 	{
-		return Quest.getQuestItemsCount(getPlayer(), itemId);
+		return Quest.getQuestItemsCount(_player, itemId);
 	}
 	
 	/**
@@ -625,7 +631,7 @@ public final class QuestState
 	 */
 	public boolean hasQuestItems(int itemId)
 	{
-		return Quest.hasQuestItems(getPlayer(), itemId);
+		return Quest.hasQuestItems(_player, itemId);
 	}
 	
 	/**
@@ -634,7 +640,7 @@ public final class QuestState
 	 */
 	public boolean hasQuestItems(int... itemIds)
 	{
-		return Quest.hasQuestItems(getPlayer(), itemIds);
+		return Quest.hasQuestItems(_player, itemIds);
 	}
 	
 	/**
@@ -644,7 +650,7 @@ public final class QuestState
 	 */
 	public int getEnchantLevel(int itemId)
 	{
-		return Quest.getEnchantLevel(getPlayer(), itemId);
+		return Quest.getEnchantLevel(_player, itemId);
 	}
 	
 	/**
@@ -659,12 +665,21 @@ public final class QuestState
 	
 	/**
 	 * Give reward to player using multiplier's
+	 * @param item
+	 */
+	public void rewardItems(ItemHolder item)
+	{
+		Quest.rewardItems(_player, item);
+	}
+	
+	/**
+	 * Give reward to player using multiplier's
 	 * @param itemId
 	 * @param count
 	 */
 	public void rewardItems(int itemId, long count)
 	{
-		Quest.rewardItems(getPlayer(), itemId, count);
+		Quest.rewardItems(_player, itemId, count);
 	}
 	
 	/**
@@ -674,41 +689,37 @@ public final class QuestState
 	 */
 	public void giveItems(int itemId, long count)
 	{
-		giveItems(itemId, count, 0);
+		Quest.giveItems(_player, itemId, count, 0);
 	}
 	
 	public void giveItems(ItemHolder holder)
 	{
-		giveItems(holder.getId(), holder.getCount(), 0);
+		Quest.giveItems(_player, holder.getId(), holder.getCount(), 0);
 	}
 	
 	public void giveItems(int itemId, long count, int enchantlevel)
 	{
-		Quest.giveItems(getPlayer(), itemId, count, enchantlevel);
+		Quest.giveItems(_player, itemId, count, enchantlevel);
 	}
 	
 	public void giveItems(int itemId, long count, byte attributeId, int attributeLevel)
 	{
-		Quest.giveItems(getPlayer(), itemId, count, attributeId, attributeLevel);
+		Quest.giveItems(_player, itemId, count, attributeId, attributeLevel);
 	}
 	
-	/**
-	 * Drop Quest item using Config.RATE_QUEST_DROP
-	 * @param itemId int Item Identifier of the item to be dropped
-	 * @param count (minCount, maxCount) long Quantity of items to be dropped
-	 * @param neededCount Quantity of items needed for quest
-	 * @param dropChance int Base chance of drop, same as in droplist
-	 * @param sound boolean indicating whether to play sound
-	 * @return boolean indicating whether player has requested number of items
-	 */
-	public boolean dropQuestItems(int itemId, int count, long neededCount, int dropChance, boolean sound)
+	public boolean giveItemRandomly(int itemId, long amount, long limit, double dropChance, boolean playSound)
 	{
-		return dropQuestItems(itemId, count, count, neededCount, dropChance, sound);
+		return Quest.giveItemRandomly(_player, null, itemId, amount, amount, limit, dropChance, playSound);
 	}
 	
-	public boolean dropQuestItems(int itemId, int minCount, int maxCount, long neededCount, int dropChance, boolean sound)
+	public boolean giveItemRandomly(L2Npc npc, int itemId, long amount, long limit, double dropChance, boolean playSound)
 	{
-		return Quest.dropQuestItems(getPlayer(), itemId, minCount, maxCount, neededCount, dropChance, sound);
+		return Quest.giveItemRandomly(_player, npc, itemId, amount, amount, limit, dropChance, playSound);
+	}
+	
+	public boolean giveItemRandomly(L2Npc npc, int itemId, long minAmount, long maxAmount, long limit, double dropChance, boolean playSound)
+	{
+		return Quest.giveItemRandomly(_player, npc, itemId, minAmount, maxAmount, limit, dropChance, playSound);
 	}
 	
 	// TODO: More radar functions need to be added when the radar class is complete.
@@ -742,7 +753,7 @@ public final class QuestState
 	 */
 	public void takeItems(int itemId, long count)
 	{
-		Quest.takeItems(getPlayer(), itemId, count);
+		Quest.takeItems(_player, itemId, count);
 	}
 	
 	/**
@@ -751,7 +762,7 @@ public final class QuestState
 	 */
 	public void playSound(String sound)
 	{
-		Quest.playSound(getPlayer(), sound);
+		Quest.playSound(_player, sound);
 	}
 	
 	/**
@@ -760,7 +771,7 @@ public final class QuestState
 	 */
 	public void playSound(QuestSound sound)
 	{
-		Quest.playSound(getPlayer(), sound);
+		Quest.playSound(_player, sound);
 	}
 	
 	/**
@@ -770,8 +781,8 @@ public final class QuestState
 	 */
 	public void addExpAndSp(int exp, int sp)
 	{
-		Quest.addExpAndSp(getPlayer(), exp, sp);
-		PcCafePointsManager.getInstance().givePcCafePoint(getPlayer(), (long) (exp * Config.RATE_QUEST_REWARD_XP));
+		Quest.addExpAndSp(_player, exp, sp);
+		PcCafePointsManager.getInstance().givePcCafePoint(_player, (long) (exp * Config.RATE_QUEST_REWARD_XP));
 	}
 	
 	public int getRandom(int max)
@@ -785,7 +796,7 @@ public final class QuestState
 	 */
 	public int getItemEquipped(int loc)
 	{
-		return Quest.getItemEquipped(getPlayer(), loc);
+		return Quest.getItemEquipped(_player, loc);
 	}
 	
 	/**
@@ -812,7 +823,7 @@ public final class QuestState
 	 */
 	public void startQuestTimer(String name, long time)
 	{
-		getQuest().startQuestTimer(name, time, null, getPlayer(), false);
+		getQuest().startQuestTimer(name, time, null, _player, false);
 	}
 	
 	/**
@@ -824,7 +835,7 @@ public final class QuestState
 	 */
 	public void startQuestTimer(String name, long time, L2Npc npc)
 	{
-		getQuest().startQuestTimer(name, time, npc, getPlayer(), false);
+		getQuest().startQuestTimer(name, time, npc, _player, false);
 	}
 	
 	/**
@@ -835,7 +846,7 @@ public final class QuestState
 	 */
 	public void startRepeatingQuestTimer(String name, long time)
 	{
-		getQuest().startQuestTimer(name, time, null, getPlayer(), true);
+		getQuest().startQuestTimer(name, time, null, _player, true);
 	}
 	
 	/**
@@ -847,7 +858,7 @@ public final class QuestState
 	 */
 	public void startRepeatingQuestTimer(String name, long time, L2Npc npc)
 	{
-		getQuest().startQuestTimer(name, time, npc, getPlayer(), true);
+		getQuest().startQuestTimer(name, time, npc, _player, true);
 	}
 	
 	/**
@@ -856,7 +867,7 @@ public final class QuestState
 	 */
 	public final QuestTimer getQuestTimer(String name)
 	{
-		return getQuest().getQuestTimer(name, null, getPlayer());
+		return getQuest().getQuestTimer(name, null, _player);
 	}
 	
 	// --- Spawn methods ---
@@ -1002,7 +1013,7 @@ public final class QuestState
 	 */
 	public String showHtmlFile(String fileName)
 	{
-		return getQuest().showHtmlFile(getPlayer(), fileName);
+		return getQuest().showHtmlFile(_player, fileName);
 	}
 	
 	/**
@@ -1137,6 +1148,10 @@ public final class QuestState
 		_player.sendPacket(new PlaySound(2, voice, 0, 0, _player.getX(), _player.getY(), _player.getZ()));
 	}
 	
+	/**
+	 * Used only in 255_Tutorial
+	 * @param html
+	 */
 	public void showTutorialHTML(String html)
 	{
 		String text = HtmCache.getInstance().getHtm(_player.getHtmlPrefix(), "data/scripts/quests/255_Tutorial/" + html);
@@ -1148,11 +1163,18 @@ public final class QuestState
 		_player.sendPacket(new TutorialShowHtml(text));
 	}
 	
+	/**
+	 * Used only in 255_Tutorial
+	 */
 	public void closeTutorialHtml()
 	{
 		_player.sendPacket(TutorialCloseHtml.STATIC_PACKET);
 	}
 	
+	/**
+	 * Used only in 255_Tutorial
+	 * @param number
+	 */
 	public void onTutorialClientEvent(int number)
 	{
 		_player.sendPacket(new TutorialEnableClientEvent(number));
