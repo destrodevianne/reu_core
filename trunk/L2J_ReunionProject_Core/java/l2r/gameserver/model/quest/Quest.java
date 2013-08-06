@@ -47,7 +47,6 @@ import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.ZoneManager;
-import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2Spawn;
@@ -3292,12 +3291,6 @@ public class Quest extends ManagedScript
 			return;
 		}
 		
-		// If item for reward is adena (Id=57), modify count with rate for quest reward if rates available
-		if ((itemId == PcInventory.ADENA_ID) && (enchantlevel == 0))
-		{
-			count = (long) (count * Config.RATE_QUEST_REWARD_ADENA);
-		}
-		
 		// Add items to player's inventory
 		final L2ItemInstance item = player.getInventory().addItem("Quest", itemId, count, player, player.getTarget());
 		if (item == null)
@@ -3459,95 +3452,6 @@ public class Quest extends ManagedScript
 			}
 		}
 		return false;
-	}
-	
-	/**
-	 * Drop Quest item using Config.RATE_QUEST_DROP
-	 * @param player
-	 * @param itemId int Item Identifier of the item to be dropped
-	 * @param count (minCount, maxCount) long Quantity of items to be dropped
-	 * @param neededCount Quantity of items needed for quest
-	 * @param dropChance int Base chance of drop, same as in droplist
-	 * @param sound boolean indicating whether to play sound
-	 * @return boolean indicating whether player has requested number of items
-	 */
-	public boolean dropQuestItems(L2PcInstance player, int itemId, int count, long neededCount, int dropChance, boolean sound)
-	{
-		return dropQuestItems(player, itemId, count, count, neededCount, dropChance, sound);
-	}
-	
-	/**
-	 * @param player
-	 * @param itemId
-	 * @param minCount
-	 * @param maxCount
-	 * @param neededCount
-	 * @param dropChance
-	 * @param sound
-	 * @return
-	 */
-	public static boolean dropQuestItems(L2PcInstance player, int itemId, int minCount, int maxCount, long neededCount, int dropChance, boolean sound)
-	{
-		dropChance *= Config.RATE_QUEST_DROP / ((player.getParty() != null) ? player.getParty().getMemberCount() : 1);
-		long currentCount = getQuestItemsCount(player, itemId);
-		
-		if ((neededCount > 0) && (currentCount >= neededCount))
-		{
-			return true;
-		}
-		
-		if (currentCount >= neededCount)
-		{
-			return true;
-		}
-		
-		long itemCount = 0;
-		int random = Rnd.get(L2DropData.MAX_CHANCE);
-		
-		while (random < dropChance)
-		{
-			// Get the item quantity dropped
-			if (minCount < maxCount)
-			{
-				itemCount += Rnd.get(minCount, maxCount);
-			}
-			else if (minCount == maxCount)
-			{
-				itemCount += minCount;
-			}
-			else
-			{
-				itemCount++;
-			}
-			
-			// Prepare for next iteration if dropChance > L2DropData.MAX_CHANCE
-			dropChance -= L2DropData.MAX_CHANCE;
-		}
-		
-		if (itemCount > 0)
-		{
-			// if over neededCount, just fill the gap
-			if ((neededCount > 0) && ((currentCount + itemCount) > neededCount))
-			{
-				itemCount = neededCount - currentCount;
-			}
-			
-			// Inventory slot check
-			if (!player.getInventory().validateCapacityByItemId(itemId))
-			{
-				return false;
-			}
-			
-			// Give the item to Player
-			player.addItem("Quest", itemId, itemCount, player.getTarget(), true);
-			
-			if (sound)
-			{
-				playSound(player, ((currentCount + itemCount) < neededCount) ? QuestSound.ITEMSOUND_QUEST_ITEMGET : QuestSound.ITEMSOUND_QUEST_MIDDLE);
-			}
-		}
-		
-		return ((neededCount > 0) && ((currentCount + itemCount) >= neededCount));
 	}
 	
 	/**
