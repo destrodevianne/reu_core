@@ -613,6 +613,10 @@ public final class Config
 	public static List<Integer> LIST_OLY_RESTRICTED_ITEMS;
 	public static int ALT_OLY_ENCHANT_LIMIT;
 	public static int ALT_OLY_WAIT_TIME;
+	public static boolean ENABLE_OLY_ANTIFEED;
+	public static String OLYMPIAD_PERIOD;
+	public static boolean ENABLE_OLYMPIAD;
+	public static int[] ALT_OLY_END_HOUR = new int[3];
 	public static int ALT_MANOR_REFRESH_TIME;
 	public static int ALT_MANOR_REFRESH_MIN;
 	public static int ALT_MANOR_APPROVE_TIME;
@@ -2689,6 +2693,16 @@ public final class Config
 			}
 			ALT_OLY_ENCHANT_LIMIT = Integer.parseInt(Olympiad.getProperty("AltOlyEnchantLimit", "-1"));
 			ALT_OLY_WAIT_TIME = Integer.parseInt(Olympiad.getProperty("AltOlyWaitTime", "120"));
+			
+			// More olympiad settings
+			ENABLE_OLY_ANTIFEED = Boolean.parseBoolean(Olympiad.getProperty("EnableOlyAntifeed", "False"));
+			OLYMPIAD_PERIOD = Olympiad.getProperty("CustomOlyPeriod", "MONTH");
+			ENABLE_OLYMPIAD = Boolean.parseBoolean(Olympiad.getProperty("EnableOlympiad", "True"));
+			String[] times = Olympiad.getProperty("AltOlyEndHour", "12:00:00").split(":");
+			for (int i = 0; i < 3; i++)
+			{
+				ALT_OLY_END_HOUR[i] = Integer.parseInt(times[i]);
+			}
 			
 			final File hex = new File(HEXID_FILE);
 			try (InputStream is = new FileInputStream(hex))
