@@ -300,8 +300,15 @@ public class GameServer
 		ManorData.getInstance();
 		
 		printSection("Olympiad");
-		Olympiad.getInstance();
-		Hero.getInstance();
+		if (Config.ENABLE_OLYMPIAD)
+		{
+			Olympiad.getInstance();
+			Hero.getInstance();
+		}
+		else
+		{
+			_log.info("Olympiad is disable by config.");
+		}
 		
 		// Call to load caches
 		printSection("Cache");

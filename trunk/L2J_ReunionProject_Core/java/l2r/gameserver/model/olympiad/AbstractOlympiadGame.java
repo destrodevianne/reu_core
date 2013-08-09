@@ -45,7 +45,6 @@ import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-import gr.reunion.configs.CustomServerConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 /**
@@ -210,7 +209,7 @@ public abstract class AbstractOlympiadGame
 			player.setOlympiadSide(par.getSide());
 			player.olyBuff = 5;
 			loc.setInstanceId(OlympiadGameManager.getInstance().getOlympiadTask(id).getZone().getInstanceId());
-			if (CustomServerConfigs.ENABLE_OLY_ANTIFEED)
+			if (Config.ENABLE_OLY_ANTIFEED)
 			{
 				player.setAntiFeedProtection(true);
 				player.startAntifeedProtection(true, true);
@@ -453,7 +452,7 @@ public abstract class AbstractOlympiadGame
 		}
 		
 		player.setInstanceId(0);
-		if (CustomServerConfigs.ENABLE_OLY_ANTIFEED)
+		if (Config.ENABLE_OLY_ANTIFEED)
 		{
 			player.setAntiFeedProtection(false);
 			player.startAntifeedProtection(false, true);
