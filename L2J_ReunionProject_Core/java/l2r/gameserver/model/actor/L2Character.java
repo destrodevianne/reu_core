@@ -8044,4 +8044,19 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		return _protected;
 	}
+	
+	// ============================================== //
+	// Premium Engine By L][Reunion Team //
+	// ============================================== //
+	private boolean _premiumService = false;
+	
+	public void setPremiumService(boolean premiumService)
+	{
+		_premiumService = premiumService;
+	}
+	
+	public boolean isPremium()
+	{
+		return _premiumService;
+	}
 }
