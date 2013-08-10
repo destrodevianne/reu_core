@@ -125,16 +125,10 @@ public class L2SummonAI extends L2PlayableAI implements Runnable
 	
 	private void thinkPickUp()
 	{
-		if (checkTargetLost(getTarget()))
-		{
-			return;
-		}
-		if (maybeMoveToPawn(getTarget(), 36))
-		{
-			return;
-		}
-		setIntention(AI_INTENTION_IDLE);
-		((L2Summon.AIAccessor) _accessor).doPickupItem(getTarget());
+		// TODO: FIXME disabled to prevent dupe items
+		/**
+		 * if (checkTargetLost(getTarget())) { return; } if (maybeMoveToPawn(getTarget(), 36)) { return; } setIntention(AI_INTENTION_IDLE); ((L2Summon.AIAccessor) _accessor).doPickupItem(getTarget());
+		 */
 	}
 	
 	private void thinkInteract()
