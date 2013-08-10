@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Future;
@@ -30,21 +31,17 @@ import l2r.gameserver.GameTimeController;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.instancemanager.DuelManager;
 import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
-import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2ServitorInstance;
 import l2r.gameserver.model.entity.DimensionalRift;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExAskModifyPartyLooting;
@@ -63,8 +60,6 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.configs.PcBangConfigs;
-import gr.reunion.configs.PremiumServiceConfigs;
 
 /**
  * This class serves as a container for player parties.
@@ -812,116 +807,64 @@ public class L2Party extends AbstractPlayerGroup
 	 * @param partyDmg
 	 * @param target
 	 */
-	public void distributeXpAndSp(long xpReward_pr, int spReward_pr, long xpReward, int spReward, List<L2Playable> rewardedMembers, int topLvl, int partyDmg, L2Attackable target)
+	public void distributeXpAndSp(long xpReward_pr, int spReward_pr, long xpReward, int spReward, List<L2PcInstance> rewardedMembers, int topLvl, int partyDmg, L2Attackable target)
 	{
-		List<L2Playable> validMembers = getValidMembers(rewardedMembers, topLvl);
+		final List<L2PcInstance> validMembers = getValidMembers(rewardedMembers, topLvl);
 		
-		float penalty;
-		double sqLevel;
-		int temp_sp;
-		long temp_exp;
-		double preCalculation;
-		
+		xpReward *= getExpBonus(validMembers.size());
+		spReward *= getSpBonus(validMembers.size());
 		xpReward_pr *= getExpBonus(validMembers.size());
 		spReward_pr *= getSpBonus(validMembers.size());
-		temp_exp = xpReward;
-		temp_sp = spReward;
 		
-		double sqLevelSum = 0;
-		for (L2Playable character : validMembers)
+		int sqLevelSum = 0;
+		for (L2PcInstance member : validMembers)
 		{
-			sqLevelSum += (character.getLevel() * character.getLevel());
+			sqLevelSum += (member.getLevel() * member.getLevel());
 		}
 		
 		final float vitalityPoints = (target.getVitalityPoints(partyDmg) * Config.RATE_PARTY_XP) / validMembers.size();
 		final boolean useVitalityRate = target.useVitalityRate();
 		
-		// Go through the L2PcInstances and L2PetInstances (not L2ServitorInstances) that must be rewarded
-		synchronized (rewardedMembers)
+		for (L2PcInstance member : rewardedMembers)
 		{
-			for (L2Character member : rewardedMembers)
+			if (member.isDead())
 			{
-				if (member.isDead())
-				{
-					continue;
-				}
+				continue;
+			}
+			
+			long addexp;
+			int addsp;
+			
+			if (validMembers.contains(member))
+			{
+				final float penalty = member.hasServitor() ? ((L2ServitorInstance) member.getSummon()).getExpPenalty() : 0;
 				
-				if (member.isPlayer())
-				{
-					if (((L2PcInstance) member).isPremium() && PremiumServiceConfigs.USE_PREMIUM_SERVICE)
-					{
-						xpReward = xpReward_pr;
-						spReward = spReward_pr;
-					}
-					else
-					{
-						xpReward = temp_exp;
-						spReward = temp_sp;
-					}
-				}
-				else
-				{
-					xpReward = temp_exp;
-					spReward = temp_sp;
-				}
+				final double sqLevel = member.getLevel() * member.getLevel();
+				final double preCalculation = (sqLevel / sqLevelSum) * (1 - penalty);
 				
-				penalty = 0;
-				
-				// The servitor penalty
-				if ((member.getSummon() != null) && member.getSummon().isServitor())
+				if (member.isPremium())
 				{
-					penalty = ((L2ServitorInstance) member.getSummon()).getExpPenalty();
-				}
-				// Pets that leech xp from the owner (like babypets) do not get rewarded directly
-				if (member.isPet())
-				{
-					if (((L2PetInstance) member).getPetLevelData().getOwnerExpTaken() > 0)
-					{
-						continue;
-					}
-					// TODO: This is a temporary fix while correct pet xp in party is figured out
-					penalty = (float) 0.85;
-				}
-				
-				// Calculate and add the EXP and SP reward to the member
-				if (validMembers.contains(member))
-				{
-					sqLevel = member.getLevel() * member.getLevel();
-					preCalculation = (sqLevel / sqLevelSum) * (1 - penalty);
 					
-					// Add the XP/SP points to the requested party member
-					long addexp = Math.round(member.calcStat(Stats.EXPSP_RATE, xpReward * preCalculation, null, null));
-					int addsp = (int) member.calcStat(Stats.EXPSP_RATE, spReward * preCalculation, null, null);
-					if (member.isPlayer())
-					{
-						addexp = calculateExpSpPartyCutoff(member.getActingPlayer(), topLvl, addexp, addsp, useVitalityRate);
-						final int skillLvl = member.getActingPlayer().getSkillLevel(467);
-						if (skillLvl > 0)
-						{
-							final L2Skill skill = SkillTable.getInstance().getInfo(467, skillLvl);
-							if (skill.getExpNeeded() <= addexp)
-							{
-								member.getActingPlayer().absorbSoul(skill, target);
-							}
-						}
-						if (addexp > 0)
-						{
-							member.getActingPlayer().updateVitalityPoints(vitalityPoints, true, false);
-							if (PcBangConfigs.PC_BANG_ENABLED)
-							{
-								PcCafePointsManager.getInstance().givePcCafePoint(((L2PcInstance) member), addexp);
-							}
-						}
-					}
-					else
-					{
-						member.addExpAndSp(addexp, addsp);
-					}
+					addexp = Math.round(member.calcStat(Stats.EXPSP_RATE, xpReward_pr * preCalculation, null, null));
+					addsp = (int) member.calcStat(Stats.EXPSP_RATE, spReward_pr * preCalculation, null, null);
 				}
 				else
 				{
-					member.addExpAndSp(0, 0);
+					addexp = Math.round(member.calcStat(Stats.EXPSP_RATE, xpReward * preCalculation, null, null));
+					addsp = (int) member.calcStat(Stats.EXPSP_RATE, spReward * preCalculation, null, null);
 				}
+				
+				addexp = calculateExpSpPartyCutoff(member.getActingPlayer(), topLvl, addexp, addsp, useVitalityRate);
+				
+				if (addexp > 0)
+				{
+					member.updateVitalityPoints(vitalityPoints, true, false);
+					PcCafePointsManager.getInstance().givePcCafePoint(member, addexp);
+				}
+			}
+			else
+			{
+				member.addExpAndSp(0, 0);
 			}
 		}
 	}
@@ -975,14 +918,13 @@ public class L2Party extends AbstractPlayerGroup
 		_partyLvl = newLevel;
 	}
 	
-	private List<L2Playable> getValidMembers(List<L2Playable> members, int topLvl)
+	private List<L2PcInstance> getValidMembers(List<L2PcInstance> members, int topLvl)
 	{
-		List<L2Playable> validMembers = new FastList<>();
+		final List<L2PcInstance> validMembers = new ArrayList<>();
 		
-		// Fixed LevelDiff cutoff point
 		if (Config.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("level"))
 		{
-			for (L2Playable member : members)
+			for (L2PcInstance member : members)
 			{
 				if ((topLvl - member.getLevel()) <= Config.PARTY_XP_CUTOFF_LEVEL)
 				{
@@ -990,16 +932,15 @@ public class L2Party extends AbstractPlayerGroup
 				}
 			}
 		}
-		// Fixed MinPercentage cutoff point
 		else if (Config.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("percentage"))
 		{
 			int sqLevelSum = 0;
-			for (L2Playable member : members)
+			for (L2PcInstance member : members)
 			{
 				sqLevelSum += (member.getLevel() * member.getLevel());
 			}
 			
-			for (L2Playable member : members)
+			for (L2PcInstance member : members)
 			{
 				int sqLevel = member.getLevel() * member.getLevel();
 				if ((sqLevel * 100) >= (sqLevelSum * Config.PARTY_XP_CUTOFF_PERCENT))
@@ -1008,11 +949,10 @@ public class L2Party extends AbstractPlayerGroup
 				}
 			}
 		}
-		// Automatic cutoff method
 		else if (Config.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("auto"))
 		{
 			int sqLevelSum = 0;
-			for (L2Playable member : members)
+			for (L2PcInstance member : members)
 			{
 				sqLevelSum += (member.getLevel() * member.getLevel());
 			}
@@ -1027,7 +967,7 @@ public class L2Party extends AbstractPlayerGroup
 				i = BONUS_EXP_SP.length - 1;
 			}
 			
-			for (L2Playable member : members)
+			for (L2PcInstance member : members)
 			{
 				int sqLevel = member.getLevel() * member.getLevel();
 				if (sqLevel >= (sqLevelSum / (members.size() * members.size())))
@@ -1036,7 +976,6 @@ public class L2Party extends AbstractPlayerGroup
 				}
 			}
 		}
-		// High Five cutoff method
 		else if (Config.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("highfive"))
 		{
 			validMembers.addAll(members);

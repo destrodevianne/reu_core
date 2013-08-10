@@ -584,9 +584,6 @@ public final class L2PcInstance extends L2Playable
 	private int namePrefixCategory = 0;
 	private String namePrefix = "[GM]";
 	
-	/** Premium Service System */
-	private boolean _premiumService = false;
-	
 	/** PC Bang System */
 	private int _pcBangPoints = 0;
 	
@@ -16518,19 +16515,6 @@ public final class L2PcInstance extends L2Playable
 		{
 			sendPacket(SystemMessageId.YOU_ARE_STARTING_TO_FEEL_THE_EFFECTS_OF_NEVITS_ADVENT_BLESSING);
 		}
-	}
-	
-	// ============================================== //
-	// Premium Engine By L][Reunion Team //
-	// ============================================== //
-	public void setPremiumService(boolean premiumService)
-	{
-		_premiumService = premiumService;
-	}
-	
-	public boolean isPremium()
-	{
-		return _premiumService;
 	}
 	
 	// ============================================== //
