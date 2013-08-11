@@ -42,6 +42,7 @@ import l2r.gameserver.datatables.HerbDropTable;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.ManorData;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
+import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2CommandChannel;
@@ -737,6 +738,7 @@ public class L2Attackable extends L2Npc
 								if (addexp > 0)
 								{
 									attacker.updateVitalityPoints(getVitalityPoints(damage), true, false);
+									PcCafePointsManager.getInstance().givePcCafePoint(attacker, addexp);
 								}
 							}
 						}
