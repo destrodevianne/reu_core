@@ -182,13 +182,6 @@ public final class RequestDropItem extends L2GameClientPacket
 			return;
 		}
 		
-		// GodFather
-		if (activeChar.hasSummon() || activeChar.hasPet())
-		{
-			activeChar.sendMessage("While your pet is summoned, you cannot discard items.");
-			return;
-		}
-		
 		if (Config.DEBUG)
 		{
 			_log.fine("requested drop item " + _objectId + "(" + item.getCount() + ") at " + _x + "/" + _y + "/" + _z);
