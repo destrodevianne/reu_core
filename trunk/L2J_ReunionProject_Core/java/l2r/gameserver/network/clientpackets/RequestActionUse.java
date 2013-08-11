@@ -951,8 +951,8 @@ public final class RequestActionUse extends L2GameClientPacket
 			return;
 		}
 		
-		final double distance = Math.sqrt(requester.getPlanDistanceSq(target));
-		if ((distance > 2000) || (distance < 70) || (requester.getObjectId() == target.getObjectId()))
+		final int distance = (int) Math.sqrt(requester.getPlanDistanceSq(target));
+		if ((distance > 125) || (distance < 15) || (requester.getObjectId() == target.getObjectId()))
 		{
 			sendPacket(SystemMessageId.TARGET_DO_NOT_MEET_LOC_REQUIREMENTS);
 			return;
