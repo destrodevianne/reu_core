@@ -334,7 +334,6 @@ import gr.reunion.configs.LeaderboardsConfigs;
 import gr.reunion.configs.PremiumServiceConfigs;
 import gr.reunion.configs.PvpRewardSystemConfigs;
 import gr.reunion.datatables.AdventTable;
-import gr.reunion.extra.FlagZoneHandler;
 import gr.reunion.interf.PlayerEventInfo;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.javaBuffer.PlayerMethods;
@@ -344,6 +343,7 @@ import gr.reunion.main.NamePrefix;
 import gr.reunion.premiumSystem.PremiumHandler;
 import gr.reunion.pvpRewardSystem.pvpRewardHandler;
 import gr.reunion.spreeSystem.SpreeHandler;
+import gr.reunion.zones.FlagZoneHandler;
 
 /**
  * This class represents all player characters in the world.<br>

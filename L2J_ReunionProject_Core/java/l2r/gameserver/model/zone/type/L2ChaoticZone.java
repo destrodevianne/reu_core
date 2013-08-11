@@ -27,32 +27,6 @@ import gr.reunion.configs.ChaoticZoneConfigs;
  */
 public class L2ChaoticZone extends L2RespawnZone
 {
-	// Chaotic Zone Revive Spots
-	public static int[] _x =
-	{
-		-76063,
-		-78299,
-		-85489,
-		-87738,
-		-81864
-	};
-	public static int[] _y =
-	{
-		-47285,
-		-54143,
-		-54154,
-		-47331,
-		-43048
-	};
-	public static int[] _z =
-	{
-		-10682,
-		-10682,
-		-10684,
-		-10682,
-		-10686
-	};
-	
 	public L2ChaoticZone(int id)
 	{
 		super(42490);
@@ -107,9 +81,12 @@ public class L2ChaoticZone extends L2RespawnZone
 				@Override
 				public void run()
 				{
-					int r = Rnd.get(5);
-					character.teleToLocation(L2ChaoticZone._x[r], L2ChaoticZone._y[r], L2ChaoticZone._z[r]);
-					character.doRevive();
+					if (character.isDead())
+					{
+						int r = Rnd.get(ChaoticZoneConfigs.CHAOTIC_ZONE_AUTO_RES_LOCS_COUNT);
+						character.teleToLocation(ChaoticZoneConfigs.xCoords[r], ChaoticZoneConfigs.yCoords[r], ChaoticZoneConfigs.zCoords[r]);
+						character.doRevive();
+					}
 				}
 			}, ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY * 1000);
 		}
