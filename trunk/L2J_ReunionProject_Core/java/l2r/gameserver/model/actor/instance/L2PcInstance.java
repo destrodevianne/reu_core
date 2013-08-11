@@ -328,6 +328,7 @@ import l2r.util.Rnd;
 import gnu.trove.list.array.TIntArrayList;
 import gr.reunion.achievementSystem.AchievementsHandler;
 import gr.reunion.configs.AntibotConfigs;
+import gr.reunion.configs.ColorSystemConfigs;
 import gr.reunion.configs.CustomServerConfigs;
 import gr.reunion.configs.FlagZoneConfigs;
 import gr.reunion.configs.LeaderboardsConfigs;
@@ -341,6 +342,7 @@ import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
 import gr.reunion.main.NamePrefix;
 import gr.reunion.premiumSystem.PremiumHandler;
+import gr.reunion.pvpColorSystem.ColorSystemHandler;
 import gr.reunion.pvpRewardSystem.pvpRewardHandler;
 import gr.reunion.spreeSystem.SpreeHandler;
 import gr.reunion.zones.FlagZoneHandler;
@@ -6287,6 +6289,11 @@ public final class L2PcInstance extends L2Playable
 					}
 				}
 				
+				if ((getPvpKills() >= (ColorSystemConfigs.PVP_AMOUNT1)) && (ColorSystemConfigs.PVP_COLOR_SYSTEM_ENABLED))
+				{
+					ColorSystemHandler.getInstance().updatePvPColor(this, getPvpKills());
+				}
+				
 				// Add karma to attacker and increase its PK counter
 				setPvpKills(getPvpKills() + 1);
 				
@@ -6375,6 +6382,11 @@ public final class L2PcInstance extends L2Playable
 		if ((target instanceof L2PcInstance) && AntiFeedManager.getInstance().check(this, target))
 		{
 			setPkKills(getPkKills() + 1);
+		}
+		
+		if ((getPkKills() >= (ColorSystemConfigs.PK_AMOUNT1)) && (ColorSystemConfigs.PK_COLOR_SYSTEM_ENABLED))
+		{
+			ColorSystemHandler.getInstance().updatePkColor(this, getPkKills());
 		}
 		
 		// Send a Server->Client UserInfo packet to attacker with its Karma and PK Counter
