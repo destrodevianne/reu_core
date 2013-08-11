@@ -14,12 +14,14 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneType;
 import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
+import l2r.util.Rnd;
 import gr.reunion.configs.FlagZoneConfigs;
 
 /**
@@ -89,7 +91,7 @@ public class L2FlagZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onDieInside(L2Character character)
+	public void onDieInside(final L2Character character)
 	{
 		if (character.isPlayer())
 		{
@@ -97,6 +99,24 @@ public class L2FlagZone extends L2ZoneType
 			{
 				final MagicSkillUse msu = new MagicSkillUse(character, character, 23096, 1, 1, 1);
 				character.broadcastPacket(msu);
+			}
+			
+			if (FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE)
+			{
+				character.sendMessage("Get ready! You will be revive in " + FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY + " seconds!");
+				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						if (character.isDead())
+						{
+							int r = Rnd.get(FlagZoneConfigs.FLAG_ZONE_AUTO_RES_LOCS_COUNT);
+							character.teleToLocation(FlagZoneConfigs.xCoords[r], FlagZoneConfigs.yCoords[r], FlagZoneConfigs.zCoords[r]);
+							character.doRevive();
+						}
+					}
+				}, FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY * 1000);
 			}
 		}
 	}

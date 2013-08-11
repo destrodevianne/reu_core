@@ -32,6 +32,9 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
+import l2r.gameserver.model.zone.ZoneId;
+import gr.reunion.configs.ChaoticZoneConfigs;
+import gr.reunion.configs.FlagZoneConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 public class Die extends L2GameServerPacket
@@ -61,16 +64,22 @@ public class Die extends L2GameServerPacket
 		_charObjId = cha.getObjectId();
 		_canTeleport = !cha.isPendingRevive();
 		
-		if ((cha instanceof L2PcInstance) && ((L2PcInstance) cha).getWorldRegion().containsZone(42490))
-		{
-			_canTeleport = false;
-		}
-		
 		if (cha.isPlayer())
 		{
-			if (ReunionEvents.isInEvent((L2PcInstance) cha))
+			L2PcInstance activeChar = cha.getActingPlayer();
+			if (activeChar.isInsideZone(ZoneId.ZONE_CHAOTIC) && ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_AUTO_REVIVE)
 			{
-				if (!ReunionEvents.canShowToVillageWindow((L2PcInstance) cha))
+				_canTeleport = false;
+			}
+			
+			if (activeChar.isInsideZone(ZoneId.FLAG) && FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE)
+			{
+				_canTeleport = false;
+			}
+			
+			if (ReunionEvents.isInEvent(activeChar))
+			{
+				if (!ReunionEvents.canShowToVillageWindow(activeChar))
 				{
 					_canTeleport = false;
 				}
@@ -81,7 +90,6 @@ public class Die extends L2GameServerPacket
 		{
 			_sweepable = ((L2Attackable) cha).isSweepActive();
 		}
-		
 	}
 	
 	@Override
