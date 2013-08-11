@@ -586,6 +586,7 @@ public class EnterWorld extends L2GameClientPacket
 		EnterWorldCustomHandler.getInstance().checkAutoSoulshot(activeChar);
 		EnterWorldCustomHandler.getInstance().checkPremiumAndPcBangSystems(activeChar);
 		EnterWorldCustomHandler.getInstance().loadStaticImages(activeChar);
+		EnterWorldCustomHandler.getInstance().initializeColorSystem(activeChar);
 		EnterWorldCustomHandler.getInstance().checkIfBot(activeChar);
 		AntibotSystem.checkOnEnterBot(activeChar);
 		if (Olympiad.getInstance().playerInStadia(activeChar))
