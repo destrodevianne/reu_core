@@ -2344,11 +2344,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			setIsDead(true);
 		}
 		
-		if (killer == null)
-		{
-			return false;
-		}
-		
 		if (!fireDeathListeners(killer))
 		{
 			return false;
