@@ -75,7 +75,7 @@ public class L2ChaoticZone extends L2RespawnZone
 	{
 		if (character.isPlayer() && ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_AUTO_REVIVE)
 		{
-			character.sendMessage("Get ready! You will be revive in " + ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY + " seconds!");
+			character.sendMessage("Get ready! You will be revived in " + ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY + " seconds!");
 			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 			{
 				@Override
