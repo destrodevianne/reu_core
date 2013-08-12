@@ -103,7 +103,7 @@ public class L2FlagZone extends L2ZoneType
 			
 			if (FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE)
 			{
-				character.sendMessage("Get ready! You will be revive in " + FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY + " seconds!");
+				character.sendMessage("Get ready! You will be revived in " + FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY + " seconds!");
 				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 				{
 					@Override
