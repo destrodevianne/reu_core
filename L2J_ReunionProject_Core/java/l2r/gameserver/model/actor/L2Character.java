@@ -2343,6 +2343,12 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			setCurrentHp(0);
 			setIsDead(true);
 		}
+		
+		if (killer == null)
+		{
+			return false;
+		}
+		
 		if (!fireDeathListeners(killer))
 		{
 			return false;
