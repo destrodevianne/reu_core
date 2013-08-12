@@ -29,7 +29,7 @@ public class L2ChaoticZone extends L2RespawnZone
 {
 	public L2ChaoticZone(int id)
 	{
-		super(42490);
+		super(id);
 	}
 	
 	@Override
