@@ -43,6 +43,7 @@ import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
+import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.ItemsOnGroundManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
@@ -70,7 +71,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.PetInventoryUpdate;
-import l2r.gameserver.network.serverpackets.PetItemList;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.StopMove;
 import l2r.gameserver.network.serverpackets.SystemMessage;
@@ -514,20 +514,13 @@ public class L2PetInstance extends L2Summon
 	@Override
 	protected void doPickupItem(L2Object object)
 	{
-		boolean follow = getFollowStatus();
 		if (isDead())
 		{
 			return;
 		}
+		
 		getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
-		StopMove sm = new StopMove(getObjectId(), getX(), getY(), getZ(), getHeading());
-		
-		if (Config.DEBUG)
-		{
-			_logPet.fine("Pet pickup pos: " + object.getX() + " " + object.getY() + " " + object.getZ());
-		}
-		
-		broadcastPacket(sm);
+		broadcastPacket(new StopMove(this));
 		
 		if (!(object instanceof L2ItemInstance))
 		{
@@ -537,7 +530,8 @@ public class L2PetInstance extends L2Summon
 			return;
 		}
 		
-		L2ItemInstance target = (L2ItemInstance) object;
+		boolean follow = getFollowStatus();
+		final L2ItemInstance target = (L2ItemInstance) object;
 		
 		// Cursed weapons
 		if (CursedWeaponsManager.getInstance().isCursed(target.getItemId()))
@@ -547,72 +541,68 @@ public class L2PetInstance extends L2Summon
 			sendPacket(smsg);
 			return;
 		}
+		else if (FortSiegeManager.getInstance().isCombat(target.getItemId()))
+		{
+			return;
+		}
 		
+		SystemMessage smsg = null;
 		synchronized (target)
 		{
+			// Check if the target to pick up is visible
 			if (!target.isVisible())
 			{
+				// Send a Server->Client packet ActionFailed to this L2PcInstance
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
+			
 			if (!target.getDropProtection().tryPickUp(this))
 			{
 				sendPacket(ActionFailed.STATIC_PACKET);
-				SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S1);
+				smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S1);
 				smsg.addItemName(target);
 				sendPacket(smsg);
 				return;
 			}
-			if (!_inventory.validateCapacity(target))
+			
+			if (((isInParty() && (getParty().getLootDistribution() == L2Party.ITEM_LOOTER)) || !isInParty()) && !_inventory.validateCapacity(target))
 			{
+				sendPacket(ActionFailed.STATIC_PACKET);
 				sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_ANY_MORE_ITEMS);
 				return;
 			}
-			if (!_inventory.validateWeight(target, target.getCount()))
-			{
-				sendPacket(SystemMessageId.UNABLE_TO_PLACE_ITEM_YOUR_PET_IS_TOO_ENCUMBERED);
-				return;
-			}
+			
 			if ((target.getOwnerId() != 0) && (target.getOwnerId() != getOwner().getObjectId()) && !getOwner().isInLooterParty(target.getOwnerId()))
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
-				
 				if (target.getItemId() == PcInventory.ADENA_ID)
 				{
-					SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S1_ADENA);
+					smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S1_ADENA);
 					smsg.addItemNumber(target.getCount());
-					sendPacket(smsg);
 				}
 				else if (target.getCount() > 1)
 				{
-					SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S2_S1_S);
-					smsg.addItemName(target.getItemId());
+					smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S2_S1_S);
+					smsg.addItemName(target);
 					smsg.addItemNumber(target.getCount());
-					sendPacket(smsg);
 				}
 				else
 				{
-					SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S1);
-					smsg.addItemName(target.getItemId());
-					sendPacket(smsg);
+					smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S1);
+					smsg.addItemName(target);
 				}
-				
+				sendPacket(ActionFailed.STATIC_PACKET);
+				sendPacket(smsg);
 				return;
 			}
+			
 			if ((target.getItemLootShedule() != null) && ((target.getOwnerId() == getOwner().getObjectId()) || getOwner().isInLooterParty(target.getOwnerId())))
 			{
 				target.resetOwnerTimer();
 			}
 			
-			// If owner is in party and it isnt finders keepers, distribute the item instead of stealing it -.-
-			if (getOwner().isInParty() && (getOwner().getParty().getLootDistribution() != L2Party.ITEM_LOOTER))
-			{
-				getOwner().getParty().distributeItem(getOwner(), target);
-			}
-			else
-			{
-				target.pickupMe(this);
-			}
+			// Remove from the ground!
+			target.pickupMe(this);
 			
 			if (Config.SAVE_DROPPED_ITEM)
 			{
@@ -634,40 +624,48 @@ public class L2PetInstance extends L2Summon
 			}
 			
 			ItemTable.getInstance().destroyItem("Consume", target, getOwner(), null);
-			
 			broadcastStatusUpdate();
 		}
 		else
 		{
 			if (target.getItemId() == PcInventory.ADENA_ID)
 			{
-				SystemMessage sm2 = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S1_ADENA);
-				sm2.addItemNumber(target.getCount());
-				sendPacket(sm2);
+				smsg = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S1_ADENA);
+				smsg.addItemNumber(target.getCount());
+				sendPacket(smsg);
 			}
 			else if (target.getEnchantLevel() > 0)
 			{
-				SystemMessage sm2 = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S1_S2);
-				sm2.addNumber(target.getEnchantLevel());
-				sm2.addString(target.getName());
-				sendPacket(sm2);
+				smsg = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S1_S2);
+				smsg.addNumber(target.getEnchantLevel());
+				smsg.addItemName(target);
+				sendPacket(smsg);
 			}
 			else if (target.getCount() > 1)
 			{
-				SystemMessage sm2 = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S2_S1_S);
-				sm2.addItemNumber(target.getCount());
-				sm2.addString(target.getName());
-				sendPacket(sm2);
+				smsg = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S2_S1_S);
+				smsg.addItemNumber(target.getCount());
+				smsg.addItemName(target);
+				sendPacket(smsg);
 			}
 			else
 			{
-				SystemMessage sm2 = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S1);
-				sm2.addString(target.getName());
-				sendPacket(sm2);
+				smsg = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S1);
+				smsg.addItemName(target);
+				sendPacket(smsg);
 			}
-			getInventory().addItem("Pickup", target, getOwner(), this);
-			// FIXME Just send the updates if possible (old way wasn't working though)
-			sendPacket(new PetItemList(getInventory().getItems()));
+			
+			// If owner is in party and it isnt finders keepers, distribute the item instead of stealing it -.-
+			if (getOwner().isInParty() && (getOwner().getParty().getLootDistribution() != L2Party.ITEM_LOOTER))
+			{
+				getOwner().getParty().distributeItem(getOwner(), target);
+			}
+			else
+			{
+				final L2ItemInstance item = getInventory().addItem("Pickup", target, getOwner(), this);
+				// sendPacket(new PetItemList(getInventory().getItems()));
+				sendPacket(new PetInventoryUpdate(item));
+			}
 		}
 		
 		getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
@@ -893,66 +891,62 @@ public class L2PetInstance extends L2Summon
 	
 	private static L2PetInstance restore(L2ItemInstance control, L2NpcTemplate template, L2PcInstance owner)
 	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement statement = con.prepareStatement("SELECT item_obj_id, name, level, curHp, curMp, exp, sp, fed FROM pets WHERE item_obj_id=?"))
 		{
 			L2PetInstance pet;
-			PreparedStatement statement = con.prepareStatement("SELECT item_obj_id, name, level, curHp, curMp, exp, sp, fed FROM pets WHERE item_obj_id=?");
 			statement.setInt(1, control.getObjectId());
-			ResultSet rset = statement.executeQuery();
-			final int id = IdFactory.getInstance().getNextId();
-			if (!rset.next())
+			try (ResultSet rset = statement.executeQuery())
 			{
+				final int id = IdFactory.getInstance().getNextId();
+				if (!rset.next())
+				{
+					if (template.isType("L2BabyPet"))
+					{
+						pet = new L2BabyPetInstance(id, template, owner, control);
+					}
+					else
+					{
+						pet = new L2PetInstance(id, template, owner, control);
+					}
+					return pet;
+				}
+				
 				if (template.isType("L2BabyPet"))
 				{
-					pet = new L2BabyPetInstance(id, template, owner, control);
+					pet = new L2BabyPetInstance(id, template, owner, control, rset.getByte("level"));
 				}
 				else
 				{
-					pet = new L2PetInstance(id, template, owner, control);
+					pet = new L2PetInstance(id, template, owner, control, rset.getByte("level"));
 				}
 				
-				rset.close();
-				statement.close();
-				return pet;
+				pet._respawned = true;
+				pet.setName(rset.getString("name"));
+				
+				long exp = rset.getLong("exp");
+				L2PetLevelData info = PetDataTable.getInstance().getPetLevelData(pet.getNpcId(), pet.getLevel());
+				// DS: update experience based by level
+				// Avoiding pet delevels due to exp per level values changed.
+				if ((info != null) && (exp < info.getPetMaxExp()))
+				{
+					exp = info.getPetMaxExp();
+				}
+				
+				pet.getStat().setExp(exp);
+				pet.getStat().setSp(rset.getInt("sp"));
+				
+				pet.getStatus().setCurrentHp(rset.getInt("curHp"));
+				pet.getStatus().setCurrentMp(rset.getInt("curMp"));
+				pet.getStatus().setCurrentCp(pet.getMaxCp());
+				if (rset.getDouble("curHp") < 1)
+				{
+					pet.setIsDead(true);
+					pet.stopHpMpRegeneration();
+				}
+				
+				pet.setCurrentFed(rset.getInt("fed"));
 			}
-			
-			if (template.isType("L2BabyPet"))
-			{
-				pet = new L2BabyPetInstance(id, template, owner, control, rset.getByte("level"));
-			}
-			else
-			{
-				pet = new L2PetInstance(id, template, owner, control, rset.getByte("level"));
-			}
-			
-			pet._respawned = true;
-			pet.setName(rset.getString("name"));
-			
-			long exp = rset.getLong("exp");
-			L2PetLevelData info = PetDataTable.getInstance().getPetLevelData(pet.getNpcId(), pet.getLevel());
-			// DS: update experience based by level
-			// Avoiding pet delevels due to exp per level values changed.
-			if ((info != null) && (exp < info.getPetMaxExp()))
-			{
-				exp = info.getPetMaxExp();
-			}
-			
-			pet.getStat().setExp(exp);
-			pet.getStat().setSp(rset.getInt("sp"));
-			
-			pet.getStatus().setCurrentHp(rset.getInt("curHp"));
-			pet.getStatus().setCurrentMp(rset.getInt("curMp"));
-			pet.getStatus().setCurrentCp(pet.getMaxCp());
-			if (rset.getDouble("curHp") < 1)
-			{
-				pet.setIsDead(true);
-				pet.stopHpMpRegeneration();
-			}
-			
-			pet.setCurrentFed(rset.getInt("fed"));
-			
-			rset.close();
-			statement.close();
 			return pet;
 		}
 		catch (Exception e)
@@ -1009,9 +1003,9 @@ public class L2PetInstance extends L2Summon
 			req = "UPDATE pets SET name=?,level=?,curHp=?,curMp=?,exp=?,sp=?,fed=?,ownerId=?,restore=? " + "WHERE item_obj_id = ?";
 		}
 		
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement statement = con.prepareStatement(req))
 		{
-			PreparedStatement statement = con.prepareStatement(req);
 			statement.setString(1, getName());
 			statement.setInt(2, getStat().getLevel());
 			statement.setDouble(3, getStatus().getCurrentHp());
@@ -1022,9 +1016,8 @@ public class L2PetInstance extends L2Summon
 			statement.setInt(8, getOwner().getObjectId());
 			statement.setString(9, String.valueOf(_restoreSummon)); // True restores pet on login
 			statement.setInt(10, getControlObjectId());
-			
 			statement.executeUpdate();
-			statement.close();
+			
 			_respawned = true;
 			
 			if (_restoreSummon)
