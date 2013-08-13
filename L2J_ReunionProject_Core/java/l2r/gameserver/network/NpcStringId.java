@@ -21,9 +21,10 @@ package l2r.gameserver.network;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21630,10 +21631,9 @@ public final class NpcStringId
 	public static final NpcStringId THE_SOUL_COFFIN_HAS_AWAKENED_EKIMUS;
 	
 	/**
-	 * Array containing all NpcStringId<br>
-	 * Important: Always initialize with a length of the highest NpcStringId + 1!!!
+	 * Map containing all NpcStringId<br>
 	 */
-	private static NpcStringId[] VALUES;
+	private static Map<Integer, NpcStringId> VALUES = new HashMap<>();
 	
 	static
 	{
@@ -25241,9 +25241,8 @@ public final class NpcStringId
 	private static final void buildFastLookupTable()
 	{
 		final Field[] fields = NpcStringId.class.getDeclaredFields();
-		final ArrayList<NpcStringId> nsIds = new ArrayList<>(fields.length);
 		
-		int maxId = 0, mod;
+		int mod;
 		NpcStringId nsId;
 		for (final Field field : fields)
 		{
@@ -25255,21 +25254,14 @@ public final class NpcStringId
 					nsId = (NpcStringId) field.get(null);
 					nsId.setName(field.getName());
 					nsId.setParamCount(parseMessageParameters(field.getName()));
-					maxId = Math.max(maxId, nsId.getId());
-					nsIds.add(nsId);
+					
+					VALUES.put(nsId.getId(), nsId);
 				}
 				catch (final Exception e)
 				{
 					_log.log(Level.WARNING, "NpcStringId: Failed field access for '" + field.getName() + "'", e);
 				}
 			}
-		}
-		
-		VALUES = new NpcStringId[maxId + 1];
-		for (int i = nsIds.size(); i-- > 0;)
-		{
-			nsId = nsIds.get(i);
-			VALUES[nsId.getId()] = nsId;
 		}
 	}
 	
@@ -25301,12 +25293,7 @@ public final class NpcStringId
 	
 	private static final NpcStringId getNpcStringIdInternal(final int id)
 	{
-		if ((id < 0) || (id >= VALUES.length))
-		{
-			return null;
-		}
-		
-		return VALUES[id];
+		return VALUES.get(id);
 	}
 	
 	public static final NpcStringId getNpcStringId(final String name)
@@ -25323,7 +25310,7 @@ public final class NpcStringId
 	
 	public static final void reloadLocalisations()
 	{
-		for (final NpcStringId nsId : VALUES)
+		for (final NpcStringId nsId : VALUES.values())
 		{
 			if (nsId != null)
 			{

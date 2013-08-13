@@ -21,9 +21,10 @@ package l2r.gameserver.network;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15085,10 +15086,9 @@ public final class SystemMessageId
 	public static final SystemMessageId CHAOTIC_ZONE;
 	
 	/**
-	 * Array containing all SystemMessageIds<br>
-	 * Important: Always initialize with a length of the highest SystemMessageId + 1!!!
+	 * Map containing all SystemMessageIds<br>
 	 */
-	private static SystemMessageId[] VALUES;
+	private static Map<Integer, SystemMessageId> VALUES = new HashMap<>();
 	
 	static
 	{
@@ -17594,9 +17594,8 @@ public final class SystemMessageId
 	private static final void buildFastLookupTable()
 	{
 		final Field[] fields = SystemMessageId.class.getDeclaredFields();
-		final ArrayList<SystemMessageId> smIds = new ArrayList<>(fields.length);
 		
-		int maxId = 0, mod;
+		int mod;
 		SystemMessageId smId;
 		for (final Field field : fields)
 		{
@@ -17608,21 +17607,13 @@ public final class SystemMessageId
 					smId = (SystemMessageId) field.get(null);
 					smId.setName(field.getName());
 					smId.setParamCount(parseMessageParameters(field.getName()));
-					maxId = Math.max(maxId, smId.getId());
-					smIds.add(smId);
+					VALUES.put(smId.getId(), smId);
 				}
 				catch (final Exception e)
 				{
 					_log.log(Level.WARNING, "SystemMessageId: Failed field access for '" + field.getName() + "'", e);
 				}
 			}
-		}
-		
-		VALUES = new SystemMessageId[maxId + 1];
-		for (int i = smIds.size(); i-- > 0;)
-		{
-			smId = smIds.get(i);
-			VALUES[smId.getId()] = smId;
 		}
 	}
 	
@@ -17654,12 +17645,7 @@ public final class SystemMessageId
 	
 	private static final SystemMessageId getSystemMessageIdInternal(final int id)
 	{
-		if ((id < 0) || (id >= VALUES.length))
-		{
-			return null;
-		}
-		
-		return VALUES[id];
+		return VALUES.get(id);
 	}
 	
 	public static final SystemMessageId getSystemMessageId(final String name)
@@ -17676,7 +17662,7 @@ public final class SystemMessageId
 	
 	public static final void reloadLocalisations()
 	{
-		for (final SystemMessageId smId : VALUES)
+		for (final SystemMessageId smId : VALUES.values())
 		{
 			if (smId != null)
 			{
