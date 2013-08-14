@@ -61,8 +61,7 @@ import l2r.gameserver.ai.L2SummonAI;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.cache.WarehouseCacheManager;
 import l2r.gameserver.communitybbs.BB.Forum;
-import l2r.gameserver.communitybbs.Manager.ForumsBBSManager;
-import l2r.gameserver.communitybbs.Manager.RegionBBSManager;
+import l2r.gameserver.communitybbs.Managers.ForumsBBSManager;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.CharSummonTable;
@@ -237,8 +236,6 @@ import l2r.gameserver.model.zone.type.L2BossZone;
 import l2r.gameserver.model.zone.type.L2NoRestartZone;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ChangeWaitType;
 import l2r.gameserver.network.serverpackets.CharInfo;
@@ -259,6 +256,8 @@ import l2r.gameserver.network.serverpackets.ExNevitAdventTimeChange;
 import l2r.gameserver.network.serverpackets.ExOlympiadMode;
 import l2r.gameserver.network.serverpackets.ExPrivateStoreSetWholeMsg;
 import l2r.gameserver.network.serverpackets.ExSetCompassZoneCode;
+import l2r.gameserver.network.serverpackets.ExShowScreenMessage2;
+import l2r.gameserver.network.serverpackets.ExShowScreenMessage2.ScreenMessageAlign;
 import l2r.gameserver.network.serverpackets.ExSpawnEmitter;
 import l2r.gameserver.network.serverpackets.ExStartScenePlayer;
 import l2r.gameserver.network.serverpackets.ExStorageMaxCount;
@@ -6981,10 +6980,6 @@ public final class L2PcInstance extends L2Playable
 			_apprentice = 0;
 			_sponsor = 0;
 			_activeWarehouse = null;
-			if (_isOnline)
-			{
-				CommunityServerThread.getInstance().sendPacket(new WorldInfo(this, null, WorldInfo.TYPE_UPDATE_PLAYER_DATA));
-			}
 			return;
 		}
 		
@@ -6996,10 +6991,6 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		_clanId = clan.getClanId();
-		if (_isOnline)
-		{
-			CommunityServerThread.getInstance().sendPacket(new WorldInfo(this, null, WorldInfo.TYPE_UPDATE_PLAYER_DATA));
-		}
 	}
 	
 	/**
@@ -10646,6 +10637,11 @@ public final class L2PcInstance extends L2Playable
 		sendPacket(SystemMessage.sendString(message));
 	}
 	
+	public void sendMessageS(String text, int timeonscreenins)
+	{
+		sendPacket(new ExShowScreenMessage2(text, timeonscreenins * 1000, ScreenMessageAlign.TOP_CENTER, text.length() > 30 ? false : true));
+	}
+	
 	public void enterObserverMode(int x, int y, int z)
 	{
 		_lastX = getX();
@@ -12491,14 +12487,6 @@ public final class L2PcInstance extends L2Playable
 			_log.log(Level.SEVERE, "deleteMe()", e);
 		}
 		
-		try
-		{
-			CommunityServerThread.getInstance().sendPacket(new WorldInfo(this, null, WorldInfo.TYPE_UPDATE_PLAYER_STATUS));
-		}
-		catch (Exception e)
-		{
-			_log.log(Level.SEVERE, "deleteMe()", e);
-		}
 		// Recommendations must be saved before task (timer) is canceled
 		try
 		{
@@ -12826,16 +12814,6 @@ public final class L2PcInstance extends L2Playable
 		// Remove L2Object object from _allObjects of L2World
 		L2World.getInstance().removeObject(this);
 		L2World.getInstance().removeFromAllPlayers(this); // force remove in case of crash during teleport
-		
-		// update bbs
-		try
-		{
-			RegionBBSManager.getInstance().changeCommunityBoard();
-		}
-		catch (Exception e)
-		{
-			_log.log(Level.WARNING, "Exception on deleteMe() changeCommunityBoard: " + e.getMessage(), e);
-		}
 		
 		try
 		{

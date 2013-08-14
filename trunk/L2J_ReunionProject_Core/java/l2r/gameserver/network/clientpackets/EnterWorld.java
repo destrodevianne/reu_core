@@ -25,7 +25,6 @@ import l2r.gameserver.LoginServerThread;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.TaskPriority;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.communitybbs.Manager.RegionBBSManager;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
@@ -62,8 +61,6 @@ import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.QuestState;
 import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 import l2r.gameserver.network.serverpackets.Die;
 import l2r.gameserver.network.serverpackets.EtcStatusUpdate;
 import l2r.gameserver.network.serverpackets.ExBasicActionList;
@@ -567,9 +564,6 @@ public class EnterWorld extends L2GameClientPacket
 				sendPacket(ExNoticePostArrived.valueOf(false));
 			}
 		}
-		
-		RegionBBSManager.getInstance().changeCommunityBoard();
-		CommunityServerThread.getInstance().sendPacket(new WorldInfo(activeChar, null, WorldInfo.TYPE_UPDATE_PLAYER_STATUS));
 		
 		ReunionEvents.onLogin(activeChar);
 		

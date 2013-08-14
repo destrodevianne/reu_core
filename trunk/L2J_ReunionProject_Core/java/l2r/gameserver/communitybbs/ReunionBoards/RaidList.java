@@ -1,4 +1,4 @@
-package l2r.gameserver.communitybbs;
+package l2r.gameserver.communitybbs.ReunionBoards;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

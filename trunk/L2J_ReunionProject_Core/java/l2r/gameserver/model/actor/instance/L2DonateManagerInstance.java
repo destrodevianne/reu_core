@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.communitybbs.Manager.RegionBBSManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.MultiSell;
@@ -16,8 +15,6 @@ import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.PartySmallWindowAll;
@@ -171,7 +168,6 @@ public class L2DonateManagerInstance extends L2Npc
 				
 				player.sendMessage("Your name has been changed to " + val);
 				player.broadcastUserInfo();
-				CommunityServerThread.getInstance().sendPacket(new WorldInfo(player, null, WorldInfo.TYPE_UPDATE_PLAYER_DATA));
 				
 				if (player.isInParty())
 				{
@@ -190,8 +186,6 @@ public class L2DonateManagerInstance extends L2Npc
 				{
 					player.getClan().broadcastClanStatus();
 				}
-				
-				RegionBBSManager.getInstance().changeCommunityBoard();
 			}
 			catch (StringIndexOutOfBoundsException e)
 			{
@@ -253,8 +247,6 @@ public class L2DonateManagerInstance extends L2Npc
 				{
 					player.getClan().broadcastClanStatus();
 				}
-				
-				RegionBBSManager.getInstance().changeCommunityBoard();
 			}
 			catch (StringIndexOutOfBoundsException e)
 			{

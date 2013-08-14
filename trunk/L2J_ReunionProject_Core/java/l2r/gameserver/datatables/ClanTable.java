@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.communitybbs.Manager.ForumsBBSManager;
+import l2r.gameserver.communitybbs.Managers.ForumsBBSManager;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.AuctionManager;
 import l2r.gameserver.instancemanager.CHSiegeManager;
@@ -48,8 +48,6 @@ import l2r.gameserver.model.entity.FortSiege;
 import l2r.gameserver.model.entity.Siege;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
 import l2r.gameserver.network.serverpackets.PledgeShowInfoUpdate;
 import l2r.gameserver.network.serverpackets.PledgeShowMemberListAll;
@@ -81,7 +79,7 @@ public class ClanTable
 	protected ClanTable()
 	{
 		// forums has to be loaded before clan data, because of last forum id used should have also memo included
-		if (Config.COMMUNITY_TYPE > 0)
+		if (Config.ENABLE_COMMUNITY)
 		{
 			ForumsBBSManager.getInstance().initRoot();
 		}
@@ -210,8 +208,6 @@ public class ClanTable
 		player.sendPacket(new ExBrExtraUserInfo(player));
 		player.sendPacket(new PledgeShowMemberListUpdate(player));
 		player.sendPacket(SystemMessageId.CLAN_CREATED);
-		// notify CB server that a new Clan is created
-		CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, clan, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 		return clan;
 	}
 	

@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.communitybbs.Manager.ForumsBBSManager;
-import l2r.gameserver.communitybbs.Manager.TopicBBSManager;
+import l2r.gameserver.communitybbs.Managers.ForumsBBSManager;
+import l2r.gameserver.communitybbs.Managers.TopicBBSManager;
 
 public class Forum
 {
@@ -59,7 +59,7 @@ public class Forum
 	private boolean _loaded = false;
 	
 	/**
-	 * Creates new instance of Forum. When you create new forum, use {@link l2r.gameserver.communitybbs.Manager.ForumsBBSManager# addForum(l2r.gameserver.communitybbs.BB.Forum)} to add forum to the forums manager.
+	 * Creates new instance of Forum. When you create new forum, use {@link l2r.gameserver.communitybbs.Managers.ForumsBBSManager# addForum(l2r.gameserver.communitybbs.BB.Forum)} to add forum to the forums manager.
 	 * @param Forumid
 	 * @param FParent
 	 */

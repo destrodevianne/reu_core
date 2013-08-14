@@ -29,8 +29,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.model.zone.type.L2SwampZone;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 
 public class PlayableStat extends CharStat
 {
@@ -182,10 +180,6 @@ public class PlayableStat extends CharStat
 		
 		getActiveChar().getStatus().setCurrentHp(getActiveChar().getStat().getMaxHp());
 		getActiveChar().getStatus().setCurrentMp(getActiveChar().getStat().getMaxMp());
-		if (getActiveChar() instanceof L2PcInstance)
-		{
-			CommunityServerThread.getInstance().sendPacket(new WorldInfo((L2PcInstance) getActiveChar(), null, WorldInfo.TYPE_UPDATE_PLAYER_DATA));
-		}
 		
 		return true;
 	}

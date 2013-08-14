@@ -19,11 +19,9 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.communitybbs.CommunityBoard;
+import l2r.gameserver.communitybbs.BoardsManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.RequestShowCommunityBoard;
 
 /**
  * packet type id 0x57 sample 57 01 00 00 00 // unknown (always 1?) format: cd
@@ -44,7 +42,11 @@ public final class RequestShowBoard extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		if (Config.ENABLE_COMMUNITY_BOARD)
+		if (Config.ENABLE_COMMUNITY)
+		{
+			BoardsManager.getInstance().handleCommands(getClient(), Config.BBS_DEFAULT);
+		}
+		else
 		{
 			L2PcInstance activeChar = getClient().getActiveChar();
 			
@@ -52,19 +54,7 @@ public final class RequestShowBoard extends L2GameClientPacket
 			{
 				return;
 			}
-			
-			if (CommunityServerThread.getInstance().isAuthed())
-			{
-				CommunityServerThread.getInstance().sendPacket(new RequestShowCommunityBoard(activeChar.getObjectId(), "_bbshome"), true);
-			}
-			else
-			{
-				activeChar.sendPacket(SystemMessageId.CB_OFFLINE);
-			}
-		}
-		else
-		{
-			CommunityBoard.getInstance().handleCommands(getClient(), Config.BBS_DEFAULT);
+			activeChar.sendPacket(SystemMessageId.CB_OFFLINE);
 		}
 	}
 	

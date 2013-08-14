@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.communitybbs.Manager;
+package l2r.gameserver.communitybbs.Managers;
 
 import java.util.List;
 
@@ -26,9 +26,7 @@ import l2r.gameserver.network.serverpackets.ShowBoard;
 
 public abstract class BaseBBSManager
 {
-	public abstract void parsecmd(String command, L2PcInstance activeChar);
-	
-	public abstract void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar);
+	public abstract void cbByPass(String command, L2PcInstance activeChar);
 	
 	protected void separateAndSend(String html, L2PcInstance acha)
 	{

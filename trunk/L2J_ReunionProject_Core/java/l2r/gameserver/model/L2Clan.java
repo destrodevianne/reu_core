@@ -33,7 +33,7 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.communitybbs.BB.Forum;
-import l2r.gameserver.communitybbs.Manager.ForumsBBSManager;
+import l2r.gameserver.communitybbs.Managers.ForumsBBSManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.CrestTable;
@@ -49,8 +49,6 @@ import l2r.gameserver.model.itemcontainer.ItemContainer;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 import l2r.gameserver.network.serverpackets.CreatureSay;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
 import l2r.gameserver.network.serverpackets.ExSubPledgeSkillAdd;
@@ -338,10 +336,6 @@ public class L2Clan
 		
 		broadcastClanStatus();
 		broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_LEADER_PRIVILEGES_HAVE_BEEN_TRANSFERRED_TO_C1).addString(member.getName()));
-		if (CommunityServerThread.getInstance() != null)
-		{
-			CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, this, WorldInfo.TYPE_UPDATE_CLAN_DATA));
-		}
 		_log.log(Level.INFO, "Leader of Clan: " + getName() + " changed to: " + member.getName() + " ex leader: " + exMember.getName());
 	}
 	
@@ -404,8 +398,6 @@ public class L2Clan
 		player.sendPacket(new PledgeShowMemberListUpdate(player));
 		player.sendPacket(new PledgeSkillList(this));
 		addSkillEffects(player);
-		// notify CB server about the change
-		CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, this, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 	}
 	
 	/**
@@ -421,8 +413,6 @@ public class L2Clan
 		}
 		
 		addClanMember(member);
-		// notify CB server about the change
-		CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, this, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 	}
 	
 	/**
@@ -560,11 +550,6 @@ public class L2Clan
 		else
 		{
 			removeMemberInDatabase(exMember, clanJoinExpiryTime, getLeaderId() == objectId ? System.currentTimeMillis() + (Config.ALT_CLAN_CREATE_DAYS * 86400000L) : 0);
-		}
-		// notify CB server about the change
-		if (CommunityServerThread.getInstance() != null)
-		{
-			CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, this, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 		}
 	}
 	
@@ -740,7 +725,7 @@ public class L2Clan
 	public void setLevel(int level)
 	{
 		_level = level;
-		if ((_level >= 2) && (_forum == null) && (Config.COMMUNITY_TYPE > 0))
+		if ((_level >= 2) && (_forum == null) && (Config.ENABLE_COMMUNITY))
 		{
 			final Forum forum = ForumsBBSManager.getInstance().getForumByName("ClanRoot");
 			if (forum != null)
@@ -2591,8 +2576,6 @@ public class L2Clan
 		
 		// TODO: Need correct message id
 		player.sendMessage("Alliance " + allyName + " has been created.");
-		// notify CB server about the change
-		CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, this, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 	}
 	
 	public void dissolveAlly(L2PcInstance player)
@@ -2624,8 +2607,6 @@ public class L2Clan
 				clan.setAllyName(null);
 				clan.setAllyPenaltyExpiryTime(0, 0);
 				clan.updateClanInDB();
-				// notify CB server about the change
-				CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, clan, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 			}
 		}
 		
@@ -2637,8 +2618,6 @@ public class L2Clan
 		
 		// The clan leader should take the XP penalty of a full death.
 		player.deathPenalty(false, false, false);
-		// notify CB server about the change
-		CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, this, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 	}
 	
 	public boolean levelUpClan(L2PcInstance player)
@@ -2921,9 +2900,6 @@ public class L2Clan
 		 */
 		// clan.broadcastToOnlineMembers(new PledgeStatusChanged(clan));
 		// clan.broadcastClanStatus();
-		
-		// notify CB server about the change
-		CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, this, WorldInfo.TYPE_UPDATE_CLAN_DATA));
 	}
 	
 	/**
