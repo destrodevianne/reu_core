@@ -16,20 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.network.communityserver.writepackets;
+package l2r.gameserver.communitybbs.Managers;
 
-import org.netcon.BaseWritePacket;
+import l2r.gameserver.model.actor.instance.L2PcInstance;
 
-/**
- * @authors Forsaiken, Gigiikun
- */
-public final class BlowFishKey extends BaseWritePacket
+public class RegionBBSManager extends BaseBBSManager
 {
-	public BlowFishKey(final byte[] tempKey)
+	@Override
+	public void cbByPass(String command, L2PcInstance activeChar)
 	{
-		super.writeC(0x00);
-		super.writeC(0x00);
-		super.writeD(tempKey.length);
-		super.writeB(tempKey);
+		
+	}
+	
+	/**
+	 * Gets the single instance of RegionBBSManager.
+	 * @return single instance of RegionBBSManager
+	 */
+	public static RegionBBSManager getInstance()
+	{
+		return SingletonHolder._instance;
+	}
+	
+	private static class SingletonHolder
+	{
+		protected static final RegionBBSManager _instance = new RegionBBSManager();
 	}
 }

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.communitybbs.Manager;
+package l2r.gameserver.communitybbs.Managers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -91,7 +91,7 @@ public class ForumsBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parsecmd(String command, L2PcInstance activeChar)
+	public void cbByPass(String command, L2PcInstance activeChar)
 	{
 	}
 	
@@ -152,12 +152,6 @@ public class ForumsBBSManager extends BaseBBSManager
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
-	{
-		
 	}
 	
 	/**

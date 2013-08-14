@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.communitybbs.Manager;
+package l2r.gameserver.communitybbs.Managers;
 
 import java.io.File;
 import java.util.StringTokenizer;
@@ -24,14 +24,14 @@ import java.util.StringTokenizer;
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.communitybbs.CastleStatus;
-import l2r.gameserver.communitybbs.GrandBossList;
-import l2r.gameserver.communitybbs.HeroeList;
-import l2r.gameserver.communitybbs.RaidList;
-import l2r.gameserver.communitybbs.TopClan;
-import l2r.gameserver.communitybbs.TopOnlinePlayers;
-import l2r.gameserver.communitybbs.TopPkPlayers;
-import l2r.gameserver.communitybbs.TopPvpPlayers;
+import l2r.gameserver.communitybbs.ReunionBoards.CastleStatus;
+import l2r.gameserver.communitybbs.ReunionBoards.GrandBossList;
+import l2r.gameserver.communitybbs.ReunionBoards.HeroeList;
+import l2r.gameserver.communitybbs.ReunionBoards.RaidList;
+import l2r.gameserver.communitybbs.ReunionBoards.TopClan;
+import l2r.gameserver.communitybbs.ReunionBoards.TopOnlinePlayers;
+import l2r.gameserver.communitybbs.ReunionBoards.TopPkPlayers;
+import l2r.gameserver.communitybbs.ReunionBoards.TopPvpPlayers;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ShowBoard;
@@ -40,7 +40,7 @@ import gr.reunion.configs.SmartCommunityConfigs;
 public class TopBBSManager extends BaseBBSManager
 {
 	@Override
-	public void parsecmd(String command, L2PcInstance activeChar)
+	public void cbByPass(String command, L2PcInstance activeChar)
 	{
 		String path = "data/html/CommunityBoard/";
 		String filepath = "";
@@ -180,11 +180,6 @@ public class TopBBSManager extends BaseBBSManager
 		
 		String realOnline = "<table border=0 cellspacing=0 width=\"740\" cellpadding=2 bgcolor=111111><tr><td fixwidth=11></td><td FIXWIDTH=280>Players Active</td><td FIXWIDTH=470><font color=26e600>" + counter + "</font></td></tr></table><img src=\"l2ui.squaregray\" width=\"740\" height=\"1\"><table border=0 cellspacing=0 width=\"740\" cellpadding=2 bgcolor=111111><tr><td fixwidth=11></td><td FIXWIDTH=280>Players Shops</td><td FIXWIDTH=470><font color=26e600>" + (allPlayers - counter) + "</font></td></tr></table>";
 		return realOnline;
-	}
-	
-	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
-	{
 	}
 	
 	public static TopBBSManager getInstance()

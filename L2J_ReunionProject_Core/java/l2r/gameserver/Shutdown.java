@@ -41,7 +41,6 @@ import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
 import l2r.gameserver.network.gameserverpackets.ServerStatus;
 import l2r.gameserver.network.serverpackets.ServerClose;
 import l2r.gameserver.network.serverpackets.SystemMessage;
@@ -236,16 +235,6 @@ public class Shutdown extends Thread
 			{
 				ThreadPoolManager.getInstance().shutdown();
 				_log.info("Thread Pool Manager: Manager has been shut down(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
-			}
-			catch (Throwable t)
-			{
-				// ignore
-			}
-			
-			try
-			{
-				CommunityServerThread.getInstance().interrupt();
-				_log.info("Community Server Thread: Thread interruped(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 			}
 			catch (Throwable t)
 			{

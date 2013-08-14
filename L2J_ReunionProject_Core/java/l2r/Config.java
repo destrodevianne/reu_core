@@ -95,7 +95,6 @@ public final class Config
 	public static final String FLOOD_PROTECTOR_FILE = "./config/main/FloodProtector.ini";
 	public static final String MMO_CONFIG_FILE = "./config/main/MMO.ini";
 	public static final String OLYMPIAD_CONFIG_FILE = "./config/main/Olympiad.ini";
-	public static final String COMMUNITY_CONFIGURATION_FILE = "./config/main/CommunityServer.ini";
 	public static final String GRACIASEEDS_CONFIG_FILE = "./config/main/GraciaSeeds.ini";
 	public static final String CHAT_FILTER_FILE = "./config/main/chatfilter.txt";
 	public static final String SECURITY_CONFIG_FILE = "./config/main/Security.ini";
@@ -566,13 +565,8 @@ public final class Config
 	public static boolean ALLOW_MANOR;
 	public static boolean ALLOW_PET_WALKERS;
 	public static boolean SERVER_NEWS;
-	public static int COMMUNITY_TYPE;
-	public static boolean BBS_SHOW_PLAYERLIST;
+	public static boolean ENABLE_COMMUNITY;
 	public static String BBS_DEFAULT;
-	public static boolean SHOW_LEVEL_COMMUNITYBOARD;
-	public static boolean SHOW_STATUS_COMMUNITYBOARD;
-	public static int NAME_PAGE_SIZE_COMMUNITYBOARD;
-	public static int NAME_PER_ROW_COMMUNITYBOARD;
 	public static boolean USE_SAY_FILTER;
 	public static String CHAT_FILTER_CHARS;
 	public static int[] BAN_CHAT_CHANNELS;
@@ -941,15 +935,6 @@ public final class Config
 	public static long LOGIN_SERVER_SCHEDULE_RESTART_TIME;
 	
 	// --------------------------------------------------
-	// CommunityServer Settings
-	// --------------------------------------------------
-	public static boolean ENABLE_COMMUNITY_BOARD;
-	public static String COMMUNITY_SERVER_ADDRESS;
-	public static int COMMUNITY_SERVER_PORT;
-	public static byte[] COMMUNITY_SERVER_HEX_ID;
-	public static int COMMUNITY_SERVER_SQL_DP_ID;
-	
-	// --------------------------------------------------
 	// MMO Settings
 	// --------------------------------------------------
 	public static int MMO_SELECTOR_SLEEP_TIME;
@@ -1243,24 +1228,6 @@ public final class Config
 			IPConfigData ipcd = new IPConfigData();
 			GAME_SERVER_SUBNETS = ipcd.getSubnets();
 			GAME_SERVER_HOSTS = ipcd.getHosts();
-			
-			// Load Community Properties file (if exists)
-			L2Properties communityServerSettings = new L2Properties();
-			final File community = new File(COMMUNITY_CONFIGURATION_FILE);
-			try (InputStream is = new FileInputStream(community))
-			{
-				communityServerSettings.load(is);
-			}
-			catch (Exception e)
-			{
-				_log.log(Level.SEVERE, "Error while loading Community Server settings!", e);
-			}
-			
-			ENABLE_COMMUNITY_BOARD = Boolean.parseBoolean(communityServerSettings.getProperty("EnableCommunityBoard", "False"));
-			COMMUNITY_SERVER_ADDRESS = communityServerSettings.getProperty("CommunityServerHostname", "localhost");
-			COMMUNITY_SERVER_PORT = Integer.parseInt(communityServerSettings.getProperty("CommunityServerPort", "9013"));
-			COMMUNITY_SERVER_HEX_ID = new BigInteger(communityServerSettings.getProperty("CommunityServerHexId", "0"), 16).toByteArray();
-			COMMUNITY_SERVER_SQL_DP_ID = Integer.parseInt(communityServerSettings.getProperty("CommunityServerSqlDpId", "200"));
 			
 			// Load Feature L2Properties file (if exists)
 			L2Properties Feature = new L2Properties();
@@ -2088,13 +2055,8 @@ public final class Config
 			ALLOW_CURSED_WEAPONS = Boolean.parseBoolean(General.getProperty("AllowCursedWeapons", "True"));
 			ALLOW_PET_WALKERS = Boolean.parseBoolean(General.getProperty("AllowPetWalkers", "True"));
 			SERVER_NEWS = Boolean.parseBoolean(General.getProperty("ShowServerNews", "False"));
-			COMMUNITY_TYPE = Integer.parseInt(General.getProperty("CommunityType", "1"));
-			BBS_SHOW_PLAYERLIST = Boolean.parseBoolean(General.getProperty("BBSShowPlayerList", "false"));
+			ENABLE_COMMUNITY = Boolean.parseBoolean(General.getProperty("EnableCommunity", "True"));
 			BBS_DEFAULT = General.getProperty("BBSDefault", "_bbshome");
-			SHOW_LEVEL_COMMUNITYBOARD = Boolean.parseBoolean(General.getProperty("ShowLevelOnCommunityBoard", "False"));
-			SHOW_STATUS_COMMUNITYBOARD = Boolean.parseBoolean(General.getProperty("ShowStatusOnCommunityBoard", "False"));
-			NAME_PAGE_SIZE_COMMUNITYBOARD = Integer.parseInt(General.getProperty("NamePageSizeOnCommunityBoard", "50"));
-			NAME_PER_ROW_COMMUNITYBOARD = Integer.parseInt(General.getProperty("NamePerRowOnCommunityBoard", "5"));
 			USE_SAY_FILTER = Boolean.parseBoolean(General.getProperty("UseChatFilter", "false"));
 			CHAT_FILTER_CHARS = General.getProperty("ChatFilterChars", "^_^");
 			String[] propertySplit4 = General.getProperty("BanChatChannels", "0;1;8;17").trim().split(";");
@@ -3431,26 +3393,11 @@ public final class Config
 			case "bypassvalidation":
 				BYPASS_VALIDATION = Boolean.parseBoolean(pValue);
 				break;
-			case "communitytype":
-				COMMUNITY_TYPE = Integer.parseInt(pValue);
-				break;
-			case "bbsshowplayerlist":
-				BBS_SHOW_PLAYERLIST = Boolean.parseBoolean(pValue);
+			case "enablecommunity":
+				ENABLE_COMMUNITY = Boolean.parseBoolean(pValue);
 				break;
 			case "bbsdefault":
 				BBS_DEFAULT = pValue;
-				break;
-			case "showleveloncommunityboard":
-				SHOW_LEVEL_COMMUNITYBOARD = Boolean.parseBoolean(pValue);
-				break;
-			case "showstatusoncommunityboard":
-				SHOW_STATUS_COMMUNITYBOARD = Boolean.parseBoolean(pValue);
-				break;
-			case "namepagesizeoncommunityboard":
-				NAME_PAGE_SIZE_COMMUNITYBOARD = Integer.parseInt(pValue);
-				break;
-			case "nameperrowoncommunityboard":
-				NAME_PER_ROW_COMMUNITYBOARD = Integer.parseInt(pValue);
 				break;
 			case "showservernews":
 				SERVER_NEWS = Boolean.parseBoolean(pValue);

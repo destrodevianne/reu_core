@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.communitybbs.Manager;
+package l2r.gameserver.communitybbs.Managers;
 
 import java.util.StringTokenizer;
 
@@ -28,17 +28,12 @@ import l2r.util.StringUtil;
 
 public class ClanBBSManager extends BaseBBSManager
 {
-	public static ClanBBSManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
 	/**
 	 * @param command
 	 * @param activeChar
 	 */
 	@Override
-	public void parsecmd(String command, L2PcInstance activeChar)
+	public void cbByPass(String command, L2PcInstance activeChar)
 	{
 		if (command.equals("_bbsclan"))
 		{
@@ -113,7 +108,7 @@ public class ClanBBSManager extends BaseBBSManager
 			if (cl.getLevel() < 2)
 			{
 				activeChar.sendPacket(SystemMessageId.NO_CB_IN_MY_CLAN);
-				parsecmd("_bbsclan_clanlist", activeChar);
+				cbByPass("_bbsclan_clanlist", activeChar);
 			}
 			else
 			{
@@ -229,11 +224,6 @@ public class ClanBBSManager extends BaseBBSManager
 		clanhome(activeChar, activeChar.getClan().getClanId());
 	}
 	
-	private static class SingletonHolder
-	{
-		protected static final ClanBBSManager _instance = new ClanBBSManager();
-	}
-	
 	/**
 	 * @param activeChar
 	 * @param clanId
@@ -246,7 +236,7 @@ public class ClanBBSManager extends BaseBBSManager
 			if (cl.getLevel() < 2)
 			{
 				activeChar.sendPacket(SystemMessageId.NO_CB_IN_MY_CLAN);
-				parsecmd("_bbsclan_clanlist", activeChar);
+				cbByPass("_bbsclan_clanlist", activeChar);
 			}
 			else
 			{
@@ -264,13 +254,13 @@ public class ClanBBSManager extends BaseBBSManager
 		}
 	}
 	
-	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
+	public static ClanBBSManager getInstance()
 	{
-		if (ar1.equals("Set"))
-		{
-			activeChar.getClan().setNotice(ar4);
-			parsecmd("_bbsclan_clanhome;" + activeChar.getClan().getClanId(), activeChar);
-		}
+		return SingletonHolder._instance;
+	}
+	
+	private static class SingletonHolder
+	{
+		protected static final ClanBBSManager _instance = new ClanBBSManager();
 	}
 }

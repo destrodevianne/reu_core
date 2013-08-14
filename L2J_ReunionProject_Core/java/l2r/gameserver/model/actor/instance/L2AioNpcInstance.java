@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import javolution.text.TextBuilder;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.communitybbs.Manager.RegionBBSManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.ClassListData;
@@ -51,8 +50,6 @@ import l2r.gameserver.model.items.L2Henna;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.olympiad.OlympiadManager;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.CharInfo;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
@@ -950,7 +947,6 @@ public final class L2AioNpcInstance extends L2Npc
 				
 				player.sendMessage("Your name has been changed to " + val);
 				player.broadcastUserInfo();
-				CommunityServerThread.getInstance().sendPacket(new WorldInfo(player, null, WorldInfo.TYPE_UPDATE_PLAYER_DATA));
 				
 				if (player.isInParty())
 				{
@@ -969,8 +965,6 @@ public final class L2AioNpcInstance extends L2Npc
 				{
 					player.getClan().broadcastClanStatus();
 				}
-				
-				RegionBBSManager.getInstance().changeCommunityBoard();
 			}
 			catch (StringIndexOutOfBoundsException e)
 			{
@@ -1032,8 +1026,6 @@ public final class L2AioNpcInstance extends L2Npc
 				{
 					player.getClan().broadcastClanStatus();
 				}
-				
-				RegionBBSManager.getInstance().changeCommunityBoard();
 			}
 			catch (StringIndexOutOfBoundsException e)
 			{

@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.communitybbs.Manager.TopicBBSManager;
+import l2r.gameserver.communitybbs.Managers.TopicBBSManager;
 
 public class Topic
 {

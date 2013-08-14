@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.ai.CtrlIntention;
-import l2r.gameserver.communitybbs.CommunityBoard;
+import l2r.gameserver.communitybbs.BoardsManager;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.BypassHandler;
@@ -40,8 +40,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.RequestShowCommunityBoard;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ConfirmDlg;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -260,47 +258,9 @@ public final class RequestBypassToServer extends L2GameClientPacket
 					manor.useBypass(_command, activeChar, null);
 				}
 			}
-			else if (_command.startsWith("_bbs"))
+			else if (_command.startsWith("_bbs") || _command.startsWith("_maillist") || _command.startsWith("_friendlist"))
 			{
-				if (Config.ENABLE_COMMUNITY_BOARD)
-				{
-					if (!CommunityServerThread.getInstance().sendPacket(new RequestShowCommunityBoard(activeChar.getObjectId(), _command)))
-					{
-						activeChar.sendPacket(SystemMessageId.CB_OFFLINE);
-					}
-				}
-				else
-				{
-					CommunityBoard.getInstance().handleCommands(getClient(), _command);
-				}
-			}
-			else if (_command.startsWith("bbs"))
-			{
-				if (Config.ENABLE_COMMUNITY_BOARD)
-				{
-					if (!CommunityServerThread.getInstance().sendPacket(new RequestShowCommunityBoard(activeChar.getObjectId(), _command)))
-					{
-						activeChar.sendPacket(SystemMessageId.CB_OFFLINE);
-					}
-				}
-				else
-				{
-					CommunityBoard.getInstance().handleCommands(getClient(), _command);
-				}
-			}
-			else if (_command.startsWith("_mail"))
-			{
-				if (!CommunityServerThread.getInstance().sendPacket(new RequestShowCommunityBoard(activeChar.getObjectId(), "_bbsmail")))
-				{
-					activeChar.sendPacket(SystemMessageId.CB_OFFLINE);
-				}
-			}
-			else if (_command.startsWith("_friend"))
-			{
-				if (!CommunityServerThread.getInstance().sendPacket(new RequestShowCommunityBoard(activeChar.getObjectId(), "_bbsfriend")))
-				{
-					activeChar.sendPacket(SystemMessageId.CB_OFFLINE);
-				}
+				BoardsManager.getInstance().handleCommands(getClient(), _command);
 			}
 			else if (_command.startsWith("Quest "))
 			{

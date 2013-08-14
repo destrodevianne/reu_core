@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.communitybbs.Manager;
+package l2r.gameserver.communitybbs.Managers;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 import javolution.util.FastMap;
 import l2r.gameserver.communitybbs.BB.Forum;
 import l2r.gameserver.communitybbs.BB.Post;
-import l2r.gameserver.communitybbs.BB.Post.CPost;
 import l2r.gameserver.communitybbs.BB.Topic;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ShowBoard;
@@ -65,7 +64,7 @@ public class PostBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parsecmd(String command, L2PcInstance activeChar)
+	public void cbByPass(String command, L2PcInstance activeChar)
 	{
 		if (command.startsWith("_bbsposts;read;"))
 		{
@@ -190,56 +189,6 @@ public class PostBBSManager extends BaseBBSManager
 		
 		final String html = StringUtil.concat("<html><body><br><br><table border=0 width=610><tr><td width=10></td><td width=600 align=left><a action=\"bypass _bbshome\">HOME</a>&nbsp;>&nbsp;<a action=\"bypass _bbsmemo\">Memo Form</a></td></tr></table><img src=\"L2UI.squareblank\" width=\"1\" height=\"10\"><center><table border=0 cellspacing=0 cellpadding=0 bgcolor=333333><tr><td height=10></td></tr><tr><td fixWIDTH=55 align=right valign=top>&$413; : &nbsp;</td><td fixWIDTH=380 valign=top>", topic.getName(), "</td><td fixwidth=5></td><td fixwidth=50></td><td fixWIDTH=120></td></tr><tr><td height=10></td></tr><tr><td align=right><font color=\"AAAAAA\" >&$417; : &nbsp;</font></td><td><font color=\"AAAAAA\">", topic.getOwnerName() + "</font></td><td></td><td><font color=\"AAAAAA\">&$418; :</font></td><td><font color=\"AAAAAA\">", dateFormat.format(p.getCPost(0).postDate), "</font></td></tr><tr><td height=10></td></tr></table><br><table border=0 cellspacing=0 cellpadding=0><tr><td fixwidth=5></td><td FIXWIDTH=600 align=left>", mes, "</td><td fixqqwidth=5></td></tr></table><br><img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><img src=\"L2UI.squaregray\" width=\"610\" height=\"1\"><img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><table border=0 cellspacing=0 cellpadding=0 FIXWIDTH=610><tr><td width=50><button value=\"&$422;\" action=\"bypass _bbsmemo\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\"></td><td width=560 align=right><table border=0 cellspacing=0><tr><td FIXWIDTH=300></td><td><button value = \"&$424;\" action=\"bypass _bbsposts;edit;", String.valueOf(forum.getID()), ";", String.valueOf(topic.getID()), ";0\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;<td><button value = \"&$425;\" action=\"bypass _bbstopics;del;", String.valueOf(forum.getID()), ";", String.valueOf(topic.getID()), "\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;<td><button value = \"&$421;\" action=\"bypass _bbstopics;crea;", String.valueOf(forum.getID()), "\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;</tr></table></td></tr></table><br><br><br></center></body></html>");
 		separateAndSend(html, activeChar);
-	}
-	
-	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
-	{
-		StringTokenizer st = new StringTokenizer(ar1, ";");
-		int idf = Integer.parseInt(st.nextToken());
-		int idt = Integer.parseInt(st.nextToken());
-		int idp = Integer.parseInt(st.nextToken());
-		
-		Forum f = ForumsBBSManager.getInstance().getForumByID(idf);
-		if (f == null)
-		{
-			ShowBoard sb = new ShowBoard("<html><body><br><br><center>the forum: " + idf + " does not exist !</center><br><br></body></html>", "101");
-			activeChar.sendPacket(sb);
-			activeChar.sendPacket(new ShowBoard(null, "102"));
-			activeChar.sendPacket(new ShowBoard(null, "103"));
-		}
-		else
-		{
-			Topic t = f.getTopic(idt);
-			if (t == null)
-			{
-				ShowBoard sb = new ShowBoard("<html><body><br><br><center>the topic: " + idt + " does not exist !</center><br><br></body></html>", "101");
-				activeChar.sendPacket(sb);
-				activeChar.sendPacket(new ShowBoard(null, "102"));
-				activeChar.sendPacket(new ShowBoard(null, "103"));
-			}
-			else
-			{
-				final Post p = getGPosttByTopic(t);
-				if (p != null)
-				{
-					final CPost cp = p.getCPost(idp);
-					if (cp == null)
-					{
-						ShowBoard sb = new ShowBoard("<html><body><br><br><center>the post: " + idp + " does not exist !</center><br><br></body></html>", "101");
-						activeChar.sendPacket(sb);
-						activeChar.sendPacket(new ShowBoard(null, "102"));
-						activeChar.sendPacket(new ShowBoard(null, "103"));
-					}
-					else
-					{
-						p.getCPost(idp).postTxt = ar4;
-						p.updatetxt(idp);
-						parsecmd("_bbsposts;read;" + f.getID() + ";" + t.getID(), activeChar);
-					}
-				}
-			}
-		}
 	}
 	
 	public static PostBBSManager getInstance()

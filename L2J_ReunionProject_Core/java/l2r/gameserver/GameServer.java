@@ -124,7 +124,6 @@ import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.L2GamePacketHandler;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
 import l2r.gameserver.pathfinding.PathFinding;
 import l2r.gameserver.script.faenor.FaenorScriptEngine;
 import l2r.gameserver.scripting.L2ScriptEngineManager;
@@ -430,8 +429,6 @@ public class GameServer
 		
 		_loginThread = LoginServerThread.getInstance();
 		_loginThread.start();
-		
-		CommunityServerThread.initialize();
 		
 		final SelectorConfig sc = new SelectorConfig();
 		sc.MAX_READ_PER_PASS = Config.MMO_MAX_READ_PER_PASS;

@@ -1,4 +1,4 @@
-package l2r.gameserver.communitybbs;
+package l2r.gameserver.communitybbs.ReunionBoards;
 
 import javolution.text.TextBuilder;
 import gr.reunion.aioItem.PlayersTopData;

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.communitybbs.Manager;
+package l2r.gameserver.communitybbs.Managers;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ShowBoard;
@@ -33,7 +33,7 @@ public class AdminBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parsecmd(String command, L2PcInstance activeChar)
+	public void cbByPass(String command, L2PcInstance activeChar)
 	{
 		if (!activeChar.isGM())
 		{
@@ -49,16 +49,6 @@ public class AdminBBSManager extends BaseBBSManager
 			activeChar.sendPacket(sb);
 			activeChar.sendPacket(new ShowBoard(null, "102"));
 			activeChar.sendPacket(new ShowBoard(null, "103"));
-		}
-		
-	}
-	
-	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
-	{
-		if (!activeChar.isGM())
-		{
-			return;
 		}
 	}
 	

@@ -16,10 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.communitybbs.Manager;
+package l2r.gameserver.communitybbs.Managers;
 
 import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -87,74 +86,7 @@ public class TopicBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
-	{
-		if (ar1.equals("crea"))
-		{
-			Forum f = ForumsBBSManager.getInstance().getForumByID(Integer.parseInt(ar2));
-			if (f == null)
-			{
-				ShowBoard sb = new ShowBoard("<html><body><br><br><center>the forum: " + ar2 + " is not implemented yet</center><br><br></body></html>", "101");
-				activeChar.sendPacket(sb);
-				activeChar.sendPacket(new ShowBoard(null, "102"));
-				activeChar.sendPacket(new ShowBoard(null, "103"));
-			}
-			else
-			{
-				f.vload();
-				Topic t = new Topic(Topic.ConstructorType.CREATE, TopicBBSManager.getInstance().getMaxID(f) + 1, Integer.parseInt(ar2), ar5, Calendar.getInstance().getTimeInMillis(), activeChar.getName(), activeChar.getObjectId(), Topic.MEMO, 0);
-				f.addTopic(t);
-				TopicBBSManager.getInstance().setMaxID(t.getID(), f);
-				Post p = new Post(activeChar.getName(), activeChar.getObjectId(), Calendar.getInstance().getTimeInMillis(), t.getID(), f.getID(), ar4);
-				PostBBSManager.getInstance().addPostByTopic(p, t);
-				parsecmd("_bbsmemo", activeChar);
-			}
-			
-		}
-		else if (ar1.equals("del"))
-		{
-			Forum f = ForumsBBSManager.getInstance().getForumByID(Integer.parseInt(ar2));
-			if (f == null)
-			{
-				ShowBoard sb = new ShowBoard("<html><body><br><br><center>the forum: " + ar2 + " does not exist !</center><br><br></body></html>", "101");
-				activeChar.sendPacket(sb);
-				activeChar.sendPacket(new ShowBoard(null, "102"));
-				activeChar.sendPacket(new ShowBoard(null, "103"));
-			}
-			else
-			{
-				Topic t = f.getTopic(Integer.parseInt(ar3));
-				if (t == null)
-				{
-					ShowBoard sb = new ShowBoard("<html><body><br><br><center>the topic: " + ar3 + " does not exist !</center><br><br></body></html>", "101");
-					activeChar.sendPacket(sb);
-					activeChar.sendPacket(new ShowBoard(null, "102"));
-					activeChar.sendPacket(new ShowBoard(null, "103"));
-				}
-				else
-				{
-					// CPost cp = null;
-					Post p = PostBBSManager.getInstance().getGPosttByTopic(t);
-					if (p != null)
-					{
-						p.deleteme(t);
-					}
-					t.deleteme(f);
-					parsecmd("_bbsmemo", activeChar);
-				}
-			}
-		}
-		else
-		{
-			ShowBoard sb = new ShowBoard("<html><body><br><br><center>the command: " + ar1 + " is not implemented yet</center><br><br></body></html>", "101");
-			activeChar.sendPacket(sb);
-			activeChar.sendPacket(new ShowBoard(null, "102"));
-			activeChar.sendPacket(new ShowBoard(null, "103"));
-		}
-	}
-	
-	@Override
-	public void parsecmd(String command, L2PcInstance activeChar)
+	public void cbByPass(String command, L2PcInstance activeChar)
 	{
 		if (command.equals("_bbsmemo"))
 		{
@@ -224,7 +156,7 @@ public class TopicBBSManager extends BaseBBSManager
 						p.deleteme(t);
 					}
 					t.deleteme(f);
-					parsecmd("_bbsmemo", activeChar);
+					cbByPass("_bbsmemo", activeChar);
 				}
 			}
 		}

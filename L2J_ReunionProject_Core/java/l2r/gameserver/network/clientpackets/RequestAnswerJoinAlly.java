@@ -18,12 +18,9 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.communityserver.CommunityServerThread;
-import l2r.gameserver.network.communityserver.writepackets.WorldInfo;
 
 public final class RequestAnswerJoinAlly extends L2GameClientPacket
 {
@@ -77,14 +74,6 @@ public final class RequestAnswerJoinAlly extends L2GameClientPacket
 				activeChar.getClan().setAllyPenaltyExpiryTime(0, 0);
 				activeChar.getClan().changeAllyCrest(clan.getAllyCrestId(), true);
 				activeChar.getClan().updateClanInDB();
-				for (L2Clan c : ClanTable.getInstance().getClanAllies(clan.getAllyId()))
-				{
-					if (c.getAllyId() == clan.getAllyId())
-					{
-						// notify CB server about the change
-						CommunityServerThread.getInstance().sendPacket(new WorldInfo(null, c, WorldInfo.TYPE_UPDATE_CLAN_DATA));
-					}
-				}
 			}
 		}
 		
