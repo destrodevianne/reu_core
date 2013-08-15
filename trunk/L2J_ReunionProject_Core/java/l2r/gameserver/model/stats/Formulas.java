@@ -83,6 +83,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import l2r.util.StringUtil;
+import gr.reunion.balanceSystem.BalanceHandler;
 import gr.reunion.configs.BalanceConfigs;
 
 /**
@@ -941,70 +942,10 @@ public final class Formulas
 			}
 		}
 		
-		if (target.isPlayer() && (weapon != null) && (weapon.getItemType() == L2WeaponType.DAGGER) && (skill != null))
+		if (target.isPlayer() && (weapon != null) && (skill != null))
 		{
-			L2Armor armor = ((L2PcInstance) target).getActiveChestArmorItem();
-			if (armor != null)
-			{
-				if (((L2PcInstance) target).isWearingHeavyArmor())
-				{
-					damage /= BalanceConfigs.ALT_DAGGER_DMG_VS_HEAVY;
-				}
-				
-				if (((L2PcInstance) target).isWearingLightArmor())
-				{
-					damage /= BalanceConfigs.ALT_DAGGER_DMG_VS_LIGHT;
-				}
-				
-				if (((L2PcInstance) target).isWearingMagicArmor())
-				{
-					damage /= BalanceConfigs.ALT_DAGGER_DMG_VS_ROBE;
-				}
-			}
-		}
-		
-		if (target.isPlayer() && (weapon != null) && (weapon.getItemType() == L2WeaponType.BOW) && (skill != null))
-		{
-			L2Armor armor = ((L2PcInstance) target).getActiveChestArmorItem();
-			if (armor != null)
-			{
-				if (((L2PcInstance) target).isWearingHeavyArmor())
-				{
-					damage /= BalanceConfigs.ALT_BOW_DMG_VS_HEAVY;
-				}
-				
-				if (((L2PcInstance) target).isWearingLightArmor())
-				{
-					damage /= BalanceConfigs.ALT_BOW_DMG_VS_LIGHT;
-				}
-				
-				if (((L2PcInstance) target).isWearingMagicArmor())
-				{
-					damage /= BalanceConfigs.ALT_BOW_DMG_VS_ROBE;
-				}
-			}
-		}
-		
-		if (target.isPlayer() && (weapon != null) && (weapon.getItemType() == L2WeaponType.CROSSBOW) && (skill != null))
-		{
-			L2Armor armor = ((L2PcInstance) target).getActiveChestArmorItem();
-			if (armor != null)
-			{
-				if (((L2PcInstance) target).isWearingHeavyArmor())
-				{
-					damage /= BalanceConfigs.ALT_CROSSBOW_DMG_VS_HEAVY;
-				}
-				
-				if (((L2PcInstance) target).isWearingLightArmor())
-				{
-					damage /= BalanceConfigs.ALT_CROSSBOW_DMG_VS_LIGHT;
-				}
-				
-				if (((L2PcInstance) target).isWearingMagicArmor())
-				{
-					damage /= BalanceConfigs.ALT_CROSSBOW_DMG_VS_ROBE;
-				}
-			}
+			// Calculates damage on attacker
+			damage = BalanceHandler.getInstance().calcPhysBalancedDamage(((L2PcInstance) target), weapon.getItemType(), damage);
 		}
 		
 		if (attacker.isPlayer())
