@@ -29,6 +29,9 @@ import l2r.Config;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.ClassListData;
 import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.PcRace;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.FortSiegeManager;
@@ -41,13 +44,11 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.AcquireSkillType;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.base.PlayerClass;
-import l2r.gameserver.model.base.Race;
 import l2r.gameserver.model.base.SubClass;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.olympiad.OlympiadManager;
 import l2r.gameserver.model.quest.QuestState;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AcquireSkillList;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -400,12 +401,12 @@ public class L2VillageMasterInstance extends L2NpcInstance
 					}
 					else
 					{
-						if ((player.getRace() == Race.Elf) || (player.getRace() == Race.DarkElf))
+						if ((player.getRace() == PcRace.Elf) || (player.getRace() == PcRace.DarkElf))
 						{
 							html.setFile(player.getHtmlPrefix(), "data/html/villagemaster/SubClass_Fail_Elves.htm");
 							player.sendPacket(html);
 						}
-						else if (player.getRace() == Race.Kamael)
+						else if (player.getRace() == PcRace.Kamael)
 						{
 							html.setFile(player.getHtmlPrefix(), "data/html/villagemaster/SubClass_Fail_Kamael.htm");
 							player.sendPacket(html);
@@ -699,9 +700,9 @@ public class L2VillageMasterInstance extends L2NpcInstance
 		}
 	}
 	
-	protected String getSubClassMenu(Race pRace)
+	protected String getSubClassMenu(PcRace pRace)
 	{
-		if (Config.ALT_GAME_SUBCLASS_EVERYWHERE || (pRace != Race.Kamael))
+		if (Config.ALT_GAME_SUBCLASS_EVERYWHERE || (pRace != PcRace.Kamael))
 		{
 			return "data/html/villagemaster/SubClass.htm";
 		}
@@ -944,7 +945,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 			}
 		}
 		
-		if (player.isInsideZone(ZoneId.SIEGE))
+		if (player.isInsideZone(ZoneIdType.SIEGE))
 		{
 			player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_WHILE_IN_SIEGE);
 			return;

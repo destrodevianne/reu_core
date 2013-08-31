@@ -20,20 +20,21 @@ package l2r.gameserver.model.actor;
 
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.ai.L2SummonAI;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2WorldRegion;
-import l2r.gameserver.model.ShotType;
 import l2r.gameserver.model.actor.L2Attackable.AggroInfo;
-import l2r.gameserver.model.actor.instance.L2MerchantSummonInstance;
 import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2SiegeSummonInstance;
@@ -50,7 +51,6 @@ import l2r.gameserver.model.items.type.L2ActionType;
 import l2r.gameserver.model.olympiad.OlympiadGameManager;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AbstractNpcInfo.SummonInfo;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -125,25 +125,23 @@ public abstract class L2Summon extends L2Playable
 	public void onSpawn()
 	{
 		super.onSpawn();
-		if (!(this instanceof L2MerchantSummonInstance))
+		
+		if (Config.SUMMON_STORE_SKILL_COOLTIME && !isTeleporting())
 		{
-			if (Config.SUMMON_STORE_SKILL_COOLTIME && !isTeleporting())
-			{
-				restoreEffects();
-			}
-			
-			setFollowStatus(true);
-			updateAndBroadcastStatus(0);
-			sendPacket(new RelationChanged(this, getOwner().getRelation(getOwner()), false));
-			for (L2PcInstance player : getOwner().getKnownList().getKnownPlayersInRadius(800))
-			{
-				player.sendPacket(new RelationChanged(this, getOwner().getRelation(player), isAutoAttackable(player)));
-			}
-			L2Party party = getOwner().getParty();
-			if (party != null)
-			{
-				party.broadcastToPartyMembers(getOwner(), new ExPartyPetWindowAdd(this));
-			}
+			restoreEffects();
+		}
+		
+		setFollowStatus(true);
+		updateAndBroadcastStatus(0);
+		sendPacket(new RelationChanged(this, getOwner().getRelation(getOwner()), false));
+		for (L2PcInstance player : getOwner().getKnownList().getKnownPlayersInRadius(800))
+		{
+			player.sendPacket(new RelationChanged(this, getOwner().getRelation(player), isAutoAttackable(player)));
+		}
+		L2Party party = getOwner().getParty();
+		if (party != null)
+		{
+			party.broadcastToPartyMembers(getOwner(), new ExPartyPetWindowAdd(this));
 		}
 		setShowSummonAnimation(false); // addVisibleObject created the info packets with summon animation
 		// if someone comes into range now, the animation shouldn't show any more
@@ -330,11 +328,8 @@ public abstract class L2Summon extends L2Playable
 		{
 			return false;
 		}
-		if (this instanceof L2MerchantSummonInstance)
-		{
-			return true;
-		}
-		L2PcInstance owner = getOwner();
+		
+		final L2PcInstance owner = getOwner();
 		
 		if (owner != null)
 		{
@@ -698,7 +693,7 @@ public abstract class L2Summon extends L2Playable
 				return false;
 			}
 			
-			if ((target.getActingPlayer() != null) && (getOwner().getSiegeState() > 0) && getOwner().isInsideZone(ZoneId.SIEGE) && (target.getActingPlayer().getSiegeState() == getOwner().getSiegeState()) && (target.getActingPlayer() != getOwner()) && (target.getActingPlayer().getSiegeSide() == getOwner().getSiegeSide()))
+			if ((target.getActingPlayer() != null) && (getOwner().getSiegeState() > 0) && getOwner().isInsideZone(ZoneIdType.SIEGE) && (target.getActingPlayer().getSiegeState() == getOwner().getSiegeState()) && (target.getActingPlayer() != getOwner()) && (target.getActingPlayer().getSiegeSide() == getOwner().getSiegeSide()))
 			{
 				if (TerritoryWarManager.getInstance().isTWInProgress())
 				{
@@ -900,7 +895,7 @@ public abstract class L2Summon extends L2Playable
 	{
 		for (L2PcInstance player : getKnownList().getKnownPlayers().values())
 		{
-			if ((player == null) || ((player == getOwner()) && !(this instanceof L2MerchantSummonInstance)))
+			if ((player == null) || (player == getOwner()))
 			{
 				continue;
 			}
@@ -933,7 +928,7 @@ public abstract class L2Summon extends L2Playable
 	public void sendInfo(L2PcInstance activeChar)
 	{
 		// Check if the L2PcInstance is the owner of the Pet
-		if (activeChar.equals(getOwner()) && !(this instanceof L2MerchantSummonInstance))
+		if (activeChar == getOwner())
 		{
 			activeChar.sendPacket(new PetInfo(this, 0));
 			// The PetInfo packet wipes the PartySpelled (list of active spells' icons). Re-add them
@@ -1059,7 +1054,7 @@ public abstract class L2Summon extends L2Playable
 			return false;
 		}
 		
-		if ((target.getActingPlayer() != null) && (getOwner().getSiegeState() > 0) && getOwner().isInsideZone(ZoneId.SIEGE) && (target.getActingPlayer().getSiegeSide() == getOwner().getSiegeSide()))
+		if ((target.getActingPlayer() != null) && (getOwner().getSiegeState() > 0) && getOwner().isInsideZone(ZoneIdType.SIEGE) && (target.getActingPlayer().getSiegeSide() == getOwner().getSiegeSide()))
 		{
 			if (TerritoryWarManager.getInstance().isTWInProgress())
 			{

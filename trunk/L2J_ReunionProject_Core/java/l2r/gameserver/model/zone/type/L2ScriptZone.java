@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A scripted zone... Creation of such a zone should require somekind of jython script reference which can handle onEnter() / onExit()
@@ -36,13 +36,13 @@ public class L2ScriptZone extends L2ZoneType
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		character.setInsideZone(ZoneId.SCRIPT, true);
+		character.setInsideZone(ZoneIdType.SCRIPT, true);
 	}
 	
 	@Override
 	protected void onExit(L2Character character)
 	{
-		character.setInsideZone(ZoneId.SCRIPT, false);
+		character.setInsideZone(ZoneIdType.SCRIPT, false);
 	}
 	
 	@Override

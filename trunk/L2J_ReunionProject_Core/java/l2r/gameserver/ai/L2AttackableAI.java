@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.ai;
 
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ACTIVE;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ATTACK;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_IDLE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +33,9 @@ import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.TerritoryTable;
+import l2r.gameserver.enums.AIType;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
@@ -53,13 +56,11 @@ import l2r.gameserver.model.actor.instance.L2RaidBossInstance;
 import l2r.gameserver.model.actor.instance.L2RiftInvaderInstance;
 import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.actor.templates.L2NpcTemplate.AIType;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 
@@ -291,7 +292,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			
 			// depending on config, do not allow mobs to attack _new_ players in peacezones,
 			// unless they are already following those players from outside the peacezone.
-			if (!Config.ALT_MOB_AGRO_IN_PEACEZONE && target.isInsideZone(ZoneId.PEACE))
+			if (!Config.ALT_MOB_AGRO_IN_PEACEZONE && target.isInsideZone(ZoneIdType.PEACE))
 			{
 				return false;
 			}

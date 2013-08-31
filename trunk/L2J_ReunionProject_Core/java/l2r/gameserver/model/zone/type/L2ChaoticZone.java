@@ -16,9 +16,9 @@ package l2r.gameserver.model.zone.type;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.util.Rnd;
 import gr.reunion.configs.ChaoticZoneConfigs;
 
@@ -35,11 +35,11 @@ public class L2ChaoticZone extends L2RespawnZone
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		character.setInsideZone(ZoneId.ZONE_CHAOTIC, true);
-		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
-		character.setInsideZone(ZoneId.NO_STORE, true);
-		character.setInsideZone(ZoneId.NO_BOOKMARK, true);
-		character.setInsideZone(ZoneId.NO_ITEM_DROP, true);
+		character.setInsideZone(ZoneIdType.ZONE_CHAOTIC, true);
+		character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, true);
+		character.setInsideZone(ZoneIdType.NO_STORE, true);
+		character.setInsideZone(ZoneIdType.NO_BOOKMARK, true);
+		character.setInsideZone(ZoneIdType.NO_ITEM_DROP, true);
 		
 		if (character.isPlayer())
 		{
@@ -52,11 +52,11 @@ public class L2ChaoticZone extends L2RespawnZone
 	@Override
 	protected void onExit(L2Character character)
 	{
-		character.setInsideZone(ZoneId.ZONE_CHAOTIC, false);
-		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
-		character.setInsideZone(ZoneId.NO_STORE, false);
-		character.setInsideZone(ZoneId.NO_BOOKMARK, false);
-		character.setInsideZone(ZoneId.NO_ITEM_DROP, false);
+		character.setInsideZone(ZoneIdType.ZONE_CHAOTIC, false);
+		character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, false);
+		character.setInsideZone(ZoneIdType.NO_STORE, false);
+		character.setInsideZone(ZoneIdType.NO_BOOKMARK, false);
+		character.setInsideZone(ZoneIdType.NO_ITEM_DROP, false);
 		
 		if (character.isPlayer())
 		{

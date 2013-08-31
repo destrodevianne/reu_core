@@ -18,11 +18,11 @@
  */
 package l2r.gameserver.model.zone.type;
 
-import l2r.gameserver.instancemanager.MapRegionManager.TeleportWhereType;
+import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneRespawn;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A castle zone
@@ -53,13 +53,13 @@ public class L2FortZone extends L2ZoneRespawn
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		character.setInsideZone(ZoneId.FORT, true);
+		character.setInsideZone(ZoneIdType.FORT, true);
 	}
 	
 	@Override
 	protected void onExit(L2Character character)
 	{
-		character.setInsideZone(ZoneId.FORT, false);
+		character.setInsideZone(ZoneIdType.FORT, false);
 	}
 	
 	@Override

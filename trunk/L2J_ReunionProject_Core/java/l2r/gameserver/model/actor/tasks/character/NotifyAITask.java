@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.actor.tasks.character;
 
-import l2r.gameserver.ai.CtrlEvent;
+import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.model.actor.L2Character;
 
 /**

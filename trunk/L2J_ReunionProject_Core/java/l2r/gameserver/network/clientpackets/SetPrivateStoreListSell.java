@@ -20,9 +20,9 @@ package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
 import l2r.Config;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.TradeList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExPrivateStoreSetWholeMsg;
@@ -109,7 +109,7 @@ public class SetPrivateStoreListSell extends L2GameClientPacket
 			return;
 		}
 		
-		if (player.isInsideZone(ZoneId.NO_STORE))
+		if (player.isInsideZone(ZoneIdType.NO_STORE))
 		{
 			player.sendPacket(new PrivateStoreManageListSell(player, _packageSale));
 			player.sendPacket(SystemMessageId.NO_PRIVATE_STORE_HERE);

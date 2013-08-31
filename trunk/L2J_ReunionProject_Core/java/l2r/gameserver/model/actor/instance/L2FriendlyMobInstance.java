@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.model.actor.instance;
 
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.knownlist.FriendlyMobKnownList;

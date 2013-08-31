@@ -34,17 +34,17 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SpawnTable;
-import l2r.gameserver.instancemanager.MapRegionManager;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.MessageType;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Party;
-import l2r.gameserver.model.L2Party.messageType;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.SpawnListener;
@@ -1459,7 +1459,7 @@ public class SevenSignsFestival implements SpawnListener
 			if ((festivalParty != null) && (festivalParty.getMemberCount() < Config.ALT_FESTIVAL_MIN_PLAYER))
 			{
 				updateParticipants(player, null); // under minimum count
-				festivalParty.removePartyMember(player, messageType.Expelled);
+				festivalParty.removePartyMember(player, MessageType.Expelled);
 			}
 		}
 	}
@@ -2423,7 +2423,7 @@ public class SevenSignsFestival implements SpawnListener
 				// If an exception occurs, just move the player to the nearest town.
 				try
 				{
-					participant.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+					participant.teleToLocation(TeleportWhereType.Town);
 					participant.sendMessage("You have been removed from the festival arena.");
 				}
 				catch (NullPointerException e2)

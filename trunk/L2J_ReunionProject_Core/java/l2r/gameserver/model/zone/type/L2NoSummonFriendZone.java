@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A simple no summon zone
@@ -37,13 +37,13 @@ public class L2NoSummonFriendZone extends L2ZoneType
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
+		character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, true);
 	}
 	
 	@Override
 	protected void onExit(L2Character character)
 	{
-		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
+		character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, false);
 	}
 	
 	@Override

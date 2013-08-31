@@ -22,6 +22,7 @@ import l2r.Config;
 import l2r.gameserver.TradeController;
 import l2r.gameserver.datatables.MerchantPriceConfigTable;
 import l2r.gameserver.datatables.MerchantPriceConfigTable.MerchantPriceConfig;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2TradeList;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.network.serverpackets.ActionFailed;

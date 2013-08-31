@@ -26,8 +26,9 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlEvent;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.CtrlEvent;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.instancemanager.DuelManager;
@@ -42,7 +43,6 @@ import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.l2skills.L2SkillDrain;
 import l2r.gameserver.model.stats.BaseStats;
 import l2r.gameserver.model.stats.Formulas;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
@@ -438,7 +438,7 @@ public final class L2CubicInstance
 				// get target in pvp or in siege
 				L2PcInstance enemy = null;
 				
-				if (((_owner.getPvpFlag() > 0) && !_owner.isInsideZone(ZoneId.PEACE)) || _owner.isInsideZone(ZoneId.PVP))
+				if (((_owner.getPvpFlag() > 0) && !_owner.isInsideZone(ZoneIdType.PEACE)) || _owner.isInsideZone(ZoneIdType.PVP))
 				{
 					if (!((L2Character) ownerTarget).isDead())
 					{
@@ -463,7 +463,7 @@ public final class L2CubicInstance
 								}
 							}
 						}
-						if ((_owner.getClan() != null) && !_owner.isInsideZone(ZoneId.PVP))
+						if ((_owner.getClan() != null) && !_owner.isInsideZone(ZoneIdType.PVP))
 						{
 							if (_owner.getClan().isMember(enemy.getObjectId()))
 							{
@@ -477,11 +477,11 @@ public final class L2CubicInstance
 								}
 							}
 						}
-						if ((enemy.getPvpFlag() == 0) && !enemy.isInsideZone(ZoneId.PVP))
+						if ((enemy.getPvpFlag() == 0) && !enemy.isInsideZone(ZoneIdType.PVP))
 						{
 							targetIt = false;
 						}
-						if (enemy.isInsideZone(ZoneId.PEACE))
+						if (enemy.isInsideZone(ZoneIdType.PEACE))
 						{
 							targetIt = false;
 						}

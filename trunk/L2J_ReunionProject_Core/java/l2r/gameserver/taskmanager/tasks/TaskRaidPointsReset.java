@@ -23,12 +23,12 @@ import java.util.Map;
 
 import l2r.Config;
 import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.instancemanager.RaidBossPointsManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
-import l2r.gameserver.taskmanager.TaskTypes;
 
 public class TaskRaidPointsReset extends Task
 {
@@ -112,6 +112,6 @@ public class TaskRaidPointsReset extends Task
 	public void initializate()
 	{
 		super.initializate();
-		TaskManager.addUniqueTask(NAME, TaskTypes.TYPE_GLOBAL_TASK, "1", "00:10:00", "");
+		TaskManager.addUniqueTask(NAME, TaskType.TYPE_GLOBAL_TASK, "1", "00:10:00", "");
 	}
 }

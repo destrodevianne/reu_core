@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javolution.util.FastList;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Tower;

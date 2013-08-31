@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A Town zone
@@ -58,13 +58,13 @@ public class L2TownZone extends L2ZoneType
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		character.setInsideZone(ZoneId.TOWN, true);
+		character.setInsideZone(ZoneIdType.TOWN, true);
 	}
 	
 	@Override
 	protected void onExit(L2Character character)
 	{
-		character.setInsideZone(ZoneId.TOWN, false);
+		character.setInsideZone(ZoneIdType.TOWN, false);
 	}
 	
 	@Override

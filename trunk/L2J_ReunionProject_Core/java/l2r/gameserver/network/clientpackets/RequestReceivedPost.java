@@ -19,10 +19,10 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Message;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExChangePostState;
 import l2r.gameserver.network.serverpackets.ExReplyReceivedPost;
@@ -58,13 +58,13 @@ public final class RequestReceivedPost extends L2GameClientPacket
 			return;
 		}
 		
-		if (!activeChar.isInsideZone(ZoneId.PEACE) && msg.hasAttachments())
+		if (!activeChar.isInsideZone(ZoneIdType.PEACE) && msg.hasAttachments())
 		{
 			activeChar.sendPacket(SystemMessageId.CANT_USE_MAIL_OUTSIDE_PEACE_ZONE);
 			return;
 		}
 		
-		if (activeChar.isInsideZone(ZoneId.JAIL))
+		if (activeChar.isInsideZone(ZoneIdType.JAIL))
 		{
 			activeChar.sendMessage("You cannot receive or send mail with attached items in jail.");
 			return;

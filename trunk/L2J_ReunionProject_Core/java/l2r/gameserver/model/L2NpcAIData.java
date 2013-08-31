@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model;
 
-import l2r.gameserver.model.actor.templates.L2NpcTemplate.AIType;
+import l2r.gameserver.enums.AIType;
 
 /**
  * This Data is for NPC Attributes and AI related stuffs.<br>

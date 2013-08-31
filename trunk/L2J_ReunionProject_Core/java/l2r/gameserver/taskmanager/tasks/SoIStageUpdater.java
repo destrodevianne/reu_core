@@ -16,11 +16,11 @@ package l2r.gameserver.taskmanager.tasks;
 
 import java.util.Calendar;
 
+import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.instancemanager.SoIManager;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
-import l2r.gameserver.taskmanager.TaskTypes;
 
 /**
  * Author: RobikBobik(L2Brick)
@@ -49,6 +49,6 @@ public class SoIStageUpdater extends Task
 	public void initializate()
 	{
 		super.initializate();
-		TaskManager.addUniqueTask(getName(), TaskTypes.TYPE_GLOBAL_TASK, "1", "12:00:00", "");
+		TaskManager.addUniqueTask(getName(), TaskType.TYPE_GLOBAL_TASK, "1", "12:00:00", "");
 	}
 }

@@ -38,6 +38,7 @@ import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.CrestTable;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.SiegeManager;
@@ -47,7 +48,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.ClanWarehouse;
 import l2r.gameserver.model.itemcontainer.ItemContainer;
 import l2r.gameserver.model.skills.L2Skill;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.CreatureSay;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
@@ -2454,7 +2454,7 @@ public class L2Clan
 				return false;
 			}
 		}
-		if (activeChar.isInsideZone(ZoneId.SIEGE) && target.isInsideZone(ZoneId.SIEGE))
+		if (activeChar.isInsideZone(ZoneIdType.SIEGE) && target.isInsideZone(ZoneIdType.SIEGE))
 		{
 			activeChar.sendPacket(SystemMessageId.OPPOSING_CLAN_IS_PARTICIPATING_IN_SIEGE);
 			return false;
@@ -2590,7 +2590,7 @@ public class L2Clan
 			player.sendPacket(SystemMessageId.FEATURE_ONLY_FOR_ALLIANCE_LEADER);
 			return;
 		}
-		if (player.isInsideZone(ZoneId.SIEGE))
+		if (player.isInsideZone(ZoneIdType.SIEGE))
 		{
 			player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_ALLY_WHILE_IN_SIEGE);
 			return;

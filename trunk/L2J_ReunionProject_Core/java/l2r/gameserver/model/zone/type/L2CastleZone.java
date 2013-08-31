@@ -18,13 +18,13 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CastleManager;
-import l2r.gameserver.instancemanager.MapRegionManager.TeleportWhereType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.zone.L2ZoneRespawn;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A castle zone
@@ -58,7 +58,7 @@ public class L2CastleZone extends L2ZoneRespawn
 	{
 		if (getCastle() != null)
 		{
-			character.setInsideZone(ZoneId.CASTLE, true);
+			character.setInsideZone(ZoneIdType.CASTLE, true);
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class L2CastleZone extends L2ZoneRespawn
 	{
 		if (getCastle() != null)
 		{
-			character.setInsideZone(ZoneId.CASTLE, false);
+			character.setInsideZone(ZoneIdType.CASTLE, false);
 		}
 	}
 	

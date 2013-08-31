@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.model.actor;
 
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_FOLLOW;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ACTIVE;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_FOLLOW;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,20 +38,24 @@ import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlEvent;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.L2AttackableAI;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.CtrlEvent;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;
 import l2r.gameserver.instancemanager.GlobalVariablesManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.MapRegionManager;
-import l2r.gameserver.instancemanager.MapRegionManager.TeleportWhereType;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.instancemanager.TownManager;
 import l2r.gameserver.model.ChanceSkillList;
@@ -64,8 +68,6 @@ import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
 import l2r.gameserver.model.Location;
-import l2r.gameserver.model.PcCondOverride;
-import l2r.gameserver.model.ShotType;
 import l2r.gameserver.model.actor.instance.L2EventMapGuardInstance;
 import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -109,7 +111,6 @@ import l2r.gameserver.model.stats.BaseStats;
 import l2r.gameserver.model.stats.Calculator;
 import l2r.gameserver.model.stats.Formulas;
 import l2r.gameserver.model.stats.Stats;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AbstractNpcInfo;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -218,7 +219,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	/** Current force buff this caster is casting to a target */
 	protected FusionSkill _fusionSkill;
 	
-	private final byte[] _zones = new byte[ZoneId.getZoneCount()];
+	private final byte[] _zones = new byte[ZoneIdType.getZoneCount()];
 	protected byte _zoneValidateCounter = 4;
 	
 	private L2Character _debugger = null;
@@ -304,7 +305,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 * @return {code true} if the character is in that zone
 	 */
 	@Override
-	public final boolean isInsideZone(ZoneId zone)
+	public final boolean isInsideZone(ZoneIdType zone)
 	{
 		Instance instance = InstanceManager.getInstance().getInstance(getInstanceId());
 		switch (zone)
@@ -314,7 +315,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				{
 					return true;
 				}
-				return (_zones[ZoneId.PVP.getId()] > 0) && (_zones[ZoneId.PEACE.getId()] == 0);
+				return (_zones[ZoneIdType.PVP.getId()] > 0) && (_zones[ZoneIdType.PEACE.getId()] == 0);
 			case PEACE:
 				if ((instance != null) && instance.isPvPInstance())
 				{
@@ -328,7 +329,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 * @param zone
 	 * @param state
 	 */
-	public final void setInsideZone(ZoneId zone, final boolean state)
+	public final void setInsideZone(ZoneIdType zone, final boolean state)
 	{
 		if (state)
 		{
@@ -870,7 +871,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				return;
 			}
 			
-			else if ((target.getActingPlayer() != null) && (getActingPlayer().getSiegeState() > 0) && isInsideZone(ZoneId.SIEGE) && (target.getActingPlayer().getSiegeState() == getActingPlayer().getSiegeState()) && (target.getActingPlayer() != this) && (target.getActingPlayer().getSiegeSide() == getActingPlayer().getSiegeSide()))
+			else if ((target.getActingPlayer() != null) && (getActingPlayer().getSiegeState() > 0) && isInsideZone(ZoneIdType.SIEGE) && (target.getActingPlayer().getSiegeState() == getActingPlayer().getSiegeState()) && (target.getActingPlayer() != this) && (target.getActingPlayer().getSiegeSide() == getActingPlayer().getSiegeSide()))
 			{
 				if (TerritoryWarManager.getInstance().isTWInProgress())
 				{
@@ -4475,7 +4476,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			dy = m._yDestination - m._yAccurate;
 		}
 		
-		final boolean isFloating = isFlying() || isInsideZone(ZoneId.WATER);
+		final boolean isFloating = isFlying() || isInsideZone(ZoneIdType.WATER);
 		
 		// Z coordinate will follow geodata or client values
 		if ((Config.GEODATA > 0) && (Config.COORD_SYNCHRONIZE == 2) && !isFloating && !m.disregardingGeodata && ((GameTimeController.getInstance().getGameTicks() % 10) == 0 // once a second to reduce possible cpu load
@@ -4732,7 +4733,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		
 		// make water move short and use no geodata checks for swimming chars
 		// distance in a click can easily be over 3000
-		if ((Config.GEODATA > 0) && isInsideZone(ZoneId.WATER) && (distance > 700))
+		if ((Config.GEODATA > 0) && isInsideZone(ZoneIdType.WATER) && (distance > 700))
 		{
 			double divider = 700 / distance;
 			x = curX + (int) (divider * dx);
@@ -4801,7 +4802,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		m.disregardingGeodata = false;
 		
 		if ((Config.GEODATA > 0) && !isFlying() // flying chars not checked - even canSeeTarget doesn't work yet
-			&& (!isInsideZone(ZoneId.WATER) || isInsideZone(ZoneId.SIEGE))) // swimming also not checked unless in siege zone - but distance is limited
+			&& (!isInsideZone(ZoneIdType.WATER) || isInsideZone(ZoneIdType.SIEGE))) // swimming also not checked unless in siege zone - but distance is limited
 		{
 			final boolean isInVehicle = isPlayer() && (getActingPlayer().getVehicle() != null);
 			if (isInVehicle)
@@ -4950,7 +4951,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// Apply Z distance for flying or swimming for correct timing calculations
-		if ((isFlying() || isInsideZone(ZoneId.WATER)) && !verticalMovementOnly)
+		if ((isFlying() || isInsideZone(ZoneIdType.WATER)) && !verticalMovementOnly)
 		{
 			distance = Math.sqrt((distance * distance) + (dz * dz));
 		}
@@ -5797,21 +5798,21 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			
 			if ((attacker instanceof L2Character) && (target instanceof L2Character))
 			{
-				return (target.isInsideZone(ZoneId.PEACE) || attacker.isInsideZone(ZoneId.PEACE));
+				return (target.isInsideZone(ZoneIdType.PEACE) || attacker.isInsideZone(ZoneIdType.PEACE));
 			}
 			if (attacker instanceof L2Character)
 			{
-				return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || attacker.isInsideZone(ZoneId.PEACE));
+				return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || attacker.isInsideZone(ZoneIdType.PEACE));
 			}
 		}
 		
 		if ((attacker instanceof L2Character) && (target instanceof L2Character))
 		{
-			return (target.isInsideZone(ZoneId.PEACE) || attacker.isInsideZone(ZoneId.PEACE));
+			return (target.isInsideZone(ZoneIdType.PEACE) || attacker.isInsideZone(ZoneIdType.PEACE));
 		}
 		if (attacker instanceof L2Character)
 		{
-			return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || attacker.isInsideZone(ZoneId.PEACE));
+			return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || attacker.isInsideZone(ZoneIdType.PEACE));
 		}
 		return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || (TownManager.getTown(attacker.getX(), attacker.getY(), attacker.getZ()) != null));
 	}

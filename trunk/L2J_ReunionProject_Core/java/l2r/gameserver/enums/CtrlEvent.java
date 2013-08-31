@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.ai;
+package l2r.gameserver.enums;
 
 /**
  * This class contains an enum of each possibles events that can happen on an AI character.

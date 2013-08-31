@@ -9,6 +9,7 @@ import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.MultiSell;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.TransformationManager;
 import l2r.gameserver.model.actor.FakePc;

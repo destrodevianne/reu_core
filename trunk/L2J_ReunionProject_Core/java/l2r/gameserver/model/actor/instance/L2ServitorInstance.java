@@ -34,6 +34,7 @@ import l2r.gameserver.datatables.CharSummonTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SummonEffectsTable;
 import l2r.gameserver.datatables.SummonEffectsTable.SummonEffect;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;

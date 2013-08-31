@@ -19,8 +19,8 @@
 package l2r.gameserver.model.actor.stat;
 
 import l2r.Config;
+import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.model.Elementals;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;

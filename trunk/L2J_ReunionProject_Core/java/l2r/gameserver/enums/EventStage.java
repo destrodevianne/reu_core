@@ -16,14 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver;
+package l2r.gameserver.enums;
 
-/**
- * @author mkizub
- */
-public enum TaskPriority
+public enum EventStage
 {
-	PR_NORMAL,
-	PR_HIGH,
-	PR_URGENT;
+	START,
+	END,
+	EVENT_STOPPED,
+	REGISTRATION_BEGIN,
+	CONTROL_CHANGE
 }

@@ -20,8 +20,8 @@ package l2r.gameserver.network.serverpackets;
 
 import l2r.Config;
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.L2Decoy;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

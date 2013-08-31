@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlIntention;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Attackable;

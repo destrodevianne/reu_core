@@ -19,11 +19,11 @@
 package l2r.gameserver.model.zone.type;
 
 import l2r.Config;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A Peace Zone
@@ -57,12 +57,12 @@ public class L2PeaceZone extends L2ZoneType
 		
 		if (Config.PEACE_ZONE_MODE != 2)
 		{
-			character.setInsideZone(ZoneId.PEACE, true);
+			character.setInsideZone(ZoneIdType.PEACE, true);
 		}
 		
 		if (!getAllowStore())
 		{
-			character.setInsideZone(ZoneId.NO_STORE, true);
+			character.setInsideZone(ZoneIdType.NO_STORE, true);
 		}
 	}
 	
@@ -71,12 +71,12 @@ public class L2PeaceZone extends L2ZoneType
 	{
 		if (Config.PEACE_ZONE_MODE != 2)
 		{
-			character.setInsideZone(ZoneId.PEACE, false);
+			character.setInsideZone(ZoneIdType.PEACE, false);
 		}
 		
 		if (!getAllowStore())
 		{
-			character.setInsideZone(ZoneId.NO_STORE, false);
+			character.setInsideZone(ZoneIdType.NO_STORE, false);
 		}
 	}
 	

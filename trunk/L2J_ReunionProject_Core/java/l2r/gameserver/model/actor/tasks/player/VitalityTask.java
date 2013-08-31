@@ -19,9 +19,9 @@
 package l2r.gameserver.model.actor.tasks.player;
 
 import l2r.Config;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.stat.PcStat;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.ExVitalityPointInfo;
 
 /**
@@ -40,7 +40,7 @@ public class VitalityTask implements Runnable
 	@Override
 	public void run()
 	{
-		if (!_player.isInsideZone(ZoneId.PEACE))
+		if (!_player.isInsideZone(ZoneIdType.PEACE))
 		{
 			return;
 		}

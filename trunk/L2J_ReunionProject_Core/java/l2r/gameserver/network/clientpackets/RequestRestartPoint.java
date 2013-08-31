@@ -19,6 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
@@ -133,7 +134,7 @@ public final class RequestRestartPoint extends L2GameClientPacket
 					_log.warning("Player [" + activeChar.getName() + "] called RestartPointPacket - To Clanhall and he doesn't have Clanhall!");
 					return;
 				}
-				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, MapRegionManager.TeleportWhereType.ClanHall);
+				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.ClanHall);
 				
 				if ((ClanHallManager.getInstance().getClanHallByOwner(activeChar.getClan()) != null) && (ClanHallManager.getInstance().getClanHallByOwner(activeChar.getClan()).getFunction(ClanHall.FUNC_RESTORE_EXP) != null))
 				{
@@ -150,11 +151,11 @@ public final class RequestRestartPoint extends L2GameClientPacket
 					// Siege in progress
 					if (castle.getSiege().checkIsDefender(activeChar.getClan()))
 					{
-						loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, MapRegionManager.TeleportWhereType.Castle);
+						loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.Castle);
 					}
 					else if (castle.getSiege().checkIsAttacker(activeChar.getClan()))
 					{
-						loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, MapRegionManager.TeleportWhereType.Town);
+						loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.Town);
 					}
 					else
 					{
@@ -168,7 +169,7 @@ public final class RequestRestartPoint extends L2GameClientPacket
 					{
 						return;
 					}
-					loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, MapRegionManager.TeleportWhereType.Castle);
+					loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.Castle);
 				}
 				if ((CastleManager.getInstance().getCastleByOwner(activeChar.getClan()) != null) && (CastleManager.getInstance().getCastleByOwner(activeChar.getClan()).getFunction(Castle.FUNC_RESTORE_EXP) != null))
 				{
@@ -183,7 +184,7 @@ public final class RequestRestartPoint extends L2GameClientPacket
 					_log.warning("Player [" + activeChar.getName() + "] called RestartPointPacket - To Fortress and he doesn't have Fortress!");
 					return;
 				}
-				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, MapRegionManager.TeleportWhereType.Fortress);
+				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.Fortress);
 				if ((FortManager.getInstance().getFortByOwner(activeChar.getClan()) != null) && (FortManager.getInstance().getFortByOwner(activeChar.getClan()).getFunction(Fort.FUNC_RESTORE_EXP) != null))
 				{
 					activeChar.restoreExp(FortManager.getInstance().getFortByOwner(activeChar.getClan()).getFunction(Fort.FUNC_RESTORE_EXP).getLvl());
@@ -221,7 +222,7 @@ public final class RequestRestartPoint extends L2GameClientPacket
 					_log.warning("Player [" + activeChar.getName() + "] called RestartPointPacket - To Siege HQ and he doesn't have Siege HQ!");
 					return;
 				}
-				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, MapRegionManager.TeleportWhereType.SiegeFlag);
+				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.SiegeFlag);
 				break;
 			}
 			case 5: // Fixed or Player is a festival participant
@@ -258,7 +259,7 @@ public final class RequestRestartPoint extends L2GameClientPacket
 			}
 			default:
 			{
-				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, MapRegionManager.TeleportWhereType.Town);
+				loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.Town);
 				break;
 			}
 		}

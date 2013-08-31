@@ -16,14 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.base;
+package l2r.gameserver.enums;
 
-/**
- * This class ...
- * @version $Revision: 1.2.4.1 $ $Date: 2005/03/27 15:29:32 $
- */
-public class Sex
+public enum TeleportWhereType
 {
-	public static final int MALE = 0;
-	public static final int FEMALE = 1;
+	Castle,
+	Castle_banish,
+	ClanHall,
+	ClanHall_banish,
+	SiegeFlag,
+	Town,
+	Fortress,
+	Fortress_banish,
+	Territory,
+	Territory_banish
 }

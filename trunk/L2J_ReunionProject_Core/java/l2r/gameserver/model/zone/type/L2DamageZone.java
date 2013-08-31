@@ -19,9 +19,9 @@
 package l2r.gameserver.model.zone.type;
 
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.ZoneManager;
-import l2r.gameserver.model.L2Object.InstanceType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;

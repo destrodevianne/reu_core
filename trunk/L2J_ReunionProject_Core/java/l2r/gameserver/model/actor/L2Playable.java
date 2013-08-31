@@ -18,7 +18,8 @@
  */
 package l2r.gameserver.model.actor;
 
-import l2r.gameserver.ai.CtrlEvent;
+import l2r.gameserver.enums.CtrlEvent;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.knownlist.PlayableKnownList;

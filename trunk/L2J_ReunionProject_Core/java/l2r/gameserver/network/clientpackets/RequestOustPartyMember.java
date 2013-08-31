@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.model.L2Party.messageType;
+import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
 /**
@@ -54,7 +54,7 @@ public final class RequestOustPartyMember extends L2GameClientPacket
 			}
 			else
 			{
-				activeChar.getParty().removePartyMember(_name, messageType.Expelled);
+				activeChar.getParty().removePartyMember(_name, MessageType.Expelled);
 			}
 		}
 	}

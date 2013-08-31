@@ -23,9 +23,10 @@ import java.text.DecimalFormat;
 import l2r.Config;
 import l2r.gameserver.datatables.CharTemplateTable;
 import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.TownManager;
 import l2r.gameserver.model.L2Clan;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
@@ -38,7 +39,6 @@ import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.effects.AbnormalEffect;
-import l2r.gameserver.model.zone.ZoneId;
 import gr.reunion.datatables.FakePcsTable;
 
 public abstract class AbstractNpcInfo extends L2GameServerPacket
@@ -129,7 +129,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			}
 			
 			// npc crest of owning clan/ally of castle
-			if ((cha instanceof L2NpcInstance) && cha.isInsideZone(ZoneId.TOWN) && (Config.SHOW_CREST_WITHOUT_QUEST || cha.getCastle().getShowNpcCrest()) && (cha.getCastle().getOwnerId() != 0))
+			if ((cha instanceof L2NpcInstance) && cha.isInsideZone(ZoneIdType.TOWN) && (Config.SHOW_CREST_WITHOUT_QUEST || cha.getCastle().getShowNpcCrest()) && (cha.getCastle().getOwnerId() != 0))
 			{
 				int townId = TownManager.getTown(_x, _y, _z).getTownId();
 				if ((townId != 33) && (townId != 22))

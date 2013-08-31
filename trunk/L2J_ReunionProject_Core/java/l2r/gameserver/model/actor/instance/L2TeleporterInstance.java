@@ -24,13 +24,14 @@ import java.util.StringTokenizer;
 import l2r.Config;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.TeleportLocationTable;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.SiegeManager;
 import l2r.gameserver.instancemanager.TownManager;
 import l2r.gameserver.model.L2TeleportLocation;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -255,7 +256,7 @@ public final class L2TeleporterInstance extends L2Npc
 				player.sendPacket(SystemMessageId.NO_PORT_THAT_IS_IN_SIGE);
 				return;
 			}
-			else if (TownManager.townHasCastleInSiege(list.getLocX(), list.getLocY()) && isInsideZone(ZoneId.TOWN))
+			else if (TownManager.townHasCastleInSiege(list.getLocX(), list.getLocY()) && isInsideZone(ZoneIdType.TOWN))
 			{
 				player.sendPacket(SystemMessageId.NO_PORT_THAT_IS_IN_SIGE);
 				return;

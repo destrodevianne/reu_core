@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.actor.knownlist;
 
-import l2r.gameserver.ai.CtrlIntention;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.instance.L2DefenderInstance;

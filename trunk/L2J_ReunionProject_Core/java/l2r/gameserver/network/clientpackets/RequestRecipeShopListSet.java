@@ -25,11 +25,11 @@ import java.util.List;
 
 import l2r.Config;
 import l2r.gameserver.datatables.RecipeData;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.L2ManufactureItem;
 import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.L2RecipeList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.RecipeShopMsg;
@@ -99,7 +99,7 @@ public final class RequestRecipeShopListSet extends L2GameClientPacket
 			return;
 		}
 		
-		if (player.isInsideZone(ZoneId.NO_STORE))
+		if (player.isInsideZone(ZoneIdType.NO_STORE))
 		{
 			player.sendPacket(SystemMessageId.NO_PRIVATE_WORKSHOP_HERE);
 			player.sendPacket(ActionFailed.STATIC_PACKET);

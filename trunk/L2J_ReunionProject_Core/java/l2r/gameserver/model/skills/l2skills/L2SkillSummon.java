@@ -26,7 +26,6 @@ import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2CubicInstance;
-import l2r.gameserver.model.actor.instance.L2MerchantSummonInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2ServitorInstance;
 import l2r.gameserver.model.actor.instance.L2SiegeSummonInstance;
@@ -267,10 +266,6 @@ public class L2SkillSummon extends L2Skill
 		{
 			summon = new L2SiegeSummonInstance(id, summonTemplate, activeChar, this);
 		}
-		else if (summonTemplate.isType("L2MerchantSummon"))
-		{
-			summon = new L2MerchantSummonInstance(id, summonTemplate, activeChar, this);
-		}
 		else
 		{
 			summon = new L2ServitorInstance(id, summonTemplate, activeChar, this);
@@ -296,12 +291,7 @@ public class L2SkillSummon extends L2Skill
 		summon.setCurrentMp(summon.getMaxMp());
 		summon.setHeading(activeChar.getHeading());
 		summon.setRunning();
-		if (!(summon instanceof L2MerchantSummonInstance))
-		{
-			activeChar.setPet(summon);
-		}
-		
-		// L2World.getInstance().storeObject(summon);
+		activeChar.setPet(summon);
 		summon.spawnMe(activeChar.getX() + 20, activeChar.getY() + 20, activeChar.getZ());
 	}
 	

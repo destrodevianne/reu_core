@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.scripting.scriptengine.events;
 
+import l2r.gameserver.enums.EventStage;
 import l2r.gameserver.model.entity.Siege;
 import l2r.gameserver.scripting.scriptengine.events.impl.L2Event;
-import l2r.gameserver.scripting.scriptengine.impl.L2Script.EventStage;
 
 /**
  * @author TheOne

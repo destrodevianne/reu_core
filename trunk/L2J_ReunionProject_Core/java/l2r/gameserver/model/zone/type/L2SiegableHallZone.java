@@ -21,7 +21,7 @@ package l2r.gameserver.model.zone.type;
 import java.util.ArrayList;
 import java.util.List;
 
-import l2r.gameserver.instancemanager.MapRegionManager.TeleportWhereType;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 

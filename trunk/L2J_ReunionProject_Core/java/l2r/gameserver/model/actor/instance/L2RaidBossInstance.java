@@ -21,6 +21,8 @@ package l2r.gameserver.model.actor.instance;
 import l2r.Config;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.RaidBossStatus;
 import l2r.gameserver.instancemanager.RaidBossPointsManager;
 import l2r.gameserver.instancemanager.RaidBossSpawnManager;
 import l2r.gameserver.model.L2Spawn;
@@ -42,7 +44,7 @@ public class L2RaidBossInstance extends L2MonsterInstance
 {
 	private static final int RAIDBOSS_MAINTENANCE_INTERVAL = 30000; // 30 sec
 	
-	private RaidBossSpawnManager.StatusEnum _raidStatus;
+	private RaidBossStatus _raidStatus;
 	private boolean _useRaidCurse = true;
 	
 	/**
@@ -182,12 +184,12 @@ public class L2RaidBossInstance extends L2MonsterInstance
 		}
 	}
 	
-	public void setRaidStatus(RaidBossSpawnManager.StatusEnum status)
+	public void setRaidStatus(RaidBossStatus status)
 	{
 		_raidStatus = status;
 	}
 	
-	public RaidBossSpawnManager.StatusEnum getRaidStatus()
+	public RaidBossStatus getRaidStatus()
 	{
 		return _raidStatus;
 	}

@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.conditions;
 
-import l2r.gameserver.model.L2Object.InstanceType;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.stats.Env;
 
 /**

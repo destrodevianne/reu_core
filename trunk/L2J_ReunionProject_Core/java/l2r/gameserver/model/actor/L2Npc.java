@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.actor;
 
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ACTIVE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +31,9 @@ import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.AIType;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.handler.BypassHandler;
 import l2r.gameserver.handler.IBypassHandler;
 import l2r.gameserver.instancemanager.CHSiegeManager;
@@ -43,7 +46,6 @@ import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
-import l2r.gameserver.model.ShotType;
 import l2r.gameserver.model.actor.instance.L2ClanHallManagerInstance;
 import l2r.gameserver.model.actor.instance.L2DoormenInstance;
 import l2r.gameserver.model.actor.instance.L2FestivalGuideInstance;
@@ -58,7 +60,6 @@ import l2r.gameserver.model.actor.knownlist.NpcKnownList;
 import l2r.gameserver.model.actor.stat.NpcStat;
 import l2r.gameserver.model.actor.status.NpcStatus;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.actor.templates.L2NpcTemplate.AIType;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
@@ -1734,20 +1735,24 @@ public class L2Npc extends L2Character
 		else if (this instanceof L2TrainerInstance)
 		{
 			html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/html/trainer/" + npcId + "-noteach.htm");
-		}
-		
-		if (html == null)
-		{
-			_log.warning("Npc " + npcId + " missing noTeach html!");
-			NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
-			msg.setHtml("<html><body>I cannot teach you any skills.<br>You must find your current class teachers.</body></html>");
-			player.sendPacket(msg);
-			return;
+			// Trainer Healer?
+			if (html == null)
+			{
+				html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/scripts/ai/npc/Trainers/HealerTrainer/" + npcId + "-noteach.html");
+			}
 		}
 		
 		final NpcHtmlMessage noTeachMsg = new NpcHtmlMessage(getObjectId());
-		noTeachMsg.setHtml(html);
-		noTeachMsg.replace("%objectId%", String.valueOf(getObjectId()));
+		if (html == null)
+		{
+			_log.warning("Npc " + npcId + " missing noTeach html!");
+			noTeachMsg.setHtml("<html><body>I cannot teach you any skills.<br>You must find your current class teachers.</body></html>");
+		}
+		else
+		{
+			noTeachMsg.setHtml(html);
+			noTeachMsg.replace("%objectId%", String.valueOf(getObjectId()));
+		}
 		player.sendPacket(noTeachMsg);
 	}
 	

@@ -28,7 +28,6 @@ import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2TradeList;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2MerchantInstance;
-import l2r.gameserver.model.actor.instance.L2MerchantSummonInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -95,15 +94,14 @@ public final class RequestRefundItem extends L2GameClientPacket
 		}
 		
 		L2Object target = player.getTarget();
-		if (!player.isGM() && ((target == null // No target (i.e. GM Shop)
-			) || !((target instanceof L2MerchantInstance) || (target instanceof L2MerchantSummonInstance)) || (player.getInstanceId() != target.getInstanceId()) || !player.isInsideRadius(target, INTERACTION_DISTANCE, true, false))) // Distance is too far
+		if (!player.isGM() && ((target == null) || !(target instanceof L2MerchantInstance) || (player.getInstanceId() != target.getInstanceId()) || !player.isInsideRadius(target, INTERACTION_DISTANCE, true, false)))
 		{
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
 		L2Character merchant = null;
-		if ((target instanceof L2MerchantInstance) || (target instanceof L2MerchantSummonInstance))
+		if (target instanceof L2MerchantInstance)
 		{
 			merchant = (L2Character) target;
 		}
@@ -118,16 +116,11 @@ public final class RequestRefundItem extends L2GameClientPacket
 		
 		if (merchant != null)
 		{
-			List<L2TradeList> lists;
+			List<L2TradeList> lists = null;
 			if (merchant instanceof L2MerchantInstance)
 			{
 				lists = TradeController.getInstance().getBuyListByNpcId(((L2MerchantInstance) merchant).getNpcId());
 				taxRate = ((L2MerchantInstance) merchant).getMpc().getTotalTaxRate();
-			}
-			else
-			{
-				lists = TradeController.getInstance().getBuyListByNpcId(((L2MerchantSummonInstance) merchant).getNpcId());
-				taxRate = 50;
 			}
 			
 			if (!player.isGM())

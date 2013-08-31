@@ -21,6 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import java.util.logging.Logger;
 
 import l2r.gameserver.ai.L2BoatAI;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Vehicle;

@@ -19,10 +19,11 @@
 package l2r.gameserver.model.zone.type;
 
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.InstanceManager;
-import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.instancemanager.ZoneManager;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
@@ -31,7 +32,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.olympiad.OlympiadGameTask;
 import l2r.gameserver.model.zone.AbstractZoneSettings;
 import l2r.gameserver.model.zone.L2ZoneRespawn;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExOlympiadMatchEnd;
 import l2r.gameserver.network.serverpackets.ExOlympiadUserInfo;
@@ -166,7 +166,7 @@ public class L2OlympiadStadiumZone extends L2ZoneRespawn
 		{
 			if (getSettings().getOlympiadTask().isBattleStarted())
 			{
-				character.setInsideZone(ZoneId.PVP, true);
+				character.setInsideZone(ZoneIdType.PVP, true);
 				if (character.isPlayer())
 				{
 					character.sendPacket(SystemMessageId.ENTERED_COMBAT_ZONE);
@@ -204,7 +204,7 @@ public class L2OlympiadStadiumZone extends L2ZoneRespawn
 		{
 			if (getSettings().getOlympiadTask().isBattleStarted())
 			{
-				character.setInsideZone(ZoneId.PVP, false);
+				character.setInsideZone(ZoneIdType.PVP, false);
 				if (character.isPlayer())
 				{
 					character.sendPacket(SystemMessageId.LEFT_COMBAT_ZONE);
@@ -241,7 +241,7 @@ public class L2OlympiadStadiumZone extends L2ZoneRespawn
 			
 			if (battleStarted)
 			{
-				character.setInsideZone(ZoneId.PVP, true);
+				character.setInsideZone(ZoneIdType.PVP, true);
 				if (character.isPlayer())
 				{
 					character.sendPacket(sm);
@@ -249,7 +249,7 @@ public class L2OlympiadStadiumZone extends L2ZoneRespawn
 			}
 			else
 			{
-				character.setInsideZone(ZoneId.PVP, false);
+				character.setInsideZone(ZoneIdType.PVP, false);
 				if (character.isPlayer())
 				{
 					character.sendPacket(sm);
@@ -288,7 +288,7 @@ public class L2OlympiadStadiumZone extends L2ZoneRespawn
 					_player.getSummon().unSummon(_player);
 				}
 				
-				_player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+				_player.teleToLocation(TeleportWhereType.Town);
 				_player.setInstanceId(0);
 				_player = null;
 			}

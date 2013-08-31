@@ -20,13 +20,13 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
-import l2r.gameserver.model.PcCondOverride;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.type.L2EtcItemType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.ItemList;
@@ -73,7 +73,7 @@ public final class RequestDropItem extends L2GameClientPacket
 		
 		L2ItemInstance item = activeChar.getInventory().getItemByObjectId(_objectId);
 		
-		if ((item == null) || (_count == 0) || !activeChar.validateItemManipulation(_objectId, "drop") || (!Config.ALLOW_DISCARDITEM && !activeChar.canOverrideCond(PcCondOverride.DROP_ALL_ITEMS)) || (!item.isDropable() && !(activeChar.canOverrideCond(PcCondOverride.DROP_ALL_ITEMS) && Config.GM_TRADE_RESTRICTED_ITEMS)) || ((item.getItemType() == L2EtcItemType.PET_COLLAR) && activeChar.havePetInvItems()) || activeChar.isInsideZone(ZoneId.NO_ITEM_DROP))
+		if ((item == null) || (_count == 0) || !activeChar.validateItemManipulation(_objectId, "drop") || (!Config.ALLOW_DISCARDITEM && !activeChar.canOverrideCond(PcCondOverride.DROP_ALL_ITEMS)) || (!item.isDropable() && !(activeChar.canOverrideCond(PcCondOverride.DROP_ALL_ITEMS) && Config.GM_TRADE_RESTRICTED_ITEMS)) || ((item.getItemType() == L2EtcItemType.PET_COLLAR) && activeChar.havePetInvItems()) || activeChar.isInsideZone(ZoneIdType.NO_ITEM_DROP))
 		{
 			activeChar.sendPacket(SystemMessageId.CANNOT_DISCARD_THIS_ITEM);
 			return;

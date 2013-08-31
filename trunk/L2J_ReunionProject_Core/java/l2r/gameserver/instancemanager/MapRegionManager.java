@@ -26,6 +26,7 @@ import java.util.Map;
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.engines.DocumentParser;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.model.L2MapRegion;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
@@ -51,20 +52,6 @@ public class MapRegionManager extends DocumentParser
 {
 	private static final Map<String, L2MapRegion> _regions = new HashMap<>();
 	private static final String defaultRespawn = "talking_island_town";
-	
-	public static enum TeleportWhereType
-	{
-		Castle,
-		Castle_banish,
-		ClanHall,
-		ClanHall_banish,
-		SiegeFlag,
-		Town,
-		Fortress,
-		Fortress_banish,
-		Territory,
-		Territory_banish
-	}
 	
 	protected MapRegionManager()
 	{

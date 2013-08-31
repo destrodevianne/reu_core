@@ -16,18 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.taskmanager;
+package l2r.gameserver.enums;
 
-/**
- * @author Layane
- */
-public enum TaskTypes
+public enum CrestType
 {
-	TYPE_NONE,
-	TYPE_TIME,
-	TYPE_SHEDULED,
-	TYPE_FIXED_SHEDULED,
-	TYPE_GLOBAL_TASK,
-	TYPE_STARTUP,
-	TYPE_SPECIAL
+	PLEDGE(1),
+	PLEDGE_LARGE(2),
+	ALLY(3);
+	
+	private final int _id;
+	
+	private CrestType(int id)
+	{
+		_id = id;
+	}
+	
+	public int getId()
+	{
+		return _id;
+	}
+	
+	public static CrestType getById(int id)
+	{
+		for (CrestType crestType : values())
+		{
+			if (crestType.getId() == id)
+			{
+				return crestType;
+			}
+		}
+		return null;
+	}
 }

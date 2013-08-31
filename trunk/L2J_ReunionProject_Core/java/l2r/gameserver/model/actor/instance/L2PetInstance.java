@@ -32,13 +32,15 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.datatables.CharSummonTable;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SummonEffectsTable;
 import l2r.gameserver.datatables.SummonEffectsTable.SummonEffect;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
 import l2r.gameserver.idfactory.IdFactory;
@@ -66,7 +68,6 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.type.L2EtcItemType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Env;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
@@ -697,7 +698,7 @@ public class L2PetInstance extends L2Summon
 		DecayTaskManager.getInstance().addDecayTask(this, PET_DECAY_DELAY);
 		// do not decrease exp if is in duel, arena
 		L2PcInstance owner = getOwner();
-		if ((owner != null) && !owner.isInDuel() && (!isInsideZone(ZoneId.PVP) || isInsideZone(ZoneId.SIEGE)))
+		if ((owner != null) && !owner.isInDuel() && (!isInsideZone(ZoneIdType.PVP) || isInsideZone(ZoneIdType.SIEGE)))
 		{
 			deathPenalty();
 		}

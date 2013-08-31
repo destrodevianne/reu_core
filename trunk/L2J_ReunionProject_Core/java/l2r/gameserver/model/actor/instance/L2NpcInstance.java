@@ -24,6 +24,7 @@ import java.util.Map;
 import l2r.Config;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2SkillLearn;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.status.FolkStatus;

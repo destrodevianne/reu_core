@@ -24,9 +24,9 @@ import java.util.Calendar;
 import java.util.logging.Level;
 
 import l2r.L2DatabaseFactory;
+import l2r.gameserver.enums.SiegeClanType;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2SiegeClan;
-import l2r.gameserver.model.L2SiegeClan.SiegeClanType;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

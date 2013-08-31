@@ -21,6 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.network.serverpackets.ActionFailed;

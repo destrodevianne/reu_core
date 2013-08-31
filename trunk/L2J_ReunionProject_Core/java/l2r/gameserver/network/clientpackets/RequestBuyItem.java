@@ -32,7 +32,6 @@ import l2r.gameserver.model.L2TradeList;
 import l2r.gameserver.model.L2TradeList.L2TradeItem;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2MerchantInstance;
-import l2r.gameserver.model.actor.instance.L2MerchantSummonInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.items.L2Item;
@@ -116,7 +115,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			if ((target instanceof L2MerchantInstance) || (target instanceof L2MerchantSummonInstance))
+			if (!(target instanceof L2MerchantInstance) || (!player.isInsideRadius(target, INTERACTION_DISTANCE, true, false)) || (player.getInstanceId() != target.getInstanceId()))
 			{
 				merchant = (L2Character) target;
 			}
@@ -134,17 +133,12 @@ public final class RequestBuyItem extends L2GameClientPacket
 		
 		if (merchant != null)
 		{
-			List<L2TradeList> lists;
+			List<L2TradeList> lists = null;
 			if (merchant instanceof L2MerchantInstance)
 			{
 				lists = TradeController.getInstance().getBuyListByNpcId(((L2MerchantInstance) merchant).getNpcId());
 				castleTaxRate = ((L2MerchantInstance) merchant).getMpc().getCastleTaxRate();
 				baseTaxRate = ((L2MerchantInstance) merchant).getMpc().getBaseTaxRate();
-			}
-			else
-			{
-				lists = TradeController.getInstance().getBuyListByNpcId(((L2MerchantSummonInstance) merchant).getNpcId());
-				baseTaxRate = 50;
 			}
 			
 			if (!player.isGM())

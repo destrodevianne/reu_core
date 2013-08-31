@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.SevenSignsFestival;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SystemMessage;
@@ -91,7 +91,7 @@ public final class Logout extends L2GameClientPacket
 		}
 		
 		// Chaotic Zone
-		if (player.isInsideZone(ZoneId.ZONE_CHAOTIC))
+		if (player.isInsideZone(ZoneIdType.ZONE_CHAOTIC))
 		{
 			player.sendMessage("You cannot logout while inside chaotic zone.");
 			player.sendPacket(ActionFailed.STATIC_PACKET);

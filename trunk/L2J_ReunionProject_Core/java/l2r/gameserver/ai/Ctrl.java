@@ -18,6 +18,8 @@
  */
 package l2r.gameserver.ai;
 
+import l2r.gameserver.enums.CtrlEvent;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.actor.L2Character;
 
 /**

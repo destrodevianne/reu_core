@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.engines.DocumentParser;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2NpcWalkerNode;
 import l2r.gameserver.model.L2WalkRoute;

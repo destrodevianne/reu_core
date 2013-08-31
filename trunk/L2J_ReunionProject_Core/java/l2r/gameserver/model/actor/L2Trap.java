@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.knownlist.TrapKnownList;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.actor.tasks.player;
 
-import l2r.gameserver.ai.CtrlIntention;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
 /**

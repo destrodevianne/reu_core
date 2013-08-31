@@ -21,6 +21,8 @@ package l2r.gameserver.model.actor.instance;
 import java.util.List;
 
 import javolution.util.FastList;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Trap;
@@ -29,7 +31,6 @@ import l2r.gameserver.model.olympiad.OlympiadGameManager;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.TrapAction;
 import l2r.gameserver.model.skills.L2Skill;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
@@ -98,7 +99,7 @@ public class L2TrapInstance extends L2Trap
 	public void onSpawn()
 	{
 		super.onSpawn();
-		_isInArena = isInsideZone(ZoneId.PVP) && !isInsideZone(ZoneId.SIEGE);
+		_isInArena = isInsideZone(ZoneIdType.PVP) && !isInsideZone(ZoneIdType.SIEGE);
 		_playersWhoDetectedMe.clear();
 	}
 	

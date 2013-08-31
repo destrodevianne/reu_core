@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.gameserver.GameTimeController;
+import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.instancemanager.PunishmentManager;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.punishment.PunishmentAffect;
 import l2r.gameserver.model.punishment.PunishmentTask;
 import l2r.gameserver.model.punishment.PunishmentType;

@@ -25,11 +25,11 @@ import java.util.Map;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.BlockCheckerEngine;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.olympiad.OlympiadManager;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExCubeGameAddPlayer;
 import l2r.gameserver.network.serverpackets.ExCubeGameChangeTeam;
@@ -349,7 +349,7 @@ public final class HandysBlockCheckerManager
 				long count = inv.getInventoryItemCount(13788, 0);
 				inv.destroyItemByItemId("Handys Block Checker", 13788, count, player, player);
 			}
-			player.setInsideZone(ZoneId.PVP, false);
+			player.setInsideZone(ZoneIdType.PVP, false);
 			// Teleport Back
 			player.teleToLocation(-57478, -60367, -2370);
 		}

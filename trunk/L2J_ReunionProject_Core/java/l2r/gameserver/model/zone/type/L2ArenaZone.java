@@ -18,10 +18,10 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 
 /**
@@ -40,13 +40,13 @@ public class L2ArenaZone extends L2ZoneType
 	{
 		if (character instanceof L2PcInstance)
 		{
-			if (!character.isInsideZone(ZoneId.PVP))
+			if (!character.isInsideZone(ZoneIdType.PVP))
 			{
 				character.sendPacket(SystemMessageId.ENTERED_COMBAT_ZONE);
 			}
 		}
 		
-		character.setInsideZone(ZoneId.PVP, true);
+		character.setInsideZone(ZoneIdType.PVP, true);
 	}
 	
 	@Override
@@ -54,13 +54,13 @@ public class L2ArenaZone extends L2ZoneType
 	{
 		if (character instanceof L2PcInstance)
 		{
-			if (!character.isInsideZone(ZoneId.PVP))
+			if (!character.isInsideZone(ZoneIdType.PVP))
 			{
 				character.sendPacket(SystemMessageId.LEFT_COMBAT_ZONE);
 			}
 		}
 		
-		character.setInsideZone(ZoneId.PVP, false);
+		character.setInsideZone(ZoneIdType.PVP, false);
 	}
 	
 	@Override

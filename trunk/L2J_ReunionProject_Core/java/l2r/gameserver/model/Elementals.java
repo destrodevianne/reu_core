@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.model;
 
+import l2r.gameserver.enums.ElementalItems;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.funcs.FuncAdd;
 import l2r.gameserver.model.skills.funcs.LambdaConst;
@@ -85,72 +86,6 @@ public final class Elementals
 		Integer.MAX_VALUE
 	// TODO: Higher stones
 	};
-	
-	public static enum ElementalItemType
-	{
-		Stone(3),
-		Roughore(3),
-		Crystal(6),
-		Jewel(9),
-		Energy(12);
-		
-		public int _maxLevel;
-		
-		private ElementalItemType(int maxLvl)
-		{
-			_maxLevel = maxLvl;
-		}
-	}
-	
-	public static enum ElementalItems
-	{
-		fireStone(FIRE, 9546, ElementalItemType.Stone),
-		waterStone(WATER, 9547, ElementalItemType.Stone),
-		windStone(WIND, 9549, ElementalItemType.Stone),
-		earthStone(EARTH, 9548, ElementalItemType.Stone),
-		divineStone(HOLY, 9551, ElementalItemType.Stone),
-		darkStone(DARK, 9550, ElementalItemType.Stone),
-		
-		fireRoughtore(FIRE, 10521, ElementalItemType.Roughore),
-		waterRoughtore(WATER, 10522, ElementalItemType.Roughore),
-		windRoughtore(WIND, 10524, ElementalItemType.Roughore),
-		earthRoughtore(EARTH, 10523, ElementalItemType.Roughore),
-		divineRoughtore(HOLY, 10526, ElementalItemType.Roughore),
-		darkRoughtore(DARK, 10525, ElementalItemType.Roughore),
-		
-		fireCrystal(FIRE, 9552, ElementalItemType.Crystal),
-		waterCrystal(WATER, 9553, ElementalItemType.Crystal),
-		windCrystal(WIND, 9555, ElementalItemType.Crystal),
-		earthCrystal(EARTH, 9554, ElementalItemType.Crystal),
-		divineCrystal(HOLY, 9557, ElementalItemType.Crystal),
-		darkCrystal(DARK, 9556, ElementalItemType.Crystal),
-		
-		fireJewel(FIRE, 9558, ElementalItemType.Jewel),
-		waterJewel(WATER, 9559, ElementalItemType.Jewel),
-		windJewel(WIND, 9561, ElementalItemType.Jewel),
-		earthJewel(EARTH, 9560, ElementalItemType.Jewel),
-		divineJewel(HOLY, 9563, ElementalItemType.Jewel),
-		darkJewel(DARK, 9562, ElementalItemType.Jewel),
-		
-		// not yet supported by client (Freya pts)
-		fireEnergy(FIRE, 9564, ElementalItemType.Energy),
-		waterEnergy(WATER, 9565, ElementalItemType.Energy),
-		windEnergy(WIND, 9567, ElementalItemType.Energy),
-		earthEnergy(EARTH, 9566, ElementalItemType.Energy),
-		divineEnergy(HOLY, 9569, ElementalItemType.Energy),
-		darkEnergy(DARK, 9568, ElementalItemType.Energy);
-		
-		public byte _element;
-		public int _itemId;
-		public ElementalItemType _type;
-		
-		private ElementalItems(byte element, int itemId, ElementalItemType type)
-		{
-			_element = element;
-			_itemId = itemId;
-			_type = type;
-		}
-	}
 	
 	public static byte getItemElement(int itemId)
 	{

@@ -36,7 +36,10 @@ import l2r.gameserver.SevenSigns;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.instancemanager.MapRegionManager;
+import l2r.gameserver.enums.EventStage;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.SiegeClanType;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.MercTicketManager;
 import l2r.gameserver.instancemanager.SiegeGuardManager;
 import l2r.gameserver.instancemanager.SiegeManager;
@@ -44,9 +47,7 @@ import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2SiegeClan;
-import l2r.gameserver.model.L2SiegeClan.SiegeClanType;
 import l2r.gameserver.model.L2Spawn;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.TowerSpawn;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2ControlTowerInstance;
@@ -59,7 +60,6 @@ import l2r.gameserver.network.serverpackets.SiegeInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.scripting.scriptengine.events.SiegeEvent;
-import l2r.gameserver.scripting.scriptengine.impl.L2Script.EventStage;
 import l2r.gameserver.scripting.scriptengine.listeners.events.SiegeListener;
 
 public class Siege implements Siegable
@@ -297,9 +297,9 @@ public class Siege implements Siegable
 			
 			getCastle().updateClansReputation();
 			removeFlags(); // Removes all flags. Note: Remove flag before teleporting players
-			teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionManager.TeleportWhereType.Town); // Teleport to the second closest town
-			teleportPlayer(Siege.TeleportWhoType.DefenderNotOwner, MapRegionManager.TeleportWhereType.Town); // Teleport to the second closest town
-			teleportPlayer(Siege.TeleportWhoType.Spectator, MapRegionManager.TeleportWhereType.Town); // Teleport to the second closest town
+			teleportPlayer(Siege.TeleportWhoType.Attacker, TeleportWhereType.Town); // Teleport to the second closest town
+			teleportPlayer(Siege.TeleportWhoType.DefenderNotOwner, TeleportWhereType.Town); // Teleport to the second closest town
+			teleportPlayer(Siege.TeleportWhoType.Spectator, TeleportWhereType.Town); // Teleport to the second closest town
 			_isInProgress = false; // Flag so that siege instance can be started
 			updatePlayerSiegeStateFlags(true);
 			saveCastleSiege(); // Save castle specific data
@@ -431,8 +431,8 @@ public class Siege implements Siegable
 						addDefender(sc, SiegeClanType.DEFENDER);
 					}
 				}
-				teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionManager.TeleportWhereType.SiegeFlag); // Teleport to the second closest town
-				teleportPlayer(Siege.TeleportWhoType.Spectator, MapRegionManager.TeleportWhereType.Town); // Teleport to the second closest town
+				teleportPlayer(Siege.TeleportWhoType.Attacker, TeleportWhereType.SiegeFlag); // Teleport to the second closest town
+				teleportPlayer(Siege.TeleportWhoType.Spectator, TeleportWhereType.Town); // Teleport to the second closest town
 				
 				removeDefenderFlags(); // Removes defenders' flags
 				getCastle().removeUpgrade(); // Remove all castle upgrade
@@ -486,7 +486,7 @@ public class Siege implements Siegable
 			
 			loadSiegeClan(); // Load siege clan from db
 			updatePlayerSiegeStateFlags(false);
-			teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionManager.TeleportWhereType.Town); // Teleport to the closest town
+			teleportPlayer(Siege.TeleportWhoType.Attacker, TeleportWhereType.Town); // Teleport to the closest town
 			// teleportPlayer(Siege.TeleportWhoType.Spectator, MapRegionTable.TeleportWhereType.Town); // Teleport to the second closest town
 			_controlTowerCount = 0;
 			spawnControlTower(); // Spawn control tower
@@ -1048,7 +1048,7 @@ public class Siege implements Siegable
 	 * @param teleportWho
 	 * @param teleportWhere
 	 */
-	public void teleportPlayer(TeleportWhoType teleportWho, MapRegionManager.TeleportWhereType teleportWhere)
+	public void teleportPlayer(TeleportWhoType teleportWho, TeleportWhereType teleportWhere)
 	{
 		List<L2PcInstance> players;
 		switch (teleportWho)

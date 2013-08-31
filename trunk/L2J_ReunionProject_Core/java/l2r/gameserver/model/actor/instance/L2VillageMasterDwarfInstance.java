@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.actor.instance;
 
+import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.PlayerClass;
-import l2r.gameserver.model.base.Race;
 
 public final class L2VillageMasterDwarfInstance extends L2VillageMasterInstance
 {
@@ -37,6 +37,6 @@ public final class L2VillageMasterDwarfInstance extends L2VillageMasterInstance
 			return false;
 		}
 		
-		return pclass.isOfRace(Race.Dwarf);
+		return pclass.isOfRace(PcRace.Dwarf);
 	}
 }

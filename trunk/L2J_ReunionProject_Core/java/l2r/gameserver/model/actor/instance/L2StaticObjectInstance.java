@@ -19,6 +19,7 @@
 package l2r.gameserver.model.actor.instance;
 
 import l2r.gameserver.ai.L2CharacterAI;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.knownlist.StaticObjectKnownList;

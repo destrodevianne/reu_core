@@ -19,11 +19,11 @@
 package l2r.gameserver.model.zone.type;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.instancemanager.MapRegionManager;
+import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A simple no restart zone
@@ -74,7 +74,7 @@ public class L2NoRestartZone extends L2ZoneType
 		
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.NO_RESTART, true);
+			character.setInsideZone(ZoneIdType.NO_RESTART, true);
 			L2PcInstance player = (L2PcInstance) character;
 			
 			if ((player.getZoneRestartLimitTime() > 0) && (player.getZoneRestartLimitTime() < System.currentTimeMillis()))
@@ -95,7 +95,7 @@ public class L2NoRestartZone extends L2ZoneType
 		
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.NO_RESTART, false);
+			character.setInsideZone(ZoneIdType.NO_RESTART, false);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class L2NoRestartZone extends L2ZoneType
 		@Override
 		public void run()
 		{
-			_player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+			_player.teleToLocation(TeleportWhereType.Town);
 		}
 	}
 }

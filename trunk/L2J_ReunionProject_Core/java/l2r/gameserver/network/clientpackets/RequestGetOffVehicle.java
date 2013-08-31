@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.GetOffVehicle;
 import l2r.gameserver.network.serverpackets.StopMoveInVehicle;
@@ -62,7 +62,7 @@ public final class RequestGetOffVehicle extends L2GameClientPacket
 		sendPacket(ActionFailed.STATIC_PACKET);
 		activeChar.broadcastPacket(new GetOffVehicle(activeChar.getObjectId(), _boatId, _x, _y, _z));
 		activeChar.setXYZ(_x, _y, _z);
-		activeChar.setInsideZone(ZoneId.PEACE, false);
+		activeChar.setInsideZone(ZoneIdType.PEACE, false);
 		activeChar.revalidateZone(true);
 	}
 	

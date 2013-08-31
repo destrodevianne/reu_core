@@ -19,7 +19,7 @@
 package l2r.gameserver.model.actor.status;
 
 import l2r.Config;
-import l2r.gameserver.ai.CtrlIntention;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.instancemanager.DuelManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;

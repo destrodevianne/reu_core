@@ -23,8 +23,9 @@ import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.L2AttackableAI;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;

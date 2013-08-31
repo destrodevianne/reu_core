@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.ai.CtrlEvent;
+import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 

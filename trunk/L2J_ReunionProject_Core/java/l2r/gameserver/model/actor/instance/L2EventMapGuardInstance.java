@@ -17,7 +17,7 @@ package l2r.gameserver.model.actor.instance;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.ai.CtrlIntention;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.network.serverpackets.ActionFailed;

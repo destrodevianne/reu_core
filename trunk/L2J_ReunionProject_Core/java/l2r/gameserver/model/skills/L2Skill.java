@@ -30,13 +30,14 @@ import l2r.Config;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.ITargetTypeHandler;
 import l2r.gameserver.handler.TargetHandler;
 import l2r.gameserver.model.ChanceCondition;
 import l2r.gameserver.model.L2ExtractableProductItem;
 import l2r.gameserver.model.L2ExtractableSkill;
 import l2r.gameserver.model.L2Object;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
@@ -58,7 +59,6 @@ import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.model.stats.BaseStats;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Formulas;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
@@ -1338,12 +1338,12 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					return false;
 				}
 				
-				if (skill.isOffensive() && (player.getSiegeState() > 0) && player.isInsideZone(ZoneId.SIEGE) && (player.getSiegeState() == targetPlayer.getSiegeState()) && (player.getSiegeSide() == targetPlayer.getSiegeSide()))
+				if (skill.isOffensive() && (player.getSiegeState() > 0) && player.isInsideZone(ZoneIdType.SIEGE) && (player.getSiegeState() == targetPlayer.getSiegeState()) && (player.getSiegeSide() == targetPlayer.getSiegeSide()))
 				{
 					return false;
 				}
 				
-				if (skill.isOffensive() && target.isInsideZone(ZoneId.PEACE))
+				if (skill.isOffensive() && target.isInsideZone(ZoneIdType.PEACE))
 				{
 					return false;
 				}
@@ -1363,7 +1363,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					}
 				}
 				
-				if (!sourceInArena && !(targetPlayer.isInsideZone(ZoneId.PVP) && !targetPlayer.isInsideZone(ZoneId.SIEGE)))
+				if (!sourceInArena && !(targetPlayer.isInsideZone(ZoneIdType.PVP) && !targetPlayer.isInsideZone(ZoneIdType.SIEGE)))
 				{
 					if ((player.getAllyId() != 0) && (player.getAllyId() == targetPlayer.getAllyId()))
 					{

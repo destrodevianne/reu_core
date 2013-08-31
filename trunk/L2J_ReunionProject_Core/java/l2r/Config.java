@@ -51,6 +51,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
+import l2r.gameserver.enums.IdFactoryType;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.util.FloodProtectorConfig;
 import l2r.util.L2Properties;
@@ -974,13 +975,6 @@ public final class Config
 	public static String DATAPACK_VERSION;
 	public static int PVP_NORMAL_TIME;
 	public static int PVP_PVP_TIME;
-	
-	public static enum IdFactoryType
-	{
-		Compaction,
-		BitSet,
-		Stack
-	}
 	
 	public static IdFactoryType IDFACTORY_TYPE;
 	public static boolean BAD_ID_CHECKING;

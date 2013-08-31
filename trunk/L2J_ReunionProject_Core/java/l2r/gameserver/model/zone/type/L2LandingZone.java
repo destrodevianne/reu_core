@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * A landing zone
@@ -38,7 +38,7 @@ public class L2LandingZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.LANDING, true);
+			character.setInsideZone(ZoneIdType.LANDING, true);
 		}
 	}
 	
@@ -47,7 +47,7 @@ public class L2LandingZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.LANDING, false);
+			character.setInsideZone(ZoneIdType.LANDING, false);
 		}
 	}
 	

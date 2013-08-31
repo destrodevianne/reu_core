@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.model.PcCondOverride;
+import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Item;

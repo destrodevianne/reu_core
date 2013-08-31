@@ -22,6 +22,7 @@ import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -38,7 +39,6 @@ import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
 import l2r.gameserver.model.skills.L2Skill;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 
 public class L2SkillSiegeFlag extends L2Skill
@@ -204,7 +204,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		{
 			text = "You have already placed the maximum number of flags possible.";
 		}
-		else if (!player.isInsideZone(ZoneId.HQ))
+		else if (!player.isInsideZone(ZoneIdType.HQ))
 		{
 			player.sendPacket(SystemMessageId.NOT_SET_UP_BASE_HERE);
 		}
@@ -256,7 +256,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		{
 			text = "You have already placed the maximum number of flags possible.";
 		}
-		else if (!player.isInsideZone(ZoneId.HQ))
+		else if (!player.isInsideZone(ZoneIdType.HQ))
 		{
 			player.sendPacket(SystemMessageId.NOT_SET_UP_BASE_HERE);
 		}
@@ -309,7 +309,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		{
 			text = "You have already placed the maximum number of flags possible.";
 		}
-		else if (!player.isInsideZone(ZoneId.HQ))
+		else if (!player.isInsideZone(ZoneIdType.HQ))
 		{
 			player.sendPacket(SystemMessageId.NOT_SET_UP_BASE_HERE);
 		}
@@ -369,7 +369,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		{
 			player.sendPacket(SystemMessageId.A_FLAG_IS_ALREADY_BEING_DISPLAYED_ANOTHER_FLAG_CANNOT_BE_DISPLAYED);
 		}
-		else if (!player.isInsideZone(ZoneId.HQ))
+		else if (!player.isInsideZone(ZoneIdType.HQ))
 		{
 			player.sendPacket(SystemMessageId.NOT_SET_UP_BASE_HERE);
 		}

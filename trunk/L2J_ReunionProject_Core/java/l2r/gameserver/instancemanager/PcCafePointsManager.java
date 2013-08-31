@@ -1,8 +1,8 @@
 package l2r.gameserver.instancemanager;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.base.ClassId;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPCCafePointInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
@@ -33,7 +33,7 @@ public class PcCafePointsManager
 			return;
 		}
 		
-		if (player.isInsideZone(ZoneId.PEACE) || player.isInsideZone(ZoneId.PVP) || player.isInsideZone(ZoneId.SIEGE) || (player.isOnlineInt() == 0) || player.isJailed())
+		if (player.isInsideZone(ZoneIdType.PEACE) || player.isInsideZone(ZoneIdType.PVP) || player.isInsideZone(ZoneIdType.SIEGE) || (player.isOnlineInt() == 0) || player.isJailed())
 		{
 			return;
 		}
