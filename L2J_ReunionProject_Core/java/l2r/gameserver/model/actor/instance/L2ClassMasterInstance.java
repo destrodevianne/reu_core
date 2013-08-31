@@ -22,6 +22,7 @@ import l2r.Config;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.ClassListData;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.network.SystemMessageId;

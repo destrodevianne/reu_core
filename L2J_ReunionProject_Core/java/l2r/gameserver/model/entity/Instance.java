@@ -37,9 +37,9 @@ import l2r.gameserver.Announcements;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.InstanceManager;
-import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
@@ -294,7 +294,9 @@ public final class Instance
 		for (L2Npc npc : getNpcs())
 		{
 			if (npc.getNpcId() == npcId)
+			{
 				return npc;
+			}
 		}
 		
 		return null;
@@ -853,7 +855,7 @@ public final class Instance
 				}
 				else
 				{
-					_player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+					_player.teleToLocation(TeleportWhereType.Town);
 				}
 			}
 		}
@@ -874,7 +876,7 @@ public final class Instance
 				}
 				else
 				{
-					player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+					player.teleToLocation(TeleportWhereType.Town);
 				}
 			}
 			return true;

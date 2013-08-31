@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.gameserver.GameTimeController;
+import l2r.gameserver.enums.RaidBossStatus;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2RaidBossInstance;
@@ -212,7 +213,7 @@ public class DayNightSpawnManager
 					continue;
 				}
 				
-				if ((boss != null) && (boss.getNpcId() == 25328) && boss.getRaidStatus().equals(RaidBossSpawnManager.StatusEnum.ALIVE))
+				if ((boss != null) && (boss.getNpcId() == 25328) && boss.getRaidStatus().equals(RaidBossStatus.ALIVE))
 				{
 					handleHellmans(boss, mode);
 				}

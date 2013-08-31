@@ -23,8 +23,8 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import l2r.Config;
+import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.model.L2Object;
-import l2r.gameserver.model.ShotType;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.effects.L2Effect;

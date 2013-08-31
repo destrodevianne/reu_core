@@ -26,10 +26,10 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.SevenSignsFestival;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.L2GameClient.GameClientState;
 import l2r.gameserver.network.SystemMessageId;
@@ -87,7 +87,7 @@ public final class RequestRestart extends L2GameClientPacket
 		}
 		
 		// Chaotic Zone
-		if (player.isInsideZone(ZoneId.ZONE_CHAOTIC))
+		if (player.isInsideZone(ZoneIdType.ZONE_CHAOTIC))
 		{
 			player.sendMessage("Cannot restart while inside chaotic zone.");
 			sendPacket(RestartResponse.valueOf(false));

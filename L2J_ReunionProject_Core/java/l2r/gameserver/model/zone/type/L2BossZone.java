@@ -22,10 +22,10 @@ import java.util.Map;
 
 import javolution.util.FastMap;
 import l2r.gameserver.GameServer;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.GrandBossManager;
-import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.instancemanager.ZoneManager;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
@@ -193,7 +193,7 @@ public class L2BossZone extends L2ZoneType
 				}
 				else
 				{
-					player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+					player.teleToLocation(TeleportWhereType.Town);
 				}
 			}
 			else if (character.isSummon())
@@ -214,7 +214,7 @@ public class L2BossZone extends L2ZoneType
 					}
 					else
 					{
-						player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+						player.teleToLocation(TeleportWhereType.Town);
 					}
 				}
 				((L2Summon) character).unSummon(player);
@@ -346,7 +346,7 @@ public class L2BossZone extends L2ZoneType
 			}
 			else
 			{
-				player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+				player.teleToLocation(TeleportWhereType.Town);
 			}
 			return false;
 		}
@@ -402,7 +402,7 @@ public class L2BossZone extends L2ZoneType
 					}
 					else
 					{
-						player.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+						player.teleToLocation(TeleportWhereType.Town);
 					}
 				}
 			}

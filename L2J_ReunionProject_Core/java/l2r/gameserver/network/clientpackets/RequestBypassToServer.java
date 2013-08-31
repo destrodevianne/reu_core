@@ -24,9 +24,9 @@ import java.util.logging.Level;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.communitybbs.BoardsManager;
 import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.BypassHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
@@ -35,7 +35,6 @@ import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Npc;
-import l2r.gameserver.model.actor.instance.L2MerchantSummonInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -218,36 +217,6 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				{
 					_log.log(Level.WARNING, "NFE for command [" + _command + "]", nfe);
 				}
-			}
-			else if (_command.startsWith("summon_"))
-			{
-				if (!activeChar.validateBypass(_command))
-				{
-					return;
-				}
-				
-				int endOfId = _command.indexOf('_', 8);
-				String id;
-				
-				if (endOfId > 0)
-				{
-					id = _command.substring(7, endOfId);
-				}
-				else
-				{
-					id = _command.substring(7);
-				}
-				
-				if (Util.isDigit(id))
-				{
-					L2Object object = L2World.getInstance().findObject(Integer.parseInt(id));
-					
-					if ((object instanceof L2MerchantSummonInstance) && (endOfId > 0) && activeChar.isInsideRadius(object, L2Npc.INTERACTION_DISTANCE, false, false))
-					{
-						((L2MerchantSummonInstance) object).onBypassFeedback(activeChar, _command.substring(endOfId + 1));
-					}
-				}
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			}
 			// Navigate through Manor windows
 			else if (_command.startsWith("manor_menu_select"))

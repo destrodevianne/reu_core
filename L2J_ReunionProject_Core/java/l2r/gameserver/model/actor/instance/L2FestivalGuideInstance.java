@@ -21,6 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.SevenSignsFestival;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.network.serverpackets.ActionFailed;

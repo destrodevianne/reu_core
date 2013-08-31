@@ -33,18 +33,19 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.enums.EventStage;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.SiegeClanType;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.FortSiegeGuardManager;
 import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.FortSiegeManager.SiegeSpawn;
-import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.model.CombatFlag;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2SiegeClan;
-import l2r.gameserver.model.L2SiegeClan.SiegeClanType;
 import l2r.gameserver.model.L2Spawn;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2FortCommanderInstance;
@@ -56,7 +57,6 @@ import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.NpcSay;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.scripting.scriptengine.events.FortSiegeEvent;
-import l2r.gameserver.scripting.scriptengine.impl.L2Script.EventStage;
 import l2r.gameserver.scripting.scriptengine.listeners.events.FortSiegeListener;
 
 public class FortSiege implements Siegable
@@ -343,7 +343,7 @@ public class FortSiege implements Siegable
 			
 			loadSiegeClan(); // Load siege clan from db
 			updatePlayerSiegeStateFlags(false);
-			teleportPlayer(FortSiege.TeleportWhoType.Attacker, MapRegionManager.TeleportWhereType.Town); // Teleport to the closest town
+			teleportPlayer(FortSiege.TeleportWhoType.Attacker, TeleportWhereType.Town); // Teleport to the closest town
 			
 			getFort().despawnNpcCommanders(); // Despawn NPC commanders
 			spawnCommanders(); // Spawn commanders
@@ -907,7 +907,7 @@ public class FortSiege implements Siegable
 	 * @param teleportWho
 	 * @param teleportWhere
 	 */
-	public void teleportPlayer(TeleportWhoType teleportWho, MapRegionManager.TeleportWhereType teleportWhere)
+	public void teleportPlayer(TeleportWhoType teleportWho, TeleportWhereType teleportWhere)
 	{
 		List<L2PcInstance> players;
 		switch (teleportWho)

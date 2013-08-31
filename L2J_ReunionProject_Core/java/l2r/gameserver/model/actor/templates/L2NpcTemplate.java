@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.gameserver.datatables.HerbDropTable;
+import l2r.gameserver.enums.NpcRace;
 import l2r.gameserver.model.L2DropCategory;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2MinionData;
@@ -60,7 +61,7 @@ public final class L2NpcTemplate extends L2CharTemplate
 	private final int _lHand;
 	private final int _enchantEffect;
 	
-	private Race _race;
+	private NpcRace _race = NpcRace.NONE;
 	private final String _clientClass;
 	
 	private final int _dropHerbGroup;
@@ -114,46 +115,6 @@ public final class L2NpcTemplate extends L2CharTemplate
 	 * Contains a list of quests for each event type (questStart, questAttack, questKill, etc).
 	 */
 	private final Map<QuestEventType, List<Quest>> _questEvents = new FastMap<QuestEventType, List<Quest>>().shared();
-	
-	public static enum AIType
-	{
-		FIGHTER,
-		ARCHER,
-		BALANCED,
-		MAGE,
-		HEALER,
-		CORPSE
-	}
-	
-	public static enum Race
-	{
-		UNDEAD,
-		MAGICCREATURE,
-		BEAST,
-		ANIMAL,
-		PLANT,
-		HUMANOID,
-		SPIRIT,
-		ANGEL,
-		DEMON,
-		DRAGON,
-		GIANT,
-		BUG,
-		FAIRIE,
-		HUMAN,
-		ELVE,
-		DARKELVE,
-		ORC,
-		DWARVE,
-		OTHER,
-		NONLIVING,
-		SIEGEWEAPON,
-		DEFENDINGARMY,
-		MERCENARIE,
-		UNKNOWN,
-		KAMAEL,
-		NONE
-	}
 	
 	public static boolean isAssignableTo(Class<?> sub, Class<?> clazz)
 	{
@@ -744,11 +705,11 @@ public final class L2NpcTemplate extends L2CharTemplate
 	/**
 	 * @return the NPC race.
 	 */
-	public Race getRace()
+	public NpcRace getRace()
 	{
 		if (_race == null)
 		{
-			_race = Race.NONE;
+			_race = NpcRace.NONE;
 		}
 		return _race;
 	}
@@ -888,7 +849,7 @@ public final class L2NpcTemplate extends L2CharTemplate
 	 */
 	public boolean isUndead()
 	{
-		return _race == Race.UNDEAD;
+		return _race == NpcRace.UNDEAD;
 	}
 	
 	public void setAIData(L2NpcAIData AIData)
@@ -901,82 +862,82 @@ public final class L2NpcTemplate extends L2CharTemplate
 		switch (raceId)
 		{
 			case 1:
-				_race = Race.UNDEAD;
+				_race = NpcRace.UNDEAD;
 				break;
 			case 2:
-				_race = Race.MAGICCREATURE;
+				_race = NpcRace.MAGICCREATURE;
 				break;
 			case 3:
-				_race = Race.BEAST;
+				_race = NpcRace.BEAST;
 				break;
 			case 4:
-				_race = Race.ANIMAL;
+				_race = NpcRace.ANIMAL;
 				break;
 			case 5:
-				_race = Race.PLANT;
+				_race = NpcRace.PLANT;
 				break;
 			case 6:
-				_race = Race.HUMANOID;
+				_race = NpcRace.HUMANOID;
 				break;
 			case 7:
-				_race = Race.SPIRIT;
+				_race = NpcRace.SPIRIT;
 				break;
 			case 8:
-				_race = Race.ANGEL;
+				_race = NpcRace.ANGEL;
 				break;
 			case 9:
-				_race = Race.DEMON;
+				_race = NpcRace.DEMON;
 				break;
 			case 10:
-				_race = Race.DRAGON;
+				_race = NpcRace.DRAGON;
 				break;
 			case 11:
-				_race = Race.GIANT;
+				_race = NpcRace.GIANT;
 				break;
 			case 12:
-				_race = Race.BUG;
+				_race = NpcRace.BUG;
 				break;
 			case 13:
-				_race = Race.FAIRIE;
+				_race = NpcRace.FAIRIE;
 				break;
 			case 14:
-				_race = Race.HUMAN;
+				_race = NpcRace.HUMAN;
 				break;
 			case 15:
-				_race = Race.ELVE;
+				_race = NpcRace.ELVE;
 				break;
 			case 16:
-				_race = Race.DARKELVE;
+				_race = NpcRace.DARKELVE;
 				break;
 			case 17:
-				_race = Race.ORC;
+				_race = NpcRace.ORC;
 				break;
 			case 18:
-				_race = Race.DWARVE;
+				_race = NpcRace.DWARVE;
 				break;
 			case 19:
-				_race = Race.OTHER;
+				_race = NpcRace.OTHER;
 				break;
 			case 20:
-				_race = Race.NONLIVING;
+				_race = NpcRace.NONLIVING;
 				break;
 			case 21:
-				_race = Race.SIEGEWEAPON;
+				_race = NpcRace.SIEGEWEAPON;
 				break;
 			case 22:
-				_race = Race.DEFENDINGARMY;
+				_race = NpcRace.DEFENDINGARMY;
 				break;
 			case 23:
-				_race = Race.MERCENARIE;
+				_race = NpcRace.MERCENARIE;
 				break;
 			case 24:
-				_race = Race.UNKNOWN;
+				_race = NpcRace.UNKNOWN;
 				break;
 			case 25:
-				_race = Race.KAMAEL;
+				_race = NpcRace.KAMAEL;
 				break;
 			default:
-				_race = Race.NONE;
+				_race = NpcRace.NONE;
 				break;
 		}
 	}

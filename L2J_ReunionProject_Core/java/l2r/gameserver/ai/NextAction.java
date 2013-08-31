@@ -20,6 +20,9 @@ package l2r.gameserver.ai;
 
 import java.util.ArrayList;
 
+import l2r.gameserver.enums.CtrlEvent;
+import l2r.gameserver.enums.CtrlIntention;
+
 /**
  * Class for AI action after some event.<br>
  * Has 2 array list for "work" and "break".

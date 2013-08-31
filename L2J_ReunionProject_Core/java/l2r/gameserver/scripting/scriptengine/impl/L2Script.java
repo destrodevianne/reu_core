@@ -21,6 +21,7 @@ package l2r.gameserver.scripting.scriptengine.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import l2r.gameserver.enums.EventStage;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -1568,24 +1569,5 @@ public abstract class L2Script extends Quest
 	protected void onCharRestore(PlayerEvent event)
 	{
 		
-	}
-	
-	// Enums
-	
-	public enum EventStage
-	{
-		START,
-		END,
-		EVENT_STOPPED,
-		REGISTRATION_BEGIN,
-		CONTROL_CHANGE
-	}
-	
-	public enum ItemTrackerEvent
-	{
-		DROP,
-		ADD_TO_INVENTORY,
-		DESTROY,
-		TRANSFER
 	}
 }

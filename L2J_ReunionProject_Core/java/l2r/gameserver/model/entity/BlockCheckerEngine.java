@@ -30,6 +30,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.HandysBlockCheckerManager;
 import l2r.gameserver.instancemanager.HandysBlockCheckerManager.ArenaParticipantsHolder;
 import l2r.gameserver.model.L2Spawn;
@@ -40,7 +41,6 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.skills.L2Skill;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExBasicActionList;
@@ -406,7 +406,7 @@ public final class BlockCheckerEngine
 				}
 				// Set the current player arena
 				player.setBlockCheckerArena((byte) _arena);
-				player.setInsideZone(ZoneId.PVP, true);
+				player.setInsideZone(ZoneIdType.PVP, true);
 				// Send needed packets
 				player.sendPacket(initialPoints);
 				player.sendPacket(_closeUserInterface);
@@ -763,7 +763,7 @@ public final class BlockCheckerEngine
 				broadcastRelationChanged(player);
 				// Teleport Back
 				player.teleToLocation(-57478, -60367, -2370);
-				player.setInsideZone(ZoneId.PVP, false);
+				player.setInsideZone(ZoneIdType.PVP, false);
 				// Send end packet
 				player.sendPacket(end);
 				player.broadcastUserInfo();

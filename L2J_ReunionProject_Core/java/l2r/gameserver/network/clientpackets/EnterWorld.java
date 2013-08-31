@@ -23,11 +23,14 @@ import l2r.Config;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.LoginServerThread;
 import l2r.gameserver.SevenSigns;
-import l2r.gameserver.TaskPriority;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.TaskPriority;
+import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
@@ -38,7 +41,6 @@ import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.MailManager;
-import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.instancemanager.PetitionManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.SiegeManager;
@@ -46,7 +48,6 @@ import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.instance.L2ClassMasterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Couple;
@@ -59,7 +60,6 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.QuestState;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.Die;
 import l2r.gameserver.network.serverpackets.EtcStatusUpdate;
@@ -552,9 +552,9 @@ public class EnterWorld extends L2GameClientPacket
 		
 		// Attacker or spectator logging in to a siege zone.
 		// Actually should be checked for inside castle only?
-		if (!activeChar.canOverrideCond(PcCondOverride.ZONE_CONDITIONS) && activeChar.isInsideZone(ZoneId.SIEGE) && (!activeChar.isInSiege() || (activeChar.getSiegeState() < 2)))
+		if (!activeChar.canOverrideCond(PcCondOverride.ZONE_CONDITIONS) && activeChar.isInsideZone(ZoneIdType.SIEGE) && (!activeChar.isInSiege() || (activeChar.getSiegeState() < 2)))
 		{
-			activeChar.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+			activeChar.teleToLocation(TeleportWhereType.Town);
 		}
 		
 		if (Config.ALLOW_MAIL)
@@ -586,7 +586,7 @@ public class EnterWorld extends L2GameClientPacket
 		if (Olympiad.getInstance().playerInStadia(activeChar))
 		{
 			activeChar.doRevive();
-			activeChar.teleToLocation(MapRegionManager.TeleportWhereType.Town);
+			activeChar.teleToLocation(TeleportWhereType.Town);
 			activeChar.sendMessage("You have been teleported to the nearest town due to you being in an Olympiad Stadium");
 		}
 		/** End of Custom Section */

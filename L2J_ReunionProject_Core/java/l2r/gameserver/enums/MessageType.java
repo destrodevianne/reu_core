@@ -16,18 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.base;
+package l2r.gameserver.enums;
 
-/**
- * This class defines all races (human, elf, darkelf, orc, dwarf) that a player can chose.
- * @version $Revision: 1.2.4.2 $ $Date: 2005/03/27 15:29:32 $
- */
-public enum Race
+public enum MessageType
 {
-	Human,
-	Elf,
-	DarkElf,
-	Orc,
-	Dwarf,
-	Kamael;
+	Expelled,
+	Left,
+	None,
+	Disconnected
 }

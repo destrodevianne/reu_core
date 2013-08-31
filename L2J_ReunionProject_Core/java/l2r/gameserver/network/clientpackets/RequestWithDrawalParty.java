@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.model.L2Party;
-import l2r.gameserver.model.L2Party.messageType;
 import l2r.gameserver.model.PartyMatchRoom;
 import l2r.gameserver.model.PartyMatchRoomList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -60,7 +60,7 @@ public final class RequestWithDrawalParty extends L2GameClientPacket
 			}
 			else
 			{
-				party.removePartyMember(player, messageType.Left);
+				party.removePartyMember(player, MessageType.Left);
 				
 				if (player.isInPartyMatchRoom())
 				{

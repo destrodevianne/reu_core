@@ -21,9 +21,9 @@ package l2r.gameserver.model;
 import java.util.List;
 
 import javolution.util.FastList;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.L2ControllableMobAI;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2ControllableMobInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

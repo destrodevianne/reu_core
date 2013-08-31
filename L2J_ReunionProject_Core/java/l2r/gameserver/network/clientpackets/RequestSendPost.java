@@ -23,6 +23,7 @@ import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.model.BlockList;
 import l2r.gameserver.model.L2AccessLevel;
@@ -30,7 +31,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Message;
 import l2r.gameserver.model.itemcontainer.Mail;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExNoticePostSent;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
@@ -129,7 +129,7 @@ public final class RequestSendPost extends L2GameClientPacket
 			return;
 		}
 		
-		if (!activeChar.isInsideZone(ZoneId.PEACE) && (_items != null))
+		if (!activeChar.isInsideZone(ZoneIdType.PEACE) && (_items != null))
 		{
 			activeChar.sendPacket(SystemMessageId.CANT_FORWARD_NOT_IN_PEACE_ZONE);
 			return;

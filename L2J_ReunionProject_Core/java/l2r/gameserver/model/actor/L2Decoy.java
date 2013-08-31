@@ -20,6 +20,7 @@ package l2r.gameserver.model.actor;
 
 import java.util.Collection;
 
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

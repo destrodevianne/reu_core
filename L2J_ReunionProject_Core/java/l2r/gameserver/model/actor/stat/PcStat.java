@@ -22,8 +22,9 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.BonusExpManager;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2ClassMasterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -31,7 +32,6 @@ import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.entity.RecoBonus;
 import l2r.gameserver.model.quest.QuestState;
 import l2r.gameserver.model.stats.Stats;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
 import l2r.gameserver.network.serverpackets.ExVitalityPointInfo;
@@ -90,7 +90,7 @@ public class PcStat extends PlayableStat
 		}
 		
 		// Set new karma
-		if (!activeChar.isCursedWeaponEquipped() && (activeChar.getKarma() > 0) && (activeChar.isGM() || !activeChar.isInsideZone(ZoneId.PVP)))
+		if (!activeChar.isCursedWeaponEquipped() && (activeChar.getKarma() > 0) && (activeChar.isGM() || !activeChar.isInsideZone(ZoneIdType.PVP)))
 		{
 			int karmaLost = activeChar.calculateKarmaLost(value);
 			if (karmaLost > 0)
@@ -178,7 +178,7 @@ public class PcStat extends PlayableStat
 				}
 			}
 			// Calculate reco exp/sp bonus
-			if ((addToExp > 0) && !activeChar.isInsideZone(ZoneId.PEACE))
+			if ((addToExp > 0) && !activeChar.isInsideZone(ZoneIdType.PEACE))
 			{
 				activeChar.startAdventTask();
 			}

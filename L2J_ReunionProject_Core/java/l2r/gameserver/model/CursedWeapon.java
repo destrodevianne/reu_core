@@ -29,9 +29,9 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.instancemanager.TransformationManager;
-import l2r.gameserver.model.L2Party.messageType;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -454,7 +454,7 @@ public class CursedWeapon
 		_player.setPkKills(0);
 		if (_player.isInParty())
 		{
-			_player.getParty().removePartyMember(_player, messageType.Expelled);
+			_player.getParty().removePartyMember(_player, MessageType.Expelled);
 		}
 		
 		// Disable All Skills

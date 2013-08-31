@@ -23,14 +23,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2Party;
-import l2r.gameserver.model.L2Party.messageType;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;
@@ -299,7 +299,7 @@ public abstract class AbstractOlympiadGame
 				final L2Party party = player.getParty();
 				if (party != null)
 				{
-					party.removePartyMember(player, messageType.Expelled);
+					party.removePartyMember(player, MessageType.Expelled);
 				}
 			}
 			// Remove Agathion

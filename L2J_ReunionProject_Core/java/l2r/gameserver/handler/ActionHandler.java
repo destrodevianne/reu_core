@@ -21,7 +21,7 @@ package l2r.gameserver.handler;
 import java.util.HashMap;
 import java.util.Map;
 
-import l2r.gameserver.model.L2Object.InstanceType;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.scripts.handlers.actionhandlers.L2ArtefactInstanceAction;
 import l2r.gameserver.scripts.handlers.actionhandlers.L2DecoyAction;
 import l2r.gameserver.scripts.handlers.actionhandlers.L2DoorInstanceAction;

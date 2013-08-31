@@ -28,6 +28,8 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.enums.PetitionState;
+import l2r.gameserver.enums.PetitionType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -50,32 +52,6 @@ public final class PetitionManager
 	private final Map<Integer, Petition> _pendingPetitions;
 	private final Map<Integer, Petition> _completedPetitions;
 	
-	private static enum PetitionState
-	{
-		Pending,
-		Responder_Cancel,
-		Responder_Missing,
-		Responder_Reject,
-		Responder_Complete,
-		Petitioner_Cancel,
-		Petitioner_Missing,
-		In_Process,
-		Completed
-	}
-	
-	private static enum PetitionType
-	{
-		Immobility,
-		Recovery_Related,
-		Bug_Report,
-		Quest_Related,
-		Bad_User,
-		Suggestions,
-		Game_Tip,
-		Operation_Related,
-		Other
-	}
-	
 	public static PetitionManager getInstance()
 	{
 		return SingletonHolder._instance;
@@ -87,7 +63,7 @@ public final class PetitionManager
 		
 		private final int _id;
 		private final PetitionType _type;
-		private PetitionState _state = PetitionState.Pending;
+		private PetitionState _state = PetitionState.PENDING;
 		private final String _content;
 		
 		private final List<CreatureSay> _messageLog = new FastList<>();
@@ -125,7 +101,7 @@ public final class PetitionManager
 			
 			if ((getResponder() != null) && getResponder().isOnline())
 			{
-				if (endState == PetitionState.Responder_Reject)
+				if (endState == PetitionState.RESPONDER_REJECT)
 				{
 					getPetitioner().sendMessage("Your petition was rejected. Please try again later.");
 				}
@@ -136,7 +112,7 @@ public final class PetitionManager
 					sm.addString(getPetitioner().getName());
 					getResponder().sendPacket(sm);
 					
-					if (endState == PetitionState.Petitioner_Cancel)
+					if (endState == PetitionState.PETITIONER_CANCEL)
 					{
 						// Receipt No. <ID> petition cancelled.
 						sm = SystemMessage.getSystemMessage(SystemMessageId.RECENT_NO_S1_CANCELED);
@@ -210,7 +186,7 @@ public final class PetitionManager
 		{
 			if ((getResponder() == null) || !getResponder().isOnline())
 			{
-				endPetitionConsultation(PetitionState.Responder_Missing);
+				endPetitionConsultation(PetitionState.RESPONDER_MISSING);
 				return;
 			}
 			
@@ -270,7 +246,7 @@ public final class PetitionManager
 		}
 		
 		currPetition.setResponder(respondingAdmin);
-		currPetition.setState(PetitionState.In_Process);
+		currPetition.setState(PetitionState.IN_PROCESS);
 		
 		// Petition application accepted. (Send to Petitioner)
 		currPetition.sendPetitionerPacket(SystemMessage.getSystemMessage(SystemMessageId.PETITION_APP_ACCEPTED));
@@ -296,12 +272,12 @@ public final class PetitionManager
 		{
 			if ((currPetition.getPetitioner() != null) && (currPetition.getPetitioner().getObjectId() == player.getObjectId()))
 			{
-				return (currPetition.endPetitionConsultation(PetitionState.Petitioner_Cancel));
+				return (currPetition.endPetitionConsultation(PetitionState.PETITIONER_CANCEL));
 			}
 			
 			if ((currPetition.getResponder() != null) && (currPetition.getResponder().getObjectId() == player.getObjectId()))
 			{
-				return (currPetition.endPetitionConsultation(PetitionState.Responder_Cancel));
+				return (currPetition.endPetitionConsultation(PetitionState.RESPONDER_CANCEL));
 			}
 		}
 		
@@ -348,7 +324,7 @@ public final class PetitionManager
 			
 			if ((currPetition.getResponder() != null) && (currPetition.getResponder().getObjectId() == player.getObjectId()))
 			{
-				return (currPetition.endPetitionConsultation(PetitionState.Completed));
+				return (currPetition.endPetitionConsultation(PetitionState.COMPLETED));
 			}
 		}
 		
@@ -417,7 +393,7 @@ public final class PetitionManager
 				continue;
 			}
 			
-			if (currPetition.getState() == PetitionState.In_Process)
+			if (currPetition.getState() == PetitionState.IN_PROCESS)
 			{
 				return true;
 			}
@@ -434,7 +410,7 @@ public final class PetitionManager
 		}
 		
 		Petition currPetition = getPendingPetitions().get(petitionId);
-		return (currPetition.getState() == PetitionState.In_Process);
+		return (currPetition.getState() == PetitionState.IN_PROCESS);
 	}
 	
 	public boolean isPlayerInConsultation(L2PcInstance player)
@@ -448,7 +424,7 @@ public final class PetitionManager
 					continue;
 				}
 				
-				if (currPetition.getState() != PetitionState.In_Process)
+				if (currPetition.getState() != PetitionState.IN_PROCESS)
 				{
 					continue;
 				}
@@ -509,7 +485,7 @@ public final class PetitionManager
 		}
 		
 		currPetition.setResponder(respondingAdmin);
-		return (currPetition.endPetitionConsultation(PetitionState.Responder_Reject));
+		return (currPetition.endPetitionConsultation(PetitionState.RESPONDER_REJECT));
 	}
 	
 	public boolean sendActivePetitionMessage(L2PcInstance player, String messageText)
@@ -577,7 +553,7 @@ public final class PetitionManager
 			StringUtil.append(htmlContent, "<tr><td width=\"270\"><table width=\"270\" cellpadding=\"2\" bgcolor=", (color ? "131210" : "444444"), "><tr><td width=\"130\">", dateFormat.format(new Date(currPetition.getSubmitTime())));
 			StringUtil.append(htmlContent, "</td><td width=\"140\" align=right><font color=\"", (currPetition.getPetitioner().isOnline() ? "00FF00" : "999999"), "\">", currPetition.getPetitioner().getName(), "</font></td></tr>");
 			StringUtil.append(htmlContent, "<tr><td width=\"130\">");
-			if (currPetition.getState() != PetitionState.In_Process)
+			if (currPetition.getState() != PetitionState.IN_PROCESS)
 			{
 				StringUtil.append(htmlContent, "<table width=\"130\" cellpadding=\"2\"><tr>" + "<td><button value=\"View\" action=\"bypass -h admin_view_petition ", String.valueOf(currPetition.getId()), "\" width=\"50\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" + "<td><button value=\"Reject\" action=\"bypass -h admin_reject_petition ", String.valueOf(currPetition.getId()), "\" width=\"50\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table>");
 			}

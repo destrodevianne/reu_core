@@ -40,13 +40,13 @@ import l2r.gameserver.LoginServerThread.SessionKey;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.model.CharSelectInfoPackage;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2World;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.ServerClose;
@@ -825,7 +825,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 			canSetShop = true;
 		}
 		
-		if (Config.OFFLINE_MODE_IN_PEACE_ZONE && !player.isInsideZone(ZoneId.PEACE))
+		if (Config.OFFLINE_MODE_IN_PEACE_ZONE && !player.isInsideZone(ZoneIdType.PEACE))
 		{
 			canSetShop = false;
 		}

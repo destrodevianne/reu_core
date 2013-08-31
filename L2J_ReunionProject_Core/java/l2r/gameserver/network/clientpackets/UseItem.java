@@ -23,16 +23,16 @@ import java.util.logging.Level;
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlEvent;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.NextAction;
 import l2r.gameserver.ai.NextAction.NextActionCallback;
+import l2r.gameserver.enums.CtrlEvent;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
 import l2r.gameserver.instancemanager.FortSiegeManager;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.base.Race;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2EtcItem;
@@ -323,7 +323,7 @@ public final class UseItem extends L2GameClientPacket
 				case L2Item.SLOT_FULL_ARMOR:
 				case L2Item.SLOT_LEGS:
 				{
-					if ((activeChar.getRace() == Race.Kamael) && ((item.getItem().getItemType() == L2ArmorType.HEAVY) || (item.getItem().getItemType() == L2ArmorType.MAGIC)))
+					if ((activeChar.getRace() == PcRace.Kamael) && ((item.getItem().getItemType() == L2ArmorType.HEAVY) || (item.getItem().getItemType() == L2ArmorType.MAGIC)))
 					{
 						activeChar.sendPacket(SystemMessageId.CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION);
 						return;

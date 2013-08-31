@@ -21,14 +21,14 @@ package l2r.gameserver.network.clientpackets;
 import java.util.Arrays;
 
 import l2r.Config;
-import l2r.gameserver.ai.CtrlEvent;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.L2SummonAI;
 import l2r.gameserver.ai.NextAction;
 import l2r.gameserver.ai.NextAction.NextActionCallback;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SummonSkillsTable;
+import l2r.gameserver.enums.CtrlEvent;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.instancemanager.AirShipManager;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2ManufactureList;

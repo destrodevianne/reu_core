@@ -1,10 +1,11 @@
 package l2r.gameserver.model.actor.instance;
 
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import gr.reunion.javaBuffer.AutoBuff;
@@ -101,7 +102,7 @@ public class L2BufferInstance extends L2Npc
 		}
 		else if (command.startsWith("autobuff"))
 		{
-			if ((player.getPvpFlag() != 0) && !player.isInsideZone(ZoneId.PEACE))
+			if ((player.getPvpFlag() != 0) && !player.isInsideZone(ZoneIdType.PEACE))
 			{
 				player.sendMessage("Cannot use this feature here with flag.");
 				return;

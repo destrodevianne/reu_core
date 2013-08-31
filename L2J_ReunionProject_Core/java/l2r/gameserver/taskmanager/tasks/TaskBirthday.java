@@ -29,13 +29,13 @@ import java.util.logging.Level;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.model.entity.Message;
 import l2r.gameserver.model.itemcontainer.Mail;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
-import l2r.gameserver.taskmanager.TaskTypes;
 import l2r.gameserver.util.Util;
 
 /**
@@ -142,6 +142,6 @@ public class TaskBirthday extends Task
 	public void initializate()
 	{
 		super.initializate();
-		TaskManager.addUniqueTask(NAME, TaskTypes.TYPE_GLOBAL_TASK, "1", "06:30:00", "");
+		TaskManager.addUniqueTask(NAME, TaskType.TYPE_GLOBAL_TASK, "1", "06:30:00", "");
 	}
 }

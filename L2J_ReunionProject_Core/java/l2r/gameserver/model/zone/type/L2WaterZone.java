@@ -20,11 +20,11 @@ package l2r.gameserver.model.zone.type;
 
 import java.util.Collection;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.AbstractNpcInfo;
 import l2r.gameserver.network.serverpackets.ServerObjectInfo;
 
@@ -38,7 +38,7 @@ public class L2WaterZone extends L2ZoneType
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		character.setInsideZone(ZoneId.WATER, true);
+		character.setInsideZone(ZoneIdType.WATER, true);
 		
 		// TODO: update to only send speed status when that packet is known
 		if (character.isPlayer())
@@ -74,7 +74,7 @@ public class L2WaterZone extends L2ZoneType
 	@Override
 	protected void onExit(L2Character character)
 	{
-		character.setInsideZone(ZoneId.WATER, false);
+		character.setInsideZone(ZoneIdType.WATER, false);
 		
 		// TODO: update to only send speed status when that packet is known
 		if (character.isPlayer())

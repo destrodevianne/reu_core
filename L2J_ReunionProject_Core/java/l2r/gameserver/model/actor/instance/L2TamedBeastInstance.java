@@ -18,15 +18,16 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_IDLE;
 
 import java.util.List;
 import java.util.concurrent.Future;
 
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

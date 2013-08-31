@@ -20,6 +20,7 @@ package l2r.gameserver.model.actor.instance;
 
 import java.util.List;
 
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Tower;

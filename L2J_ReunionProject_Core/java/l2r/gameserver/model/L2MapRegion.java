@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import l2r.Config;
-import l2r.gameserver.model.base.Race;
+import l2r.gameserver.enums.PcRace;
 import l2r.util.Rnd;
 
 /**
@@ -44,7 +44,7 @@ public class L2MapRegion
 	private List<Location> _chaoticSpawnLocs = null;
 	private List<Location> _banishSpawnLocs = null;
 	
-	private final Map<Race, String> _bannedRace = new HashMap<>();
+	private final Map<PcRace, String> _bannedRace = new HashMap<>();
 	
 	public L2MapRegion(String name, String town, int locId, int castle, int bbs)
 	{
@@ -212,10 +212,10 @@ public class L2MapRegion
 	
 	public final void addBannedRace(String race, String point)
 	{
-		_bannedRace.put(Race.valueOf(race), point);
+		_bannedRace.put(PcRace.valueOf(race), point);
 	}
 	
-	public final Map<Race, String> getBannedRace()
+	public final Map<PcRace, String> getBannedRace()
 	{
 		return _bannedRace;
 	}

@@ -26,7 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
-import l2r.gameserver.model.CategoryType;
+import l2r.gameserver.enums.CategoryType;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

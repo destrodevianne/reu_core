@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import l2r.Config;
+import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.model.base.ClassId;
-import l2r.gameserver.model.base.Race;
 import l2r.gameserver.model.base.SocialClass;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.holders.SkillHolder;
@@ -40,7 +40,7 @@ public final class L2SkillLearn
 	private final boolean _autoGet;
 	private final int _levelUpSp;
 	private final List<ItemHolder> _requiredItems = new ArrayList<>();
-	private final List<Race> _races = new ArrayList<>();
+	private final List<PcRace> _races = new ArrayList<>();
 	private final List<SkillHolder> _preReqSkills = new ArrayList<>();
 	private SocialClass _socialClass;
 	private final boolean _residenceSkill;
@@ -162,7 +162,7 @@ public final class L2SkillLearn
 	/**
 	 * @return a list with the races that can acquire this skill.
 	 */
-	public List<Race> getRaces()
+	public List<PcRace> getRaces()
 	{
 		return _races;
 	}
@@ -171,7 +171,7 @@ public final class L2SkillLearn
 	 * Adds a required race to learn this skill.
 	 * @param race the required race.
 	 */
-	public void addRace(Race race)
+	public void addRace(PcRace race)
 	{
 		_races.add(race);
 	}

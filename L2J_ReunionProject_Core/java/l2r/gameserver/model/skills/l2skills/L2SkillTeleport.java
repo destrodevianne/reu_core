@@ -20,12 +20,13 @@ package l2r.gameserver.model.skills.l2skills;
 
 import java.util.logging.Level;
 
+import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.GrandBossManager;
 import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
-import l2r.gameserver.model.PcCondOverride;
-import l2r.gameserver.model.ShotType;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -151,19 +152,19 @@ public class L2SkillTeleport extends L2Skill
 				{
 					if (_recallType.equalsIgnoreCase("Castle"))
 					{
-						loc = MapRegionManager.getInstance().getTeleToLocation(target, MapRegionManager.TeleportWhereType.Castle);
+						loc = MapRegionManager.getInstance().getTeleToLocation(target, TeleportWhereType.Castle);
 					}
 					else if (_recallType.equalsIgnoreCase("ClanHall"))
 					{
-						loc = MapRegionManager.getInstance().getTeleToLocation(target, MapRegionManager.TeleportWhereType.ClanHall);
+						loc = MapRegionManager.getInstance().getTeleToLocation(target, TeleportWhereType.ClanHall);
 					}
 					else if (_recallType.equalsIgnoreCase("Fortress"))
 					{
-						loc = MapRegionManager.getInstance().getTeleToLocation(target, MapRegionManager.TeleportWhereType.Fortress);
+						loc = MapRegionManager.getInstance().getTeleToLocation(target, TeleportWhereType.Fortress);
 					}
 					else
 					{
-						loc = MapRegionManager.getInstance().getTeleToLocation(target, MapRegionManager.TeleportWhereType.Town);
+						loc = MapRegionManager.getInstance().getTeleToLocation(target, TeleportWhereType.Town);
 					}
 				}
 				if (loc != null)

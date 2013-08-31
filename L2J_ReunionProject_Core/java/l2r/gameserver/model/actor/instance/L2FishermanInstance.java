@@ -22,6 +22,7 @@ import java.util.List;
 
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2SkillLearn;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.AcquireSkillType;

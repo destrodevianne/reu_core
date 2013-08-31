@@ -23,6 +23,7 @@ import java.util.logging.Level;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Decoy;
 import l2r.gameserver.model.actor.knownlist.DecoyKnownList;

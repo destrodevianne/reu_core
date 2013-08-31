@@ -23,6 +23,7 @@ import java.util.List;
 import javolution.util.FastList;
 import l2r.gameserver.MonsterRace;
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.knownlist.RaceManagerKnownList;

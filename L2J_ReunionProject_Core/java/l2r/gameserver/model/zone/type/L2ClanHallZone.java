@@ -18,14 +18,14 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.ClanHallManager;
-import l2r.gameserver.instancemanager.MapRegionManager.TeleportWhereType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.ClanHall;
 import l2r.gameserver.model.entity.clanhall.AuctionableHall;
 import l2r.gameserver.model.zone.L2ZoneRespawn;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.AgitDecoInfo;
 
 /**
@@ -70,7 +70,7 @@ public class L2ClanHallZone extends L2ZoneRespawn
 		if (character.isPlayer())
 		{
 			// Set as in clan hall
-			character.setInsideZone(ZoneId.CLAN_HALL, true);
+			character.setInsideZone(ZoneIdType.CLAN_HALL, true);
 			
 			AuctionableHall clanHall = ClanHallManager.getInstance().getAuctionableHallById(_clanHallId);
 			if (clanHall == null)
@@ -90,7 +90,7 @@ public class L2ClanHallZone extends L2ZoneRespawn
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.CLAN_HALL, false);
+			character.setInsideZone(ZoneIdType.CLAN_HALL, false);
 		}
 	}
 	

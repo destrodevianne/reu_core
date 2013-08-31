@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.TaskPriority;
+import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.instancemanager.BoatManager;
 import l2r.gameserver.model.actor.instance.L2BoatInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

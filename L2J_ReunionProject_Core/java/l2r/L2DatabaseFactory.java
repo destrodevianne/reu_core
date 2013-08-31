@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.ProviderType;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -37,15 +38,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class L2DatabaseFactory
 {
 	private static final Logger _log = Logger.getLogger(L2DatabaseFactory.class.getName());
-	
-	/**
-	 * The Enum ProviderType.
-	 */
-	private static enum ProviderType
-	{
-		MySql,
-		MsSql
-	}
 	
 	private static L2DatabaseFactory _instance;
 	private static volatile ScheduledExecutorService _executor;

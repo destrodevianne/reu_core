@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.ai;
+package l2r.gameserver.enums;
 
 /**
  * Enumeration of generic intentions of an NPC/PC, an intention may require several steps to be completed.

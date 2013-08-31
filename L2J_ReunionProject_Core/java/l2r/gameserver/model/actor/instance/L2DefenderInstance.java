@@ -19,11 +19,12 @@
 package l2r.gameserver.model.actor.instance;
 
 import l2r.Config;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.ai.L2FortSiegeGuardAI;
 import l2r.gameserver.ai.L2SiegeGuardAI;
 import l2r.gameserver.ai.L2SpecialSiegeGuardAI;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;

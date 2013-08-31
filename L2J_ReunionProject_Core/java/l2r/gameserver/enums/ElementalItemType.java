@@ -16,27 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model;
+package l2r.gameserver.enums;
 
-/**
- * @author UnAfraid
- */
-public enum ShotType
+public enum ElementalItemType
 {
-	SOULSHOTS,
-	SPIRITSHOTS,
-	BLESSED_SPIRITSHOTS,
-	FISH_SOULSHOTS;
+	Stone(3),
+	Roughore(3),
+	Crystal(6),
+	Jewel(9),
+	Energy(12);
 	
-	private final int _mask;
+	public int _maxLevel;
 	
-	private ShotType()
+	private ElementalItemType(int maxLvl)
 	{
-		_mask = (1 << ordinal());
-	}
-	
-	public int getMask()
-	{
-		return _mask;
+		_maxLevel = maxLvl;
 	}
 }

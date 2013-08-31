@@ -18,15 +18,16 @@
  */
 package l2r.gameserver.ai;
 
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_FOLLOW;
-import static l2r.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ATTACK;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_FOLLOW;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_IDLE;
 
 import java.util.concurrent.Future;
 
 import l2r.Config;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Character.AIAccessor;

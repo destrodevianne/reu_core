@@ -18,10 +18,10 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneRespawn;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * based on Kerberos work for custom L2CastleTeleportZone
@@ -52,13 +52,13 @@ public class L2ResidenceTeleportZone extends L2ZoneRespawn
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true); // FIXME: Custom ?
+		character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, true); // FIXME: Custom ?
 	}
 	
 	@Override
 	protected void onExit(L2Character character)
 	{
-		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false); // FIXME: Custom ?
+		character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, false); // FIXME: Custom ?
 	}
 	
 	@Override

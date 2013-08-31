@@ -18,10 +18,10 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.BoatManager;
 import l2r.gameserver.model.actor.instance.L2BoatInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.GetOnVehicle;
 import l2r.gameserver.util.Point3D;
@@ -82,7 +82,7 @@ public final class RequestGetOnVehicle extends L2GameClientPacket
 		activeChar.broadcastPacket(new GetOnVehicle(activeChar.getObjectId(), boat.getObjectId(), _pos));
 		
 		activeChar.setXYZ(boat.getX(), boat.getY(), boat.getZ());
-		activeChar.setInsideZone(ZoneId.PEACE, true);
+		activeChar.setInsideZone(ZoneIdType.PEACE, true);
 		activeChar.revalidateZone(true);
 	}
 	

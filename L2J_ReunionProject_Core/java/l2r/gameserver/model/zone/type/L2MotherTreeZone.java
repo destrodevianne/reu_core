@@ -18,10 +18,10 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
 /**
@@ -71,7 +71,7 @@ public class L2MotherTreeZone extends L2ZoneType
 		if (character.isPlayer())
 		{
 			L2PcInstance player = character.getActingPlayer();
-			character.setInsideZone(ZoneId.MOTHER_TREE, true);
+			character.setInsideZone(ZoneIdType.MOTHER_TREE, true);
 			if (_enterMsg != 0)
 			{
 				player.sendPacket(SystemMessage.getSystemMessage(_enterMsg));
@@ -85,7 +85,7 @@ public class L2MotherTreeZone extends L2ZoneType
 		if (character.isPlayer())
 		{
 			L2PcInstance player = character.getActingPlayer();
-			player.setInsideZone(ZoneId.MOTHER_TREE, false);
+			player.setInsideZone(ZoneIdType.MOTHER_TREE, false);
 			if (_leaveMsg != 0)
 			{
 				player.sendPacket(SystemMessage.getSystemMessage(_leaveMsg));

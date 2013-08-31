@@ -31,11 +31,11 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.ArmorSetsData;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.model.L2ArmorSet;
 import l2r.gameserver.model.L2World;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.items.L2Item;
@@ -908,7 +908,7 @@ public abstract class Inventory extends ItemContainer
 	{
 		return _paperdoll[slot];
 	}
-
+	
 	/**
 	 * @param slot the slot.
 	 * @return {@code true} if specified paperdoll slot is empty, {@code false} otherwise

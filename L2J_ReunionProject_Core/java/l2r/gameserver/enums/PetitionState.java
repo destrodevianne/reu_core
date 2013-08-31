@@ -16,26 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.util.osnative;
-
-import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.win32.StdCallLibrary;
-import com.sun.jna.win32.W32APIOptions;
+package l2r.gameserver.enums;
 
 /**
- * @author mrTJO
+ * Enum with petition states.
+ * @author xban1x
  */
-public interface WinConsole extends StdCallLibrary
+public enum PetitionState
 {
-	WinConsole INSTANCE = (WinConsole) Native.loadLibrary("kernel32", WinConsole.class, W32APIOptions.UNICODE_OPTIONS);
-	
-	public boolean SetConsoleOutputCP(int codePage);
-	
-	public int GetConsoleOutputCP();
-	
-	public Pointer GetStdHandle(int stream);
-	
-	public boolean WriteConsoleW(Pointer stream, char[] text, int textLen, IntByReference caretPosition, Pointer reservedNull);
+	PENDING,
+	RESPONDER_CANCEL,
+	RESPONDER_MISSING,
+	RESPONDER_REJECT,
+	RESPONDER_COMPLETE,
+	PETITIONER_CANCEL,
+	PETITIONER_MISSING,
+	IN_PROCESS,
+	COMPLETED
 }

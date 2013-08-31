@@ -30,6 +30,7 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
@@ -265,7 +266,7 @@ public final class L2WorldRegion
 					// stop the ai tasks
 					if (mob.hasAI())
 					{
-						mob.getAI().setIntention(l2r.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE);
+						mob.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 						mob.getAI().stopAITask();
 					}
 				}

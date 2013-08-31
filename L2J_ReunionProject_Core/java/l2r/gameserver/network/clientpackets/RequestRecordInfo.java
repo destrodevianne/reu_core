@@ -20,7 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import java.util.Collection;
 
-import l2r.gameserver.TaskPriority;
+import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

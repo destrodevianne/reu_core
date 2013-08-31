@@ -19,6 +19,7 @@
 package l2r.gameserver.ai;
 
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;

@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * Zone where store is not allowed.
@@ -38,7 +38,7 @@ public class L2NoStoreZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.NO_STORE, true);
+			character.setInsideZone(ZoneIdType.NO_STORE, true);
 		}
 	}
 	
@@ -47,7 +47,7 @@ public class L2NoStoreZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.NO_STORE, false);
+			character.setInsideZone(ZoneIdType.NO_STORE, false);
 		}
 	}
 	

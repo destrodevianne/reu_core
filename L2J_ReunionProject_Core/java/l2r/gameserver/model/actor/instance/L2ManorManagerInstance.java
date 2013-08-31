@@ -18,8 +18,9 @@
  */
 package l2r.gameserver.model.actor.instance;
 
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.instancemanager.CastleManorManager;
-import l2r.gameserver.model.PcCondOverride;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 
 public class L2ManorManagerInstance extends L2MerchantInstance

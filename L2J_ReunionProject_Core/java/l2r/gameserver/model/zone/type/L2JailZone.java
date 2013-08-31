@@ -20,12 +20,12 @@ package l2r.gameserver.model.zone.type;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.tasks.player.TeleportTask;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 
 /**
@@ -47,16 +47,16 @@ public class L2JailZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.JAIL, true);
-			character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
+			character.setInsideZone(ZoneIdType.JAIL, true);
+			character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, true);
 			if (Config.JAIL_IS_PVP)
 			{
-				character.setInsideZone(ZoneId.PVP, true);
+				character.setInsideZone(ZoneIdType.PVP, true);
 				character.sendPacket(SystemMessageId.ENTERED_COMBAT_ZONE);
 			}
 			if (Config.JAIL_DISABLE_TRANSACTION)
 			{
-				character.setInsideZone(ZoneId.NO_STORE, true);
+				character.setInsideZone(ZoneIdType.NO_STORE, true);
 			}
 		}
 	}
@@ -67,12 +67,12 @@ public class L2JailZone extends L2ZoneType
 		if (character.isPlayer())
 		{
 			final L2PcInstance player = character.getActingPlayer();
-			player.setInsideZone(ZoneId.JAIL, false);
-			player.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
+			player.setInsideZone(ZoneIdType.JAIL, false);
+			player.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, false);
 			
 			if (Config.JAIL_IS_PVP)
 			{
-				character.setInsideZone(ZoneId.PVP, false);
+				character.setInsideZone(ZoneIdType.PVP, false);
 				character.sendPacket(SystemMessageId.LEFT_COMBAT_ZONE);
 			}
 			
@@ -84,7 +84,7 @@ public class L2JailZone extends L2ZoneType
 			}
 			if (Config.JAIL_DISABLE_TRANSACTION)
 			{
-				character.setInsideZone(ZoneId.NO_STORE, false);
+				character.setInsideZone(ZoneIdType.NO_STORE, false);
 			}
 		}
 	}

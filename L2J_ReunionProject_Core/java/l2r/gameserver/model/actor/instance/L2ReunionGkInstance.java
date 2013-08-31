@@ -1,12 +1,13 @@
 package l2r.gameserver.model.actor.instance;
 
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import gr.reunion.datatables.CustomTable;
@@ -111,7 +112,7 @@ public final class L2ReunionGkInstance extends L2Npc
 			}
 			NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setFile(player.getHtmlPrefix(), "data/html/ReunionGatekeeper/" + subCommand[1]);
-			html.replace("%players%", String.valueOf(getPlayersInZoneCount(ZoneId.ZONE_CHAOTIC.getId())));
+			html.replace("%players%", String.valueOf(getPlayersInZoneCount(ZoneIdType.ZONE_CHAOTIC.getId())));
 			html.replace("%objectId%", String.valueOf(getObjectId()));
 			player.sendPacket(html);
 		}

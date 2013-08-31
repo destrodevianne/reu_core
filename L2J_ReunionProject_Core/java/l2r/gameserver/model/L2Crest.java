@@ -19,6 +19,7 @@
 package l2r.gameserver.model;
 
 import l2r.Config;
+import l2r.gameserver.enums.CrestType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.AllyCrest;
 import l2r.gameserver.network.serverpackets.ExPledgeCrestLarge;
@@ -29,37 +30,6 @@ import l2r.gameserver.network.serverpackets.PledgeCrest;
  */
 public final class L2Crest
 {
-	public enum CrestType
-	{
-		PLEDGE(1),
-		PLEDGE_LARGE(2),
-		ALLY(3);
-		
-		private final int _id;
-		
-		private CrestType(int id)
-		{
-			_id = id;
-		}
-		
-		public int getId()
-		{
-			return _id;
-		}
-		
-		public static CrestType getById(int id)
-		{
-			for (CrestType crestType : values())
-			{
-				if (crestType.getId() == id)
-				{
-					return crestType;
-				}
-			}
-			return null;
-		}
-	}
-	
 	private final int _id;
 	private final byte[] _data;
 	private final CrestType _type;

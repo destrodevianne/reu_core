@@ -28,6 +28,7 @@ import java.util.StringTokenizer;
 
 import javolution.util.FastMap;
 import l2r.Config;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.AuctionManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
 import l2r.gameserver.instancemanager.MapRegionManager;

@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.model.L2Party.messageType;
+import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.model.PartyMatchRoom;
 import l2r.gameserver.model.PartyMatchRoomList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -122,7 +122,7 @@ public final class RequestAnswerJoinParty extends L2GameClientPacket
 			// activate garbage collection if there are no other members in party (happens when we were creating new one)
 			if (requestor.isInParty() && (requestor.getParty().getMemberCount() == 1))
 			{
-				requestor.getParty().removePartyMember(requestor, messageType.None);
+				requestor.getParty().removePartyMember(requestor, MessageType.None);
 			}
 		}
 		else
@@ -133,7 +133,7 @@ public final class RequestAnswerJoinParty extends L2GameClientPacket
 			// activate garbage collection if there are no other members in party (happens when we were creating new one)
 			if (requestor.isInParty() && (requestor.getParty().getMemberCount() == 1))
 			{
-				requestor.getParty().removePartyMember(requestor, messageType.None);
+				requestor.getParty().removePartyMember(requestor, MessageType.None);
 			}
 		}
 		

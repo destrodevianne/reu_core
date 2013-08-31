@@ -19,6 +19,7 @@
 package l2r.gameserver.network.serverpackets;
 
 import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
@@ -32,7 +33,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
-import l2r.gameserver.model.zone.ZoneId;
 import gr.reunion.configs.ChaoticZoneConfigs;
 import gr.reunion.configs.FlagZoneConfigs;
 import gr.reunion.interf.ReunionEvents;
@@ -67,12 +67,12 @@ public class Die extends L2GameServerPacket
 		if (cha.isPlayer())
 		{
 			L2PcInstance activeChar = cha.getActingPlayer();
-			if (activeChar.isInsideZone(ZoneId.ZONE_CHAOTIC) && ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_AUTO_REVIVE)
+			if (activeChar.isInsideZone(ZoneIdType.ZONE_CHAOTIC) && ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_AUTO_REVIVE)
 			{
 				_canTeleport = false;
 			}
 			
-			if (activeChar.isInsideZone(ZoneId.FLAG) && FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE)
+			if (activeChar.isInsideZone(ZoneIdType.FLAG) && FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE)
 			{
 				_canTeleport = false;
 			}

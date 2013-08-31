@@ -24,11 +24,11 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlIntention;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.DuelManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.effects.L2Effect;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExDuelEnd;
@@ -890,7 +890,7 @@ public class Duel
 			}
 			
 			// is one of the players in a Siege, Peace or PvP zone?
-			if (_playerA.isInsideZone(ZoneId.PEACE) || _playerB.isInsideZone(ZoneId.PEACE) || _playerA.isInsideZone(ZoneId.SIEGE) || _playerB.isInsideZone(ZoneId.SIEGE) || _playerA.isInsideZone(ZoneId.PVP) || _playerB.isInsideZone(ZoneId.PVP))
+			if (_playerA.isInsideZone(ZoneIdType.PEACE) || _playerB.isInsideZone(ZoneIdType.PEACE) || _playerA.isInsideZone(ZoneIdType.SIEGE) || _playerB.isInsideZone(ZoneIdType.SIEGE) || _playerA.isInsideZone(ZoneIdType.PVP) || _playerB.isInsideZone(ZoneIdType.PVP))
 			{
 				return DuelResultEnum.Canceled;
 			}

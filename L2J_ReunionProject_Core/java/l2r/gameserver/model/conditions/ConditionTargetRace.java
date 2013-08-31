@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.model.conditions;
 
+import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.base.Race;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.util.Util;
 
@@ -29,13 +29,13 @@ import l2r.gameserver.util.Util;
  */
 public class ConditionTargetRace extends Condition
 {
-	private final Race[] _races;
+	private final PcRace[] _races;
 	
 	/**
 	 * Instantiates a new condition target race.
 	 * @param races the list containing the allowed races.
 	 */
-	public ConditionTargetRace(Race[] races)
+	public ConditionTargetRace(PcRace[] races)
 	{
 		_races = races;
 	}

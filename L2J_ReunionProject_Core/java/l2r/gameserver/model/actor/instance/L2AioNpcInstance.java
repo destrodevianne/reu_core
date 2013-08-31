@@ -32,6 +32,8 @@ import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.MultiSell;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.GrandBossManager;
@@ -42,7 +44,6 @@ import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.PlayerClass;
-import l2r.gameserver.model.base.Race;
 import l2r.gameserver.model.base.SubClass;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.itemcontainer.Inventory;
@@ -159,9 +160,9 @@ public final class L2AioNpcInstance extends L2Npc
 		player.sendPacket(html);
 	}
 	
-	protected static String getSubClassMenu(Race pRace)
+	protected static String getSubClassMenu(PcRace pRace)
 	{
-		if (Config.ALT_GAME_SUBCLASS_EVERYWHERE || (pRace != Race.Kamael))
+		if (Config.ALT_GAME_SUBCLASS_EVERYWHERE || (pRace != PcRace.Kamael))
 		{
 			return "data/html/AioNpc/subclass/SubClass.htm";
 		}
@@ -530,12 +531,12 @@ public final class L2AioNpcInstance extends L2Npc
 					}
 					else
 					{
-						if ((player.getRace() == Race.Elf) || (player.getRace() == Race.DarkElf))
+						if ((player.getRace() == PcRace.Elf) || (player.getRace() == PcRace.DarkElf))
 						{
 							html.setFile(player.getHtmlPrefix(), "data/html/AioNpc/subclass/SubClass_Fail_Elves.htm");
 							player.sendPacket(html);
 						}
-						else if (player.getRace() == Race.Kamael)
+						else if (player.getRace() == PcRace.Kamael)
 						{
 							html.setFile(player.getHtmlPrefix(), "data/html/AioNpc/subclass/SubClass_Fail_Kamael.htm");
 							player.sendPacket(html);

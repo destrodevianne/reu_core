@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.ClanHallManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

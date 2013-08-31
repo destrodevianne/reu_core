@@ -32,11 +32,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.model.ChanceCondition;
-import l2r.gameserver.model.L2Object.InstanceType;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.base.PlayerState;
-import l2r.gameserver.model.base.Race;
 import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.conditions.ConditionChangeWeapon;
 import l2r.gameserver.model.conditions.ConditionForceBuff;
@@ -575,12 +575,12 @@ public abstract class DocumentBase
 			if ("races".equalsIgnoreCase(a.getNodeName()))
 			{
 				final String[] racesVal = a.getNodeValue().split(",");
-				final Race[] races = new Race[racesVal.length];
+				final PcRace[] races = new PcRace[racesVal.length];
 				for (int r = 0; r < racesVal.length; r++)
 				{
 					if (racesVal[r] != null)
 					{
-						races[r] = Race.valueOf(racesVal[r]);
+						races[r] = PcRace.valueOf(racesVal[r]);
 					}
 				}
 				cond = joinAnd(cond, new ConditionPlayerRace(races));
@@ -992,12 +992,12 @@ public abstract class DocumentBase
 			else if ("races".equalsIgnoreCase(a.getNodeName()))
 			{
 				final String[] racesVal = a.getNodeValue().split(",");
-				final Race[] races = new Race[racesVal.length];
+				final PcRace[] races = new PcRace[racesVal.length];
 				for (int r = 0; r < racesVal.length; r++)
 				{
 					if (racesVal[r] != null)
 					{
-						races[r] = Race.valueOf(racesVal[r]);
+						races[r] = PcRace.valueOf(racesVal[r]);
 					}
 				}
 				cond = joinAnd(cond, new ConditionTargetRace(races));

@@ -29,6 +29,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.ai.L2DoorAI;
 import l2r.gameserver.datatables.DoorTable;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
 import l2r.gameserver.instancemanager.FortManager;

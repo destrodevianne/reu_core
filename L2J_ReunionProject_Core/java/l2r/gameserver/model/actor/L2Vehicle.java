@@ -27,8 +27,10 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.CtrlIntention;
 import l2r.gameserver.ai.L2CharacterAI;
+import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2World;
@@ -220,7 +222,7 @@ public abstract class L2Vehicle extends L2Character
 	
 	public Location getOustLoc()
 	{
-		return _oustLoc != null ? _oustLoc : MapRegionManager.getInstance().getTeleToLocation(this, MapRegionManager.TeleportWhereType.Town);
+		return _oustLoc != null ? _oustLoc : MapRegionManager.getInstance().getTeleToLocation(this, TeleportWhereType.Town);
 	}
 	
 	public void oustPlayers()

@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l2r.Config;
+import l2r.gameserver.enums.FortUpdaterType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.entity.Fort;
@@ -37,15 +38,9 @@ public class FortUpdater implements Runnable
 	private final L2Clan _clan;
 	private final Fort _fort;
 	private int _runCount;
-	private final UpdaterType _updaterType;
+	private final FortUpdaterType _updaterType;
 	
-	public enum UpdaterType
-	{
-		MAX_OWN_TIME, // gives fort back to NPC clan
-		PERIODIC_UPDATE // raise blood oath/supply level
-	}
-	
-	public FortUpdater(Fort fort, L2Clan clan, int runCount, UpdaterType ut)
+	public FortUpdater(Fort fort, L2Clan clan, int runCount, FortUpdaterType ut)
 	{
 		_fort = fort;
 		_clan = clan;

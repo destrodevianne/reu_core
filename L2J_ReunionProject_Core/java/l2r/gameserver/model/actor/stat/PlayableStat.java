@@ -23,11 +23,11 @@ import java.util.logging.Logger;
 import l2r.Config;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.PetDataTable;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
-import l2r.gameserver.model.zone.ZoneId;
 import l2r.gameserver.model.zone.type.L2SwampZone;
 
 public class PlayableStat extends CharStat
@@ -226,12 +226,12 @@ public class PlayableStat extends CharStat
 	public int getRunSpeed()
 	{
 		int val = super.getRunSpeed();
-		if (getActiveChar().isInsideZone(ZoneId.WATER))
+		if (getActiveChar().isInsideZone(ZoneIdType.WATER))
 		{
 			val /= 2;
 		}
 		
-		if (getActiveChar().isInsideZone(ZoneId.SWAMP))
+		if (getActiveChar().isInsideZone(ZoneIdType.SWAMP))
 		{
 			L2SwampZone zone = ZoneManager.getInstance().getZone(getActiveChar(), L2SwampZone.class);
 			int bonus = zone == null ? 0 : zone.getMoveBonus();

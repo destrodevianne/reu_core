@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.gameserver.model.zone.ZoneId;
 
 /**
  * Zone where 'Build Headquarters' is allowed.
@@ -63,7 +63,7 @@ public class L2HqZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.HQ, true);
+			character.setInsideZone(ZoneIdType.HQ, true);
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class L2HqZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			character.setInsideZone(ZoneId.HQ, false);
+			character.setInsideZone(ZoneIdType.HQ, false);
 		}
 	}
 	
