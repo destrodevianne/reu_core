@@ -686,4 +686,36 @@ public final class Util
 		t.printStackTrace(new PrintWriter(sw));
 		return sw.toString();
 	}
+	
+	public static int[] getRange(int start, int end)
+	{
+		if (start > end)
+		{
+			return null;
+		}
+		
+		int[] range = new int[(end - start) + 1];
+		for (int l = 0; start < (end + 1); l++)
+		{
+			range[l] = start;
+			start++;
+		}
+		return range;
+	}
+	
+	public static long[] getRange(long start, long end)
+	{
+		if (start > end)
+		{
+			return null;
+		}
+		
+		long[] range = new long[(int) ((end - start) + 1)];
+		for (int l = 0; start < (end + 1); l++)
+		{
+			range[l] = start;
+			start++;
+		}
+		return range;
+	}
 }
