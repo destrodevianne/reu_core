@@ -2483,42 +2483,6 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
-	 * Show an on screen message to the player.
-	 * @param player the player to display the message
-	 * @param text the message
-	 * @param time the display time
-	 */
-	public static void showOnScreenMsg(L2PcInstance player, String text, int time)
-	{
-		player.sendPacket(new ExShowScreenMessage(text, time));
-	}
-	
-	/**
-	 * Show an on screen message to the player.
-	 * @param player the player to display the message
-	 * @param npcString the NPC String to display
-	 * @param position the position in the screen
-	 * @param time the display time
-	 */
-	public static void showOnScreenMsg(L2PcInstance player, NpcStringId npcString, int position, int time)
-	{
-		player.sendPacket(new ExShowScreenMessage(npcString, position, time));
-	}
-	
-	/**
-	 * Show an on screen message to the player.
-	 * @param player the player to display the message
-	 * @param systemMsg the System Message to display
-	 * @param position the position in the screen
-	 * @param time the display time
-	 * @param params parameters values to replace in the System Message
-	 */
-	public static void showOnScreenMsg(L2PcInstance player, SystemMessageId systemMsg, int position, int time, String... params)
-	{
-		player.sendPacket(new ExShowScreenMessage(systemMsg, position, time, params));
-	}
-	
-	/**
 	 * Auxiliary function for party quests.<br>
 	 * Note: This function is only here because of how commonly it may be used by quest developers.<br>
 	 * For any variations on this function, the quest script can always handle things on its own.
@@ -2534,7 +2498,7 @@ public class Quest extends ManagedScript
 			return null;
 		}
 		
-		// normal cases...if the player is not in a partym check the player's state
+		// normal cases...if the player is not in a party check the player's state
 		QuestState temp = null;
 		L2Party party = player.getParty();
 		// if this player is not in a party, just check if this player instance matches the conditions itself
@@ -2580,6 +2544,133 @@ public class Quest extends ManagedScript
 		
 		// if a match was found from the party, return one of them at random.
 		return candidates.get(Rnd.get(candidates.size()));
+	}
+	
+	/**
+	 * Get a random party member from the player's party who has this quest at the specified quest progress.<br>
+	 * If the player is not in a party, only the player himself is checked.
+	 * @param player the player whose random party member state to get
+	 * @param condition the quest progress step the random member should be at (-1 = check only if quest is started)
+	 * @param playerChance how many times more chance does the player get compared to other party members (3 - 3x more chance).<br>
+	 *            On retail servers, the killer usually gets 2-3x more chance than other party members
+	 * @param target the NPC to use for the distance check (can be null)
+	 * @return the {@link QuestState} object of the random party member or {@code null} if none matched the condition
+	 */
+	public QuestState getRandomPartyMemberState(L2PcInstance player, int condition, int playerChance, L2Npc target)
+	{
+		if ((player == null) || (playerChance < 1))
+		{
+			return null;
+		}
+		
+		QuestState qs = player.getQuestState(getName());
+		if (!player.isInParty())
+		{
+			if (!checkPartyMemberConditions(qs, condition, target))
+			{
+				return null;
+			}
+			if (!checkDistanceToTarget(player, target))
+			{
+				return null;
+			}
+			return qs;
+		}
+		
+		final List<QuestState> candidates = new ArrayList<>();
+		if (checkPartyMemberConditions(qs, condition, target) && (playerChance > 0))
+		{
+			for (int i = 0; i < playerChance; i++)
+			{
+				candidates.add(qs);
+			}
+		}
+		
+		for (L2PcInstance member : player.getParty().getMembers())
+		{
+			if (member == player)
+			{
+				continue;
+			}
+			
+			qs = member.getQuestState(getName());
+			if (checkPartyMemberConditions(qs, condition, target))
+			{
+				candidates.add(qs);
+			}
+		}
+		
+		if (candidates.isEmpty())
+		{
+			return null;
+		}
+		
+		qs = candidates.get(getRandom(candidates.size()));
+		if (!checkDistanceToTarget(qs.getPlayer(), target))
+		{
+			return null;
+		}
+		return qs;
+	}
+	
+	private boolean checkPartyMemberConditions(QuestState qs, int condition, L2Npc npc)
+	{
+		return ((qs != null) && ((condition == -1) ? qs.isStarted() : qs.isCond(condition)) && checkPartyMember(qs, npc));
+	}
+	
+	private static boolean checkDistanceToTarget(L2PcInstance player, L2Npc target)
+	{
+		return ((target == null) || l2r.gameserver.util.Util.checkIfInRange(1500, player, target, true));
+	}
+	
+	/**
+	 * This method is called for every party member in {@link #getRandomPartyMemberState(L2PcInstance, int, int, L2Npc)} if/after all the standard checks are passed.<br>
+	 * It is intended to be overriden by the specific quest implementations.<br>
+	 * It can be used in cases when there are more checks performed than simply a quest condition check,<br>
+	 * for example, if an item is required in the player's inventory.
+	 * @param qs the {@link QuestState} object of the party member
+	 * @param npc the NPC that was passed as the last parameter to {@link #getRandomPartyMemberState(L2PcInstance, int, int, L2Npc)}
+	 * @return {@code true} if this party member passes the check, {@code false} otherwise
+	 */
+	public boolean checkPartyMember(QuestState qs, L2Npc npc)
+	{
+		return true;
+	}
+	
+	/**
+	 * Show an on screen message to the player.
+	 * @param player the player to display the message
+	 * @param text the message
+	 * @param time the display time
+	 */
+	public static void showOnScreenMsg(L2PcInstance player, String text, int time)
+	{
+		player.sendPacket(new ExShowScreenMessage(text, time));
+	}
+	
+	/**
+	 * Show an on screen message to the player.
+	 * @param player the player to display the message
+	 * @param npcString the NPC String to display
+	 * @param position the position in the screen
+	 * @param time the display time
+	 */
+	public static void showOnScreenMsg(L2PcInstance player, NpcStringId npcString, int position, int time)
+	{
+		player.sendPacket(new ExShowScreenMessage(npcString, position, time));
+	}
+	
+	/**
+	 * Show an on screen message to the player.
+	 * @param player the player to display the message
+	 * @param systemMsg the System Message to display
+	 * @param position the position in the screen
+	 * @param time the display time
+	 * @param params parameters values to replace in the System Message
+	 */
+	public static void showOnScreenMsg(L2PcInstance player, SystemMessageId systemMsg, int position, int time, String... params)
+	{
+		player.sendPacket(new ExShowScreenMessage(systemMsg, position, time, params));
 	}
 	
 	/**
