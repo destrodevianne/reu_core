@@ -115,15 +115,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			if (!(target instanceof L2MerchantInstance) || (!player.isInsideRadius(target, INTERACTION_DISTANCE, true, false)) || (player.getInstanceId() != target.getInstanceId()))
-			{
-				merchant = (L2Character) target;
-			}
-			else
-			{
-				sendPacket(ActionFailed.STATIC_PACKET);
-				return;
-			}
+			merchant = (L2Character) target;
 		}
 		
 		L2TradeList list = null;
