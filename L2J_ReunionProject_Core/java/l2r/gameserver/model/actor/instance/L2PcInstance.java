@@ -12393,19 +12393,21 @@ public final class L2PcInstance extends L2Playable
 	
 	private synchronized void cleanup()
 	{
-		// Set the online Flag to True or False and update the characters table of the database with online status and lastAccess (called when login and logout)
+		// Set the online Flag to true or false and update the characters table of the database with online status and lastAccess (called when login and logout)
 		try
 		{
-			if (!isOnline())
-			{
-				_log.log(Level.SEVERE, "deleteMe() called on offline character " + this, new RuntimeException());
-			}
 			setOnlineStatus(false, true);
+			closeNetConnection(true);
 		}
 		catch (Exception e)
 		{
 			_log.log(Level.SEVERE, "deleteMe()", e);
 		}
+		
+		/**
+		 * // Set the online Flag to True or False and update the characters table of the database with online status and lastAccess (called when login and logout) try { if (!isOnline()) { _log.log(Level.SEVERE, "deleteMe() called on offline character " + this, new RuntimeException()); }
+		 * setOnlineStatus(false, true); } catch (Exception e) { _log.log(Level.SEVERE, "deleteMe()", e); }
+		 */
 		
 		try
 		{
