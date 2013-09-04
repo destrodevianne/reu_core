@@ -109,8 +109,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 		L2Character merchant = null;
 		if (!player.isGM())
 		{
-			if ((target == null) || (!player.isInsideRadius(target, INTERACTION_DISTANCE, true, false)) // Distance is too far)
-				|| (player.getInstanceId() != target.getInstanceId()))
+			if ((target == null) || !(target instanceof L2MerchantInstance) || (!player.isInsideRadius(target, INTERACTION_DISTANCE, true, false)) || (player.getInstanceId() != target.getInstanceId()))
 			{
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
