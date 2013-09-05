@@ -146,7 +146,7 @@ public class SoIManager
 		ServerVariables.unset("SoI_opened");
 		EnergySeeds.SoiSeedStop();
 		DoorTable.getInstance().getDoor(14240102).closeMe();
-		for (L2PcInstance ch : ZoneManager.getInstance().getZoneById(200033).getPlayersInside())
+		for (L2PcInstance ch : ZoneManager.getInstance().getZoneById(60010).getPlayersInside())
 		{
 			if (ch != null)
 			{
