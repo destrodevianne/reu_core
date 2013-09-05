@@ -50,12 +50,14 @@ public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Client: " + getClient().toString() + " - Failed reading: " + getType() + " - L2J Server Version: " + Config.SERVER_VERSION + " - DP Revision: " + Config.DATAPACK_VERSION + " ; " + e.getMessage(), e);
-			
 			if (e instanceof BufferUnderflowException)
 			{
+				_log.log(Level.INFO, "Client: " + getClient().toString() + " - Failed reading: " + getType() + " Buffer Under Flow Exception.");
 				getClient().onBufferUnderflow();
+				return false;
 			}
+			
+			_log.log(Level.SEVERE, "Client: " + getClient().toString() + " - Failed reading: " + getType() + " - L2J Server Version: " + Config.SERVER_VERSION + " - DP Revision: " + Config.DATAPACK_VERSION + " ; " + e.getMessage(), e);
 		}
 		return false;
 	}
