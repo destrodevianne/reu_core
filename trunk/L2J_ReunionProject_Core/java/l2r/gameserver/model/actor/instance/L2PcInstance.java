@@ -491,10 +491,6 @@ public final class L2PcInstance extends L2Playable
 	
 	private PcAppearance _appearance;
 	
-	/** The Identifier of the L2PcInstance */
-	@Deprecated
-	private int _charId = 0x00030b7a;
-	
 	/** The Experience of the L2PcInstance before the last Death Penalty */
 	private long _expBeforeDeath;
 	
@@ -3430,25 +3426,6 @@ public final class L2PcInstance extends L2Playable
 			_refund.deleteMe();
 		}
 		_refund = null;
-	}
-	
-	/**
-	 * @return the Identifier of the L2PcInstance.
-	 */
-	@Deprecated
-	public int getCharId()
-	{
-		return _charId;
-	}
-	
-	/**
-	 * Set the Identifier of the L2PcInstance.
-	 * @param charId
-	 */
-	@Deprecated
-	public void setCharId(int charId)
-	{
-		_charId = charId;
 	}
 	
 	/**
