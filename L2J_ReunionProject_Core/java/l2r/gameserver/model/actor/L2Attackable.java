@@ -107,7 +107,8 @@ public class L2Attackable extends L2Npc
 	
 	private final L2TIntObjectHashMap<AbsorberInfo> _absorbersList = new L2TIntObjectHashMap<>();
 	
-	private boolean _mustGiveExpSp;
+	private volatile boolean _mustGiveExpSp;
+	private volatile boolean _doItemDrop;
 	
 	/** True if a Dwarf has used Spoil on this L2NpcInstance */
 	private boolean _isSpoil = false;
@@ -303,6 +304,7 @@ public class L2Attackable extends L2Npc
 		setInstanceType(InstanceType.L2Attackable);
 		setIsInvul(false);
 		_mustGiveExpSp = true;
+		_doItemDrop = true;
 	}
 	
 	@Override
@@ -507,14 +509,24 @@ public class L2Attackable extends L2Npc
 		super.reduceCurrentHp(damage, attacker, awake, isDOT, skill);
 	}
 	
-	public synchronized void setMustRewardExpSp(boolean value)
+	public void setMustRewardExpSp(boolean value)
 	{
 		_mustGiveExpSp = value;
 	}
 	
-	public synchronized boolean getMustRewardExpSP()
+	public boolean getMustRewardExpSP()
 	{
 		return _mustGiveExpSp;
+	}
+	
+	public void enableItemDrop(boolean value)
+	{
+		_doItemDrop = value;
+	}
+	
+	public boolean isItemDropEnabled()
+	{
+		return _doItemDrop;
 	}
 	
 	/**
@@ -1750,7 +1762,7 @@ public class L2Attackable extends L2Npc
 	 */
 	public void doItemDrop(L2NpcTemplate npcTemplate, L2Character mainDamageDealer)
 	{
-		if (mainDamageDealer == null)
+		if ((mainDamageDealer == null) || !isItemDropEnabled())
 		{
 			return;
 		}
