@@ -24,7 +24,7 @@ public class TopOnlinePlayers
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			PreparedStatement statement = con.prepareStatement("SELECT char_name,clanid,onlinetime FROM characters where accesslevel = 0 order by pvpkills DESC LIMIT " + SmartCommunityConfigs.TOP_PLAYER_RESULTS + ";");
+			PreparedStatement statement = con.prepareStatement("SELECT char_name,clanid,onlinetime FROM characters where accesslevel = 0 order by onlinetime DESC LIMIT " + SmartCommunityConfigs.TOP_PLAYER_RESULTS + ";");
 			ResultSet rset = statement.executeQuery();
 			while (rset.next())
 			{
