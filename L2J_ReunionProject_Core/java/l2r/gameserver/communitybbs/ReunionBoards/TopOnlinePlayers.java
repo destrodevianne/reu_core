@@ -1,14 +1,9 @@
 package l2r.gameserver.communitybbs.ReunionBoards;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 import javolution.text.TextBuilder;
-import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.model.L2Clan;
+import gr.reunion.aioItem.PlayersTopData;
 import gr.reunion.configs.SmartCommunityConfigs;
+import gr.reunion.datatables.CustomTable;
 
 public class TopOnlinePlayers
 {
@@ -22,34 +17,17 @@ public class TopOnlinePlayers
 	
 	private void loadDB(String file)
 	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		for (PlayersTopData playerData : CustomTable.getInstance().getTopOnlineTime())
 		{
-			PreparedStatement statement = con.prepareStatement("SELECT char_name,clanid,onlinetime FROM characters where accesslevel = 0 order by onlinetime DESC LIMIT " + SmartCommunityConfigs.TOP_PLAYER_RESULTS + ";");
-			ResultSet rset = statement.executeQuery();
-			while (rset.next())
+			if (getCounter() <= SmartCommunityConfigs.TOP_PLAYER_RESULTS)
 			{
-				String clanName = "No Clan";
-				int clanid = rset.getInt("clanid");
-				String name = rset.getString("char_name");
-				int onTime = rset.getInt("onlinetime");
-				if (clanid != 0)
-				{
-					L2Clan clan = ClanTable.getInstance().getClan(clanid);
-					
-					// Just in case checking for null pointer
-					if (clan != null)
-					{
-						clanName = clan.getName();
-					}
-				}
-				setCounter(getCounter() + 1);
+				String name = playerData.getCharName();
+				String cName = playerData.getClanName();
+				int onlineTime = playerData.getOnlineTime();
 				
-				addChar(name, clanName, getPlayerRunTime(onTime));
+				addChar(name, cName, getPlayerRunTime(onlineTime));
+				setCounter(getCounter() + 1);
 			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
 		}
 	}
 	
@@ -60,13 +38,12 @@ public class TopOnlinePlayers
 	
 	private void addChar(String name, String cname, String onTime)
 	{
-		_topOnline.append("<table border=0 cellspacing=0 cellpadding=2 bgcolor=111111 width=750>");
 		_topOnline.append("<tr>");
-		_topOnline.append("<td FIXWIDTH=40>" + getCounter() + "</td");
-		_topOnline.append("<td fixwidth=160>" + name + "</td");
-		_topOnline.append("<td fixwidth=160>" + cname + "</td>");
-		_topOnline.append("<td fixwidth=80>" + onTime + "</td>");
-		_topOnline.append("</tr></table><img src=\"L2UI.Squaregray\" width=\"735\" height=\"1\">");
+		_topOnline.append("<td valign=\"top\" align=\"center\">" + getCounter() + "</td");
+		_topOnline.append("<td valign=\"top\" align=\"center\">" + name + "</td");
+		_topOnline.append("<td valign=\"top\" align=\"center\">" + cname + "</td>");
+		_topOnline.append("<td valign=\"top\" align=\"center\">" + onTime + "</td>");
+		_topOnline.append("</tr>");
 	}
 	
 	public String getPlayerRunTime(int secs)
