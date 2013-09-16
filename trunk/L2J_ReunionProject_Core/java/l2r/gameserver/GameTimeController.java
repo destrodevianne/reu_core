@@ -51,6 +51,7 @@ public final class GameTimeController extends Thread
 	
 	private final FastMap<Integer, L2Character> _movingObjects = new FastMap<Integer, L2Character>().shared();
 	private final long _referenceTime;
+	private final long _startTime;
 	
 	private GameTimeController()
 	{
@@ -64,6 +65,7 @@ public final class GameTimeController extends Thread
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		_referenceTime = c.getTimeInMillis();
+		_startTime = System.currentTimeMillis();
 		
 		super.start();
 	}
@@ -239,6 +241,13 @@ public final class GameTimeController extends Thread
 				});
 			}
 		}
+	}
+	
+	public int getServerRunTime()
+	{
+		long currentTime = System.currentTimeMillis();
+		
+		return (int) ((currentTime - _startTime) / 1000);
 	}
 	
 	public static final GameTimeController getInstance()
