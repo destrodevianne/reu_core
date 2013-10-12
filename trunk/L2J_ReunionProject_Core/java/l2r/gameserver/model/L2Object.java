@@ -36,6 +36,7 @@ import l2r.gameserver.model.actor.knownlist.ObjectKnownList;
 import l2r.gameserver.model.actor.poly.ObjectPoly;
 import l2r.gameserver.model.actor.position.ObjectPosition;
 import l2r.gameserver.model.entity.Instance;
+import l2r.gameserver.model.interfaces.IUniqueId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExSendUIEvent;
@@ -48,16 +49,14 @@ import l2r.gameserver.network.serverpackets.L2GameServerPacket;
  * <BR>
  * <li>L2Character</li> <li>L2ItemInstance</li>
  */
-public abstract class L2Object
+public abstract class L2Object implements IUniqueId
 {
-	private boolean _isVisible; // Object visibility
+	private boolean _isVisible;
 	private ObjectKnownList _knownList;
 	private String _name;
-	private int _objectId; // Object identifier
-	private ObjectPoly _poly;
+	private int _objectId;
 	private ObjectPosition _position;
 	private int _instanceId = 0;
-	
 	private InstanceType _instanceType = null;
 	private volatile Map<String, Object> _scripts;
 	
@@ -171,7 +170,6 @@ public abstract class L2Object
 		
 		Instance oldI = InstanceManager.getInstance().getInstance(_instanceId);
 		Instance newI = InstanceManager.getInstance().getInstance(instanceId);
-		
 		if (newI == null)
 		{
 			return;
@@ -179,22 +177,13 @@ public abstract class L2Object
 		
 		if (isPlayer())
 		{
-			L2PcInstance player = getActingPlayer();
+			final L2PcInstance player = getActingPlayer();
 			if ((_instanceId > 0) && (oldI != null))
 			{
 				oldI.removePlayer(getObjectId());
 				if (oldI.isShowTimer())
 				{
-					int startTime = (int) ((System.currentTimeMillis() - oldI.getInstanceStartTime()) / 1000);
-					int endTime = (int) ((oldI.getInstanceEndTime() - oldI.getInstanceStartTime()) / 1000);
-					if (oldI.isTimerIncrease())
-					{
-						sendPacket(new ExSendUIEvent(this, true, true, startTime, endTime, oldI.getTimerText()));
-					}
-					else
-					{
-						sendPacket(new ExSendUIEvent(this, true, false, endTime - startTime, 0, oldI.getTimerText()));
-					}
+					sendInstanceUpdate(oldI, true);
 				}
 			}
 			if (instanceId > 0)
@@ -202,19 +191,9 @@ public abstract class L2Object
 				newI.addPlayer(getObjectId());
 				if (newI.isShowTimer())
 				{
-					int startTime = (int) ((System.currentTimeMillis() - newI.getInstanceStartTime()) / 1000);
-					int endTime = (int) ((newI.getInstanceEndTime() - newI.getInstanceStartTime()) / 1000);
-					if (newI.isTimerIncrease())
-					{
-						sendPacket(new ExSendUIEvent(this, false, true, startTime, endTime, newI.getTimerText()));
-					}
-					else
-					{
-						sendPacket(new ExSendUIEvent(this, false, false, endTime - startTime, 0, newI.getTimerText()));
-					}
+					sendInstanceUpdate(newI, false);
 				}
 			}
-			
 			if (player.hasSummon())
 			{
 				player.getSummon().setInstanceId(instanceId);
@@ -222,7 +201,7 @@ public abstract class L2Object
 		}
 		else if (isNpc())
 		{
-			L2Npc npc = (L2Npc) this;
+			final L2Npc npc = (L2Npc) this;
 			if ((_instanceId > 0) && (oldI != null))
 			{
 				oldI.removeNpc(npc);
@@ -235,20 +214,30 @@ public abstract class L2Object
 		
 		_instanceId = instanceId;
 		
-		// If we change it for visible objects, me must clear & revalidates knownlists
 		if (_isVisible && (_knownList != null))
 		{
-			if (isPlayer())
-			{
-				// We don't want some ugly looking disappear/appear effects, so don't update
-				// the knownlist here, but players usually enter instancezones through teleporting
-				// and the teleport will do the revalidation for us.
-			}
-			else
+			// We don't want some ugly looking disappear/appear effects, so don't update
+			// the knownlist here, but players usually enter instancezones through teleporting
+			// and the teleport will do the revalidation for us.
+			if (!isPlayer())
 			{
 				decayMe();
 				spawnMe();
 			}
+		}
+	}
+	
+	private final void sendInstanceUpdate(Instance instance, boolean hide)
+	{
+		final int startTime = (int) ((System.currentTimeMillis() - instance.getInstanceStartTime()) / 1000);
+		final int endTime = (int) ((instance.getInstanceEndTime() - instance.getInstanceStartTime()) / 1000);
+		if (instance.isTimerIncrease())
+		{
+			sendPacket(new ExSendUIEvent(getActingPlayer(), hide, true, startTime, endTime, instance.getTimerText()));
+		}
+		else
+		{
+			sendPacket(new ExSendUIEvent(getActingPlayer(), hide, false, endTime - startTime, 0, instance.getTimerText()));
 		}
 	}
 	
@@ -468,6 +457,7 @@ public abstract class L2Object
 		_name = value;
 	}
 	
+	@Override
 	public final int getObjectId()
 	{
 		return _objectId;
@@ -475,11 +465,8 @@ public abstract class L2Object
 	
 	public final ObjectPoly getPoly()
 	{
-		if (_poly == null)
-		{
-			_poly = new ObjectPoly(this);
-		}
-		return _poly;
+		final ObjectPoly poly = getScript(ObjectPoly.class);
+		return (poly == null) ? addScript(new ObjectPoly(this)) : poly;
 	}
 	
 	public ObjectPosition getPosition()
@@ -650,6 +637,11 @@ public abstract class L2Object
 	 * @return {@code true} if object Npc Walker or Vehicle
 	 */
 	public boolean isWalker()
+	{
+		return false;
+	}
+	
+	public boolean isRunner()
 	{
 		return false;
 	}

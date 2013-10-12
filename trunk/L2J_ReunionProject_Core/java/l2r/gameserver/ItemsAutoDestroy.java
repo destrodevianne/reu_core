@@ -22,6 +22,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 import l2r.Config;
+import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.instancemanager.ItemsOnGroundManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -64,7 +65,7 @@ public class ItemsAutoDestroy
 		long curtime = System.currentTimeMillis();
 		for (L2ItemInstance item : _items)
 		{
-			if ((item == null) || (item.getDropTime() == 0) || (item.getLocation() != L2ItemInstance.ItemLocation.VOID))
+			if ((item == null) || (item.getDropTime() == 0) || (item.getLocation() != ItemLocation.VOID))
 			{
 				_items.remove(item);
 			}

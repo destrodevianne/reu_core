@@ -25,7 +25,7 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPutItemResultForVariationCancel;
 import l2r.gameserver.util.Util;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * Format(ch) d

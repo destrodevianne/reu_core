@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.model.itemcontainer;
 
+import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.items.instance.L2ItemInstance.ItemLocation;
 
 public class PcWarehouse extends Warehouse
 {

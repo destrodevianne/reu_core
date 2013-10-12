@@ -31,6 +31,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.entity.RecoBonus;
 import l2r.gameserver.model.quest.QuestState;
+import l2r.gameserver.model.stats.Formulas;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
@@ -44,7 +45,7 @@ import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.scripting.scriptengine.events.PlayerLevelChangeEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerLevelListener;
 import l2r.gameserver.util.Util;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 public class PcStat extends PlayableStat
 {
@@ -92,10 +93,13 @@ public class PcStat extends PlayableStat
 		// Set new karma
 		if (!activeChar.isCursedWeaponEquipped() && (activeChar.getKarma() > 0) && (activeChar.isGM() || !activeChar.isInsideZone(ZoneIdType.PVP)))
 		{
-			int karmaLost = activeChar.calculateKarmaLost(value);
+			int karmaLost = Formulas.calculateKarmaLost(activeChar, value);
 			if (karmaLost > 0)
 			{
 				activeChar.setKarma(activeChar.getKarma() - karmaLost);
+				final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOUR_KARMA_HAS_BEEN_CHANGED_TO_S1);
+				msg.addNumber(activeChar.getKarma());
+				activeChar.sendPacket(msg);
 			}
 		}
 		

@@ -2,7 +2,7 @@ package l2r.gameserver.communitybbs.ReunionBoards;
 
 import javolution.text.TextBuilder;
 import gr.reunion.aioItem.PlayersTopData;
-import gr.reunion.configs.SmartCommunityConfigs;
+import gr.reunion.configsEngine.SmartCommunityConfigs;
 import gr.reunion.datatables.CustomTable;
 
 public class TopOnlinePlayers
@@ -38,12 +38,14 @@ public class TopOnlinePlayers
 	
 	private void addChar(String name, String cname, String onTime)
 	{
+		_topOnline.append("<table border=0 cellspacing=0 cellpadding=2 bgcolor=111111 width=750>");
 		_topOnline.append("<tr>");
-		_topOnline.append("<td valign=\"top\" align=\"center\">" + getCounter() + "</td");
-		_topOnline.append("<td valign=\"top\" align=\"center\">" + name + "</td");
-		_topOnline.append("<td valign=\"top\" align=\"center\">" + cname + "</td>");
-		_topOnline.append("<td valign=\"top\" align=\"center\">" + onTime + "</td>");
+		_topOnline.append("<td FIXWIDTH=40>" + getCounter() + "</td");
+		_topOnline.append("<td fixwidth=160>" + name + "</td");
+		_topOnline.append("<td fixwidth=160>" + cname + "</td>");
+		_topOnline.append("<td fixwidth=160>" + onTime + "</td>");
 		_topOnline.append("</tr>");
+		_topOnline.append("</tr></table><img src=\"L2UI.Squaregray\" width=\"735\" height=\"1\">");
 	}
 	
 	public String getPlayerRunTime(int secs)

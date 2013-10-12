@@ -6,10 +6,10 @@ import javolution.text.TextBuilder;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
-import gr.reunion.achievementSystem.AchievementsHandler;
-import gr.reunion.achievementSystem.AchievementsManager;
-import gr.reunion.achievementSystem.base.Achievement;
-import gr.reunion.achievementSystem.base.Condition;
+import gr.reunion.achievementEngine.AchievementsHandler;
+import gr.reunion.achievementEngine.AchievementsManager;
+import gr.reunion.achievementEngine.base.Achievement;
+import gr.reunion.achievementEngine.base.Condition;
 import gr.reunion.main.Conditions;
 
 public class L2AchievementManagerInstance extends L2Npc

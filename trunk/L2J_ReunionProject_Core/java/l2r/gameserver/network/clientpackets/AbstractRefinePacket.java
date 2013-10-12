@@ -23,13 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import l2r.Config;
+import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 public abstract class AbstractRefinePacket extends L2GameClientPacket
 {
@@ -220,7 +221,7 @@ public abstract class AbstractRefinePacket extends L2GameClientPacket
 			return false;
 		}
 		// .. and located in inventory
-		if (gemStones.getLocation() != L2ItemInstance.ItemLocation.INVENTORY)
+		if (gemStones.getLocation() != ItemLocation.INVENTORY)
 		{
 			return false;
 		}
@@ -262,7 +263,7 @@ public abstract class AbstractRefinePacket extends L2GameClientPacket
 			return false;
 		}
 		// Lifestone must be located in inventory
-		if (refinerItem.getLocation() != L2ItemInstance.ItemLocation.INVENTORY)
+		if (refinerItem.getLocation() != ItemLocation.INVENTORY)
 		{
 			return false;
 		}

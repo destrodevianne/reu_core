@@ -19,6 +19,7 @@
 package l2r.gameserver.model.actor.instance;
 
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 import l2r.Config;
@@ -36,9 +37,7 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.network.serverpackets.ActionFailed;
-import l2r.gameserver.network.serverpackets.MyTargetSelected;
 import l2r.gameserver.network.serverpackets.SocialAction;
-import l2r.gameserver.network.serverpackets.ValidateLocation;
 import l2r.util.Rnd;
 
 /**
@@ -49,6 +48,8 @@ public class L2GuardInstance extends L2Attackable
 	private static Logger _log = Logger.getLogger(L2GuardInstance.class.getName());
 	
 	private static final int RETURN_INTERVAL = 60000;
+	
+	private Future<?> _returnTask;
 	
 	public class ReturnTask implements Runnable
 	{
@@ -125,6 +126,11 @@ public class L2GuardInstance extends L2Attackable
 		setIsNoRndWalk(true);
 		super.onSpawn();
 		
+		if ((_returnTask == null) && !isWalker() && !isRunner())
+		{
+			_returnTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new ReturnTask(), RETURN_INTERVAL, RETURN_INTERVAL + Rnd.nextInt(60000));
+		}
+		
 		// check the region where this mob is, do not activate the AI if region is inactive.
 		L2WorldRegion region = L2World.getInstance().getRegion(getX(), getY());
 		if ((region != null) && (!region.isActive()))
@@ -198,14 +204,6 @@ public class L2GuardInstance extends L2Attackable
 			
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
-			
-			// Send a Server->Client packet MyTargetSelected to the L2PcInstance player
-			// The color to display in the select window is White
-			MyTargetSelected my = new MyTargetSelected(getObjectId(), 0);
-			player.sendPacket(my);
-			
-			// Send a Server->Client packet ValidateLocation to correct the L2NpcInstance position and heading on the client
-			player.sendPacket(new ValidateLocation(this));
 		}
 		else if (interact)
 		{
@@ -232,8 +230,9 @@ public class L2GuardInstance extends L2Attackable
 				{
 					// Send a Server->Client packet SocialAction to the all L2PcInstance on the _knownPlayer of the L2NpcInstance
 					// to display a social action of the L2GuardInstance on their client
-					SocialAction sa = new SocialAction(getObjectId(), Rnd.nextInt(8));
-					broadcastPacket(sa);
+					broadcastPacket(new SocialAction(getObjectId(), Rnd.nextInt(8)));
+					
+					player.setLastFolkNPC(this);
 					
 					// Open a chat window on client with the text of the L2GuardInstance
 					List<Quest> qlsa = getTemplate().getEventQuests(QuestEventType.QUEST_START);

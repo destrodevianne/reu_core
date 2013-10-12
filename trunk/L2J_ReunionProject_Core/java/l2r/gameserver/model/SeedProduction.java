@@ -16,11 +16,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.enums;
+package l2r.gameserver.model;
 
-public enum IdFactoryType
+/**
+ * @author xban1x
+ */
+public final class SeedProduction
 {
-	Compaction,
-	BitSet,
-	Stack
+	final int _seedId;
+	long _residual;
+	final long _price;
+	final long _sales;
+	
+	public SeedProduction(int id)
+	{
+		_seedId = id;
+		_residual = 0;
+		_price = 0;
+		_sales = 0;
+	}
+	
+	public SeedProduction(int id, long amount, long price, long sales)
+	{
+		_seedId = id;
+		_residual = amount;
+		_price = price;
+		_sales = sales;
+	}
+	
+	public int getId()
+	{
+		return _seedId;
+	}
+	
+	public long getCanProduce()
+	{
+		return _residual;
+	}
+	
+	public long getPrice()
+	{
+		return _price;
+	}
+	
+	public long getStartProduce()
+	{
+		return _sales;
+	}
+	
+	public void setCanProduce(long amount)
+	{
+		_residual = amount;
+	}
 }

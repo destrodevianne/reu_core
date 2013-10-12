@@ -39,7 +39,7 @@ import l2r.gameserver.model.entity.Auction;
 import l2r.gameserver.model.entity.Auction.Bidder;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 public final class L2AuctioneerInstance extends L2Npc
 {

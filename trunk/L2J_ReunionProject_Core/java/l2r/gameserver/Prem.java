@@ -20,7 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import l2r.L2DatabaseFactory;
-import gr.reunion.configs.PremiumServiceConfigs;
+import gr.reunion.configsEngine.PremiumServiceConfigs;
 
 public class Prem
 {

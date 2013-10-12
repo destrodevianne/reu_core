@@ -41,7 +41,7 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2RaidBossInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.util.Rnd;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * Raid Boss spawn manager.

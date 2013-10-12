@@ -18,20 +18,18 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.model.actor.L2Character;
+import l2r.gameserver.model.L2Object;
+import l2r.gameserver.model.Location;
 
 public class ValidateLocation extends L2GameServerPacket
 {
 	private final int _charObjId;
-	private final int _x, _y, _z, _heading;
+	private final Location _loc;
 	
-	public ValidateLocation(L2Character cha)
+	public ValidateLocation(L2Object obj)
 	{
-		_charObjId = cha.getObjectId();
-		_x = cha.getX();
-		_y = cha.getY();
-		_z = cha.getZ();
-		_heading = cha.getHeading();
+		_charObjId = obj.getObjectId();
+		_loc = new Location(obj);
 	}
 	
 	@Override
@@ -40,9 +38,7 @@ public class ValidateLocation extends L2GameServerPacket
 		writeC(0x79);
 		
 		writeD(_charObjId);
-		writeD(_x);
-		writeD(_y);
-		writeD(_z);
-		writeD(_heading);
+		writeLoc(_loc);
+		writeD(_loc.getHeading());
 	}
 }

@@ -21,7 +21,7 @@ package l2r.gameserver.network.serverpackets;
 import java.util.List;
 
 import l2r.gameserver.datatables.ManorData;
-import l2r.gameserver.instancemanager.CastleManorManager.SeedProduction;
+import l2r.gameserver.model.SeedProduction;
 
 /**
  * @author l3x

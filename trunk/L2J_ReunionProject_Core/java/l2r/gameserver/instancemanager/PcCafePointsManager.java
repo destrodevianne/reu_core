@@ -7,7 +7,7 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPCCafePointInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
-import gr.reunion.configs.PcBangConfigs;
+import gr.reunion.configsEngine.PcBangConfigs;
 
 public class PcCafePointsManager
 {

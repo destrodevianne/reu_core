@@ -21,6 +21,7 @@ package l2r.gameserver.network.clientpackets;
 import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.model.L2World;
@@ -28,7 +29,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Message;
 import l2r.gameserver.model.itemcontainer.ItemContainer;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.instance.L2ItemInstance.ItemLocation;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExChangePostState;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
@@ -36,7 +36,7 @@ import l2r.gameserver.network.serverpackets.ItemList;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * @author Migi, DS

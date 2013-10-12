@@ -85,7 +85,6 @@ import l2r.gameserver.model.actor.tasks.character.NotifyAITask;
 import l2r.gameserver.model.actor.tasks.character.QueuedMagicUseTask;
 import l2r.gameserver.model.actor.tasks.character.UsePotionTask;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
-import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.effects.AbnormalEffect;
 import l2r.gameserver.model.effects.EffectFlag;
 import l2r.gameserver.model.effects.L2Effect;
@@ -143,7 +142,7 @@ import l2r.gameserver.util.L2TIntObjectHashMap;
 import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 /**
@@ -403,11 +402,14 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public L2Character(int objectId, L2CharTemplate template)
 	{
 		super(objectId);
+		if (template == null)
+		{
+			throw new NullPointerException("Template is null!");
+		}
+		
 		setInstanceType(InstanceType.L2Character);
 		initCharStat();
 		initCharStatus();
-		
-		_skills.shared();
 		
 		// Set its template to the new L2Character
 		_template = template;
@@ -416,7 +418,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			_calculators = Formulas.getStdDoorCalculators();
 		}
-		else if ((template != null) && isNpc())
+		else if (isNpc())
 		{
 			// Copy the Standard Calculators of the L2NPCInstance in _calculators
 			_calculators = NPC_STD_CALCULATOR;
@@ -424,14 +426,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			// Copy the skills of the L2NPCInstance from its template to the L2Character Instance
 			// The skills list can be affected by spell effects so it's necessary to make a copy
 			// to avoid that a spell affecting a L2NPCInstance, affects others L2NPCInstance of the same type too.
-			if (template.getSkills() != null)
+			for (L2Skill skill : template.getSkills().values())
 			{
-				_skills.putAll(template.getSkills());
-			}
-			
-			for (L2Skill skill : _skills.values())
-			{
-				addStatFuncs(skill.getStatFuncs(null, this));
+				addSkill(skill);
 			}
 		}
 		else
@@ -444,14 +441,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				// Copy the skills of the L2Summon from its template to the L2Character Instance
 				// The skills list can be affected by spell effects so it's necessary to make a copy
 				// to avoid that a spell affecting a L2Summon, affects others L2Summon of the same type too.
-				if (template != null)
+				for (L2Skill skill : template.getSkills().values())
 				{
-					_skills.putAll(((L2NpcTemplate) template).getSkills());
-				}
-				
-				for (L2Skill skill : _skills.values())
-				{
-					addStatFuncs(skill.getStatFuncs(null, this));
+					addSkill(skill);
 				}
 			}
 			
@@ -4482,7 +4474,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		if ((Config.GEODATA > 0) && (Config.COORD_SYNCHRONIZE == 2) && !isFloating && !m.disregardingGeodata && ((GameTimeController.getInstance().getGameTicks() % 10) == 0 // once a second to reduce possible cpu load
 		) && GeoData.getInstance().hasGeo(xPrev, yPrev))
 		{
-			short geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30, null);
+			// short geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30);
+			// FIXME: Test Modification, don't use next lower Z(spawn height), if the terrain goes upwards it will possibly return another floor
+			int geoHeight = GeoData.getInstance().getHeight(xPrev, yPrev, zPrev);
 			dz = m._zDestination - geoHeight;
 			// quite a big difference, compare to validatePosition packet
 			if (isPlayer() && (Math.abs(getActingPlayer().getClientZ() - geoHeight) > 200) && (Math.abs(getActingPlayer().getClientZ() - geoHeight) < 1500))
@@ -4913,7 +4907,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 						z = m.geoPath.get(m.onGeodataPathIndex).getZ();
 						
 						// check for doors in the route
-						if (DoorTable.getInstance().checkIfDoorsBetween(curX, curY, curZ, x, y, z, getInstanceId()))
+						if (DoorTable.getInstance().checkIfDoorsBetween(curX, curY, curZ, x, y, z, getInstanceId(), false))
 						{
 							m.geoPath = null;
 							getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);

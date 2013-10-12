@@ -29,12 +29,12 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.TradeItem;
 import l2r.gameserver.model.TradeList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.instance.L2ItemInstance.ItemLocation;
 import l2r.gameserver.model.items.type.L2EtcItemType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
@@ -46,7 +46,7 @@ import l2r.gameserver.scripting.scriptengine.events.ItemDropEvent;
 import l2r.gameserver.scripting.scriptengine.events.ItemTransferEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.ItemTracker;
 import l2r.gameserver.util.Util;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 public class PcInventory extends Inventory
 {

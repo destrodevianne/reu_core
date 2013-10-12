@@ -32,6 +32,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.enums.AIType;
+import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.handler.BypassHandler;
@@ -83,12 +84,11 @@ import l2r.gameserver.network.serverpackets.ServerObjectInfo;
 import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.gameserver.taskmanager.DecayTaskManager;
 import l2r.gameserver.util.Broadcast;
-import l2r.gameserver.util.IllegalPlayerAction;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.antibotSystem.AntibotSystem;
-import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.configs.PremiumServiceConfigs;
+import gr.reunion.antibotEngine.AntibotSystem;
+import gr.reunion.configsEngine.CustomServerConfigs;
+import gr.reunion.configsEngine.PremiumServiceConfigs;
 import gr.reunion.datatables.FakePcsTable;
 import gr.reunion.interf.ReunionEvents;
 
@@ -151,6 +151,7 @@ public class L2Npc extends L2Character
 	private int _displayEffect = 0;
 	private int _scriptVal = 0;
 	private FakePc _fakePc = null;
+	private boolean _isRunner = false;
 	
 	/**
 	 * The character that summons this NPC.
@@ -791,7 +792,7 @@ public class L2Npc extends L2Character
 		{
 			if (!player.isGM())
 			{
-				Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " used a 3rd party program, and received a punishment.", IllegalPlayerAction.PUNISH_JAIL);
+				Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " used a 3rd party program, and received a punishment.", IllegalActionPunishmentType.JAIL);
 			}
 		}
 		// TODO: More checks...
@@ -1899,6 +1900,17 @@ public class L2Npc extends L2Character
 	public boolean isWalker()
 	{
 		return WalkingManager.getInstance().isRegistered(this);
+	}
+	
+	@Override
+	public boolean isRunner()
+	{
+		return _isRunner;
+	}
+	
+	public void setIsRunner(boolean status)
+	{
+		_isRunner = status;
 	}
 	
 	@Override

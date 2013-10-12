@@ -295,6 +295,30 @@ public class Siege implements Siegable
 				Announcements.getInstance().announceToAll(sm);
 			}
 			
+			for (L2SiegeClan attackerClan : getAttackerClans())
+			{
+				final L2Clan clan = ClanTable.getInstance().getClan(attackerClan.getClanId());
+				if (clan == null)
+				{
+					continue;
+				}
+				
+				clan.clearSiegeKills();
+				clan.clearSiegeDeaths();
+			}
+			
+			for (L2SiegeClan defenderClan : getDefenderClans())
+			{
+				final L2Clan clan = ClanTable.getInstance().getClan(defenderClan.getClanId());
+				if (clan == null)
+				{
+					continue;
+				}
+				
+				clan.clearSiegeKills();
+				clan.clearSiegeDeaths();
+			}
+			
 			getCastle().updateClansReputation();
 			removeFlags(); // Removes all flags. Note: Remove flag before teleporting players
 			teleportPlayer(Siege.TeleportWhoType.Attacker, TeleportWhereType.Town); // Teleport to the second closest town
@@ -727,8 +751,8 @@ public class Siege implements Siegable
 			{
 				try (PreparedStatement delete = con.prepareStatement("DELETE FROM siege_clans WHERE clan_id=?"))
 				{
-					statement.setInt(1, getCastle().getOwnerId());
-					statement.execute();
+					delete.setInt(1, getCastle().getOwnerId());
+					delete.execute();
 				}
 			}
 			

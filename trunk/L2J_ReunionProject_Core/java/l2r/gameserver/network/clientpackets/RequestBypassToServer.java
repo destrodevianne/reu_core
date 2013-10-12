@@ -47,12 +47,12 @@ import l2r.gameserver.scripting.scriptengine.listeners.talk.RequestBypassToServe
 import l2r.gameserver.util.GMAudit;
 import l2r.gameserver.util.Util;
 import gr.reunion.aioItem.AioItemNpcs;
-import gr.reunion.configs.AioBufferConfigs;
-import gr.reunion.configs.AioItemsConfigs;
-import gr.reunion.configs.VoteSystemConfigs;
+import gr.reunion.configsEngine.AioBufferConfigs;
+import gr.reunion.configsEngine.AioItemsConfigs;
+import gr.reunion.configsEngine.VoteSystemConfigs;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.javaBuffer.buffItem.AioItemBuffer;
-import gr.reunion.voteSystem.VoteHandler;
+import gr.reunion.voteEngine.VoteHandler;
 
 /**
  * This class ...

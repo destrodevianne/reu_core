@@ -38,9 +38,6 @@ import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
 import l2r.gameserver.network.serverpackets.ActionFailed;
-import l2r.gameserver.network.serverpackets.MyTargetSelected;
-import l2r.gameserver.network.serverpackets.StatusUpdate;
-import l2r.gameserver.network.serverpackets.ValidateLocation;
 
 public class L2DefenderInstance extends L2Attackable
 {
@@ -196,19 +193,6 @@ public class L2DefenderInstance extends L2Attackable
 			
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
-			
-			// Send a Server->Client packet MyTargetSelected to the L2PcInstance player
-			MyTargetSelected my = new MyTargetSelected(getObjectId(), player.getLevel() - getLevel());
-			player.sendPacket(my);
-			
-			// Send a Server->Client packet StatusUpdate of the L2NpcInstance to the L2PcInstance to update its HP bar
-			StatusUpdate su = new StatusUpdate(this);
-			su.addAttribute(StatusUpdate.CUR_HP, (int) getStatus().getCurrentHp());
-			su.addAttribute(StatusUpdate.MAX_HP, getMaxHp());
-			player.sendPacket(su);
-			
-			// Send a Server->Client packet ValidateLocation to correct the L2NpcInstance position and heading on the client
-			player.sendPacket(new ValidateLocation(this));
 		}
 		else if (interact)
 		{

@@ -19,10 +19,10 @@
 package l2r.gameserver.model.itemcontainer;
 
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.instance.L2ItemInstance.ItemLocation;
 import l2r.gameserver.model.items.type.L2EtcItemType;
 
 public class PetInventory extends Inventory

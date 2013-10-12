@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 
 import javolution.text.TextBuilder;
 import l2r.L2DatabaseFactory;
-import gr.reunion.configs.SmartCommunityConfigs;
+import gr.reunion.configsEngine.SmartCommunityConfigs;
 
 public class RaidList
 {

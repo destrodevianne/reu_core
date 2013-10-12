@@ -59,6 +59,7 @@ import l2r.gameserver.datatables.HerbDropTable;
 import l2r.gameserver.datatables.HitConditionBonus;
 import l2r.gameserver.datatables.InitialEquipmentData;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.KarmaData;
 import l2r.gameserver.datatables.ManorData;
 import l2r.gameserver.datatables.MerchantPriceConfigTable;
 import l2r.gameserver.datatables.MultiSell;
@@ -137,7 +138,7 @@ import l2r.util.IPv4Filter;
 import org.mmocore.network.SelectorConfig;
 import org.mmocore.network.SelectorThread;
 
-import gr.reunion.configs.CustomConfigController;
+import gr.reunion.configsEngine.CustomConfigController;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.main.CustomServerMods;
 import gr.reunion.main.PlayerValues;
@@ -208,6 +209,13 @@ public class GameServer
 		printSection("Engines");
 		L2ScriptEngineManager.getInstance();
 		
+		printSection("Geodata");
+		GeoData.getInstance();
+		if (Config.GEODATA == 2)
+		{
+			PathFinding.getInstance();
+		}
+		
 		printSection("World");
 		// start game time control early
 		GameTimeController.init();
@@ -247,6 +255,7 @@ public class GameServer
 		ClassListData.getInstance();
 		InitialEquipmentData.getInstance();
 		ExperienceTable.getInstance();
+		KarmaData.getInstance();
 		HitConditionBonus.getInstance();
 		CharTemplateTable.getInstance();
 		CharNameTable.getInstance();
@@ -260,13 +269,6 @@ public class GameServer
 		CHSiegeManager.getInstance();
 		ClanHallManager.getInstance();
 		AuctionManager.getInstance();
-		
-		printSection("Geodata");
-		GeoData.getInstance();
-		if (Config.GEODATA == 2)
-		{
-			PathFinding.getInstance();
-		}
 		
 		printSection("NPCs");
 		HerbDropTable.getInstance();

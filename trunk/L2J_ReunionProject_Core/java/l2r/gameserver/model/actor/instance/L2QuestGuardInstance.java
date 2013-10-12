@@ -22,6 +22,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
+import l2r.gameserver.model.actor.tasks.attackable.OnKillNotifyTask;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
