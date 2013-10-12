@@ -30,14 +30,14 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.instance.L2ItemInstance.ItemLocation;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * @author Advi

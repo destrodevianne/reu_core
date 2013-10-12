@@ -22,12 +22,12 @@ import l2r.gameserver.network.serverpackets.PartySmallWindowAll;
 import l2r.gameserver.network.serverpackets.PartySmallWindowDeleteAll;
 import l2r.gameserver.util.Util;
 import gr.reunion.aioItem.runnable.TransformFinalizer;
-import gr.reunion.configs.DonateManagerConfigs;
-import gr.reunion.donateSystem.DonateHandler;
-import gr.reunion.imageGeneratorSystem.GenerateLogos;
+import gr.reunion.configsEngine.DonateManagerConfigs;
+import gr.reunion.donateEngine.DonateHandler;
+import gr.reunion.imageGeneratorEngine.GenerateLogos;
 import gr.reunion.main.Conditions;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
+import gr.reunion.securityEngine.SecurityActions;
+import gr.reunion.securityEngine.SecurityType;
 
 public class L2DonateManagerInstance extends L2Npc
 {

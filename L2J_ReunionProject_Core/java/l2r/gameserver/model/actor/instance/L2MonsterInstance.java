@@ -29,7 +29,7 @@ import l2r.gameserver.model.actor.knownlist.MonsterKnownList;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.util.MinionList;
 import l2r.util.Rnd;
-import gr.reunion.achievementSystem.AchievementsManager;
+import gr.reunion.achievementEngine.AchievementsManager;
 
 /**
  * This class manages all Monsters. L2MonsterInstance:
@@ -268,6 +268,12 @@ public class L2MonsterInstance extends L2Attackable
 	public boolean isWalker()
 	{
 		return ((getLeader() == null) ? super.isWalker() : getLeader().isWalker());
+	}
+	
+	@Override
+	public boolean isRunner()
+	{
+		return ((getLeader() == null) ? super.isRunner() : getLeader().isRunner());
 	}
 	
 	/**

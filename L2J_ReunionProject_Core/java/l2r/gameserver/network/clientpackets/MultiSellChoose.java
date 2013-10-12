@@ -185,7 +185,7 @@ public class MultiSellChoose extends L2GameClientPacket
 						// this happens if 1 list entry has the same ingredient twice (example 2 swords = 1 dual)
 						if ((ex.getItemId() == e.getItemId()) && (ex.getEnchantLevel() == e.getEnchantLevel()))
 						{
-							if ((ex.getItemCount() + e.getItemCount()) > Integer.MAX_VALUE)
+							if ((ex.getItemCount() + e.getItemCount()) > Config.MAX_ADENA)
 							{
 								player.sendPacket(SystemMessageId.YOU_HAVE_EXCEEDED_QUANTITY_THAT_CAN_BE_INPUTTED);
 								return;
@@ -208,7 +208,7 @@ public class MultiSellChoose extends L2GameClientPacket
 				// now check if the player has sufficient items in the inventory to cover the ingredients' expences
 				for (Ingredient e : ingredientsList)
 				{
-					if ((e.getItemCount() * _amount) > Integer.MAX_VALUE)
+					if ((e.getItemCount() * _amount) > Config.MAX_ADENA)
 					{
 						player.sendPacket(SystemMessageId.YOU_HAVE_EXCEEDED_QUANTITY_THAT_CAN_BE_INPUTTED);
 						return;

@@ -42,7 +42,7 @@ import l2r.gameserver.model.zone.type.L2BossZone;
 import l2r.util.L2FastList;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * @author DaRkRaGe Revised by Emperorc

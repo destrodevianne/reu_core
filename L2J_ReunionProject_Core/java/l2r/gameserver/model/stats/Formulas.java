@@ -26,6 +26,7 @@ import l2r.Config;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.datatables.HitConditionBonus;
+import l2r.gameserver.datatables.KarmaData;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
@@ -83,8 +84,8 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import l2r.util.StringUtil;
-import gr.reunion.balanceSystem.BalanceHandler;
-import gr.reunion.configs.BalanceConfigs;
+import gr.reunion.balanceEngine.BalanceHandler;
+import gr.reunion.configsEngine.BalanceConfigs;
 
 /**
  * Global calculations.
@@ -2410,5 +2411,43 @@ public final class Formulas
 		rate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 		
 		return Rnd.get(100) < rate;
+	}
+	
+	/**
+	 * Calculates karma lost upon death.
+	 * @param player
+	 * @param exp
+	 * @return the amount of karma player has loosed.
+	 */
+	public static int calculateKarmaLost(L2PcInstance player, long exp)
+	{
+		double karmaLooseMul = KarmaData.getInstance().getMultiplier(player.getLevel());
+		return (int) ((Math.abs(exp) / karmaLooseMul) / 15);
+	}
+	
+	/**
+	 * Calculates karma gain upon player kill.
+	 * @param pkCount
+	 * @param isSummon
+	 * @return karma points that will be added to the player.
+	 */
+	public static int calculateKarmaGain(int pkCount, boolean isSummon)
+	{
+		int result = 14400;
+		if (pkCount < 100)
+		{
+			result = (int) (((((pkCount - 1) * 0.5) + 1) * 60) * 4);
+		}
+		else if (pkCount < 180)
+		{
+			result = (int) (((((pkCount + 1) * 0.125) + 37.5) * 60) * 4);
+		}
+		
+		if (isSummon)
+		{
+			result = ((pkCount & 3) + result) >> 2;
+		}
+		
+		return result;
 	}
 }

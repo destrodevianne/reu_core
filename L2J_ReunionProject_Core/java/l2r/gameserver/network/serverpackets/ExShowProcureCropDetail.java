@@ -23,7 +23,7 @@ import java.util.Map;
 
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.CastleManorManager;
-import l2r.gameserver.instancemanager.CastleManorManager.CropProcure;
+import l2r.gameserver.model.CropProcure;
 import l2r.gameserver.model.entity.Castle;
 
 /**

@@ -515,23 +515,22 @@ public class L2Spawn
 			// Set the calculated position of the L2NpcInstance
 			newlocx = p[0];
 			newlocy = p[1];
-			newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, p[2], p[3], this);
+			newlocz = p[3];
 		}
 		else
 		{
 			// The L2NpcInstance is spawned at the exact position (Lox, Locy, Locz)
-		// Set is not random walk default value
-		mob.setIsNoRndWalk(isNoRndWalk());
+			// Set is not random walk default value
+			mob.setIsNoRndWalk(isNoRndWalk());
 			newlocx = getLocx();
 			newlocy = getLocy();
-			if (Config.GEODATA > 0)
-			{
-				newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, getLocz(), getLocz(), this);
-			}
-			else
-			{
-				newlocz = getLocz();
-			}
+			newlocz = getLocz();
+		}
+		
+		// don't correct z of flying npc's
+		if (!mob.isFlying())
+		{
+			newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, newlocz, newlocz);
 		}
 		
 		mob.stopAllEffects();

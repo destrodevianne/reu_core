@@ -60,8 +60,8 @@ import l2r.gameserver.scripts.handlers.itemhandlers.SpecialXMas;
 import l2r.gameserver.scripts.handlers.itemhandlers.SpiritShot;
 import l2r.gameserver.scripts.handlers.itemhandlers.SummonItems;
 import l2r.gameserver.scripts.handlers.itemhandlers.TeleportBookmark;
-import gr.reunion.configs.AioBufferConfigs;
-import gr.reunion.configs.AioItemsConfigs;
+import gr.reunion.configsEngine.AioBufferConfigs;
+import gr.reunion.configsEngine.AioItemsConfigs;
 
 /**
  * This class manages handlers of items

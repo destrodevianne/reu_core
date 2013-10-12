@@ -170,7 +170,14 @@ public abstract class L2Playable extends L2Character
 		{
 			for (QuestState qs : actingPlayer.getNotifyQuestOfDeath())
 			{
-				qs.getQuest().notifyDeath((killer == null ? this : killer), this, qs);
+				try
+				{
+					qs.getQuest().notifyDeath((killer == null ? this : killer), this, qs);
+				}
+				catch (Exception e)
+				{
+					_log.warning("Logger: notifyDeath failed (L2Playable 1) Report this to team. ");
+				}
 			}
 		}
 		// Notify instance
@@ -179,7 +186,14 @@ public abstract class L2Playable extends L2Character
 			final Instance instance = InstanceManager.getInstance().getInstance(getInstanceId());
 			if (instance != null)
 			{
-				instance.notifyDeath(killer, this);
+				try
+				{
+					instance.notifyDeath(killer, this);
+				}
+				catch (Exception e)
+				{
+					_log.warning("Logger: notifyDeath failed (L2Playable 2) Report this to team. ");
+				}
 			}
 		}
 		

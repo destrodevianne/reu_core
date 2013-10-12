@@ -38,7 +38,7 @@ import l2r.gameserver.scripting.scriptengine.listeners.talk.ChatFilterListener;
 import l2r.gameserver.scripting.scriptengine.listeners.talk.ChatListener;
 import l2r.gameserver.util.Broadcast;
 import l2r.gameserver.util.Util;
-import gr.reunion.configs.PremiumServiceConfigs;
+import gr.reunion.configsEngine.PremiumServiceConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 /**

@@ -30,7 +30,7 @@ import l2r.gameserver.network.serverpackets.PrivateStoreManageListSell;
 import l2r.gameserver.network.serverpackets.PrivateStoreMsgSell;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.gameserver.util.Util;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * This class ...

@@ -36,11 +36,8 @@ import l2r.gameserver.network.NpcStringId;
 import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.CreatureSay;
-import l2r.gameserver.network.serverpackets.MyTargetSelected;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.SocialAction;
-import l2r.gameserver.network.serverpackets.StatusUpdate;
-import l2r.gameserver.network.serverpackets.ValidateLocation;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import gnu.trove.procedure.TObjectProcedure;
@@ -126,35 +123,6 @@ public class L2SepulcherNpcInstance extends L2Npc
 			
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
-			
-			// Check if the player is attackable (without a forced attack)
-			if (isAutoAttackable(player))
-			{
-				// Send a Server->Client packet MyTargetSelected to the
-				// L2PcInstance player
-				// The player.getLevel() - getLevel() permit to display the
-				// correct color in the select window
-				MyTargetSelected my = new MyTargetSelected(getObjectId(), player.getLevel() - getLevel());
-				player.sendPacket(my);
-				
-				// Send a Server->Client packet StatusUpdate of the
-				// L2NpcInstance to the L2PcInstance to update its HP bar
-				StatusUpdate su = new StatusUpdate(this);
-				su.addAttribute(StatusUpdate.CUR_HP, (int) getStatus().getCurrentHp());
-				su.addAttribute(StatusUpdate.MAX_HP, getMaxHp());
-				player.sendPacket(su);
-			}
-			else
-			{
-				// Send a Server->Client packet MyTargetSelected to the
-				// L2PcInstance player
-				MyTargetSelected my = new MyTargetSelected(getObjectId(), 0);
-				player.sendPacket(my);
-			}
-			
-			// Send a Server->Client packet ValidateLocation to correct the
-			// L2NpcInstance position and heading on the client
-			player.sendPacket(new ValidateLocation(this));
 		}
 		else if (interact)
 		{

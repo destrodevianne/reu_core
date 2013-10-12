@@ -19,5 +19,7 @@
 	<classpathentry kind="lib" path="dist/libs/CatsByteGuard.jar"/>
 	<classpathentry kind="lib" path="dist/libs/reunion-scripts.jar"/>
 	<classpathentry kind="lib" path="dist/libs/trove-3.0.2.jar"/>
+	<classpathentry kind="lib" path="dist/libs/L2JGeoAbstraction.jar"/>
+	<classpathentry kind="lib" path="dist/libs/L2JGeoDriver.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

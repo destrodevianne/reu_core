@@ -79,6 +79,7 @@ import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTable.FrequentSkill;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.enums.PcCondOverride;
@@ -196,6 +197,7 @@ import l2r.gameserver.model.entity.Siege;
 import l2r.gameserver.model.fishing.L2Fish;
 import l2r.gameserver.model.fishing.L2Fishing;
 import l2r.gameserver.model.holders.ItemHolder;
+import l2r.gameserver.model.holders.PlayerEventHolder;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.ItemContainer;
 import l2r.gameserver.model.itemcontainer.PcFreight;
@@ -273,6 +275,7 @@ import l2r.gameserver.network.serverpackets.ItemList;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.LeaveWorld;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
+import l2r.gameserver.network.serverpackets.MyTargetSelected;
 import l2r.gameserver.network.serverpackets.NicknameChanged;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.ObservationMode;
@@ -309,6 +312,7 @@ import l2r.gameserver.network.serverpackets.TradeDone;
 import l2r.gameserver.network.serverpackets.TradeOtherDone;
 import l2r.gameserver.network.serverpackets.TradeStart;
 import l2r.gameserver.network.serverpackets.UserInfo;
+import l2r.gameserver.network.serverpackets.ValidateLocation;
 import l2r.gameserver.scripting.scriptengine.events.EquipmentEvent;
 import l2r.gameserver.scripting.scriptengine.events.HennaEvent;
 import l2r.gameserver.scripting.scriptengine.events.ProfessionChangeEvent;
@@ -319,21 +323,21 @@ import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerDespawnListe
 import l2r.gameserver.scripting.scriptengine.listeners.player.ProfessionChangeListener;
 import l2r.gameserver.scripting.scriptengine.listeners.player.TransformListener;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
+import l2r.gameserver.util.Broadcast;
 import l2r.gameserver.util.FloodProtectors;
-import l2r.gameserver.util.PlayerEventStatus;
 import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 import l2r.util.L2FastList;
 import l2r.util.Rnd;
 import gnu.trove.list.array.TIntArrayList;
-import gr.reunion.achievementSystem.AchievementsHandler;
-import gr.reunion.configs.AntibotConfigs;
-import gr.reunion.configs.ColorSystemConfigs;
-import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.configs.FlagZoneConfigs;
-import gr.reunion.configs.LeaderboardsConfigs;
-import gr.reunion.configs.PremiumServiceConfigs;
-import gr.reunion.configs.PvpRewardSystemConfigs;
+import gr.reunion.achievementEngine.AchievementsHandler;
+import gr.reunion.configsEngine.AntibotConfigs;
+import gr.reunion.configsEngine.ColorSystemConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
+import gr.reunion.configsEngine.FlagZoneConfigs;
+import gr.reunion.configsEngine.LeaderboardsConfigs;
+import gr.reunion.configsEngine.PremiumServiceConfigs;
+import gr.reunion.configsEngine.PvpRewardSystemConfigs;
 import gr.reunion.datatables.AdventTable;
 import gr.reunion.interf.PlayerEventInfo;
 import gr.reunion.interf.ReunionEvents;
@@ -341,10 +345,10 @@ import gr.reunion.javaBuffer.PlayerMethods;
 import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
 import gr.reunion.main.NamePrefix;
-import gr.reunion.premiumSystem.PremiumHandler;
-import gr.reunion.pvpColorSystem.ColorSystemHandler;
-import gr.reunion.pvpRewardSystem.pvpRewardHandler;
-import gr.reunion.spreeSystem.SpreeHandler;
+import gr.reunion.premiumEngine.PremiumHandler;
+import gr.reunion.pvpColorEngine.ColorSystemHandler;
+import gr.reunion.pvpRewardEngine.pvpRewardHandler;
+import gr.reunion.spreeEngine.SpreeHandler;
 import gr.reunion.zones.FlagZoneHandler;
 
 /**
@@ -829,7 +833,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public final ReentrantLock soulShotLock = new ReentrantLock();
 	
-	private PlayerEventStatus eventStatus = null;
+	private PlayerEventHolder eventStatus = null;
 	
 	private byte _handysBlockCheckerEventArena = -1;
 	
@@ -1525,18 +1529,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public boolean hasRecipeList(int recipeId)
 	{
-		if (_dwarvenRecipeBook.containsKey(recipeId))
-		{
-			return true;
-		}
-		else if (_commonRecipeBook.containsKey(recipeId))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return _dwarvenRecipeBook.containsKey(recipeId) || _commonRecipeBook.containsKey(recipeId);
 	}
 	
 	/**
@@ -1835,7 +1828,7 @@ public final class L2PcInstance extends L2Playable
 							{
 								if (qs.getQuest().notifyEvent(event, npc, this))
 								{
-									showQuestWindow(quest, State.getStateName(qs.getState()));
+									showQuestWindow(quest, npc, State.getStateName(qs.getState()));
 								}
 								
 								retval = qs;
@@ -1849,16 +1842,14 @@ public final class L2PcInstance extends L2Playable
 		return retval;
 	}
 	
-	private void showQuestWindow(String questId, String stateId)
+	private void showQuestWindow(String questId, L2Npc npc, String stateId)
 	{
 		String path = "data/scripts/quests/" + questId + "/" + stateId + ".htm";
 		String content = HtmCache.getInstance().getHtm(getHtmlPrefix(), path); // TODO path for quests html
 		
 		if (content != null)
 		{
-			NpcHtmlMessage npcReply = new NpcHtmlMessage(5);
-			npcReply.setHtml(content);
-			sendPacket(npcReply);
+			sendPacket(new NpcHtmlMessage(npc != null ? npc.getObjectId() : 0, content));
 		}
 		
 		sendPacket(ActionFailed.STATIC_PACKET);
@@ -2489,14 +2480,7 @@ public final class L2PcInstance extends L2Playable
 		
 		// calc weapon penalty
 		weaponPenalty = weaponPenalty - expertiseLevel - bonus;
-		if (weaponPenalty < 0)
-		{
-			weaponPenalty = 0;
-		}
-		else if (weaponPenalty > 4)
-		{
-			weaponPenalty = 4;
-		}
+		weaponPenalty = Math.min(Math.max(weaponPenalty, 0), 4);
 		
 		if ((getExpertiseWeaponPenalty() != weaponPenalty) || (getSkillLevel(FrequentSkill.WEAPON_GRADE_PENALTY.getId()) != weaponPenalty))
 		{
@@ -2514,14 +2498,7 @@ public final class L2PcInstance extends L2Playable
 		
 		// calc armor penalty
 		armorPenalty = armorPenalty - expertiseLevel - bonus;
-		if (armorPenalty < 0)
-		{
-			armorPenalty = 0;
-		}
-		else if (armorPenalty > 4)
-		{
-			armorPenalty = 4;
-		}
+		armorPenalty = Math.min(Math.max(armorPenalty, 0), 4);
 		
 		if ((getExpertiseArmorPenalty() != armorPenalty) || (getSkillLevel(FrequentSkill.ARMOR_GRADE_PENALTY.getId()) != armorPenalty))
 		{
@@ -2663,14 +2640,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void setFame(int fame)
 	{
-		if (fame > Config.MAX_PERSONAL_FAME_POINTS)
-		{
-			_fame = Config.MAX_PERSONAL_FAME_POINTS;
-		}
-		else
-		{
-			_fame = fame;
-		}
+		_fame = (fame > Config.MAX_PERSONAL_FAME_POINTS) ? Config.MAX_PERSONAL_FAME_POINTS : fame;
 	}
 	
 	/**
@@ -2944,6 +2914,7 @@ public final class L2PcInstance extends L2Playable
 			giveAvailableAutoGetSkills();
 		}
 		
+		checkPlayerSkills();
 		checkItemRestriction();
 		sendSkillList();
 	}
@@ -3342,7 +3313,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void standUp()
 	{
-		if (ReunionEvents.isInEvent(this) && getEventStatus().eventSitForced)
+		if (ReunionEvents.isInEvent(this) && getEventStatus().isSitForced())
 		{
 			sendMessage("A dark force beyond your mortal understanding makes your knees to shake when you try to stand up...");
 		}
@@ -5138,7 +5109,7 @@ public final class L2PcInstance extends L2Playable
 			IItemHandler handler = ItemHandler.getInstance().getHandler(target.getEtcItem());
 			if (handler == null)
 			{
-				_log.fine("No item handler registered for item ID " + target.getItemId() + ".");
+				_log.warning("No item handler registered for item ID: " + target.getItemId() + ".");
 			}
 			else
 			{
@@ -5454,43 +5425,26 @@ public final class L2PcInstance extends L2Playable
 	@Override
 	public void setTarget(L2Object newTarget)
 	{
-		
 		if (newTarget != null)
 		{
-			boolean isParty = (((newTarget instanceof L2PcInstance) && isInParty() && getParty().getMembers().contains(newTarget)));
-			
-			// Check if the new target is visible
-			if (!isParty && !newTarget.isVisible())
-			{
-				newTarget = null;
-			}
+			boolean isInParty = (newTarget.isPlayer() && isInParty() && getParty().containsPlayer(newTarget.getActingPlayer()));
 			
 			// Prevents /target exploiting
-			if ((newTarget != null) && !isParty && (Math.abs(newTarget.getZ() - getZ()) > 1000))
+			if (!isInParty && (Math.abs(newTarget.getZ() - getZ()) > 1000))
 			{
 				newTarget = null;
 			}
-		}
-		if (!isGM())
-		{
-			// Can't target and attack festival monsters if not participant
-			if ((newTarget instanceof L2FestivalMonsterInstance) && !isFestivalParticipant())
+			
+			// Check if the new target is visible
+			if ((newTarget != null) && !isInParty && !newTarget.isVisible())
 			{
 				newTarget = null;
 			}
-			else if (newTarget instanceof L2Vehicle)
+			
+			// vehicles cant be targeted
+			if (!isGM() && (newTarget instanceof L2Vehicle))
 			{
 				newTarget = null;
-			}
-			else if (isInParty() && getParty().isInDimensionalRift())
-			{
-				byte riftType = getParty().getDimensionalRift().getType();
-				byte riftRoom = getParty().getDimensionalRift().getCurrentRoom();
-				
-				if ((newTarget != null) && !DimensionalRiftManager.getInstance().getRoom(riftType, riftRoom).checkIfInZone(newTarget.getX(), newTarget.getY(), newTarget.getZ()))
-				{
-					newTarget = null;
-				}
 			}
 		}
 		
@@ -5499,9 +5453,14 @@ public final class L2PcInstance extends L2Playable
 		
 		if (oldTarget != null)
 		{
-			if (oldTarget.equals(newTarget))
+			if (oldTarget.equals(newTarget)) // no target change?
 			{
-				return; // no target change
+				// Validate location of the target.
+				if ((newTarget != null) && (newTarget.getObjectId() != getObjectId()))
+				{
+					sendPacket(new ValidateLocation(newTarget));
+				}
+				return;
 			}
 			
 			// Remove the L2PcInstance from the _statusListener of the old target if it was a L2Character
@@ -5511,13 +5470,33 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 		
-		// Add the L2PcInstance to the _statusListener of the new target if it's a L2Character
 		if (newTarget instanceof L2Character)
 		{
-			((L2Character) newTarget).addStatusListener(this);
-			TargetSelected my = new TargetSelected(getObjectId(), newTarget.getObjectId(), getX(), getY(), getZ());
-			broadcastPacket(my);
+			final L2Character target = (L2Character) newTarget;
+			
+			// Validate location of the new target.
+			if (newTarget.getObjectId() != getObjectId())
+			{
+				sendPacket(new ValidateLocation(target));
+			}
+			
+			// Show the client his new target.
+			sendPacket(new MyTargetSelected(this, target));
+			
+			// Register target to listen for hp changes.
+			target.addStatusListener(this);
+			
+			// Send max/current hp.
+			final StatusUpdate su = new StatusUpdate(target);
+			su.addAttribute(StatusUpdate.MAX_HP, target.getMaxHp());
+			su.addAttribute(StatusUpdate.CUR_HP, (int) target.getCurrentHp());
+			sendPacket(su);
+			
+			// To others the new target, and not yourself!
+			Broadcast.toKnownPlayers(this, new TargetSelected(getObjectId(), newTarget.getObjectId(), getX(), getY(), getZ()));
 		}
+		
+		// Target was removed?
 		if ((newTarget == null) && (getTarget() != null))
 		{
 			broadcastPacket(new TargetUnselected(this));
@@ -5790,6 +5769,8 @@ public final class L2PcInstance extends L2Playable
 			spreeKills = 0;
 		}
 		
+		stopSpecialEffect(AbnormalEffect.ARCANE_SHIELD);
+		
 		if (isMounted())
 		{
 			stopFeed();
@@ -5955,10 +5936,6 @@ public final class L2PcInstance extends L2Playable
 							deathPenalty(atWar, (pk != null), siegeNpc);
 						}
 					}
-					else if (!(isInsideZone(ZoneIdType.PVP) && !isInSiege()) || (pk == null))
-					{
-						onDieUpdateKarma(); // Update karma if delevel is not allowed
-					}
 				}
 			}
 		}
@@ -6121,48 +6098,17 @@ public final class L2PcInstance extends L2Playable
 		}
 	}
 	
-	private void onDieUpdateKarma()
-	{
-		// Karma lose for server that does not allow delevel
-		if (getKarma() > 0)
-		{
-			// this formula seems to work relatively well:
-			// baseKarma * thisLVL * (thisLVL/100)
-			// Calculate the new Karma of the attacker : newKarma = baseKarma*pkCountMulti*lvlDiffMulti
-			double karmaLost = Config.KARMA_LOST_BASE;
-			karmaLost *= getLevel(); // multiply by char lvl
-			karmaLost *= (getLevel() / 100.0); // divide by 0.charLVL
-			karmaLost = Math.round(karmaLost);
-			if (karmaLost < 0)
-			{
-				karmaLost = 1;
-			}
-			
-			// Decrease Karma of the L2PcInstance and Send it a Server->Client StatusUpdate packet with Karma and PvP Flag if necessary
-			setKarma(getKarma() - (int) karmaLost);
-		}
-	}
-	
 	public void onKillUpdatePvPKarma(L2Character target)
 	{
-		if (target == null)
-		{
-			return;
-		}
-		if (!(target instanceof L2Playable))
+		if ((target == null) || !target.isPlayable())
 		{
 			return;
 		}
 		
 		L2PcInstance targetPlayer = target.getActingPlayer();
-		
-		if (targetPlayer == null)
+		if ((targetPlayer == null) || (targetPlayer == this))
 		{
-			return; // Target player is null
-		}
-		if (targetPlayer == this)
-		{
-			return; // Target player is self
+			return;
 		}
 		
 		if (ReunionEvents.isInEvent(this) && ReunionEvents.canAttack(this, target) && ReunionEvents.gainPvpPointsOnEvents())
@@ -6174,13 +6120,6 @@ public final class L2PcInstance extends L2Playable
 		if (isCursedWeaponEquipped() && target.isPlayer())
 		{
 			CursedWeaponsManager.getInstance().increaseKills(_cursedWeaponEquippedId);
-			// Custom message for time left
-			// CursedWeapon cw = CursedWeaponsManager.getInstance().getCursedWeapon(_cursedWeaponEquipedId);
-			// SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.THERE_IS_S1_HOUR_AND_S2_MINUTE_LEFT_OF_THE_FIXED_USAGE_TIME);
-			// int timeLeftInHours = (int)(((cw.getTimeLeft()/60000)/60));
-			// msg.addItemName(_cursedWeaponEquipedId);
-			// msg.addNumber(timeLeftInHours);
-			// sendPacket(msg);
 			return;
 		}
 		
@@ -6198,6 +6137,16 @@ public final class L2PcInstance extends L2Playable
 		// If in Arena, do nothing
 		if (isInsideZone(ZoneIdType.PVP) || targetPlayer.isInsideZone(ZoneIdType.PVP))
 		{
+			if ((getSiegeState() > 0) && (targetPlayer.getSiegeState() > 0) && (getSiegeState() != targetPlayer.getSiegeState()))
+			{
+				final L2Clan killerClan = getClan();
+				final L2Clan targetClan = targetPlayer.getClan();
+				if ((killerClan != null) && (targetClan != null))
+				{
+					killerClan.addSiegeKill();
+					targetClan.addSiegeDeath();
+				}
+			}
 			return;
 		}
 		
@@ -6214,8 +6163,8 @@ public final class L2PcInstance extends L2Playable
 			increasePvpKills(target);
 		}
 		else
-		// Target player doesn't have pvp flag set
 		{
+			// Target player doesn't have pvp flag set
 			// check about wars
 			if ((targetPlayer.getClan() != null) && (getClan() != null) && getClan().isAtWarWith(targetPlayer.getClanId()) && targetPlayer.getClan().isAtWarWith(getClanId()) && (targetPlayer.getPledgeType() != L2Clan.SUBUNIT_ACADEMY) && (getPledgeType() != L2Clan.SUBUNIT_ACADEMY))
 			{
@@ -6235,8 +6184,7 @@ public final class L2PcInstance extends L2Playable
 			else if (targetPlayer.getPvpFlag() == 0) // Target player doesn't have karma
 			{
 				increasePkKillsAndKarma(target);
-				// Unequip adventurer items
-				checkItemRestriction();
+				checkItemRestriction(); // Unequip adventurer items
 			}
 		}
 	}
@@ -6271,7 +6219,6 @@ public final class L2PcInstance extends L2Playable
 					ColorSystemHandler.getInstance().updatePvPColor(this, getPvpKills());
 				}
 				
-				// Add karma to attacker and increase its PK counter
 				setPvpKills(getPvpKills() + 1);
 				
 				// Send a Server->Client UserInfo packet to attacker with its Karma and PK Counter
@@ -6292,71 +6239,14 @@ public final class L2PcInstance extends L2Playable
 			return;
 		}
 		
-		int baseKarma = Config.KARMA_MIN_KARMA;
-		int newKarma = baseKarma;
-		int karmaLimit = Config.KARMA_MAX_KARMA;
-		
-		int pkLVL = getLevel();
-		int pkPKCount = getPkKills();
-		
-		int targLVL = target.getLevel();
-		
-		int lvlDiffMulti = 0;
-		int pkCountMulti = 0;
-		
-		// Check if the attacker has a PK counter greater than 0
-		if (pkPKCount > 0)
+		// Only playables can increase karma/pk
+		if ((target == null) || !target.isPlayable())
 		{
-			pkCountMulti = pkPKCount / 2;
-		}
-		else
-		{
-			pkCountMulti = 1;
+			return;
 		}
 		
-		if (pkCountMulti < 1)
-		{
-			pkCountMulti = 1;
-		}
-		
-		// Calculate the level difference Multiplier between attacker and killed L2PcInstance
-		if (pkLVL > targLVL)
-		{
-			lvlDiffMulti = pkLVL / targLVL;
-		}
-		else
-		{
-			lvlDiffMulti = 1;
-		}
-		
-		if (lvlDiffMulti < 1)
-		{
-			lvlDiffMulti = 1;
-		}
-		
-		// Calculate the new Karma of the attacker : newKarma = baseKarma*pkCountMulti*lvlDiffMulti
-		newKarma *= pkCountMulti;
-		newKarma *= lvlDiffMulti;
-		
-		// Make sure newKarma is less than karmaLimit and higher than baseKarma
-		if (newKarma < baseKarma)
-		{
-			newKarma = baseKarma;
-		}
-		if (newKarma > karmaLimit)
-		{
-			newKarma = karmaLimit;
-		}
-		
-		// Fix to prevent overflow (=> karma has a max value of 2 147 483 647)
-		if (getKarma() > (Integer.MAX_VALUE - newKarma))
-		{
-			newKarma = Integer.MAX_VALUE - getKarma();
-		}
-		
-		// Add karma to attacker and increase its PK counter
-		setKarma(getKarma() + newKarma);
-		if ((target instanceof L2PcInstance) && AntiFeedManager.getInstance().check(this, target))
+		// PK Points are increased only if you kill a player.
+		if (target.isPlayer())
 		{
 			setPkKills(getPkKills() + 1);
 		}
@@ -6366,43 +6256,12 @@ public final class L2PcInstance extends L2Playable
 			ColorSystemHandler.getInstance().updatePkColor(this, getPkKills());
 		}
 		
-		// Send a Server->Client UserInfo packet to attacker with its Karma and PK Counter
+		// Calculate new karma.
+		setKarma(getKarma() + Formulas.calculateKarmaGain(getPkKills(), target.isSummon()));
+		
+		// Update player's UI.
 		sendPacket(new UserInfo(this));
 		sendPacket(new ExBrExtraUserInfo(this));
-	}
-	
-	public int calculateKarmaLost(long exp)
-	{
-		// KARMA LOSS
-		// When a PKer gets killed by another player or a L2MonsterInstance, it loses a certain amount of Karma based on their level.
-		// this (with defaults) results in a level 1 losing about ~2 karma per death, and a lvl 70 loses about 11760 karma per death...
-		// You lose karma as long as you were not in a pvp zone and you did not kill urself.
-		// NOTE: exp for death (if delevel is allowed) is based on the players level
-		
-		long expGained = Math.abs(exp);
-		expGained /= Config.KARMA_XP_DIVIDER;
-		
-		// FIXME Micht : Maybe this code should be fixed and karma set to a long value
-		int karmaLost = 0;
-		if (expGained > Integer.MAX_VALUE)
-		{
-			karmaLost = Integer.MAX_VALUE;
-		}
-		else
-		{
-			karmaLost = (int) expGained;
-		}
-		
-		if (karmaLost < Config.KARMA_LOST_BASE)
-		{
-			karmaLost = Config.KARMA_LOST_BASE;
-		}
-		if (karmaLost > getKarma())
-		{
-			karmaLost = getKarma();
-		}
-		
-		return karmaLost;
 	}
 	
 	public void updatePvPStatus()
@@ -7855,10 +7714,13 @@ public final class L2PcInstance extends L2Playable
 					}
 					
 					player.setDeleteTimer(rset.getLong("deletetime"));
-					
 					player.setTitle(rset.getString("title"));
-					player.getAppearance().setTitleColor(rset.getInt("title_color"));
 					player.setAccessLevel(rset.getInt("accesslevel"));
+					int titleColor = rset.getInt("title_color");
+					if (titleColor != 0xFFFFFF)
+					{
+						player.getAppearance().setTitleColor(titleColor);
+					}
 					player.setFistsWeaponItem(player.findFistsWeaponItem(activeClassId));
 					player.setUptime(System.currentTimeMillis());
 					
@@ -8771,7 +8633,7 @@ public final class L2PcInstance extends L2Playable
 				{
 					if (!SkillTreesData.getInstance().isSkillAllowed(this, skill))
 					{
-						Util.handleIllegalPlayerAction(this, "Player " + getName() + " has invalid skill " + skill.getName() + " (" + skill.getId() + "/" + skill.getLevel() + "), class:" + ClassListData.getInstance().getClass(getClassId()).getClassName(), 1);
+						Util.handleIllegalPlayerAction(this, "Player " + getName() + " has invalid skill " + skill.getName() + " (" + skill.getId() + "/" + skill.getLevel() + "), class:" + ClassListData.getInstance().getClass(getClassId()).getClassName(), IllegalActionPunishmentType.BROADCAST);
 						if (Config.SKILL_CHECK_REMOVE)
 						{
 							removeSkill(skill);
@@ -15820,15 +15682,15 @@ public final class L2PcInstance extends L2Playable
 	
 	public void setEventStatus()
 	{
-		eventStatus = new PlayerEventStatus(this);
+		eventStatus = new PlayerEventHolder(this);
 	}
 	
-	public void setEventStatus(PlayerEventStatus pes)
+	public void setEventStatus(PlayerEventHolder pes)
 	{
 		eventStatus = pes;
 	}
 	
-	public PlayerEventStatus getEventStatus()
+	public PlayerEventHolder getEventStatus()
 	{
 		return eventStatus;
 	}

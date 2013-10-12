@@ -150,6 +150,11 @@ public class PcKnownList extends PlayableKnownList
 			return 10000;
 		}
 		
+		if (object.isRunner())
+		{
+			return 15000;
+		}
+		
 		// when knownlist grows, the distance to forget should be at least
 		// the same as the previous watch range, or it becomes possible that
 		// extra charinfo packets are being sent (watch-forget-watch-forget)
@@ -175,6 +180,11 @@ public class PcKnownList extends PlayableKnownList
 		if (object.isWalker())
 		{
 			return 9000;
+		}
+		
+		if (object.isRunner())
+		{
+			return 14000;
 		}
 		
 		final int knownlistSize = getKnownObjects().size();

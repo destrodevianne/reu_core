@@ -33,6 +33,7 @@ import l2r.gameserver.scripts.handlers.usercommandhandlers.Mount;
 import l2r.gameserver.scripts.handlers.usercommandhandlers.MyBirthday;
 import l2r.gameserver.scripts.handlers.usercommandhandlers.OlympiadStat;
 import l2r.gameserver.scripts.handlers.usercommandhandlers.PartyInfo;
+import l2r.gameserver.scripts.handlers.usercommandhandlers.SiegeStatus;
 import l2r.gameserver.scripts.handlers.usercommandhandlers.Time;
 import l2r.gameserver.scripts.handlers.usercommandhandlers.Unstuck;
 
@@ -57,6 +58,7 @@ public class UserCommandHandler implements IHandler<IUserCommandHandler, Integer
 		registerHandler(new Loc());
 		registerHandler(new Mount());
 		registerHandler(new MyBirthday());
+		registerHandler(new SiegeStatus());
 		registerHandler(new OlympiadStat());
 		registerHandler(new PartyInfo());
 		registerHandler(new Time());

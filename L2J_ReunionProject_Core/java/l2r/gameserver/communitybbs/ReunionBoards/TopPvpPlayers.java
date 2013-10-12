@@ -2,7 +2,7 @@ package l2r.gameserver.communitybbs.ReunionBoards;
 
 import javolution.text.TextBuilder;
 import gr.reunion.aioItem.PlayersTopData;
-import gr.reunion.configs.SmartCommunityConfigs;
+import gr.reunion.configsEngine.SmartCommunityConfigs;
 import gr.reunion.datatables.CustomTable;
 
 

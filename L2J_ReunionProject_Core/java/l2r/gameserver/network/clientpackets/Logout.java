@@ -25,13 +25,12 @@ import java.util.logging.Logger;
 import l2r.Config;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.enums.ZoneIdType;
-import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
-import gr.reunion.configs.AntibotConfigs;
+import gr.reunion.configsEngine.AntibotConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 /**
@@ -124,9 +123,8 @@ public final class Logout extends L2GameClientPacket
 				player.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			final L2Party playerParty = player.getParty();
 			
-			if (playerParty != null)
+			if (player.isInParty())
 			{
 				player.getParty().broadcastPacket(SystemMessage.sendString(player.getName() + " has been removed from the upcoming Festival."));
 			}

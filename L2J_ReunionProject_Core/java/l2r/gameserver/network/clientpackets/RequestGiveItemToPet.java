@@ -24,8 +24,8 @@ import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.util.Util;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
+import gr.reunion.securityEngine.SecurityActions;
+import gr.reunion.securityEngine.SecurityType;
 
 /**
  * This class ...

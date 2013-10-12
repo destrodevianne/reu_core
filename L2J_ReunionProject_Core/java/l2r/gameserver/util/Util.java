@@ -34,9 +34,11 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
+import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.actor.tasks.player.IllegalPlayerActionTask;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.ShowBoard;
 import l2r.util.file.filter.ExtFilter;
@@ -48,9 +50,9 @@ public final class Util
 {
 	private static final NumberFormat ADENA_FORMATTER = NumberFormat.getIntegerInstance(Locale.ENGLISH);
 	
-	public static void handleIllegalPlayerAction(L2PcInstance actor, String message, int punishment)
+	public static void handleIllegalPlayerAction(L2PcInstance actor, String message, IllegalActionPunishmentType punishment)
 	{
-		ThreadPoolManager.getInstance().scheduleGeneral(new IllegalPlayerAction(actor, message, punishment), 5000);
+		ThreadPoolManager.getInstance().scheduleGeneral(new IllegalPlayerActionTask(actor, message, punishment), 5000);
 	}
 	
 	public static String getRelativePath(File base, File file)

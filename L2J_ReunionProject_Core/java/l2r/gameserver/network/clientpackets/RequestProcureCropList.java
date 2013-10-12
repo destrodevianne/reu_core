@@ -25,7 +25,7 @@ import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.ManorData;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.CastleManorManager;
-import l2r.gameserver.instancemanager.CastleManorManager.CropProcure;
+import l2r.gameserver.model.CropProcure;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.instance.L2ManorManagerInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;

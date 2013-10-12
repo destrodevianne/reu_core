@@ -85,6 +85,11 @@ public class NpcKnownList extends CharKnownList
 			return 0;
 		}
 		
+		if (object.isRunner())
+		{
+			return 2000;
+		}
+		
 		if (object instanceof L2FestivalGuideInstance)
 		{
 			return 4000;

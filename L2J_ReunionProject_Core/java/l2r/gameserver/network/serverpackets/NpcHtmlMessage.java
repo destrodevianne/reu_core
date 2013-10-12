@@ -227,6 +227,12 @@ public final class NpcHtmlMessage extends L2GameServerPacket
 		_html = _html.replaceAll(pattern, value.replaceAll("\\$", "\\\\\\$"));
 	}
 	
+	public void replace(String pattern, int value)
+	{
+		String replacableValue = String.valueOf(value);
+		_html = _html.replaceAll(pattern, replacableValue.replaceAll("\\$", "\\\\\\$"));
+	}
+	
 	public void replace2(String pattern, String value)
 	{
 		_html = _html.replaceAll(pattern, value);

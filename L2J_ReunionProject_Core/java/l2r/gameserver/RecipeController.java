@@ -51,7 +51,7 @@ import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.configs.LeaderboardsConfigs;
+import gr.reunion.configsEngine.LeaderboardsConfigs;
 import gr.reunion.leaderboards.CraftLeaderboard;
 
 public class RecipeController

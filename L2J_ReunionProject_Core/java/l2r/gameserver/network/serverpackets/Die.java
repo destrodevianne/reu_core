@@ -33,8 +33,8 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
-import gr.reunion.configs.ChaoticZoneConfigs;
-import gr.reunion.configs.FlagZoneConfigs;
+import gr.reunion.configsEngine.ChaoticZoneConfigs;
+import gr.reunion.configsEngine.FlagZoneConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 public class Die extends L2GameServerPacket

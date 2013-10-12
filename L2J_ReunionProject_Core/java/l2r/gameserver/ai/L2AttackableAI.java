@@ -548,7 +548,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 		}
 		
 		// Check if the actor is a L2GuardInstance
-		if (npc instanceof L2GuardInstance)
+		if ((npc instanceof L2GuardInstance) && !npc.isWalker() && !npc.isRunner())
 		{
 			// Order to the L2GuardInstance to return to its home location because there's no target to attack
 			((L2GuardInstance) npc).returnHome();

@@ -59,8 +59,8 @@ import org.mmocore.network.MMOConnection;
 import org.mmocore.network.ReceivablePacket;
 
 import gr.reunion.interf.ReunionEvents;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
+import gr.reunion.securityEngine.SecurityActions;
+import gr.reunion.securityEngine.SecurityType;
 
 /**
  * Represents a client connected on Game Server.
@@ -805,24 +805,37 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	 */
 	protected boolean offlineMode(L2PcInstance player)
 	{
-		boolean canSetShop = false;
 		if (player.isInOlympiadMode() || player.isFestivalParticipant() || player.isJailed() || (player.getVehicle() != null))
 		{
 			return false;
 		}
+		
+		boolean canSetShop = false;
 		
 		if (ReunionEvents.isInEvent(player))
 		{
 			return false;
 		}
 		
-		if (Config.OFFLINE_TRADE_ENABLE && ((player.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_SELL) || (player.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_BUY) || (player.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_PACKAGE_SELL)))
+		switch (player.getPrivateStoreType())
 		{
-			canSetShop = true;
-		}
-		else if (Config.OFFLINE_CRAFT_ENABLE && (player.isInCraftMode() || (player.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_MANUFACTURE)))
-		{
-			canSetShop = true;
+			case L2PcInstance.STORE_PRIVATE_SELL:
+			case L2PcInstance.STORE_PRIVATE_PACKAGE_SELL:
+			case L2PcInstance.STORE_PRIVATE_BUY:
+			{
+				canSetShop = Config.OFFLINE_TRADE_ENABLE;
+				break;
+			}
+			case L2PcInstance.STORE_PRIVATE_MANUFACTURE:
+			{
+				canSetShop = Config.OFFLINE_TRADE_ENABLE;
+				break;
+			}
+			default:
+			{
+				canSetShop = Config.OFFLINE_CRAFT_ENABLE && player.isInCraftMode();
+				break;
+			}
 		}
 		
 		if (Config.OFFLINE_MODE_IN_PEACE_ZONE && !player.isInsideZone(ZoneIdType.PEACE))

@@ -12,8 +12,8 @@ import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import gr.reunion.datatables.CustomTable;
 import gr.reunion.main.Conditions;
-import gr.reunion.securitySystem.SecurityActions;
-import gr.reunion.securitySystem.SecurityType;
+import gr.reunion.securityEngine.SecurityActions;
+import gr.reunion.securityEngine.SecurityType;
 
 /**
  * @author -=DoctorNo=-

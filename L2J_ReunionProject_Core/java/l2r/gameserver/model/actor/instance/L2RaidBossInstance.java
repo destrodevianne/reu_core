@@ -33,8 +33,8 @@ import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
-import gr.reunion.achievementSystem.AchievementsManager;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.achievementEngine.AchievementsManager;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * This class manages all RaidBoss.<br>

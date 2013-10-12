@@ -54,7 +54,7 @@ import l2r.gameserver.network.serverpackets.CharSelectionInfo;
 import l2r.gameserver.scripting.scriptengine.events.PlayerEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerListener;
 import l2r.gameserver.util.Util;
-import gr.reunion.configs.CustomServerConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
 
 @SuppressWarnings("unused")
 public final class CharacterCreate extends L2GameClientPacket

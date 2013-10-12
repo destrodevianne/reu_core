@@ -41,13 +41,13 @@ import l2r.gameserver.scripts.handlers.voicedcommandhandlers.TeleportsVCmd;
 import l2r.gameserver.scripts.handlers.voicedcommandhandlers.VotePanelVCmd;
 import l2r.gameserver.scripts.handlers.voicedcommandhandlers.VoteVCmd;
 import l2r.gameserver.scripts.handlers.voicedcommandhandlers.Wedding;
-import gr.reunion.configs.AioBufferConfigs;
-import gr.reunion.configs.AioItemsConfigs;
-import gr.reunion.configs.AntibotConfigs;
-import gr.reunion.configs.ChaoticZoneConfigs;
-import gr.reunion.configs.CustomServerConfigs;
-import gr.reunion.configs.PremiumServiceConfigs;
-import gr.reunion.configs.VoteSystemConfigs;
+import gr.reunion.configsEngine.AioBufferConfigs;
+import gr.reunion.configsEngine.AioItemsConfigs;
+import gr.reunion.configsEngine.AntibotConfigs;
+import gr.reunion.configsEngine.ChaoticZoneConfigs;
+import gr.reunion.configsEngine.CustomServerConfigs;
+import gr.reunion.configsEngine.PremiumServiceConfigs;
+import gr.reunion.configsEngine.VoteSystemConfigs;
 
 /**
  * @author UnAfraid

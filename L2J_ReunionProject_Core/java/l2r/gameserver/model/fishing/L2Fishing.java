@@ -32,7 +32,7 @@ import l2r.gameserver.network.serverpackets.ExFishingStartCombat;
 import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
-import gr.reunion.configs.LeaderboardsConfigs;
+import gr.reunion.configsEngine.LeaderboardsConfigs;
 import gr.reunion.leaderboards.FishermanLeaderboard;
 
 public class L2Fishing implements Runnable
