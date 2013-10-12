@@ -100,7 +100,6 @@ public final class Config
 	public static final String SECURITY_CONFIG_FILE = "./config/main/Security.ini";
 	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini";
 	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
-	public static final String ELEMENTAL_FILE = "./config/elemental/Elemental.ini";
 	// Bosses/
 	public static final String ANTHARAS_CONFIG = "./config/bosses/Antharas.ini";
 	public static final String VALAKAS_CONFIG = "./config/bosses/Valakas.ini";
@@ -1133,10 +1132,6 @@ public final class Config
 	public static boolean CHS_ENABLE_FAME;
 	public static int CHS_FAME_AMOUNT;
 	public static int CHS_FAME_FREQUENCY;
-	
-	// Elemental Configs
-	public static boolean AUCTION_HOUSE_ONLY_PEACE_ZONE;
-	public static double AUCTION_HOUSE_SALE_FEE;
 	
 	/**
 	 * This class initializes all global variables for configuration.<br>
@@ -2699,12 +2694,6 @@ public final class Config
 			CHS_ENABLE_FAME = ClanHallSiege.getBoolean("EnableFame", false);
 			CHS_FAME_AMOUNT = ClanHallSiege.getInt("FameAmount", 0);
 			CHS_FAME_FREQUENCY = ClanHallSiege.getInt("FameFrequency", 0);
-			
-			// Synerge - Elemental Configs
-			final PropertiesParser ElementalSettings = new PropertiesParser(ELEMENTAL_FILE);
-			
-			AUCTION_HOUSE_ONLY_PEACE_ZONE = ElementalSettings.getBoolean("AuctionHouseOnlyPeaceZone", true);
-			AUCTION_HOUSE_SALE_FEE = ElementalSettings.getDouble("AuctionHouseSaleFee", 0.5) / 100;
 		}
 		else if (Server.serverMode == Server.MODE_LOGINSERVER)
 		{
