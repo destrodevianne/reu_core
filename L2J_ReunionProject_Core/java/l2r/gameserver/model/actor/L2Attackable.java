@@ -721,7 +721,17 @@ public class L2Attackable extends L2Npc
 							}
 							catch (Exception e)
 							{
+								if (skill == null)
+								{
+									_log.warning("Logger: skill is NULL (L2Attackable) Report this to team.");
+								}
+								
+								if (damage == 0)
+								{
+									_log.warning("Logger: damage is 0 (L2Attackable) Report this to team.");
+								}
 								_log.warning("Logger: notifyAttack failed (L2Attackable) Report this to team.");
+								_log.warning("Problem caused caused from: " + e);
 							}
 						}
 					}
