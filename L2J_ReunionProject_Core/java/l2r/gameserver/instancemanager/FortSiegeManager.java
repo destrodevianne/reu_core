@@ -27,8 +27,6 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -47,9 +45,12 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FortSiegeManager
 {
-	private static final Logger _log = Logger.getLogger(FortSiegeManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(FortSiegeManager.class);
 	
 	public static final FortSiegeManager getInstance()
 	{
@@ -95,7 +96,7 @@ public class FortSiegeManager
 		L2PcInstance player = (L2PcInstance) activeChar;
 		Fort fort = FortManager.getInstance().getFort(player);
 		
-		if ((fort == null) || (fort.getFortId() <= 0))
+		if ((fort == null) || (fort.getResidenceId() <= 0))
 		{
 			text = "You must be on fort ground to summon this";
 		}
@@ -148,7 +149,7 @@ public class FortSiegeManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: checkIsRegistered(): " + e.getMessage(), e);
+			_log.warn("Exception: checkIsRegistered(): " + e.getMessage(), e);
 		}
 		return register;
 	}
@@ -169,7 +170,7 @@ public class FortSiegeManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error while loading Fort Siege Manager settings!", e);
+			_log.warn("Error while loading Fort Siege Manager settings!", e);
 		}
 		
 		// Siege setting
@@ -205,15 +206,15 @@ public class FortSiegeManager
 					int heading = Integer.parseInt(st.nextToken());
 					int npc_id = Integer.parseInt(st.nextToken());
 					
-					_commanderSpawns.add(new SiegeSpawn(fort.getFortId(), x, y, z, heading, npc_id, i));
+					_commanderSpawns.add(new SiegeSpawn(fort.getResidenceId(), x, y, z, heading, npc_id, i));
 				}
 				catch (Exception e)
 				{
-					_log.warning("Error while loading commander(s) for " + fort.getName() + " fort.");
+					_log.warn("Error while loading commander(s) for " + fort.getName() + " fort.");
 				}
 			}
 			
-			_commanderSpawnList.put(fort.getFortId(), _commanderSpawns);
+			_commanderSpawnList.put(fort.getResidenceId(), _commanderSpawns);
 			
 			for (int i = 1; i < 4; i++)
 			{
@@ -231,14 +232,14 @@ public class FortSiegeManager
 					int z = Integer.parseInt(st.nextToken());
 					int flag_id = Integer.parseInt(st.nextToken());
 					
-					_flagSpawns.add(new CombatFlag(fort.getFortId(), x, y, z, 0, flag_id));
+					_flagSpawns.add(new CombatFlag(fort.getResidenceId(), x, y, z, 0, flag_id));
 				}
 				catch (Exception e)
 				{
-					_log.warning("Error while loading flag(s) for " + fort.getName() + " fort.");
+					_log.warn("Error while loading flag(s) for " + fort.getName() + " fort.");
 				}
 			}
-			_flagList.put(fort.getFortId(), _flagSpawns);
+			_flagList.put(fort.getResidenceId(), _flagSpawns);
 		}
 	}
 	
@@ -339,7 +340,7 @@ public class FortSiegeManager
 		
 		Fort fort = FortManager.getInstance().getFort(player);
 		
-		FastList<CombatFlag> fcf = _flagList.get(fort.getFortId());
+		FastList<CombatFlag> fcf = _flagList.get(fort.getResidenceId());
 		for (CombatFlag cf : fcf)
 		{
 			if (cf.getCombatFlagInstance() == item)
@@ -366,7 +367,7 @@ public class FortSiegeManager
 		// here check if is siege is attacker
 		Fort fort = FortManager.getInstance().getFort(player);
 		
-		if ((fort == null) || (fort.getFortId() <= 0))
+		if ((fort == null) || (fort.getResidenceId() <= 0))
 		{
 			player.sendPacket(sm);
 			return false;
@@ -388,7 +389,7 @@ public class FortSiegeManager
 	{
 		Fort fort = FortManager.getInstance().getFortById(fortId);
 		
-		FastList<CombatFlag> fcf = _flagList.get(fort.getFortId());
+		FastList<CombatFlag> fcf = _flagList.get(fort.getResidenceId());
 		
 		for (CombatFlag cf : fcf)
 		{
@@ -420,7 +421,7 @@ public class FortSiegeManager
 			_id = id;
 		}
 		
-		public int getFortId()
+		public int getResidenceId()
 		{
 			return _fortId;
 		}

@@ -29,9 +29,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Encodes and decodes to and from Base64 notation.<br>
@@ -48,7 +50,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class Base64
 {
-	private static final Logger _log = Logger.getLogger(Base64.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Base64.class);
 	
 	/* P U B L I C F I E L D S */
 	
@@ -417,7 +419,7 @@ public class Base64
 			}
 			catch (IOException e)
 			{
-				_log.warning("Base64: " + e.getMessage());
+				_log.warn("Base64: " + e.getMessage());
 				return null;
 			}
 			
@@ -677,11 +679,11 @@ public class Base64
 		}
 		catch (IOException e)
 		{
-			_log.warning("Base64: " + e.getMessage());
+			_log.warn("Base64: " + e.getMessage());
 		}
 		catch (ClassNotFoundException e)
 		{
-			_log.warning("Base64: " + e.getMessage());
+			_log.warn("Base64: " + e.getMessage());
 		}
 		return obj;
 	}

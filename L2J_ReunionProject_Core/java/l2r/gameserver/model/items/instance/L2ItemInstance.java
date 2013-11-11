@@ -31,7 +31,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -88,14 +87,17 @@ import l2r.gameserver.scripting.scriptengine.listeners.player.AugmentListener;
 import l2r.gameserver.scripting.scriptengine.listeners.player.DropListener;
 import l2r.gameserver.util.GMAudit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class manages items.
  * @version $Revision: 1.4.2.1.2.11 $ $Date: 2005/03/31 16:07:50 $
  */
 public final class L2ItemInstance extends L2Object
 {
-	private static final Logger _log = Logger.getLogger(L2ItemInstance.class.getName());
-	private static final Logger _logItems = Logger.getLogger("item");
+	private static final Logger _log = LoggerFactory.getLogger(L2ItemInstance.class);
+	private static final java.util.logging.Logger _logItems = java.util.logging.Logger.getLogger("item");
 	
 	private static FastList<AugmentListener> augmentListeners = new FastList<AugmentListener>().shared();
 	private static FastList<DropListener> dropListeners = new FastList<DropListener>().shared();
@@ -936,7 +938,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Could not update atributes for item: " + this + " from DB:", e);
+			_log.error("Could not update atributes for item: " + this + " from DB:", e);
 		}
 		return true;
 	}
@@ -964,7 +966,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Could not remove augmentation for item: " + this + " from DB:", e);
+			_log.error("Could not remove augmentation for item: " + this + " from DB:", e);
 		}
 	}
 	
@@ -1003,7 +1005,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Could not restore augmentation and elemental data for item " + this + " from DB: " + e.getMessage(), e);
+			_log.error("Could not restore augmentation and elemental data for item " + this + " from DB: " + e.getMessage(), e);
 		}
 	}
 	
@@ -1017,7 +1019,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Could not update atributes for item: " + this + " from DB:", e);
+			_log.error("Could not update atributes for item: " + this + " from DB:", e);
 		}
 	}
 	
@@ -1030,7 +1032,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Could not update elementals for item: " + this + " from DB:", e);
+			_log.error("Could not update elementals for item: " + this + " from DB:", e);
 		}
 		
 		if (_elementals == null)
@@ -1051,7 +1053,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Could not update elementals for item: " + this + " from DB:", e);
+			_log.error("Could not update elementals for item: " + this + " from DB:", e);
 		}
 	}
 	
@@ -1174,7 +1176,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Could not update elementals for item: " + this + " from DB:", e);
+			_log.error("Could not update elementals for item: " + this + " from DB:", e);
 		}
 	}
 	
@@ -1219,7 +1221,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Could not remove elemental enchant for item: " + this + " from DB:", e);
+			_log.error("Could not remove elemental enchant for item: " + this + " from DB:", e);
 		}
 	}
 	
@@ -1228,7 +1230,7 @@ public final class L2ItemInstance extends L2Object
 	 */
 	public static class ScheduleConsumeManaTask implements Runnable
 	{
-		private static final Logger _log = Logger.getLogger(ScheduleConsumeManaTask.class.getName());
+		private static final Logger _log = LoggerFactory.getLogger(ScheduleConsumeManaTask.class);
 		private final L2ItemInstance _shadowItem;
 		
 		public ScheduleConsumeManaTask(L2ItemInstance item)
@@ -1249,7 +1251,7 @@ public final class L2ItemInstance extends L2Object
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -1495,13 +1497,13 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Could not restore an item owned by " + ownerId + " from DB:", e);
+			_log.error("Could not restore an item owned by " + ownerId + " from DB:", e);
 			return null;
 		}
 		L2Item item = ItemTable.getInstance().getTemplate(item_id);
 		if (item == null)
 		{
-			_log.severe("Item item_id=" + item_id + " not known, object_id=" + objectId);
+			_log.error("Item item_id=" + item_id + " not known, object_id=" + objectId);
 			return null;
 		}
 		inst = new L2ItemInstance(objectId, item);
@@ -1653,7 +1655,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Could not update item " + this + " in DB: Reason: " + e.getMessage(), e);
+			_log.error("Could not update item " + this + " in DB: Reason: " + e.getMessage(), e);
 		}
 	}
 	
@@ -1699,7 +1701,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Could not insert item " + this + " into DB: Reason: " + e.getMessage(), e);
+			_log.error("Could not insert item " + this + " into DB: Reason: " + e.getMessage(), e);
 		}
 	}
 	
@@ -1739,7 +1741,7 @@ public final class L2ItemInstance extends L2Object
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Could not delete item " + this + " in DB: " + e.getMessage(), e);
+			_log.error("Could not delete item " + this + " in DB: " + e.getMessage(), e);
 		}
 	}
 	
@@ -1899,7 +1901,7 @@ public final class L2ItemInstance extends L2Object
 	
 	public static class ScheduleLifeTimeTask implements Runnable
 	{
-		private static final Logger _log = Logger.getLogger(ScheduleLifeTimeTask.class.getName());
+		private static final Logger _log = LoggerFactory.getLogger(ScheduleLifeTimeTask.class);
 		private final L2ItemInstance _limitedItem;
 		
 		public ScheduleLifeTimeTask(L2ItemInstance item)
@@ -1919,7 +1921,7 @@ public final class L2ItemInstance extends L2Object
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -2267,7 +2269,7 @@ public final class L2ItemInstance extends L2Object
 			}
 			else if (id != 0)
 			{
-				_log.log(Level.INFO, "applyEnchantStats: Couldn't find option: " + id);
+				_log.info("applyEnchantStats: Couldn't find option: " + id);
 			}
 		}
 	}

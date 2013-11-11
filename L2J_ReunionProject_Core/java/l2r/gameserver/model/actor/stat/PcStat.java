@@ -22,16 +22,20 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.BonusExpManager;
+import l2r.gameserver.model.L2PetLevelData;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2ClassMasterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
+import l2r.gameserver.model.actor.transform.TransformTemplate;
 import l2r.gameserver.model.entity.RecoBonus;
 import l2r.gameserver.model.quest.QuestState;
 import l2r.gameserver.model.stats.Formulas;
+import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
@@ -347,7 +351,7 @@ public class PcStat extends PlayableStat
 		
 		if (getActiveChar().isTransformed() || getActiveChar().isInStance())
 		{
-			getActiveChar().getTransformation().onLevelUp();
+			getActiveChar().getTransformation().onLevelUp(getActiveChar());
 		}
 		
 		// Synchronize level with pet if possible.
@@ -556,33 +560,87 @@ public class PcStat extends PlayableStat
 		}
 	}
 	
+	/**
+	 * @param type movement type
+	 * @return the base move speed of given movement type.
+	 */
+	@Override
+	public float getBaseMoveSpeed(MoveType type)
+	{
+		final L2PcInstance player = getActiveChar();
+		float val = super.getBaseMoveSpeed(type);
+		
+		if (getActiveChar().isTransformed())
+		{
+			final TransformTemplate template = getActiveChar().getTransformation().getTemplate(getActiveChar());
+			if (template != null)
+			{
+				return template.getBaseMoveSpeed(type);
+			}
+		}
+		else if (player.isMounted())
+		{
+			final L2PetLevelData data = PetDataTable.getInstance().getPetLevelData(getActiveChar().getMountNpcId(), getActiveChar().getMountLevel());
+			if (data != null)
+			{
+				return data.getSpeedOnRide(type);
+			}
+		}
+		return val;
+	}
+	
 	@Override
 	public int getRunSpeed()
 	{
-		if (getActiveChar() == null)
-		{
-			return 1;
-		}
-		
-		int val;
-		
-		L2PcInstance player = getActiveChar();
-		if (player.isMounted())
-		{
-			int baseRunSpd = NpcTable.getInstance().getTemplate(getActiveChar().getMountNpcId()).getBaseRunSpd();
-			val = (int) Math.round(calcStat(Stats.RUN_SPEED, baseRunSpd, null, null));
-		}
-		else
-		{
-			val = super.getRunSpeed();
-		}
-		
-		val += Config.RUN_SPD_BOOST;
+		int val = super.getRunSpeed() + Config.RUN_SPD_BOOST;
 		
 		// Apply max run speed cap.
 		if ((val > Config.MAX_RUN_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
 			return Config.MAX_RUN_SPEED;
+		}
+		
+		// Check for mount penalties
+		if (getActiveChar().isMounted())
+		{
+			// if level diff with mount >= 10, it decreases move speed by 50%
+			if ((getActiveChar().getMountLevel() - getActiveChar().getLevel()) >= 10)
+			{
+				val /= 2;
+			}
+			// if mount is hungry, it decreases move speed by 50%
+			if (getActiveChar().isHungry())
+			{
+				val /= 2;
+			}
+		}
+		
+		return val;
+	}
+	
+	@Override
+	public int getWalkSpeed()
+	{
+		int val = super.getWalkSpeed() + Config.RUN_SPD_BOOST;
+		
+		// Apply max run speed cap.
+		if ((val > Config.MAX_RUN_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		{
+			return Config.MAX_RUN_SPEED;
+		}
+		
+		if (getActiveChar().isMounted())
+		{
+			// if level diff with mount >= 10, it decreases move speed by 50%
+			if ((getActiveChar().getMountLevel() - getActiveChar().getLevel()) >= 10)
+			{
+				val /= 2;
+			}
+			// if mount is hungry, it decreases move speed by 50%
+			if (getActiveChar().isHungry())
+			{
+				val /= 2;
+			}
 		}
 		
 		return val;
@@ -630,28 +688,14 @@ public class PcStat extends PlayableStat
 	@Override
 	public float getMovementSpeedMultiplier()
 	{
-		if (getActiveChar() == null)
-		{
-			return 1;
-		}
-		
 		if (getActiveChar().isMounted())
 		{
-			return (getRunSpeed() * 1f) / NpcTable.getInstance().getTemplate(getActiveChar().getMountNpcId()).getBaseRunSpd();
+			final L2PetLevelData data = PetDataTable.getInstance().getPetLevelData(getActiveChar().getMountNpcId(), getActiveChar().getMountLevel());
+			float baseSpeed = data != null ? data.getSpeedOnRide(MoveType.RUN) : NpcTable.getInstance().getTemplate(getActiveChar().getMountNpcId()).getBaseMoveSpeed(MoveType.RUN);
+			return (getRunSpeed() / baseSpeed);
 		}
 		
 		return super.getMovementSpeedMultiplier();
-	}
-	
-	@Override
-	public int getWalkSpeed()
-	{
-		if (getActiveChar() == null)
-		{
-			return 1;
-		}
-		
-		return (getRunSpeed() * 70) / 100;
 	}
 	
 	private void updateVitalityLevel(boolean quiet)

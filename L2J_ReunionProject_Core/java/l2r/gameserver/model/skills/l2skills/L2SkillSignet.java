@@ -21,13 +21,13 @@ package l2r.gameserver.model.skills.l2skills;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.L2Object;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2EffectPointInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
-import l2r.gameserver.util.Point3D;
 
 /**
  * @author Forsaiken
@@ -58,7 +58,7 @@ public final class L2SkillSignet extends L2Skill
 		
 		if (caster.isPlayer() && (getTargetType() == L2TargetType.GROUND))
 		{
-			Point3D wordPosition = caster.getActingPlayer().getCurrentSkillWorldPosition();
+			Location wordPosition = caster.getActingPlayer().getCurrentSkillWorldPosition();
 			
 			if (wordPosition != null)
 			{

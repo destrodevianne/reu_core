@@ -305,7 +305,7 @@ public final class L2TeleporterInstance extends L2Npc
 			{
 				if (Config.DEBUG)
 				{
-					_log.fine("Teleporting player " + player.getName() + " to new location: " + list.getLocX() + ":" + list.getLocY() + ":" + list.getLocZ());
+					_log.info("Teleporting player " + player.getName() + " to new location: " + list.getLocX() + ":" + list.getLocY() + ":" + list.getLocZ());
 				}
 				
 				player.teleToLocation(list.getLocX(), list.getLocY(), list.getLocZ(), true);
@@ -313,7 +313,7 @@ public final class L2TeleporterInstance extends L2Npc
 		}
 		else
 		{
-			_log.warning("No teleport destination with id:" + val);
+			_log.warn("No teleport destination with id:" + val);
 		}
 		
 		player.sendPacket(ActionFailed.STATIC_PACKET);

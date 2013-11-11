@@ -18,12 +18,13 @@
  */
 package l2r.gameserver.model.actor.tasks.player;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.serverpackets.LeaveWorld;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Task dedicated to verify client's game guard.
@@ -31,7 +32,7 @@ import l2r.gameserver.network.serverpackets.LeaveWorld;
  */
 public class GameGuardCheckTask implements Runnable
 {
-	private static final Logger _log = Logger.getLogger(GameGuardCheckTask.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(GameGuardCheckTask.class);
 	
 	private final L2PcInstance _player;
 	

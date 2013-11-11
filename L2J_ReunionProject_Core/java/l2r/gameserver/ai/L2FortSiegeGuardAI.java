@@ -142,7 +142,7 @@ public class L2FortSiegeGuardAI extends L2CharacterAI implements Runnable
 			{
 				player = ((L2Summon) target).getOwner();
 			}
-			if ((player == null) || ((player.getClan() != null) && (player.getClan().getFortId() == ((L2Npc) _actor).getFort().getFortId())))
+			if ((player == null) || ((player.getClan() != null) && (player.getClan().getFortId() == ((L2Npc) _actor).getFort().getResidenceId())))
 			{
 				return false;
 			}
@@ -198,7 +198,7 @@ public class L2FortSiegeGuardAI extends L2CharacterAI implements Runnable
 	{
 		if (Config.DEBUG)
 		{
-			_log.warning(getClass().getSimpleName() + ": changeIntention(" + intention + ", " + arg0 + ", " + arg1 + ")");
+			_log.warn(getClass().getSimpleName() + ": changeIntention(" + intention + ", " + arg0 + ", " + arg1 + ")");
 		}
 		
 		if (intention == AI_INTENTION_IDLE /* || intention == AI_INTENTION_ACTIVE */) // active becomes idle if only a summon is present
@@ -375,7 +375,7 @@ public class L2FortSiegeGuardAI extends L2CharacterAI implements Runnable
 	{
 		if (Config.DEBUG)
 		{
-			_log.warning(getClass().getSimpleName() + ": thinkAttack(); timeout=" + (_attackTimeout - GameTimeController.getInstance().getGameTicks()));
+			_log.warn(getClass().getSimpleName() + ": thinkAttack(); timeout=" + (_attackTimeout - GameTimeController.getInstance().getGameTicks()));
 		}
 		
 		if (_attackTimeout < GameTimeController.getInstance().getGameTicks())
@@ -575,7 +575,7 @@ public class L2FortSiegeGuardAI extends L2CharacterAI implements Runnable
 		}
 		catch (NullPointerException e)
 		{
-			// _log.warning("AttackableAI: Attack target is NULL.");
+			// _log.warn("AttackableAI: Attack target is NULL.");
 			_actor.setTarget(null);
 			setIntention(AI_INTENTION_IDLE, null, null);
 			return;

@@ -20,7 +20,6 @@ package l2r.gameserver.datatables;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.gameserver.engines.DocumentParser;
@@ -142,7 +141,7 @@ public class EnchantGroupsData extends DocumentParser
 			
 			return _enchantSkillGroups.get(group).getEnchantGroupDetails().size();
 		}
-		_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error while loading generating enchant skill id: " + skillId + "; route: " + route + "; missing group: " + group);
+		_log.error(getClass().getSimpleName() + ": Error while loading generating enchant skill id: " + skillId + "; route: " + route + "; missing group: " + group);
 		return 0;
 	}
 	

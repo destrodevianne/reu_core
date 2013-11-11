@@ -50,7 +50,7 @@ public final class WareHouseWithdrawalList extends L2GameServerPacket
 		if (_activeChar.getActiveWarehouse() == null)
 		{
 			// Something went wrong!
-			_log.warning("error while sending withdraw request to: " + _activeChar.getName());
+			_log.warn("error while sending withdraw request to: " + _activeChar.getName());
 			return;
 		}
 		
@@ -59,7 +59,7 @@ public final class WareHouseWithdrawalList extends L2GameServerPacket
 		{
 			for (L2ItemInstance item : _items)
 			{
-				_log.fine("item:" + item.getItem().getName() + " type1:" + item.getItem().getType1() + " type2:" + item.getItem().getType2());
+				_log.info("item:" + item.getItem().getName() + " type1:" + item.getItem().getType1() + " type2:" + item.getItem().getType2());
 			}
 		}
 	}

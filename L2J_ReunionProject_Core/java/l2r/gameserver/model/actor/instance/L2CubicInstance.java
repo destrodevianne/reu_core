@@ -20,8 +20,6 @@ package l2r.gameserver.model.actor.instance;
 
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -47,11 +45,15 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.interf.ReunionEvents;
 
 public final class L2CubicInstance
 {
-	protected static final Logger _log = Logger.getLogger(L2CubicInstance.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2CubicInstance.class);
 	
 	// Type of Cubics
 	public static final int STORM_CUBIC = 1;
@@ -505,7 +507,7 @@ public final class L2CubicInstance
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "", e);
+			_log.error("", e);
 		}
 	}
 	
@@ -667,7 +669,7 @@ public final class L2CubicInstance
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -1036,7 +1038,7 @@ public final class L2CubicInstance
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}

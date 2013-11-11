@@ -18,18 +18,19 @@
  */
 package l2r.loginserver.network.gameserverpackets;
 
-import java.util.logging.Logger;
-
 import l2r.Config;
 import l2r.loginserver.LoginController;
 import l2r.util.network.BaseRecievePacket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mrTJO
  */
 public class PlayerTracert extends BaseRecievePacket
 {
-	protected static Logger _log = Logger.getLogger(PlayerTracert.class.getName());
+	protected static Logger _log = LoggerFactory.getLogger(PlayerTracert.class);
 	
 	/**
 	 * @param decrypt

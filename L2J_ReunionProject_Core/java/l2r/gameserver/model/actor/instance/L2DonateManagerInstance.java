@@ -1,7 +1,6 @@
 package l2r.gameserver.model.actor.instance;
 
 import java.util.StringTokenizer;
-import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
@@ -9,9 +8,9 @@ import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.MultiSell;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.TransformData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.idfactory.IdFactory;
-import l2r.gameserver.instancemanager.TransformationManager;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
@@ -274,7 +273,7 @@ public class L2DonateManagerInstance extends L2Npc
 			player.sendMessage("Your gender has been changed.");
 			player.broadcastUserInfo();
 			// Transform-untransorm player quickly to force the client to reload the character textures
-			TransformationManager.getInstance().transformPlayer(105, player);
+			TransformData.getInstance().transformPlayer(105, player);
 			TransformFinalizer ef = new TransformFinalizer(player);
 			player.setSkillCast(ThreadPoolManager.getInstance().scheduleGeneral(ef, 200));
 		}
@@ -346,7 +345,7 @@ public class L2DonateManagerInstance extends L2Npc
 			catch (Exception e)
 			{
 				player.sendMessage("A problem occured while adding captcha!");
-				_log.log(Level.WARNING, "", e);
+				_log.warn(String.valueOf(e));
 			}
 		}
 		// Donate form

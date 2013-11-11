@@ -26,8 +26,6 @@ import java.io.LineNumberReader;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -42,9 +40,12 @@ import l2r.gameserver.script.DateRange;
 import l2r.gameserver.util.Broadcast;
 import l2r.util.StringUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Announcements
 {
-	private static Logger _log = Logger.getLogger(Announcements.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(Announcements.class);
 	
 	private final List<String> _announcements = new FastList<>();
 	private final List<String> _critAnnouncements = new FastList<>();
@@ -186,7 +187,7 @@ public class Announcements
 		}
 		catch (IOException e1)
 		{
-			_log.log(Level.SEVERE, "Error reading announcements: ", e1);
+			_log.error("Error reading announcements: ", e1);
 		}
 	}
 	
@@ -217,7 +218,7 @@ public class Announcements
 		}
 		catch (IOException e)
 		{
-			_log.log(Level.SEVERE, "Saving to the announcements file has failed: ", e);
+			_log.error("Saving to the announcements file has failed: ", e);
 		}
 	}
 	

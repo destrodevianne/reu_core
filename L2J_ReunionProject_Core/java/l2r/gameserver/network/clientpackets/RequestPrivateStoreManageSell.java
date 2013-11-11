@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.enums.MountType;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 
@@ -58,11 +59,10 @@ public final class RequestPrivateStoreManageSell extends L2GameClientPacket
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		if (player.getMountType() != 0)
+		if (player.getMountType() != MountType.NONE)
 		{
 			return;
 		}
-		
 	}
 	
 	@Override

@@ -67,7 +67,7 @@ public final class Logout extends L2GameClientPacket
 		
 		if (player.isLocked())
 		{
-			_log.warning("Player " + player.getName() + " tried to logout during class change.");
+			_log.warn("Player " + player.getName() + " tried to logout during class change.");
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
@@ -81,7 +81,7 @@ public final class Logout extends L2GameClientPacket
 			
 			if (Config.DEBUG)
 			{
-				_log.fine("Player " + player.getName() + " tried to logout while fighting");
+				_log.info("Player " + player.getName() + " tried to logout while fighting");
 			}
 			
 			player.sendPacket(SystemMessageId.CANT_LOGOUT_WHILE_FIGHTING);

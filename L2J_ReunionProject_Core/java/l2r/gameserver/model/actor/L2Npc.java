@@ -23,7 +23,6 @@ import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ACTIVE;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
@@ -417,7 +416,7 @@ public class L2Npc extends L2Character
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -513,7 +512,7 @@ public class L2Npc extends L2Character
 		
 		if (template == null)
 		{
-			_log.severe("No template for Npc. Please check your datapack is setup correctly.");
+			_log.error("No template for Npc. Please check your datapack is setup correctly.");
 			return;
 		}
 		
@@ -875,8 +874,8 @@ public class L2Npc extends L2Character
 	{
 		if (player.isClanLeader())
 		{
-			final int castleId = getCastle() != null ? getCastle().getCastleId() : -1;
-			final int fortId = getFort() != null ? getFort().getFortId() : -1;
+			final int castleId = getCastle() != null ? getCastle().getResidenceId() : -1;
+			final int fortId = getFort() != null ? getFort().getResidenceId() : -1;
 			return (player.getClan().getCastleId() == castleId) || (player.getClan().getFortId() == fortId);
 		}
 		return false;
@@ -915,7 +914,7 @@ public class L2Npc extends L2Character
 			Fort fort = FortManager.getInstance().getFort(getX(), getY(), getZ());
 			if (fort != null)
 			{
-				_fortIndex = FortManager.getInstance().getFortIndex(fort.getFortId());
+				_fortIndex = FortManager.getInstance().getFortIndex(fort.getResidenceId());
 			}
 			
 			if (_fortIndex < 0)
@@ -1568,7 +1567,7 @@ public class L2Npc extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Failed decayMe().", e);
+			_log.error("Failed decayMe().", e);
 		}
 		try
 		{
@@ -1587,7 +1586,7 @@ public class L2Npc extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "deleteMe()", e);
+			_log.error("deleteMe()", e);
 		}
 		if (oldRegion != null)
 		{
@@ -1601,7 +1600,7 @@ public class L2Npc extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Failed removing cleaning knownlist.", e);
+			_log.error("Failed removing cleaning knownlist.", e);
 		}
 		
 		// Remove L2Object object from _allObjects of L2World
@@ -1746,7 +1745,7 @@ public class L2Npc extends L2Character
 		final NpcHtmlMessage noTeachMsg = new NpcHtmlMessage(getObjectId());
 		if (html == null)
 		{
-			_log.warning("Npc " + npcId + " missing noTeach html!");
+			_log.warn("Npc " + npcId + " missing noTeach html!");
 			noTeachMsg.setHtml("<html><body>I cannot teach you any skills.<br>You must find your current class teachers.</body></html>");
 		}
 		else
@@ -1795,7 +1794,7 @@ public class L2Npc extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "", e);
+			_log.error("", e);
 		}
 	}
 	

@@ -19,16 +19,13 @@
 package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.actor.L2Npc.INTERACTION_DISTANCE;
-
-import java.util.List;
-
 import l2r.Config;
-import l2r.gameserver.TradeController;
+import l2r.gameserver.datatables.BuyListData;
 import l2r.gameserver.model.L2Object;
-import l2r.gameserver.model.L2TradeList;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2MerchantInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.buylist.L2BuyList;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -111,46 +108,24 @@ public final class RequestRefundItem extends L2GameClientPacket
 			return;
 		}
 		
-		L2TradeList list = null;
 		double taxRate = 0;
 		
-		if (merchant != null)
+		if (merchant == null)
 		{
-			List<L2TradeList> lists = null;
-			if (merchant instanceof L2MerchantInstance)
-			{
-				lists = TradeController.getInstance().getBuyListByNpcId(((L2MerchantInstance) merchant).getNpcId());
-				taxRate = ((L2MerchantInstance) merchant).getMpc().getTotalTaxRate();
-			}
-			
-			if (!player.isGM())
-			{
-				if (lists == null)
-				{
-					Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
-					return;
-				}
-				for (L2TradeList tradeList : lists)
-				{
-					if (tradeList.getListId() == _listId)
-					{
-						list = tradeList;
-					}
-				}
-			}
-			else
-			{
-				list = TradeController.getInstance().getBuyList(_listId);
-			}
-		}
-		else
-		{
-			list = TradeController.getInstance().getBuyList(_listId);
+			sendPacket(ActionFailed.STATIC_PACKET);
+			return;
 		}
 		
-		if (list == null)
+		final L2BuyList buyList = BuyListData.getInstance().getBuyList(_listId);
+		if (buyList == null)
 		{
 			Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
+			return;
+		}
+		
+		if (!buyList.isNpcAllowed(((L2MerchantInstance) merchant).getNpcId()))
+		{
+			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
@@ -233,7 +208,7 @@ public final class RequestRefundItem extends L2GameClientPacket
 			L2ItemInstance item = player.getRefund().transferItem("Refund", objectIds[i], Long.MAX_VALUE, player.getInventory(), player, player.getLastFolkNPC());
 			if (item == null)
 			{
-				_log.warning("Error refunding object for char " + player.getName() + " (newitem == null)");
+				_log.warn("Error refunding object for char " + player.getName() + " (newitem == null)");
 				continue;
 			}
 		}

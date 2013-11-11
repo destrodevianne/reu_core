@@ -18,16 +18,16 @@
  */
 package l2r.gameserver.script;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.script.ScriptContext;
 
 import l2r.gameserver.scripting.L2ScriptEngineManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Expression
 {
-	protected static final Logger _log = Logger.getLogger(Expression.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(Expression.class);
 	private final ScriptContext _context;
 	@SuppressWarnings("unused")
 	private final String _lang;
@@ -42,7 +42,7 @@ public class Expression
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 	}
@@ -55,7 +55,7 @@ public class Expression
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 	}
@@ -68,7 +68,7 @@ public class Expression
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 	}
@@ -88,7 +88,7 @@ public class Expression
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class Expression
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	

@@ -23,7 +23,6 @@ import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_FOLLOW;
 import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_IDLE;
 
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ThreadPoolManager;
@@ -45,6 +44,9 @@ import l2r.gameserver.network.serverpackets.StopMove;
 import l2r.gameserver.network.serverpackets.StopRotation;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Mother class of all objects AI in the world.<br>
  * AbastractAI :<br>
@@ -52,7 +54,7 @@ import l2r.gameserver.taskmanager.AttackStanceTaskManager;
  */
 public abstract class AbstractAI implements Ctrl
 {
-	protected final Logger _log = Logger.getLogger(getClass().getName());
+	protected final Logger _log = LoggerFactory.getLogger(getClass().getName());
 	
 	private NextAction _nextAction;
 	
@@ -125,7 +127,7 @@ public abstract class AbstractAI implements Ctrl
 			}
 			catch (Exception e)
 			{
-				_log.warning(getClass().getSimpleName() + ": Error: " + e.getMessage());
+				_log.warn(getClass().getSimpleName() + ": Error: " + e.getMessage());
 			}
 		}
 	}

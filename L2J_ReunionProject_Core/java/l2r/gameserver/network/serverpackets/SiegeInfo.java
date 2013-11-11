@@ -70,7 +70,7 @@ public class SiegeInfo extends L2GameServerPacket
 		writeC(0xc9);
 		if (_castle != null)
 		{
-			writeD(_castle.getCastleId());
+			writeD(_castle.getResidenceId());
 			
 			final int ownerId = _castle.getOwnerId();
 			
@@ -88,7 +88,7 @@ public class SiegeInfo extends L2GameServerPacket
 				}
 				else
 				{
-					_log.warning("Null owner for castle: " + _castle.getName());
+					_log.warn("Null owner for castle: " + _castle.getName());
 				}
 			}
 			else
@@ -123,7 +123,7 @@ public class SiegeInfo extends L2GameServerPacket
 				}
 				else
 				{
-					_log.warning("Null owner for siegable hall: " + _hall.getName());
+					_log.warn("Null owner for siegable hall: " + _hall.getName());
 				}
 			}
 			else

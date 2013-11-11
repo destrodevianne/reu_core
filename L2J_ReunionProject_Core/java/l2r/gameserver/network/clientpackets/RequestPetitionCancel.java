@@ -20,7 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
-import l2r.gameserver.instancemanager.PetitionManager;
+import l2r.gameserver.instancemanager.petition.PetitionManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.CreatureSay;

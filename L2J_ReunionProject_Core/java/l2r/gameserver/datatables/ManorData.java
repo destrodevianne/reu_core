@@ -22,14 +22,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.L2Seed;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.items.L2Item;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
  */
 public class ManorData extends DocumentParser
 {
-	private static Logger _log = Logger.getLogger(ManorData.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(ManorData.class);
 	
 	private static Map<Integer, L2Seed> _seeds = new HashMap<>();
 	
@@ -53,7 +53,7 @@ public class ManorData extends DocumentParser
 	{
 		_seeds.clear();
 		parseDatapackFile("data/seeds.xml");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _seeds.size() + " Seeds");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _seeds.size() + " Seeds");
 	}
 	
 	@Override

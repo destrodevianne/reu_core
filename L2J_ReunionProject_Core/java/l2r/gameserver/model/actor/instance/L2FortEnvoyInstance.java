@@ -42,7 +42,7 @@ public class L2FortEnvoyInstance extends L2Npc
 		
 		String filename;
 		
-		if (!player.isClanLeader() || (getFort().getFortId() != player.getClan().getFortId()))
+		if (!player.isClanLeader() || (getFort().getResidenceId() != player.getClan().getFortId()))
 		{
 			filename = "data/html/fortress/envoy-noclan.htm";
 		}

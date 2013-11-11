@@ -20,8 +20,6 @@ package l2r.gameserver.model.actor.status;
 
 import java.util.Set;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastSet;
 import l2r.Config;
@@ -31,11 +29,15 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.stat.CharStat;
 import l2r.gameserver.model.stats.Formulas;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.interf.ReunionEvents;
 
 public class CharStatus
 {
-	protected static final Logger _log = Logger.getLogger(CharStatus.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(CharStatus.class);
 	
 	private final L2Character _activeChar;
 	
@@ -185,7 +187,7 @@ public class CharStatus
 			
 			if (Config.DEBUG)
 			{
-				_log.fine("char is dead.");
+				_log.info("char is dead.");
 			}
 			
 			boolean allowDie = true;
@@ -223,7 +225,7 @@ public class CharStatus
 		{
 			if (Config.DEBUG)
 			{
-				_log.fine("HP/MP regen started");
+				_log.info("HP/MP regen started");
 			}
 			
 			// Get the Regeneration period
@@ -248,7 +250,7 @@ public class CharStatus
 		{
 			if (Config.DEBUG)
 			{
-				_log.fine("HP/MP regen stop");
+				_log.info("HP/MP regen stop");
 			}
 			
 			// Stop the HP/MP/CP Regeneration task
@@ -424,7 +426,7 @@ public class CharStatus
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}

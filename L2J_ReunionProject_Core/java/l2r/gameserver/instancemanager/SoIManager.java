@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.instancemanager;
 
-import java.util.logging.Logger;
-
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.DoorTable;
@@ -29,9 +27,12 @@ import l2r.gameserver.scripts.ai.group_template.EnergySeeds;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SoIManager
 {
-	protected static final Logger _log = Logger.getLogger(SoIManager.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(SoIManager.class);
 	
 	private static SoIManager _instance = null;
 	private static final long SOI_OPEN_TIME = 24 * 60 * 60 * 1000L;

@@ -54,7 +54,7 @@ public final class RequestAcquireSkillInfo extends L2GameClientPacket
 	{
 		if ((_id <= 0) || (_level <= 0))
 		{
-			_log.warning(RequestAcquireSkillInfo.class.getSimpleName() + ": Invalid Id: " + _id + " or level: " + _level + "!");
+			_log.warn(RequestAcquireSkillInfo.class.getSimpleName() + ": Invalid Id: " + _id + " or level: " + _level + "!");
 			return;
 		}
 		
@@ -78,7 +78,7 @@ public final class RequestAcquireSkillInfo extends L2GameClientPacket
 		final L2Skill skill = SkillTable.getInstance().getInfo(_id, _level);
 		if (skill == null)
 		{
-			_log.warning(RequestAcquireSkillInfo.class.getSimpleName() + ": Skill Id: " + _id + " level: " + _level + " is undefined. " + RequestAcquireSkillInfo.class.getName() + " failed.");
+			_log.warn(RequestAcquireSkillInfo.class.getSimpleName() + ": Skill Id: " + _id + " level: " + _level + " is undefined. " + RequestAcquireSkillInfo.class.getName() + " failed.");
 			return;
 		}
 		
@@ -88,11 +88,11 @@ public final class RequestAcquireSkillInfo extends L2GameClientPacket
 		{
 			if (prevSkillLevel == _level)
 			{
-				_log.warning(RequestAcquireSkillInfo.class.getSimpleName() + ": Player " + activeChar.getName() + " is trequesting info for a skill that already knows, Id: " + _id + " level: " + _level + "!");
+				_log.warn(RequestAcquireSkillInfo.class.getSimpleName() + ": Player " + activeChar.getName() + " is trequesting info for a skill that already knows, Id: " + _id + " level: " + _level + "!");
 			}
 			else if (prevSkillLevel != (_level - 1))
 			{
-				_log.warning(RequestAcquireSkillInfo.class.getSimpleName() + ": Player " + activeChar.getName() + " is requesting info for skill Id: " + _id + " level " + _level + " without knowing it's previous level!");
+				_log.warn(RequestAcquireSkillInfo.class.getSimpleName() + ": Player " + activeChar.getName() + " is requesting info for skill Id: " + _id + " level " + _level + " without knowing it's previous level!");
 			}
 		}
 		

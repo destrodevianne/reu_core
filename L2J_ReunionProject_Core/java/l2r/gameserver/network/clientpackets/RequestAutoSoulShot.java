@@ -57,7 +57,7 @@ public final class RequestAutoSoulShot extends L2GameClientPacket
 		{
 			if (Config.DEBUG)
 			{
-				_log.fine("AutoSoulShot:" + _itemId);
+				_log.info("AutoSoulShot:" + _itemId);
 			}
 			
 			final L2ItemInstance item = activeChar.getInventory().getItemByItemId(_itemId);

@@ -110,7 +110,7 @@ public class PetStat extends SummonStat
 		{
 			if (getActiveChar() != null)
 			{
-				_log.warning("Pet objectId:" + getActiveChar().getObjectId() + ", NpcId:" + getActiveChar().getNpcId() + ", level:" + level + " is missing data from pets_stats table!");
+				_log.warn("Pet objectId:" + getActiveChar().getObjectId() + ", NpcId:" + getActiveChar().getNpcId() + ", level:" + level + " is missing data from pets_stats table!");
 			}
 			throw e;
 		}

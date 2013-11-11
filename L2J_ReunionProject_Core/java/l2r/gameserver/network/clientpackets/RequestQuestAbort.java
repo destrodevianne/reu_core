@@ -71,7 +71,7 @@ public final class RequestQuestAbort extends L2GameClientPacket
 		{
 			if (Config.DEBUG)
 			{
-				_log.warning("Quest (id='" + _questId + "') not found.");
+				_log.warn("Quest (id='" + _questId + "') not found.");
 			}
 		}
 	}

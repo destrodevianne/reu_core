@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -401,7 +400,7 @@ public class L2Attackable extends L2Npc
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "", e);
+			_log.error(String.valueOf(e));
 		}
 		return true;
 	}
@@ -670,7 +669,7 @@ public class L2Attackable extends L2Npc
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "", e);
+			_log.error(String.valueOf(e));
 		}
 	}
 	
@@ -723,16 +722,16 @@ public class L2Attackable extends L2Npc
 							{
 								if (skill == null)
 								{
-									_log.warning("Logger: Skill is NULL (L2Attackable) Report this to team.");
+									_log.warn("Logger: Skill is NULL (L2Attackable) Report this to team.");
 								}
 								
 								if (damage == 0)
 								{
-									_log.warning("Logger: Damage is 0 (L2Attackable) Report this to team.");
+									_log.warn("Logger: Damage is 0 (L2Attackable) Report this to team.");
 								}
 								
-								_log.warning("Logger: Attacker is: " + String.valueOf(player.getName()) + " (L2Attackable) Report this to team.");
-								_log.warning("Logger: notifyAttack failed (L2Attackable) Report this to team.");
+								_log.warn("Logger: Attacker is: " + String.valueOf(player.getName()) + " (L2Attackable) Report this to team.");
+								_log.warn("Logger: notifyAttack failed (L2Attackable) Report this to team.");
 								e.printStackTrace();
 							}
 						}
@@ -747,7 +746,7 @@ public class L2Attackable extends L2Npc
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error(String.valueOf(e));
 			}
 		}
 	}
@@ -1778,7 +1777,7 @@ public class L2Attackable extends L2Npc
 			}
 			else
 			{
-				_log.log(Level.SEVERE, "Item doesn't exist so cannot be dropped. Item ID: " + item.getId());
+				_log.error("Item doesn't exist so cannot be dropped. Item ID: " + item.getId());
 			}
 		}
 		return ditem;

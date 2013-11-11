@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -38,6 +36,8 @@ import l2r.gameserver.model.options.Options;
 import l2r.gameserver.network.clientpackets.AbstractRefinePacket;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -48,7 +48,7 @@ import org.w3c.dom.Node;
  */
 public class AugmentationData
 {
-	private static final Logger _log = Logger.getLogger(AugmentationData.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(AugmentationData.class);
 	
 	// stats
 	private static final int STAT_BLOCKSIZE = 3640;
@@ -112,8 +112,8 @@ public class AugmentationData
 		}
 		else
 		{
-			_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _augmentationChances.size() + " augmentations.");
-			_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _augmentationChancesAcc.size() + " accessory augmentations.");
+			_log.info(getClass().getSimpleName() + ": Loaded: " + _augmentationChances.size() + " augmentations.");
+			_log.info(getClass().getSimpleName() + ": Loaded: " + _augmentationChancesAcc.size() + " accessory augmentations.");
 		}
 	}
 	
@@ -240,7 +240,7 @@ public class AugmentationData
 				File file = new File(Config.DATAPACK_ROOT + "/data/stats/augmentation/augmentation_skillmap.xml");
 				if (!file.exists())
 				{
-					_log.log(Level.WARNING, getClass().getSimpleName() + ": ERROR The augmentation skillmap file is missing.");
+					_log.warn(getClass().getSimpleName() + ": ERROR The augmentation skillmap file is missing.");
 					return;
 				}
 				
@@ -314,7 +314,7 @@ public class AugmentationData
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": ERROR parsing augmentation_skillmap.xml.", e);
+				_log.warn(getClass().getSimpleName() + ": ERROR parsing augmentation_skillmap.xml.", e);
 				return;
 			}
 		}
@@ -411,7 +411,7 @@ public class AugmentationData
 			}
 			else
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": ERROR The retailchances.xml data file is missing.");
+				_log.warn(getClass().getSimpleName() + ": ERROR The retailchances.xml data file is missing.");
 				return;
 			}
 		}
@@ -504,7 +504,7 @@ public class AugmentationData
 			}
 			else
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": ERROR The retailchances_accessory.xml data file is missing.");
+				_log.warn(getClass().getSimpleName() + ": ERROR The retailchances_accessory.xml data file is missing.");
 				return;
 			}
 		}

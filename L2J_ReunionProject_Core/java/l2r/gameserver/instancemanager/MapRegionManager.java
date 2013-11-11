@@ -291,13 +291,13 @@ public class MapRegionManager extends DocumentParser
 						}
 					}
 					
-					if ((castle != null) && (castle.getCastleId() > 0))
+					if ((castle != null) && (castle.getResidenceId() > 0))
 					{
 						if (player.getKarma() > 0)
 						{
-							return castle.getCastleZone().getChaoticSpawnLoc();
+							return castle.getResidenceZone().getChaoticSpawnLoc();
 						}
-						return castle.getCastleZone().getSpawnLoc();
+						return castle.getResidenceZone().getSpawnLoc();
 					}
 				}
 				
@@ -316,13 +316,13 @@ public class MapRegionManager extends DocumentParser
 						}
 					}
 					
-					if ((fort != null) && (fort.getFortId() > 0))
+					if ((fort != null) && (fort.getResidenceId() > 0))
 					{
 						if (player.getKarma() > 0)
 						{
-							return fort.getFortZone().getChaoticSpawnLoc();
+							return fort.getResidenceZone().getChaoticSpawnLoc();
 						}
-						return fort.getFortZone().getSpawnLoc();
+						return fort.getResidenceZone().getSpawnLoc();
 					}
 				}
 				
@@ -384,7 +384,7 @@ public class MapRegionManager extends DocumentParser
 				castle = CastleManager.getInstance().getCastle(player);
 				if (castle != null)
 				{
-					return castle.getCastleZone().getBanishSpawnLoc();
+					return castle.getResidenceZone().getBanishSpawnLoc();
 				}
 			}
 			else if (teleportWhere == TeleportWhereType.Fortress_banish)
@@ -392,7 +392,7 @@ public class MapRegionManager extends DocumentParser
 				fort = FortManager.getInstance().getFort(activeChar);
 				if (fort != null)
 				{
-					return fort.getFortZone().getBanishSpawnLoc();
+					return fort.getResidenceZone().getBanishSpawnLoc();
 				}
 			}
 			else if (teleportWhere == TeleportWhereType.ClanHall_banish)
@@ -435,7 +435,7 @@ public class MapRegionManager extends DocumentParser
 					// Check if player's clan is participating
 					if ((castle.getSiege().checkIsDefender(player.getClan()) || castle.getSiege().checkIsAttacker(player.getClan())) && (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) == SevenSigns.CABAL_DAWN))
 					{
-						return castle.getCastleZone().getOtherSpawnLoc();
+						return castle.getResidenceZone().getOtherSpawnLoc();
 					}
 				}
 			}

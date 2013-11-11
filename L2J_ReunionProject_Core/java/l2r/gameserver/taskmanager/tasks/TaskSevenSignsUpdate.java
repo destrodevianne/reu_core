@@ -53,7 +53,7 @@ public class TaskSevenSignsUpdate extends Task
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": SevenSigns: Failed to save Seven Signs configuration: " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": SevenSigns: Failed to save Seven Signs configuration: " + e.getMessage());
 		}
 	}
 	

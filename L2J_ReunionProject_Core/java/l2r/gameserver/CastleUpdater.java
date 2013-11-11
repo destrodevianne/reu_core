@@ -18,14 +18,14 @@
  */
 package l2r.gameserver;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import l2r.Config;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.itemcontainer.ItemContainer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class managing periodical events with castle
@@ -33,7 +33,7 @@ import l2r.gameserver.model.itemcontainer.ItemContainer;
  */
 public class CastleUpdater implements Runnable
 {
-	protected static final Logger _log = Logger.getLogger(CastleUpdater.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(CastleUpdater.class);
 	private final L2Clan _clan;
 	private int _runCount = 0;
 	
@@ -71,7 +71,7 @@ public class CastleUpdater implements Runnable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 }

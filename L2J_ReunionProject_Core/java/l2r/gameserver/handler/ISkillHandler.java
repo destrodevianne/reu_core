@@ -18,16 +18,17 @@
  */
 package l2r.gameserver.handler;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public interface ISkillHandler
 {
-	public static Logger _log = Logger.getLogger(ISkillHandler.class.getName());
+	public static Logger _log = LoggerFactory.getLogger(ISkillHandler.class);
 	
 	/**
 	 * this is the worker method that is called when using an item.

@@ -24,7 +24,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -118,7 +117,7 @@ public class TaskBirthday extends Task
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "Error checking birthdays. ", e);
+			_log.warn("Error checking birthdays. ", e);
 		}
 		
 		// If character birthday is 29-Feb and year isn't leap, send gift on 28-feb

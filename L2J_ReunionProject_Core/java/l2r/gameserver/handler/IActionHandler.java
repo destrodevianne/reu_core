@@ -18,15 +18,16 @@
  */
 package l2r.gameserver.handler;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public interface IActionHandler
 {
-	public static Logger _log = Logger.getLogger(IActionHandler.class.getName());
+	public static Logger _log = LoggerFactory.getLogger(IActionHandler.class);
 	
 	public boolean action(L2PcInstance activeChar, L2Object target, boolean interact);
 	

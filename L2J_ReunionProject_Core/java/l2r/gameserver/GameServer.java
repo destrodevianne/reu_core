@@ -24,11 +24,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.Calendar;
-import java.util.logging.Level;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -37,6 +36,7 @@ import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.ArmorSetsData;
 import l2r.gameserver.datatables.AugmentationData;
+import l2r.gameserver.datatables.BuyListData;
 import l2r.gameserver.datatables.CategoryData;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.CharSummonTable;
@@ -76,10 +76,10 @@ import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.datatables.StaticObjects;
 import l2r.gameserver.datatables.SummonSkillsTable;
 import l2r.gameserver.datatables.TeleportLocationTable;
+import l2r.gameserver.datatables.TransformData;
 import l2r.gameserver.datatables.UIData;
 import l2r.gameserver.geoeditorcon.GeoEditorListener;
 import l2r.gameserver.handler.EffectHandler;
-import l2r.gameserver.handler.TransformHandler;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.AirShipManager;
 import l2r.gameserver.instancemanager.AntiFeedManager;
@@ -107,16 +107,15 @@ import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.instancemanager.MercTicketManager;
 import l2r.gameserver.instancemanager.PcCafePointsManager;
-import l2r.gameserver.instancemanager.PetitionManager;
 import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.RaidBossPointsManager;
 import l2r.gameserver.instancemanager.RaidBossSpawnManager;
 import l2r.gameserver.instancemanager.SiegeManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
-import l2r.gameserver.instancemanager.TransformationManager;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.instancemanager.ZoneManager;
+import l2r.gameserver.instancemanager.petition.PetitionManager;
 import l2r.gameserver.model.AutoSpawnHandler;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.PartyMatchRoomList;
@@ -137,6 +136,8 @@ import l2r.util.IPv4Filter;
 
 import org.mmocore.network.SelectorConfig;
 import org.mmocore.network.SelectorThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gr.reunion.configsEngine.CustomConfigController;
 import gr.reunion.interf.ReunionEvents;
@@ -146,7 +147,7 @@ import gr.reunion.main.ReunionInfo;
 
 public class GameServer
 {
-	private static final Logger _log = Logger.getLogger(GameServer.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(GameServer.class);
 	
 	private final SelectorThread<L2GameClient> _selectorThread;
 	private final L2GamePacketHandler _gamePacketHandler;
@@ -182,22 +183,12 @@ public class GameServer
 		long serverLoadStart = System.currentTimeMillis();
 		
 		gameServer = this;
-		_log.finest(getClass().getSimpleName() + ": used mem:" + getUsedMemoryMB() + "MB");
-		
-		if (Config.SERVER_VERSION != null)
-		{
-			_log.info(getClass().getSimpleName() + ": L2J Server Version:    " + Config.SERVER_VERSION);
-		}
-		if (Config.DATAPACK_VERSION != null)
-		{
-			_log.info(getClass().getSimpleName() + ": L2J Datapack Version:  " + Config.DATAPACK_VERSION);
-		}
 		
 		_idFactory = IdFactory.getInstance();
 		
 		if (!_idFactory.isInitialized())
 		{
-			_log.severe(getClass().getSimpleName() + ": Could not read object IDs from DB. Please Check Your Data.");
+			_log.error(getClass().getSimpleName() + ": Could not read object IDs from DB. Please Check Your Data.");
 			throw new Exception("Could not initialize the ID factory");
 		}
 		
@@ -242,7 +233,7 @@ public class GameServer
 		OptionsData.getInstance();
 		EnchantHPBonusData.getInstance();
 		MerchantPriceConfigTable.getInstance().loadInstances();
-		TradeController.getInstance();
+		BuyListData.getInstance();
 		MultiSell.getInstance();
 		RecipeData.getInstance();
 		ArmorSetsData.getInstance();
@@ -323,6 +314,7 @@ public class GameServer
 		PetitionManager.getInstance();
 		AugmentationData.getInstance();
 		CursedWeaponsManager.getInstance();
+		TransformData.getInstance();
 		
 		// Custom settings section
 		printSection("Custom");
@@ -340,8 +332,6 @@ public class GameServer
 		
 		printSection("Scripts");
 		QuestManager.getInstance();
-		TransformHandler.getInstance();
-		TransformationManager.getInstance();
 		BoatManager.getInstance();
 		AirShipManager.getInstance();
 		GraciaSeedsManager.getInstance();
@@ -354,7 +344,6 @@ public class GameServer
 		L2ScriptEngineManager.getInstance().executeScriptList();
 		
 		QuestManager.getInstance().report();
-		TransformationManager.getInstance().report();
 		
 		if (Config.SAVE_DROPPED_ITEM)
 		{
@@ -386,6 +375,7 @@ public class GameServer
 		
 		AntiFeedManager.getInstance().registerEvent(AntiFeedManager.GAME_ID);
 		
+		printSection("Reunion Events");
 		ReunionEvents.start();
 		
 		if (Config.ALLOW_MAIL)
@@ -451,7 +441,7 @@ public class GameServer
 			}
 			catch (UnknownHostException e1)
 			{
-				_log.log(Level.SEVERE, getClass().getSimpleName() + ": WARNING: The GameServer bind address is invalid, using all avaliable IPs. Reason: " + e1.getMessage(), e1);
+				_log.error(getClass().getSimpleName() + ": WARNING: The GameServer bind address is invalid, using all avaliable IPs. Reason: " + e1.getMessage(), e1);
 			}
 		}
 		
@@ -461,7 +451,7 @@ public class GameServer
 		}
 		catch (IOException e)
 		{
-			_log.log(Level.SEVERE, getClass().getSimpleName() + ": FATAL: Failed to open server socket. Reason: " + e.getMessage(), e);
+			_log.error(getClass().getSimpleName() + ": FATAL: Failed to open server socket. Reason: " + e.getMessage(), e);
 			System.exit(1);
 		}
 		_selectorThread.start();
@@ -496,9 +486,12 @@ public class GameServer
 		Config.load();
 		// Custom configs load section
 		CustomConfigController.getInstance().reloadCustomConfigs();
+		// Check binding address
+		checkFreePorts();
 		_log.info("Custom Configs Loaded...");
-		printSection("Database");
-		L2DatabaseFactory.getInstance();
+		// Initialize database
+		Class.forName(Config.DATABASE_DRIVER).newInstance();
+		L2DatabaseFactory.getInstance().getConnection().close();
 		gameServer = new GameServer();
 		
 		if (Config.IS_TELNET_ENABLED)
@@ -515,10 +508,44 @@ public class GameServer
 	public static void printSection(String s)
 	{
 		s = "=[ " + s + " ]";
-		while (s.length() < 78)
+		while (s.length() < 62)
 		{
 			s = "-" + s;
 		}
 		_log.info(s);
+	}
+	
+	public static void checkFreePorts()
+	{
+		boolean binded = false;
+		while (!binded)
+		{
+			try
+			{
+				ServerSocket ss;
+				if (Config.GAMESERVER_HOSTNAME.equalsIgnoreCase("*"))
+				{
+					ss = new ServerSocket(Config.PORT_GAME);
+				}
+				else
+				{
+					ss = new ServerSocket(Config.PORT_GAME, 50, InetAddress.getByName(Config.GAMESERVER_HOSTNAME));
+				}
+				ss.close();
+				binded = true;
+			}
+			catch (Exception e)
+			{
+				_log.warn("Port " + Config.PORT_GAME + " is allready binded. Please free it and restart server.");
+				binded = false;
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e2)
+				{
+				}
+			}
+		}
 	}
 }

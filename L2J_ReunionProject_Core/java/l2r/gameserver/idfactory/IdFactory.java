@@ -23,11 +23,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.list.array.TIntArrayList;
 
 /**
@@ -36,7 +38,7 @@ import gnu.trove.list.array.TIntArrayList;
  */
 public abstract class IdFactory
 {
-	protected final Logger _log = Logger.getLogger(getClass().getName());
+	protected final Logger _log = LoggerFactory.getLogger(getClass().getName());
 	
 	@Deprecated
 	protected static final String[] ID_UPDATES =
@@ -180,7 +182,7 @@ public abstract class IdFactory
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "Could not update characters online status: " + e.getMessage(), e);
+			_log.warn("Could not update characters online status: " + e.getMessage(), e);
 		}
 	}
 	
@@ -297,7 +299,7 @@ public abstract class IdFactory
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "Could not clean up database: " + e.getMessage(), e);
+			_log.warn("Could not clean up database: " + e.getMessage(), e);
 		}
 	}
 	
@@ -312,7 +314,7 @@ public abstract class IdFactory
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "Could not clean up invalid Weddings: " + e.getMessage(), e);
+			_log.warn("Could not clean up invalid Weddings: " + e.getMessage(), e);
 		}
 	}
 	

@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import java.util.logging.Level;
-
 import l2r.Config;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -191,7 +189,7 @@ public final class NpcHtmlMessage extends L2GameServerPacket
 	{
 		if (text.length() > 17200)
 		{
-			_log.log(Level.WARNING, "Html is too long! this will crash the client!", new Throwable());
+			_log.warn("Html is too long! this will crash the client!", new Throwable());
 			_html = text.substring(0, 17200);
 		}
 		if (!text.contains("<html>"))
@@ -209,7 +207,7 @@ public final class NpcHtmlMessage extends L2GameServerPacket
 		if (content == null)
 		{
 			setHtml("<html><body>My Text is missing:<br>" + path + "</body></html>");
-			_log.warning("missing html page " + path);
+			_log.warn("missing html page " + path);
 			return false;
 		}
 		

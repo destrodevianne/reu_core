@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -38,6 +36,10 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
@@ -45,7 +47,7 @@ import gr.reunion.configsEngine.CustomServerConfigs;
  */
 public final class ItemAuction
 {
-	static final Logger _log = Logger.getLogger(ItemAuctionManager.class.getName());
+	static final Logger _log = LoggerFactory.getLogger(ItemAuctionManager.class);
 	private static final long ENDING_TIME_EXTEND_5 = TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES);
 	private static final long ENDING_TIME_EXTEND_3 = TimeUnit.MILLISECONDS.convert(3, TimeUnit.MINUTES);
 	
@@ -209,7 +211,7 @@ public final class ItemAuction
 		}
 		catch (final SQLException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	
@@ -243,7 +245,7 @@ public final class ItemAuction
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	

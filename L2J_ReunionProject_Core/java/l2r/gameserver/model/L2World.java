@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
@@ -33,8 +31,11 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2Players;
 import l2r.gameserver.util.L2TIntObjectHashMap;
-import l2r.gameserver.util.Point3D;
 import l2r.util.StringUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.procedure.TObjectProcedure;
 
 /**
@@ -43,7 +44,7 @@ import gnu.trove.procedure.TObjectProcedure;
  */
 public final class L2World
 {
-	private static Logger _log = Logger.getLogger(L2World.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2World.class);
 	
 	/**
 	 * Gracia border Flying objects not allowed to the east of it.
@@ -116,11 +117,11 @@ public final class L2World
 	{
 		if (_allObjects.containsKey(object.getObjectId()))
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Current object: " + object + " already exist in OID map!");
-			_log.log(Level.WARNING, StringUtil.getTraceString(Thread.currentThread().getStackTrace()));
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Previous object: " + _allObjects.get(object.getObjectId()) + " already exist in OID map!");
-			_log.log(Level.WARNING, _allObjectsDebug.get(object.getObjectId()));
-			_log.log(Level.WARNING, "---------------------- End ---------------------");
+			_log.warn(getClass().getSimpleName() + ": Current object: " + object + " already exist in OID map!");
+			_log.warn(StringUtil.getTraceString(Thread.currentThread().getStackTrace()));
+			_log.warn(getClass().getSimpleName() + ": Previous object: " + _allObjects.get(object.getObjectId()) + " already exist in OID map!");
+			_log.warn(_allObjectsDebug.get(object.getObjectId()));
+			_log.warn("---------------------- End ---------------------");
 			return;
 		}
 		
@@ -328,7 +329,7 @@ public final class L2World
 				L2PcInstance tmp = getPlayer(player.getObjectId());
 				if (tmp != null)
 				{
-					_log.warning("Duplicate character!? Closing both characters (" + player.getName() + ")");
+					_log.warn("Duplicate character!? Closing both characters (" + player.getName() + ")");
 					player.logout();
 					tmp.resetOfflineShop();
 					tmp.logout();
@@ -348,7 +349,7 @@ public final class L2World
 		List<L2Object> visibles = getVisibleObjects(object, 2000);
 		if (Config.DEBUG)
 		{
-			_log.finest("objects in range:" + visibles.size());
+			_log.info("objects in range:" + visibles.size());
 		}
 		
 		// tell the player about the surroundings
@@ -633,7 +634,7 @@ public final class L2World
 	 * @param point position of the object
 	 * @return
 	 */
-	public L2WorldRegion getRegion(Point3D point)
+	public L2WorldRegion getRegion(Location point)
 	{
 		return _worldRegions[(point.getX() >> SHIFT_BY) + OFFSET_X][(point.getY() >> SHIFT_BY) + OFFSET_Y];
 	}

@@ -20,15 +20,16 @@ package l2r.gameserver.communitybbs.BB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.communitybbs.Managers.TopicBBSManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Topic
 {
-	private static final Logger _log = Logger.getLogger(Topic.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Topic.class);
 	
 	public static final int MORMAL = 0;
 	public static final int MEMO = 1;
@@ -89,7 +90,7 @@ public class Topic
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error while saving new Topic to db " + e.getMessage(), e);
+			_log.warn("Error while saving new Topic to db " + e.getMessage(), e);
 		}
 	}
 	
@@ -141,7 +142,7 @@ public class Topic
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error while deleting topic: " + e.getMessage(), e);
+			_log.warn("Error while deleting topic: " + e.getMessage(), e);
 		}
 	}
 	

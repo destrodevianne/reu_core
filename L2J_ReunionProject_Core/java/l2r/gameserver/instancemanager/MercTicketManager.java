@@ -23,8 +23,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
@@ -38,6 +36,9 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is similar to the SiegeGuardManager, except it handles the loading of the mercenary tickets that are dropped on castle floors by the castle lords.<br>
  * These tickets (a.k.a. badges) need to be read after each server reboot except when the server crashed in the middle of an ongoing siege.<br>
@@ -47,7 +48,7 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
  */
 public class MercTicketManager
 {
-	private static final Logger _log = Logger.getLogger(MercTicketManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(MercTicketManager.class);
 	
 	private static final FastList<L2ItemInstance> _droppedTickets = new FastList<>();
 	
@@ -172,12 +173,12 @@ public class MercTicketManager
 				Castle castle = CastleManager.getInstance().getCastle(x, y, z);
 				if (castle != null)
 				{
-					if (mercPlaced[castle.getCastleId() - 1] >= MERCS_MAX_PER_CASTLE[castle.getCastleId() - 1])
+					if (mercPlaced[castle.getResidenceId() - 1] >= MERCS_MAX_PER_CASTLE[castle.getResidenceId() - 1])
 					{
 						continue;
 					}
-					startindex = GUARDIAN_TYPES_COUNT * (castle.getCastleId() - 1);
-					mercPlaced[castle.getCastleId() - 1] += 1;
+					startindex = GUARDIAN_TYPES_COUNT * (castle.getResidenceId() - 1);
+					mercPlaced[castle.getResidenceId() - 1] += 1;
 				}
 				
 				// find the FIRST ticket itemId with spawns the saved NPC in the saved location
@@ -208,7 +209,7 @@ public class MercTicketManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: loadMercenaryData(): " + e.getMessage(), e);
+			_log.warn("Exception: loadMercenaryData(): " + e.getMessage(), e);
 		}
 	}
 	

@@ -20,7 +20,6 @@ package l2r.gameserver.model.actor.instance;
 
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
@@ -40,12 +39,15 @@ import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class manages all Guards in the world. It inherits all methods from L2Attackable and adds some more such as tracking PK and aggressive L2MonsterInstance.
  */
 public class L2GuardInstance extends L2Attackable
 {
-	private static Logger _log = Logger.getLogger(L2GuardInstance.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2GuardInstance.class);
 	
 	private static final int RETURN_INTERVAL = 60000;
 	
@@ -199,7 +201,7 @@ public class L2GuardInstance extends L2Attackable
 		{
 			if (Config.DEBUG)
 			{
-				_log.fine(player.getObjectId() + ": Targetted guard " + getObjectId());
+				_log.info(player.getObjectId() + ": Targetted guard " + getObjectId());
 			}
 			
 			// Set the target of the L2PcInstance player
@@ -212,7 +214,7 @@ public class L2GuardInstance extends L2Attackable
 			{
 				if (Config.DEBUG)
 				{
-					_log.fine(player.getObjectId() + ": Attacked guard " + getObjectId());
+					_log.info(player.getObjectId() + ": Attacked guard " + getObjectId());
 				}
 				
 				// Set the L2PcInstance Intention to AI_INTENTION_ATTACK

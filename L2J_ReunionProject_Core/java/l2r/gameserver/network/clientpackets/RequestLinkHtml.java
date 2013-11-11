@@ -19,8 +19,6 @@
 
 package l2r.gameserver.network.clientpackets;
 
-import java.util.logging.Level;
-
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 
@@ -50,7 +48,7 @@ public final class RequestLinkHtml extends L2GameClientPacket
 		
 		if (_link.contains("..") || !_link.contains(".htm"))
 		{
-			_log.warning("[RequestLinkHtml] hack? link contains prohibited characters: '" + _link + "', skipped");
+			_log.warn("[RequestLinkHtml] hack? link contains prohibited characters: '" + _link + "', skipped");
 			return;
 		}
 		try
@@ -63,7 +61,7 @@ public final class RequestLinkHtml extends L2GameClientPacket
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Bad RequestLinkHtml: ", e);
+			_log.warn("Bad RequestLinkHtml: ", e);
 		}
 	}
 	

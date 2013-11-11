@@ -20,7 +20,6 @@ package l2r.gameserver.model.olympiad;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.gameserver.idfactory.IdFactory;
@@ -316,7 +315,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return false;
 		}
 		return result;
@@ -623,7 +622,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "Exception on validateWinner(): " + e.getMessage(), e);
+				_log.warn("Exception on validateWinner(): " + e.getMessage(), e);
 			}
 			return;
 		}
@@ -823,7 +822,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "Exception on validateWinner(): " + e.getMessage(), e);
+				_log.warn("Exception on validateWinner(): " + e.getMessage(), e);
 			}
 			
 			if (winside == 1)
@@ -985,7 +984,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on validateWinner(): " + e.getMessage(), e);
+			_log.warn("Exception on validateWinner(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -1089,7 +1088,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on checkDefaulted(): " + e.getMessage(), e);
+			_log.warn("Exception on checkDefaulted(): " + e.getMessage(), e);
 			return true;
 		}
 	}

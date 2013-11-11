@@ -23,10 +23,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @version 0.1, 2005-06-06
@@ -34,7 +35,7 @@ import l2r.Config;
  */
 public class Log
 {
-	private static final Logger _log = Logger.getLogger(Log.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Log.class);
 	
 	public static final void add(String text, String cat)
 	{
@@ -49,7 +50,7 @@ public class Log
 		}
 		catch (IOException e)
 		{
-			_log.log(Level.WARNING, "Error saving logfile: ", e);
+			_log.warn("Error saving logfile: ", e);
 		}
 	}
 }

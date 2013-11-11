@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -62,6 +60,8 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.L2FastList;
 import l2r.util.L2FastMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -72,7 +72,7 @@ import org.w3c.dom.Node;
  */
 public final class Instance
 {
-	private static final Logger _log = Logger.getLogger(Instance.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Instance.class);
 	
 	private final int _id;
 	private String _name;
@@ -264,7 +264,7 @@ public final class Instance
 	{
 		if (_doors.containsKey(doorId))
 		{
-			_log.warning("Door ID " + doorId + " already exists in instance " + getId());
+			_log.warn("Door ID " + doorId + " already exists in instance " + getId());
 			return;
 		}
 		
@@ -418,7 +418,7 @@ public final class Instance
 		}
 		else
 		{
-			_log.warning(getName() + " instance: cannot spawn NPC's, wrong group name: " + groupName);
+			_log.warn(getName() + " instance: cannot spawn NPC's, wrong group name: " + groupName);
 		}
 		
 		return ret;
@@ -446,11 +446,11 @@ public final class Instance
 		}
 		catch (IOException e)
 		{
-			_log.log(Level.WARNING, "Instance: can not find " + xml.getAbsolutePath() + " ! " + e.getMessage(), e);
+			_log.warn("Instance: can not find " + xml.getAbsolutePath() + " ! " + e.getMessage(), e);
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Instance: error while loading " + xml.getAbsolutePath() + " ! " + e.getMessage(), e);
+			_log.warn("Instance: error while loading " + xml.getAbsolutePath() + " ! " + e.getMessage(), e);
 		}
 	}
 	
@@ -634,7 +634,7 @@ public final class Instance
 								}
 								else
 								{
-									_log.warning("Instance: Data missing in NPC table for ID: " + npcId + " in Instance " + getId());
+									_log.warn("Instance: Data missing in NPC table for ID: " + npcId + " in Instance " + getId());
 								}
 							}
 						}
@@ -656,7 +656,7 @@ public final class Instance
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, "Error parsing instance xml: " + e.getMessage(), e);
+					_log.warn("Error parsing instance xml: " + e.getMessage(), e);
 					_spawnLoc = null;
 				}
 			}

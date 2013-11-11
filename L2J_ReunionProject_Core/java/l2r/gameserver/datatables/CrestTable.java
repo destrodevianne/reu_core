@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -40,12 +38,15 @@ import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Crest;
 import l2r.util.file.filter.BMPFilter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Nos
  */
 public final class CrestTable
 {
-	private final static Logger _log = Logger.getLogger(CrestTable.class.getName());
+	private final static Logger _log = LoggerFactory.getLogger(CrestTable.class);
 	
 	private final Map<Integer, L2Crest> _crests = new ConcurrentHashMap<>();
 	private final AtomicInteger _nextId = new AtomicInteger(1);
@@ -106,14 +107,14 @@ public final class CrestTable
 				}
 				else
 				{
-					_log.warning("Unknown crest type found in database. Type:" + rs.getInt("type"));
+					_log.warn("Unknown crest type found in database. Type:" + rs.getInt("type"));
 				}
 			}
 			
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "There was an error while loading crests from database:", e);
+			_log.warn("There was an error while loading crests from database:", e);
 		}
 		
 		moveOldCrestsToDb(crestsInUse);
@@ -230,7 +231,7 @@ public final class CrestTable
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, "There was an error while moving crest file " + file.getName() + " to database:", e);
+					_log.warn("There was an error while moving crest file " + file.getName() + " to database:", e);
 				}
 			}
 			crestDir.delete();
@@ -269,7 +270,7 @@ public final class CrestTable
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "There was an error while saving crest in database:", e);
+			_log.warn("There was an error while saving crest in database:", e);
 		}
 		return null;
 	}
@@ -297,7 +298,7 @@ public final class CrestTable
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "There was an error while deleting crest from database:", e);
+			_log.warn("There was an error while deleting crest from database:", e);
 		}
 	}
 	

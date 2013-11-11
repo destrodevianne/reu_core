@@ -20,13 +20,15 @@ package l2r.gameserver.datatables;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.engines.DocumentEngine;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.skills.L2Skill;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntIntHashMap;
 
@@ -35,7 +37,7 @@ import gnu.trove.map.hash.TIntIntHashMap;
  */
 public class SkillTable
 {
-	private static Logger _log = Logger.getLogger(SkillTable.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(SkillTable.class);
 	
 	private final Map<Integer, L2Skill> _skills = new HashMap<>();
 	private final TIntIntHashMap _skillMaxLevel = new TIntIntHashMap();
@@ -120,12 +122,12 @@ public class SkillTable
 		{
 			if (Config.DEBUG)
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": call to unexisting skill level id: " + skillId + " requested level: " + level + " max level: " + maxLvl, new Throwable());
+				_log.warn(getClass().getSimpleName() + ": call to unexisting skill level id: " + skillId + " requested level: " + level + " max level: " + maxLvl, new Throwable());
 			}
 			return _skills.get(getSkillHashCode(skillId, maxLvl));
 		}
 		
-		_log.warning(getClass().getSimpleName() + ": No skill info found for skill id " + skillId + " and skill level " + level + ".");
+		_log.warn(getClass().getSimpleName() + ": No skill info found for skill id " + skillId + " and skill level " + level + ".");
 		return null;
 	}
 	

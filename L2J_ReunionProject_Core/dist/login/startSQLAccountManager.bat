@@ -1,7 +1,7 @@
 @echo off
 title L2J - SQL Account Manager
 color 17
-java -Djava.util.logging.config.file=console.cfg -cp ./../libs/*;l2jlogin.jar l2r.tools.accountmanager.SQLAccountManager
+java -Djava.util.logging.config.file=console.cfg -Xbootclasspath/p:./../libs/l2ft.jar -cp config/xml;./../libs/*;l2jlogin.jar l2r.tools.accountmanager.SQLAccountManager
 if %errorlevel% == 0 (
 echo.
 echo Execution successful

@@ -21,8 +21,6 @@ package l2r.gameserver.instancemanager;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
@@ -30,12 +28,15 @@ import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Couple;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author evill33t
  */
 public class CoupleManager
 {
-	private static final Logger _log = Logger.getLogger(CoupleManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(CoupleManager.class);
 	
 	private FastList<Couple> _couples;
 	
@@ -64,7 +65,7 @@ public class CoupleManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: CoupleManager.load(): " + e.getMessage(), e);
+			_log.error("Exception: CoupleManager.load(): " + e.getMessage(), e);
 		}
 	}
 	

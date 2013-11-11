@@ -294,7 +294,7 @@ public final class SkillTreesData extends DocumentParser
 									}
 									default:
 									{
-										_log.warning(getClass().getSimpleName() + ": Unknown Skill Tree type: " + type + "!");
+										_log.warn(getClass().getSimpleName() + ": Unknown Skill Tree type: " + type + "!");
 									}
 								}
 							}
@@ -508,7 +508,7 @@ public final class SkillTreesData extends DocumentParser
 		if (skills.isEmpty())
 		{
 			// The Skill Tree for this class is undefined.
-			_log.warning(getClass().getSimpleName() + ": Skilltree for class " + classId + " is not defined!");
+			_log.warn(getClass().getSimpleName() + ": Skilltree for class " + classId + " is not defined!");
 			return result;
 		}
 		
@@ -571,7 +571,7 @@ public final class SkillTreesData extends DocumentParser
 		if (skills.isEmpty())
 		{
 			// The Skill Tree for this class is undefined, so we return an empty list.
-			_log.warning(getClass().getSimpleName() + ": Skill Tree for this class Id(" + player.getClassId() + ") is not defined!");
+			_log.warn(getClass().getSimpleName() + ": Skill Tree for this class Id(" + player.getClassId() + ") is not defined!");
 			return result;
 		}
 		
@@ -988,7 +988,7 @@ public final class SkillTreesData extends DocumentParser
 		int minLevel = 0;
 		if (skillTree.isEmpty())
 		{
-			_log.warning(getClass().getSimpleName() + ": SkillTree is not defined for getMinLevelForNewSkill!");
+			_log.warn(getClass().getSimpleName() + ": SkillTree is not defined for getMinLevelForNewSkill!");
 		}
 		else
 		{
@@ -1233,6 +1233,7 @@ public final class SkillTreesData extends DocumentParser
 	/**
 	 * Logs current Skill Trees skills count.
 	 */
+	@SuppressWarnings("unused")
 	private void report()
 	{
 		int classSkillTreeCount = 0;
@@ -1266,12 +1267,16 @@ public final class SkillTreesData extends DocumentParser
 		}
 		
 		final String className = getClass().getSimpleName();
-		_log.info(className + ": Loaded " + classSkillTreeCount + " Class Skills for " + _classSkillTrees.size() + " Class Skill Trees.");
+		_log.info(className + ": Loaded " + classSkillTreeCount + " Class Skills.");
+		// _log.info(className + ": Loaded " + classSkillTreeCount + " Class Skills for " + _classSkillTrees.size() + " Class Skill Trees.");
 		_log.info(className + ": Loaded " + _subClassSkillTree.size() + " Sub-Class Skills.");
-		_log.info(className + ": Loaded " + trasferSkillTreeCount + " Transfer Skills for " + _transferSkillTrees.size() + " Transfer Skill Trees.");
-		_log.info(className + ": Loaded " + _fishingSkillTree.size() + " Fishing Skills, " + dwarvenOnlyFishingSkillCount + " Dwarven only Fishing Skills.");
+		_log.info(className + ": Loaded " + trasferSkillTreeCount + " Transfer Skills.");
+		// _log.info(className + ": Loaded " + trasferSkillTreeCount + " Transfer Skills for " + _transferSkillTrees.size() + " Transfer Skill Trees.");
+		_log.info(className + ": Loaded " + _fishingSkillTree.size() + " Fishing Skills.");
+		// _log.info(className + ": Loaded " + _fishingSkillTree.size() + " Fishing Skills, " + dwarvenOnlyFishingSkillCount + " Dwarven only Fishing Skills.");
 		_log.info(className + ": Loaded " + _collectSkillTree.size() + " Collect Skills.");
-		_log.info(className + ": Loaded " + _pledgeSkillTree.size() + " Pledge Skills, " + (_pledgeSkillTree.size() - resSkillCount) + " for Pledge and " + resSkillCount + " Residential.");
+		_log.info(className + ": Loaded " + _pledgeSkillTree.size() + " Pledge Skills.");
+		// _log.info(className + ": Loaded " + _pledgeSkillTree.size() + " Pledge Skills, " + (_pledgeSkillTree.size() - resSkillCount) + " for Pledge and " + resSkillCount + " Residential.");
 		_log.info(className + ": Loaded " + _subPledgeSkillTree.size() + " Sub-Pledge Skills.");
 		_log.info(className + ": Loaded " + _transformSkillTree.size() + " Transform Skills.");
 		_log.info(className + ": Loaded " + _nobleSkillTree.size() + " Noble Skills.");

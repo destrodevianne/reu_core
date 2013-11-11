@@ -58,7 +58,7 @@ public final class L2TerritoryWardInstance extends L2Attackable
 		{
 			return false;
 		}
-		if (TerritoryWarManager.getInstance().isAllyField(actingPlayer, getCastle().getCastleId()))
+		if (TerritoryWarManager.getInstance().isAllyField(actingPlayer, getCastle().getResidenceId()))
 		{
 			return false;
 		}
@@ -79,7 +79,7 @@ public final class L2TerritoryWardInstance extends L2Attackable
 		
 		if (getCastle() == null)
 		{
-			_log.warning("L2TerritoryWardInstance(" + getName() + ") spawned outside Castle Zone!");
+			_log.warn("L2TerritoryWardInstance(" + getName() + ") spawned outside Castle Zone!");
 		}
 	}
 	
@@ -108,7 +108,7 @@ public final class L2TerritoryWardInstance extends L2Attackable
 		{
 			return;
 		}
-		if (TerritoryWarManager.getInstance().isAllyField(actingPlayer, getCastle().getCastleId()))
+		if (TerritoryWarManager.getInstance().isAllyField(actingPlayer, getCastle().getResidenceId()))
 		{
 			return;
 		}

@@ -85,7 +85,7 @@ public class RecipeData extends DocumentParser
 						att = attrs.getNamedItem("id");
 						if (att == null)
 						{
-							_log.severe(getClass().getSimpleName() + ": Missing id for recipe item, skipping");
+							_log.error(getClass().getSimpleName() + ": Missing id for recipe item, skipping");
 							continue;
 						}
 						id = Integer.parseInt(att.getNodeValue());
@@ -94,7 +94,7 @@ public class RecipeData extends DocumentParser
 						att = attrs.getNamedItem("recipeId");
 						if (att == null)
 						{
-							_log.severe(getClass().getSimpleName() + ": Missing recipeId for recipe item id: " + id + ", skipping");
+							_log.error(getClass().getSimpleName() + ": Missing recipeId for recipe item id: " + id + ", skipping");
 							continue;
 						}
 						set.set("recipeId", Integer.parseInt(att.getNodeValue()));
@@ -102,7 +102,7 @@ public class RecipeData extends DocumentParser
 						att = attrs.getNamedItem("name");
 						if (att == null)
 						{
-							_log.severe(getClass().getSimpleName() + ": Missing name for recipe item id: " + id + ", skipping");
+							_log.error(getClass().getSimpleName() + ": Missing name for recipe item id: " + id + ", skipping");
 							continue;
 						}
 						set.set("recipeName", att.getNodeValue());
@@ -110,7 +110,7 @@ public class RecipeData extends DocumentParser
 						att = attrs.getNamedItem("craftLevel");
 						if (att == null)
 						{
-							_log.severe(getClass().getSimpleName() + ": Missing level for recipe item id: " + id + ", skipping");
+							_log.error(getClass().getSimpleName() + ": Missing level for recipe item id: " + id + ", skipping");
 							continue;
 						}
 						set.set("craftLevel", Integer.parseInt(att.getNodeValue()));
@@ -118,7 +118,7 @@ public class RecipeData extends DocumentParser
 						att = attrs.getNamedItem("type");
 						if (att == null)
 						{
-							_log.severe(getClass().getSimpleName() + ": Missing type for recipe item id: " + id + ", skipping");
+							_log.error(getClass().getSimpleName() + ": Missing type for recipe item id: " + id + ", skipping");
 							continue;
 						}
 						set.set("isDwarvenRecipe", att.getNodeValue().equalsIgnoreCase("dwarven"));
@@ -126,7 +126,7 @@ public class RecipeData extends DocumentParser
 						att = attrs.getNamedItem("successRate");
 						if (att == null)
 						{
-							_log.severe(getClass().getSimpleName() + ": Missing successRate for recipe item id: " + id + ", skipping");
+							_log.error(getClass().getSimpleName() + ": Missing successRate for recipe item id: " + id + ", skipping");
 							continue;
 						}
 						set.set("successRate", Integer.parseInt(att.getNodeValue()));
@@ -143,7 +143,7 @@ public class RecipeData extends DocumentParser
 								}
 								catch (Exception e)
 								{
-									_log.severe(getClass().getSimpleName() + ": Error in StatUse parameter for recipe item id: " + id + ", skipping");
+									_log.error(getClass().getSimpleName() + ": Error in StatUse parameter for recipe item id: " + id + ", skipping");
 									continue recipesFile;
 								}
 							}
@@ -157,7 +157,7 @@ public class RecipeData extends DocumentParser
 								}
 								catch (Exception e)
 								{
-									_log.severe(getClass().getSimpleName() + ": Error in AltStatChange parameter for recipe item id: " + id + ", skipping");
+									_log.error(getClass().getSimpleName() + ": Error in AltStatChange parameter for recipe item id: " + id + ", skipping");
 									continue recipesFile;
 								}
 							}

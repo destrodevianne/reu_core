@@ -124,7 +124,7 @@ public class InstanceManager extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": Could not insert character instance time data: " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": Could not insert character instance time data: " + e.getMessage());
 		}
 	}
 	
@@ -144,7 +144,7 @@ public class InstanceManager extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
 		}
 	}
 	
@@ -181,7 +181,7 @@ public class InstanceManager extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
 		}
 	}
 	
@@ -361,7 +361,7 @@ public class InstanceManager extends DocumentParser
 			_dynamic++;
 			if (_dynamic == Integer.MAX_VALUE)
 			{
-				_log.warning(getClass().getSimpleName() + ": More then " + (Integer.MAX_VALUE - 300000) + " instances created");
+				_log.warn(getClass().getSimpleName() + ": More then " + (Integer.MAX_VALUE - 300000) + " instances created");
 				_dynamic = 300000;
 			}
 		}

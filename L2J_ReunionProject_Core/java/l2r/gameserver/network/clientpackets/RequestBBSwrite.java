@@ -18,6 +18,8 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.communitybbs.BoardsManager;
+
 /**
  * Format SSSSSS
  * @author -Wooden-
@@ -25,17 +27,11 @@ package l2r.gameserver.network.clientpackets;
 public final class RequestBBSwrite extends L2GameClientPacket
 {
 	private static final String _C__24_REQUESTBBSWRITE = "[C] 24 RequestBBSwrite";
-	@SuppressWarnings("unused")
 	private String _url;
-	@SuppressWarnings("unused")
 	private String _arg1;
-	@SuppressWarnings("unused")
 	private String _arg2;
-	@SuppressWarnings("unused")
 	private String _arg3;
-	@SuppressWarnings("unused")
 	private String _arg4;
-	@SuppressWarnings("unused")
 	private String _arg5;
 	
 	@Override
@@ -52,10 +48,7 @@ public final class RequestBBSwrite extends L2GameClientPacket
 	@Override
 	protected final void runImpl()
 	{
-		/**
-		 * if (Config.ENABLE_COMMUNITY_BOARD) { L2PcInstance activeChar = getClient().getActiveChar(); if (activeChar == null) { return; } if (!CommunityServerThread.getInstance().sendPacket(new RequestCommunityBoardWrite(activeChar.getObjectId(), _url, _arg1, _arg2, _arg3, _arg4, _arg5))) {
-		 * activeChar.sendPacket(SystemMessageId.CB_OFFLINE); } } else { CommunityBoard.getInstance().handleWriteCommands(getClient(), _url, _arg1, _arg2, _arg3, _arg4, _arg5); }
-		 */
+		BoardsManager.getInstance().handleWriteCommands(getClient(), _url, _arg1, _arg2, _arg3, _arg4, _arg5);
 	}
 	
 	@Override

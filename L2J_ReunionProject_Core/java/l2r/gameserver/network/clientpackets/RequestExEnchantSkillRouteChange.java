@@ -187,7 +187,7 @@ public final class RequestExEnchantSkillRouteChange extends L2GameClientPacket
 			
 			if (Config.DEBUG)
 			{
-				_log.fine("Learned skill ID: " + _skillId + " Level: " + _skillLvl + " for " + requiredSp + " SP, " + requireditems + " Adena.");
+				_log.info("Learned skill ID: " + _skillId + " Level: " + _skillLvl + " for " + requiredSp + " SP, " + requireditems + " Adena.");
 			}
 			
 			player.sendPacket(new UserInfo(player));

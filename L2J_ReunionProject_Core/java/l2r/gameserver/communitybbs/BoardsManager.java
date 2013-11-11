@@ -20,6 +20,7 @@ package l2r.gameserver.communitybbs;
 
 import l2r.Config;
 import l2r.gameserver.communitybbs.Managers.ClanBBSManager;
+import l2r.gameserver.communitybbs.Managers.MailBBSManager;
 import l2r.gameserver.communitybbs.Managers.PostBBSManager;
 import l2r.gameserver.communitybbs.Managers.TopBBSManager;
 import l2r.gameserver.communitybbs.Managers.TopicBBSManager;
@@ -31,11 +32,6 @@ import gr.reunion.interf.ReunionEvents;
 
 public class BoardsManager
 {
-	public static BoardsManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
 	public void handleCommands(L2GameClient client, String command)
 	{
 		L2PcInstance activeChar = client.getActiveChar();
@@ -79,9 +75,9 @@ public class BoardsManager
 		{
 			TopBBSManager.getInstance().cbByPass(command, activeChar);
 		}
-		else if (command.equals("_maillist_0_1_0_"))
+		else if (command.startsWith("_maillist_0_1_0_"))
 		{
-			
+			MailBBSManager.getInstance().cbByPass(command, activeChar);
 		}
 		else if (command.startsWith("_friendlist_0_") || command.startsWith("_bbs_friends") || command.startsWith("_bbsfriends"))
 		{
@@ -106,6 +102,52 @@ public class BoardsManager
 			activeChar.sendPacket(new ShowBoard(null, "102"));
 			activeChar.sendPacket(new ShowBoard(null, "103"));
 		}
+	}
+	
+	public void handleWriteCommands(L2GameClient client, String url, String arg1, String arg2, String arg3, String arg4, String arg5)
+	{
+		L2PcInstance activeChar = client.getActiveChar();
+		if (activeChar == null)
+		{
+			return;
+		}
+		
+		if (url.equals("Topic"))
+		{
+			TopicBBSManager.getInstance().parsewrite(url, arg1, arg2, arg3, arg4, arg5, activeChar);
+		}
+		else if (url.equals("Post"))
+		{
+			PostBBSManager.getInstance().parsewrite(url, arg1, arg2, arg3, arg4, arg5, activeChar);
+		}
+		else if (url.equals("Region"))
+		{
+			// Future usage
+			// RegionBBSManager.getInstance().parsewrite(url, arg1, arg2, arg3, arg4, arg5, activeChar);
+		}
+		else if (url.equals("Friends"))
+		{
+			// Future usage
+			// FriendsBBSManager.getInstance().parsewrite(url, arg1, arg2, arg3, arg4, arg5, activeChar);
+		}
+		else if (url.equals("Notice"))
+		{
+			ClanBBSManager.getInstance().parsewrite(url, arg1, arg2, arg3, arg4, arg5, activeChar);
+		}
+		else if (url.equals("Mail"))
+		{
+			MailBBSManager.getInstance().parsewrite(url, arg1, arg2, arg3, arg4, arg5, activeChar);
+		}
+		else
+		{
+			// no nothing
+		}
+		return;
+	}
+	
+	public static BoardsManager getInstance()
+	{
+		return SingletonHolder._instance;
 	}
 	
 	private static class SingletonHolder

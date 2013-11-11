@@ -25,8 +25,6 @@ import java.sql.Statement;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import javolution.util.FastSet;
@@ -37,13 +35,16 @@ import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.interfaces.IL2Procedure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Spawn data retriever.
  * @author Zoey76
  */
 public final class SpawnTable
 {
-	private static final Logger _log = Logger.getLogger(SpawnTable.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(SpawnTable.class);
 	// SQL
 	private static final String SELECT_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM spawnlist";
 	private static final String SELECT_CUSTOM_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM custom_spawnlist";
@@ -94,7 +95,7 @@ public final class SpawnTable
 				npcTemplate = NpcTable.getInstance().getTemplate(npcId);
 				if (npcTemplate == null)
 				{
-					_log.warning(getClass().getSimpleName() + ": Data missing in NPC table for ID: " + npcId + ".");
+					_log.warn(getClass().getSimpleName() + ": Data missing in NPC table for ID: " + npcId + ".");
 					continue;
 				}
 				
@@ -135,7 +136,7 @@ public final class SpawnTable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Spawn could not be initialized: " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Spawn could not be initialized: " + e.getMessage(), e);
 		}
 		return npcSpawnCount;
 	}
@@ -203,7 +204,7 @@ public final class SpawnTable
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": Could not store spawn in the DB:" + e.getMessage(), e);
+				_log.warn(getClass().getSimpleName() + ": Could not store spawn in the DB:" + e.getMessage(), e);
 			}
 		}
 	}
@@ -234,7 +235,7 @@ public final class SpawnTable
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": Spawn " + spawn + " could not be removed from DB: " + e.getMessage(), e);
+				_log.warn(getClass().getSimpleName() + ": Spawn " + spawn + " could not be removed from DB: " + e.getMessage(), e);
 			}
 		}
 	}

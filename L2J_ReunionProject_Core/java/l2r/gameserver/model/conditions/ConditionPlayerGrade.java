@@ -18,9 +18,10 @@
  */
 package l2r.gameserver.model.conditions;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.model.stats.Env;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class ConditionPlayerGrade.
@@ -28,7 +29,7 @@ import l2r.gameserver.model.stats.Env;
  */
 public final class ConditionPlayerGrade extends Condition
 {
-	protected static final Logger _log = Logger.getLogger(ConditionPlayerGrade.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(ConditionPlayerGrade.class);
 	// conditional values
 	public static final int COND_NO_GRADE = 0x0001;
 	public static final int COND_D_GRADE = 0x0002;

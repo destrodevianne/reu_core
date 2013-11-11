@@ -19,8 +19,6 @@
 package l2r.gameserver.model.entity;
 
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
@@ -40,9 +38,12 @@ import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Duel
 {
-	protected static final Logger _log = Logger.getLogger(Duel.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(Duel.class);
 	
 	public static final int DUELSTATE_NODUEL = 0;
 	public static final int DUELSTATE_DUELLING = 1;
@@ -221,7 +222,7 @@ public class Duel
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -264,7 +265,7 @@ public class Duel
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -289,7 +290,7 @@ public class Duel
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -999,7 +1000,7 @@ public class Duel
 		{
 			if ((player != _playerA) && (player != _playerB))
 			{
-				_log.warning("Error in onPlayerDefeat(): player is not part of this 1vs1 duel");
+				_log.warn("Error in onPlayerDefeat(): player is not part of this 1vs1 duel");
 			}
 			
 			if (_playerA == player)

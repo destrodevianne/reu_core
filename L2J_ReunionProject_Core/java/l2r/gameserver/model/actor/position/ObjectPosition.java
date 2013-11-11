@@ -18,21 +18,22 @@
  */
 package l2r.gameserver.model.actor.position;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
-import l2r.gameserver.util.Point3D;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ObjectPosition
 {
-	private static final Logger _log = Logger.getLogger(ObjectPosition.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(ObjectPosition.class);
 	
 	private final L2Object _activeObject;
 	private int _heading = 0;
-	private Point3D _worldPosition;
+	private Location _worldPosition;
 	private L2WorldRegion _worldRegion; // Object localization : Used for items/chars that are seen in the world
 	
 	public ObjectPosition(L2Object activeObject)
@@ -70,7 +71,7 @@ public class ObjectPosition
 		}
 		catch (Exception e)
 		{
-			_log.warning("Object Id at bad coords: (x: " + getX() + ", y: " + getY() + ", z: " + getZ() + ").");
+			_log.warn("Object Id at bad coords: (x: " + getX() + ", y: " + getY() + ", z: " + getZ() + ").");
 			badCoords();
 		}
 	}
@@ -205,11 +206,11 @@ public class ObjectPosition
 		getWorldPosition().setZ(value);
 	}
 	
-	public final Point3D getWorldPosition()
+	public final Location getWorldPosition()
 	{
 		if (_worldPosition == null)
 		{
-			_worldPosition = new Point3D(0, 0, 0);
+			_worldPosition = new Location(0, 0, 0);
 		}
 		return _worldPosition;
 	}
@@ -219,7 +220,7 @@ public class ObjectPosition
 		getWorldPosition().setXYZ(x, y, z);
 	}
 	
-	public final void setWorldPosition(Point3D newPosition)
+	public final void setWorldPosition(Location newPosition)
 	{
 		setWorldPosition(newPosition.getX(), newPosition.getY(), newPosition.getZ());
 	}

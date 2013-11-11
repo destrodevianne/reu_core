@@ -130,7 +130,7 @@ public class CharacterSelect extends L2GameClientPacket
 					// The L2PcInstance must be created here, so that it can be attached to the L2GameClient
 					if (Config.DEBUG)
 					{
-						_log.fine("selected slot:" + _charSlot);
+						_log.info("selected slot:" + _charSlot);
 					}
 					
 					PlayerEvent event = new PlayerEvent();

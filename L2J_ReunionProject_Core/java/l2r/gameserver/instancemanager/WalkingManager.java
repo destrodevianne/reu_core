@@ -288,7 +288,7 @@ public class WalkingManager extends DocumentParser
 								npcString = NpcStringId.getNpcStringId(node.getNodeValue());
 								if (npcString == null)
 								{
-									_log.warning(getClass().getSimpleName() + ": Unknown npcstring '" + node.getNodeValue() + ".");
+									_log.warn(getClass().getSimpleName() + ": Unknown npcstring '" + node.getNodeValue() + ".");
 									continue;
 								}
 							}
@@ -300,7 +300,7 @@ public class WalkingManager extends DocumentParser
 									npcString = NpcStringId.getNpcStringId(Integer.parseInt(node.getNodeValue()));
 									if (npcString == null)
 									{
-										_log.warning(getClass().getSimpleName() + ": Unknown npcstring '" + node.getNodeValue() + ".");
+										_log.warn(getClass().getSimpleName() + ": Unknown npcstring '" + node.getNodeValue() + ".");
 										continue;
 									}
 								}
@@ -327,7 +327,7 @@ public class WalkingManager extends DocumentParser
 						}
 						catch (Exception e)
 						{
-							_log.warning("Walking Manager: Error in target definition for route : " + routeName);
+							_log.warn("Walking Manager: Error in target definition for route : " + routeName);
 						}
 					}
 				}

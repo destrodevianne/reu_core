@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -170,19 +169,19 @@ public class LongTimeEvent extends Quest
 									
 									if (ItemTable.getInstance().getTemplate(itemId) == null)
 									{
-										_log.warning(getScriptName() + " event: " + itemId + " is wrong item id, item was not added in droplist");
+										_log.warn(getScriptName() + " event: " + itemId + " is wrong item id, item was not added in droplist");
 										continue;
 									}
 									
 									if (minCount > maxCount)
 									{
-										_log.warning(getScriptName() + " event: item " + itemId + " - min greater than max, item was not added in droplist");
+										_log.warn(getScriptName() + " event: item " + itemId + " - min greater than max, item was not added in droplist");
 										continue;
 									}
 									
 									if ((finalChance < 10000) || (finalChance > L2DropData.MAX_CHANCE))
 									{
-										_log.warning(getScriptName() + " event: item " + itemId + " - incorrect drop chance, item was not added in droplist");
+										_log.warn(getScriptName() + " event: item " + itemId + " - incorrect drop chance, item was not added in droplist");
 										continue;
 									}
 									
@@ -190,7 +189,7 @@ public class LongTimeEvent extends Quest
 								}
 								catch (NumberFormatException nfe)
 								{
-									_log.warning("Wrong number format in config.xml droplist block for " + getScriptName() + " event");
+									_log.warn("Wrong number format in config.xml droplist block for " + getScriptName() + " event");
 								}
 							}
 						}
@@ -212,7 +211,7 @@ public class LongTimeEvent extends Quest
 									
 									if (NpcTable.getInstance().getTemplate(npcId) == null)
 									{
-										_log.warning(getScriptName() + " event: " + npcId + " is wrong NPC id, NPC was not added in spawnlist");
+										_log.warn(getScriptName() + " event: " + npcId + " is wrong NPC id, NPC was not added in spawnlist");
 										continue;
 									}
 									
@@ -220,7 +219,7 @@ public class LongTimeEvent extends Quest
 								}
 								catch (NumberFormatException nfe)
 								{
-									_log.warning("Wrong number format in config.xml spawnlist block for " + getScriptName() + " event");
+									_log.warn("Wrong number format in config.xml spawnlist block for " + getScriptName() + " event");
 								}
 							}
 						}
@@ -253,7 +252,7 @@ public class LongTimeEvent extends Quest
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getScriptName() + " event: error reading " + configFile.getAbsolutePath() + " ! " + e.getMessage(), e);
+			_log.warn(getScriptName() + " event: error reading " + configFile.getAbsolutePath() + " ! " + e.getMessage(), e);
 		}
 	}
 	

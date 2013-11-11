@@ -29,6 +29,7 @@ import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SummonSkillsTable;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.MountType;
 import l2r.gameserver.instancemanager.AirShipManager;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2ManufactureList;
@@ -93,7 +94,7 @@ public final class RequestActionUse extends L2GameClientPacket
 		
 		if (Config.DEBUG)
 		{
-			_log.finest(activeChar + " requested action use Id: " + _actionId + " Ctrl pressed:" + _ctrlPressed + " Shift pressed:" + _shiftPressed);
+			_log.info(activeChar + " requested action use Id: " + _actionId + " Ctrl pressed:" + _ctrlPressed + " Shift pressed:" + _shiftPressed);
 		}
 		
 		// Don't do anything if player is dead
@@ -117,7 +118,7 @@ public final class RequestActionUse extends L2GameClientPacket
 			if (!(Arrays.binarySearch(allowedActions, _actionId) >= 0))
 			{
 				sendPacket(ActionFailed.STATIC_PACKET);
-				_log.warning("Player " + activeChar + " used action which he does not have! Id = " + _actionId + " transform: " + activeChar.getTransformation());
+				_log.warn("Player " + activeChar + " used action which he does not have! Id = " + _actionId + " transform: " + activeChar.getTransformation());
 				return;
 			}
 		}
@@ -768,7 +769,7 @@ public final class RequestActionUse extends L2GameClientPacket
 				tryBroadcastSocial(15);
 				break;
 			default:
-				_log.warning(activeChar.getName() + ": unhandled action type " + _actionId);
+				_log.warn(activeChar.getName() + ": unhandled action type " + _actionId);
 				break;
 		}
 	}
@@ -781,7 +782,7 @@ public final class RequestActionUse extends L2GameClientPacket
 	 */
 	protected boolean useSit(L2PcInstance activeChar, L2Object target)
 	{
-		if (activeChar.getMountType() != 0)
+		if (activeChar.getMountType() != MountType.NONE)
 		{
 			return false;
 		}
@@ -1012,7 +1013,7 @@ public final class RequestActionUse extends L2GameClientPacket
 			sendPacket(sm);
 		}
 		
-		if (requester.isMounted() || requester.isRidingStrider() || requester.isFlyingMounted() || requester.isInBoat() || requester.isInAirShip())
+		if (requester.isMounted() || requester.isFlyingMounted() || requester.isInBoat() || requester.isInAirShip())
 		{
 			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_RIDING_A_SHIP_STEED_OR_STRIDER_AND_CANNOT_BE_REQUESTED_FOR_A_COUPLE_ACTION);
 			sm.addPcName(requester);
@@ -1102,7 +1103,7 @@ public final class RequestActionUse extends L2GameClientPacket
 			return;
 		}
 		
-		if (partner.isMounted() || partner.isRidingStrider() || partner.isFlyingMounted() || partner.isInBoat() || partner.isInAirShip())
+		if (partner.isMounted() || partner.isFlyingMounted() || partner.isInBoat() || partner.isInAirShip())
 		{
 			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_RIDING_A_SHIP_STEED_OR_STRIDER_AND_CANNOT_BE_REQUESTED_FOR_A_COUPLE_ACTION);
 			sm.addPcName(partner);

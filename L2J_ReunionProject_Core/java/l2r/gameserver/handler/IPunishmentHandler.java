@@ -18,17 +18,18 @@
  */
 package l2r.gameserver.handler;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.model.punishment.PunishmentTask;
 import l2r.gameserver.model.punishment.PunishmentType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
  */
 public interface IPunishmentHandler
 {
-	static final Logger _log = Logger.getLogger(IPunishmentHandler.class.getName());
+	static final Logger _log = LoggerFactory.getLogger(IPunishmentHandler.class);
 	
 	public void onStart(PunishmentTask task);
 	

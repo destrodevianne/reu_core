@@ -20,19 +20,20 @@ package l2r.gameserver.model.olympiad;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.type.L2OlympiadStadiumZone;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author GodKratos, DS
  */
 public class OlympiadGameManager implements Runnable
 {
-	private static final Logger _log = Logger.getLogger(OlympiadGameManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(OlympiadGameManager.class);
 	
 	private volatile boolean _battleStarted = false;
 	private final OlympiadGameTask[] _tasks;
@@ -52,7 +53,7 @@ public class OlympiadGameManager implements Runnable
 			_tasks[i++] = new OlympiadGameTask(zone);
 		}
 		
-		_log.log(Level.INFO, "Olympiad System: Loaded " + _tasks.length + " stadiums.");
+		_log.info("Olympiad System: Loaded " + _tasks.length + " stadiums.");
 	}
 	
 	public static final OlympiadGameManager getInstance()
@@ -154,7 +155,7 @@ public class OlympiadGameManager implements Runnable
 			{
 				OlympiadManager.getInstance().clearRegistered();
 				_battleStarted = false;
-				_log.log(Level.INFO, "Olympiad System: All current games finished.");
+				_log.info("Olympiad System: All current games finished.");
 			}
 		}
 	}

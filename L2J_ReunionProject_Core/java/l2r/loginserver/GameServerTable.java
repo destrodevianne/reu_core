@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 import javolution.io.UTF8StreamReader;
 import javolution.xml.stream.XMLStreamConstants;
@@ -46,13 +45,16 @@ import l2r.loginserver.network.gameserverpackets.ServerStatus;
 import l2r.util.IPSubnet;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The Class GameServerTable loads the game server names and initialize the game server tables.
  * @author KenM, Zoey76
  */
 public final class GameServerTable
 {
-	private static final Logger _log = Logger.getLogger(GameServerTable.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(GameServerTable.class);
 	// Server Names Config
 	private static final Map<Integer, String> _serverNames = new HashMap<>();
 	// Game Server Table
@@ -124,7 +126,7 @@ public final class GameServerTable
 		}
 		catch (Exception e)
 		{
-			_log.severe(getClass().getSimpleName() + ": Error loading RSA keys for Game Server communication!");
+			_log.error(getClass().getSimpleName() + ": Error loading RSA keys for Game Server communication!");
 		}
 	}
 	
@@ -146,7 +148,7 @@ public final class GameServerTable
 		}
 		catch (Exception e)
 		{
-			_log.severe(getClass().getSimpleName() + ": Error loading registered game servers!");
+			_log.error(getClass().getSimpleName() + ": Error loading registered game servers!");
 		}
 	}
 	
@@ -251,7 +253,7 @@ public final class GameServerTable
 		}
 		catch (Exception e)
 		{
-			_log.severe(getClass().getSimpleName() + ": Error while saving gameserver!");
+			_log.error(getClass().getSimpleName() + ": Error while saving gameserver!");
 		}
 	}
 	

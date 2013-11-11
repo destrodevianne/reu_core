@@ -20,7 +20,6 @@ package l2r.gameserver.model.stats;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
@@ -84,6 +83,10 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import l2r.util.StringUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.balanceEngine.BalanceHandler;
 import gr.reunion.configsEngine.BalanceConfigs;
 
@@ -92,7 +95,7 @@ import gr.reunion.configsEngine.BalanceConfigs;
  */
 public final class Formulas
 {
-	private static final Logger _log = Logger.getLogger(Formulas.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Formulas.class);
 	
 	/** Regen Task period. */
 	private static final int HP_REGENERATE_PERIOD = 3000; // 3 secs
@@ -165,8 +168,8 @@ public final class Formulas
 		std[Stats.MAGIC_ATTACK_SPEED.ordinal()] = new Calculator();
 		std[Stats.MAGIC_ATTACK_SPEED.ordinal()].addFunc(FuncMAtkSpeed.getInstance());
 		
-		std[Stats.RUN_SPEED.ordinal()] = new Calculator();
-		std[Stats.RUN_SPEED.ordinal()].addFunc(FuncMoveSpeed.getInstance());
+		std[Stats.MOVE_SPEED.ordinal()] = new Calculator();
+		std[Stats.MOVE_SPEED.ordinal()].addFunc(FuncMoveSpeed.getInstance());
 		
 		return std;
 	}
@@ -297,7 +300,7 @@ public final class Formulas
 			if (player.isInsideZone(ZoneIdType.CLAN_HALL) && (player.getClan() != null) && (player.getClan().getHideoutId() > 0))
 			{
 				L2ClanHallZone zone = ZoneManager.getInstance().getZone(player, L2ClanHallZone.class);
-				int posChIndex = zone == null ? -1 : zone.getClanHallId();
+				int posChIndex = zone == null ? -1 : zone.getResidenceId();
 				int clanHallIndex = player.getClan().getHideoutId();
 				if ((clanHallIndex > 0) && (clanHallIndex == posChIndex))
 				{
@@ -315,7 +318,7 @@ public final class Formulas
 			if (player.isInsideZone(ZoneIdType.CASTLE) && (player.getClan() != null) && (player.getClan().getCastleId() > 0))
 			{
 				L2CastleZone zone = ZoneManager.getInstance().getZone(player, L2CastleZone.class);
-				int posCastleIndex = zone == null ? -1 : zone.getCastleId();
+				int posCastleIndex = zone == null ? -1 : zone.getResidenceId();
 				int castleIndex = player.getClan().getCastleId();
 				if ((castleIndex > 0) && (castleIndex == posCastleIndex))
 				{
@@ -333,7 +336,7 @@ public final class Formulas
 			if (player.isInsideZone(ZoneIdType.FORT) && (player.getClan() != null) && (player.getClan().getFortId() > 0))
 			{
 				L2FortZone zone = ZoneManager.getInstance().getZone(player, L2FortZone.class);
-				int posFortIndex = zone == null ? -1 : zone.getFortId();
+				int posFortIndex = zone == null ? -1 : zone.getResidenceId();
 				int fortIndex = player.getClan().getFortId();
 				if ((fortIndex > 0) && (fortIndex == posFortIndex))
 				{
@@ -413,7 +416,7 @@ public final class Formulas
 			if (player.isInsideZone(ZoneIdType.CLAN_HALL) && (player.getClan() != null) && (player.getClan().getHideoutId() > 0))
 			{
 				L2ClanHallZone zone = ZoneManager.getInstance().getZone(player, L2ClanHallZone.class);
-				int posChIndex = zone == null ? -1 : zone.getClanHallId();
+				int posChIndex = zone == null ? -1 : zone.getResidenceId();
 				int clanHallIndex = player.getClan().getHideoutId();
 				if ((clanHallIndex > 0) && (clanHallIndex == posChIndex))
 				{
@@ -431,7 +434,7 @@ public final class Formulas
 			if (player.isInsideZone(ZoneIdType.CASTLE) && (player.getClan() != null) && (player.getClan().getCastleId() > 0))
 			{
 				L2CastleZone zone = ZoneManager.getInstance().getZone(player, L2CastleZone.class);
-				int posCastleIndex = zone == null ? -1 : zone.getCastleId();
+				int posCastleIndex = zone == null ? -1 : zone.getResidenceId();
 				int castleIndex = player.getClan().getCastleId();
 				if ((castleIndex > 0) && (castleIndex == posCastleIndex))
 				{
@@ -449,7 +452,7 @@ public final class Formulas
 			if (player.isInsideZone(ZoneIdType.FORT) && (player.getClan() != null) && (player.getClan().getFortId() > 0))
 			{
 				L2FortZone zone = ZoneManager.getInstance().getZone(player, L2FortZone.class);
-				int posFortIndex = zone == null ? -1 : zone.getFortId();
+				int posFortIndex = zone == null ? -1 : zone.getResidenceId();
 				int fortIndex = player.getClan().getFortId();
 				if ((fortIndex > 0) && (fortIndex == posFortIndex))
 				{
@@ -627,7 +630,7 @@ public final class Formulas
 		proximityBonus = attacker.isBehindTarget() ? 1.2 : attacker.isInFrontOfTarget() ? 1.1 : 1;
 		
 		damage *= calcValakasTrait(attacker, target, skill);
-		double element = calcElemental(attacker, target, skill);
+		double element = calcAttributeBonus(attacker, target, skill);
 		
 		// SSBoost > 0 have different calculation
 		if (skill.getSSBoost() > 0)
@@ -682,17 +685,10 @@ public final class Formulas
 		double defence = target.getPDef(attacker);
 		damage *= calcValakasTrait(attacker, target, skill);
 		
-		// Def bonuses in PvP fight
+		// Defense bonuses in PvP fight
 		if (isPvP)
 		{
-			if (skill == null)
-			{
-				defence *= target.calcStat(Stats.PVP_PHYSICAL_DEF, 1, null, null);
-			}
-			else
-			{
-				defence *= target.calcStat(Stats.PVP_PHYS_SKILL_DEF, 1, null, null);
-			}
+			defence *= (skill == null) ? target.calcStat(Stats.PVP_PHYSICAL_DEF, 1, null, null) : target.calcStat(Stats.PVP_PHYS_SKILL_DEF, 1, null, null);
 		}
 		
 		switch (shld)
@@ -801,9 +797,10 @@ public final class Formulas
 		if (crit)
 		{
 			// Finally retail like formula
-			damage = 2 * attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill) * target.calcStat(Stats.CRIT_VULN, target.getTemplate().getBaseCritVuln(), target, null) * ((70 * damage) / defence);
+			damage = 2 * attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill) * target.calcStat(Stats.CRIT_VULN, 1, target, null) * ((70 * damage) / defence);
 			// Crit dmg add is almost useless in normal hits...
 			damage += ((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 70) / defence);
+			damage += target.calcStat(Stats.CRIT_ADD_VULN, 0, target, skill);
 		}
 		else
 		{
@@ -886,7 +883,7 @@ public final class Formulas
 			damage = attacker.calcStat(Stats.PHYSICAL_SKILL_POWER, damage, null, null);
 		}
 		
-		damage *= calcElemental(attacker, target, skill);
+		damage *= calcAttributeBonus(attacker, target, skill);
 		if (target.isL2Attackable())
 		{
 			if (isBow)
@@ -1049,37 +1046,23 @@ public final class Formulas
 		}
 		else if (mcrit)
 		{
-			if (attacker.isPlayer() && target.isPlayer())
-			{
-				damage *= 2.5;
-			}
-			else
-			{
-				damage *= 3;
-			}
-			
+			damage *= attacker.isPlayer() && target.isPlayer() ? 2.5 : 3;
 			damage *= attacker.calcStat(Stats.MAGIC_CRIT_DMG, 1, null, null);
 		}
 		
 		// Weapon random damage
 		damage *= attacker.getRandomDamageMultiplier();
 		
-		// Pvp bonuses for dmg
+		// PvP bonuses for damage
 		if (isPvP)
 		{
-			if (skill.isMagic())
-			{
-				damage *= attacker.calcStat(Stats.PVP_MAGICAL_DMG, 1, null, null);
-			}
-			else
-			{
-				damage *= attacker.calcStat(Stats.PVP_PHYS_SKILL_DMG, 1, null, null);
-			}
+			Stats stat = skill.isMagic() ? Stats.PVP_MAGICAL_DMG : Stats.PVP_PHYS_SKILL_DMG;
+			damage *= attacker.calcStat(stat, 1, null, null);
 		}
+		
 		// CT2.3 general magic vuln
 		damage *= target.calcStat(Stats.MAGIC_DAMAGE_VULN, 1, null, null);
-		
-		damage *= calcElemental(attacker, target, skill);
+		damage *= calcAttributeBonus(attacker, target, skill);
 		
 		if (target.isL2Attackable())
 		{
@@ -1123,10 +1106,7 @@ public final class Formulas
 	
 	public static final double calcMagicDam(L2CubicInstance attacker, L2Character target, L2Skill skill, boolean mcrit, byte shld)
 	{
-		int mAtk = attacker.getCubicPower();
 		int mDef = target.getMDef(attacker.getOwner(), skill);
-		final boolean isPvP = target.isPlayable();
-		final boolean isPvE = target.isL2Attackable();
 		
 		switch (shld)
 		{
@@ -1136,6 +1116,11 @@ public final class Formulas
 			case SHIELD_DEFENSE_PERFECT_BLOCK: // perfect block
 				return 1;
 		}
+		
+		int mAtk = attacker.getCubicPower();
+		final boolean isPvP = target.isPlayable();
+		final boolean isPvE = target.isL2Attackable();
+		
 		// Cubics MDAM Formula (similar to PDAM formula, but using 91 instead of 70, also resisted by mDef).
 		double damage = 91 * ((mAtk + skill.getPower(isPvP, isPvE)) / mDef);
 		
@@ -1153,7 +1138,6 @@ public final class Formulas
 				{
 					owner.sendPacket(SystemMessageId.ATTACK_FAILED);
 				}
-				
 				damage /= 2;
 			}
 			else
@@ -1162,7 +1146,6 @@ public final class Formulas
 				sm.addCharName(target);
 				sm.addSkillName(skill);
 				owner.sendPacket(sm);
-				
 				damage = 1;
 			}
 			
@@ -1189,8 +1172,7 @@ public final class Formulas
 		
 		// CT2.3 general magic vuln
 		damage *= target.calcStat(Stats.MAGIC_DAMAGE_VULN, 1, null, null);
-		
-		damage *= calcElemental(owner, target, skill);
+		damage *= calcAttributeBonus(owner, target, skill);
 		
 		if (target.isL2Attackable())
 		{
@@ -1221,25 +1203,18 @@ public final class Formulas
 	 */
 	public static final boolean calcCrit(double rate, boolean skill, L2Character target)
 	{
-		final boolean success = rate > Rnd.get(1000);
-		
-		// support for critical damage evasion
-		if (success)
+		// support for critical damage evade
+		if (rate > Rnd.get(1000))
 		{
-			if (target == null)
+			if ((target == null) || skill)
 			{
 				return true; // no effect
-			}
-			
-			if (skill)
-			{
-				return success;
 			}
 			
 			// little weird, but remember what CRIT_DAMAGE_EVASION > 1 increase chances to _evade_ crit hits
 			return Rnd.get((int) target.getStat().calcStat(Stats.CRIT_DAMAGE_EVASION, 100, null, null)) < 100;
 		}
-		return success;
+		return false;
 	}
 	
 	public static final boolean calcLethalHit(L2Character activeChar, L2Character target, L2Skill skill)
@@ -1343,14 +1318,7 @@ public final class Formulas
 		double rate = target.calcStat(Stats.ATTACK_CANCEL, init, null, null);
 		
 		// Adjust the rate to be between 1 and 99
-		if (rate > 99)
-		{
-			rate = 99;
-		}
-		else if (rate < 1)
-		{
-			rate = 1;
-		}
+		rate = Math.max(Math.min(rate, 99), 1);
 		
 		return Rnd.get(100) < rate;
 	}
@@ -2067,84 +2035,177 @@ public final class Formulas
 		return 1 + ((calcDefen + calcPower) / 100);
 	}
 	
-	public static double calcElemental(L2Character attacker, L2Character target, L2Skill skill)
+	public static double calcAttributeBonus(L2Character attacker, L2Character target, L2Skill skill)
 	{
-		int calcPower = 0;
-		int calcDefen = 0;
-		int calcTotal = 0;
-		double result = 1.0;
-		byte element;
+		int attack_attribute;
+		int defence_attribute;
 		
 		if (skill != null)
 		{
-			element = skill.getElement();
-			if (element >= 0)
+			if (skill.getElement() == -1)
 			{
-				calcPower = skill.getElementPower();
-				calcDefen = target.getDefenseElementValue(element);
-				
-				if (attacker.getAttackElement() == element)
+				attack_attribute = 0;
+				defence_attribute = target.getDefenseElementValue((byte) -1);
+			}
+			else
+			{
+				if (attacker.getAttackElement() == skill.getElement())
 				{
-					calcPower += attacker.getAttackElementValue(element);
+					attack_attribute = attacker.getAttackElementValue(attacker.getAttackElement()) + skill.getElementPower();
+					defence_attribute = target.getDefenseElementValue(attacker.getAttackElement());
 				}
-				
-				calcTotal = calcPower - calcDefen;
-				if (calcTotal > 0)
+				else
 				{
-					if (calcTotal < 50)
-					{
-						result += calcTotal * 0.003948;
-					}
-					else if (calcTotal < 150)
-					{
-						result = 1.1974;
-					}
-					else if (calcTotal < 300)
-					{
-						result = 1.3973;
-					}
-					else
-					{
-						result = 1.6963;
-					}
-				}
-				
-				if (Config.DEVELOPER)
-				{
-					_log.info(skill.getName() + ": " + calcPower + ", " + calcDefen + ", " + result);
+					attack_attribute = skill.getElementPower();
+					defence_attribute = target.getDefenseElementValue(skill.getElement());
 				}
 			}
 		}
 		else
 		{
-			element = attacker.getAttackElement();
-			if (element >= 0)
+			attack_attribute = attacker.getAttackElementValue(attacker.getAttackElement());
+			defence_attribute = target.getDefenseElementValue(attacker.getAttackElement());
+		}
+		
+		double attack_attribute_mod = 0;
+		double defence_attribute_mod = 0;
+		
+		if (attack_attribute >= 450)
+		{
+			if (defence_attribute >= 450)
 			{
-				calcTotal = Math.max(attacker.getAttackElementValue(element) - target.getDefenseElementValue(element), 0);
-				
-				if (calcTotal < 50)
-				{
-					result += calcTotal * 0.003948;
-				}
-				else if (calcTotal < 150)
-				{
-					result = 1.1974;
-				}
-				else if (calcTotal < 300)
-				{
-					result = 1.3973;
-				}
-				else
-				{
-					result = 1.6963;
-				}
-				
-				if (Config.DEVELOPER)
-				{
-					_log.info("Hit: " + calcPower + ", " + calcDefen + ", " + result);
-				}
+				attack_attribute_mod = 0.06909;
+				defence_attribute_mod = 0.078;
+			}
+			else if (attack_attribute >= 350)
+			{
+				attack_attribute_mod = 0.0887;
+				defence_attribute_mod = 0.1007;
+			}
+			else
+			{
+				attack_attribute_mod = 0.129;
+				defence_attribute_mod = 0.1473;
 			}
 		}
+		else if (attack_attribute >= 300)
+		{
+			if (defence_attribute >= 300)
+			{
+				attack_attribute_mod = 0.0887;
+				defence_attribute_mod = 0.1007;
+			}
+			else if (defence_attribute >= 150)
+			{
+				attack_attribute_mod = 0.129;
+				defence_attribute_mod = 0.1473;
+			}
+			else
+			{
+				attack_attribute_mod = 0.25;
+				defence_attribute_mod = 0.2894;
+			}
+		}
+		else if (attack_attribute >= 150)
+		{
+			if (defence_attribute >= 150)
+			{
+				attack_attribute_mod = 0.129;
+				defence_attribute_mod = 0.1473;
+			}
+			else if (defence_attribute >= 0)
+			{
+				attack_attribute_mod = 0.25;
+				defence_attribute_mod = 0.2894;
+			}
+			else
+			{
+				attack_attribute_mod = 0.4;
+				defence_attribute_mod = 0.55;
+			}
+		}
+		else if (attack_attribute >= -99)
+		{
+			if (defence_attribute >= 0)
+			{
+				attack_attribute_mod = 0.25;
+				defence_attribute_mod = 0.2894;
+			}
+			else
+			{
+				attack_attribute_mod = 0.4;
+				defence_attribute_mod = 0.55;
+			}
+		}
+		else
+		{
+			if (defence_attribute >= 450)
+			{
+				attack_attribute_mod = 0.06909;
+				defence_attribute_mod = 0.078;
+			}
+			else if (defence_attribute >= 350)
+			{
+				attack_attribute_mod = 0.0887;
+				defence_attribute_mod = 0.1007;
+			}
+			else
+			{
+				attack_attribute_mod = 0.129;
+				defence_attribute_mod = 0.1473;
+			}
+		}
+		
+		int attribute_diff = attack_attribute - defence_attribute;
+		double min;
+		double max;
+		if (attribute_diff >= 300)
+		{
+			max = 100.0;
+			min = -50;
+		}
+		else if (attribute_diff >= 150)
+		{
+			max = 70.0;
+			min = -50;
+		}
+		else if (attribute_diff >= -150)
+		{
+			max = 40.0;
+			min = -50;
+		}
+		else if (attribute_diff >= -300)
+		{
+			max = 40.0;
+			min = -60;
+		}
+		else
+		{
+			max = 40.0;
+			min = -80;
+		}
+		
+		attack_attribute += 100;
+		attack_attribute *= attack_attribute;
+		
+		attack_attribute_mod = (attack_attribute / 144.0) * attack_attribute_mod;
+		
+		defence_attribute += 100;
+		defence_attribute *= defence_attribute;
+		
+		defence_attribute_mod = (defence_attribute / 169.0) * defence_attribute_mod;
+		
+		double attribute_mod_diff = attack_attribute_mod - defence_attribute_mod;
+		
+		attribute_mod_diff = Math.min(Math.max(attribute_mod_diff, min), max);
+		
+		double result = (attribute_mod_diff / 100.0) + 1;
+		
+		if (attacker.isPlayer() && target.isPlayer() && (result < 1.0))
+		{
+			result = 1.0;
+		}
+		
 		return result;
 	}
 	
@@ -2405,12 +2466,8 @@ public final class Formulas
 	public static boolean calcCancelSuccess(L2Effect eff, int cancelMagicLvl, int rate, L2Skill skill)
 	{
 		// Lvl Bonus Modifier.
-		rate *= (eff.getSkill().getMagicLevel() > 0) ? (cancelMagicLvl / eff.getSkill().getMagicLevel()) : 1;
-		
-		// Check the Rate Limits.
-		rate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
-		
-		return Rnd.get(100) < rate;
+		rate *= eff.getSkill().getMagicLevel() > 0 ? 1 + ((cancelMagicLvl - eff.getSkill().getMagicLevel()) / 100.) : 1;
+		return Rnd.get(100) < Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 	}
 	
 	/**

@@ -23,10 +23,10 @@ import java.util.List;
 import javolution.util.FastList;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.model.CursedWeapon;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.network.serverpackets.ExCursedWeaponLocation;
 import l2r.gameserver.network.serverpackets.ExCursedWeaponLocation.CursedWeaponInfo;
-import l2r.gameserver.util.Point3D;
 
 /**
  * Format: (ch)
@@ -59,7 +59,7 @@ public final class RequestCursedWeaponLocation extends L2GameClientPacket
 				continue;
 			}
 			
-			Point3D pos = cw.getWorldPosition();
+			Location pos = cw.getWorldPosition();
 			if (pos != null)
 			{
 				list.add(new CursedWeaponInfo(pos, cw.getItemId(), cw.isActivated() ? 1 : 0));

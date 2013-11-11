@@ -31,8 +31,6 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -90,13 +88,16 @@ import l2r.gameserver.util.Util;
 import l2r.util.L2FastMap;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Quest main class.
  * @author Luis Arias
  */
 public class Quest extends ManagedScript
 {
-	public static final Logger _log = Logger.getLogger(Quest.class.getName());
+	public static final Logger _log = LoggerFactory.getLogger(Quest.class);
 	
 	/** Map containing events from String value of the event. */
 	private static Map<String, Quest> _allEventsS = new HashMap<>();
@@ -414,7 +415,26 @@ public class Quest extends ManagedScript
 	 */
 	public QuestState newQuestState(L2PcInstance player)
 	{
-		return new QuestState(this, player, getInitialState());
+		return new QuestState(this, player, _initialState);
+	}
+	
+	/**
+	 * Get the specified player's {@link QuestState} object for this quest.<br>
+	 * If the player does not have it and initIfNode is {@code true},<br>
+	 * create a new QuestState object and return it, otherwise return {@code null}.
+	 * @param player the player whose QuestState to get
+	 * @param initIfNone if true and the player does not have a QuestState for this quest,<br>
+	 *            create a new QuestState
+	 * @return the QuestState object for this quest or null if it doesn't exist
+	 */
+	public QuestState getQuestState(L2PcInstance player, boolean initIfNone)
+	{
+		final QuestState qs = player.getQuestState(_name);
+		if ((qs != null) || !initIfNone)
+		{
+			return qs;
+		}
+		return newQuestState(player);
 	}
 	
 	/**
@@ -699,7 +719,7 @@ public class Quest extends ManagedScript
 			{
 				showError(trigger.getActingPlayer(), e);
 			}
-			_log.log(Level.WARNING, "Exception on onTrapAction() in notifyTrapAction(): " + e.getMessage(), e);
+			_log.warn("Exception on onTrapAction() in notifyTrapAction(): " + e.getMessage(), e);
 			return;
 		}
 		if (trigger.getActingPlayer() != null)
@@ -719,7 +739,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on onSpawn() in notifySpawn(): " + e.getMessage(), e);
+			_log.warn("Exception on onSpawn() in notifySpawn(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -1016,7 +1036,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on onEventReceived() in notifyEventReceived(): " + e.getMessage(), e);
+			_log.warn("Exception on onEventReceived() in notifyEventReceived(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -1113,7 +1133,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on onMoveFinished() in notifyMoveFinished(): " + e.getMessage(), e);
+			_log.warn("Exception on onMoveFinished() in notifyMoveFinished(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -1128,7 +1148,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on onNodeArrived() in notifyNodeArrived(): " + e.getMessage(), e);
+			_log.warn("Exception on onNodeArrived() in notifyNodeArrived(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -1143,7 +1163,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on onRouteFinished() in notifyRouteFinished(): " + e.getMessage(), e);
+			_log.warn("Exception on onRouteFinished() in notifyRouteFinished(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -1544,10 +1564,10 @@ public class Quest extends ManagedScript
 	 */
 	public boolean showError(L2PcInstance player, Throwable t)
 	{
-		_log.log(Level.WARNING, getScriptFile().getAbsolutePath(), t);
+		_log.warn(getScriptFile().getAbsolutePath(), t);
 		if (t.getMessage() == null)
 		{
-			_log.warning(getClass().getSimpleName() + ": " + t.getMessage());
+			_log.warn(getClass().getSimpleName() + ": " + t.getMessage());
 		}
 		if ((player != null) && player.getAccessLevel().isGm())
 		{
@@ -1623,7 +1643,7 @@ public class Quest extends ManagedScript
 					Quest q = QuestManager.getInstance().getQuest(questId);
 					if (q == null)
 					{
-						_log.finer("Unknown quest " + questId + " for player " + player.getName());
+						_log.info("Unknown quest " + questId + " for player " + player.getName());
 						if (Config.AUTODELETE_INVALID_QUEST_DATA)
 						{
 							invalidQuestData.setInt(1, player.getObjectId());
@@ -1654,7 +1674,7 @@ public class Quest extends ManagedScript
 						QuestState qs = player.getQuestState(questId);
 						if (qs == null)
 						{
-							_log.finer("Lost variable " + var + " in quest " + questId + " for player " + player.getName());
+							_log.info("Lost variable " + var + " in quest " + questId + " for player " + player.getName());
 							if (Config.AUTODELETE_INVALID_QUEST_DATA)
 							{
 								invalidQuestDataVar.setInt(1, player.getObjectId());
@@ -1672,7 +1692,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not insert char quest:", e);
+			_log.warn("could not insert char quest:", e);
 		}
 		
 		// events
@@ -1701,7 +1721,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not insert global quest variable:", e);
+			_log.warn("could not insert global quest variable:", e);
 		}
 	}
 	
@@ -1732,7 +1752,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not load global quest variable:", e);
+			_log.warn("could not load global quest variable:", e);
 		}
 		return result;
 	}
@@ -1752,7 +1772,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not delete global quest variable:", e);
+			_log.warn("could not delete global quest variable:", e);
 		}
 	}
 	
@@ -1769,7 +1789,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not delete global quest variables:", e);
+			_log.warn("could not delete global quest variables:", e);
 		}
 	}
 	
@@ -1793,7 +1813,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not insert char quest:", e);
+			_log.warn("could not insert char quest:", e);
 		}
 	}
 	
@@ -1816,7 +1836,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not update char quest:", e);
+			_log.warn("could not update char quest:", e);
 		}
 	}
 	
@@ -1837,7 +1857,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not delete char quest:", e);
+			_log.warn("could not delete char quest:", e);
 		}
 	}
 	
@@ -1861,7 +1881,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not delete char quest:", e);
+			_log.warn("could not delete char quest:", e);
 		}
 	}
 	
@@ -1935,7 +1955,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on addEventId(): " + e.getMessage(), e);
+			_log.warn("Exception on addEventId(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -2834,7 +2854,7 @@ public class Quest extends ManagedScript
 				// default spawn location, which is at the player's loc.
 				if ((x == 0) && (y == 0))
 				{
-					_log.log(Level.SEVERE, "Failed to adjust bad locks for quest spawn!  Spawn aborted!");
+					_log.error("Failed to adjust bad locks for quest spawn!  Spawn aborted!");
 					return null;
 				}
 				if (randomOffset)
@@ -2878,7 +2898,7 @@ public class Quest extends ManagedScript
 		}
 		catch (Exception e1)
 		{
-			_log.warning("Could not spawn Npc " + npcId + " Error: " + e1.getMessage());
+			_log.warn("Could not spawn Npc " + npcId + " Error: " + e1.getMessage());
 		}
 		
 		return null;
@@ -3748,7 +3768,7 @@ public class Quest extends ManagedScript
 		final L2DoorInstance door = getDoor(doorId, instanceId);
 		if (door == null)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": called openDoor(" + doorId + ", " + instanceId + "); but door wasnt found!", new NullPointerException());
+			_log.warn(getClass().getSimpleName() + ": called openDoor(" + doorId + ", " + instanceId + "); but door wasnt found!", new NullPointerException());
 		}
 		else if (!door.getOpen())
 		{
@@ -3766,7 +3786,7 @@ public class Quest extends ManagedScript
 		final L2DoorInstance door = getDoor(doorId, instanceId);
 		if (door == null)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": called closeDoor(" + doorId + ", " + instanceId + "); but door wasnt found!", new NullPointerException());
+			_log.warn(getClass().getSimpleName() + ": called closeDoor(" + doorId + ", " + instanceId + "); but door wasnt found!", new NullPointerException());
 		}
 		else if (door.getOpen())
 		{

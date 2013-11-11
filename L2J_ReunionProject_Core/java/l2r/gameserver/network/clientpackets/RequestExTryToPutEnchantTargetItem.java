@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.logging.Level;
-
 import l2r.gameserver.datatables.EnchantItemData;
 import l2r.gameserver.model.EnchantScroll;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -73,7 +71,7 @@ public class RequestExTryToPutEnchantTargetItem extends L2GameClientPacket
 			activeChar.sendPacket(new ExPutEnchantTargetItemResult(0));
 			if (scrollTemplate == null)
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": Undefined scroll have been used id: " + scroll.getItemId());
+				_log.warn(getClass().getSimpleName() + ": Undefined scroll have been used id: " + scroll.getItemId());
 			}
 			return;
 		}

@@ -23,7 +23,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 
 public class PcWarehouse extends Warehouse
 {
-	// private static final Logger _log = Logger.getLogger(PcWarehouse.class.getName());
+	// private static final Logger _log = LoggerFactory.getLogger(PcWarehouse.class);
 	
 	private final L2PcInstance _owner;
 	

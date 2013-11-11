@@ -25,12 +25,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.L2DropCategory;
 import l2r.gameserver.model.L2DropData;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
@@ -38,7 +39,7 @@ import l2r.gameserver.model.L2DropData;
  */
 public class HerbDropTable
 {
-	private static final Logger _log = Logger.getLogger(HerbDropTable.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(HerbDropTable.class);
 	
 	private final Map<Integer, List<L2DropCategory>> _herbGroups = new HashMap<>();
 	
@@ -50,15 +51,7 @@ public class HerbDropTable
 	private void restoreData()
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement("SELECT " + L2DatabaseFactory.getInstance().safetyString(new String[]
-			{
-				"groupId",
-				"itemId",
-				"min",
-				"max",
-				"category",
-				"chance"
-			}) + " FROM herb_droplist_groups ORDER BY groupId, chance DESC");
+			PreparedStatement statement = con.prepareStatement("SELECT groupId, itemId,min, max,category, chance FROM herb_droplist_groups ORDER BY groupId, chance DESC");
 			ResultSet dropData = statement.executeQuery())
 		{
 			L2DropData dropDat = null;
@@ -87,7 +80,7 @@ public class HerbDropTable
 				
 				if (ItemTable.getInstance().getTemplate(dropDat.getItemId()) == null)
 				{
-					_log.warning(getClass().getSimpleName() + ": Data for undefined item template! GroupId: " + groupId + " itemId: " + dropDat.getItemId());
+					_log.warn(getClass().getSimpleName() + ": Data for undefined item template! GroupId: " + groupId + " itemId: " + dropDat.getItemId());
 					continue;
 				}
 				
@@ -113,7 +106,7 @@ public class HerbDropTable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error reading Herb dropdata. ", e);
+			_log.error(getClass().getSimpleName() + ": Error reading Herb dropdata. ", e);
 		}
 	}
 	

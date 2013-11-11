@@ -21,7 +21,6 @@ package l2r.gameserver.util;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
@@ -35,12 +34,15 @@ import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author luisantonioa, DS
  */
 public class MinionList
 {
-	private static Logger _log = Logger.getLogger(MinionList.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(MinionList.class);
 	
 	protected final L2MonsterInstance _master;
 	/** List containing the current spawned minions */
@@ -394,7 +396,7 @@ public class MinionList
 		
 		if (Config.DEBUG)
 		{
-			_log.fine("Spawned minion template " + minion.getNpcId() + " with objid: " + minion.getObjectId() + " to boss " + master.getObjectId() + " ,at: " + minion.getX() + " x, " + minion.getY() + " y, " + minion.getZ() + " z");
+			_log.info("Spawned minion template " + minion.getNpcId() + " with objid: " + minion.getObjectId() + " to boss " + master.getObjectId() + " ,at: " + minion.getX() + " x, " + minion.getY() + " y, " + minion.getZ() + " z");
 		}
 		
 		return minion;

@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -44,13 +42,15 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.util.file.filter.XMLFilter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 public class MultiSell
 {
-	private static final Logger _log = Logger.getLogger(MultiSell.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(MultiSell.class);
 	
 	public static final int PAGE_SIZE = 40;
 	
@@ -107,11 +107,11 @@ public class MultiSell
 		{
 			if (player.isAioMultisell())
 			{
-				_log.warning("AIOItem " + getClass().getSimpleName() + ": Cannot find list: " + listId + " requested by player: " + player.getName());
+				_log.warn("AIOItem " + getClass().getSimpleName() + ": Cannot find list: " + listId + " requested by player: " + player.getName());
 			}
 			else
 			{
-				_log.warning(getClass().getSimpleName() + ": can't find list id: " + listId + " requested by player: " + player.getName() + ", npcId:" + (npc != null ? npc.getNpcId() : 0));
+				_log.warn(getClass().getSimpleName() + ": can't find list id: " + listId + " requested by player: " + player.getName() + ", npcId:" + (npc != null ? npc.getNpcId() : 0));
 			}
 			return;
 		}
@@ -256,7 +256,7 @@ public class MultiSell
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error loading file " + f, e);
+				_log.error(getClass().getSimpleName() + ": Error loading file " + f, e);
 				continue;
 			}
 			
@@ -268,11 +268,11 @@ public class MultiSell
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error in file " + f, e);
+				_log.error(getClass().getSimpleName() + ": Error in file " + f, e);
 			}
 		}
 		verify();
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded " + _entries.size() + " lists.");
+		_log.info(getClass().getSimpleName() + ": Loaded " + _entries.size() + " lists.");
 	}
 	
 	private final ListContainer parseDocument(Document doc)
@@ -316,14 +316,14 @@ public class MultiSell
 						}
 						catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException | DOMException e1)
 						{
-							_log.warning(e.getMessage() + doc.getLocalName());
+							_log.warn(e.getMessage() + doc.getLocalName());
 							list.setUseRate(1.0);
 						}
 						
 					}
 					catch (DOMException e)
 					{
-						_log.warning(e.getMessage() + doc.getLocalName());
+						_log.warn(e.getMessage() + doc.getLocalName());
 					}
 				}
 				
@@ -420,7 +420,7 @@ public class MultiSell
 		File dir = new File(Config.DATAPACK_ROOT, dirname);
 		if (!dir.exists())
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Dir " + dir.getAbsolutePath() + " not exists");
+			_log.warn(getClass().getSimpleName() + ": Dir " + dir.getAbsolutePath() + " not exists");
 			return;
 		}
 		
@@ -445,14 +445,14 @@ public class MultiSell
 				{
 					if (!verifyIngredient(ing))
 					{
-						_log.warning(getClass().getSimpleName() + ": can't find ingredient with itemId: " + ing.getItemId() + " in list: " + list.getListId());
+						_log.warn(getClass().getSimpleName() + ": can't find ingredient with itemId: " + ing.getItemId() + " in list: " + list.getListId());
 					}
 				}
 				for (Ingredient ing : ent.getProducts())
 				{
 					if (!verifyIngredient(ing))
 					{
-						_log.warning(getClass().getSimpleName() + ": can't find product with itemId: " + ing.getItemId() + " in list: " + list.getListId());
+						_log.warn(getClass().getSimpleName() + ": can't find product with itemId: " + ing.getItemId() + " in list: " + list.getListId());
 					}
 				}
 			}

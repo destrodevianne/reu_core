@@ -19,7 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import java.util.List;
-import java.util.logging.Level;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -58,7 +57,7 @@ public final class CharacterDelete extends L2GameClientPacket
 		
 		if (Config.DEBUG)
 		{
-			_log.fine("deleting slot:" + _charSlot);
+			_log.info("deleting slot:" + _charSlot);
 		}
 		
 		try
@@ -88,7 +87,7 @@ public final class CharacterDelete extends L2GameClientPacket
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Error:", e);
+			_log.error("Error:", e);
 		}
 		
 		CharSelectionInfo cl = new CharSelectionInfo(getClient().getAccountName(), getClient().getSessionId().playOkID1, 0);

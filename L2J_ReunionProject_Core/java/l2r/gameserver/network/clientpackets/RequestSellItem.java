@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import l2r.Config;
-import l2r.gameserver.TradeController;
+import l2r.gameserver.datatables.BuyListData;
 import l2r.gameserver.model.L2Object;
-import l2r.gameserver.model.L2TradeList;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2MerchantInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.holders.ItemHolder;
+import l2r.gameserver.model.buylist.L2BuyList;
+import l2r.gameserver.model.holders.UniqueItemHolder;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExBuySellList;
@@ -48,7 +48,7 @@ public final class RequestSellItem extends L2GameClientPacket
 	private static final int BATCH_LENGTH = 16;
 	
 	private int _listId;
-	private List<ItemHolder> _items = null;
+	private List<UniqueItemHolder> _items = null;
 	
 	@Override
 	protected void readImpl()
@@ -71,7 +71,7 @@ public final class RequestSellItem extends L2GameClientPacket
 				_items = null;
 				return;
 			}
-			_items.add(new ItemHolder(itemId, objectId, count));
+			_items.add(new UniqueItemHolder(itemId, objectId, count));
 		}
 	}
 	
@@ -132,50 +132,28 @@ public final class RequestSellItem extends L2GameClientPacket
 		
 		double taxRate = 0;
 		
-		L2TradeList list = null;
-		if (merchant != null)
-		{
-			List<L2TradeList> lists = null;
-			if (merchant instanceof L2MerchantInstance)
-			{
-				lists = TradeController.getInstance().getBuyListByNpcId(((L2MerchantInstance) merchant).getNpcId());
-				taxRate = ((L2MerchantInstance) merchant).getMpc().getTotalTaxRate();
-			}
-			
-			if (!player.isGM())
-			{
-				if (lists == null)
-				{
-					Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
-					return;
-				}
-				for (L2TradeList tradeList : lists)
-				{
-					if (tradeList.getListId() == _listId)
-					{
-						list = tradeList;
-					}
-				}
-			}
-			else
-			{
-				list = TradeController.getInstance().getBuyList(_listId);
-			}
-		}
-		else
-		{
-			list = TradeController.getInstance().getBuyList(_listId);
-		}
-		
-		if (list == null)
+		final L2BuyList buyList = BuyListData.getInstance().getBuyList(_listId);
+		if (buyList == null)
 		{
 			Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
 			return;
 		}
 		
+		if (merchant != null)
+		{
+			if (merchant instanceof L2MerchantInstance)
+			{
+				if (!buyList.isNpcAllowed(((L2MerchantInstance) merchant).getNpcId()))
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
+		
 		long totalPrice = 0;
 		// Proceed the sell
-		for (ItemHolder i : _items)
+		for (UniqueItemHolder i : _items)
 		{
 			L2ItemInstance item = player.checkItemManipulation(i.getObjectId(), i.getCount(), "sell");
 			if ((item == null) || (!item.isSellable()))

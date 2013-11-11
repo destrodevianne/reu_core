@@ -20,8 +20,6 @@ package l2r.gameserver.model;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -36,6 +34,9 @@ import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class manages the spawn and respawn of a group of L2NpcInstance that are in the same are and have the same type.<br>
  * <B><U>Concept</U>:</B><br>
@@ -45,7 +46,7 @@ import l2r.util.Rnd;
  */
 public class L2Spawn
 {
-	protected static final Logger _log = Logger.getLogger(L2Spawn.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2Spawn.class);
 	
 	/** The link on the L2NpcTemplate object containing generic and static properties of this spawn (ex : RewardExp, RewardSP, AggroRange...) */
 	private L2NpcTemplate _template;
@@ -122,7 +123,7 @@ public class L2Spawn
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "", e);
+				_log.warn(String.valueOf(e));
 			}
 			
 			_scheduledCount--;
@@ -488,7 +489,7 @@ public class L2Spawn
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "NPC " + _template.getNpcId() + " class not found", e);
+			_log.warn("NPC " + _template.getNpcId() + " class not found", e);
 		}
 		return mob;
 	}
@@ -515,22 +516,23 @@ public class L2Spawn
 			// Set the calculated position of the L2NpcInstance
 			newlocx = p[0];
 			newlocy = p[1];
-			newlocz = p[3];
+			newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, p[2], p[3], this);
 		}
 		else
 		{
 			// The L2NpcInstance is spawned at the exact position (Lox, Locy, Locz)
-			// Set is not random walk default value
-			mob.setIsNoRndWalk(isNoRndWalk());
+		// Set is not random walk default value
+		mob.setIsNoRndWalk(isNoRndWalk());
 			newlocx = getLocx();
 			newlocy = getLocy();
-			newlocz = getLocz();
-		}
-		
-		// don't correct z of flying npc's
-		if (!mob.isFlying())
-		{
-			newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, newlocz, newlocz);
+			if (Config.GEODATA > 0)
+			{
+				newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, getLocz(), getLocz(), this);
+			}
+			else
+			{
+				newlocz = getLocz();
+			}
 		}
 		
 		mob.stopAllEffects();
@@ -584,7 +586,7 @@ public class L2Spawn
 		
 		if (Config.DEBUG)
 		{
-			_log.finest("Spawned Mob Id: " + _template.getNpcId() + " , at: X: " + mob.getX() + " Y: " + mob.getY() + " Z: " + mob.getZ());
+			_log.info("Spawned Mob Id: " + _template.getNpcId() + " , at: X: " + mob.getX() + " Y: " + mob.getY() + " Z: " + mob.getZ());
 		}
 		// Increase the current number of L2NpcInstance managed by this L2Spawn
 		_currentCount++;
@@ -629,7 +631,7 @@ public class L2Spawn
 		{
 			if (delay < 0)
 			{
-				_log.warning("respawn delay is negative for spawn:" + this);
+				_log.warn("respawn delay is negative for spawn:" + this);
 			}
 			
 			int minDelay = delay - randomInterval;

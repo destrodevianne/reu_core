@@ -21,8 +21,6 @@ package l2r.gameserver.instancemanager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -33,9 +31,12 @@ import l2r.gameserver.model.actor.instance.L2FortBallistaInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.Fort;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FortSiegeGuardManager
 {
-	private static final Logger _log = Logger.getLogger(FortSiegeGuardManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(FortSiegeGuardManager.class);
 	
 	private final Fort _fort;
 	protected FastMap<Integer, FastList<L2Spawn>> _siegeGuards = new FastMap<>();
@@ -53,7 +54,7 @@ public class FortSiegeGuardManager
 	{
 		try
 		{
-			FastList<L2Spawn> monsterList = getSiegeGuardSpawn().get(getFort().getFortId());
+			FastList<L2Spawn> monsterList = getSiegeGuardSpawn().get(getFort().getResidenceId());
 			if (monsterList != null)
 			{
 				for (L2Spawn spawnDat : monsterList)
@@ -72,7 +73,7 @@ public class FortSiegeGuardManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error spawning siege guards for fort " + getFort().getName() + ":" + e.getMessage(), e);
+			_log.warn("Error spawning siege guards for fort " + getFort().getName() + ":" + e.getMessage(), e);
 		}
 	}
 	
@@ -83,7 +84,7 @@ public class FortSiegeGuardManager
 	{
 		try
 		{
-			FastList<L2Spawn> monsterList = getSiegeGuardSpawn().get(getFort().getFortId());
+			FastList<L2Spawn> monsterList = getSiegeGuardSpawn().get(getFort().getResidenceId());
 			
 			if (monsterList != null)
 			{
@@ -99,7 +100,7 @@ public class FortSiegeGuardManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error unspawning siege guards for fort " + getFort().getName() + ":" + e.getMessage(), e);
+			_log.warn("Error unspawning siege guards for fort " + getFort().getName() + ":" + e.getMessage(), e);
 		}
 	}
 	
@@ -112,7 +113,7 @@ public class FortSiegeGuardManager
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM fort_siege_guards Where fortId = ? "))
 		{
-			ps.setInt(1, getFort().getFortId());
+			ps.setInt(1, getFort().getResidenceId());
 			try (ResultSet rs = ps.executeQuery())
 			{
 				L2Spawn spawn1;
@@ -137,7 +138,7 @@ public class FortSiegeGuardManager
 					}
 					else
 					{
-						_log.warning("Missing npc data in npc table for id: " + rs.getInt("npcId"));
+						_log.warn("Missing npc data in npc table for id: " + rs.getInt("npcId"));
 					}
 					_siegeGuards.put(fortId, _siegeGuardsSpawns);
 				}
@@ -145,7 +146,7 @@ public class FortSiegeGuardManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error loading siege guard for fort " + getFort().getName() + ": " + e.getMessage(), e);
+			_log.warn("Error loading siege guard for fort " + getFort().getName() + ": " + e.getMessage(), e);
 		}
 	}
 	

@@ -21,7 +21,6 @@ package l2r.gameserver.model.actor;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -421,7 +420,7 @@ public abstract class L2Vehicle extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Failed stopMove().", e);
+			_log.error("Failed stopMove().", e);
 		}
 		
 		try
@@ -430,7 +429,7 @@ public abstract class L2Vehicle extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Failed oustPlayers().", e);
+			_log.error("Failed oustPlayers().", e);
 		}
 		
 		final L2WorldRegion oldRegion = getWorldRegion();
@@ -441,7 +440,7 @@ public abstract class L2Vehicle extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Failed decayMe().", e);
+			_log.error("Failed decayMe().", e);
 		}
 		
 		if (oldRegion != null)
@@ -455,7 +454,7 @@ public abstract class L2Vehicle extends L2Character
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Failed cleaning knownlist.", e);
+			_log.error("Failed cleaning knownlist.", e);
 		}
 		
 		// Remove L2Object object from _allObjects of L2World

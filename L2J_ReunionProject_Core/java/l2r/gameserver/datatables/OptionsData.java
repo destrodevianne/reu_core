@@ -20,7 +20,6 @@ package l2r.gameserver.datatables;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.holders.SkillHolder;
@@ -50,7 +49,7 @@ public class OptionsData extends DocumentParser
 	public synchronized void load()
 	{
 		parseDirectory("data/stats/options");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _data.size() + " Options.");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _data.size() + " Options.");
 	}
 	
 	@Override

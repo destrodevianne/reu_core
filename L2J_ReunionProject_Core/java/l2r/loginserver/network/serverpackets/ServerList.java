@@ -23,12 +23,14 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import l2r.loginserver.GameServerTable;
 import l2r.loginserver.GameServerTable.GameServerInfo;
 import l2r.loginserver.network.L2LoginClient;
 import l2r.loginserver.network.gameserverpackets.ServerStatus;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ServerList
@@ -60,7 +62,7 @@ import l2r.loginserver.network.gameserverpackets.ServerStatus;
  */
 public final class ServerList extends L2LoginServerPacket
 {
-	protected static final Logger _log = Logger.getLogger(ServerList.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(ServerList.class);
 	
 	private final List<ServerData> _servers;
 	private final int _lastServer;
@@ -89,7 +91,7 @@ public final class ServerList extends L2LoginServerPacket
 			}
 			catch (UnknownHostException e)
 			{
-				_log.warning(getClass().getSimpleName() + ": " + e.getMessage());
+				_log.warn(getClass().getSimpleName() + ": " + e.getMessage());
 				_ip = new byte[4];
 				_ip[0] = 127;
 				_ip[1] = 0;

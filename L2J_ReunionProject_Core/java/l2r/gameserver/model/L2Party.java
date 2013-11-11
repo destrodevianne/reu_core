@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -60,6 +58,10 @@ import l2r.gameserver.network.serverpackets.PartySmallWindowDeleteAll;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
@@ -68,7 +70,7 @@ import gr.reunion.configsEngine.CustomServerConfigs;
  */
 public class L2Party extends AbstractPlayerGroup
 {
-	private static final Logger _log = Logger.getLogger(L2Party.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(L2Party.class);
 	// @formatter:off
 	private static final double[] BONUS_EXP_SP =
 	{
@@ -433,7 +435,7 @@ public class L2Party extends AbstractPlayerGroup
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "", e);
+				_log.warn(String.valueOf(e));
 			}
 			
 			SystemMessage msg;

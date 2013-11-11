@@ -60,8 +60,6 @@ public class L2SkillSummon extends L2Skill
 	// How much time is lost per second of activity (fighting)
 	private final int _summonTimeLostActive;
 	
-	// item consume time in milliseconds
-	private final int _itemConsumeTime;
 	// item consume count over time
 	private final int _itemConsumeOT;
 	// item consume id over time
@@ -91,7 +89,6 @@ public class L2SkillSummon extends L2Skill
 		
 		_itemConsumeOT = set.getInteger("itemConsumeCountOT", 0);
 		_itemConsumeIdOT = set.getInteger("itemConsumeIdOT", 0);
-		_itemConsumeTime = set.getInteger("itemConsumeTime", 0);
 		_itemConsumeSteps = set.getInteger("itemConsumeSteps", 0);
 		
 		_inheritElementals = set.getBool("inheritElementals", false);
@@ -233,7 +230,7 @@ public class L2SkillSummon extends L2Skill
 				{
 					if (Config.DEBUG)
 					{
-						_log.fine("player can't summon any more cubics. ignore summon skill");
+						_log.info("player can't summon any more cubics. ignore summon skill");
 					}
 					activeChar.sendPacket(SystemMessageId.CUBIC_SUMMONING_FAILED);
 					return;
@@ -248,7 +245,7 @@ public class L2SkillSummon extends L2Skill
 		{
 			if (Config.DEBUG)
 			{
-				_log.fine("player has a pet already. ignore summon skill");
+				_log.info("player has a pet already. ignore summon skill");
 			}
 			return;
 		}
@@ -257,7 +254,7 @@ public class L2SkillSummon extends L2Skill
 		L2NpcTemplate summonTemplate = NpcTable.getInstance().getTemplate(getNpcId());
 		if (summonTemplate == null)
 		{
-			_log.warning("Summon attempt for nonexisting NPC ID:" + getNpcId() + ", skill ID:" + getId());
+			_log.warn("Summon attempt for nonexisting NPC ID:" + getNpcId() + ", skill ID:" + getId());
 			return; // npcID doesn't exist
 		}
 		
@@ -280,7 +277,7 @@ public class L2SkillSummon extends L2Skill
 		if (summon.getLevel() >= ExperienceTable.getInstance().getMaxPetLevel())
 		{
 			summon.getStat().setExp(ExperienceTable.getInstance().getExpForLevel(ExperienceTable.getInstance().getMaxPetLevel() - 1));
-			_log.warning("Summon (" + summon.getName() + ") NpcID: " + summon.getNpcId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
+			_log.warn("Summon (" + summon.getName() + ") NpcID: " + summon.getNpcId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
 		}
 		else
 		{
@@ -334,14 +331,6 @@ public class L2SkillSummon extends L2Skill
 	public final int getItemConsumeSteps()
 	{
 		return _itemConsumeSteps;
-	}
-	
-	/**
-	 * @return Returns the itemConsume time in milliseconds.
-	 */
-	public final int getItemConsumeTime()
-	{
-		return _itemConsumeTime;
 	}
 	
 	public final float getExpPenalty()

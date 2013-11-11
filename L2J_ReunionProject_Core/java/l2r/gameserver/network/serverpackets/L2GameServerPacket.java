@@ -18,21 +18,19 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import l2r.Config;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.network.L2GameClient;
 
 import org.mmocore.network.SendablePacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author KenM
  */
 public abstract class L2GameServerPacket extends SendablePacket<L2GameClient>
 {
-	protected static final Logger _log = Logger.getLogger(L2GameServerPacket.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2GameServerPacket.class);
 	
 	protected boolean _invisible = false;
 	
@@ -74,7 +72,7 @@ public abstract class L2GameServerPacket extends SendablePacket<L2GameClient>
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Client: " + getClient().toString() + " - Failed writing: " + getClass().getSimpleName() + " - L2J Server Version: " + Config.SERVER_VERSION + " - DP Revision: " + Config.DATAPACK_VERSION + " ; " + e.getMessage(), e);
+			_log.error("Client: " + getClient().toString() + " - Failed writing: " + getClass().getSimpleName() + e.getMessage(), e);
 		}
 	}
 	

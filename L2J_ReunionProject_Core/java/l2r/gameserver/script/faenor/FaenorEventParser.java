@@ -19,8 +19,6 @@
 package l2r.gameserver.script.faenor;
 
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.script.ScriptContext;
 
@@ -32,6 +30,8 @@ import l2r.gameserver.script.Parser;
 import l2r.gameserver.script.ParserFactory;
 import l2r.gameserver.script.ScriptEngine;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 /**
@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
  */
 public class FaenorEventParser extends FaenorParser
 {
-	static Logger _log = Logger.getLogger(FaenorEventParser.class.getName());
+	static Logger _log = LoggerFactory.getLogger(FaenorEventParser.class);
 	private DateRange _eventDates = null;
 	
 	@Override
@@ -101,7 +101,7 @@ public class FaenorEventParser extends FaenorParser
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error in event parser: " + e.getMessage(), e);
+			_log.warn("Error in event parser: " + e.getMessage(), e);
 		}
 	}
 	
@@ -128,7 +128,7 @@ public class FaenorEventParser extends FaenorParser
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "ERROR(parseEventDrop):" + e.getMessage(), e);
+			_log.warn("ERROR(parseEventDrop):" + e.getMessage(), e);
 		}
 	}
 	

@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor.instance;
 
 import java.util.concurrent.Future;
-import java.util.logging.Level;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
@@ -114,7 +113,7 @@ public class L2DecoyInstance extends L2Decoy
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Decoy Error: ", e);
+				_log.error("Decoy Error: ", e);
 			}
 		}
 	}
@@ -141,7 +140,7 @@ public class L2DecoyInstance extends L2Decoy
 			}
 			catch (Throwable e)
 			{
-				_log.log(Level.SEVERE, "Decoy Error: ", e);
+				_log.error("Decoy Error: ", e);
 			}
 		}
 	}

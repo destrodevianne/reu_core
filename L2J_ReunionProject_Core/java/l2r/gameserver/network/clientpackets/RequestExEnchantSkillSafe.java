@@ -181,7 +181,7 @@ public final class RequestExEnchantSkillSafe extends L2GameClientPacket
 				
 				if (Config.DEBUG)
 				{
-					_log.fine("Learned skill ID: " + _skillId + " Level: " + _skillLvl + " for " + requiredSp + " SP, " + requireditems + " Adena.");
+					_log.info("Learned skill ID: " + _skillId + " Level: " + _skillLvl + " for " + requiredSp + " SP, " + requireditems + " Adena.");
 				}
 				
 				player.sendPacket(ExEnchantSkillResult.valueOf(true));

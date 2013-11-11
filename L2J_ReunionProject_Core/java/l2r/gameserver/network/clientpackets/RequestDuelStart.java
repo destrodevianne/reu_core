@@ -138,7 +138,7 @@ public final class RequestDuelStart extends L2GameClientPacket
 					
 					if (Config.DEBUG)
 					{
-						_log.fine(activeChar.getName() + " requested a duel with " + partyLeader.getName());
+						_log.info(activeChar.getName() + " requested a duel with " + partyLeader.getName());
 					}
 					
 					SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.C1_PARTY_HAS_BEEN_CHALLENGED_TO_A_DUEL);
@@ -167,7 +167,7 @@ public final class RequestDuelStart extends L2GameClientPacket
 				
 				if (Config.DEBUG)
 				{
-					_log.fine(activeChar.getName() + " requested a duel with " + targetChar.getName());
+					_log.info(activeChar.getName() + " requested a duel with " + targetChar.getName());
 				}
 				
 				SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_BEEN_CHALLENGED_TO_A_DUEL);

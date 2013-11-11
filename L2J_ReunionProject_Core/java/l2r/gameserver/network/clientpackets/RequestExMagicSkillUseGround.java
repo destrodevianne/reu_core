@@ -19,11 +19,11 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ValidateLocation;
-import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 
 /**
@@ -77,7 +77,7 @@ public final class RequestExMagicSkillUseGround extends L2GameClientPacket
 		// Check the validity of the skill
 		if (skill != null)
 		{
-			activeChar.setCurrentSkillWorldPosition(new Point3D(_x, _y, _z));
+			activeChar.setCurrentSkillWorldPosition(new Location(_x, _y, _z));
 			
 			// normally magicskilluse packet turns char client side but for these skills, it doesn't (even with correct target)
 			activeChar.setHeading(Util.calculateHeadingFrom(activeChar.getX(), activeChar.getY(), _x, _y));
@@ -88,7 +88,7 @@ public final class RequestExMagicSkillUseGround extends L2GameClientPacket
 		else
 		{
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-			_log.warning("No skill found with id " + _skillId + " and level " + level + " !!");
+			_log.warn("No skill found with id " + _skillId + " and level " + level + " !!");
 		}
 	}
 	

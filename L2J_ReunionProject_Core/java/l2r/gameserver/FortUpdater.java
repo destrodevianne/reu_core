@@ -18,9 +18,6 @@
  */
 package l2r.gameserver;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import l2r.Config;
 import l2r.gameserver.enums.FortUpdaterType;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -28,13 +25,16 @@ import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Class managing periodical events with castle
  * @author Vice - 2008
  */
 public class FortUpdater implements Runnable
 {
-	protected static Logger _log = Logger.getLogger(FortUpdater.class.getName());
+	protected static Logger _log = LoggerFactory.getLogger(FortUpdater.class);
 	private final L2Clan _clan;
 	private final Fort _fort;
 	private int _runCount;
@@ -94,7 +94,7 @@ public class FortUpdater implements Runnable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	

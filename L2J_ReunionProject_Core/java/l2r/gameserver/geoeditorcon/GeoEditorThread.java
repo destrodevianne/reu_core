@@ -21,18 +21,19 @@ package l2r.gameserver.geoeditorcon;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Luno, Dezmond
  */
 public class GeoEditorThread extends Thread
 {
-	private static Logger _log = Logger.getLogger(GeoEditorThread.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(GeoEditorThread.class);
 	
 	private boolean _working = false;
 	
@@ -113,7 +114,7 @@ public class GeoEditorThread extends Thread
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "GeoEditor disconnected. " + e.getMessage(), e);
+			_log.warn("GeoEditor disconnected. " + e.getMessage(), e);
 		}
 		finally
 		{
@@ -148,7 +149,7 @@ public class GeoEditorThread extends Thread
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "GeoEditor disconnected. " + e.getMessage(), e);
+			_log.warn("GeoEditor disconnected. " + e.getMessage(), e);
 			_working = false;
 		}
 		finally
@@ -187,7 +188,7 @@ public class GeoEditorThread extends Thread
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "GeoEditor disconnected. " + e.getMessage(), e);
+			_log.warn("GeoEditor disconnected. " + e.getMessage(), e);
 			_working = false;
 		}
 		finally

@@ -21,8 +21,6 @@ package l2r.gameserver.model.effects;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ThreadPoolManager;
@@ -44,9 +42,12 @@ import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.network.serverpackets.PartySpelled;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class L2Effect implements IChanceSkillTrigger
 {
-	protected static final Logger _log = Logger.getLogger(L2Effect.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2Effect.class);
 	
 	private static final Func[] _emptyFunctionSet = new Func[0];
 	
@@ -110,7 +111,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}

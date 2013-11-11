@@ -19,19 +19,20 @@
 package l2r.gameserver.model;
 
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.enums.TriggerType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kombat
  */
 public final class ChanceCondition
 {
-	protected static final Logger _log = Logger.getLogger(ChanceCondition.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(ChanceCondition.class);
 	public static final int EVT_HIT = 1;
 	public static final int EVT_CRIT = 2;
 	public static final int EVT_CAST = 4;
@@ -85,7 +86,7 @@ public final class ChanceCondition
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 		return null;
 	}
@@ -108,7 +109,7 @@ public final class ChanceCondition
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 		
 		return null;

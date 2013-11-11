@@ -57,7 +57,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 		
 		if (activeChar == null)
 		{
-			_log.fine("RequestCrystalizeItem: activeChar was null");
+			_log.info("RequestCrystalizeItem: activeChar was null");
 			return;
 		}
 		
@@ -120,7 +120,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 		
 		if (!itemToRemove.getItem().isCrystallizable() || (itemToRemove.getItem().getCrystalCount() <= 0) || (itemToRemove.getItem().getCrystalType() == L2Item.CRYSTAL_NONE))
 		{
-			_log.warning(activeChar.getName() + " (" + activeChar.getObjectId() + ") tried to crystallize " + itemToRemove.getItem().getItemId());
+			_log.warn(activeChar.getName() + " (" + activeChar.getObjectId() + ") tried to crystallize " + itemToRemove.getItem().getItemId());
 			return;
 		}
 		

@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.model.skills.l2skills;
 
-import java.util.logging.Level;
-
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.enums.TeleportWhereType;
@@ -182,7 +180,7 @@ public class L2SkillTeleport extends L2Skill
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "", e);
+			_log.error("", e);
 		}
 	}
 }

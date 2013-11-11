@@ -26,7 +26,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.Properties;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Specialized {@link java.util.Properties} class.<br>
@@ -37,7 +39,7 @@ public final class L2Properties extends Properties
 {
 	private static final long serialVersionUID = 1L;
 	
-	private static Logger _log = Logger.getLogger(L2Properties.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2Properties.class);
 	
 	public L2Properties()
 	{
@@ -134,7 +136,7 @@ public final class L2Properties extends Properties
 		
 		if (property == null)
 		{
-			_log.warning("L2Properties: Missing defaultValue for key - " + key);
+			_log.warn("L2Properties: Missing defaultValue for key - " + key);
 			
 			return null;
 		}

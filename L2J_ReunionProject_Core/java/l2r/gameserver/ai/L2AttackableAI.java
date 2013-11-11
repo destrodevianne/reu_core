@@ -814,7 +814,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			}
 			catch (NullPointerException e)
 			{
-				_log.warning(getClass().getSimpleName() + ": thinkAttack() faction call failed: " + e.getMessage());
+				_log.warn(getClass().getSimpleName() + ": thinkAttack() faction call failed: " + e.getMessage());
 			}
 		}
 		
@@ -2034,7 +2034,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 		catch (NullPointerException e)
 		{
 			setIntention(AI_INTENTION_ACTIVE);
-			_log.warning(getClass().getSimpleName() + ": " + this + " - failed executing movementDisable(): " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": " + this + " - failed executing movementDisable(): " + e.getMessage());
 			return;
 		}
 	}
@@ -2643,7 +2643,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": " + this + " -  onEvtThink() failed: " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": " + this + " -  onEvtThink() failed: " + e.getMessage());
 		}
 		finally
 		{

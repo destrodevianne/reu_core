@@ -39,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -56,6 +54,9 @@ import javolution.util.FastSet;
 import l2r.Config;
 import l2r.gameserver.model.quest.Quest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.l2jserver.script.jython.JythonScriptEngine;
 
 /**
@@ -64,7 +65,7 @@ import com.l2jserver.script.jython.JythonScriptEngine;
  */
 public final class L2ScriptEngineManager
 {
-	private static final Logger _log = Logger.getLogger(L2ScriptEngineManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(L2ScriptEngineManager.class);
 	
 	public static final File SCRIPT_FOLDER = new File(Config.DATAPACK_ROOT.getAbsolutePath(), "data/scripts");
 	private static final String[] SCRIPT_PKGS =
@@ -76,9 +77,7 @@ public final class L2ScriptEngineManager
 		"hellbound",
 		"instances",
 		"quests",
-		"transformations",
-		"vehicles",
-		"village_master"
+		"vehicles"
 	};
 	
 	public static L2ScriptEngineManager getInstance()
@@ -156,7 +155,7 @@ public final class L2ScriptEngineManager
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "Failed initializing factory: " + e.getMessage(), e);
+				_log.warn("Failed initializing factory: " + e.getMessage(), e);
 			}
 		}
 		
@@ -174,7 +173,7 @@ public final class L2ScriptEngineManager
 		}
 		catch (ScriptException e)
 		{
-			_log.severe("Failed preconfiguring jython: " + e.getMessage());
+			_log.error("Failed preconfiguring jython: " + e.getMessage());
 		}
 	}
 	
@@ -205,7 +204,7 @@ public final class L2ScriptEngineManager
 			}
 			catch (ScriptException se)
 			{
-				_log.log(Level.WARNING, "", se);
+				_log.warn("", se);
 			}
 		}
 		
@@ -266,7 +265,7 @@ public final class L2ScriptEngineManager
 						}
 						else
 						{
-							_log.warning("Failed loading: (" + file.getCanonicalPath() + ") @ " + list.getName() + ":" + lnr.getLineNumber() + " - Reason: doesnt exists or is not a file.");
+							_log.warn("Failed loading: (" + file.getCanonicalPath() + ") @ " + list.getName() + ":" + lnr.getLineNumber() + " - Reason: doesnt exists or is not a file.");
 						}
 					}
 				}
@@ -435,7 +434,7 @@ public final class L2ScriptEngineManager
 		}
 		catch (IOException e)
 		{
-			_log.log(Level.WARNING, "Error executing script!", e);
+			_log.warn("Error executing script!", e);
 		}
 	}
 	
@@ -509,16 +508,16 @@ public final class L2ScriptEngineManager
 				String errorHeader = "Error on: " + file.getCanonicalPath() + Config.EOL + "Line: " + e.getLineNumber() + " - Column: " + e.getColumnNumber() + Config.EOL + Config.EOL;
 				fos.write(errorHeader.getBytes());
 				fos.write(e.getMessage().getBytes());
-				_log.warning("Failed executing script: " + script.getAbsolutePath() + ". See " + file.getName() + " for details.");
+				_log.warn("Failed executing script: " + script.getAbsolutePath() + ". See " + file.getName() + " for details.");
 			}
 			catch (IOException ioe)
 			{
-				_log.log(Level.WARNING, "Failed executing script: " + script.getAbsolutePath() + Config.EOL + e.getMessage() + "Additionally failed when trying to write an error report on script directory. Reason: " + ioe.getMessage(), ioe);
+				_log.warn("Failed executing script: " + script.getAbsolutePath() + Config.EOL + e.getMessage() + "Additionally failed when trying to write an error report on script directory. Reason: " + ioe.getMessage(), ioe);
 			}
 		}
 		else
 		{
-			_log.log(Level.WARNING, "Failed executing script: " + script.getAbsolutePath() + Config.EOL + e.getMessage() + "Additionally failed when trying to write an error report on script directory.", e);
+			_log.warn("Failed executing script: " + script.getAbsolutePath() + Config.EOL + e.getMessage() + "Additionally failed when trying to write an error report on script directory.", e);
 		}
 	}
 	
@@ -571,11 +570,11 @@ public final class L2ScriptEngineManager
 		}
 		catch (ClassNotFoundException e)
 		{
-			_log.log(Level.WARNING, "" + e.getMessage(), e);
+			_log.warn("" + e.getMessage(), e);
 		}
 		catch (Throwable t)
 		{
-			_log.warning(t.getMessage());
+			_log.warn(t.getMessage());
 		}
 	}
 	
@@ -621,7 +620,7 @@ public final class L2ScriptEngineManager
 		}
 		catch (IOException e)
 		{
-			_log.warning("Can't get classes for url " + url + ": " + e.getMessage());
+			_log.warn("Can't get classes for url " + url + ": " + e.getMessage());
 		}
 	}
 	
@@ -646,7 +645,7 @@ public final class L2ScriptEngineManager
 		}
 		catch (IOException e)
 		{
-			_log.log(Level.WARNING, "" + e.getMessage(), e);
+			_log.warn("" + e.getMessage(), e);
 		}
 		ArrayList<URL> jarUrls = new ArrayList<>();
 		while (classLoader != null)
@@ -697,11 +696,11 @@ public final class L2ScriptEngineManager
 				}
 				catch (InvocationTargetException e)
 				{
-					_log.log(Level.WARNING, e.getMessage(), e);
+					_log.warn(e.getMessage(), e);
 				}
 				catch (IllegalAccessException e)
 				{
-					_log.log(Level.WARNING, e.getMessage(), e);
+					_log.warn(e.getMessage(), e);
 				}
 				try
 				{
@@ -711,19 +710,19 @@ public final class L2ScriptEngineManager
 				}
 				catch (NoSuchMethodException e)
 				{
-					// _log.log(Level.WARNING, e.getMessage(), e);
+					// _log.warn(e.getMessage(), e);
 				}
 				catch (InvocationTargetException e)
 				{
-					_log.log(Level.WARNING, e.getMessage(), e);
+					_log.warn(e.getMessage(), e);
 				}
 				catch (IllegalAccessException e)
 				{
-					_log.log(Level.WARNING, e.getMessage(), e);
+					_log.warn(e.getMessage(), e);
 				}
 				catch (InstantiationException e)
 				{
-					_log.log(Level.WARNING, e.getMessage(), e);
+					_log.warn(e.getMessage(), e);
 				}
 				
 			}
@@ -765,7 +764,7 @@ public final class L2ScriptEngineManager
 			}
 			catch (ScriptException se)
 			{
-				_log.log(Level.WARNING, "", se);
+				_log.warn("", se);
 			}
 		}
 		
@@ -826,7 +825,7 @@ public final class L2ScriptEngineManager
 						}
 						else
 						{
-							_log.warning("Failed loading: (" + file.getCanonicalPath() + ") @ " + list.getName() + ":" + lnr.getLineNumber() + " - Reason: doesnt exists or is not a file.");
+							_log.warn("Failed loading: (" + file.getCanonicalPath() + ") @ " + list.getName() + ":" + lnr.getLineNumber() + " - Reason: doesnt exists or is not a file.");
 						}
 					}
 				}

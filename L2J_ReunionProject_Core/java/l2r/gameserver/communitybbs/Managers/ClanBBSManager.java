@@ -254,6 +254,16 @@ public class ClanBBSManager extends BaseBBSManager
 		}
 	}
 	
+	@Override
+	public void parsewrite(String url, String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
+	{
+		if (ar1.equals("Set"))
+		{
+			activeChar.getClan().setNotice(ar4);
+			cbByPass("_bbsclan_clanhome;" + activeChar.getClan().getClanId(), activeChar);
+		}
+	}
+	
 	public static ClanBBSManager getInstance()
 	{
 		return SingletonHolder._instance;

@@ -20,8 +20,6 @@ package l2r.gameserver.model.effects;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.handler.EffectHandler;
 import l2r.gameserver.model.ChanceCondition;
@@ -30,12 +28,15 @@ import l2r.gameserver.model.skills.funcs.FuncTemplate;
 import l2r.gameserver.model.skills.funcs.Lambda;
 import l2r.gameserver.model.stats.Env;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author mkizub
  */
 public class EffectTemplate
 {
-	static Logger _log = Logger.getLogger(EffectTemplate.class.getName());
+	static Logger _log = LoggerFactory.getLogger(EffectTemplate.class);
 	
 	private final Class<?> _func;
 	
@@ -82,7 +83,7 @@ public class EffectTemplate
 		_func = EffectHandler.getInstance().getHandler(func);
 		if (_func == null)
 		{
-			_log.warning("EffectTemplate: Requested Unexistent effect: " + func);
+			_log.warn("EffectTemplate: Requested Unexistent effect: " + func);
 			throw new RuntimeException();
 		}
 		
@@ -114,17 +115,17 @@ public class EffectTemplate
 		}
 		catch (IllegalAccessException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 		catch (InstantiationException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 		catch (InvocationTargetException e)
 		{
-			_log.log(Level.WARNING, "Error creating new instance of Class " + _func + " Exception was: " + e.getTargetException().getMessage(), e.getTargetException());
+			_log.warn("Error creating new instance of Class " + _func + " Exception was: " + e.getTargetException().getMessage(), e.getTargetException());
 			return null;
 		}
 		
@@ -162,17 +163,17 @@ public class EffectTemplate
 		}
 		catch (IllegalAccessException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 		catch (InstantiationException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 		catch (InvocationTargetException e)
 		{
-			_log.log(Level.WARNING, "Error creating new instance of Class " + func + " Exception was: " + e.getTargetException().getMessage(), e.getTargetException());
+			_log.warn("Error creating new instance of Class " + func + " Exception was: " + e.getTargetException().getMessage(), e.getTargetException());
 			return null;
 		}
 	}

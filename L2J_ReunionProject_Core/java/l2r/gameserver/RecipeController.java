@@ -21,7 +21,6 @@ package l2r.gameserver;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -53,6 +52,9 @@ import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import gr.reunion.configsEngine.LeaderboardsConfigs;
 import gr.reunion.leaderboards.CraftLeaderboard;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RecipeController
 {
@@ -171,7 +173,7 @@ public class RecipeController
 	
 	private static class RecipeItemMaker implements Runnable
 	{
-		private static final Logger _log = Logger.getLogger(RecipeItemMaker.class.getName());
+		private static final Logger _log = LoggerFactory.getLogger(RecipeItemMaker.class);
 		protected boolean _isValid;
 		protected List<TempItem> _items = null;
 		protected final L2RecipeList _recipeList;
@@ -309,14 +311,14 @@ public class RecipeController
 			
 			if ((_player == null) || (_target == null))
 			{
-				_log.warning("player or target == null (disconnected?), aborting" + _target + _player);
+				_log.warn("player or target == null (disconnected?), aborting" + _target + _player);
 				abort();
 				return;
 			}
 			
 			if (!_player.isOnline() || !_target.isOnline())
 			{
-				_log.warning("player or target is not online, aborting " + _target + _player);
+				_log.warn("player or target is not online, aborting " + _target + _player);
 				abort();
 				return;
 			}

@@ -21,7 +21,6 @@ package l2r.gameserver.network.clientpackets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.logging.Level;
 
 import l2r.gameserver.network.L2GameClient;
 
@@ -82,7 +81,7 @@ public class GameGuardReply extends L2GameClientPacket
 		}
 		catch (NoSuchAlgorithmException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	

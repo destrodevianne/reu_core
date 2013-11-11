@@ -19,19 +19,20 @@
 package l2r.gameserver.model.skills.funcs;
 
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Stats;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mkizub
  */
 public final class FuncTemplate
 {
-	protected static final Logger _log = Logger.getLogger(FuncTemplate.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(FuncTemplate.class);
 	
 	public Condition attachCond;
 	public Condition applayCond;
@@ -93,7 +94,7 @@ public final class FuncTemplate
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return null;
 		}
 	}

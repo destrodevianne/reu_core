@@ -176,7 +176,7 @@ public abstract class L2Playable extends L2Character
 				}
 				catch (Exception e)
 				{
-					_log.warning("Logger: notifyDeath failed (L2Playable 1) Report this to team. ");
+					_log.warn("Logger: notifyDeath failed (L2Playable 1) Report this to team. ");
 				}
 			}
 		}
@@ -192,7 +192,7 @@ public abstract class L2Playable extends L2Character
 				}
 				catch (Exception e)
 				{
-					_log.warning("Logger: notifyDeath failed (L2Playable 2) Report this to team. ");
+					_log.warn("Logger: notifyDeath failed (L2Playable 2) Report this to team. ");
 				}
 			}
 		}

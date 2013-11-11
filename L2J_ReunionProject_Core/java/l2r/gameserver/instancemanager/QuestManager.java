@@ -19,16 +19,18 @@
 package l2r.gameserver.instancemanager;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.scripting.L2ScriptEngineManager;
 import l2r.gameserver.scripting.ScriptManager;
 import l2r.util.L2FastMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QuestManager extends ScriptManager<Quest>
 {
-	protected static final Logger _log = Logger.getLogger(QuestManager.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(QuestManager.class);
 	
 	private final Map<String, Quest> _quests = new L2FastMap<>(true);
 	

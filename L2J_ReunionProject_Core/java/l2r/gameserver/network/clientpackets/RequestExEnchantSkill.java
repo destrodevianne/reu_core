@@ -186,7 +186,7 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 				
 				if (Config.DEBUG)
 				{
-					_log.fine("Learned skill ID: " + _skillId + " Level: " + _skillLvl + " for " + requiredSp + " SP, " + requiredAdena + " Adena.");
+					_log.info("Learned skill ID: " + _skillId + " Level: " + _skillLvl + " for " + requiredSp + " SP, " + requiredAdena + " Adena.");
 				}
 			}
 			else

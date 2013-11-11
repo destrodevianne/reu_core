@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -45,9 +43,12 @@ import l2r.gameserver.network.serverpackets.ExOlympiadSpelledInfo;
 import l2r.gameserver.network.serverpackets.PartySpelled;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CharEffectList
 {
-	protected static final Logger _log = Logger.getLogger(CharEffectList.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(CharEffectList.class);
 	private static final L2Effect[] EMPTY_EFFECTS = new L2Effect[0];
 	
 	private FastList<L2Effect> _buffs;
@@ -1495,7 +1496,7 @@ public class CharEffectList
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 }

@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor;
 
 import java.util.Collection;
-import java.util.logging.Level;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.InstanceType;
@@ -304,7 +303,7 @@ public class L2Trap extends L2Character
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 				unSummon();
 			}
 		}

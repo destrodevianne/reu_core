@@ -19,13 +19,13 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.enums.TaskPriority;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2AirShipInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.type.L2WeaponType;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExMoveToLocationInAirShip;
 import l2r.gameserver.network.serverpackets.StopMoveInVehicle;
-import l2r.gameserver.util.Point3D;
 
 /**
  * format: ddddddd X:%d Y:%d Z:%d OriginX:%d OriginY:%d OriginZ:%d
@@ -100,7 +100,7 @@ public class MoveToLocationInAirShip extends L2GameClientPacket
 			return;
 		}
 		
-		activeChar.setInVehiclePosition(new Point3D(_targetX, _targetY, _targetZ));
+		activeChar.setInVehiclePosition(new Location(_targetX, _targetY, _targetZ));
 		activeChar.broadcastPacket(new ExMoveToLocationInAirShip(activeChar));
 	}
 	

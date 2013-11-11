@@ -70,7 +70,7 @@ public final class RequestExCubeGameChangeTeam extends L2GameClientPacket
 				break;
 			}
 			default:
-				_log.warning("Wrong Cube Game Team ID: " + _team);
+				_log.warn("Wrong Cube Game Team ID: " + _team);
 				break;
 		}
 	}

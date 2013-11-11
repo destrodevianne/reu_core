@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor.instance;
 
 import java.util.List;
-import java.util.logging.Level;
 
 import javolution.util.FastList;
 import l2r.gameserver.enums.InstanceType;
@@ -63,7 +62,7 @@ public class L2ControlTowerInstance extends L2Tower
 					}
 					catch (Exception e)
 					{
-						_log.log(Level.WARNING, "Error at L2ControlTowerInstance", e);
+						_log.warn("Error at L2ControlTowerInstance", e);
 					}
 				}
 				_guards.clear();

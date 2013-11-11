@@ -23,12 +23,13 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MonitorInfo;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.Shutdown;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thread to check for deadlocked threads.
@@ -36,7 +37,7 @@ import l2r.gameserver.Shutdown;
  */
 public class DeadLockDetector extends Thread
 {
-	private static Logger _log = Logger.getLogger(DeadLockDetector.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(DeadLockDetector.class);
 	
 	/** Interval to check for deadlocked threads */
 	private static final int _sleepTime = Config.DEADLOCK_CHECK_INTERVAL * 1000;
@@ -104,7 +105,7 @@ public class DeadLockDetector extends Thread
 							info.append(Config.EOL);
 						}
 					}
-					_log.warning(info.toString());
+					_log.warn(info.toString());
 					
 					if (Config.RESTART_ON_DEADLOCK)
 					{
@@ -118,7 +119,7 @@ public class DeadLockDetector extends Thread
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "DeadLockDetector: ", e);
+				_log.warn("DeadLockDetector: ", e);
 			}
 		}
 	}

@@ -74,7 +74,7 @@ public final class RequestRestart extends L2GameClientPacket
 		
 		if (player.isLocked())
 		{
-			_log.warning("Player " + player.getName() + " tried to restart during class change.");
+			_log.warn("Player " + player.getName() + " tried to restart during class change.");
 			sendPacket(RestartResponse.valueOf(false));
 			return;
 		}
@@ -106,7 +106,7 @@ public final class RequestRestart extends L2GameClientPacket
 		{
 			if (Config.DEBUG)
 			{
-				_log.fine("Player " + player.getName() + " tried to logout while fighting.");
+				_logger.fine("Player " + player.getName() + " tried to logout while fighting.");
 			}
 			
 			player.sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);

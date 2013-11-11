@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.ai.L2BoatAI;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2CharPosition;
@@ -30,12 +28,15 @@ import l2r.gameserver.network.serverpackets.VehicleDeparture;
 import l2r.gameserver.network.serverpackets.VehicleInfo;
 import l2r.gameserver.network.serverpackets.VehicleStarted;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Maktakien, reworked by DS
  */
 public class L2BoatInstance extends L2Vehicle
 {
-	protected static final Logger _logBoat = Logger.getLogger(L2BoatInstance.class.getName());
+	protected static final Logger _logBoat = LoggerFactory.getLogger(L2BoatInstance.class);
 	
 	public L2BoatInstance(int objectId, L2CharTemplate template)
 	{

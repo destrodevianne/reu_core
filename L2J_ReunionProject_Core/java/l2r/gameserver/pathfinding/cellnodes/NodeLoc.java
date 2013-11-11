@@ -19,86 +19,54 @@
 package l2r.gameserver.pathfinding.cellnodes;
 
 import l2r.gameserver.GeoData;
+import l2r.gameserver.model.L2World;
 import l2r.gameserver.pathfinding.AbstractNodeLoc;
-
-import com.l2jserver.gameserver.geoengine.Direction;
 
 /**
  * @author -Nemesiss-
- * @author FBIagent
  */
 public class NodeLoc extends AbstractNodeLoc
 {
 	private int _x;
 	private int _y;
-	private boolean _goNorth;
-	private boolean _goEast;
-	private boolean _goSouth;
-	private boolean _goWest;
-	private int _geoHeight;
+	private short _geoHeightAndNSWE;
 	
-	public NodeLoc(int x, int y, int z)
-	{
-		set(x, y, z);
-	}
-	
-	public void set(int x, int y, int z)
+	public NodeLoc(int x, int y, short z)
 	{
 		_x = x;
 		_y = y;
-		_goNorth = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.NORTH);
-		_goEast = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.EAST);
-		_goSouth = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.SOUTH);
-		_goWest = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.WEST);
-		_geoHeight = GeoData.getInstance().getNearestZ(x, y, z);
+		_geoHeightAndNSWE = GeoData.getInstance().getHeightAndNSWE(x, y, z);
 	}
 	
-	public boolean canGoNorth()
+	public void set(int x, int y, short z)
 	{
-		return _goNorth;
+		_x = x;
+		_y = y;
+		_geoHeightAndNSWE = GeoData.getInstance().getHeightAndNSWE(x, y, z);
 	}
 	
-	public boolean canGoEast()
+	public short getNSWE()
 	{
-		return _goEast;
-	}
-	
-	public boolean canGoSouth()
-	{
-		return _goSouth;
-	}
-	
-	public boolean canGoWest()
-	{
-		return _goWest;
-	}
-	
-	public boolean canGoNone()
-	{
-		return !canGoNorth() && !canGoEast() && !canGoSouth() && !canGoWest();
-	}
-	
-	public boolean canGoAll()
-	{
-		return canGoNorth() && canGoEast() && canGoSouth() && canGoWest();
+		return (short) (_geoHeightAndNSWE & 0x0f);
 	}
 	
 	@Override
 	public int getX()
 	{
-		return GeoData.getInstance().getWorldX(_x);
+		return (_x << 4) + L2World.MAP_MIN_X;
 	}
 	
 	@Override
 	public int getY()
 	{
-		return GeoData.getInstance().getWorldY(_y);
+		return (_y << 4) + L2World.MAP_MIN_Y;
 	}
 	
 	@Override
-	public int getZ()
+	public short getZ()
 	{
-		return _geoHeight;
+		short height = (short) (_geoHeightAndNSWE & 0x0fff0);
+		return (short) (height >> 1);
 	}
 	
 	@Override
@@ -122,33 +90,12 @@ public class NodeLoc extends AbstractNodeLoc
 	@Override
 	public int hashCode()
 	{
-		
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + _x;
 		result = (prime * result) + _y;
-		
-		byte nswe = 0;
-		if (canGoNorth())
-		{
-			nswe |= 1;
-		}
-		if (canGoEast())
-		{
-			nswe |= 1 << 1;
-		}
-		if (canGoSouth())
-		{
-			nswe |= 1 << 2;
-		}
-		if (canGoEast())
-		{
-			nswe |= 1 << 3;
-		}
-		
-		result = (prime * result) + (((_geoHeight & 0xFFFF) << 1) | nswe);
+		result = (prime * result) + _geoHeightAndNSWE;
 		return result;
-		// return super.hashCode();
 	}
 	
 	@Override
@@ -175,23 +122,7 @@ public class NodeLoc extends AbstractNodeLoc
 		{
 			return false;
 		}
-		if (_goNorth != other._goNorth)
-		{
-			return false;
-		}
-		if (_goEast != other._goEast)
-		{
-			return false;
-		}
-		if (_goSouth != other._goSouth)
-		{
-			return false;
-		}
-		if (_goWest != other._goWest)
-		{
-			return false;
-		}
-		if (_geoHeight != other._geoHeight)
+		if (_geoHeightAndNSWE != other._geoHeightAndNSWE)
 		{
 			return false;
 		}

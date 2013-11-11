@@ -21,6 +21,7 @@ package l2r.gameserver.network.clientpackets;
 import l2r.Config;
 import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.instancemanager.BoatManager;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2BoatInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.type.L2WeaponType;
@@ -28,7 +29,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.MoveToLocationInVehicle;
 import l2r.gameserver.network.serverpackets.StopMoveInVehicle;
-import l2r.gameserver.util.Point3D;
 
 public final class RequestMoveToLocationInVehicle extends L2GameClientPacket
 {
@@ -128,8 +128,8 @@ public final class RequestMoveToLocationInVehicle extends L2GameClientPacket
 			activeChar.setVehicle(boat);
 		}
 		
-		final Point3D pos = new Point3D(_targetX, _targetY, _targetZ);
-		final Point3D originPos = new Point3D(_originX, _originY, _originZ);
+		final Location pos = new Location(_targetX, _targetY, _targetZ);
+		final Location originPos = new Location(_originX, _originY, _originZ);
 		activeChar.setInVehiclePosition(pos);
 		activeChar.broadcastPacket(new MoveToLocationInVehicle(activeChar, pos, originPos));
 	}

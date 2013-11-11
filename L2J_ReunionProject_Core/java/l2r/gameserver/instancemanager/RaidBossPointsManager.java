@@ -28,12 +28,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kerberos, JIV
@@ -41,7 +42,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
  */
 public class RaidBossPointsManager
 {
-	private static final Logger _log = Logger.getLogger(RaidBossPointsManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(RaidBossPointsManager.class);
 	
 	private FastMap<Integer, Map<Integer, Integer>> _list;
 	
@@ -83,7 +84,7 @@ public class RaidBossPointsManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldnt load raid points ", e);
+			_log.warn(getClass().getSimpleName() + ": Couldnt load raid points ", e);
 		}
 	}
 	
@@ -99,7 +100,7 @@ public class RaidBossPointsManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldn't update char raid points for player: " + player, e);
+			_log.warn(getClass().getSimpleName() + ": Couldn't update char raid points for player: " + player, e);
 		}
 	}
 	
@@ -156,7 +157,7 @@ public class RaidBossPointsManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldn't clean raid points", e);
+			_log.warn(getClass().getSimpleName() + ": Couldn't clean raid points", e);
 		}
 	}
 	

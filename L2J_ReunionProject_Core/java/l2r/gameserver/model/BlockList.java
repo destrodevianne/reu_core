@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -34,13 +32,16 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class ...
  * @version $Revision: 1.2 $ $Date: 2004/06/27 08:12:59 $
  */
 public class BlockList
 {
-	private static Logger _log = Logger.getLogger(BlockList.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(BlockList.class);
 	private static Map<Integer, List<Integer>> _offlineList = new FastMap<Integer, List<Integer>>().shared();
 	
 	private final L2PcInstance _owner;
@@ -99,7 +100,7 @@ public class BlockList
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error found in " + ObjId + " FriendList while loading BlockList: " + e.getMessage(), e);
+			_log.warn("Error found in " + ObjId + " FriendList while loading BlockList: " + e.getMessage(), e);
 		}
 		return list;
 	}
@@ -130,7 +131,7 @@ public class BlockList
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not add block player: " + e.getMessage(), e);
+			_log.warn("Could not add block player: " + e.getMessage(), e);
 		}
 	}
 	

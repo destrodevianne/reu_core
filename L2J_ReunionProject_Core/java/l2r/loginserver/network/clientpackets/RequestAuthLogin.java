@@ -19,8 +19,6 @@
 package l2r.loginserver.network.clientpackets;
 
 import java.security.GeneralSecurityException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.crypto.Cipher;
 
@@ -36,6 +34,9 @@ import l2r.loginserver.network.serverpackets.LoginFail.LoginFailReason;
 import l2r.loginserver.network.serverpackets.LoginOk;
 import l2r.loginserver.network.serverpackets.ServerList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <pre>
  * Format: x
@@ -46,7 +47,7 @@ import l2r.loginserver.network.serverpackets.ServerList;
  */
 public class RequestAuthLogin extends L2LoginClientPacket
 {
-	private static Logger _log = Logger.getLogger(RequestAuthLogin.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(RequestAuthLogin.class);
 	
 	private final byte[] _raw = new byte[128];
 	
@@ -99,7 +100,7 @@ public class RequestAuthLogin extends L2LoginClientPacket
 		}
 		catch (GeneralSecurityException e)
 		{
-			_log.log(Level.INFO, "", e);
+			_log.info("", e);
 			return;
 		}
 		
@@ -114,7 +115,7 @@ public class RequestAuthLogin extends L2LoginClientPacket
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return;
 		}
 		

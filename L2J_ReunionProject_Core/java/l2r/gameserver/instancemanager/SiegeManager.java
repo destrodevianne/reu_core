@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -44,9 +42,12 @@ import l2r.gameserver.model.entity.Siege;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.util.PropertiesParser;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SiegeManager
 {
-	private static final Logger _log = Logger.getLogger(SiegeManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(SiegeManager.class);
 	
 	private final Map<Integer, List<TowerSpawn>> _controlTowers = new HashMap<>();
 	private final Map<Integer, List<TowerSpawn>> _flameTowers = new HashMap<>();
@@ -88,7 +89,7 @@ public class SiegeManager
 		L2PcInstance player = (L2PcInstance) activeChar;
 		Castle castle = CastleManager.getInstance().getCastle(player);
 		
-		if ((castle == null) || (castle.getCastleId() <= 0))
+		if ((castle == null) || (castle.getResidenceId() <= 0))
 		{
 			text = "You must be on castle ground to summon this";
 		}
@@ -146,7 +147,7 @@ public class SiegeManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Exception: checkIsRegistered(): " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Exception: checkIsRegistered(): " + e.getMessage(), e);
 		}
 		return register;
 	}
@@ -195,7 +196,7 @@ public class SiegeManager
 				}
 				catch (Exception e)
 				{
-					_log.warning(getClass().getSimpleName() + ": Error while loading control tower(s) for " + castle.getName() + " castle.");
+					_log.warn(getClass().getSimpleName() + ": Error while loading control tower(s) for " + castle.getName() + " castle.");
 				}
 			}
 			
@@ -226,16 +227,16 @@ public class SiegeManager
 				}
 				catch (Exception e)
 				{
-					_log.warning(getClass().getSimpleName() + ": Error while loading flame tower(s) for " + castle.getName() + " castle.");
+					_log.warn(getClass().getSimpleName() + ": Error while loading flame tower(s) for " + castle.getName() + " castle.");
 				}
 			}
-			_controlTowers.put(castle.getCastleId(), controlTowers);
-			_flameTowers.put(castle.getCastleId(), flameTowers);
-			MercTicketManager.MERCS_MAX_PER_CASTLE[castle.getCastleId() - 1] = siegeSettings.getInt(castle.getName() + "MaxMercenaries", MercTicketManager.MERCS_MAX_PER_CASTLE[castle.getCastleId() - 1]);
+			_controlTowers.put(castle.getResidenceId(), controlTowers);
+			_flameTowers.put(castle.getResidenceId(), flameTowers);
+			MercTicketManager.MERCS_MAX_PER_CASTLE[castle.getResidenceId() - 1] = siegeSettings.getInt(castle.getName() + "MaxMercenaries", MercTicketManager.MERCS_MAX_PER_CASTLE[castle.getResidenceId() - 1]);
 			
 			if (castle.getOwnerId() != 0)
 			{
-				loadTrapUpgrade(castle.getCastleId());
+				loadTrapUpgrade(castle.getResidenceId());
 			}
 		}
 	}
@@ -328,7 +329,7 @@ public class SiegeManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: loadTrapUpgrade(): " + e.getMessage(), e);
+			_log.warn("Exception: loadTrapUpgrade(): " + e.getMessage(), e);
 		}
 	}
 	

@@ -23,12 +23,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.L2TeleportLocation;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
@@ -36,7 +37,7 @@ import l2r.gameserver.model.L2TeleportLocation;
  */
 public class TeleportLocationTable
 {
-	private static Logger _log = Logger.getLogger(TeleportLocationTable.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(TeleportLocationTable.class);
 	
 	private final Map<Integer, L2TeleportLocation> _teleports = new HashMap<>();
 	
@@ -71,7 +72,7 @@ public class TeleportLocationTable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error loading Teleport Table.", e);
+			_log.error(getClass().getSimpleName() + ": Error loading Teleport Table.", e);
 		}
 		
 		if (Config.CUSTOM_TELEPORT_TABLE)
@@ -103,7 +104,7 @@ public class TeleportLocationTable
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": Error while creating custom teleport table " + e.getMessage(), e);
+				_log.warn(getClass().getSimpleName() + ": Error while creating custom teleport table " + e.getMessage(), e);
 			}
 		}
 	}

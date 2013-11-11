@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -38,6 +36,10 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.skills.l2skills.L2SkillSummon;
 import l2r.gameserver.network.serverpackets.PetItemList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.map.hash.TIntIntHashMap;
 
 /**
@@ -45,7 +47,7 @@ import gnu.trove.map.hash.TIntIntHashMap;
  */
 public class CharSummonTable
 {
-	private static Logger _log = Logger.getLogger(CharSummonTable.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(CharSummonTable.class);
 	
 	private static final String INIT_SUMMONS = "SELECT ownerId, summonSkillId FROM character_summons";
 	private static final String INIT_PET = "SELECT ownerId, item_obj_id FROM pets WHERE restore = 'true'";
@@ -77,7 +79,7 @@ public class CharSummonTable
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error while loading saved summons", e);
+				_log.error(getClass().getSimpleName() + ": Error while loading saved summons", e);
 			}
 		}
 		
@@ -94,7 +96,7 @@ public class CharSummonTable
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error while loading saved summons", e);
+				_log.error(getClass().getSimpleName() + ": Error while loading saved summons", e);
 			}
 		}
 	}
@@ -129,7 +131,7 @@ public class CharSummonTable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, getClass().getSimpleName() + ": Failed to store summon [SummonId: " + summon.getNpcId() + "] from Char [CharId: " + summon.getOwner().getObjectId() + "] data", e);
+			_log.error(getClass().getSimpleName() + ": Failed to store summon [SummonId: " + summon.getNpcId() + "] from Char [CharId: " + summon.getOwner().getObjectId() + "] data", e);
 		}
 		
 	}
@@ -165,7 +167,7 @@ public class CharSummonTable
 					summonTemplate = NpcTable.getInstance().getTemplate(skill.getNpcId());
 					if (summonTemplate == null)
 					{
-						_log.warning(getClass().getSimpleName() + ": Summon attemp for nonexisting Skill ID:" + skillId);
+						_log.warn(getClass().getSimpleName() + ": Summon attemp for nonexisting Skill ID:" + skillId);
 						return;
 					}
 					
@@ -193,7 +195,7 @@ public class CharSummonTable
 					if (summon.getLevel() >= ExperienceTable.getInstance().getMaxPetLevel())
 					{
 						summon.getStat().setExp(ExperienceTable.getInstance().getExpForLevel(ExperienceTable.getInstance().getMaxPetLevel() - 1));
-						_log.warning(getClass().getSimpleName() + ": Summon (" + summon.getName() + ") NpcID: " + summon.getNpcId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
+						_log.warn(getClass().getSimpleName() + ": Summon (" + summon.getName() + ") NpcID: " + summon.getNpcId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
 					}
 					else
 					{
@@ -213,7 +215,7 @@ public class CharSummonTable
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Summon cannot be restored: ", e);
+			_log.warn(getClass().getSimpleName() + ": Summon cannot be restored: ", e);
 		}
 	}
 	
@@ -228,7 +230,7 @@ public class CharSummonTable
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Summon cannot be removed: ", e);
+			_log.warn(getClass().getSimpleName() + ": Summon cannot be removed: ", e);
 		}
 	}
 	

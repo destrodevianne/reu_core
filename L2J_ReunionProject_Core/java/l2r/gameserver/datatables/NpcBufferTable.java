@@ -24,16 +24,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.holders.SkillHolder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class NpcBufferTable
 {
-	private static Logger _log = Logger.getLogger(NpcBufferTable.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(NpcBufferTable.class);
 	
 	private final Map<Integer, NpcBufferSkills> _buffers = new HashMap<>();
 	
@@ -131,7 +132,7 @@ public class NpcBufferTable
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error reading npc_buffer table: " + e.getMessage(), e);
+			_log.error(getClass().getSimpleName() + ": Error reading npc_buffer table: " + e.getMessage(), e);
 		}
 		_log.info(getClass().getSimpleName() + ": Loaded " + _buffers.size() + " buffers and " + skillCount + " skills.");
 	}

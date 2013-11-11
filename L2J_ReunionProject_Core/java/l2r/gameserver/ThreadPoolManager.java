@@ -28,14 +28,15 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import l2r.Config;
 import l2r.util.StringUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -73,7 +74,7 @@ import l2r.util.StringUtil;
  */
 public class ThreadPoolManager
 {
-	protected static final Logger _log = Logger.getLogger(ThreadPoolManager.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(ThreadPoolManager.class);
 	
 	private static final class RunnableWrapper implements Runnable
 	{
@@ -375,7 +376,7 @@ public class ThreadPoolManager
 		}
 		catch (InterruptedException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	

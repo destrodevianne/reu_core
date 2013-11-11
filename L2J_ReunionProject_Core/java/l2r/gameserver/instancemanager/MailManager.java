@@ -26,8 +26,6 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
@@ -41,12 +39,15 @@ import l2r.gameserver.network.serverpackets.ExNoticePostArrived;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.L2FastMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Migi, DS
  */
 public class MailManager
 {
-	private static Logger _log = Logger.getLogger(MailManager.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(MailManager.class);
 	
 	private final Map<Integer, Message> _messages = new L2FastMap<>(true);
 	
@@ -86,7 +87,7 @@ public class MailManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error loading from database:" + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error loading from database:" + e.getMessage(), e);
 		}
 		_log.info(getClass().getSimpleName() + ": Successfully loaded " + count + " messages.");
 	}
@@ -176,7 +177,7 @@ public class MailManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error saving message:" + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error saving message:" + e.getMessage(), e);
 		}
 		
 		final L2PcInstance receiver = L2World.getInstance().getPlayer(msg.getReceiverId());
@@ -190,7 +191,7 @@ public class MailManager
 	
 	private class MessageDeletionTask implements Runnable
 	{
-		private final Logger _log = Logger.getLogger(MessageDeletionTask.class.getName());
+		private final Logger _log = LoggerFactory.getLogger(MessageDeletionTask.class);
 		
 		final int _msgId;
 		
@@ -236,7 +237,7 @@ public class MailManager
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, getClass().getSimpleName() + ": Error returning items:" + e.getMessage(), e);
+					_log.warn(getClass().getSimpleName() + ": Error returning items:" + e.getMessage(), e);
 				}
 			}
 			deleteMessageInDb(msg.getId());
@@ -253,7 +254,7 @@ public class MailManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error marking as read message:" + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error marking as read message:" + e.getMessage(), e);
 		}
 	}
 	
@@ -267,7 +268,7 @@ public class MailManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error marking as deleted by sender message:" + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error marking as deleted by sender message:" + e.getMessage(), e);
 		}
 	}
 	
@@ -281,7 +282,7 @@ public class MailManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error marking as deleted by receiver message:" + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error marking as deleted by receiver message:" + e.getMessage(), e);
 		}
 	}
 	
@@ -295,7 +296,7 @@ public class MailManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error removing attachments in message:" + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error removing attachments in message:" + e.getMessage(), e);
 		}
 	}
 	
@@ -309,7 +310,7 @@ public class MailManager
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error deleting message:" + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error deleting message:" + e.getMessage(), e);
 		}
 		
 		_messages.remove(msgId);

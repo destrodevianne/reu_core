@@ -24,18 +24,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
  */
 public class PlayerVariables extends StatsSet
 {
-	private static final Logger _log = Logger.getLogger(PlayerVariables.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(PlayerVariables.class);
 	
 	// SQL Queries.
 	private static final String SELECT_QUERY = "SELECT * FROM character_variables WHERE charId = ?";
@@ -68,7 +69,7 @@ public class PlayerVariables extends StatsSet
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldn't restore variables for: " + getPlayer(), e);
+			_log.warn(getClass().getSimpleName() + ": Couldn't restore variables for: " + getPlayer(), e);
 		}
 	}
 	
@@ -104,7 +105,7 @@ public class PlayerVariables extends StatsSet
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldn't update variables for: " + getPlayer(), e);
+			_log.warn(getClass().getSimpleName() + ": Couldn't update variables for: " + getPlayer(), e);
 		}
 		finally
 		{

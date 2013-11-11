@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mkizub <BR>
@@ -34,7 +35,7 @@ import javolution.util.FastMap;
  */
 public class StatsSet
 {
-	private static final Logger _log = Logger.getLogger(StatsSet.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(StatsSet.class);
 	private final Map<String, Object> _set;
 	
 	public StatsSet()
@@ -672,7 +673,7 @@ public class StatsSet
 		assert !(((min <= max) && ((value < min) || (value >= max))));
 		if ((min <= max) && ((value < min) || (value >= max)))
 		{
-			_log.log(Level.SEVERE, "Incorrect value: " + value + "for: " + name + "Ref: " + reference);
+			_log.error("Incorrect value: " + value + "for: " + name + "Ref: " + reference);
 		}
 		
 		set(name, value);

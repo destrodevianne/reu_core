@@ -20,20 +20,14 @@ package l2r.gameserver.model.zone.type;
 
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
-import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.actor.L2Character;
-import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.entity.Castle;
-import l2r.gameserver.model.zone.L2ZoneRespawn;
 
 /**
  * A castle zone
  * @author durgus
  */
-public class L2CastleZone extends L2ZoneRespawn
+public final class L2CastleZone extends L2ResidenceZone
 {
-	private int _castleId;
-	private Castle _castle = null;
 	
 	public L2CastleZone(int id)
 	{
@@ -45,7 +39,7 @@ public class L2CastleZone extends L2ZoneRespawn
 	{
 		if (name.equals("castleId"))
 		{
-			_castleId = Integer.parseInt(value);
+			setResidenceId(Integer.parseInt(value));
 		}
 		else
 		{
@@ -56,60 +50,17 @@ public class L2CastleZone extends L2ZoneRespawn
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		if (getCastle() != null)
-		{
-			character.setInsideZone(ZoneIdType.CASTLE, true);
-		}
+		character.setInsideZone(ZoneIdType.CASTLE, true);
 	}
 	
 	@Override
 	protected void onExit(L2Character character)
 	{
-		if (getCastle() != null)
-		{
-			character.setInsideZone(ZoneIdType.CASTLE, false);
-		}
+		character.setInsideZone(ZoneIdType.CASTLE, false);
 	}
 	
-	@Override
-	public void onDieInside(L2Character character)
-	{
-	}
-	
-	@Override
-	public void onReviveInside(L2Character character)
-	{
-	}
-	
-	/**
-	 * Removes all foreigners from the castle
-	 * @param owningClanId
-	 */
 	public void banishForeigners(int owningClanId)
 	{
-		TeleportWhereType type = TeleportWhereType.Town;
-		for (L2PcInstance temp : getPlayersInside())
-		{
-			if ((temp.getClanId() == owningClanId) && (owningClanId != 0))
-			{
-				continue;
-			}
-			
-			temp.teleToLocation(type);
-		}
-	}
-	
-	public int getCastleId()
-	{
-		return _castleId;
-	}
-	
-	private final Castle getCastle()
-	{
-		if (_castle == null)
-		{
-			_castle = CastleManager.getInstance().getCastleById(_castleId);
-		}
-		return _castle;
+		super.banishForeigners(owningClanId, TeleportWhereType.Castle_banish);
 	}
 }
