@@ -28,15 +28,17 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.handler.ITelnetHandler;
 import l2r.gameserver.handler.TelnetHandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class GameStatusThread extends Thread
 {
-	private static final Logger _log = Logger.getLogger(GameStatusThread.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(GameStatusThread.class);
 	
 	private final Socket _cSocket;
 	
@@ -235,7 +237,7 @@ public class GameStatusThread extends Thread
 		}
 		catch (IOException e)
 		{
-			_log.warning(getClass().getSimpleName() + ": " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": " + e.getMessage());
 		}
 	}
 }

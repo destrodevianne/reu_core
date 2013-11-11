@@ -105,7 +105,6 @@ public enum L2SkillType
 	// Summons
 	SUMMON(L2SkillSummon.class),
 	FEED_PET,
-	STRSIEGEASSAULT,
 	ERASE,
 	BETRAY,
 	DECOY(L2SkillDecoy.class),

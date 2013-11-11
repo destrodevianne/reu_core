@@ -18,19 +18,20 @@
  */
 package l2r.loginserver.network.gameserverpackets;
 
-import java.util.logging.Logger;
-
 import l2r.loginserver.GameServerTable;
 import l2r.loginserver.GameServerTable.GameServerInfo;
 import l2r.loginserver.GameServerThread;
 import l2r.util.network.BaseRecievePacket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author -Wooden-
  */
 public class ServerStatus extends BaseRecievePacket
 {
-	protected static Logger _log = Logger.getLogger(ServerStatus.class.getName());
+	protected static Logger _log = LoggerFactory.getLogger(ServerStatus.class);
 	
 	public static final String[] STATUS_STRING =
 	{

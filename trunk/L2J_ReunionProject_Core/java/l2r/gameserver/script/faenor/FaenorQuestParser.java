@@ -18,14 +18,14 @@
  */
 package l2r.gameserver.script.faenor;
 
-import java.util.logging.Logger;
-
 import javax.script.ScriptContext;
 
 import l2r.gameserver.script.Parser;
 import l2r.gameserver.script.ParserFactory;
 import l2r.gameserver.script.ScriptEngine;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 /**
@@ -33,7 +33,7 @@ import org.w3c.dom.Node;
  */
 public class FaenorQuestParser extends FaenorParser
 {
-	protected static final Logger _log = Logger.getLogger(FaenorQuestParser.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(FaenorQuestParser.class);
 	
 	@Override
 	public void parseScript(Node questNode, ScriptContext context)

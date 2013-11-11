@@ -20,8 +20,6 @@ package l2r.gameserver.model.entity;
 
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -52,12 +50,15 @@ import l2r.gameserver.network.serverpackets.RelationChanged;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author BiggBoss
  */
 public final class BlockCheckerEngine
 {
-	protected static final Logger _log = Logger.getLogger(BlockCheckerEngine.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(BlockCheckerEngine.class);
 	// The object which holds all basic members info
 	protected HandysBlockCheckerManager.ArenaParticipantsHolder _holder;
 	// Maps to hold player of each team and his points
@@ -309,13 +310,13 @@ public final class BlockCheckerEngine
 				
 				if (Config.DEBUG)
 				{
-					_log.config("Handys Block Checker Event at arena " + _arena + " ended due lack of players!");
+					_log.info("Handys Block Checker Event at arena " + _arena + " ended due lack of players!");
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Couldnt end Block Checker event at " + _arena, e);
+			_log.error("Couldnt end Block Checker event at " + _arena, e);
 		}
 	}
 	
@@ -411,8 +412,7 @@ public final class BlockCheckerEngine
 				player.sendPacket(initialPoints);
 				player.sendPacket(_closeUserInterface);
 				// ExBasicActionList
-				final ExBasicActionList actionList = ExBasicActionList.getStaticPacket(player);
-				player.sendPacket(actionList);
+				player.sendPacket(ExBasicActionList.STATIC_PACKET);
 				broadcastRelationChanged(player);
 			}
 		}
@@ -423,7 +423,7 @@ public final class BlockCheckerEngine
 			// Wrong arena passed, stop event
 			if (_arena == -1)
 			{
-				_log.severe("Couldnt set up the arena Id for the Block Checker event, cancelling event...");
+				_log.error("Couldnt set up the arena Id for the Block Checker event, cancelling event...");
 				return;
 			}
 			_isStarted = true;
@@ -511,7 +511,7 @@ public final class BlockCheckerEngine
 			}
 			catch (Exception e)
 			{
-				_log.warning(getClass().getSimpleName() + ": " + e.getMessage());
+				_log.warn(getClass().getSimpleName() + ": " + e.getMessage());
 			}
 			
 			// Spawn the block carrying girl
@@ -534,8 +534,8 @@ public final class BlockCheckerEngine
 				}
 				catch (Exception e)
 				{
-					_log.warning("Couldnt Spawn Block Checker NPCs! Wrong instance type at npc table?");
-					_log.warning(getClass().getSimpleName() + ": " + e.getMessage());
+					_log.warn("Couldnt Spawn Block Checker NPCs! Wrong instance type at npc table?");
+					_log.warn(getClass().getSimpleName() + ": " + e.getMessage());
 				}
 			}
 			
@@ -562,7 +562,7 @@ public final class BlockCheckerEngine
 		{
 			if (_spawn == null)
 			{
-				_log.warning("HBCE: Block Carrying Girl is null");
+				_log.warn("HBCE: Block Carrying Girl is null");
 				return;
 			}
 			SpawnTable.getInstance().deleteSpawn(_spawn, false);

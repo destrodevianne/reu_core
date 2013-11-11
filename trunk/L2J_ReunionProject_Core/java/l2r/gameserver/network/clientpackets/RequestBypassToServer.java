@@ -20,7 +20,6 @@ package l2r.gameserver.network.clientpackets;
 
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -112,14 +111,14 @@ public final class RequestBypassToServer extends L2GameClientPacket
 					{
 						activeChar.sendMessage("The command " + command.substring(6) + " does not exist!");
 					}
-					_log.warning(activeChar + " requested not registered admin command '" + command + "'");
+					_log.warn(activeChar + " requested not registered admin command '" + command + "'");
 					return;
 				}
 				
 				if (!AdminTable.getInstance().hasAccess(command, activeChar.getAccessLevel()))
 				{
 					activeChar.sendMessage("You don't have the access rights to use this command!");
-					_log.warning("Character " + activeChar.getName() + " tried to use admin command " + command + ", without proper access level!");
+					_log.warn("Character " + activeChar.getName() + " tried to use admin command " + command + ", without proper access level!");
 					return;
 				}
 				
@@ -215,7 +214,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				}
 				catch (NumberFormatException nfe)
 				{
-					_log.log(Level.WARNING, "NFE for command [" + _command + "]", nfe);
+					_log.warn("NFE for command [" + _command + "]", nfe);
 				}
 			}
 			// Navigate through Manor windows
@@ -315,13 +314,13 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				}
 				else
 				{
-					_log.log(Level.WARNING, getClient() + " sent not handled RequestBypassToServer: [" + _command + "]");
+					_log.warn(getClient() + " sent not handled RequestBypassToServer: [" + _command + "]");
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClient() + " sent bad RequestBypassToServer: \"" + _command + "\"", e);
+			_log.warn(getClient() + " sent bad RequestBypassToServer: \"" + _command + "\"", e);
 			if (activeChar.isGM())
 			{
 				StringBuilder sb = new StringBuilder(200);

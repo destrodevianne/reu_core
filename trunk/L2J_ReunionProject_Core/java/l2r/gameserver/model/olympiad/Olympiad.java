@@ -31,7 +31,6 @@ import java.util.Properties;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -46,6 +45,10 @@ import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.L2FastList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.map.hash.TIntIntHashMap;
 
 /**
@@ -53,8 +56,8 @@ import gnu.trove.map.hash.TIntIntHashMap;
  */
 public class Olympiad
 {
-	protected static final Logger _log = Logger.getLogger(Olympiad.class.getName());
-	protected static final Logger _logResults = Logger.getLogger("olympiad");
+	protected static final Logger _log = LoggerFactory.getLogger(Olympiad.class);
+	protected static final java.util.logging.Logger _logResults = java.util.logging.Logger.getLogger("olympiad");
 	
 	private static final Map<Integer, StatsSet> _nobles = new FastMap<>();
 	protected static L2FastList<StatsSet> _heroesToBe;
@@ -191,12 +194,12 @@ public class Olympiad
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Olympiad System: Error loading olympiad data from database: ", e);
+			_log.warn("Olympiad System: Error loading olympiad data from database: ", e);
 		}
 		
 		if (!loaded)
 		{
-			_log.log(Level.INFO, "Olympiad System: failed to load data from database, trying to load from file.");
+			_log.info("Olympiad System: failed to load data from database, trying to load from file.");
 			
 			Properties OlympiadProperties = new Properties();
 			try (InputStream is = new FileInputStream(Config.OLYMPIAD_CONFIG_FILE))
@@ -206,7 +209,7 @@ public class Olympiad
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Olympiad System: Error loading olympiad properties: ", e);
+				_log.error("Olympiad System: Error loading olympiad properties: ", e);
 				return;
 			}
 			
@@ -244,7 +247,7 @@ public class Olympiad
 				}
 				break;
 			default:
-				_log.warning("Olympiad System: Omg something went wrong in loading!! Period = " + _period);
+				_log.warn("Olympiad System: Omg something went wrong in loading!! Period = " + _period);
 				return;
 		}
 		
@@ -274,7 +277,7 @@ public class Olympiad
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Olympiad System: Error loading noblesse data from database: ", e);
+			_log.warn("Olympiad System: Error loading noblesse data from database: ", e);
 		}
 		
 		synchronized (this)
@@ -329,7 +332,7 @@ public class Olympiad
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Olympiad System: Error loading noblesse data from database for Ranking: ", e);
+			_log.warn("Olympiad System: Error loading noblesse data from database for Ranking: ", e);
 		}
 		
 		int rank1 = (int) Math.round(tmpPlace.size() * 0.01);
@@ -798,7 +801,7 @@ public class Olympiad
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Olympiad System: Failed to save noblesse data to database: ", e);
+			_log.error("Olympiad System: Failed to save noblesse data to database: ", e);
 		}
 	}
 	
@@ -826,7 +829,7 @@ public class Olympiad
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Olympiad System: Failed to save olympiad data to database: ", e);
+			_log.error("Olympiad System: Failed to save olympiad data to database: ", e);
 		}
 		//@formatter:off
 		/*
@@ -842,7 +845,7 @@ public class Olympiad
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Olympiad System: Unable to save olympiad properties to file: ", e);
+			_log.warn("Olympiad System: Unable to save olympiad properties to file: ", e);
 		}
 		*/
 		//@formatter:on
@@ -859,7 +862,7 @@ public class Olympiad
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "Olympiad System: Failed to update monthly noblese data: ", e);
+			_log.error("Olympiad System: Failed to update monthly noblese data: ", e);
 		}
 	}
 	
@@ -1029,7 +1032,7 @@ public class Olympiad
 		}
 		catch (SQLException e)
 		{
-			_log.warning("Olympiad System: Couldnt load heros from DB");
+			_log.warn("Olympiad System: Couldnt load heros from DB");
 		}
 	}
 	
@@ -1052,7 +1055,7 @@ public class Olympiad
 		}
 		catch (SQLException e)
 		{
-			_log.warning("Olympiad System: Couldn't load olympiad leaders from DB!");
+			_log.warn("Olympiad System: Couldn't load olympiad leaders from DB!");
 		}
 		return names;
 	}
@@ -1130,7 +1133,7 @@ public class Olympiad
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not load last olympiad points:", e);
+			_log.warn("Could not load last olympiad points:", e);
 		}
 		return result;
 	}
@@ -1267,7 +1270,7 @@ public class Olympiad
 		}
 		catch (SQLException e)
 		{
-			_log.warning("Olympiad System: Couldn't delete nobles from DB!");
+			_log.warn("Olympiad System: Couldn't delete nobles from DB!");
 		}
 		_nobles.clear();
 	}

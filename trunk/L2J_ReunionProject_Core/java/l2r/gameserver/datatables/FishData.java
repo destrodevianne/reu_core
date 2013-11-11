@@ -136,7 +136,7 @@ public final class FishData extends DocumentParser
 			}
 			default:
 			{
-				_log.warning(getClass().getSimpleName() + ": Unmanaged fish grade!");
+				_log.warn(getClass().getSimpleName() + ": Unmanaged fish grade!");
 				return result;
 			}
 		}
@@ -152,7 +152,7 @@ public final class FishData extends DocumentParser
 		
 		if (result.isEmpty())
 		{
-			_log.warning(getClass().getSimpleName() + ": Cannot find any fish for level: " + level + " group: " + group + " and grade: " + grade + "!");
+			_log.warn(getClass().getSimpleName() + ": Cannot find any fish for level: " + level + " group: " + group + " and grade: " + grade + "!");
 		}
 		return result;
 	}

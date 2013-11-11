@@ -19,7 +19,7 @@
 package l2r.gameserver.engines;
 
 import java.io.File;
-import java.util.logging.Logger;
+import java.io.FileFilter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,6 +27,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import l2r.Config;
 import l2r.util.file.filter.XMLFilter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -40,7 +42,7 @@ import org.xml.sax.SAXParseException;
  */
 public abstract class DocumentParser
 {
-	protected final Logger _log = Logger.getLogger(getClass().getName());
+	protected final Logger _log = LoggerFactory.getLogger(getClass().getName());
 	
 	private static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 	private static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
@@ -50,6 +52,8 @@ public abstract class DocumentParser
 	private File _currentFile;
 	
 	private Document _currentDocument;
+	
+	private FileFilter _currentFilter = null;
 	
 	/**
 	 * This method can be used to load/reload the data.<br>
@@ -76,7 +80,7 @@ public abstract class DocumentParser
 	{
 		if (!xmlFilter.accept(f))
 		{
-			_log.warning(getClass().getSimpleName() + ": Could not parse " + f.getName() + " is not a file or it doesn't exist!");
+			_log.warn(getClass().getSimpleName() + ": Could not parse " + f.getName() + " is not a file or it doesn't exist!");
 			return;
 		}
 		
@@ -95,7 +99,7 @@ public abstract class DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": Could not parse " + f.getName() + " file: " + e.getMessage());
+			_log.warn(getClass().getSimpleName() + ": Could not parse " + f.getName() + " file: " + e.getMessage());
 			return;
 		}
 		parseDocument();
@@ -160,7 +164,7 @@ public abstract class DocumentParser
 	{
 		if (!dir.exists())
 		{
-			_log.warning(getClass().getSimpleName() + ": Folder " + dir.getAbsolutePath() + " doesn't exist!");
+			_log.warn(getClass().getSimpleName() + ": Folder " + dir.getAbsolutePath() + " doesn't exist!");
 			return false;
 		}
 		
@@ -279,6 +283,16 @@ public abstract class DocumentParser
 	{
 		final Node b = n.getNamedItem(name);
 		return (b == null) ? "" : b.getNodeValue();
+	}
+	
+	public void setCurrentFileFilter(FileFilter filter)
+	{
+		_currentFilter = filter;
+	}
+	
+	public FileFilter getCurrentFileFilter()
+	{
+		return _currentFilter != null ? _currentFilter : xmlFilter;
 	}
 	
 	/**

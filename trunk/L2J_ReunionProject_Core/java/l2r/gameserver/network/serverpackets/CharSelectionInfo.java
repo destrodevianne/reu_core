@@ -22,8 +22,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -36,9 +34,12 @@ import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.network.L2GameClient;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CharSelectionInfo extends L2GameServerPacket
 {
-	private static Logger _log = Logger.getLogger(CharSelectionInfo.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(CharSelectionInfo.class);
 	private final String _loginName;
 	private final int _sessionId;
 	private int _activeId;
@@ -236,7 +237,7 @@ public class CharSelectionInfo extends L2GameServerPacket
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not restore char info: " + e.getMessage(), e);
+			_log.warn("Could not restore char info: " + e.getMessage(), e);
 		}
 		return new CharSelectInfoPackage[0];
 	}
@@ -260,7 +261,7 @@ public class CharSelectionInfo extends L2GameServerPacket
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not restore char subclass info: " + e.getMessage(), e);
+			_log.warn("Could not restore char subclass info: " + e.getMessage(), e);
 		}
 	}
 	
@@ -384,7 +385,7 @@ public class CharSelectionInfo extends L2GameServerPacket
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "Could not restore augmentation info: " + e.getMessage(), e);
+				_log.warn("Could not restore augmentation info: " + e.getMessage(), e);
 			}
 		}
 		

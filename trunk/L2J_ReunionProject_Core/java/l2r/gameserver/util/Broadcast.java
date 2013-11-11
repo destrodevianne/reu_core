@@ -19,8 +19,6 @@
 package l2r.gameserver.util;
 
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Character;
@@ -30,6 +28,10 @@ import l2r.gameserver.network.serverpackets.CharInfo;
 import l2r.gameserver.network.serverpackets.CreatureSay;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.RelationChanged;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.procedure.TObjectProcedure;
 
 /**
@@ -38,7 +40,7 @@ import gnu.trove.procedure.TObjectProcedure;
  */
 public final class Broadcast
 {
-	private static Logger _log = Logger.getLogger(Broadcast.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(Broadcast.class);
 	
 	/**
 	 * Send a packet to all L2PcInstance in the _KnownPlayers of the L2Character that have the Character targeted.<BR>
@@ -101,7 +103,7 @@ public final class Broadcast
 			}
 			catch (NullPointerException e)
 			{
-				_log.log(Level.WARNING, e.getMessage(), e);
+				_log.warn(e.getMessage(), e);
 			}
 		}
 		

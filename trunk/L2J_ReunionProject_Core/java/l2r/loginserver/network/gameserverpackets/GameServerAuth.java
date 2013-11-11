@@ -19,7 +19,6 @@
 package l2r.loginserver.network.gameserverpackets;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.loginserver.GameServerTable;
@@ -29,6 +28,9 @@ import l2r.loginserver.network.L2JGameServerPacketHandler.GameServerState;
 import l2r.loginserver.network.loginserverpackets.AuthResponse;
 import l2r.loginserver.network.loginserverpackets.LoginServerFail;
 import l2r.util.network.BaseRecievePacket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <pre>
@@ -46,7 +48,7 @@ import l2r.util.network.BaseRecievePacket;
  */
 public class GameServerAuth extends BaseRecievePacket
 {
-	protected static Logger _log = Logger.getLogger(GameServerAuth.class.getName());
+	protected static Logger _log = LoggerFactory.getLogger(GameServerAuth.class);
 	GameServerThread _server;
 	private final byte[] _hexId;
 	private final int _desiredId;

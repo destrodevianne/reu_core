@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -32,12 +30,15 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.util.Broadcast;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author nBd
  */
 public class AutoAnnounceTaskManager
 {
-	private static final Logger _log = Logger.getLogger(AutoAnnounceTaskManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(AutoAnnounceTaskManager.class);
 	
 	protected final List<AutoAnnouncement> _announces = new FastList<>();
 	private int _nextId = 1;
@@ -88,9 +89,9 @@ public class AutoAnnounceTaskManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "AutoAnnoucements: Failed to load announcements data.", e);
+			_log.error("AutoAnnoucements: Failed to load announcements data.", e);
 		}
-		_log.log(Level.INFO, "AutoAnnoucements: Loaded " + count + " Auto Annoucement Data.");
+		_log.info("AutoAnnoucements: Loaded " + count + " Auto Annoucement Data.");
 	}
 	
 	public void addAutoAnnounce(long initial, long delay, int repeat, String memo, boolean isCritical)
@@ -111,7 +112,7 @@ public class AutoAnnounceTaskManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "AutoAnnoucements: Failed to add announcements data.", e);
+			_log.error("AutoAnnoucements: Failed to add announcements data.", e);
 		}
 	}
 	
@@ -128,7 +129,7 @@ public class AutoAnnounceTaskManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "AutoAnnoucements: Failed to delete announcements data.", e);
+			_log.error("AutoAnnoucements: Failed to delete announcements data.", e);
 		}
 	}
 	

@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -37,9 +35,12 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.L2GameClient.GameClientState;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class OfflineTradersTable
 {
-	private static Logger _log = Logger.getLogger(OfflineTradersTable.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(OfflineTradersTable.class);
 	
 	// SQL DEFINITIONS
 	private static final String SAVE_OFFLINE_STATUS = "INSERT INTO character_offline_trade (`charId`,`time`,`type`,`title`) VALUES (?,?,?,?)";
@@ -132,14 +133,14 @@ public class OfflineTradersTable
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, getClass().getSimpleName() + ": Error while saving offline trader: " + pc.getObjectId() + " " + e, e);
+					_log.warn(getClass().getSimpleName() + ": Error while saving offline trader: " + pc.getObjectId() + " " + e, e);
 				}
 			}
 			_log.info(getClass().getSimpleName() + ": Offline traders stored.");
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error while saving offline traders: " + e, e);
+			_log.warn(getClass().getSimpleName() + ": Error while saving offline traders: " + e, e);
 		}
 	}
 	
@@ -240,7 +241,7 @@ public class OfflineTradersTable
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, getClass().getSimpleName() + ": Error loading trader: " + player, e);
+					_log.warn(getClass().getSimpleName() + ": Error loading trader: " + player, e);
 					if (player != null)
 					{
 						player.deleteMe();
@@ -258,7 +259,7 @@ public class OfflineTradersTable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error while loading offline traders: ", e);
+			_log.warn(getClass().getSimpleName() + ": Error while loading offline traders: ", e);
 		}
 	}
 	

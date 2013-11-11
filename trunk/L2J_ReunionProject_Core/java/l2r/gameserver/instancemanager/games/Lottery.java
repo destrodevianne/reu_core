@@ -24,8 +24,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -36,12 +34,15 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Lottery
 {
 	public static final long SECOND = 1000;
 	public static final long MINUTE = 60000;
 	
-	protected static final Logger _log = Logger.getLogger(Lottery.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(Lottery.class);
 	
 	private static final String INSERT_LOTTERY = "INSERT INTO games(id, idnr, enddate, prize, newprize) VALUES (?, ?, ?, ?, ?)";
 	private static final String UPDATE_PRICE = "UPDATE games SET prize=?, newprize=? WHERE id = 1 AND idnr = ?";
@@ -103,7 +104,7 @@ public class Lottery
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "Lottery: Could not increase current lottery prize: " + e.getMessage(), e);
+			_log.warn("Lottery: Could not increase current lottery prize: " + e.getMessage(), e);
 		}
 	}
 	
@@ -169,7 +170,7 @@ public class Lottery
 			}
 			catch (SQLException e)
 			{
-				_log.log(Level.WARNING, "Lottery: Could not restore lottery data: " + e.getMessage(), e);
+				_log.warn("Lottery: Could not restore lottery data: " + e.getMessage(), e);
 			}
 			
 			if (Config.DEBUG)
@@ -213,7 +214,7 @@ public class Lottery
 			}
 			catch (SQLException e)
 			{
-				_log.log(Level.WARNING, "Lottery: Could not store new lottery data: " + e.getMessage(), e);
+				_log.warn("Lottery: Could not store new lottery data: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -366,7 +367,7 @@ public class Lottery
 			}
 			catch (SQLException e)
 			{
-				_log.log(Level.WARNING, "Lottery: Could restore lottery data: " + e.getMessage(), e);
+				_log.warn("Lottery: Could restore lottery data: " + e.getMessage(), e);
 			}
 			
 			long prize4 = count4 * Config.ALT_LOTTERY_2_AND_1_NUMBER_PRIZE;
@@ -437,7 +438,7 @@ public class Lottery
 			}
 			catch (SQLException e)
 			{
-				_log.log(Level.WARNING, "Lottery: Could not store finished lottery data: " + e.getMessage(), e);
+				_log.warn("Lottery: Could not store finished lottery data: " + e.getMessage(), e);
 			}
 			
 			ThreadPoolManager.getInstance().scheduleGeneral(new startLottery(), MINUTE);
@@ -549,14 +550,14 @@ public class Lottery
 					
 					if (Config.DEBUG)
 					{
-						_log.warning("count: " + count + ", id: " + id + ", enchant: " + enchant + ", type2: " + type2);
+						_log.warn("count: " + count + ", id: " + id + ", enchant: " + enchant + ", type2: " + type2);
 					}
 				}
 			}
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, "Lottery: Could not check lottery ticket #" + id + ": " + e.getMessage(), e);
+			_log.warn("Lottery: Could not check lottery ticket #" + id + ": " + e.getMessage(), e);
 		}
 		return res;
 	}

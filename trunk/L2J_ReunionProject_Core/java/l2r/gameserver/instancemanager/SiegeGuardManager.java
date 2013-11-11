@@ -22,8 +22,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
@@ -33,9 +31,12 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.Castle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SiegeGuardManager
 {
-	private static Logger _log = Logger.getLogger(SiegeGuardManager.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(SiegeGuardManager.class);
 	
 	private final Castle _castle;
 	private final List<L2Spawn> _siegeGuardSpawn = new FastList<>();
@@ -119,7 +120,7 @@ public class SiegeGuardManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error deleting hired siege guard at " + x + ',' + y + ',' + z + ": " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error deleting hired siege guard at " + x + ',' + y + ',' + z + ": " + e.getMessage(), e);
 		}
 	}
 	
@@ -131,12 +132,12 @@ public class SiegeGuardManager
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement("Delete From castle_siege_guards Where castleId = ? And isHired = 1"))
 		{
-			ps.setInt(1, getCastle().getCastleId());
+			ps.setInt(1, getCastle().getResidenceId());
 			ps.execute();
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error deleting hired siege guard for castle " + getCastle().getName() + ": " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error deleting hired siege guard for castle " + getCastle().getName() + ": " + e.getMessage(), e);
 		}
 	}
 	
@@ -147,7 +148,7 @@ public class SiegeGuardManager
 	{
 		try
 		{
-			int hiredCount = 0, hiredMax = MercTicketManager.getInstance().getMaxAllowedMerc(_castle.getCastleId());
+			int hiredCount = 0, hiredMax = MercTicketManager.getInstance().getMaxAllowedMerc(_castle.getResidenceId());
 			boolean isHired = (getCastle().getOwnerId() > 0) ? true : false;
 			loadSiegeGuard();
 			for (L2Spawn spawn : getSiegeGuardSpawn())
@@ -168,7 +169,7 @@ public class SiegeGuardManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, getClass().getSimpleName() + ": Error spawning siege guards for castle " + getCastle().getName(), e);
+			_log.error(getClass().getSimpleName() + ": Error spawning siege guards for castle " + getCastle().getName(), e);
 		}
 	}
 	
@@ -179,13 +180,11 @@ public class SiegeGuardManager
 	{
 		for (L2Spawn spawn : getSiegeGuardSpawn())
 		{
-			if (spawn == null)
+			if ((spawn != null) && (spawn.getLastSpawn() != null))
 			{
-				continue;
+				spawn.stopRespawn();
+				spawn.getLastSpawn().doDie(spawn.getLastSpawn());
 			}
-			
-			spawn.stopRespawn();
-			spawn.getLastSpawn().doDie(spawn.getLastSpawn());
 		}
 		
 		getSiegeGuardSpawn().clear();
@@ -199,7 +198,7 @@ public class SiegeGuardManager
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM castle_siege_guards Where castleId = ? And isHired = ?"))
 		{
-			ps.setInt(1, getCastle().getCastleId());
+			ps.setInt(1, getCastle().getResidenceId());
 			if (getCastle().getOwnerId() > 0)
 			{
 				ps.setInt(2, 1);
@@ -230,14 +229,14 @@ public class SiegeGuardManager
 					}
 					else
 					{
-						_log.warning(getClass().getSimpleName() + ": Missing npc data in npc table for id: " + rs.getInt("npcId"));
+						_log.warn(getClass().getSimpleName() + ": Missing npc data in npc table for id: " + rs.getInt("npcId"));
 					}
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error loading siege guard for castle " + getCastle().getName() + ": " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error loading siege guard for castle " + getCastle().getName() + ": " + e.getMessage(), e);
 		}
 	}
 	
@@ -255,7 +254,7 @@ public class SiegeGuardManager
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement("Insert Into castle_siege_guards (castleId, npcId, x, y, z, heading, respawnDelay, isHired) Values (?, ?, ?, ?, ?, ?, ?, ?)"))
 		{
-			statement.setInt(1, getCastle().getCastleId());
+			statement.setInt(1, getCastle().getResidenceId());
 			statement.setInt(2, npcId);
 			statement.setInt(3, x);
 			statement.setInt(4, y);
@@ -267,7 +266,7 @@ public class SiegeGuardManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error adding siege guard for castle " + getCastle().getName() + ": " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error adding siege guard for castle " + getCastle().getName() + ": " + e.getMessage(), e);
 		}
 	}
 	

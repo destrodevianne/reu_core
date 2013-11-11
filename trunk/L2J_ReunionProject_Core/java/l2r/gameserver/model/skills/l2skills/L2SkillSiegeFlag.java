@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.model.skills.l2skills;
 
-import java.util.logging.Level;
-
 import l2r.Config;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.enums.ZoneIdType;
@@ -96,7 +94,7 @@ public class L2SkillSiegeFlag extends L2Skill
 			catch (Exception e)
 			{
 				player.sendMessage("Error placing flag: " + e);
-				_log.log(Level.WARNING, "Error placing flag: " + e.getMessage(), e);
+				_log.warn("Error placing flag: " + e.getMessage(), e);
 			}
 			return;
 		}
@@ -129,7 +127,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		catch (Exception e)
 		{
 			player.sendMessage("Error placing flag:" + e);
-			_log.log(Level.WARNING, "Error placing flag: " + e.getMessage(), e);
+			_log.warn("Error placing flag: " + e.getMessage(), e);
 		}
 	}
 	
@@ -184,7 +182,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		String text = "";
 		L2PcInstance player = activeChar.getActingPlayer();
 		
-		if ((castle == null) || (castle.getCastleId() <= 0))
+		if ((castle == null) || (castle.getResidenceId() <= 0))
 		{
 			text = "You must be on castle ground to place a flag.";
 		}
@@ -236,7 +234,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		String text = "";
 		L2PcInstance player = activeChar.getActingPlayer();
 		
-		if ((fort == null) || (fort.getFortId() <= 0))
+		if ((fort == null) || (fort.getResidenceId() <= 0))
 		{
 			text = "You must be on fort ground to place a flag.";
 		}
@@ -349,7 +347,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		String text = "";
 		L2PcInstance player = activeChar.getActingPlayer();
 		
-		if (((fort != null) && (fort.getFortId() == 0)) || ((castle != null) && (castle.getCastleId() == 0)))
+		if (((fort != null) && (fort.getResidenceId() == 0)) || ((castle != null) && (castle.getResidenceId() == 0)))
 		{
 			text = "You must be on fort or castle ground to construct an outpost or flag.";
 		}

@@ -21,8 +21,6 @@ package l2r.gameserver.taskmanager;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -30,12 +28,15 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author la2 Lets drink to code!
  */
 public class DecayTaskManager
 {
-	protected static final Logger _log = Logger.getLogger(DecayTaskManager.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(DecayTaskManager.class);
 	
 	protected final Map<L2Character, Long> _decayTasks = new FastMap<L2Character, Long>().shared();
 	
@@ -108,7 +109,7 @@ public class DecayTaskManager
 			catch (Exception e)
 			{
 				// TODO: Find out the reason for exception. Unless caught here, mob decay would stop.
-				_log.log(Level.WARNING, "Error in DecayScheduler: " + e.getMessage(), e);
+				_log.warn("Error in DecayScheduler: " + e.getMessage(), e);
 			}
 		}
 	}

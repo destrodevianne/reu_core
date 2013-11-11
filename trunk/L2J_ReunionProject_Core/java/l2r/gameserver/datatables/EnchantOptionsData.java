@@ -20,7 +20,6 @@ package l2r.gameserver.datatables;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -88,7 +87,7 @@ public class EnchantOptionsData extends DocumentParser
 				}
 			}
 		}
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _data.size() + " Items and " + counter + " Options.");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _data.size() + " Items and " + counter + " Options.");
 	}
 	
 	/**

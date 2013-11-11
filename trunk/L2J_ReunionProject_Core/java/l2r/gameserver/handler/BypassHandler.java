@@ -27,6 +27,7 @@ import l2r.gameserver.scripts.handlers.bypasshandlers.Buy;
 import l2r.gameserver.scripts.handlers.bypasshandlers.BuyShadowItem;
 import l2r.gameserver.scripts.handlers.bypasshandlers.ChatLink;
 import l2r.gameserver.scripts.handlers.bypasshandlers.ClanWarehouse;
+import l2r.gameserver.scripts.handlers.bypasshandlers.ElcardiaBuff;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Festival;
 import l2r.gameserver.scripts.handlers.bypasshandlers.FortSiege;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Freight;
@@ -72,6 +73,7 @@ public class BypassHandler implements IHandler<IBypassHandler, String>
 		registerHandler(new BuyShadowItem());
 		registerHandler(new ChatLink());
 		registerHandler(new ClanWarehouse());
+		registerHandler(new ElcardiaBuff());
 		registerHandler(new Festival());
 		registerHandler(new FortSiege());
 		registerHandler(new Freight());

@@ -18,12 +18,12 @@
  */
 package l2r.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StackTrace
 {
-	private static final Logger _log = Logger.getLogger(StackTrace.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(StackTrace.class);
 	
 	public static boolean displayStackTraceInformation(Throwable ex)
 	{
@@ -37,7 +37,7 @@ public class StackTrace
 			return false;
 		}
 		
-		_log.log(Level.INFO, "", ex);
+		_log.info("", ex);
 		
 		if (!displayAll)
 		{
@@ -46,30 +46,30 @@ public class StackTrace
 		
 		StackTraceElement[] stackElements = ex.getStackTrace();
 		
-		_log.log(Level.INFO, "The " + stackElements.length + " element" + ((stackElements.length == 1) ? "" : "s") + " of the stack trace:\n");
+		_log.info("The " + stackElements.length + " element" + ((stackElements.length == 1) ? "" : "s") + " of the stack trace:\n");
 		
 		for (StackTraceElement stackElement : stackElements)
 		{
-			_log.log(Level.INFO, "File name: " + stackElement.getFileName());
-			_log.log(Level.INFO, "Line number: " + stackElement.getLineNumber());
+			_log.info("File name: " + stackElement.getFileName());
+			_log.info("Line number: " + stackElement.getLineNumber());
 			
 			String className = stackElement.getClassName();
 			String packageName = extractPackageName(className);
 			String simpleClassName = extractSimpleClassName(className);
 			
-			_log.log(Level.INFO, "Package name: " + ("".equals(packageName) ? "[default package]" : packageName));
-			_log.log(Level.INFO, "Full class name: " + className);
-			_log.log(Level.INFO, "Simple class name: " + simpleClassName);
-			_log.log(Level.INFO, "Unmunged class name: " + unmungeSimpleClassName(simpleClassName));
-			_log.log(Level.INFO, "Direct class name: " + extractDirectClassName(simpleClassName));
+			_log.info("Package name: " + ("".equals(packageName) ? "[default package]" : packageName));
+			_log.info("Full class name: " + className);
+			_log.info("Simple class name: " + simpleClassName);
+			_log.info("Unmunged class name: " + unmungeSimpleClassName(simpleClassName));
+			_log.info("Direct class name: " + extractDirectClassName(simpleClassName));
 			
-			_log.log(Level.INFO, "Method name: " + stackElement.getMethodName());
-			_log.log(Level.INFO, "Native method?: " + stackElement.isNativeMethod());
+			_log.info("Method name: " + stackElement.getMethodName());
+			_log.info("Native method?: " + stackElement.isNativeMethod());
 			
-			_log.log(Level.INFO, "toString(): " + stackElement.toString());
-			_log.log(Level.INFO, "");
+			_log.info("toString(): " + stackElement.toString());
+			_log.info("");
 		}
-		_log.log(Level.INFO, "");
+		_log.info("");
 		
 		return true;
 	}

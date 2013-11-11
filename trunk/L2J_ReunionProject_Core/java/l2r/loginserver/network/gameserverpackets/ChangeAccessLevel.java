@@ -18,18 +18,19 @@
  */
 package l2r.loginserver.network.gameserverpackets;
 
-import java.util.logging.Logger;
-
 import l2r.loginserver.GameServerThread;
 import l2r.loginserver.LoginController;
 import l2r.util.network.BaseRecievePacket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author -Wooden-
  */
 public class ChangeAccessLevel extends BaseRecievePacket
 {
-	protected static Logger _log = Logger.getLogger(ChangeAccessLevel.class.getName());
+	protected static Logger _log = LoggerFactory.getLogger(ChangeAccessLevel.class);
 	
 	/**
 	 * @param decrypt

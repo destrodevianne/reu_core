@@ -19,7 +19,6 @@
 package l2r.gameserver.model;
 
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 
 import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
@@ -29,12 +28,15 @@ import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.util.Util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author kombat, Forsaiken
  */
 public final class FusionSkill
 {
-	protected static final Logger _log = Logger.getLogger(FusionSkill.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(FusionSkill.class);
 	
 	protected int _skillCastRange;
 	protected int _fusionId;
@@ -75,7 +77,7 @@ public final class FusionSkill
 			}
 			else
 			{
-				_log.warning("Triggered skill [" + _fusionId + ";" + _fusionLevel + "] not found!");
+				_log.warn("Triggered skill [" + _fusionId + ";" + _fusionLevel + "] not found!");
 			}
 		}
 		_geoCheckTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new GeoCheckTask(), 1000, 1000);

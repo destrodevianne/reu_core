@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -64,9 +63,9 @@ public class AdminTable extends DocumentParser
 		_accessLevels.clear();
 		_adminCommandAccessRights.clear();
 		parseDatapackFile("config/accessLevels.xml");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _accessLevels.size() + " Access Levels");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _accessLevels.size() + " Access Levels");
 		parseDatapackFile("config/adminCommands.xml");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _adminCommandAccessRights.size() + " Access Commands");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _adminCommandAccessRights.size() + " Access Commands");
 	}
 	
 	@Override
@@ -245,7 +244,7 @@ public class AdminTable extends DocumentParser
 	{
 		if (Config.DEBUG)
 		{
-			_log.fine("added gm: " + player.getName());
+			_log.info("added gm: " + player.getName());
 		}
 		_gmList.put(player, hidden);
 	}
@@ -258,7 +257,7 @@ public class AdminTable extends DocumentParser
 	{
 		if (Config.DEBUG)
 		{
-			_log.fine("deleted gm: " + player.getName());
+			_log.info("deleted gm: " + player.getName());
 		}
 		_gmList.remove(player);
 	}

@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor.instance;
 
 import java.util.StringTokenizer;
-import java.util.logging.Level;
 
 import javolution.text.TextBuilder;
 import l2r.Config;
@@ -98,7 +97,7 @@ public class L2SignsPriestInstance extends L2Npc
 						}
 						catch (Exception e3)
 						{
-							_log.warning("Failed to retrieve cabal from bypass command. NpcId: " + getNpcId() + "; Command: " + command);
+							_log.warn("Failed to retrieve cabal from bypass command. NpcId: " + getNpcId() + "; Command: " + command);
 						}
 					}
 				}
@@ -576,7 +575,7 @@ public class L2SignsPriestInstance extends L2Npc
 						}
 						else
 						{
-							_log.warning("Problem with HTML text " + path);
+							_log.warn("Problem with HTML text " + path);
 						}
 					}
 					break;
@@ -671,7 +670,7 @@ public class L2SignsPriestInstance extends L2Npc
 					}
 					catch (Exception e)
 					{
-						_log.log(Level.WARNING, "SevenSigns: Error occurred while teleporting player: " + e.getMessage(), e);
+						_log.warn("SevenSigns: Error occurred while teleporting player: " + e.getMessage(), e);
 					}
 					break;
 				case 16:
@@ -793,7 +792,7 @@ public class L2SignsPriestInstance extends L2Npc
 					}
 					else
 					{
-						_log.warning("Problem with HTML text " + SevenSigns.SEVEN_SIGNS_HTML_PATH + "signs_17.htm: " + path);
+						_log.warn("Problem with HTML text " + SevenSigns.SEVEN_SIGNS_HTML_PATH + "signs_17.htm: " + path);
 					}
 					break;
 				case 18: // Exchange Seal Stones for Ancient Adena - SevenSigns 18 xxxx xxxxxx

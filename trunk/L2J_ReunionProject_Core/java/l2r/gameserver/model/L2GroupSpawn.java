@@ -19,7 +19,6 @@
 package l2r.gameserver.model;
 
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.gameserver.datatables.TerritoryTable;
@@ -108,14 +107,14 @@ public class L2GroupSpawn extends L2Spawn
 			
 			if (Config.DEBUG)
 			{
-				_log.finest("Spawned Mob Id: " + _template.getNpcId() + " ,at: X: " + mob.getX() + " Y: " + mob.getY() + " Z: " + mob.getZ());
+				_log.info("Spawned Mob Id: " + _template.getNpcId() + " ,at: X: " + mob.getX() + " Y: " + mob.getY() + " Z: " + mob.getZ());
 			}
 			return mob;
 			
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "NPC class not found: " + e.getMessage(), e);
+			_log.warn("NPC class not found: " + e.getMessage(), e);
 			return null;
 		}
 	}

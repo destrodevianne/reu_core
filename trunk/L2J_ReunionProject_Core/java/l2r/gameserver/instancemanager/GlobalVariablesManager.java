@@ -23,17 +23,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.util.L2FastMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Gigiikun
  */
 public class GlobalVariablesManager
 {
-	private static final Logger _log = Logger.getLogger(GlobalVariablesManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(GlobalVariablesManager.class);
 	
 	private static final String LOAD_VAR = "SELECT var,value FROM global_variables";
 	private static final String SAVE_VAR = "INSERT INTO global_variables (var,value) VALUES (?,?) ON DUPLICATE KEY UPDATE value=?";
@@ -62,7 +64,7 @@ public class GlobalVariablesManager
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": problem while loading variables: " + e);
+			_log.warn(getClass().getSimpleName() + ": problem while loading variables: " + e);
 		}
 	}
 	
@@ -83,7 +85,7 @@ public class GlobalVariablesManager
 		}
 		catch (Exception e)
 		{
-			_log.warning(getClass().getSimpleName() + ": problem while saving variables: " + e);
+			_log.warn(getClass().getSimpleName() + ": problem while saving variables: " + e);
 		}
 	}
 	

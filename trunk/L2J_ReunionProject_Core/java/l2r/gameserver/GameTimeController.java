@@ -19,8 +19,6 @@
 package l2r.gameserver;
 
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -30,13 +28,16 @@ import l2r.gameserver.instancemanager.DayNightSpawnManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.util.StackTrace;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Game Time controller class.
  * @author Unknown, Forsaiken
  */
 public final class GameTimeController extends Thread
 {
-	private static final Logger _log = Logger.getLogger(GameTimeController.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(GameTimeController.class);
 	
 	public static final int TICKS_PER_SECOND = 10; // not able to change this without checking through code
 	public static final int MILLIS_IN_TICK = 1000 / TICKS_PER_SECOND;
@@ -178,13 +179,13 @@ public final class GameTimeController extends Thread
 	public final void stopTimer()
 	{
 		super.interrupt();
-		_log.log(Level.INFO, "Stopping " + getClass().getSimpleName());
+		_log.info("Stopping " + getClass().getSimpleName());
 	}
 	
 	@Override
 	public final void run()
 	{
-		_log.log(Level.CONFIG, getClass().getSimpleName() + ": Started.");
+		_log.info(getClass().getSimpleName() + ": Started.");
 		
 		long nextTickTime, sleepTime;
 		boolean isNight = isNight();

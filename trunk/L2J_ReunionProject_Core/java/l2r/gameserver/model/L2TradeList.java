@@ -26,14 +26,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.model.items.L2Item;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
@@ -175,7 +176,7 @@ public class L2TradeList
 	 */
 	public static class L2TradeItem
 	{
-		private static final Logger _log = Logger.getLogger(L2TradeItem.class.getName());
+		private static final Logger _log = LoggerFactory.getLogger(L2TradeItem.class);
 		
 		private final int _listId;
 		private final int _itemId;
@@ -354,7 +355,7 @@ public class L2TradeList
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "L2TradeItem: Could not update Timer save in Buylist");
+				_log.error("L2TradeItem: Could not update Timer save in Buylist");
 			}
 		}
 	}

@@ -21,7 +21,6 @@ package l2r.gameserver.model.actor.instance;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -61,13 +60,16 @@ import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.util.Util;
 import l2r.util.StringUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class ...
  * @version $Revision: 1.4.2.3.2.8 $ $Date: 2005/03/29 23:15:15 $
  */
 public class L2VillageMasterInstance extends L2NpcInstance
 {
-	private static Logger _log = Logger.getLogger(L2VillageMasterInstance.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2VillageMasterInstance.class);
 	
 	/**
 	 * @param objectId
@@ -371,7 +373,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 			}
 			catch (Exception NumberFormatException)
 			{
-				_log.warning(L2VillageMasterInstance.class.getName() + ": Wrong numeric values for command " + command);
+				_log.warn(L2VillageMasterInstance.class.getName() + ": Wrong numeric values for command " + command);
 			}
 			
 			Set<PlayerClass> subsAvailable = null;
@@ -512,7 +514,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("add subclass"))
 					{
-						_log.warning(L2VillageMasterInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2VillageMasterInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -578,7 +580,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("change class"))
 					{
-						_log.warning(L2VillageMasterInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2VillageMasterInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -657,7 +659,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("change class"))
 					{
-						_log.warning(L2VillageMasterInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2VillageMasterInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -930,7 +932,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 		
 		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
-			if (SiegeManager.getInstance().checkIsRegistered(clan, castle.getCastleId()))
+			if (SiegeManager.getInstance().checkIsRegistered(clan, castle.getResidenceId()))
 			{
 				player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_WHILE_IN_SIEGE);
 				return;
@@ -938,7 +940,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 		}
 		for (Fort fort : FortManager.getInstance().getForts())
 		{
-			if (FortSiegeManager.getInstance().checkIsRegistered(clan, fort.getFortId()))
+			if (FortSiegeManager.getInstance().checkIsRegistered(clan, fort.getResidenceId()))
 			{
 				player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_WHILE_IN_SIEGE);
 				return;
@@ -1246,7 +1248,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 		}
 		catch (PatternSyntaxException e)
 		{
-			_log.warning("ERROR: Wrong pattern for clan name!");
+			_log.warn("ERROR: Wrong pattern for clan name!");
 			pattern = Pattern.compile(".*");
 		}
 		return pattern.matcher(name).matches();

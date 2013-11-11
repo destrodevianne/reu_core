@@ -50,7 +50,7 @@ public final class RequestHennaItemRemoveInfo extends L2GameClientPacket
 		final L2Henna henna = HennaData.getInstance().getHenna(_symbolId);
 		if (henna == null)
 		{
-			_log.warning(getClass().getName() + ": Invalid Henna Id: " + _symbolId + " from player " + activeChar);
+			_log.warn(getClass().getSimpleName() + ": Invalid Henna Id: " + _symbolId + " from player " + activeChar);
 			sendActionFailed();
 			return;
 		}

@@ -20,6 +20,7 @@ package l2r.gameserver.model.zone.type;
 
 import l2r.Config;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.enums.MountType;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CHSiegeManager;
@@ -142,7 +143,7 @@ public class L2SiegeZone extends L2ZoneType
 			SiegableHall hall = CHSiegeManager.getInstance().getConquerableHalls().get(getSettings().getSiegeableId());
 			if (hall == null)
 			{
-				_log.warning("L2SiegeZone: Siegable clan hall with id " + value + " does not exist!");
+				_log.warn("L2SiegeZone: Siegable clan hall with id " + value + " does not exist!");
 			}
 			else
 			{
@@ -177,7 +178,7 @@ public class L2SiegeZone extends L2ZoneType
 				}
 				
 				character.sendPacket(SystemMessageId.ENTERED_COMBAT_ZONE);
-				if (!Config.ALLOW_WYVERN_DURING_SIEGE && (plyer.getMountType() == 2))
+				if (!Config.ALLOW_WYVERN_DURING_SIEGE && (plyer.getMountType() == MountType.WYVERN))
 				{
 					plyer.sendPacket(SystemMessageId.AREA_CANNOT_BE_ENTERED_WHILE_MOUNTED_WYVERN);
 					plyer.enteredNoLanding(DISMOUNT_DELAY);
@@ -198,7 +199,7 @@ public class L2SiegeZone extends L2ZoneType
 			{
 				L2PcInstance player = character.getActingPlayer();
 				character.sendPacket(SystemMessageId.LEFT_COMBAT_ZONE);
-				if (player.getMountType() == 2)
+				if (player.getMountType() == MountType.WYVERN)
 				{
 					player.exitedNoLanding();
 				}
@@ -221,7 +222,7 @@ public class L2SiegeZone extends L2ZoneType
 				Fort fort = FortManager.getInstance().getFortById(getSettings().getSiegeableId());
 				if (fort != null)
 				{
-					FortSiegeManager.getInstance().dropCombatFlag(activeChar, fort.getFortId());
+					FortSiegeManager.getInstance().dropCombatFlag(activeChar, fort.getResidenceId());
 				}
 				else
 				{
@@ -298,7 +299,7 @@ public class L2SiegeZone extends L2ZoneType
 					player = character.getActingPlayer();
 					character.sendPacket(SystemMessageId.LEFT_COMBAT_ZONE);
 					player.stopFameTask();
-					if (player.getMountType() == 2)
+					if (player.getMountType() == MountType.WYVERN)
 					{
 						player.exitedNoLanding();
 					}

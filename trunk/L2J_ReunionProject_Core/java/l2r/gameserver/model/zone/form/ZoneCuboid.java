@@ -20,7 +20,7 @@ package l2r.gameserver.model.zone.form;
 
 import java.awt.Rectangle;
 
-import l2r.gameserver.GeoData;
+import l2r.gameserver.GeoEngine;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.zone.L2ZoneForm;
 import l2r.util.Rnd;
@@ -136,7 +136,7 @@ public class ZoneCuboid extends L2ZoneForm
 		{
 			x,
 			y,
-			GeoData.getInstance().getHeight(x, y, _z1)
+			GeoEngine.getInstance().getHeight(x, y, _z1)
 		};
 	}
 }

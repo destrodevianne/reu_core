@@ -20,7 +20,6 @@ package l2r.gameserver.network.clientpackets;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.logging.Level;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.CharNameTable;
@@ -102,7 +101,7 @@ public final class RequestFriendDel extends L2GameClientPacket
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "could not del friend objectid: ", e);
+			_log.warn("could not del friend objectid: ", e);
 		}
 	}
 	

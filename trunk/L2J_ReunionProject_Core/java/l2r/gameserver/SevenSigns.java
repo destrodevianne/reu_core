@@ -27,8 +27,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -49,6 +47,10 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SSQInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Broadcast;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.procedure.TObjectProcedure;
 
 /**
@@ -57,7 +59,7 @@ import gnu.trove.procedure.TObjectProcedure;
  */
 public class SevenSigns
 {
-	protected static final Logger _log = Logger.getLogger(SevenSigns.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(SevenSigns.class);
 	
 	// Basic Seven Signs Constants \\
 	public static final String SEVEN_SIGNS_HTML_PATH = "data/html/seven_signs/";
@@ -169,7 +171,7 @@ public class SevenSigns
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "SevenSigns: Failed to load configuration: " + e.getMessage(), e);
+			_log.error("SevenSigns: Failed to load configuration: " + e.getMessage(), e);
 		}
 		
 		_log.info("SevenSigns: Currently in the " + getCurrentPeriodName() + " period!");
@@ -218,8 +220,7 @@ public class SevenSigns
 		int numHours = (int) Math.floor(countDown % 24);
 		int numDays = (int) Math.floor((countDown - numHours) / 24);
 		
-		_log.info("SevenSigns: Next period begins in " + numDays + " days, " + numHours + " hours and " + numMins + " mins.");
-		
+		_log.info("SevenSigns: Next period begins in " + numDays + " D. " + numHours + " H. and " + numMins + " M.");
 	}
 	
 	private boolean isNextPeriodChangeInPast()
@@ -554,7 +555,7 @@ public class SevenSigns
 				_nextPeriodChange.add(Calendar.MILLISECOND, PERIOD_MINOR_LENGTH);
 				break;
 		}
-		_log.info("SevenSigns: Next period change set to " + _nextPeriodChange.getTime());
+		_log.info("SevenSigns: Next period changed to " + _nextPeriodChange.getTime());
 	}
 	
 	public final String getCurrentPeriodName()
@@ -877,7 +878,7 @@ public class SevenSigns
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "SevenSigns: Unable to load Seven Signs data from database: " + e.getMessage(), e);
+			_log.error("SevenSigns: Unable to load Seven Signs data from database: " + e.getMessage(), e);
 		}
 		// Festival data is loaded now after the Seven Signs engine data.
 	}
@@ -907,7 +908,7 @@ public class SevenSigns
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "SevenSigns: Unable to save data to database: " + e.getMessage(), e);
+			_log.error("SevenSigns: Unable to save data to database: " + e.getMessage(), e);
 		}
 	}
 	
@@ -934,7 +935,7 @@ public class SevenSigns
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "SevenSigns: Unable to save data to database: " + e.getMessage(), e);
+			_log.error("SevenSigns: Unable to save data to database: " + e.getMessage(), e);
 		}
 	}
 	
@@ -971,7 +972,7 @@ public class SevenSigns
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "SevenSigns: Unable to save data to database: " + e.getMessage(), e);
+			_log.error("SevenSigns: Unable to save data to database: " + e.getMessage(), e);
 		}
 	}
 	
@@ -1043,7 +1044,7 @@ public class SevenSigns
 			}
 			catch (SQLException e)
 			{
-				_log.log(Level.SEVERE, "SevenSigns: Failed to save data: " + e.getMessage(), e);
+				_log.error("SevenSigns: Failed to save data: " + e.getMessage(), e);
 			}
 		}
 		

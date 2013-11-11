@@ -14,17 +14,18 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import java.util.logging.Logger;
-
 import l2r.Config;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class L2EventMapGuardInstance extends L2GuardInstance
 {
-	private static Logger _log = Logger.getLogger(L2GuardInstance.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2GuardInstance.class);
 	
 	/**
 	 * Constructor of L2GuardInstance (use L2Character and L2NpcInstance constructor).<BR>
@@ -80,7 +81,7 @@ public final class L2EventMapGuardInstance extends L2GuardInstance
 		{
 			if (Config.DEBUG)
 			{
-				_log.fine(player.getObjectId() + ": Targetted guard " + getObjectId());
+				_log.info(player.getObjectId() + ": Targetted guard " + getObjectId());
 			}
 			
 			// Set the target of the L2PcInstance player
@@ -93,7 +94,7 @@ public final class L2EventMapGuardInstance extends L2GuardInstance
 			{
 				if (Config.DEBUG)
 				{
-					_log.fine(player.getObjectId() + ": Attacked guard " + getObjectId());
+					_log.info(player.getObjectId() + ": Attacked guard " + getObjectId());
 				}
 				
 				// Set the L2PcInstance Intention to AI_INTENTION_ATTACK

@@ -180,7 +180,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			
 			if (Config.DEBUG)
 			{
-				_log.fine("sent out a party invitation to:" + target.getName());
+				_log.info("sent out a party invitation to:" + target.getName());
 			}
 			
 		}
@@ -192,7 +192,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			
 			if (Config.DEBUG)
 			{
-				_log.warning(requestor.getName() + " already received a party invitation");
+				_log.warn(requestor.getName() + " already received a party invitation");
 			}
 		}
 	}
@@ -213,7 +213,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			
 			if (Config.DEBUG)
 			{
-				_log.fine("sent out a party invitation to:" + target.getName());
+				_log.info("sent out a party invitation to:" + target.getName());
 			}
 			
 		}
@@ -223,7 +223,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			
 			if (Config.DEBUG)
 			{
-				_log.warning(requestor.getName() + " already received a party invitation");
+				_log.warn(requestor.getName() + " already received a party invitation");
 			}
 		}
 	}

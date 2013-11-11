@@ -20,7 +20,6 @@ package l2r.gameserver.datatables;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import l2r.gameserver.engines.DocumentParser;
 
@@ -44,7 +43,7 @@ public class KarmaData extends DocumentParser
 	{
 		_karmaTable.clear();
 		parseDatapackFile("data/stats/chars/pcKarmaIncrease.xml");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded " + _karmaTable.size() + " karma modifiers.");
+		_log.info(getClass().getSimpleName() + ": Loaded " + _karmaTable.size() + " karma modifiers.");
 	}
 	
 	@Override

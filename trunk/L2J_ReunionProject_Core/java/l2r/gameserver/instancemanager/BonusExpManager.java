@@ -5,8 +5,6 @@ package l2r.gameserver.instancemanager;
 
 import java.io.File;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -17,6 +15,8 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -25,7 +25,7 @@ import org.w3c.dom.Node;
  */
 public class BonusExpManager
 {
-	private final Logger _log = Logger.getLogger(getClass().getName());
+	private final Logger _log = LoggerFactory.getLogger(getClass().getName());
 	private final Map<Integer, BonusItem> _bonusItems = new FastMap<Integer, BonusItem>().shared();
 	
 	public BonusExpManager()
@@ -53,7 +53,7 @@ public class BonusExpManager
 			File file = new File(Config.DATAPACK_ROOT + "/data/BonusExpItems.xml");
 			if (!file.exists())
 			{
-				_log.log(Level.INFO, "[" + getClass().getSimpleName() + "]Missing" + Config.DATAPACK_ROOT + "/data/BonusExpItems.xml Thescriptwontworkwithoutit!");
+				_log.info("[" + getClass().getSimpleName() + "]Missing" + Config.DATAPACK_ROOT + "/data/BonusExpItems.xml Thescriptwontworkwithoutit!");
 				return;
 			}
 			
@@ -78,7 +78,7 @@ public class BonusExpManager
 								}
 								else
 								{
-									_log.severe("[" + getClass().getSimpleName() + "] Missing Itemid, skipping");
+									_log.error("[" + getClass().getSimpleName() + "] Missing Itemid, skipping");
 									continue;
 								}
 								
@@ -89,7 +89,7 @@ public class BonusExpManager
 								}
 								else
 								{
-									_log.severe("[" + getClass().getSimpleName() + "] Missing exp, skipping");
+									_log.error("[" + getClass().getSimpleName() + "] Missing exp, skipping");
 									continue;
 								}
 								
@@ -100,7 +100,7 @@ public class BonusExpManager
 								}
 								else
 								{
-									_log.severe("[" + getClass().getSimpleName() + "] Missing sp, skipping");
+									_log.error("[" + getClass().getSimpleName() + "] Missing sp, skipping");
 									continue;
 								}
 								

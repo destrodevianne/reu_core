@@ -18,9 +18,6 @@
  */
 package l2r.gameserver.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javolution.util.FastMap;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.handler.ISkillHandler;
@@ -35,13 +32,16 @@ import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.network.serverpackets.MagicSkillLaunched;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * CT2.3: Added support for allowing effect as a chance skill trigger (DrHouse)
  * @author kombat
  */
 public class ChanceSkillList extends FastMap<IChanceSkillTrigger, ChanceCondition>
 {
-	protected static final Logger _log = Logger.getLogger(ChanceSkillList.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(ChanceSkillList.class);
 	private static final long serialVersionUID = 1L;
 	
 	private final L2Character _owner;
@@ -205,7 +205,7 @@ public class ChanceSkillList extends FastMap<IChanceSkillTrigger, ChanceConditio
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 }

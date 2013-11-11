@@ -18,9 +18,6 @@
  */
 package l2r.gameserver.model.skills.l2skills;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Spawn;
@@ -31,12 +28,15 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Zoey76
  */
 public class L2SkillSpawn extends L2Skill
 {
-	private static final Logger _log = Logger.getLogger(L2SkillSpawn.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(L2SkillSpawn.class);
 	
 	private final int _despawnDelay;
 	private final boolean _summonSpawn;
@@ -60,14 +60,14 @@ public class L2SkillSpawn extends L2Skill
 		
 		if (getNpcId() == 0)
 		{
-			_log.warning("NPC ID not defined for skill ID:" + getId());
+			_log.warn("NPC ID not defined for skill ID:" + getId());
 			return;
 		}
 		
 		final L2NpcTemplate template = NpcTable.getInstance().getTemplate(getNpcId());
 		if (template == null)
 		{
-			_log.warning("Spawn of the nonexisting NPC ID:" + getNpcId() + ", skill ID:" + getId());
+			_log.warn("Spawn of the nonexisting NPC ID:" + getNpcId() + ", skill ID:" + getId());
 			return;
 		}
 		
@@ -78,7 +78,7 @@ public class L2SkillSpawn extends L2Skill
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception in L2SkillSpawn: " + e.getMessage(), e);
+			_log.warn("Exception in L2SkillSpawn: " + e.getMessage(), e);
 			return;
 		}
 		

@@ -18,6 +18,9 @@
  */
 package l2r.gameserver.model.items.type;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author mkizub <BR>
  *         Description of Weapon Type
@@ -46,6 +49,7 @@ public enum L2WeaponType implements L2ItemType
 	BIGBLUNT("Big Blunt"),
 	BIGSWORD("Big Sword");
 	
+	private static final Logger _log = LoggerFactory.getLogger(L2WeaponType.class);
 	private final int _mask;
 	private final String _name;
 	
@@ -79,4 +83,24 @@ public enum L2WeaponType implements L2ItemType
 		return _name;
 	}
 	
+	public static L2WeaponType findByName(String name)
+	{
+		if (name.equalsIgnoreCase("DUAL"))
+		{
+			name = "Dual Sword";
+		}
+		else if (name.equalsIgnoreCase("DUALFIST"))
+		{
+			name = "Dual Fist";
+		}
+		for (L2WeaponType type : values())
+		{
+			if (type.toString().equalsIgnoreCase(name))
+			{
+				return type;
+			}
+		}
+		_log.warn(L2WeaponType.class.getSimpleName() + ": Requested unexistent enum member: " + name, new IllegalStateException());
+		return FIST;
+	}
 }

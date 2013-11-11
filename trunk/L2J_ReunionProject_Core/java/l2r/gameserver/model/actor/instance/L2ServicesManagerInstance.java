@@ -451,7 +451,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 			}
 			catch (Exception NumberFormatException)
 			{
-				_log.warning(L2ServicesManagerInstance.class.getName() + ": Wrong numeric values for command " + command);
+				_log.warn(L2ServicesManagerInstance.class.getName() + ": Wrong numeric values for command " + command);
 			}
 			
 			Set<PlayerClass> subsAvailable = null;
@@ -592,7 +592,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("add subclass"))
 					{
-						_log.warning(L2ServicesManagerInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2ServicesManagerInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -658,7 +658,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("change class"))
 					{
-						_log.warning(L2ServicesManagerInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2ServicesManagerInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -736,7 +736,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("change class"))
 					{
-						_log.warning(L2ServicesManagerInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2ServicesManagerInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -1020,7 +1020,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 		
 		if (Config.DEBUG)
 		{
-			_log.fine("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindowClan; Message: Showing stored items.");
+			_log.info("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindowClan; Message: Showing stored items.");
 		}
 	}
 	
@@ -1046,7 +1046,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 		
 		if (Config.DEBUG)
 		{
-			_log.fine("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindow; Message: Showing stored items.");
+			_log.info("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindow; Message: Showing stored items.");
 		}
 	}
 	

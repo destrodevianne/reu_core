@@ -21,19 +21,21 @@ package l2r.gameserver.script;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javolution.util.FastList;
 import l2r.Config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Luis Arias
  */
 public class ScriptPackage
 {
-	private static final Logger _log = Logger.getLogger(ScriptPackage.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(ScriptPackage.class);
 	
 	private final List<ScriptDocument> _scriptFiles;
 	private final List<String> _otherFiles;
@@ -80,7 +82,7 @@ public class ScriptPackage
 				}
 				catch (IOException io)
 				{
-					_log.warning(getClass().getSimpleName() + ": " + io.getMessage());
+					_log.warn(getClass().getSimpleName() + ": " + io.getMessage());
 				}
 			}
 			else if (!entry.isDirectory())

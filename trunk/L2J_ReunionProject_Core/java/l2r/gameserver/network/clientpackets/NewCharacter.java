@@ -41,7 +41,7 @@ public final class NewCharacter extends L2GameClientPacket
 	{
 		if (Config.DEBUG)
 		{
-			_log.fine(_C__13_NEWCHARACTER);
+			_log.info(_C__13_NEWCHARACTER);
 		}
 		
 		final NewCharacterSuccess ct = new NewCharacterSuccess();

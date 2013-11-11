@@ -46,8 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
@@ -56,6 +54,8 @@ import l2r.gameserver.util.FloodProtectorConfig;
 import l2r.util.PropertiesParser;
 import l2r.util.StringUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -66,7 +66,7 @@ import org.w3c.dom.Node;
  */
 public final class Config
 {
-	private static final Logger _log = Logger.getLogger(Config.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Config.class);
 	// --------------------------------------------------
 	// Constants
 	// --------------------------------------------------
@@ -100,7 +100,7 @@ public final class Config
 	public static final String SECURITY_CONFIG_FILE = "./config/main/Security.ini";
 	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini";
 	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
-	// Bosses/
+	// Bosses
 	public static final String ANTHARAS_CONFIG = "./config/bosses/Antharas.ini";
 	public static final String VALAKAS_CONFIG = "./config/bosses/Valakas.ini";
 	public static final String BAIUM_CONFIG = "./config/bosses/Baium.ini";
@@ -115,6 +115,7 @@ public final class Config
 	public static final String SAILREN_CONFIG = "./config/bosses/Sailren.ini";
 	public static final String ZAKEN_CONFIG = "./config/bosses/Zaken.ini";
 	public static final String DESTRUCTION_BOSSES_CONFIG = "./config/bosses/DestructionBosses.ini";
+	
 	// --------------------------------------------------
 	// L2J Variable Definitions
 	// --------------------------------------------------
@@ -325,6 +326,7 @@ public final class Config
 	public static int CH_FRONT1_FEE;
 	public static int CH_FRONT2_FEE;
 	public static boolean CH_BUFF_FREE;
+	
 	// --------------------------------------------------
 	// Castle Settings
 	// --------------------------------------------------
@@ -383,6 +385,7 @@ public final class Config
 	public static int FS_MAX_SUPPLY_LEVEL;
 	public static int FS_FEE_FOR_CASTLE;
 	public static int FS_MAX_OWN_TIME;
+	
 	// --------------------------------------------------
 	// Feature Settings
 	// --------------------------------------------------
@@ -528,7 +531,7 @@ public final class Config
 	public static int WORLD_Y_MIN;
 	public static int WORLD_Y_MAX;
 	public static int GEODATA;
-	public static String GEODATA_DRIVER;
+	public static File GEODATA_DIR;
 	public static File PATHNODE_DIR;
 	public static boolean GEODATA_CELLFINDING;
 	public static String PATHFIND_BUFFERS;
@@ -656,10 +659,10 @@ public final class Config
 	public static boolean CUSTOM_NPC_SKILLS_TABLE;
 	public static boolean CUSTOM_TELEPORT_TABLE;
 	public static boolean CUSTOM_DROPLIST_TABLE;
-	public static boolean CUSTOM_MERCHANT_TABLES;
 	public static boolean CUSTOM_SKILLS_LOAD;
 	public static boolean CUSTOM_ITEMS_LOAD;
 	public static boolean CUSTOM_MULTISELL_LOAD;
+	public static boolean CUSTOM_BUYLIST_LOAD;
 	public static int ALT_BIRTHDAY_GIFT;
 	public static String ALT_BIRTHDAY_MAIL_SUBJECT;
 	public static String ALT_BIRTHDAY_MAIL_TEXT;
@@ -670,6 +673,7 @@ public final class Config
 	public static int PLAYER_MOVEMENT_BLOCK_TIME;
 	public static int NORMAL_ENCHANT_COST_MULTIPLIER;
 	public static int SAFE_ENCHANT_COST_MULTIPLIER;
+	
 	// --------------------------------------------------
 	// FloodProtector Settings
 	// --------------------------------------------------
@@ -769,6 +773,7 @@ public final class Config
 	public static int L2JMOD_DUALBOX_CHECK_MAX_L2EVENT_PARTICIPANTS_PER_IP;
 	public static Map<Integer, Integer> L2JMOD_DUALBOX_CHECK_WHITELIST;
 	public static boolean L2JMOD_ALLOW_CHANGE_PASSWORD;
+	
 	// --------------------------------------------------
 	// NPC Settings
 	// --------------------------------------------------
@@ -916,6 +921,7 @@ public final class Config
 	public static String DATABASE_PASSWORD;
 	public static int DATABASE_MAX_CONNECTIONS;
 	public static int DATABASE_MAX_IDLE_TIME;
+	public static int DATABASE_IDLE_TEST_PERIOD;
 	public static int MAXIMUM_ONLINE_USERS;
 	public static String CNAME_TEMPLATE;
 	public static String PET_NAME_TEMPLATE;
@@ -965,9 +971,6 @@ public final class Config
 	public static String GAME_SERVER_LOGIN_HOST;
 	public static List<String> GAME_SERVER_SUBNETS;
 	public static List<String> GAME_SERVER_HOSTS;
-	public static String SERVER_VERSION;
-	public static String SERVER_BUILD_DATE;
-	public static String DATAPACK_VERSION;
 	public static int PVP_NORMAL_TIME;
 	public static int PVP_PVP_TIME;
 	
@@ -1022,35 +1025,48 @@ public final class Config
 	public static int FAST_CONNECTION_TIME;
 	public static int MAX_CONNECTION_PER_IP;
 	
+	// --------------------------------------------------
 	// GrandBoss Settings
-	
+	// --------------------------------------------------
 	// Antharas
 	public static int ANTHARAS_WAIT_TIME;
 	public static int ANTHARAS_SPAWN_INTERVAL;
 	public static int ANTHARAS_SPAWN_RANDOM;
 	
+	// --------------------------------------------------
 	// Valakas
+	// --------------------------------------------------
 	public static int VALAKAS_WAIT_TIME;
 	public static int VALAKAS_SPAWN_INTERVAL;
 	public static int VALAKAS_SPAWN_RANDOM;
 	
+	// --------------------------------------------------
 	// Baium
+	// --------------------------------------------------
 	public static int BAIUM_SPAWN_INTERVAL;
 	public static int BAIUM_SPAWN_RANDOM;
 	
+	// --------------------------------------------------
 	// Core
+	// --------------------------------------------------
 	public static int CORE_SPAWN_INTERVAL;
 	public static int CORE_SPAWN_RANDOM;
 	
+	// --------------------------------------------------
 	// Offen
+	// --------------------------------------------------
 	public static int ORFEN_SPAWN_INTERVAL;
 	public static int ORFEN_SPAWN_RANDOM;
 	
+	// --------------------------------------------------
 	// Queen Ant
+	// --------------------------------------------------
 	public static int QUEEN_ANT_SPAWN_INTERVAL;
 	public static int QUEEN_ANT_SPAWN_RANDOM;
 	
+	// --------------------------------------------------
 	// Zaken
+	// --------------------------------------------------
 	public static int ZAKEN_MINLEVEL_DAYTIME;
 	public static int ZAKEN_MINLEVEL_DAYTIME83;
 	public static int ZAKEN_MINMEMBERS_DAYTIME;
@@ -1058,16 +1074,22 @@ public final class Config
 	public static int ZAKEN_MAXMEMBERS_DAYTIME;
 	public static int ZAKEN_MAXMEMBERS_NIGHTTIME;
 	
+	// --------------------------------------------------
 	// Beleth
+	// --------------------------------------------------
 	public static int BELETH_MIN_PLAYERS;
 	public static int BELETH_SPAWN_INTERVAL;
 	public static int BELETH_SPAWN_RANDOM;
 	
+	// --------------------------------------------------
 	// Sailren
+	// --------------------------------------------------
 	public static int INTERVAL_OF_SAILREN_SPAWN;
 	public static int RANDOM_OF_SAILREN_SPAWN;
 	
+	// --------------------------------------------------
 	// Freya
+	// --------------------------------------------------
 	public static int MIN_PLAYERS_TO_HARD;
 	public static int MAX_PLAYERS_TO_HARD;
 	public static int MIN_PLAYERS_TO_EASY;
@@ -1075,12 +1097,16 @@ public final class Config
 	public static int MIN_PLAYER_LEVEL_TO_HARD;
 	public static int MIN_PLAYER_LEVEL_TO_EASY;
 	
+	// --------------------------------------------------
 	// Frintezza
+	// --------------------------------------------------
 	public static int MIN_PLAYER_TO_FE;
 	public static int MAX_PLAYER_TO_FE;
 	public static int MIN_LEVEL_TO_FE;
 	
+	// --------------------------------------------------
 	// Ekimus
+	// --------------------------------------------------
 	public static int SOI_EKIMUS_KILL_COUNT;
 	public static int EROSION_ATTACK_MIN_PLAYERS;
 	public static int EROSION_ATTACK_MAX_PLAYERS;
@@ -1091,26 +1117,35 @@ public final class Config
 	public static int HEART_DEFENCE_MIN_PLAYERS;
 	public static int HEART_DEFENCE_MAX_PLAYERS;
 	
+	// --------------------------------------------------
 	// Blood Altars
+	// --------------------------------------------------
 	public static int CHANGE_STATUS;
 	public static int CHANCE_SPAWN;
 	public static int RESPAWN_TIME;
 	
+	// --------------------------------------------------
 	// Gracia Seeds Settings
-	
+	// --------------------------------------------------
 	public static int SOD_TIAT_KILL_COUNT;
 	public static long SOD_STAGE_2_LENGTH;
 	
-	// chatfilter
+	// --------------------------------------------------
+	// Chatfilter Settings
+	// --------------------------------------------------
 	public static ArrayList<String> FILTER_LIST;
 	
-	// Security
+	// --------------------------------------------------
+	// Security Settings
+	// --------------------------------------------------
 	public static boolean SECOND_AUTH_ENABLED;
 	public static int SECOND_AUTH_MAX_ATTEMPTS;
 	public static long SECOND_AUTH_BAN_TIME;
 	public static String SECOND_AUTH_REC_LINK;
 	
-	// Email
+	// --------------------------------------------------
+	// Email Settings
+	// --------------------------------------------------
 	public static String EMAIL_SERVERINFO_NAME;
 	public static String EMAIL_SERVERINFO_ADDRESS;
 	public static boolean EMAIL_SYS_ENABLED;
@@ -1125,7 +1160,9 @@ public final class Config
 	public static String EMAIL_SYS_SELECTQUERY;
 	public static String EMAIL_SYS_DBFIELD;
 	
+	// --------------------------------------------------
 	// Conquerable Halls Settings
+	// --------------------------------------------------
 	public static int CHS_CLAN_MINLEVEL;
 	public static int CHS_MAX_ATTACKERS;
 	public static int CHS_MAX_FLAGS_PER_CLAN;
@@ -1179,6 +1216,7 @@ public final class Config
 			DATABASE_PASSWORD = serverSettings.getString("Password", "");
 			DATABASE_MAX_CONNECTIONS = serverSettings.getInt("MaximumDbConnections", 10);
 			DATABASE_MAX_IDLE_TIME = serverSettings.getInt("MaximumDbIdleTime", 0);
+			DATABASE_IDLE_TEST_PERIOD = serverSettings.getInt("IdleConnectionTestPeriod", 60);
 			
 			try
 			{
@@ -1186,7 +1224,7 @@ public final class Config
 			}
 			catch (IOException e)
 			{
-				_log.log(Level.WARNING, "Error setting datapack root!", e);
+				_log.warn("Error setting datapack root!", e);
 				DATAPACK_ROOT = new File(".");
 			}
 			
@@ -1207,7 +1245,7 @@ public final class Config
 				}
 				catch (NumberFormatException e)
 				{
-					_log.log(Level.WARNING, "Wrong config protocol version: " + protocol + ". Skipped.");
+					_log.warn("Wrong config protocol version: " + protocol + ". Skipped.");
 				}
 			}
 			
@@ -1290,7 +1328,7 @@ public final class Config
 					}
 					else
 					{
-						_log.warning(StringUtil.concat("[CLSetSiegeTimeList]: invalid config property -> CLSetSiegeTimeList \"", st, "\""));
+						_log.warn(StringUtil.concat("[CLSetSiegeTimeList]: invalid config property -> CLSetSiegeTimeList \"", st, "\""));
 					}
 				}
 				if (isHour)
@@ -1303,7 +1341,7 @@ public final class Config
 							int val = Integer.parseInt(st);
 							if ((val > 23) || (val < 0))
 							{
-								_log.warning(StringUtil.concat("[SiegeHourList]: invalid config property -> SiegeHourList \"", st, "\""));
+								_log.warn(StringUtil.concat("[SiegeHourList]: invalid config property -> SiegeHourList \"", st, "\""));
 							}
 							else if (val < 12)
 							{
@@ -1318,7 +1356,7 @@ public final class Config
 					}
 					if (Config.SIEGE_HOUR_LIST_AFTERNOON.isEmpty() && Config.SIEGE_HOUR_LIST_AFTERNOON.isEmpty())
 					{
-						_log.warning("[SiegeHourList]: invalid config property -> SiegeHourList is empty");
+						_log.warn("[SiegeHourList]: invalid config property -> SiegeHourList is empty");
 						CL_SET_SIEGE_TIME_LIST.remove("hour");
 					}
 				}
@@ -1471,7 +1509,7 @@ public final class Config
 					String[] skillSplit = skill.split(",");
 					if (skillSplit.length != 2)
 					{
-						_log.warning(StringUtil.concat("[SkillDurationList]: invalid config property -> SkillDurationList \"", skill, "\""));
+						_log.warn(StringUtil.concat("[SkillDurationList]: invalid config property -> SkillDurationList \"", skill, "\""));
 					}
 					else
 					{
@@ -1483,7 +1521,7 @@ public final class Config
 						{
 							if (!skill.isEmpty())
 							{
-								_log.warning(StringUtil.concat("[SkillDurationList]: invalid config property -> SkillList \"", skillSplit[0], "\"", skillSplit[1]));
+								_log.warn(StringUtil.concat("[SkillDurationList]: invalid config property -> SkillList \"", skillSplit[0], "\"", skillSplit[1]));
 							}
 						}
 					}
@@ -1500,7 +1538,7 @@ public final class Config
 					String[] skillSplit = skill.split(",");
 					if (skillSplit.length != 2)
 					{
-						_log.warning(StringUtil.concat("[SkillReuseList]: invalid config property -> SkillReuseList \"", skill, "\""));
+						_log.warn(StringUtil.concat("[SkillReuseList]: invalid config property -> SkillReuseList \"", skill, "\""));
 					}
 					else
 					{
@@ -1512,7 +1550,7 @@ public final class Config
 						{
 							if (!skill.isEmpty())
 							{
-								_log.warning(StringUtil.concat("[SkillReuseList]: invalid config property -> SkillList \"", skillSplit[0], "\"", skillSplit[1]));
+								_log.warn(StringUtil.concat("[SkillReuseList]: invalid config property -> SkillList \"", skillSplit[0], "\"", skillSplit[1]));
 							}
 						}
 					}
@@ -1676,7 +1714,7 @@ public final class Config
 			ALT_CLAN_LEADER_DATE_CHANGE = Character.getInt("AltClanLeaderDateChange", 3);
 			if ((ALT_CLAN_LEADER_DATE_CHANGE < 1) || (ALT_CLAN_LEADER_DATE_CHANGE > 7))
 			{
-				_log.log(Level.WARNING, "Wrong value specified for AltClanLeaderDateChange: " + ALT_CLAN_LEADER_DATE_CHANGE);
+				_log.warn("Wrong value specified for AltClanLeaderDateChange: " + ALT_CLAN_LEADER_DATE_CHANGE);
 				ALT_CLAN_LEADER_DATE_CHANGE = 3;
 			}
 			ALT_CLAN_LEADER_HOUR_CHANGE = Character.getString("AltClanLeaderHourChange", "00:00:00");
@@ -1722,8 +1760,8 @@ public final class Config
 				}
 				catch (NumberFormatException nfe)
 				{
-					_log.warning("Player Spawn Protection: Wrong ItemId passed: " + item);
-					_log.warning(nfe.getMessage());
+					_log.warn("Player Spawn Protection: Wrong ItemId passed: " + item);
+					_log.warn(nfe.getMessage());
 				}
 				if (itm != 0)
 				{
@@ -1771,17 +1809,6 @@ public final class Config
 			SILENCE_MODE_EXCLUDE = Character.getBoolean("SilenceModeExclude", false);
 			ALT_VALIDATE_TRIGGER_SKILLS = Character.getBoolean("AltValidateTriggerSkills", false);
 			PLAYER_MOVEMENT_BLOCK_TIME = Character.getInt("NpcTalkBlockingTime", 0) * 1000;
-			
-			// Load L2J Server Version L2Properties file (if exists)
-			final PropertiesParser serverVersion = new PropertiesParser(SERVER_VERSION_FILE);
-			
-			SERVER_VERSION = serverVersion.getString("version", "Unsupported Custom Version.");
-			SERVER_BUILD_DATE = serverVersion.getString("builddate", "Undefined Date.");
-			
-			// Load L2J Datapack Version L2Properties file (if exists)
-			final PropertiesParser dpVersion = new PropertiesParser(new File(DATAPACK_ROOT, DATAPACK_VERSION_FILE));
-			
-			DATAPACK_VERSION = dpVersion.getString("version", "Unsupported Custom Version.");
 			
 			// Load Telnet L2Properties file (if exists)
 			final PropertiesParser telnetSettings = new PropertiesParser(TELNET_FILE);
@@ -1914,14 +1941,22 @@ public final class Config
 			WORLD_Y_MIN = General.getInt("WorldYMin", 10);
 			WORLD_Y_MAX = General.getInt("WorldYMax", 26);
 			GEODATA = General.getInt("GeoData", 0);
-			GEODATA_DRIVER = General.getString("GeoDataDriver", "l2r.gameserver.geoengine.NullDriver");
+			try
+			{
+				GEODATA_DIR = new File(General.getString("GeodataDirectory", "data/geodata").replaceAll("\\\\", "/")).getCanonicalFile();
+			}
+			catch (IOException e)
+			{
+				_log.warn("Error setting geodata directory!", e);
+				GEODATA_DIR = new File("data/geodata");
+			}
 			try
 			{
 				PATHNODE_DIR = new File(General.getString("PathnodeDirectory", "data/pathnode").replaceAll("\\\\", "/")).getCanonicalFile();
 			}
 			catch (IOException e)
 			{
-				_log.log(Level.WARNING, "Error setting pathnode directory!", e);
+				_log.warn("Error setting pathnode directory!", e);
 				PATHNODE_DIR = new File("data/pathnode");
 			}
 			GEODATA_CELLFINDING = General.getBoolean("CellPathFinding", false);
@@ -1978,7 +2013,7 @@ public final class Config
 			}
 			catch (NumberFormatException nfe)
 			{
-				_log.log(Level.WARNING, nfe.getMessage(), nfe);
+				_log.warn(nfe.getMessage(), nfe);
 			}
 			ALT_MANOR_REFRESH_TIME = General.getInt("AltManorRefreshTime", 20);
 			ALT_MANOR_REFRESH_MIN = General.getInt("AltManorRefreshMin", 0);
@@ -2045,10 +2080,10 @@ public final class Config
 			CUSTOM_NPC_SKILLS_TABLE = General.getBoolean("CustomNpcSkillsTable", false);
 			CUSTOM_TELEPORT_TABLE = General.getBoolean("CustomTeleportTable", false);
 			CUSTOM_DROPLIST_TABLE = General.getBoolean("CustomDroplistTable", false);
-			CUSTOM_MERCHANT_TABLES = General.getBoolean("CustomMerchantTables", false);
 			CUSTOM_SKILLS_LOAD = General.getBoolean("CustomSkillsLoad", false);
 			CUSTOM_ITEMS_LOAD = General.getBoolean("CustomItemsLoad", false);
 			CUSTOM_MULTISELL_LOAD = General.getBoolean("CustomMultisellLoad", false);
+			CUSTOM_BUYLIST_LOAD = General.getBoolean("CustomBuyListLoad", false);
 			ALT_BIRTHDAY_GIFT = General.getInt("AltBirthdayGift", 22187);
 			ALT_BIRTHDAY_MAIL_SUBJECT = General.getString("AltBirthdayMailSubject", "Happy Birthday!");
 			ALT_BIRTHDAY_MAIL_TEXT = General.getString("AltBirthdayMailText", "Hello Adventurer!! Seeing as you're one year older now, I thought I would send you some birthday cheer :) Please find your birthday pack attached. May these gifts bring you joy and happiness on this very special day." + EOL + EOL + "Sincerely, Alegria");
@@ -2122,7 +2157,7 @@ public final class Config
 				String[] propSplit = prop.split(",");
 				if (propSplit.length != 2)
 				{
-					_log.warning(StringUtil.concat("[CustomMinionsRespawnTime]: invalid config property -> CustomMinionsRespawnTime \"", prop, "\""));
+					_log.warn(StringUtil.concat("[CustomMinionsRespawnTime]: invalid config property -> CustomMinionsRespawnTime \"", prop, "\""));
 				}
 				
 				try
@@ -2133,7 +2168,7 @@ public final class Config
 				{
 					if (!prop.isEmpty())
 					{
-						_log.warning(StringUtil.concat("[CustomMinionsRespawnTime]: invalid config property -> CustomMinionsRespawnTime \"", propSplit[0], "\"", propSplit[1]));
+						_log.warn(StringUtil.concat("[CustomMinionsRespawnTime]: invalid config property -> CustomMinionsRespawnTime \"", propSplit[0], "\"", propSplit[1]));
 					}
 				}
 			}
@@ -2157,7 +2192,7 @@ public final class Config
 				{
 					if (!npcId.isEmpty())
 					{
-						_log.warning("Could not parse " + npcId + " id for NonTalkingNpcs. Please check that all values are digits and coma separated.");
+						_log.warn("Could not parse " + npcId + " id for NonTalkingNpcs. Please check that all values are digits and coma separated.");
 					}
 				}
 			}
@@ -2252,7 +2287,7 @@ public final class Config
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "Error while loading Player XP percent lost!", e);
+				_log.warn("Error while loading Player XP percent lost!", e);
 			}
 			
 			String[] rateDropItemsById = RatesSettings.getString("RateDropItemsById", "").split(";");
@@ -2264,7 +2299,7 @@ public final class Config
 					String[] itemSplit = item.split(",");
 					if (itemSplit.length != 2)
 					{
-						_log.warning(StringUtil.concat("Config.load(): invalid config property -> RateDropItemsById \"", item, "\""));
+						_log.warn(StringUtil.concat("Config.load(): invalid config property -> RateDropItemsById \"", item, "\""));
 					}
 					else
 					{
@@ -2276,7 +2311,7 @@ public final class Config
 						{
 							if (!item.isEmpty())
 							{
-								_log.warning(StringUtil.concat("Config.load(): invalid config property -> RateDropItemsById \"", item, "\""));
+								_log.warn(StringUtil.concat("Config.load(): invalid config property -> RateDropItemsById \"", item, "\""));
 							}
 						}
 					}
@@ -2367,7 +2402,7 @@ public final class Config
 			
 			if (!L2JMOD_MULTILANG_ALLOWED.contains(L2JMOD_MULTILANG_DEFAULT))
 			{
-				_log.warning("MultiLang[Config.load()]: default language: " + L2JMOD_MULTILANG_DEFAULT + " is not in allowed list !");
+				_log.warn("MultiLang[Config.load()]: default language: " + L2JMOD_MULTILANG_DEFAULT + " is not in allowed list !");
 			}
 			
 			L2JMOD_HELLBOUND_STATUS = L2JModSettings.getBoolean("HellboundStatus", false);
@@ -2406,7 +2441,7 @@ public final class Config
 				String[] entrySplit = entry.split(",");
 				if (entrySplit.length != 2)
 				{
-					_log.warning(StringUtil.concat("DualboxCheck[Config.load()]: invalid config property -> DualboxCheckWhitelist \"", entry, "\""));
+					_log.warn(StringUtil.concat("DualboxCheck[Config.load()]: invalid config property -> DualboxCheckWhitelist \"", entry, "\""));
 				}
 				else
 				{
@@ -2418,11 +2453,11 @@ public final class Config
 					}
 					catch (UnknownHostException e)
 					{
-						_log.warning(StringUtil.concat("DualboxCheck[Config.load()]: invalid address -> DualboxCheckWhitelist \"", entrySplit[0], "\""));
+						_log.warn(StringUtil.concat("DualboxCheck[Config.load()]: invalid address -> DualboxCheckWhitelist \"", entrySplit[0], "\""));
 					}
 					catch (NumberFormatException e)
 					{
-						_log.warning(StringUtil.concat("DualboxCheck[Config.load()]: invalid number -> DualboxCheckWhitelist \"", entrySplit[1], "\""));
+						_log.warn(StringUtil.concat("DualboxCheck[Config.load()]: invalid number -> DualboxCheckWhitelist \"", entrySplit[1], "\""));
 					}
 				}
 			}
@@ -2530,17 +2565,17 @@ public final class Config
 					}
 					catch (Exception e)
 					{
-						_log.warning("Could not load HexID file (" + HEXID_FILE + "). Hopefully login will give us one.");
+						_log.warn("Could not load HexID file (" + HEXID_FILE + "). Hopefully login will give us one.");
 					}
 				}
 				else
 				{
-					_log.warning("Could not load HexID file (" + HEXID_FILE + "). Hopefully login will give us one.");
+					_log.warn("Could not load HexID file (" + HEXID_FILE + "). Hopefully login will give us one.");
 				}
 			}
 			else
 			{
-				_log.warning("Could not load HexID file (" + HEXID_FILE + "). Hopefully login will give us one.");
+				_log.warn("Could not load HexID file (" + HEXID_FILE + "). Hopefully login will give us one.");
 			}
 			
 			// Bosses
@@ -2674,7 +2709,7 @@ public final class Config
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "Error while loading chat filter words!", e);
+				_log.warn("Error while loading chat filter words!", e);
 			}
 			
 			// Security
@@ -2711,7 +2746,7 @@ public final class Config
 			}
 			catch (IOException e)
 			{
-				_log.log(Level.WARNING, "Error setting datapack root!", e);
+				_log.warn("Error setting datapack root!", e);
 				DATAPACK_ROOT = new File(".");
 			}
 			
@@ -2779,7 +2814,7 @@ public final class Config
 		}
 		else
 		{
-			_log.severe("Could not Load Config: server mode was not set!");
+			_log.error("Could not Load Config: server mode was not set!");
 		}
 	}
 	
@@ -3618,7 +3653,7 @@ public final class Config
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, "", e);
+					_log.warn(String.valueOf(e));
 					return false;
 				}
 		}
@@ -3659,8 +3694,8 @@ public final class Config
 		}
 		catch (Exception e)
 		{
-			_log.warning(StringUtil.concat("Failed to save hex id to ", fileName, " File."));
-			_log.warning("Config: " + e.getMessage());
+			_log.warn(StringUtil.concat("Failed to save hex id to ", fileName, " File."));
+			_log.warn("Config: " + e.getMessage());
 		}
 	}
 	
@@ -3882,7 +3917,7 @@ public final class Config
 			valueSplit = value.split(",");
 			if (valueSplit.length != 2)
 			{
-				_log.warning(StringUtil.concat("parseItemsList[Config.load()]: invalid entry -> \"", valueSplit[0], "\", should be itemId,itemNumber. Skipping to the next entry in the list."));
+				_log.warn(StringUtil.concat("parseItemsList[Config.load()]: invalid entry -> \"", valueSplit[0], "\", should be itemId,itemNumber. Skipping to the next entry in the list."));
 				continue;
 			}
 			
@@ -3893,7 +3928,7 @@ public final class Config
 			}
 			catch (NumberFormatException e)
 			{
-				_log.warning(StringUtil.concat("parseItemsList[Config.load()]: invalid itemId -> \"", valueSplit[0], "\", value must be an integer. Skipping to the next entry in the list."));
+				_log.warn(StringUtil.concat("parseItemsList[Config.load()]: invalid itemId -> \"", valueSplit[0], "\", value must be an integer. Skipping to the next entry in the list."));
 				continue;
 			}
 			try
@@ -3902,7 +3937,7 @@ public final class Config
 			}
 			catch (NumberFormatException e)
 			{
-				_log.warning(StringUtil.concat("parseItemsList[Config.load()]: invalid item number -> \"", valueSplit[1], "\", value must be an integer. Skipping to the next entry in the list."));
+				_log.warn(StringUtil.concat("parseItemsList[Config.load()]: invalid item number -> \"", valueSplit[1], "\", value must be an integer. Skipping to the next entry in the list."));
 				continue;
 			}
 			result[i++] = tmp;
@@ -3926,13 +3961,13 @@ public final class Config
 			File f = new File(IP_CONFIG_FILE);
 			if (f.exists())
 			{
-				_log.log(Level.INFO, "Network Config: ipconfig.xml exists using manual configuration...");
+				_log.info("Network Config: ipconfig.xml exists using manual configuration...");
 				parseFile(new File(IP_CONFIG_FILE));
 			}
 			else
 			// Auto configuration...
 			{
-				_log.log(Level.INFO, "Network Config: ipconfig.xml doesn't exists using automatic configuration...");
+				_log.info("Network Config: ipconfig.xml doesn't exists using automatic configuration...");
 				autoIpConfig();
 			}
 		}
@@ -3955,7 +3990,7 @@ public final class Config
 							
 							if (_hosts.size() != _subnets.size())
 							{
-								_log.log(Level.WARNING, "Failed to Load " + IP_CONFIG_FILE + " File - subnets does not match server addresses.");
+								_log.warn("Failed to Load " + IP_CONFIG_FILE + " File - subnets does not match server addresses.");
 							}
 						}
 					}
@@ -3963,7 +3998,7 @@ public final class Config
 					Node att = n.getAttributes().getNamedItem("address");
 					if (att == null)
 					{
-						_log.log(Level.WARNING, "Failed to load " + IP_CONFIG_FILE + " file - default server address is missing.");
+						_log.warn("Failed to load " + IP_CONFIG_FILE + " file - default server address is missing.");
 						_hosts.add("127.0.0.1");
 					}
 					else
@@ -3988,7 +4023,7 @@ public final class Config
 			}
 			catch (IOException e)
 			{
-				_log.log(Level.INFO, "Network Config: Failed to connect to api.externalip.net please check your internet connection using 127.0.0.1!");
+				_log.info("Network Config: Failed to connect to api.externalip.net please check your internet connection using 127.0.0.1!");
 				externalIp = "127.0.0.1";
 			}
 			
@@ -4025,7 +4060,7 @@ public final class Config
 						{
 							_subnets.add(subnet);
 							_hosts.add(sub.getIPAddress());
-							_log.log(Level.INFO, "Network Config: Adding new subnet: " + subnet + " address: " + sub.getIPAddress());
+							_log.info("Network Config: Adding new subnet: " + subnet + " address: " + sub.getIPAddress());
 						}
 					}
 				}
@@ -4033,11 +4068,11 @@ public final class Config
 				// External host and subnet
 				_hosts.add(externalIp);
 				_subnets.add("0.0.0.0/0");
-				_log.log(Level.INFO, "Network Config: Adding new subnet: 0.0.0.0/0 address: " + externalIp);
+				_log.info("Network Config: Adding new subnet: 0.0.0.0/0 address: " + externalIp);
 			}
 			catch (SocketException e)
 			{
-				_log.log(Level.INFO, "Network Config: Configuration failed please configure manually using ipconfig.xml", e);
+				_log.info("Network Config: Configuration failed please configure manually using ipconfig.xml", e);
 				System.exit(0);
 			}
 		}

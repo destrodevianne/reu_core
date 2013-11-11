@@ -24,11 +24,12 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.UIData;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * UI Keys Settings class.
@@ -36,7 +37,7 @@ import l2r.gameserver.datatables.UIData;
  */
 public class UIKeysSettings
 {
-	private static final Logger _log = Logger.getLogger(UIKeysSettings.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(UIKeysSettings.class);
 	
 	private final int _playerObjId;
 	private Map<Integer, List<ActionKey>> _storedKeys;
@@ -112,7 +113,7 @@ public class UIKeysSettings
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: saveInDB(): " + e.getMessage(), e);
+			_log.warn("Exception: saveInDB(): " + e.getMessage(), e);
 		}
 		
 		query = "REPLACE INTO character_ui_actions (`charId`, `cat`, `order`, `cmd`, `key`, `tgKey1`, `tgKey2`, `show`) VALUES";
@@ -133,7 +134,7 @@ public class UIKeysSettings
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: saveInDB(): " + e.getMessage(), e);
+			_log.warn("Exception: saveInDB(): " + e.getMessage(), e);
 		}
 		_saved = true;
 	}
@@ -161,7 +162,7 @@ public class UIKeysSettings
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: getCatsFromDB(): " + e.getMessage(), e);
+			_log.warn("Exception: getCatsFromDB(): " + e.getMessage(), e);
 		}
 		
 		if (_storedCategories.isEmpty())
@@ -199,7 +200,7 @@ public class UIKeysSettings
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: getKeysFromDB(): " + e.getMessage(), e);
+			_log.warn("Exception: getKeysFromDB(): " + e.getMessage(), e);
 		}
 		
 		if (_storedKeys.isEmpty())

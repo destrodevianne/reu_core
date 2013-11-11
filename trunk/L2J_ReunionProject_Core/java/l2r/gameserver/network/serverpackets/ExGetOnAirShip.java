@@ -18,14 +18,14 @@
  */
 package l2r.gameserver.network.serverpackets;
 
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.util.Point3D;
 
 public class ExGetOnAirShip extends L2GameServerPacket
 {
 	private final int _playerId, _airShipId;
-	private final Point3D _pos;
+	private final Location _pos;
 	
 	public ExGetOnAirShip(L2PcInstance player, L2Character ship)
 	{

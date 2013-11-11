@@ -130,7 +130,7 @@ public class MultiSellChoose extends L2GameClientPacket
 			{
 				if (!entry.isStackable() && (_amount > 1))
 				{
-					_log.severe("Character: " + player.getName() + " is trying to set amount > 1 on non-stackable multisell, id:" + _listId + ":" + _entryId);
+					_log.error("Character: " + player.getName() + " is trying to set amount > 1 on non-stackable multisell, id:" + _listId + ":" + _entryId);
 					player.setMultiSell(null);
 					return;
 				}
@@ -256,7 +256,7 @@ public class MultiSellChoose extends L2GameClientPacket
 							L2ItemInstance itemToTake = inv.getItemByItemId(e.getItemId()); // initialize and initial guess for the item to take.
 							if (itemToTake == null)
 							{ // this is a cheat, transaction will be aborted and if any items already taken will not be returned back to inventory!
-								_log.severe("Character: " + player.getName() + " is trying to cheat in multisell, id:" + _listId + ":" + _entryId);
+								_log.error("Character: " + player.getName() + " is trying to cheat in multisell, id:" + _listId + ":" + _entryId);
 								player.setMultiSell(null);
 								return;
 							}
@@ -264,7 +264,7 @@ public class MultiSellChoose extends L2GameClientPacket
 							// if (itemToTake.isEquipped())
 							// {
 							// this is a cheat, transaction will be aborted and if any items already taken will not be returned back to inventory!
-							// _log.severe("Character: " + player.getName() + " is trying to cheat in multisell, exchanging equipped item, merchatnt id:" + merchant.getNpcId());
+							// _log.error("Character: " + player.getName() + " is trying to cheat in multisell, exchanging equipped item, merchatnt id:" + merchant.getNpcId());
 							// player.setMultiSell(null);
 							// return;
 							// }

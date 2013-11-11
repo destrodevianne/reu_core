@@ -27,8 +27,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
@@ -41,11 +39,15 @@ import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.configsEngine.CustomServerConfigs;
 
 public class Auction
 {
-	protected static final Logger _log = Logger.getLogger(Auction.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(Auction.class);
 	private int _id = 0;
 	private long _endDate;
 	private int _highestBidderId = 0;
@@ -137,7 +139,7 @@ public class Auction
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error("", e);
 			}
 		}
 	}
@@ -193,7 +195,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: Auction.load(): " + e.getMessage(), e);
+			_log.warn("Exception: Auction.load(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -224,7 +226,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception: Auction.loadBid(): " + e.getMessage(), e);
+			_log.warn("Exception: Auction.loadBid(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -262,7 +264,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: saveAuctionDate(): " + e.getMessage(), e);
+			_log.error("Exception: saveAuctionDate(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -405,7 +407,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: Auction.updateInDB(L2PcInstance bidder, int bid): " + e.getMessage(), e);
+			_log.error("Exception: Auction.updateInDB(L2PcInstance bidder, int bid): " + e.getMessage(), e);
 		}
 	}
 	
@@ -420,7 +422,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: Auction.deleteFromDB(): " + e.getMessage(), e);
+			_log.error("Exception: Auction.deleteFromDB(): " + e.getMessage(), e);
 		}
 		
 		for (Bidder b : _bidders.values())
@@ -453,7 +455,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: Auction.deleteFromDB(): " + e.getMessage(), e);
+			_log.error("Exception: Auction.deleteFromDB(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -510,7 +512,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: Auction.cancelBid(String bidder): " + e.getMessage(), e);
+			_log.error("Exception: Auction.cancelBid(String bidder): " + e.getMessage(), e);
 		}
 		
 		returnItem(_bidders.get(bidder).getClanName(), _bidders.get(bidder).getBid(), true);
@@ -550,7 +552,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: Auction.load(): " + e.getMessage(), e);
+			_log.error("Exception: Auction.load(): " + e.getMessage(), e);
 		}
 	}
 	

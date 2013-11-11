@@ -20,6 +20,7 @@ package l2r.gameserver.model.actor.stat;
 
 import l2r.Config;
 import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.items.L2Weapon;
@@ -28,6 +29,7 @@ import l2r.gameserver.model.items.type.L2WeaponType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Calculator;
 import l2r.gameserver.model.stats.Env;
+import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.stats.Stats;
 
 public class CharStat
@@ -68,9 +70,9 @@ public class CharStat
 			return init;
 		}
 		
-		int id = stat.ordinal();
+		final int id = stat.ordinal();
 		
-		Calculator c = _activeChar.getCalculators()[id];
+		final Calculator c = _activeChar.getCalculators()[id];
 		
 		// If no Func object found, no modifier is applied
 		if ((c == null) || (c.size() == 0))
@@ -78,8 +80,18 @@ public class CharStat
 			return init;
 		}
 		
+		// Apply transformation stats.
+		if (getActiveChar().isPlayer() && getActiveChar().isTransformed())
+		{
+			double val = getActiveChar().getTransformation().getStat(getActiveChar().getActingPlayer(), stat);
+			if (val > 0)
+			{
+				init = val;
+			}
+		}
+		
 		// Create and init an Env object to pass parameters to the Calculator
-		Env env = new Env();
+		final Env env = new Env();
 		env.setCharacter(_activeChar);
 		env.setTarget(target);
 		env.setSkill(skill);
@@ -87,6 +99,7 @@ public class CharStat
 		
 		// Launch the calculation
 		c.calc(env);
+		
 		// avoid some troubles with negative stats (some stats should never be negative)
 		if (env.getValue() <= 0)
 		{
@@ -435,12 +448,16 @@ public class CharStat
 	
 	public float getMovementSpeedMultiplier()
 	{
-		if (_activeChar == null)
-		{
-			return 1;
-		}
-		
-		return getRunSpeed() / (float) _activeChar.getTemplate().getBaseRunSpd();
+		return (getRunSpeed() / getBaseMoveSpeed(MoveType.RUN));
+	}
+	
+	/**
+	 * @param type movement type
+	 * @return the base move speed of given movement type.
+	 */
+	public float getBaseMoveSpeed(MoveType type)
+	{
+		return _activeChar.getTemplate().getBaseMoveSpeed(type);
 	}
 	
 	/**
@@ -693,21 +710,24 @@ public class CharStat
 	 */
 	public int getRunSpeed()
 	{
-		if (_activeChar == null)
-		{
-			return 1;
-		}
-		
-		// err we should be adding TO the persons run speed
-		// not making it a constant
-		double baseRunSpd = _activeChar.getTemplate().getBaseRunSpd();
-		
+		final float baseRunSpd = _activeChar.isInsideZone(ZoneIdType.WATER) ? getSwimRunSpeed() : getBaseMoveSpeed(MoveType.RUN);
 		if (baseRunSpd == 0)
 		{
 			return 0;
 		}
 		
-		return (int) Math.round(calcStat(Stats.RUN_SPEED, baseRunSpd, null, null));
+		return (int) Math.round(calcStat(Stats.MOVE_SPEED, baseRunSpd, null, null));
+	}
+	
+	public int getSwimRunSpeed()
+	{
+		final float baseRunSpd = getBaseMoveSpeed(MoveType.FAST_SWIM);
+		if (baseRunSpd == 0)
+		{
+			return 0;
+		}
+		
+		return (int) Math.round(calcStat(Stats.MOVE_SPEED, baseRunSpd, null, null));
 	}
 	
 	/**
@@ -746,19 +766,27 @@ public class CharStat
 	 */
 	public int getWalkSpeed()
 	{
-		if (_activeChar == null)
-		{
-			return 1;
-		}
-		
-		double baseWalkSpd = _activeChar.getTemplate().getBaseWalkSpd();
-		
+		final float baseWalkSpd = _activeChar.isInsideZone(ZoneIdType.WATER) ? getSwimWalkSpeed() : getBaseMoveSpeed(MoveType.WALK);
 		if (baseWalkSpd == 0)
 		{
 			return 0;
 		}
 		
-		return (int) calcStat(Stats.WALK_SPEED, baseWalkSpd);
+		return (int) Math.round(calcStat(Stats.MOVE_SPEED, baseWalkSpd));
+	}
+	
+	/**
+	 * @return the WalkSpeed (base+modifier) of the L2Character.
+	 */
+	public int getSwimWalkSpeed()
+	{
+		final float baseWalkSpd = getBaseMoveSpeed(MoveType.SLOW_SWIM);
+		if (baseWalkSpd == 0)
+		{
+			return 0;
+		}
+		
+		return (int) Math.round(calcStat(Stats.MOVE_SPEED, baseWalkSpd));
 	}
 	
 	/**

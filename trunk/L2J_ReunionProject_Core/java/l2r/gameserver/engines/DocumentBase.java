@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -51,6 +49,8 @@ import l2r.gameserver.model.conditions.ConditionPlayerActiveEffectId;
 import l2r.gameserver.model.conditions.ConditionPlayerActiveSkillId;
 import l2r.gameserver.model.conditions.ConditionPlayerAgathionId;
 import l2r.gameserver.model.conditions.ConditionPlayerCanSweep;
+import l2r.gameserver.model.conditions.ConditionPlayerCanTransform;
+import l2r.gameserver.model.conditions.ConditionPlayerCanUntransform;
 import l2r.gameserver.model.conditions.ConditionPlayerCharges;
 import l2r.gameserver.model.conditions.ConditionPlayerClassIdRestriction;
 import l2r.gameserver.model.conditions.ConditionPlayerCloakStatus;
@@ -118,6 +118,8 @@ import l2r.gameserver.model.skills.funcs.LambdaStats;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Stats;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -127,7 +129,7 @@ import org.w3c.dom.Node;
  */
 public abstract class DocumentBase
 {
-	protected final Logger _log = Logger.getLogger(getClass().getName());
+	protected final Logger _log = LoggerFactory.getLogger(getClass().getName());
 	
 	private final File _file;
 	protected Map<String, String[]> _tables;
@@ -150,7 +152,7 @@ public abstract class DocumentBase
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Error loading file " + _file, e);
+			_log.error("Error loading file " + _file, e);
 			return null;
 		}
 		try
@@ -159,7 +161,7 @@ public abstract class DocumentBase
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Error in file " + _file, e);
+			_log.error("Error in file " + _file, e);
 			return null;
 		}
 		return doc;
@@ -529,7 +531,7 @@ public abstract class DocumentBase
 		}
 		if ((cond.conditions == null) || (cond.conditions.length == 0))
 		{
-			_log.severe("Empty <and> condition in " + _file);
+			_log.error("Empty <and> condition in " + _file);
 		}
 		return cond;
 	}
@@ -546,7 +548,7 @@ public abstract class DocumentBase
 		}
 		if ((cond.conditions == null) || (cond.conditions.length == 0))
 		{
-			_log.severe("Empty <or> condition in " + _file);
+			_log.error("Empty <or> condition in " + _file);
 		}
 		return cond;
 	}
@@ -560,7 +562,7 @@ public abstract class DocumentBase
 				return new ConditionLogicNot(parseCondition(n, template));
 			}
 		}
-		_log.severe("Empty <not> condition in " + _file);
+		_log.error("Empty <not> condition in " + _file);
 		return null;
 	}
 	
@@ -869,6 +871,14 @@ public abstract class DocumentBase
 			{
 				cond = joinAnd(cond, new ConditionPlayerCanSweep(Boolean.parseBoolean(a.getNodeValue())));
 			}
+			else if ("canTransform".equalsIgnoreCase(a.getNodeName()))
+			{
+				cond = joinAnd(cond, new ConditionPlayerCanTransform(Boolean.parseBoolean(a.getNodeValue())));
+			}
+			else if ("canUntransform".equalsIgnoreCase(a.getNodeName()))
+			{
+				cond = joinAnd(cond, new ConditionPlayerCanUntransform(Boolean.parseBoolean(a.getNodeValue())));
+			}
 			else if ("insideZoneId".equalsIgnoreCase(a.getNodeName()))
 			{
 				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
@@ -889,7 +899,7 @@ public abstract class DocumentBase
 		
 		if (cond == null)
 		{
-			_log.severe("Unrecognized <player> condition in " + _file);
+			_log.error("Unrecognized <player> condition in " + _file);
 		}
 		return cond;
 	}
@@ -1072,7 +1082,7 @@ public abstract class DocumentBase
 		}
 		if (cond == null)
 		{
-			_log.severe("Unrecognized <target> condition in " + _file);
+			_log.error("Unrecognized <target> condition in " + _file);
 		}
 		return cond;
 	}
@@ -1134,7 +1144,7 @@ public abstract class DocumentBase
 		}
 		if (cond == null)
 		{
-			_log.severe("Unrecognized <using> condition in " + _file);
+			_log.error("Unrecognized <using> condition in " + _file);
 		}
 		return cond;
 	}
@@ -1164,7 +1174,7 @@ public abstract class DocumentBase
 		}
 		if (cond == null)
 		{
-			_log.severe("Unrecognized <game> condition in " + _file);
+			_log.error("Unrecognized <game> condition in " + _file);
 		}
 		return cond;
 	}

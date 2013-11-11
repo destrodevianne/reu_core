@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.logging.Level;
-
 import l2r.Config;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.model.L2Clan;
@@ -47,7 +45,7 @@ public final class RequestPledgeInfo extends L2GameClientPacket
 	{
 		if (Config.DEBUG)
 		{
-			_log.log(Level.FINE, "Info for clan " + _clanId + " requested");
+			_log.info("Info for clan " + _clanId + " requested");
 		}
 		
 		L2PcInstance activeChar = getClient().getActiveChar();
@@ -62,7 +60,7 @@ public final class RequestPledgeInfo extends L2GameClientPacket
 		{
 			if (Config.DEBUG)
 			{
-				_log.warning("Clan data for clanId " + _clanId + " is missing for player " + activeChar.getName());
+				_log.warn("Clan data for clanId " + _clanId + " is missing for player " + activeChar.getName());
 			}
 			return; // we have no clan data ?!? should not happen
 		}

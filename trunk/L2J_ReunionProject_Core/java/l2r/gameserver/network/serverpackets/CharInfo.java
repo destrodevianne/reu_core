@@ -203,7 +203,7 @@ public class CharInfo extends L2GameServerPacket
 			}
 			else
 			{
-				_log.warning("Character " + _activeChar.getName() + " (" + _activeChar.getObjectId() + ") morphed in a Npc (" + _activeChar.getPoly().getPolyId() + ") w/o template.");
+				_log.warn("Character " + _activeChar.getName() + " (" + _activeChar.getObjectId() + ") morphed in a Npc (" + _activeChar.getPoly().getPolyId() + ") w/o template.");
 			}
 		}
 		else
@@ -377,7 +377,7 @@ public class CharInfo extends L2GameServerPacket
 			
 			writeC(!gmSeeInvis && _invisible ? 1 : 0); // invisible = 1 visible =0
 			
-			writeC(_activeChar.getMountType()); // 1-on Strider, 2-on Wyvern, 3-on Great Wolf, 0-no mount
+			writeC(_activeChar.getMountType().ordinal()); // 1-on Strider, 2-on Wyvern, 3-on Great Wolf, 0-no mount
 			writeC(_activeChar.getPrivateStoreType()); // 1 - sellshop
 			
 			writeH(_activeChar.getCubics().size());

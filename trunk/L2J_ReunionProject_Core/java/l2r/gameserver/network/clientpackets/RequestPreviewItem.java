@@ -18,21 +18,18 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.TradeController;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.BuyListData;
 import l2r.gameserver.model.L2Object;
-import l2r.gameserver.model.L2TradeList;
 import l2r.gameserver.model.actor.L2Npc;
-import l2r.gameserver.model.actor.instance.L2MercManagerInstance;
 import l2r.gameserver.model.actor.instance.L2MerchantInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.buylist.L2BuyList;
+import l2r.gameserver.model.buylist.Product;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Armor;
@@ -80,7 +77,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "", e);
+				_log.error(String.valueOf(e));
 			}
 		}
 	}
@@ -141,7 +138,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 		// Check current target of the player and the INTERACTION_DISTANCE
 		L2Object target = _activeChar.getTarget();
 		if (!_activeChar.isGM() && ((target == null // No target (i.e. GM Shop)
-			) || !((target instanceof L2MerchantInstance) || (target instanceof L2MercManagerInstance)) // Target not a merchant and not mercmanager
+			) || !((target instanceof L2MerchantInstance)) // Target not a merchant
 		|| !_activeChar.isInsideRadius(target, L2Npc.INTERACTION_DISTANCE, false, false) // Distance is too far
 		))
 		{
@@ -154,52 +151,36 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			return;
 		}
 		
-		L2TradeList list = null;
-		
 		// Get the current merchant targeted by the player
 		final L2MerchantInstance merchant = (target instanceof L2MerchantInstance) ? (L2MerchantInstance) target : null;
 		if (merchant == null)
 		{
-			_log.warning(getClass().getName() + " Null merchant!");
+			_log.warn(getClass().getName() + " Null merchant!");
 			return;
 		}
 		
-		final List<L2TradeList> lists = TradeController.getInstance().getBuyListByNpcId(merchant.getNpcId());
-		if (lists == null)
-		{
-			Util.handleIllegalPlayerAction(_activeChar, "Warning!! Character " + _activeChar.getName() + " of account " + _activeChar.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
-			return;
-		}
-		
-		for (L2TradeList tradeList : lists)
-		{
-			if (tradeList.getListId() == _listId)
-			{
-				list = tradeList;
-			}
-		}
-		
-		if (list == null)
+		final L2BuyList buyList = BuyListData.getInstance().getBuyList(_listId);
+		if (buyList == null)
 		{
 			Util.handleIllegalPlayerAction(_activeChar, "Warning!! Character " + _activeChar.getName() + " of account " + _activeChar.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
 			return;
 		}
 		
 		long totalPrice = 0;
-		_listId = list.getListId();
 		_item_list = new FastMap<>();
 		
 		for (int i = 0; i < _count; i++)
 		{
 			int itemId = _items[i];
 			
-			if (!list.containsItemId(itemId))
+			final Product product = buyList.getProductByItemId(itemId);
+			if (product == null)
 			{
 				Util.handleIllegalPlayerAction(_activeChar, "Warning!! Character " + _activeChar.getName() + " of account " + _activeChar.getAccountName() + " sent a false BuyList list_id " + _listId + " and item_id " + itemId, Config.DEFAULT_PUNISH);
 				return;
 			}
 			
-			L2Item template = ItemTable.getInstance().getTemplate(itemId);
+			L2Item template = product.getItem();
 			if (template == null)
 			{
 				continue;

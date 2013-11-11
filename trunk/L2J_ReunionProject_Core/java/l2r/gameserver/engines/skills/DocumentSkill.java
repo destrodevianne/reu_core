@@ -20,7 +20,6 @@ package l2r.gameserver.engines.skills;
 
 import java.io.File;
 import java.util.List;
-import java.util.logging.Level;
 
 import javolution.util.FastList;
 import l2r.gameserver.datatables.EnchantGroupsData;
@@ -90,7 +89,7 @@ public class DocumentSkill extends DocumentBase
 		}
 		catch (RuntimeException e)
 		{
-			_log.log(Level.SEVERE, "Error in table: " + name + " of Skill Id " + _currentSkill.id, e);
+			_log.error("Error in table: " + name + " of Skill Id " + _currentSkill.id, e);
 			return "";
 		}
 	}
@@ -104,7 +103,7 @@ public class DocumentSkill extends DocumentBase
 		}
 		catch (RuntimeException e)
 		{
-			_log.log(Level.SEVERE, "wrong level count in skill Id " + _currentSkill.id + " name: " + name + " index : " + idx, e);
+			_log.error("wrong level count in skill Id " + _currentSkill.id + " name: " + name + " index : " + idx, e);
 			return "";
 		}
 	}
@@ -888,7 +887,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.sets[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.sets[i]).getDisplayId() + "level" + _currentSkill.sets[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.sets[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.sets[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.sets[i]).getDisplayId() + "level" + _currentSkill.sets[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.sets[i]).getLevel(), e);
 			}
 		}
 		int _count = count;
@@ -901,7 +900,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets1[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets1[i]).getDisplayId() + " level=" + _currentSkill.enchsets1[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets1[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets1[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets1[i]).getDisplayId() + " level=" + _currentSkill.enchsets1[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets1[i]).getLevel(), e);
 			}
 		}
 		_count = count;
@@ -914,7 +913,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets2[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets2[i]).getDisplayId() + " level=" + _currentSkill.enchsets2[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets2[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets2[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets2[i]).getDisplayId() + " level=" + _currentSkill.enchsets2[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets2[i]).getLevel(), e);
 			}
 		}
 		_count = count;
@@ -927,7 +926,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets3[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets3[i]).getDisplayId() + " level=" + _currentSkill.enchsets3[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets3[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets3[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets3[i]).getDisplayId() + " level=" + _currentSkill.enchsets3[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets3[i]).getLevel(), e);
 			}
 		}
 		_count = count;
@@ -940,7 +939,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets4[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets4[i]).getDisplayId() + " level=" + _currentSkill.enchsets4[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets4[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets4[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets4[i]).getDisplayId() + " level=" + _currentSkill.enchsets4[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets4[i]).getLevel(), e);
 			}
 		}
 		_count = count;
@@ -953,7 +952,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets5[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets5[i]).getDisplayId() + " level=" + _currentSkill.enchsets5[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets5[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets5[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets5[i]).getDisplayId() + " level=" + _currentSkill.enchsets5[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets5[i]).getLevel(), e);
 			}
 		}
 		_count = count;
@@ -966,7 +965,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets6[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets6[i]).getDisplayId() + " level=" + _currentSkill.enchsets6[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets6[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets6[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets6[i]).getDisplayId() + " level=" + _currentSkill.enchsets6[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets6[i]).getLevel(), e);
 			}
 		}
 		_count = count;
@@ -979,7 +978,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets7[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets7[i]).getDisplayId() + " level=" + _currentSkill.enchsets7[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets7[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets7[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets7[i]).getDisplayId() + " level=" + _currentSkill.enchsets7[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets7[i]).getLevel(), e);
 			}
 		}
 		_count = count;
@@ -992,7 +991,7 @@ public class DocumentSkill extends DocumentBase
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Skill id=" + _currentSkill.enchsets8[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets8[i]).getDisplayId() + " level=" + _currentSkill.enchsets8[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets8[i]).getLevel(), e);
+				_log.error("Skill id=" + _currentSkill.enchsets8[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets8[i]).getDisplayId() + " level=" + _currentSkill.enchsets8[i].getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY).makeSkill(_currentSkill.enchsets8[i]).getLevel(), e);
 			}
 		}
 	}

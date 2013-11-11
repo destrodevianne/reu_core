@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor.instance;
 
 import java.util.concurrent.Future;
-import java.util.logging.Level;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.InstanceType;
@@ -281,7 +280,7 @@ public class L2ControllableAirShipInstance extends L2AirShipInstance
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Failed decayMe():" + e.getMessage());
+			_log.error("Failed decayMe():" + e.getMessage());
 		}
 	}
 	

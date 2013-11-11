@@ -19,8 +19,6 @@
 package l2r.gameserver;
 
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.idfactory.IdFactory;
@@ -28,9 +26,12 @@ import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MonsterRace
 {
-	protected static final Logger _log = Logger.getLogger(MonsterRace.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(MonsterRace.class);
 	
 	private final L2Npc[] _monsters;
 	private Constructor<?> _constructor;
@@ -79,7 +80,7 @@ public class MonsterRace
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "", e);
+				_log.warn(String.valueOf(e));
 			}
 			// _log.info("Monster "+i+" is id: "+(id+random));
 		}

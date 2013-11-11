@@ -21,8 +21,9 @@ package l2r.gameserver.geoeditorcon;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Dezmond
@@ -31,7 +32,7 @@ public class GeoEditorListener extends Thread
 {
 	private static GeoEditorListener _instance;
 	private static final int PORT = 9011;
-	private static Logger _log = Logger.getLogger(GeoEditorListener.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(GeoEditorListener.class);
 	private final ServerSocket _serverSocket;
 	private GeoEditorThread _geoEditor;
 	
@@ -49,7 +50,7 @@ public class GeoEditorListener extends Thread
 				}
 				catch (IOException e)
 				{
-					_log.log(Level.SEVERE, "Error creating geoeditor listener! " + e.getMessage(), e);
+					_log.error("Error creating geoeditor listener! " + e.getMessage(), e);
 					System.exit(1);
 				}
 			}
@@ -85,7 +86,7 @@ public class GeoEditorListener extends Thread
 			{
 				if ((_geoEditor != null) && _geoEditor.isWorking())
 				{
-					_log.warning("Geoeditor already connected!");
+					_log.warn("Geoeditor already connected!");
 					connection.close();
 					continue;
 				}
@@ -96,7 +97,7 @@ public class GeoEditorListener extends Thread
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "GeoEditorListener: " + e.getMessage(), e);
+			_log.warn("GeoEditorListener: " + e.getMessage(), e);
 		}
 		finally
 		{
@@ -106,9 +107,9 @@ public class GeoEditorListener extends Thread
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "GeoEditorListener: " + e.getMessage(), e);
+				_log.warn("GeoEditorListener: " + e.getMessage(), e);
 			}
-			_log.warning("GeoEditorListener Closed!");
+			_log.warn("GeoEditorListener Closed!");
 		}
 	}
 }

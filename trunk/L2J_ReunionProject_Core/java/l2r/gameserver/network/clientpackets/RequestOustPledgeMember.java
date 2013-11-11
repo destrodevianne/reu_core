@@ -71,7 +71,7 @@ public final class RequestOustPledgeMember extends L2GameClientPacket
 		L2ClanMember member = clan.getClanMember(_target);
 		if (member == null)
 		{
-			_log.warning("Target (" + _target + ") is not member of the clan");
+			_log.warn("Target (" + _target + ") is not member of the clan");
 			return;
 		}
 		if (member.isOnline() && member.getPlayerInstance().isInCombat())

@@ -65,7 +65,7 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 			if (skill == null)
 			{
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-				_log.warning("Skill Id " + _magicId + " not found in player!");
+				_log.warn("Skill Id " + _magicId + " not found in player!");
 				return;
 			}
 		}
@@ -91,13 +91,13 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 				}
 				else if (allowSkill == 0)
 				{
-					if (!activeChar.containsAllowedTransformSkill(skill.getId()))
+					if (!activeChar.hasTransformSkill(skill.getId()))
 					{
 						allow = false;
 					}
 				}
 			}
-			else if (!activeChar.containsAllowedTransformSkill(skill.getId()))
+			else if (!activeChar.hasTransformSkill(skill.getId()))
 			{
 				allow = false;
 			}
@@ -111,9 +111,9 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 		
 		if (activeChar.isDebug())
 		{
-			_log.fine("Skill:" + skill.getName() + " level:" + skill.getLevel() + " passive:" + skill.isPassive());
-			_log.fine("Range:" + skill.getCastRange() + " targettype:" + skill.getTargetType() + " power:" + skill.getPower());
-			_log.fine("Reusedelay:" + skill.getReuseDelay() + " hittime:" + skill.getHitTime());
+			_log.info("Skill:" + skill.getName() + " level:" + skill.getLevel() + " passive:" + skill.isPassive());
+			_log.info("Range:" + skill.getCastRange() + " targettype:" + skill.getTargetType() + " power:" + skill.getPower());
+			_log.info("Reusedelay:" + skill.getReuseDelay() + " hittime:" + skill.getHitTime());
 		}
 		
 		// If Alternate rule Karma punishment is set to true, forbid skill Return to player with Karma

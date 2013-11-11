@@ -19,8 +19,6 @@
 package l2r.gameserver.model.olympiad;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.datatables.SkillTreesData;
@@ -45,6 +43,10 @@ import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SystemMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.interf.ReunionEvents;
 
 /**
@@ -52,8 +54,8 @@ import gr.reunion.interf.ReunionEvents;
  */
 public abstract class AbstractOlympiadGame
 {
-	protected static final Logger _log = Logger.getLogger(AbstractOlympiadGame.class.getName());
-	protected static final Logger _logResults = Logger.getLogger("olympiad");
+	protected static final Logger _log = LoggerFactory.getLogger(AbstractOlympiadGame.class);
+	protected static final java.util.logging.Logger _logResults = java.util.logging.Logger.getLogger("olympiad");
 	
 	protected static final String POINTS = "olympiad_points";
 	protected static final String COMP_DONE = "competitions_done";
@@ -219,7 +221,7 @@ public abstract class AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, e.getMessage(), e);
+			_log.warn(e.getMessage(), e);
 			return false;
 		}
 		return true;
@@ -335,7 +337,7 @@ public abstract class AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, e.getMessage(), e);
+			_log.warn(e.getMessage(), e);
 		}
 	}
 	
@@ -379,7 +381,7 @@ public abstract class AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, e.getMessage(), e);
+			_log.warn(e.getMessage(), e);
 		}
 	}
 	
@@ -435,7 +437,7 @@ public abstract class AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "portPlayersToArena()", e);
+			_log.warn("portPlayersToArena()", e);
 		}
 	}
 	
@@ -496,7 +498,7 @@ public abstract class AbstractOlympiadGame
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, e.getMessage(), e);
+			_log.warn(e.getMessage(), e);
 		}
 	}
 	

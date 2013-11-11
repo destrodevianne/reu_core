@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
@@ -38,9 +36,12 @@ import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.zone.type.L2ClanHallZone;
 import l2r.gameserver.network.serverpackets.PledgeShowInfoUpdate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class ClanHall
 {
-	protected static final Logger _log = Logger.getLogger(ClanHall.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(ClanHall.class);
 	
 	private final int _clanHallId;
 	private ArrayList<L2DoorInstance> _doors;
@@ -181,7 +182,7 @@ public abstract class ClanHall
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.SEVERE, "", e);
+					_log.error("", e);
 				}
 			}
 		}
@@ -201,7 +202,7 @@ public abstract class ClanHall
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Exception: ClanHall.updateFunctions(int type, int lvl, int lease, long rate, long time, boolean addNew): " + e.getMessage(), e);
+				_log.error("Exception: ClanHall.updateFunctions(int type, int lvl, int lease, long rate, long time, boolean addNew): " + e.getMessage(), e);
 			}
 		}
 	}
@@ -443,7 +444,7 @@ public abstract class ClanHall
 		}
 		else
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Zone is null for clan hall: " + getId() + " " + getName());
+			_log.warn(getClass().getSimpleName() + ": Zone is null for clan hall: " + getId() + " " + getName());
 		}
 	}
 	
@@ -464,7 +465,7 @@ public abstract class ClanHall
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: ClanHall.loadFunctions(): " + e.getMessage(), e);
+			_log.error("Exception: ClanHall.loadFunctions(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -484,7 +485,7 @@ public abstract class ClanHall
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: ClanHall.removeFunctions(int functionType): " + e.getMessage(), e);
+			_log.error("Exception: ClanHall.removeFunctions(int functionType): " + e.getMessage(), e);
 		}
 	}
 	

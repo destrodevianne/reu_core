@@ -18,8 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.text.TextBuilder;
 import l2r.Config;
@@ -32,12 +30,12 @@ import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.MultiSell;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.TransformData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.GrandBossManager;
-import l2r.gameserver.instancemanager.TransformationManager;
 import l2r.gameserver.model.L2Augmentation;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.FakePc;
@@ -71,15 +69,19 @@ import l2r.gameserver.network.serverpackets.WareHouseDepositList;
 import l2r.gameserver.network.serverpackets.WareHouseWithdrawalList;
 import l2r.gameserver.util.Util;
 import l2r.util.StringUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.achievementEngine.AchievementsHandler;
 import gr.reunion.achievementEngine.AchievementsManager;
 import gr.reunion.achievementEngine.base.Achievement;
 import gr.reunion.achievementEngine.base.Condition;
-import gr.reunion.aioItem.PlayersTopData;
 import gr.reunion.aioItem.runnable.TransformFinalizer;
 import gr.reunion.configsEngine.AioItemsConfigs;
 import gr.reunion.configsEngine.CustomServerConfigs;
 import gr.reunion.configsEngine.LeaderboardsConfigs;
+import gr.reunion.dataHolder.PlayersTopData;
 import gr.reunion.datatables.CustomTable;
 import gr.reunion.donateEngine.DonateHandler;
 import gr.reunion.imageGeneratorEngine.GenerateLogos;
@@ -116,7 +118,7 @@ public final class L2AioNpcInstance extends L2Npc
 	private static int itemIdToGet;
 	// Global Variable
 	private static int price;
-	private static Logger _log = Logger.getLogger(L2AioNpcInstance.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2AioNpcInstance.class);
 	private static final int[] BOSSES =
 	{
 		29001,
@@ -501,7 +503,7 @@ public final class L2AioNpcInstance extends L2Npc
 			}
 			catch (Exception NumberFormatException)
 			{
-				_log.warning(L2AioNpcInstance.class.getName() + ": Wrong numeric values for command " + command);
+				_log.warn(L2AioNpcInstance.class.getName() + ": Wrong numeric values for command " + command);
 			}
 			
 			Set<PlayerClass> subsAvailable = null;
@@ -642,7 +644,7 @@ public final class L2AioNpcInstance extends L2Npc
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("add subclass"))
 					{
-						_log.warning(L2AioNpcInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2AioNpcInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -708,7 +710,7 @@ public final class L2AioNpcInstance extends L2Npc
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("change class"))
 					{
-						_log.warning(L2AioNpcInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2AioNpcInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -786,7 +788,7 @@ public final class L2AioNpcInstance extends L2Npc
 					 */
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("change class"))
 					{
-						_log.warning(L2AioNpcInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
+						_log.warn(L2AioNpcInstance.class.getName() + ": Player " + player.getName() + " has performed a subclass change too fast");
 						return;
 					}
 					
@@ -1257,7 +1259,7 @@ public final class L2AioNpcInstance extends L2Npc
 			player.sendMessage("Your gender has been changed.");
 			player.broadcastUserInfo();
 			// Transform-untransorm player quickly to force the client to reload the character textures
-			TransformationManager.getInstance().transformPlayer(105, player);
+			TransformData.getInstance().transformPlayer(105, player);
 			TransformFinalizer ef = new TransformFinalizer(player);
 			player.setSkillCast(ThreadPoolManager.getInstance().scheduleGeneral(ef, 200));
 		}
@@ -1324,7 +1326,7 @@ public final class L2AioNpcInstance extends L2Npc
 			catch (Exception e)
 			{
 				player.sendMessage("A problem occured while adding captcha!");
-				_log.log(Level.WARNING, "", e);
+				_log.warn(String.valueOf(e));
 			}
 		}
 		
@@ -1489,7 +1491,7 @@ public final class L2AioNpcInstance extends L2Npc
 		
 		if (Config.DEBUG)
 		{
-			_log.fine("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindowClan; Message: Showing stored items.");
+			_log.info("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindowClan; Message: Showing stored items.");
 		}
 	}
 	
@@ -1515,7 +1517,7 @@ public final class L2AioNpcInstance extends L2Npc
 		
 		if (Config.DEBUG)
 		{
-			_log.fine("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindow; Message: Showing stored items.");
+			_log.info("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindow; Message: Showing stored items.");
 		}
 	}
 	

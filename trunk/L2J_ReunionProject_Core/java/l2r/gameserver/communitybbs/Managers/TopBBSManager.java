@@ -182,6 +182,12 @@ public class TopBBSManager extends BaseBBSManager
 		return realOnline;
 	}
 	
+	@Override
+	public void parsewrite(String url, String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
+	{
+		
+	}
+	
 	public static TopBBSManager getInstance()
 	{
 		return SingletonHolder._instance;

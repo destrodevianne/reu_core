@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.model.itemcontainer;
 
-import java.util.logging.Level;
-
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -73,7 +71,7 @@ public class PcRefund extends ItemContainer
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "addItem()", e);
+			_log.error("addItem()", e);
 		}
 	}
 	
@@ -98,7 +96,7 @@ public class PcRefund extends ItemContainer
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "deleteMe()", e);
+			_log.error("deleteMe()", e);
 		}
 		_items.clear();
 	}

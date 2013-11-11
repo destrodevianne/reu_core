@@ -28,6 +28,8 @@ public abstract class BaseBBSManager
 {
 	public abstract void cbByPass(String command, L2PcInstance activeChar);
 	
+	public abstract void parsewrite(String url, String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar);
+	
 	protected void separateAndSend(String html, L2PcInstance acha)
 	{
 		if (html == null)

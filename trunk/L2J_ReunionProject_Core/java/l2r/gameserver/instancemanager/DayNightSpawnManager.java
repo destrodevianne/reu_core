@@ -21,8 +21,6 @@ package l2r.gameserver.instancemanager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.gameserver.GameTimeController;
@@ -31,13 +29,16 @@ import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2RaidBossInstance;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author godson
  */
 public class DayNightSpawnManager
 {
 	
-	private static Logger _log = Logger.getLogger(DayNightSpawnManager.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(DayNightSpawnManager.class);
 	
 	private final List<L2Spawn> _dayCreatures;
 	private final List<L2Spawn> _nightCreatures;
@@ -131,7 +132,7 @@ public class DayNightSpawnManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error while spawning creatures: " + e.getMessage(), e);
+			_log.warn("Error while spawning creatures: " + e.getMessage(), e);
 		}
 	}
 	
@@ -153,7 +154,7 @@ public class DayNightSpawnManager
 				specialNightBoss(1);
 				break;
 			default:
-				_log.warning("DayNightSpawnManager: Wrong mode sent");
+				_log.warn("DayNightSpawnManager: Wrong mode sent");
 				break;
 		}
 	}
@@ -180,7 +181,7 @@ public class DayNightSpawnManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error while notifyChangeMode(): " + e.getMessage(), e);
+			_log.warn("Error while notifyChangeMode(): " + e.getMessage(), e);
 		}
 	}
 	
@@ -222,7 +223,7 @@ public class DayNightSpawnManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error while specialNoghtBoss(): " + e.getMessage(), e);
+			_log.warn("Error while specialNoghtBoss(): " + e.getMessage(), e);
 		}
 	}
 	

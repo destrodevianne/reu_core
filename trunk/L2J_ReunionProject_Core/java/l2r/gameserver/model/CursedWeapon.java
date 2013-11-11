@@ -22,16 +22,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillTable.FrequentSkill;
+import l2r.gameserver.datatables.TransformData;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
-import l2r.gameserver.instancemanager.TransformationManager;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -47,12 +46,14 @@ import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.util.Broadcast;
-import l2r.gameserver.util.Point3D;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CursedWeapon
 {
-	private static final Logger _log = Logger.getLogger(CursedWeapon.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(CursedWeapon.class);
 	
 	// _name is the name of the cursed weapon associated with its ID.
 	private final String _name;
@@ -82,12 +83,6 @@ public class CursedWeapon
 	private int _playerKarma = 0;
 	private int _playerPkKills = 0;
 	protected int transformationId = 0;
-	
-	private static final int[] TRANSFORM_IDS = new int[]
-	{
-		3630,
-		3631
-	};
 	
 	public CursedWeapon(int itemId, int skillId, String name)
 	{
@@ -153,7 +148,7 @@ public class CursedWeapon
 					statement.setInt(2, _itemId);
 					if (statement.executeUpdate() != 1)
 					{
-						_log.warning("Error while deleting itemId " + _itemId + " from userId " + _playerId);
+						_log.warn("Error while deleting itemId " + _itemId + " from userId " + _playerId);
 					}
 					statement.close();
 					
@@ -164,14 +159,14 @@ public class CursedWeapon
 					statement.setInt(3, _playerId);
 					if (statement.executeUpdate() != 1)
 					{
-						_log.warning("Error while updating karma & pkkills for userId " + _playerId);
+						_log.warn("Error while updating karma & pkkills for userId " + _playerId);
 					}
 					
 					statement.close();
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, "Could not delete : " + e.getMessage(), e);
+					_log.warn("Could not delete : " + e.getMessage(), e);
 				}
 			}
 		}
@@ -345,15 +340,12 @@ public class CursedWeapon
 		_player.addSkill(skill, false);
 		
 		// Void Burst, Void Flow
-		skill = SkillTable.FrequentSkill.VOID_BURST.getSkill();
+		skill = FrequentSkill.VOID_BURST.getSkill();
 		_player.addSkill(skill, false);
-		skill = SkillTable.FrequentSkill.VOID_FLOW.getSkill();
+		skill = FrequentSkill.VOID_FLOW.getSkill();
 		_player.addSkill(skill, false);
-		_player.setTransformAllowedSkills(TRANSFORM_IDS);
-		if (Config.DEBUG)
-		{
-			_log.info("Player " + _player.getName() + " has been awarded with skill " + skill);
-		}
+		_player.addTransformSkill(FrequentSkill.VOID_BURST.getId());
+		_player.addTransformSkill(FrequentSkill.VOID_FLOW.getId());
 		_player.sendSkillList();
 	}
 	
@@ -377,13 +369,13 @@ public class CursedWeapon
 				@Override
 				public void run()
 				{
-					TransformationManager.getInstance().transformPlayer(transformationId, _player);
+					TransformData.getInstance().transformPlayer(transformationId, _player);
 				}
 			}, 500);
 		}
 		else
 		{
-			TransformationManager.getInstance().transformPlayer(transformationId, _player);
+			TransformData.getInstance().transformPlayer(transformationId, _player);
 		}
 	}
 	
@@ -531,7 +523,7 @@ public class CursedWeapon
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.SEVERE, "CursedWeapon: Failed to save data.", e);
+			_log.error("CursedWeapon: Failed to save data.", e);
 		}
 	}
 	
@@ -749,7 +741,7 @@ public class CursedWeapon
 		}
 	}
 	
-	public Point3D getWorldPosition()
+	public Location getWorldPosition()
 	{
 		if (_isActivated && (_player != null))
 		{

@@ -20,8 +20,6 @@ package l2r.gameserver.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -42,9 +40,12 @@ import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class Evolve
 {
-	public static final Logger _log = Logger.getLogger(Evolve.class.getName());
+	public static final Logger _log = LoggerFactory.getLogger(Evolve.class);
 	
 	public static final boolean doEvolve(L2PcInstance player, L2Npc npc, int itemIdtake, int itemIdgive, int petminlvl)
 	{
@@ -295,7 +296,7 @@ public final class Evolve
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "", e);
+				_log.warn(String.valueOf(e));
 			}
 		}
 	}
@@ -322,7 +323,7 @@ public final class Evolve
 			}
 			catch (Throwable e)
 			{
-				_log.log(Level.WARNING, "", e);
+				_log.warn(String.valueOf(e));
 			}
 		}
 	}

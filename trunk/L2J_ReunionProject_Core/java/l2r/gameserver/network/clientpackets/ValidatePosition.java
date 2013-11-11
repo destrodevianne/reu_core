@@ -74,8 +74,8 @@ public class ValidatePosition extends L2GameClientPacket
 		
 		if (Config.DEVELOPER)
 		{
-			_log.fine("client pos: " + _x + " " + _y + " " + _z + " head " + _heading);
-			_log.fine("server pos: " + realX + " " + realY + " " + realZ + " head " + activeChar.getHeading());
+			_log.info("client pos: " + _x + " " + _y + " " + _z + " head " + _heading);
+			_log.info("server pos: " + realX + " " + realY + " " + realZ + " head " + activeChar.getHeading());
 		}
 		
 		if ((_x == 0) && (_y == 0))

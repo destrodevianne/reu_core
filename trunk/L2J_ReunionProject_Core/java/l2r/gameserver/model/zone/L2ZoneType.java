@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.gameserver.enums.InstanceType;
@@ -35,13 +34,16 @@ import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Abstract base class for any zone type handles basic operations.
  * @author durgus
  */
 public abstract class L2ZoneType
 {
-	protected static final Logger _log = Logger.getLogger(L2ZoneType.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2ZoneType.class);
 	
 	private final int _id;
 	protected L2ZoneForm _zone;

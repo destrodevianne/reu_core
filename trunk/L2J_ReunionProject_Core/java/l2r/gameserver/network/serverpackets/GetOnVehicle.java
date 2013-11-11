@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.util.Point3D;
+import l2r.gameserver.model.Location;
 
 /**
  * @author Maktakien
@@ -27,14 +27,14 @@ public class GetOnVehicle extends L2GameServerPacket
 {
 	private final int _charObjId;
 	private final int _boatObjId;
-	private final Point3D _pos;
+	private final Location _pos;
 	
 	/**
 	 * @param charObjId
 	 * @param boatObjId
 	 * @param pos
 	 */
-	public GetOnVehicle(int charObjId, int boatObjId, Point3D pos)
+	public GetOnVehicle(int charObjId, int boatObjId, Location pos)
 	{
 		_charObjId = charObjId;
 		_boatObjId = boatObjId;
@@ -50,6 +50,5 @@ public class GetOnVehicle extends L2GameServerPacket
 		writeD(_pos.getX());
 		writeD(_pos.getY());
 		writeD(_pos.getZ());
-		
 	}
 }

@@ -21,17 +21,19 @@ package l2r.loginserver;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author KenM
  */
 public class GameServerListener extends FloodProtectedListener
 {
-	private static Logger _log = Logger.getLogger(GameServerListener.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(GameServerListener.class);
 	private static List<GameServerThread> _gameServers = new FastList<>();
 	
 	public GameServerListener() throws IOException

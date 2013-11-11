@@ -22,8 +22,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
@@ -31,6 +29,9 @@ import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TODO: System messages:<br>
@@ -41,7 +42,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
  */
 public class L2ContactList
 {
-	private final Logger _log = Logger.getLogger(getClass().getName());
+	private final Logger _log = LoggerFactory.getLogger(getClass().getName());
 	private final L2PcInstance activeChar;
 	private final List<String> _contacts;
 	
@@ -83,7 +84,7 @@ public class L2ContactList
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error found in " + activeChar.getName() + "'s ContactsList: " + e.getMessage(), e);
+			_log.warn("Error found in " + activeChar.getName() + "'s ContactsList: " + e.getMessage(), e);
 		}
 	}
 	
@@ -141,7 +142,7 @@ public class L2ContactList
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error found in " + activeChar.getName() + "'s ContactsList: " + e.getMessage(), e);
+			_log.warn("Error found in " + activeChar.getName() + "'s ContactsList: " + e.getMessage(), e);
 		}
 		return true;
 	}
@@ -176,7 +177,7 @@ public class L2ContactList
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Error found in " + activeChar.getName() + "'s ContactsList: " + e.getMessage(), e);
+			_log.warn("Error found in " + activeChar.getName() + "'s ContactsList: " + e.getMessage(), e);
 		}
 	}
 	

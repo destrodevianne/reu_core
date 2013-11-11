@@ -17,12 +17,13 @@ package l2r.gameserver.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.datatables.OptionsData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.options.Options;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used to store an augmentation and its boni
@@ -41,7 +42,7 @@ public final class L2Augmentation
 	
 	public static class AugmentationStatBoni
 	{
-		private static final Logger _log = Logger.getLogger(AugmentationStatBoni.class.getName());
+		private static final Logger _log = LoggerFactory.getLogger(AugmentationStatBoni.class);
 		private final List<Options> _options = new ArrayList<>();
 		private boolean _active;
 		
@@ -61,7 +62,7 @@ public final class L2Augmentation
 				}
 				else
 				{
-					_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldn't find option: " + stat);
+					_log.warn(getClass().getSimpleName() + ": Couldn't find option: " + stat);
 				}
 			}
 		}

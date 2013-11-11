@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.CategoryType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -37,7 +37,7 @@ import org.w3c.dom.Node;
  */
 public final class CategoryData extends DocumentParser
 {
-	private static final Logger _log = Logger.getLogger(CategoryData.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(CategoryData.class);
 	
 	private final Map<CategoryType, Set<Integer>> _categories = new HashMap<>();
 	
@@ -68,7 +68,7 @@ public final class CategoryData extends DocumentParser
 						final CategoryType categoryType = CategoryType.findByName(attrs.getNamedItem("name").getNodeValue());
 						if (categoryType == null)
 						{
-							_log.log(Level.WARNING, getClass().getSimpleName() + ": Can't find category by name :" + attrs.getNamedItem("name").getNodeValue());
+							_log.warn(getClass().getSimpleName() + ": Can't find category by name :" + attrs.getNamedItem("name").getNodeValue());
 							continue;
 						}
 						
@@ -98,7 +98,7 @@ public final class CategoryData extends DocumentParser
 		final Set<Integer> category = getCategoryByType(type);
 		if (category == null)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Can't find category type :" + type);
+			_log.warn(getClass().getSimpleName() + ": Can't find category type :" + type);
 			return false;
 		}
 		return category.contains(id);

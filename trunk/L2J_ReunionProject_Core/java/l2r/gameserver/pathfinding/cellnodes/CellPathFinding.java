@@ -28,6 +28,7 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.idfactory.IdFactory;
+import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.pathfinding.AbstractNode;
@@ -94,20 +95,20 @@ public class CellPathFinding extends PathFinding
 	@Override
 	public List<AbstractNodeLoc> findPath(int x, int y, int z, int tx, int ty, int tz, int instanceId, boolean playable)
 	{
-		int gx = GeoData.getInstance().getGeoX(x);
-		int gy = GeoData.getInstance().getGeoY(y);
+		int gx = (x - L2World.MAP_MIN_X) >> 4;
+		int gy = (y - L2World.MAP_MIN_Y) >> 4;
 		if (!GeoData.getInstance().hasGeo(x, y))
 		{
 			return null;
 		}
-		int gz = GeoData.getInstance().getHeight(x, y, z);
-		int gtx = GeoData.getInstance().getGeoX(tx);
-		int gty = GeoData.getInstance().getGeoY(ty);
+		short gz = GeoData.getInstance().getHeight(x, y, z);
+		int gtx = (tx - L2World.MAP_MIN_X) >> 4;
+		int gty = (ty - L2World.MAP_MIN_Y) >> 4;
 		if (!GeoData.getInstance().hasGeo(tx, ty))
 		{
 			return null;
 		}
-		int gtz = GeoData.getInstance().getHeight(tx, ty, tz);
+		short gtz = GeoData.getInstance().getHeight(tx, ty, tz);
 		CellNodeBuffer buffer = alloc(64 + (2 * Math.max(Math.abs(gx - gtx), Math.abs(gy - gty))), playable);
 		if (buffer == null)
 		{

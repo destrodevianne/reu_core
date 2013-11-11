@@ -98,7 +98,7 @@ public class SortedWareHouseWithdrawalList extends L2GameServerPacket
 		if (_activeChar.getActiveWarehouse() == null)
 		{
 			// Something went wrong!
-			_log.warning("error while sending withdraw request to: " + _activeChar.getName());
+			_log.warn("error while sending withdraw request to: " + _activeChar.getName());
 			return;
 		}
 		

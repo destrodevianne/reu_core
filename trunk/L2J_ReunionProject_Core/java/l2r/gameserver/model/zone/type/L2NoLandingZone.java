@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.gameserver.enums.MountType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.zone.L2ZoneType;
@@ -55,7 +56,7 @@ public class L2NoLandingZone extends L2ZoneType
 		if (character.isPlayer())
 		{
 			character.setInsideZone(ZoneIdType.NO_LANDING, true);
-			if (character.getActingPlayer().getMountType() == 2)
+			if (character.getActingPlayer().getMountType() == MountType.WYVERN)
 			{
 				character.sendPacket(SystemMessageId.AREA_CANNOT_BE_ENTERED_WHILE_MOUNTED_WYVERN);
 				character.getActingPlayer().enteredNoLanding(dismountDelay);
@@ -69,7 +70,7 @@ public class L2NoLandingZone extends L2ZoneType
 		if (character.isPlayer())
 		{
 			character.setInsideZone(ZoneIdType.NO_LANDING, false);
-			if (character.getActingPlayer().getMountType() == 2)
+			if (character.getActingPlayer().getMountType() == MountType.WYVERN)
 			{
 				character.getActingPlayer().exitedNoLanding();
 			}

@@ -19,7 +19,6 @@
 package l2r.gameserver.script.faenor;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -32,12 +31,15 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.script.DateRange;
 import l2r.gameserver.script.EngineInterface;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Luis Arias
  */
 public class FaenorInterface implements EngineInterface
 {
-	protected static final Logger _log = Logger.getLogger(FaenorInterface.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(FaenorInterface.class);
 	
 	public static FaenorInterface getInstance()
 	{
@@ -87,7 +89,7 @@ public class FaenorInterface implements EngineInterface
 		{
 			if (Config.DEBUG)
 			{
-				_log.warning("Npc doesnt Exist");
+				_log.warn("Npc doesnt Exist");
 			}
 			throw new NullPointerException();
 		}

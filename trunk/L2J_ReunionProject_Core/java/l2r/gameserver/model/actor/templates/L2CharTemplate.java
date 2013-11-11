@@ -18,11 +18,13 @@
  */
 package l2r.gameserver.model.actor.templates;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.skills.L2Skill;
+import l2r.gameserver.model.stats.MoveType;
 
 /**
  * @author Zoey76
@@ -53,8 +55,6 @@ public class L2CharTemplate
 	private final int _baseShldRate;
 	private final int _baseCritRate;
 	private final int _baseMCritRate;
-	private final int _baseWalkSpd;
-	private final int _baseRunSpd;
 	// SpecialStats
 	private final int _baseBreath;
 	private final int _baseAggression;
@@ -102,6 +102,8 @@ public class L2CharTemplate
 	private final double _fCollisionRadius;
 	private final double _fCollisionHeight;
 	
+	private final float[] _moveType = new float[MoveType.values().length];
+	
 	public L2CharTemplate(StatsSet set)
 	{
 		// Base stats
@@ -128,8 +130,6 @@ public class L2CharTemplate
 		_baseShldRate = set.getInteger("baseShldRate", 0);
 		_baseCritRate = set.getInteger("baseCritRate", 4);
 		_baseMCritRate = set.getInteger("baseMCritRate", 0);
-		_baseWalkSpd = set.getInteger("baseWalkSpd", 0);
-		_baseRunSpd = set.getInteger("baseRunSpd", 0);
 		
 		// SpecialStats
 		_baseBreath = set.getInteger("baseBreath", 100);
@@ -171,6 +171,13 @@ public class L2CharTemplate
 		_fCollisionRadius = set.getDouble("collision_radius", 0);
 		_collisionRadius = (int) _fCollisionRadius;
 		_collisionHeight = (int) _fCollisionHeight;
+		
+		// speed.
+		Arrays.fill(_moveType, 1);
+		setBaseMoveSpeed(MoveType.RUN, set.getInteger("baseRunSpd", 1));
+		setBaseMoveSpeed(MoveType.WALK, set.getInteger("baseWalkSpd", 1));
+		setBaseMoveSpeed(MoveType.FAST_SWIM, set.getInteger("baseSwimRunSpd", 1));
+		setBaseMoveSpeed(MoveType.SLOW_SWIM, set.getInteger("baseSwimWalkSpd", 1));
 	}
 	
 	/**
@@ -453,20 +460,14 @@ public class L2CharTemplate
 		return _baseMCritRate;
 	}
 	
-	/**
-	 * @return the baseWalkSpd
-	 */
-	public int getBaseWalkSpd()
+	public void setBaseMoveSpeed(MoveType type, float val)
 	{
-		return _baseWalkSpd;
+		_moveType[type.ordinal()] = val;
 	}
 	
-	/**
-	 * @return the baseRunSpd
-	 */
-	public int getBaseRunSpd()
+	public float getBaseMoveSpeed(MoveType mt)
 	{
-		return _baseRunSpd;
+		return _moveType[mt.ordinal()];
 	}
 	
 	/**

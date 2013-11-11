@@ -1,8 +1,8 @@
 package l2r.gameserver.communitybbs.ReunionBoards;
 
 import javolution.text.TextBuilder;
-import gr.reunion.aioItem.PlayersTopData;
 import gr.reunion.configsEngine.SmartCommunityConfigs;
+import gr.reunion.dataHolder.PlayersTopData;
 import gr.reunion.datatables.CustomTable;
 
 public class TopOnlinePlayers

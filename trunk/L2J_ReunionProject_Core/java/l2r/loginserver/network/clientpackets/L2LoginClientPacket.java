@@ -18,19 +18,18 @@
  */
 package l2r.loginserver.network.clientpackets;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import l2r.loginserver.network.L2LoginClient;
 
 import org.mmocore.network.ReceivablePacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author KenM
  */
 public abstract class L2LoginClientPacket extends ReceivablePacket<L2LoginClient>
 {
-	private static Logger _log = Logger.getLogger(L2LoginClientPacket.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2LoginClientPacket.class);
 	
 	@Override
 	protected final boolean read()
@@ -41,7 +40,7 @@ public abstract class L2LoginClientPacket extends ReceivablePacket<L2LoginClient
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "ERROR READING: " + this.getClass().getSimpleName() + ": " + e.getMessage(), e);
+			_log.error("ERROR READING: " + this.getClass().getSimpleName() + ": " + e.getMessage(), e);
 			return false;
 		}
 	}

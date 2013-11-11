@@ -41,6 +41,7 @@ import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
@@ -60,7 +61,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.AutoAttackStop;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
-import l2r.gameserver.util.Point3D;
 import l2r.util.Rnd;
 
 /**
@@ -484,7 +484,7 @@ public class L2CharacterAI extends AbstractAI
 		setTarget(object);
 		if ((object.getX() == 0) && (object.getY() == 0)) // TODO: Find the drop&spawn bug
 		{
-			_log.warning("Object in coords 0,0 - using a temporary fix");
+			_log.warn("Object in coords 0,0 - using a temporary fix");
 			object.setXYZ(getActor().getX(), getActor().getY(), getActor().getZ() + 5);
 		}
 		
@@ -968,11 +968,11 @@ public class L2CharacterAI extends AbstractAI
 		// do nothing
 	}
 	
-	protected boolean maybeMoveToPosition(Point3D worldPosition, int offset)
+	protected boolean maybeMoveToPosition(Location worldPosition, int offset)
 	{
 		if (worldPosition == null)
 		{
-			_log.warning("maybeMoveToPosition: worldPosition == NULL!");
+			_log.warn("maybeMoveToPosition: worldPosition == NULL!");
 			return false;
 		}
 		
@@ -1044,7 +1044,7 @@ public class L2CharacterAI extends AbstractAI
 		// Get the distance between the current position of the L2Character and the target (x,y)
 		if (target == null)
 		{
-			_log.warning("maybeMoveToPawn: target == NULL!");
+			_log.warn("maybeMoveToPawn: target == NULL!");
 			return false;
 		}
 		if (offset < 0)
@@ -1088,7 +1088,7 @@ public class L2CharacterAI extends AbstractAI
 			// while flying there is no move to cast
 			if ((_actor.getAI().getIntention() == CtrlIntention.AI_INTENTION_CAST) && (_actor instanceof L2PcInstance) && ((L2PcInstance) _actor).isTransformed())
 			{
-				if (!((L2PcInstance) _actor).getTransformation().canStartFollowToCast())
+				if (!((L2PcInstance) _actor).getTransformation().isCombat())
 				{
 					_actor.sendPacket(SystemMessageId.DIST_TOO_FAR_CASTING_STOPPED);
 					_actor.sendPacket(ActionFailed.STATIC_PACKET);

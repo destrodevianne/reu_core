@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.model.actor.L2Character;
@@ -31,13 +29,16 @@ import l2r.gameserver.model.actor.instance.L2CubicInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.AutoAttackStop;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Attack stance task manager.
  * @author Luca Baldi, Zoey76
  */
 public class AttackStanceTaskManager
 {
-	protected static final Logger _log = Logger.getLogger(AttackStanceTaskManager.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(AttackStanceTaskManager.class);
 	
 	protected static final Map<L2Character, Long> _attackStanceTasks = new ConcurrentHashMap<>();
 	
@@ -139,7 +140,7 @@ public class AttackStanceTaskManager
 			catch (Exception e)
 			{
 				// Unless caught here, players remain in attack positions.
-				_log.log(Level.WARNING, "Error in FightModeScheduler: " + e.getMessage(), e);
+				_log.warn("Error in FightModeScheduler: " + e.getMessage(), e);
 			}
 		}
 	}

@@ -20,17 +20,19 @@ package l2r.gameserver.datatables;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import l2r.gameserver.model.L2Territory;
 import l2r.util.lib.SqlUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Balancer, Mr
  */
 public class TerritoryTable
 {
-	private static final Logger _log = Logger.getLogger(TerritoryTable.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(TerritoryTable.class);
 	
 	private static final Map<Integer, L2Territory> _territory = new HashMap<>();
 	
@@ -82,7 +84,7 @@ public class TerritoryTable
 			Integer terr = row[0];
 			if (terr == null)
 			{
-				_log.warning(getClass().getSimpleName() + ": Null territory!");
+				_log.warn(getClass().getSimpleName() + ": Null territory!");
 				continue;
 			}
 			

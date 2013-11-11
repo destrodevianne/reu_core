@@ -42,7 +42,7 @@ public class ExReplySentPost extends L2GameServerPacket
 			}
 			else
 			{
-				_log.warning("Message " + msg.getId() + " has attachments but itemcontainer is empty.");
+				_log.warn("Message " + msg.getId() + " has attachments but itemcontainer is empty.");
 			}
 		}
 	}

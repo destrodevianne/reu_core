@@ -19,8 +19,6 @@
 package l2r.gameserver.model.actor.tasks.player;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
@@ -29,13 +27,16 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Task dedicated for feeding player's pet.
  * @author UnAfraid
  */
 public class PetFeedTask implements Runnable
 {
-	private static final Logger _log = Logger.getLogger(PetFeedTask.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(PetFeedTask.class);
 	
 	private final L2PcInstance _player;
 	
@@ -101,7 +102,7 @@ public class PetFeedTask implements Runnable
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.SEVERE, "Mounted Pet [NpcId: " + _player.getMountNpcId() + "] a feed task error has occurred", e);
+				_log.error("Mounted Pet [NpcId: " + _player.getMountNpcId() + "] a feed task error has occurred", e);
 			}
 		}
 	}

@@ -166,7 +166,7 @@ public final class NpcQuestHtmlMessage extends L2GameServerPacket
 		if (content == null)
 		{
 			setHtml("<html><body>My Text is missing:<br>" + path + "</body></html>");
-			_log.warning("missing html page " + path);
+			_log.warn("missing html page " + path);
 			return false;
 		}
 		

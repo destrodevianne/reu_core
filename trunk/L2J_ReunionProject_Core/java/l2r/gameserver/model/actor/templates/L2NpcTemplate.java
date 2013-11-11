@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.gameserver.datatables.HerbDropTable;
@@ -39,12 +38,15 @@ import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.skills.L2Skill;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Zoey76
  */
 public final class L2NpcTemplate extends L2CharTemplate
 {
-	private static final Logger _log = Logger.getLogger(L2NpcTemplate.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(L2NpcTemplate.class);
 	
 	public final int _npcId;
 	private final int _idTemplate;
@@ -185,7 +187,7 @@ public final class L2NpcTemplate extends L2CharTemplate
 		final int herbGroup = set.getInteger("dropHerbGroup");
 		if ((herbGroup > 0) && (HerbDropTable.getInstance().getHerbDroplist(herbGroup) == null))
 		{
-			_log.warning("Missing Herb Drop Group for npcId: " + getNpcId());
+			_log.warn("Missing Herb Drop Group for npcId: " + getNpcId());
 			_dropHerbGroup = 0;
 		}
 		else
@@ -315,7 +317,7 @@ public final class L2NpcTemplate extends L2CharTemplate
 			
 			if (!EventType.isMultipleRegistrationAllowed() && !quests.isEmpty())
 			{
-				_log.warning("Quest event not allowed in multiple quests.  Skipped addition of Event Type \"" + EventType + "\" for NPC \"" + _name + "\" and quest \"" + q.getName() + "\".");
+				_log.warn("Quest event not allowed in multiple quests.  Skipped addition of Event Type \"" + EventType + "\" for NPC \"" + _name + "\" and quest \"" + q.getName() + "\".");
 			}
 			else
 			{

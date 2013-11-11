@@ -26,14 +26,16 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Useful utilities common to L2J Server.
  */
 public class Util
 {
-	private static final Logger _log = Logger.getLogger(Util.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Util.class);
 	
 	private static final char[] ILLEGAL_CHARACTERS =
 	{
@@ -69,7 +71,7 @@ public class Util
 		}
 		catch (UnknownHostException e)
 		{
-			_log.warning("Util: " + e.getMessage());
+			_log.warn("Util: " + e.getMessage());
 		}
 		return false;
 	}

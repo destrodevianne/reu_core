@@ -23,15 +23,6 @@ import l2r.gameserver.network.serverpackets.ShowBoard;
 
 public class AdminBBSManager extends BaseBBSManager
 {
-	/**
-	 * Gets the single instance of AdminBBSManager.
-	 * @return single instance of AdminBBSManager
-	 */
-	public static AdminBBSManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
 	@Override
 	public void cbByPass(String command, L2PcInstance activeChar)
 	{
@@ -50,6 +41,17 @@ public class AdminBBSManager extends BaseBBSManager
 			activeChar.sendPacket(new ShowBoard(null, "102"));
 			activeChar.sendPacket(new ShowBoard(null, "103"));
 		}
+	}
+	
+	@Override
+	public void parsewrite(String url, String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
+	{
+		
+	}
+	
+	public static AdminBBSManager getInstance()
+	{
+		return SingletonHolder._instance;
 	}
 	
 	private static class SingletonHolder

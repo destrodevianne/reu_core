@@ -20,7 +20,6 @@ package l2r.gameserver.network.clientpackets;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.logging.Level;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -167,7 +166,7 @@ public final class RequestDestroyItem extends L2GameClientPacket
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "could not delete pet objectid: ", e);
+				_log.warn("could not delete pet objectid: ", e);
 			}
 		}
 		if (itemToRemove.isTimeLimitedItem())

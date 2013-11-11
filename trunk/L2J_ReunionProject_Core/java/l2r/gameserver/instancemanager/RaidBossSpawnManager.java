@@ -25,8 +25,6 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
 import l2r.Config;
@@ -41,6 +39,10 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2RaidBossInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
@@ -49,7 +51,7 @@ import gr.reunion.configsEngine.CustomServerConfigs;
  */
 public class RaidBossSpawnManager
 {
-	private static final Logger _log = Logger.getLogger(RaidBossSpawnManager.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(RaidBossSpawnManager.class);
 	
 	protected static final Map<Integer, L2RaidBossInstance> _bosses = new FastMap<>();
 	protected static final Map<Integer, L2Spawn> _spawns = new FastMap<>();
@@ -99,7 +101,7 @@ public class RaidBossSpawnManager
 				}
 				else
 				{
-					_log.warning(getClass().getSimpleName() + ": Could not load raidboss #" + rset.getInt("boss_id") + " from DB");
+					_log.warn(getClass().getSimpleName() + ": Could not load raidboss #" + rset.getInt("boss_id") + " from DB");
 				}
 			}
 			
@@ -108,17 +110,17 @@ public class RaidBossSpawnManager
 		}
 		catch (SQLException e)
 		{
-			_log.warning(getClass().getSimpleName() + ": Couldnt load raidboss_spawnlist table");
+			_log.warn(getClass().getSimpleName() + ": Couldnt load raidboss_spawnlist table");
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": Error while initializing RaidBossSpawnManager: " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Error while initializing RaidBossSpawnManager: " + e.getMessage(), e);
 		}
 	}
 	
 	private static class SpawnSchedule implements Runnable
 	{
-		private static final Logger _log = Logger.getLogger(SpawnSchedule.class.getName());
+		private static final Logger _log = LoggerFactory.getLogger(SpawnSchedule.class);
 		
 		private final int bossId;
 		
@@ -298,7 +300,7 @@ public class RaidBossSpawnManager
 			catch (Exception e)
 			{
 				// problem with storing spawn
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": Could not store raidboss #" + bossId + " in the DB:" + e.getMessage(), e);
+				_log.warn(getClass().getSimpleName() + ": Could not store raidboss #" + bossId + " in the DB:" + e.getMessage(), e);
 			}
 		}
 	}
@@ -351,7 +353,7 @@ public class RaidBossSpawnManager
 			catch (Exception e)
 			{
 				// problem with deleting spawn
-				_log.log(Level.WARNING, getClass().getSimpleName() + ": Could not remove raidboss #" + bossId + " from DB: " + e.getMessage(), e);
+				_log.warn(getClass().getSimpleName() + ": Could not remove raidboss #" + bossId + " from DB: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -401,13 +403,13 @@ public class RaidBossSpawnManager
 				}
 				catch (SQLException e)
 				{
-					_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldnt update raidboss_spawnlist table " + e.getMessage(), e);
+					_log.warn(getClass().getSimpleName() + ": Couldnt update raidboss_spawnlist table " + e.getMessage(), e);
 				}
 			}
 		}
 		catch (SQLException e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": SQL error while updating RaidBoss spawn to database: " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": SQL error while updating RaidBoss spawn to database: " + e.getMessage(), e);
 		}
 	}
 	

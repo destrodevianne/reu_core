@@ -22,9 +22,9 @@ import l2r.gameserver.model.actor.L2Character;
 
 public final class Location
 {
-	private final int _x;
-	private final int _y;
-	private final int _z;
+	private int _x;
+	private int _y;
+	private int _z;
 	private int _heading;
 	private int _instanceId;
 	
@@ -71,19 +71,71 @@ public final class Location
 		_instanceId = obj.getInstanceId();
 	}
 	
+	/**
+	 * Get the x coordinate.
+	 * @return the x coordinate
+	 */
 	public int getX()
 	{
 		return _x;
 	}
 	
+	/**
+	 * Set the x coordinate.
+	 * @param x the x coordinate
+	 */
+	public void setX(int x)
+	{
+		_x = x;
+	}
+	
+	/**
+	 * Get the y coordinate.
+	 * @return the y coordinate
+	 */
 	public int getY()
 	{
 		return _y;
 	}
 	
+	/**
+	 * Set the y coordinate.
+	 * @param y the x coordinate
+	 */
+	public void setY(int y)
+	{
+		_y = y;
+	}
+	
+	/**
+	 * Get the z coordinate.
+	 * @return the z coordinate
+	 */
 	public int getZ()
 	{
 		return _z;
+	}
+	
+	/**
+	 * Set the z coordinate.
+	 * @param z the z coordinate
+	 */
+	public void setZ(int z)
+	{
+		_z = z;
+	}
+	
+	/**
+	 * Set the x, y, z coordinates.
+	 * @param x the x coordinate
+	 * @param y the y coordinate
+	 * @param z the z coordinate
+	 */
+	public void setXYZ(int x, int y, int z)
+	{
+		setX(x);
+		setY(y);
+		setZ(z);
 	}
 	
 	public int getHeading()

@@ -52,7 +52,7 @@ public final class RequestHennaItemInfo extends L2GameClientPacket
 		{
 			if (_symbolId != 0)
 			{
-				_log.warning(getClass().getSimpleName() + ": Invalid Henna Id: " + _symbolId + " from player " + activeChar);
+				_log.warn(getClass().getSimpleName() + ": Invalid Henna Id: " + _symbolId + " from player " + activeChar);
 			}
 			sendActionFailed();
 			return;

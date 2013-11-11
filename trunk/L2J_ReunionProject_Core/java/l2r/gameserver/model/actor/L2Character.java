@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -85,6 +83,7 @@ import l2r.gameserver.model.actor.tasks.character.NotifyAITask;
 import l2r.gameserver.model.actor.tasks.character.QueuedMagicUseTask;
 import l2r.gameserver.model.actor.tasks.character.UsePotionTask;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
+import l2r.gameserver.model.actor.transform.Transform;
 import l2r.gameserver.model.effects.AbnormalEffect;
 import l2r.gameserver.model.effects.EffectFlag;
 import l2r.gameserver.model.effects.L2Effect;
@@ -139,9 +138,12 @@ import l2r.gameserver.scripting.scriptengine.listeners.character.DeathListener;
 import l2r.gameserver.scripting.scriptengine.listeners.character.SkillUseListener;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.gameserver.util.L2TIntObjectHashMap;
-import l2r.gameserver.util.Point3D;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gr.reunion.configsEngine.CustomServerConfigs;
 import gr.reunion.interf.ReunionEvents;
 
@@ -167,7 +169,7 @@ import gr.reunion.interf.ReunionEvents;
  */
 public abstract class L2Character extends L2Object implements ISkillsHolder
 {
-	public static final Logger _log = Logger.getLogger(L2Character.class.getName());
+	public static final Logger _log = LoggerFactory.getLogger(L2Character.class);
 	
 	private static List<DeathListener> globalDeathListeners = new FastList<DeathListener>().shared();
 	private static List<SkillUseListener> globalSkillUseListeners = new FastList<SkillUseListener>().shared();
@@ -352,6 +354,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public boolean isTransformed()
 	{
 		return false;
+	}
+	
+	public Transform getTransformation()
+	{
+		return null;
 	}
 	
 	/**
@@ -827,7 +834,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				
 				L2PcInstance actor = getActingPlayer();
 				// Players riding wyvern or with special (flying) transformations can do melee attacks, only with skills
-				if ((actor.isMounted() && (actor.getMountNpcId() == 12621)) || (actor.isTransformed() && !actor.getTransformation().canDoMeleeAttack()))
+				if ((actor.isMounted() && (actor.getMountNpcId() == 12621)) || (actor.isTransformed() && !actor.getTransformation().canAttack()))
 				{
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
@@ -2185,7 +2192,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			boolean canCast = true;
 			if ((skill.getTargetType() == L2TargetType.GROUND) && isPlayer())
 			{
-				Point3D wp = getActingPlayer().getCurrentSkillWorldPosition();
+				Location wp = getActingPlayer().getCurrentSkillWorldPosition();
 				if (!region.checkEffectRangeInsidePeaceZone(skill, wp.getX(), wp.getY(), wp.getZ()))
 				{
 					canCast = false;
@@ -2438,7 +2445,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "deleteMe()", e);
+			_log.error("deleteMe()", e);
 		}
 		return true;
 	}
@@ -4125,7 +4132,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				{
 					su.addAttribute(StatusUpdate.CAST_SPD, getMAtkSpd());
 				}
-				else if (stat == Stats.RUN_SPEED)
+				else if (stat == Stats.MOVE_SPEED)
 				{
 					broadcastFull = true;
 				}
@@ -4474,9 +4481,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		if ((Config.GEODATA > 0) && (Config.COORD_SYNCHRONIZE == 2) && !isFloating && !m.disregardingGeodata && ((GameTimeController.getInstance().getGameTicks() % 10) == 0 // once a second to reduce possible cpu load
 		) && GeoData.getInstance().hasGeo(xPrev, yPrev))
 		{
-			// short geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30);
-			// FIXME: Test Modification, don't use next lower Z(spawn height), if the terrain goes upwards it will possibly return another floor
-			int geoHeight = GeoData.getInstance().getHeight(xPrev, yPrev, zPrev);
+			short geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30, null);
 			dz = m._zDestination - geoHeight;
 			// quite a big difference, compare to validatePosition packet
 			if (isPlayer() && (Math.abs(getActingPlayer().getClientZ() - geoHeight) > 200) && (Math.abs(getActingPlayer().getClientZ() - geoHeight) < 1500))
@@ -4515,7 +4520,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			distFraction = distPassed / delta;
 		}
 		
-		// if (Config.DEVELOPER) _log.warning("Move Ticks:" + (gameTicks - m._moveTimestamp) + ", distPassed:" + distPassed + ", distFraction:" + distFraction);
+		// if (Config.DEVELOPER) _log.warn("Move Ticks:" + (gameTicks - m._moveTimestamp) + ", distPassed:" + distPassed + ", distFraction:" + distFraction);
 		
 		if (distFraction > 1)
 		{
@@ -4836,7 +4841,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				if ((curX < L2World.MAP_MIN_X) || (curX > L2World.MAP_MAX_X) || (curY < L2World.MAP_MIN_Y) || (curY > L2World.MAP_MAX_Y))
 				{
 					// Temporary fix for character outside world region errors
-					_log.warning("Character " + getName() + " outside world area, in coordinates x:" + curX + " y:" + curY);
+					_log.warn("Character " + getName() + " outside world area, in coordinates x:" + curX + " y:" + curY);
 					getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 					if (isPlayer())
 					{
@@ -5460,7 +5465,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					}
 					else
 					{
-						_log.warning("Skill 4515 at level 1 is missing in DP.");
+						_log.warn("Skill 4515 at level 1 is missing in DP.");
 					}
 					
 					damage = 0; // prevents messing up drop calculation
@@ -6487,7 +6492,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		catch (NullPointerException e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 		
 		if (mut.getSkillTime() > 0)
@@ -6745,10 +6750,8 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 								getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 								tempSkill.getEffects(target, this);
 							}
-							else if (_log.isLoggable(Level.WARNING))
-							{
-								_log.log(Level.WARNING, "Skill 4215 at level 1 is missing in DP.");
-							}
+							
+							_log.warn("Skill 4215 at level 1 is missing in DP.");
 						}
 						else
 						{
@@ -6760,10 +6763,8 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 								getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 								tempSkill.getEffects(target, this);
 							}
-							else if (_log.isLoggable(Level.WARNING))
-							{
-								_log.log(Level.WARNING, "Skill 4515 at level 1 is missing in DP.");
-							}
+							
+							_log.warn("Skill 4515 at level 1 is missing in DP.");
 						}
 						return;
 					}
@@ -6967,7 +6968,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, getClass().getSimpleName() + ": callSkill() failed.", e);
+			_log.warn(getClass().getSimpleName() + ": callSkill() failed.", e);
 		}
 	}
 	
@@ -7005,7 +7006,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		else
 		{
-			_log.fine("isBehindTarget's target not an L2 Character.");
+			_log.info("isBehindTarget's target not an L2 Character.");
 		}
 		return false;
 	}
@@ -7356,6 +7357,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		return getStat().getRunSpeed();
 	}
 	
+	public int getSwimRunSpeed()
+	{
+		return getStat().getSwimRunSpeed();
+	}
+	
 	public final int getShldDef()
 	{
 		return getStat().getShldDef();
@@ -7369,6 +7375,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public final int getWalkSpeed()
 	{
 		return getStat().getWalkSpeed();
+	}
+	
+	public final int getSwimWalkSpeed()
+	{
+		return getStat().getSwimWalkSpeed();
 	}
 	
 	public int getWIT()
@@ -7729,7 +7740,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 		}
 	}
 	

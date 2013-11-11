@@ -21,7 +21,6 @@ package l2r.gameserver.model.items;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -52,6 +51,9 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.util.StringUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class contains all informations concerning the item (weapon, armor, etc).<BR>
  * Mother class of :
@@ -64,7 +66,7 @@ import l2r.util.StringUtil;
  */
 public abstract class L2Item
 {
-	protected static final Logger _log = Logger.getLogger(L2Item.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2Item.class);
 	
 	public static final int TYPE1_WEAPON_RING_EARRING_NECKLACE = 0;
 	public static final int TYPE1_SHIELD_ARMOR = 1;
@@ -359,7 +361,7 @@ public abstract class L2Item
 				}
 				catch (Exception e)
 				{
-					_log.warning(StringUtil.concat("Failed to parse item_skill(", element, ") for item ", toString(), "! Format: SkillId0-SkillLevel0[;SkillIdN-SkillLevelN]"));
+					_log.warn(StringUtil.concat("Failed to parse item_skill(", element, ") for item ", toString(), "! Format: SkillId0-SkillLevel0[;SkillIdN-SkillLevelN]"));
 				}
 			}
 			

@@ -31,7 +31,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 
 public class TerritoryWard
 {
-	// private static final Logger _log = Logger.getLogger(CombatFlag.class.getName());
+	// private static final Logger _log = LoggerFactory.getLogger(CombatFlag.class);
 	
 	protected L2PcInstance _player = null;
 	public int playerId = 0;

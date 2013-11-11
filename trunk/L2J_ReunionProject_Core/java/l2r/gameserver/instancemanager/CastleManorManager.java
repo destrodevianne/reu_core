@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -45,13 +43,16 @@ import l2r.gameserver.model.itemcontainer.ItemContainer;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.util.Rnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Class for Castle Manor Manager load manor data from DB update/reload/delete, handles all schedule for manor.
  * @author l3x
  */
 public final class CastleManorManager
 {
-	protected static final Logger _log = Logger.getLogger(CastleManorManager.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(CastleManorManager.class);
 	
 	public static final int PERIOD_CURRENT = 0;
 	public static final int PERIOD_NEXT = 1;
@@ -113,7 +114,7 @@ public final class CastleManorManager
 				FastList<CropProcure> procureNext = new FastList<>();
 				
 				// restore seed production info
-				statementProduction.setInt(1, castle.getCastleId());
+				statementProduction.setInt(1, castle.getResidenceId());
 				try (ResultSet rs = statementProduction.executeQuery())
 				{
 					statementProduction.clearParameters();
@@ -140,7 +141,7 @@ public final class CastleManorManager
 				
 				// restore procure info
 				
-				statementProcure.setInt(1, castle.getCastleId());
+				statementProcure.setInt(1, castle.getResidenceId());
 				try (ResultSet rs = statementProcure.executeQuery())
 				{
 					statementProcure.clearParameters();
@@ -219,7 +220,7 @@ public final class CastleManorManager
 							}
 							catch (Exception e)
 							{
-								_log.log(Level.WARNING, "Manor System: Failed to save manor data: " + e.getMessage(), e);
+								_log.warn("Manor System: Failed to save manor data: " + e.getMessage(), e);
 							}
 							setUnderMaintenance(false);
 						}
@@ -349,8 +350,8 @@ public final class CastleManorManager
 			
 			if (c.getTreasury() < c.getManorCost(PERIOD_CURRENT))
 			{
-				c.setSeedProduction(getNewSeedsList(c.getCastleId()), PERIOD_NEXT);
-				c.setCropProcure(getNewCropsList(c.getCastleId()), PERIOD_NEXT);
+				c.setSeedProduction(getNewSeedsList(c.getResidenceId()), PERIOD_NEXT);
+				c.setCropProcure(getNewCropsList(c.getResidenceId()), PERIOD_NEXT);
 			}
 			else
 			{
@@ -403,8 +404,8 @@ public final class CastleManorManager
 			{
 				notFunc = true;
 				_log.info("Manor for castle " + c.getName() + " disabled, not enough adena in treasury: " + c.getTreasury() + ", " + c.getManorCost(PERIOD_NEXT) + " required.");
-				c.setSeedProduction(getNewSeedsList(c.getCastleId()), PERIOD_NEXT);
-				c.setCropProcure(getNewCropsList(c.getCastleId()), PERIOD_NEXT);
+				c.setSeedProduction(getNewSeedsList(c.getResidenceId()), PERIOD_NEXT);
+				c.setCropProcure(getNewCropsList(c.getResidenceId()), PERIOD_NEXT);
 			}
 			else
 			{
@@ -429,8 +430,8 @@ public final class CastleManorManager
 				{
 					notFunc = true;
 					_log.info("Manor for castle " + c.getName() + " disabled, not enough free slots in clan warehouse: " + (Config.WAREHOUSE_SLOTS_CLAN - cwh.getSize()) + ", but " + slots + " required.");
-					c.setSeedProduction(getNewSeedsList(c.getCastleId()), PERIOD_NEXT);
-					c.setCropProcure(getNewCropsList(c.getCastleId()), PERIOD_NEXT);
+					c.setSeedProduction(getNewSeedsList(c.getResidenceId()), PERIOD_NEXT);
+					c.setCropProcure(getNewCropsList(c.getResidenceId()), PERIOD_NEXT);
 				}
 			}
 			c.setNextPeriodApproved(true);

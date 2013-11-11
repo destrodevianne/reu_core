@@ -30,7 +30,6 @@ import l2r.gameserver.network.serverpackets.ExGetOffAirShip;
 import l2r.gameserver.network.serverpackets.ExGetOnAirShip;
 import l2r.gameserver.network.serverpackets.ExMoveToLocationAirShip;
 import l2r.gameserver.network.serverpackets.ExStopMoveAirShip;
-import l2r.gameserver.util.Point3D;
 
 /**
  * Flying airships. Very similar to Maktakien boats (see L2BoatInstance) but these do fly :P
@@ -127,7 +126,7 @@ public class L2AirShipInstance extends L2Vehicle
 		}
 		
 		player.setVehicle(this);
-		player.setInVehiclePosition(new Point3D(0, 0, 0));
+		player.setInVehiclePosition(new Location(0, 0, 0));
 		player.broadcastPacket(new ExGetOnAirShip(player, this));
 		player.getKnownList().removeAllKnownObjects();
 		player.setXYZ(getX(), getY(), getZ());

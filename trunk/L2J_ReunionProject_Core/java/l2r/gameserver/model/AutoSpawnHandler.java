@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -40,6 +38,9 @@ import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Auto Spawn handler.<br>
@@ -59,7 +60,7 @@ import l2r.util.Rnd;
  */
 public class AutoSpawnHandler
 {
-	protected static final Logger _log = Logger.getLogger(AutoSpawnHandler.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(AutoSpawnHandler.class);
 	
 	private static final int DEFAULT_INITIAL_SPAWN = 30000; // 30 seconds after registration
 	private static final int DEFAULT_RESPAWN = 3600000; // 1 hour in millisecs
@@ -151,7 +152,7 @@ public class AutoSpawnHandler
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "AutoSpawnHandler: Could not restore spawn data: " + e.getMessage(), e);
+			_log.warn("AutoSpawnHandler: Could not restore spawn data: " + e.getMessage(), e);
 		}
 	}
 	
@@ -238,7 +239,7 @@ public class AutoSpawnHandler
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "AutoSpawnHandler: Could not auto spawn for NPC ID " + spawnInst._npcId + " (Object ID = " + spawnInst._objectId + "): " + e.getMessage(), e);
+			_log.warn("AutoSpawnHandler: Could not auto spawn for NPC ID " + spawnInst._npcId + " (Object ID = " + spawnInst._objectId + "): " + e.getMessage(), e);
 			return false;
 		}
 		
@@ -474,7 +475,7 @@ public class AutoSpawnHandler
 				L2NpcTemplate npcTemp = NpcTable.getInstance().getTemplate(spawnInst.getNpcId());
 				if (npcTemp == null)
 				{
-					_log.warning("Couldnt find NPC id" + spawnInst.getNpcId() + " Try to update your DP");
+					_log.warn("Couldnt find NPC id" + spawnInst.getNpcId() + " Try to update your DP");
 					return;
 				}
 				L2Spawn newSpawn = new L2Spawn(npcTemp);
@@ -533,7 +534,7 @@ public class AutoSpawnHandler
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "AutoSpawnHandler: An error occurred while initializing spawn instance (Object ID = " + _objectId + "): " + e.getMessage(), e);
+				_log.warn("AutoSpawnHandler: An error occurred while initializing spawn instance (Object ID = " + _objectId + "): " + e.getMessage(), e);
 			}
 		}
 	}
@@ -579,7 +580,7 @@ public class AutoSpawnHandler
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "AutoSpawnHandler: An error occurred while despawning spawn (Object ID = " + _objectId + "): " + e.getMessage(), e);
+				_log.warn("AutoSpawnHandler: An error occurred while despawning spawn (Object ID = " + _objectId + "): " + e.getMessage(), e);
 			}
 		}
 	}

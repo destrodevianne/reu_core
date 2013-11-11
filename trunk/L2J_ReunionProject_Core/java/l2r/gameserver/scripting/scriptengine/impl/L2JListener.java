@@ -18,9 +18,10 @@
  */
 package l2r.gameserver.scripting.scriptengine.impl;
 
-import java.util.logging.Logger;
-
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Convenience superclass for all the L2J listeners.<br>
@@ -31,7 +32,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
  */
 public abstract class L2JListener
 {
-	public static Logger log = Logger.getLogger(L2JListener.class.getName());
+	public static Logger log = LoggerFactory.getLogger(L2JListener.class);
 	
 	public L2PcInstance player = null;
 	

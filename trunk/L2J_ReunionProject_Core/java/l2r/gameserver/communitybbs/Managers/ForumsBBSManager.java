@@ -22,17 +22,18 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.communitybbs.BB.Forum;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ForumsBBSManager extends BaseBBSManager
 {
-	private static Logger _log = Logger.getLogger(ForumsBBSManager.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(ForumsBBSManager.class);
 	private final List<Forum> _table;
 	private int _lastid = 1;
 	
@@ -55,7 +56,7 @@ public class ForumsBBSManager extends BaseBBSManager
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Data error on Forum (root): " + e.getMessage(), e);
+			_log.warn("Data error on Forum (root): " + e.getMessage(), e);
 		}
 	}
 	
@@ -154,10 +155,12 @@ public class ForumsBBSManager extends BaseBBSManager
 		return null;
 	}
 	
-	/**
-	 * Gets the single instance of ForumsBBSManager.
-	 * @return single instance of ForumsBBSManager
-	 */
+	@Override
+	public void parsewrite(String url, String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
+	{
+		
+	}
+	
 	public static ForumsBBSManager getInstance()
 	{
 		return SingletonHolder._instance;

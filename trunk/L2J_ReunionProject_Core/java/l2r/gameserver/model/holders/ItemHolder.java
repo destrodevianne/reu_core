@@ -18,44 +18,30 @@
  */
 package l2r.gameserver.model.holders;
 
+import l2r.gameserver.model.interfaces.IIdentifiable;
+
 /**
- * Holder for item id-count.
+ * Holder for item id and count.
  * @author UnAfraid
  */
-public class ItemHolder
+public class ItemHolder implements IIdentifiable
 {
 	private final int _id;
-	private final int _objectId;
 	private final long _count;
 	
 	public ItemHolder(int id, long count)
 	{
 		_id = id;
-		_objectId = -1;
-		_count = count;
-	}
-	
-	public ItemHolder(int id, int objectId, long count)
-	{
-		_id = id;
-		_objectId = objectId;
 		_count = count;
 	}
 	
 	/**
 	 * @return the item/object identifier.
 	 */
+	@Override
 	public int getId()
 	{
 		return _id;
-	}
-	
-	/**
-	 * @return the object Id
-	 */
-	public int getObjectId()
-	{
-		return _objectId;
 	}
 	
 	/**

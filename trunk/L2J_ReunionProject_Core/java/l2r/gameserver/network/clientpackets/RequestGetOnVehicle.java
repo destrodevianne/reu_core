@@ -20,11 +20,11 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.BoatManager;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2BoatInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.GetOnVehicle;
-import l2r.gameserver.util.Point3D;
 
 /**
  * This class ...
@@ -35,7 +35,7 @@ public final class RequestGetOnVehicle extends L2GameClientPacket
 	private static final String _C__53_GETONVEHICLE = "[C] 53 GetOnVehicle";
 	
 	private int _boatId;
-	private Point3D _pos;
+	private Location _pos;
 	
 	@Override
 	protected void readImpl()
@@ -45,7 +45,7 @@ public final class RequestGetOnVehicle extends L2GameClientPacket
 		x = readD();
 		y = readD();
 		z = readD();
-		_pos = new Point3D(x, y, z);
+		_pos = new Location(x, y, z);
 	}
 	
 	@Override

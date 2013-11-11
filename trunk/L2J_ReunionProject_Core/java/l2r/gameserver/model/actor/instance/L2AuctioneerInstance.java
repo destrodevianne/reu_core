@@ -158,7 +158,7 @@ public final class L2AuctioneerInstance extends L2Npc
 				
 				if (Config.DEBUG)
 				{
-					_log.warning("bidding show successful");
+					_log.warn("bidding show successful");
 				}
 				
 				try
@@ -168,7 +168,7 @@ public final class L2AuctioneerInstance extends L2Npc
 					
 					if (Config.DEBUG)
 					{
-						_log.warning("auction test started");
+						_log.warn("auction test started");
 					}
 					
 					String filename = "data/html/auction/AgitAuctionInfo.htm";
@@ -195,7 +195,7 @@ public final class L2AuctioneerInstance extends L2Npc
 					}
 					else
 					{
-						_log.warning("Auctioneer Auction null for AuctionId : " + auctionId);
+						_log.warn("Auctioneer Auction null for AuctionId : " + auctionId);
 					}
 					
 					player.sendPacket(html);
@@ -310,7 +310,7 @@ public final class L2AuctioneerInstance extends L2Npc
 				
 				if (Config.DEBUG)
 				{
-					_log.warning("cmd list: auction test started");
+					_log.warn("cmd list: auction test started");
 				}
 				
 				StringBuilder items = new StringBuilder();
@@ -397,7 +397,7 @@ public final class L2AuctioneerInstance extends L2Npc
 				
 				if (Config.DEBUG)
 				{
-					_log.warning("cmd bidlist: auction test started");
+					_log.warn("cmd bidlist: auction test started");
 				}
 				
 				String biders = "";
@@ -444,7 +444,7 @@ public final class L2AuctioneerInstance extends L2Npc
 					}
 					else
 					{
-						_log.warning("Auctioneer Auction null for AuctionBiddedAt : " + player.getClan().getAuctionBiddedAt());
+						_log.warn("Auctioneer Auction null for AuctionBiddedAt : " + player.getClan().getAuctionBiddedAt());
 					}
 					
 					player.sendPacket(html);
@@ -476,7 +476,7 @@ public final class L2AuctioneerInstance extends L2Npc
 					}
 					else
 					{
-						_log.warning("Auctioneer Auction null for getHasHideout : " + player.getClan().getHideoutId());
+						_log.warn("Auctioneer Auction null for getHasHideout : " + player.getClan().getHideoutId());
 					}
 					
 					player.sendPacket(html);
@@ -501,7 +501,7 @@ public final class L2AuctioneerInstance extends L2Npc
 					}
 					else
 					{
-						_log.warning("Clan Hall ID NULL : " + ItemId + " Can be caused by concurent write in ClanHallManager");
+						_log.warn("Clan Hall ID NULL : " + ItemId + " Can be caused by concurent write in ClanHallManager");
 					}
 					
 					player.sendPacket(html);
@@ -636,7 +636,7 @@ public final class L2AuctioneerInstance extends L2Npc
 					}
 					else
 					{
-						_log.warning("Auctioneer Auction null for AuctionBiddedAt : " + player.getClan().getAuctionBiddedAt());
+						_log.warn("Auctioneer Auction null for AuctionBiddedAt : " + player.getClan().getAuctionBiddedAt());
 					}
 					
 					player.sendPacket(html);
@@ -692,7 +692,7 @@ public final class L2AuctioneerInstance extends L2Npc
 	
 	private int validateCondition(L2PcInstance player)
 	{
-		if ((getCastle() != null) && (getCastle().getCastleId() > 0))
+		if ((getCastle() != null) && (getCastle().getResidenceId() > 0))
 		{
 			if (getCastle().getSiege().getIsInProgress())
 			{

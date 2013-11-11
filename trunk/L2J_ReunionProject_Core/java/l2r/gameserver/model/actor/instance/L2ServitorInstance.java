@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
@@ -45,11 +43,15 @@ import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.l2skills.L2SkillSummon;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.network.serverpackets.SetSummonRemainTime;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class L2ServitorInstance extends L2Summon
 {
-	protected static final Logger log = Logger.getLogger(L2ServitorInstance.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2ServitorInstance.class);
 	
 	private static final String ADD_SKILL_SAVE = "INSERT INTO character_summon_skills_save (ownerId,ownerClassIndex,summonSkillId,skill_id,skill_level,effect_count,effect_cur_time,buff_index) VALUES (?,?,?,?,?,?,?,?)";
 	private static final String RESTORE_SKILL_SAVE = "SELECT skill_id,skill_level,effect_count,effect_cur_time,buff_index FROM character_summon_skills_save WHERE ownerId=? AND ownerClassIndex=? AND summonSkillId=? ORDER BY buff_index ASC";
@@ -122,11 +124,11 @@ public class L2ServitorInstance extends L2Summon
 		
 		if (Config.DEBUG && (_itemConsumeCount != 0))
 		{
-			_log.warning(getClass().getSimpleName() + ": Item Consume ID: " + _itemConsumeId + ", Count: " + _itemConsumeCount + ", Rate: " + _itemConsumeSteps + " times.");
+			_log.warn(getClass().getSimpleName() + ": Item Consume ID: " + _itemConsumeId + ", Count: " + _itemConsumeCount + ", Rate: " + _itemConsumeSteps + " times.");
 		}
 		if (Config.DEBUG)
 		{
-			_log.warning(getClass().getSimpleName() + ": Task Delay " + (delay / 1000) + " seconds.");
+			_log.warn(getClass().getSimpleName() + ": Task Delay " + (delay / 1000) + " seconds.");
 		}
 		
 		_summonLifeTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new SummonLifetime(getOwner(), this), delay, delay);
@@ -244,7 +246,7 @@ public class L2ServitorInstance extends L2Summon
 		
 		if (Config.DEBUG)
 		{
-			_log.warning(getClass().getSimpleName() + ": " + getTemplate().getName() + " (" + getOwner().getName() + ") has been killed.");
+			_log.warn(getClass().getSimpleName() + ": " + getTemplate().getName() + " (" + getOwner().getName() + ") has been killed.");
 		}
 		
 		if (_summonLifeTask != null)
@@ -429,7 +431,7 @@ public class L2ServitorInstance extends L2Summon
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not store summon effect data: ", e);
+			_log.warn("Could not store summon effect data: ", e);
 		}
 	}
 	
@@ -495,7 +497,7 @@ public class L2ServitorInstance extends L2Summon
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not restore " + this + " active effect data: " + e.getMessage(), e);
+			_log.warn("Could not restore " + this + " active effect data: " + e.getMessage(), e);
 		}
 		finally
 		{
@@ -544,7 +546,7 @@ public class L2ServitorInstance extends L2Summon
 		{
 			if (Config.DEBUG)
 			{
-				log.warning(getClass().getSimpleName() + ": " + _summon.getTemplate().getName() + " (" + _activeChar.getName() + ") run task.");
+				_log.warn(getClass().getSimpleName() + ": " + _summon.getTemplate().getName() + " (" + _activeChar.getName() + ") run task.");
 			}
 			
 			try
@@ -590,7 +592,7 @@ public class L2ServitorInstance extends L2Summon
 			}
 			catch (Exception e)
 			{
-				log.log(Level.SEVERE, "Error on player [" + _activeChar.getName() + "] summon item consume task.", e);
+				_log.error("Error on player [" + _activeChar.getName() + "] summon item consume task.", e);
 			}
 		}
 	}
@@ -628,7 +630,7 @@ public class L2ServitorInstance extends L2Summon
 	{
 		if (Config.DEBUG)
 		{
-			_log.warning(getClass().getSimpleName() + ": " + getTemplate().getName() + " (" + getOwner().getName() + ") consume.");
+			_log.warn(getClass().getSimpleName() + ": " + getTemplate().getName() + " (" + getOwner().getName() + ") consume.");
 		}
 		
 		return getOwner().destroyItemByItemId(process, itemId, count, reference, sendMessage);

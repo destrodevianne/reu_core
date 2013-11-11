@@ -33,8 +33,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.crypto.Cipher;
 
@@ -50,13 +48,16 @@ import l2r.util.Rnd;
 import l2r.util.crypt.ScrambledKeyPair;
 import l2r.util.lib.Log;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class ...
  * @version $Revision: 1.7.4.3 $ $Date: 2005/03/27 15:30:09 $
  */
 public class LoginController
 {
-	protected static final Logger _log = Logger.getLogger(LoginController.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(LoginController.class);
 	
 	private static LoginController _instance;
 	
@@ -395,7 +396,7 @@ public class LoginController
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, "Could not set lastServer: " + e.getMessage(), e);
+					_log.warn("Could not set lastServer: " + e.getMessage(), e);
 				}
 			}
 			return loginOk;
@@ -414,7 +415,7 @@ public class LoginController
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not set accessLevel: " + e.getMessage(), e);
+			_log.warn("Could not set accessLevel: " + e.getMessage(), e);
 		}
 	}
 	
@@ -433,7 +434,7 @@ public class LoginController
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not set last tracert: " + e.getMessage(), e);
+			_log.warn("Could not set last tracert: " + e.getMessage(), e);
 		}
 	}
 	
@@ -515,7 +516,7 @@ public class LoginController
 						}
 						if (Config.DEBUG)
 						{
-							_log.fine("account exists");
+							_log.info("account exists");
 						}
 					}
 				}
@@ -580,7 +581,7 @@ public class LoginController
 						Log.add("'" + user + "' " + address.getHostAddress() + " - ERR : ErrCreatingACC", "loginlog");
 					}
 					
-					_log.warning("Invalid username creation/use attempt: " + user);
+					_log.warn("Invalid username creation/use attempt: " + user);
 				}
 				else
 				{
@@ -589,7 +590,7 @@ public class LoginController
 						Log.add("'" + user + "' " + address.getHostAddress() + " - ERR : AccountMissing", "loginlog");
 					}
 					
-					_log.warning("Account missing for user " + user);
+					_log.warn("Account missing for user " + user);
 					FailedLoginAttempt failedAttempt = _hackProtection.get(address);
 					int failedCount;
 					if (failedAttempt == null)
@@ -664,7 +665,7 @@ public class LoginController
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Could not check password:" + e.getMessage(), e);
+			// _log.warn("Could not check password:" + e.getMessage(), e);
 			ok = false;
 		}
 		

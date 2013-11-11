@@ -18,13 +18,12 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import l2r.Config;
-import l2r.gameserver.TradeController;
+import l2r.gameserver.datatables.BuyListData;
 import l2r.gameserver.datatables.MerchantPriceConfigTable;
 import l2r.gameserver.datatables.MerchantPriceConfigTable.MerchantPriceConfig;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.model.L2TradeList;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.buylist.L2BuyList;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.BuyList;
 import l2r.gameserver.network.serverpackets.ExBuySellList;
@@ -81,30 +80,32 @@ public class L2MerchantInstance extends L2NpcInstance
 	
 	public final void showBuyWindow(L2PcInstance player, int val)
 	{
-		double taxRate = 0;
+		showBuyWindow(player, val, true);
+	}
+	
+	public final void showBuyWindow(L2PcInstance player, int val, boolean applyTax)
+	{
+		final L2BuyList buyList = BuyListData.getInstance().getBuyList(val);
+		if (buyList == null)
+		{
+			_log.warn("BuyList not found! BuyListId:" + val);
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
 		
-		taxRate = getMpc().getTotalTaxRate();
+		if (!buyList.isNpcAllowed(getNpcId()))
+		{
+			_log.warn("Npc not allowed in BuyList! BuyListId:" + val + " NpcId:" + getNpcId());
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
+		final double taxRate = (applyTax) ? getMpc().getTotalTaxRate() : 0;
 		
 		player.tempInventoryDisable();
 		
-		if (Config.DEBUG)
-		{
-			_log.fine("Showing buylist");
-		}
-		
-		L2TradeList list = TradeController.getInstance().getBuyList(val);
-		
-		if ((list != null) && list.getNpcId().equals(String.valueOf(getNpcId())))
-		{
-			player.sendPacket(new BuyList(list, player.getAdena(), taxRate));
-			player.sendPacket(new ExBuySellList(player, taxRate, false));
-		}
-		else
-		{
-			_log.warning("possible client hacker: " + player.getName() + " attempting to buy from GM shop! < Ban him!");
-			_log.warning("buylist id:" + val);
-		}
-		
+		player.sendPacket(new BuyList(buyList, player.getAdena(), taxRate));
+		player.sendPacket(new ExBuySellList(player, taxRate, false));
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 }

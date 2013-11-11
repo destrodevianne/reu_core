@@ -19,8 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import java.nio.BufferUnderflowException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -31,6 +29,8 @@ import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
 import org.mmocore.network.ReceivablePacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Packets received by the game server from clients
@@ -38,7 +38,8 @@ import org.mmocore.network.ReceivablePacket;
  */
 public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 {
-	protected static final Logger _log = Logger.getLogger(L2GameClientPacket.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(L2GameClientPacket.class);
+	protected static final java.util.logging.Logger _logger = java.util.logging.Logger.getLogger(L2GameClientPacket.class.getName());
 	
 	@Override
 	public boolean read()
@@ -52,12 +53,12 @@ public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 		{
 			if (e instanceof BufferUnderflowException)
 			{
-				_log.log(Level.INFO, "Client: " + getClient().toString() + " - Failed reading: " + getType() + " Buffer Under Flow Exception.");
+				_log.info("Client: " + getClient().toString() + " - Failed reading: " + getType() + " Buffer Under Flow Exception.");
 				getClient().onBufferUnderflow();
 				return false;
 			}
 			
-			_log.log(Level.SEVERE, "Client: " + getClient().toString() + " - Failed reading: " + getType() + " - L2J Server Version: " + Config.SERVER_VERSION + " - DP Revision: " + Config.DATAPACK_VERSION + " ; " + e.getMessage(), e);
+			_log.error("Client: " + getClient().toString() + " - Failed reading: " + getType() + e.getMessage(), e);
 		}
 		return false;
 	}
@@ -89,7 +90,7 @@ public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 		}
 		catch (Throwable t)
 		{
-			_log.log(Level.SEVERE, "Client: " + getClient().toString() + " - Failed running: " + getType() + " - L2J Server Version: " + Config.SERVER_VERSION + " - DP Revision: " + Config.DATAPACK_VERSION + " ; " + t.getMessage(), t);
+			_log.error("Client: " + getClient().toString() + " - Failed running: " + getType() + t.getMessage(), t);
 			// in case of EnterWorld error kick player from game
 			if (this instanceof EnterWorld)
 			{

@@ -61,7 +61,7 @@ public final class DlgAnswer extends L2GameClientPacket
 		
 		if (Config.DEBUG)
 		{
-			_log.fine(getType() + ": Answer accepted. Message ID " + _messageId + ", answer " + _answer + ", Requester ID " + _requesterId);
+			_log.info(getType() + ": Answer accepted. Message ID " + _messageId + ", answer " + _answer + ", Requester ID " + _requesterId);
 		}
 		if ((_messageId == SystemMessageId.RESSURECTION_REQUEST_BY_C1_FOR_S2_XP.getId()) || (_messageId == SystemMessageId.RESURRECT_USING_CHARM_OF_COURAGE.getId()))
 		{

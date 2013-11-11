@@ -51,7 +51,7 @@ public class RequestUnEquipItem extends L2GameClientPacket
 	{
 		if (Config.DEBUG)
 		{
-			_log.fine("Request unequip slot " + _slot);
+			_log.info("Request unequip slot " + _slot);
 		}
 		
 		final L2PcInstance activeChar = getClient().getActiveChar();

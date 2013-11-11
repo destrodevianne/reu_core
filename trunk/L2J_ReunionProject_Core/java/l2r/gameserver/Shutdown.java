@@ -18,9 +18,6 @@
  */
 package l2r.gameserver;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.ClanTable;
@@ -45,6 +42,10 @@ import l2r.gameserver.network.gameserverpackets.ServerStatus;
 import l2r.gameserver.network.serverpackets.ServerClose;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Broadcast;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.trove.procedure.TObjectProcedure;
 import gr.reunion.backupManager.DatabaseBackupManager;
 import gr.reunion.configsEngine.BackupManagerConfigs;
@@ -62,7 +63,7 @@ import gr.reunion.leaderboards.TvTLeaderboard;
  */
 public class Shutdown extends Thread
 {
-	private static final Logger _log = Logger.getLogger(Shutdown.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(Shutdown.class);
 	private static Shutdown _counterInstance = null;
 	
 	private int _secondsShut;
@@ -92,7 +93,7 @@ public class Shutdown extends Thread
 	
 	public void startTelnetShutdown(String IP, int seconds, boolean restart)
 	{
-		_log.warning("IP: " + IP + " issued shutdown command. " + MODE_TEXT[_shutdownMode] + " in " + seconds + " seconds!");
+		_log.warn("IP: " + IP + " issued shutdown command. " + MODE_TEXT[_shutdownMode] + " in " + seconds + " seconds!");
 		
 		if (restart)
 		{
@@ -143,7 +144,7 @@ public class Shutdown extends Thread
 	 */
 	public void telnetAbort(String IP)
 	{
-		_log.warning("IP: " + IP + " issued shutdown ABORT. " + MODE_TEXT[_shutdownMode] + " has been stopped!");
+		_log.warn("IP: " + IP + " issued shutdown ABORT. " + MODE_TEXT[_shutdownMode] + " has been stopped!");
 		
 		if (_counterInstance != null)
 		{
@@ -206,7 +207,7 @@ public class Shutdown extends Thread
 			}
 			catch (Throwable t)
 			{
-				_log.log(Level.WARNING, "Error saving offline shops.", t);
+				_log.warn("Error saving offline shops.", t);
 			}
 			
 			try
@@ -299,7 +300,7 @@ public class Shutdown extends Thread
 			// gm shutdown: send warnings and then call exit to start shutdown sequence
 			countdown();
 			// last point where logging is operational :(
-			_log.warning("GM shutdown countdown is over. " + MODE_TEXT[_shutdownMode] + " NOW!");
+			_log.warn("GM shutdown countdown is over. " + MODE_TEXT[_shutdownMode] + " NOW!");
 			switch (_shutdownMode)
 			{
 				case GM_SHUTDOWN:
@@ -336,7 +337,7 @@ public class Shutdown extends Thread
 		
 		if (activeChar != null)
 		{
-			_log.warning("GM: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") issued shutdown command. " + MODE_TEXT[_shutdownMode] + " in " + seconds + " seconds!");
+			_log.warn("GM: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") issued shutdown command. " + MODE_TEXT[_shutdownMode] + " in " + seconds + " seconds!");
 		}
 		
 		if (_shutdownMode > 0)
@@ -381,7 +382,7 @@ public class Shutdown extends Thread
 	 */
 	public void abort(L2PcInstance activeChar)
 	{
-		_log.warning("GM: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") issued shutdown ABORT. " + MODE_TEXT[_shutdownMode] + " has been stopped!");
+		_log.warn("GM: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") issued shutdown ABORT. " + MODE_TEXT[_shutdownMode] + " has been stopped!");
 		if (_counterInstance != null)
 		{
 			_counterInstance._abort();
@@ -551,9 +552,6 @@ public class Shutdown extends Thread
 		_log.info("GrandBossManager: All Grand Boss info saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		HellboundManager.getInstance().cleanUp();
 		_log.info("Hellbound Manager: Data saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
-		_log.info("TradeController saving data.. This action may take some minutes! Please wait until completed!");
-		TradeController.getInstance().dataCountStore();
-		_log.info("TradeController: All count Item saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		ItemAuctionManager.getInstance().shutdown();
 		_log.info("Item Auction Manager: All tasks stopped(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		Olympiad.getInstance().saveOlympiadStatus();
@@ -614,7 +612,7 @@ public class Shutdown extends Thread
 	
 	protected final class DisconnectAllCharacters implements TObjectProcedure<L2PcInstance>
 	{
-		private final Logger _log = Logger.getLogger(DisconnectAllCharacters.class.getName());
+		private final Logger _log = LoggerFactory.getLogger(DisconnectAllCharacters.class);
 		
 		@Override
 		public final boolean execute(final L2PcInstance player)
@@ -635,7 +633,7 @@ public class Shutdown extends Thread
 				}
 				catch (Throwable t)
 				{
-					_log.log(Level.WARNING, "Failed logour char " + player, t);
+					_log.warn("Failed logour char " + player, t);
 				}
 			}
 			return true;

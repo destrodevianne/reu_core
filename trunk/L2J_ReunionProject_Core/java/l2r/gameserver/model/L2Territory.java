@@ -19,10 +19,12 @@
 package l2r.gameserver.model;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.util.Rnd;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @version 0.1, 2005-03-12
@@ -30,7 +32,7 @@ import l2r.util.Rnd;
  */
 public class L2Territory
 {
-	private static Logger _log = Logger.getLogger(L2Territory.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(L2Territory.class);
 	
 	protected static class Point
 	{
@@ -196,7 +198,7 @@ public class L2Territory
 				return p;
 			}
 		}
-		_log.warning("Can't make point for territory " + _terr);
+		_log.warn("Can't make point for territory " + _terr);
 		return p;
 	}
 	

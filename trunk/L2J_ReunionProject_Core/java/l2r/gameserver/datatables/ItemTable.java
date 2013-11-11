@@ -25,9 +25,6 @@ import java.sql.PreparedStatement;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -53,14 +50,18 @@ import l2r.gameserver.scripting.scriptengine.events.ItemCreateEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.NewItemListener;
 import l2r.gameserver.util.GMAudit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class ...
  * @version $Revision: 1.9.2.6.2.9 $ $Date: 2005/04/02 15:57:34 $
  */
 public class ItemTable
 {
-	private static Logger _log = Logger.getLogger(ItemTable.class.getName());
-	private static Logger _logItems = Logger.getLogger("item");
+	private static Logger _log = LoggerFactory.getLogger(ItemTable.class);
+	@SuppressWarnings("unused")
+	private static Logger _logItems = LoggerFactory.getLogger("item");
 	
 	private static FastList<NewItemListener> newItemListeners = new FastList<NewItemListener>().shared();
 	
@@ -220,10 +221,10 @@ public class ItemTable
 			}
 		}
 		buildFastLookupTable(highest);
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _etcItems.size() + " Etc Items");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _armors.size() + " Armor Items");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + _weapons.size() + " Weapon Items");
-		_log.log(Level.INFO, getClass().getSimpleName() + ": Loaded: " + (_etcItems.size() + _armors.size() + _weapons.size()) + " Items in total.");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _etcItems.size() + " Etc Items");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _armors.size() + " Armor Items");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + _weapons.size() + " Weapon Items");
+		_log.info(getClass().getSimpleName() + ": Loaded: " + (_etcItems.size() + _armors.size() + _weapons.size()) + " Items in total.");
 	}
 	
 	/**
@@ -314,7 +315,7 @@ public class ItemTable
 		
 		if (Config.DEBUG)
 		{
-			_log.fine(getClass().getSimpleName() + ": Item created  oid:" + item.getObjectId() + " itemid:" + itemId);
+			_log.info(getClass().getSimpleName() + ": Item created  oid:" + item.getObjectId() + " itemid:" + itemId);
 		}
 		
 		// Add the L2ItemInstance object to _allObjects of L2world
@@ -330,15 +331,10 @@ public class ItemTable
 		{
 			if (!Config.LOG_ITEMS_SMALL_LOG || (Config.LOG_ITEMS_SMALL_LOG && (item.isEquipable() || (item.getItemId() == ADENA_ID))))
 			{
-				LogRecord record = new LogRecord(Level.INFO, "CREATE:" + process);
-				record.setLoggerName("item");
-				record.setParameters(new Object[]
-				{
-					item,
-					actor,
-					reference
-				});
-				_logItems.log(record);
+				// FIXME:LOGGER
+				/**
+				 * LogRecord record = new LogRecord(Level.INFO, "CREATE:" + process); record.setLoggerName("item"); record.setParameters(new Object[] { item, actor, reference }); _logItems.log(record);
+				 */
 			}
 		}
 		
@@ -402,6 +398,7 @@ public class ItemTable
 	 * @param actor the player requesting the item destroy.
 	 * @param reference the object referencing current action like NPC selling item or previous item in transformation.
 	 */
+	@SuppressWarnings("unused")
 	public void destroyItem(String process, L2ItemInstance item, L2PcInstance actor, Object reference)
 	{
 		synchronized (item)
@@ -419,16 +416,10 @@ public class ItemTable
 			{
 				if (!Config.LOG_ITEMS_SMALL_LOG || (Config.LOG_ITEMS_SMALL_LOG && (item.isEquipable() || (item.getItemId() == ADENA_ID))))
 				{
-					LogRecord record = new LogRecord(Level.INFO, "DELETE:" + process);
-					record.setLoggerName("item");
-					record.setParameters(new Object[]
-					{
-						item,
-						"PrevCount(" + old + ")",
-						actor,
-						reference
-					});
-					_logItems.log(record);
+					// FIXME:LOGGER
+					/**
+					 * LogRecord record = new LogRecord(Level.INFO, "DELETE:" + process); record.setLoggerName("item"); record.setParameters(new Object[] { item, "PrevCount(" + old + ")", actor, reference }); _logItems.log(record);
+					 */
 				}
 			}
 			
@@ -465,7 +456,7 @@ public class ItemTable
 				}
 				catch (Exception e)
 				{
-					_log.log(Level.WARNING, "could not delete pet objectid:", e);
+					_log.warn("could not delete pet objectid:", e);
 				}
 			}
 		}

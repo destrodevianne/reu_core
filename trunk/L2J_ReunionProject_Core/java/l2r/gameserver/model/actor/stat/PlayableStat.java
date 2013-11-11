@@ -18,8 +18,6 @@
  */
 package l2r.gameserver.model.actor.stat;
 
-import java.util.logging.Logger;
-
 import l2r.Config;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.PetDataTable;
@@ -30,9 +28,12 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.zone.type.L2SwampZone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PlayableStat extends CharStat
 {
-	protected static final Logger _log = Logger.getLogger(PlayableStat.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(PlayableStat.class);
 	
 	public PlayableStat(L2Playable activeChar)
 	{
@@ -188,7 +189,7 @@ public class PlayableStat extends CharStat
 	{
 		if (value < 0)
 		{
-			_log.warning("wrong usage");
+			_log.warn("wrong usage");
 			return false;
 		}
 		int currentSp = getSp();

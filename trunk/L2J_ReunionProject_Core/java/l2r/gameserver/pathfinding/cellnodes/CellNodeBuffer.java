@@ -25,10 +25,16 @@ import l2r.Config;
 
 /**
  * @author DS Credits to Diamond
- * @author FBIagent
  */
 public class CellNodeBuffer
 {
+	private static final byte EAST = 1;
+	private static final byte WEST = 2;
+	private static final byte SOUTH = 4;
+	private static final byte NORTH = 8;
+	private static final byte NSWE_ALL = 15;
+	private static final byte NSWE_NONE = 0;
+	
 	private static final int MAX_ITERATIONS = 3500;
 	
 	private final ReentrantLock _lock = new ReentrantLock();
@@ -40,7 +46,7 @@ public class CellNodeBuffer
 	
 	private int _targetX = 0;
 	private int _targetY = 0;
-	private int _targetZ = 0;
+	private short _targetZ = 0;
 	
 	private long _timeStamp = 0;
 	private long _lastElapsedTime = 0;
@@ -58,7 +64,7 @@ public class CellNodeBuffer
 		return _lock.tryLock();
 	}
 	
-	public final CellNode findPath(int x, int y, int z, int tx, int ty, int tz)
+	public final CellNode findPath(int x, int y, short z, int tx, int ty, short tz)
 	{
 		_timeStamp = System.currentTimeMillis();
 		_baseX = x + ((tx - x - _mapSize) / 2); // middle of the line (x,y) - (tx,ty)
@@ -142,14 +148,15 @@ public class CellNodeBuffer
 	
 	private final void getNeighbors()
 	{
-		if (((NodeLoc) _current.getLoc()).canGoNone())
+		final short NSWE = ((NodeLoc) _current.getLoc()).getNSWE();
+		if (NSWE == NSWE_NONE)
 		{
 			return;
 		}
 		
 		final int x = _current.getLoc().getNodeX();
 		final int y = _current.getLoc().getNodeY();
-		final int z = _current.getLoc().getZ();
+		final short z = _current.getLoc().getZ();
 		
 		CellNode nodeE = null;
 		CellNode nodeS = null;
@@ -157,25 +164,25 @@ public class CellNodeBuffer
 		CellNode nodeN = null;
 		
 		// East
-		if (((NodeLoc) _current.getLoc()).canGoEast())
+		if ((NSWE & EAST) != 0)
 		{
 			nodeE = addNode(x + 1, y, z, false);
 		}
 		
 		// South
-		if (((NodeLoc) _current.getLoc()).canGoSouth())
+		if ((NSWE & SOUTH) != 0)
 		{
 			nodeS = addNode(x, y + 1, z, false);
 		}
 		
 		// West
-		if (((NodeLoc) _current.getLoc()).canGoWest())
+		if ((NSWE & WEST) != 0)
 		{
 			nodeW = addNode(x - 1, y, z, false);
 		}
 		
 		// North
-		if (((NodeLoc) _current.getLoc()).canGoNorth())
+		if ((NSWE & NORTH) != 0)
 		{
 			nodeN = addNode(x, y - 1, z, false);
 		}
@@ -185,7 +192,7 @@ public class CellNodeBuffer
 			// SouthEast
 			if ((nodeE != null) && (nodeS != null))
 			{
-				if (((NodeLoc) nodeE.getLoc()).canGoSouth() && ((NodeLoc) nodeS.getLoc()).canGoEast())
+				if (((((NodeLoc) nodeE.getLoc()).getNSWE() & SOUTH) != 0) && ((((NodeLoc) nodeS.getLoc()).getNSWE() & EAST) != 0))
 				{
 					addNode(x + 1, y + 1, z, true);
 				}
@@ -194,7 +201,7 @@ public class CellNodeBuffer
 			// SouthWest
 			if ((nodeS != null) && (nodeW != null))
 			{
-				if (((NodeLoc) nodeW.getLoc()).canGoSouth() && ((NodeLoc) nodeS.getLoc()).canGoWest())
+				if (((((NodeLoc) nodeW.getLoc()).getNSWE() & SOUTH) != 0) && ((((NodeLoc) nodeS.getLoc()).getNSWE() & WEST) != 0))
 				{
 					addNode(x - 1, y + 1, z, true);
 				}
@@ -203,7 +210,7 @@ public class CellNodeBuffer
 			// NorthEast
 			if ((nodeN != null) && (nodeE != null))
 			{
-				if (((NodeLoc) nodeE.getLoc()).canGoNorth() && ((NodeLoc) nodeN.getLoc()).canGoEast())
+				if (((((NodeLoc) nodeE.getLoc()).getNSWE() & NORTH) != 0) && ((((NodeLoc) nodeN.getLoc()).getNSWE() & EAST) != 0))
 				{
 					addNode(x + 1, y - 1, z, true);
 				}
@@ -212,7 +219,7 @@ public class CellNodeBuffer
 			// NorthWest
 			if ((nodeN != null) && (nodeW != null))
 			{
-				if (((NodeLoc) nodeW.getLoc()).canGoNorth() && ((NodeLoc) nodeN.getLoc()).canGoWest())
+				if (((((NodeLoc) nodeW.getLoc()).getNSWE() & NORTH) != 0) && ((((NodeLoc) nodeN.getLoc()).getNSWE() & WEST) != 0))
 				{
 					addNode(x - 1, y - 1, z, true);
 				}
@@ -220,7 +227,7 @@ public class CellNodeBuffer
 		}
 	}
 	
-	private final CellNode getNode(int x, int y, int z)
+	private final CellNode getNode(int x, int y, short z)
 	{
 		final int aX = x - _baseX;
 		if ((aX < 0) || (aX >= _mapSize))
@@ -257,7 +264,7 @@ public class CellNodeBuffer
 		return result;
 	}
 	
-	private final CellNode addNode(int x, int y, int z, boolean diagonal)
+	private final CellNode addNode(int x, int y, short z, boolean diagonal)
 	{
 		CellNode newNode = getNode(x, y, z);
 		if (newNode == null)
@@ -269,12 +276,12 @@ public class CellNodeBuffer
 			return newNode;
 		}
 		
-		final int geoZ = newNode.getLoc().getZ();
+		final short geoZ = newNode.getLoc().getZ();
 		
 		final int stepZ = Math.abs(geoZ - _current.getLoc().getZ());
 		float weight = diagonal ? Config.DIAGONAL_WEIGHT : Config.LOW_WEIGHT;
 		
-		if (!((NodeLoc) newNode.getLoc()).canGoAll() || (stepZ > 16))
+		if ((((NodeLoc) newNode.getLoc()).getNSWE() != NSWE_ALL) || (stepZ > 16))
 		{
 			weight = Config.HIGH_WEIGHT;
 		}
@@ -324,7 +331,7 @@ public class CellNodeBuffer
 		return newNode;
 	}
 	
-	private final boolean isHighWeight(int x, int y, int z)
+	private final boolean isHighWeight(int x, int y, short z)
 	{
 		final CellNode result = getNode(x, y, z);
 		if (result == null)
@@ -332,7 +339,7 @@ public class CellNodeBuffer
 			return true;
 		}
 		
-		if (!((NodeLoc) result.getLoc()).canGoAll())
+		if (((NodeLoc) result.getLoc()).getNSWE() != NSWE_ALL)
 		{
 			return true;
 		}
@@ -344,7 +351,7 @@ public class CellNodeBuffer
 		return false;
 	}
 	
-	private final double getCost(int x, int y, int z, float weight)
+	private final double getCost(int x, int y, short z, float weight)
 	{
 		final int dX = x - _targetX;
 		final int dY = y - _targetY;

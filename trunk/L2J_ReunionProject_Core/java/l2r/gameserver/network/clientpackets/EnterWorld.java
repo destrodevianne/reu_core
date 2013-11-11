@@ -41,10 +41,10 @@ import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.MailManager;
-import l2r.gameserver.instancemanager.PetitionManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.SiegeManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
+import l2r.gameserver.instancemanager.petition.PetitionManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
@@ -142,7 +142,7 @@ public class EnterWorld extends L2GameClientPacket
 		
 		if ((activeChar == null) || !PlayerValues.isPlayer())
 		{
-			_log.warning("EnterWorld failed! activeChar returned 'null'.");
+			_log.warn("EnterWorld failed! activeChar returned 'null'.");
 			getClient().closeNow();
 			return;
 		}
@@ -175,7 +175,7 @@ public class EnterWorld extends L2GameClientPacket
 		{
 			if (Config.DEBUG)
 			{
-				_log.warning("User already exists in Object ID map! User " + activeChar.getName() + " is a character clone.");
+				_log.warn("User already exists in Object ID map! User " + activeChar.getName() + " is a character clone.");
 			}
 		}
 		
@@ -260,13 +260,13 @@ public class EnterWorld extends L2GameClientPacket
 				if (siege.checkIsAttacker(activeChar.getClan()))
 				{
 					activeChar.setSiegeState((byte) 1);
-					activeChar.setSiegeSide(siege.getCastle().getCastleId());
+					activeChar.setSiegeSide(siege.getCastle().getResidenceId());
 				}
 				
 				else if (siege.checkIsDefender(activeChar.getClan()))
 				{
 					activeChar.setSiegeState((byte) 2);
-					activeChar.setSiegeSide(siege.getCastle().getCastleId());
+					activeChar.setSiegeSide(siege.getCastle().getResidenceId());
 				}
 			}
 			
@@ -280,13 +280,13 @@ public class EnterWorld extends L2GameClientPacket
 				if (siege.checkIsAttacker(activeChar.getClan()))
 				{
 					activeChar.setSiegeState((byte) 1);
-					activeChar.setSiegeSide(siege.getFort().getFortId());
+					activeChar.setSiegeSide(siege.getFort().getResidenceId());
 				}
 				
 				else if (siege.checkIsDefender(activeChar.getClan()))
 				{
 					activeChar.setSiegeState((byte) 2);
-					activeChar.setSiegeSide(siege.getFort().getFortId());
+					activeChar.setSiegeSide(siege.getFort().getResidenceId());
 				}
 			}
 			
@@ -382,7 +382,7 @@ public class EnterWorld extends L2GameClientPacket
 		sendPacket(new ShortCutInit(activeChar));
 		
 		// Send Action list
-		activeChar.sendPacket(ExBasicActionList.getStaticPacket(activeChar));
+		activeChar.sendPacket(ExBasicActionList.STATIC_PACKET);
 		
 		// Send Skill list
 		activeChar.sendSkillList();
@@ -540,7 +540,7 @@ public class EnterWorld extends L2GameClientPacket
 			
 			if (fort != null)
 			{
-				FortSiegeManager.getInstance().dropCombatFlag(activeChar, fort.getFortId());
+				FortSiegeManager.getInstance().dropCombatFlag(activeChar, fort.getResidenceId());
 			}
 			else
 			{
@@ -670,7 +670,7 @@ public class EnterWorld extends L2GameClientPacket
 			}
 			catch (ClassCastException cce)
 			{
-				_log.warning("Wedding Error: ID " + objId + " is now owned by a(n) " + L2World.getInstance().findObject(objId).getClass().getSimpleName());
+				_log.warn("Wedding Error: ID " + objId + " is now owned by a(n) " + L2World.getInstance().findObject(objId).getClass().getSimpleName());
 			}
 		}
 	}
