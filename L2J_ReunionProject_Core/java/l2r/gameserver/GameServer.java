@@ -68,6 +68,7 @@ import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.OfflineTradersTable;
 import l2r.gameserver.datatables.OptionsData;
 import l2r.gameserver.datatables.PetDataTable;
+import l2r.gameserver.datatables.ProductItemData;
 import l2r.gameserver.datatables.RecipeData;
 import l2r.gameserver.datatables.SkillLearnData;
 import l2r.gameserver.datatables.SkillTable;
@@ -228,6 +229,7 @@ public class GameServer
 		
 		printSection("Items");
 		ItemTable.getInstance();
+		ProductItemData.getInstance();
 		EnchantItemData.getInstance();
 		EnchantOptionsData.getInstance();
 		OptionsData.getInstance();
