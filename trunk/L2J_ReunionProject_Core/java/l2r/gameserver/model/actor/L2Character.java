@@ -720,7 +720,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		int y = loc.getY();
 		int z = loc.getZ();
 		
-		if (isPlayer() && DimensionalRiftManager.getInstance().checkIfInRiftZone(getX(), getY(), getZ(), true)) // true -> ignore waiting room :)
+		if (isPlayer() && DimensionalRiftManager.getInstance().checkIfInRiftZone(getX(), getY(), getZ(), false)) // true -> ignore waiting room :)
 		{
 			L2PcInstance player = getActingPlayer();
 			player.sendMessage("You have been sent to the waiting room.");

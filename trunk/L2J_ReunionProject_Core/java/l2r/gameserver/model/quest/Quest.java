@@ -3948,4 +3948,16 @@ public class Quest extends ManagedScript
 		}
 		return st;
 	}
+	
+	protected static boolean isIntInArray(int i, int[] ia)
+	{
+		for (int v : ia)
+		{
+			if (i == v)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

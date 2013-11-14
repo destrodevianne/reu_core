@@ -100,6 +100,7 @@ public final class Config
 	public static final String SECURITY_CONFIG_FILE = "./config/main/Security.ini";
 	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini";
 	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
+	public static final String ITEM_MALL_CONFIG_FILE = "./config/main/ItemMall.ini";
 	// Bosses
 	public static final String ANTHARAS_CONFIG = "./config/bosses/Antharas.ini";
 	public static final String VALAKAS_CONFIG = "./config/bosses/Valakas.ini";
@@ -113,6 +114,7 @@ public final class Config
 	public static final String ORFEN_CONFIG = "./config/bosses/Orfen.ini";
 	public static final String QUEEN_ANT_CONFIG = "./config/bosses/QueenAnt.ini";
 	public static final String SAILREN_CONFIG = "./config/bosses/Sailren.ini";
+	public static final String VAN_HALTER_CONFIG = "./config/bosses/VanHalter.ini";
 	public static final String ZAKEN_CONFIG = "./config/bosses/Zaken.ini";
 	public static final String DESTRUCTION_BOSSES_CONFIG = "./config/bosses/DestructionBosses.ini";
 	
@@ -974,6 +976,11 @@ public final class Config
 	public static int PVP_NORMAL_TIME;
 	public static int PVP_PVP_TIME;
 	
+	// --------------------------------------------------
+	// ItemMall Settings
+	// --------------------------------------------------
+	public static int GAME_POINT_ITEM_ID;
+	
 	public static enum IdFactoryType
 	{
 		Compaction,
@@ -1086,6 +1093,19 @@ public final class Config
 	// --------------------------------------------------
 	public static int INTERVAL_OF_SAILREN_SPAWN;
 	public static int RANDOM_OF_SAILREN_SPAWN;
+	
+	// --------------------------------------------------
+	// Van Halter
+	// --------------------------------------------------
+	public static int HPH_FIXINTERVALOFHALTER;
+	public static int HPH_RANDOMINTERVALOFHALTER;
+	public static int HPH_APPTIMEOFHALTER;
+	public static int HPH_ACTIVITYTIMEOFHALTER;
+	public static int HPH_FIGHTTIMEOFHALTER;
+	public static int HPH_CALLROYALGUARDHELPERCOUNT;
+	public static int HPH_CALLROYALGUARDHELPERINTERVAL;
+	public static int HPH_INTERVALOFDOOROFALTER;
+	public static int HPH_TIMEOFLOCKUPDOOROFALTAR;
 	
 	// --------------------------------------------------
 	// Freya
@@ -2651,6 +2671,64 @@ public final class Config
 			INTERVAL_OF_SAILREN_SPAWN = sailren_load.getInt("IntervalOfSailrenSpawn", 12);
 			RANDOM_OF_SAILREN_SPAWN = sailren_load.getInt("RandomOfSailrenSpawn", 24);
 			
+			// Load VAN_HALTER_CONFIG L2Properties file (if exists)
+			final PropertiesParser vanhalter_load = new PropertiesParser(VAN_HALTER_CONFIG);
+			
+			// High Priestess van Halter
+			HPH_FIXINTERVALOFHALTER = vanhalter_load.getInt("FixIntervalOfHalter", 172800);
+			if ((HPH_FIXINTERVALOFHALTER < 300) || (HPH_FIXINTERVALOFHALTER > 864000))
+			{
+				HPH_FIXINTERVALOFHALTER = 172800;
+			}
+			HPH_FIXINTERVALOFHALTER *= 6000;
+			HPH_RANDOMINTERVALOFHALTER = vanhalter_load.getInt("RandomIntervalOfHalter", 86400);
+			if ((HPH_RANDOMINTERVALOFHALTER < 300) || (HPH_RANDOMINTERVALOFHALTER > 864000))
+			{
+				HPH_RANDOMINTERVALOFHALTER = 86400;
+			}
+			HPH_RANDOMINTERVALOFHALTER *= 6000;
+			HPH_APPTIMEOFHALTER = vanhalter_load.getInt("AppTimeOfHalter", 20);
+			if ((HPH_APPTIMEOFHALTER < 5) || (HPH_APPTIMEOFHALTER > 60))
+			{
+				HPH_APPTIMEOFHALTER = 20;
+			}
+			HPH_APPTIMEOFHALTER *= 6000;
+			HPH_ACTIVITYTIMEOFHALTER = vanhalter_load.getInt("ActivityTimeOfHalter", 21600);
+			if ((HPH_ACTIVITYTIMEOFHALTER < 7200) || (HPH_ACTIVITYTIMEOFHALTER > 86400))
+			{
+				HPH_ACTIVITYTIMEOFHALTER = 21600;
+			}
+			HPH_ACTIVITYTIMEOFHALTER *= 1000;
+			HPH_FIGHTTIMEOFHALTER = vanhalter_load.getInt("FightTimeOfHalter", 7200);
+			if ((HPH_FIGHTTIMEOFHALTER < 7200) || (HPH_FIGHTTIMEOFHALTER > 21600))
+			{
+				HPH_FIGHTTIMEOFHALTER = 7200;
+			}
+			HPH_FIGHTTIMEOFHALTER *= 6000;
+			HPH_CALLROYALGUARDHELPERCOUNT = vanhalter_load.getInt("CallRoyalGuardHelperCount", 6);
+			if ((HPH_CALLROYALGUARDHELPERCOUNT < 1) || (HPH_CALLROYALGUARDHELPERCOUNT > 6))
+			{
+				HPH_CALLROYALGUARDHELPERCOUNT = 6;
+			}
+			HPH_CALLROYALGUARDHELPERINTERVAL = vanhalter_load.getInt("CallRoyalGuardHelperInterval", 10);
+			if ((HPH_CALLROYALGUARDHELPERINTERVAL < 1) || (HPH_CALLROYALGUARDHELPERINTERVAL > 60))
+			{
+				HPH_CALLROYALGUARDHELPERINTERVAL = 10;
+			}
+			HPH_CALLROYALGUARDHELPERINTERVAL *= 6000;
+			HPH_INTERVALOFDOOROFALTER = vanhalter_load.getInt("IntervalOfDoorOfAlter", 5400);
+			if ((HPH_INTERVALOFDOOROFALTER < 60) || (HPH_INTERVALOFDOOROFALTER > 5400))
+			{
+				HPH_INTERVALOFDOOROFALTER = 5400;
+			}
+			HPH_INTERVALOFDOOROFALTER *= 6000;
+			HPH_TIMEOFLOCKUPDOOROFALTAR = vanhalter_load.getInt("TimeOfLockUpDoorOfAltar", 180);
+			if ((HPH_TIMEOFLOCKUPDOOROFALTAR < 60) || (HPH_TIMEOFLOCKUPDOOROFALTAR > 600))
+			{
+				HPH_TIMEOFLOCKUPDOOROFALTAR = 180;
+			}
+			HPH_TIMEOFLOCKUPDOOROFALTAR *= 6000;
+			
 			// Load ZAKEN_CONFIG L2Properties file (if exists)
 			final PropertiesParser zaken_load = new PropertiesParser(ZAKEN_CONFIG);
 			
@@ -2729,6 +2807,11 @@ public final class Config
 			CHS_ENABLE_FAME = ClanHallSiege.getBoolean("EnableFame", false);
 			CHS_FAME_AMOUNT = ClanHallSiege.getInt("FameAmount", 0);
 			CHS_FAME_FREQUENCY = ClanHallSiege.getInt("FameFrequency", 0);
+			
+			// ItemMall Settings
+			final PropertiesParser itemMallSettigns = new PropertiesParser(ITEM_MALL_CONFIG_FILE);
+			
+			GAME_POINT_ITEM_ID = itemMallSettigns.getInt("GamePointItemId", -1);
 		}
 		else if (Server.serverMode == Server.MODE_LOGINSERVER)
 		{
