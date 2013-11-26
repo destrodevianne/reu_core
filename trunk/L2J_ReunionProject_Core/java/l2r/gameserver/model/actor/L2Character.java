@@ -6709,47 +6709,37 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 						}
 					}
 					
-					// crafting does not trigger any chance skills
-					// possibly should be unhardcoded
-					switch (skill.getSkillType())
+					if (!skill.isStatic())
 					{
-						case COMMON_CRAFT:
-						case DWARVEN_CRAFT:
-							break;
-						default:
+						if ((activeWeapon != null) && !target.isDead())
 						{
-							// Launch weapon Special ability skill effect if available
-							if ((activeWeapon != null) && !target.isDead())
+							if ((activeWeapon.getSkillEffects(this, target, skill).length > 0) && isPlayer())
 							{
-								if ((activeWeapon.getSkillEffects(this, target, skill).length > 0) && isPlayer())
+								SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_ACTIVATED);
+								sm.addSkillName(skill);
+								sendPacket(sm);
+							}
+						}
+						
+						if (_chanceSkills != null)
+						{
+							_chanceSkills.onSkillHit(target, skill, false);
+						}
+						
+						if (target.getChanceSkills() != null)
+						{
+							target.getChanceSkills().onSkillHit(this, skill, true);
+						}
+						
+						if (_triggerSkills != null)
+						{
+							for (OptionsSkillHolder holder : _triggerSkills.values())
+							{
+								if ((skill.isMagic() && (holder.getSkillType() == OptionsSkillType.MAGIC)) || (skill.isPhysical() && (holder.getSkillType() == OptionsSkillType.ATTACK)))
 								{
-									SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_ACTIVATED);
-									sm.addSkillName(skill);
-									sendPacket(sm);
-								}
-							}
-							
-							// Maybe launch chance skills on us
-							if (_chanceSkills != null)
-							{
-								_chanceSkills.onSkillHit(target, skill, false);
-							}
-							// Maybe launch chance skills on target
-							if (target.getChanceSkills() != null)
-							{
-								target.getChanceSkills().onSkillHit(this, skill, true);
-							}
-							
-							if (_triggerSkills != null)
-							{
-								for (OptionsSkillHolder holder : _triggerSkills.values())
-								{
-									if ((skill.isMagic() && (holder.getSkillType() == OptionsSkillType.MAGIC)) || (skill.isPhysical() && (holder.getSkillType() == OptionsSkillType.ATTACK)))
+									if (Rnd.get(100) < holder.getChance())
 									{
-										if (Rnd.get(100) < holder.getChance())
-										{
-											makeTriggerCast(holder.getSkill(), target);
-										}
+										makeTriggerCast(holder.getSkill(), target);
 									}
 								}
 							}
@@ -6844,7 +6834,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 								switch (skill.getSkillType())
 								{
 									case SUMMON:
-									case BEAST_FEED:
 									case UNLOCK:
 									case DELUXE_KEY_UNLOCK:
 									case UNLOCK_SPECIAL:

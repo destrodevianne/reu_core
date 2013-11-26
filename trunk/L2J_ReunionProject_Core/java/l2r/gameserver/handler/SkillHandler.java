@@ -23,11 +23,9 @@ import java.util.Map;
 
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.scripts.handlers.skillhandlers.BallistaBomb;
-import l2r.gameserver.scripts.handlers.skillhandlers.BeastSkills;
 import l2r.gameserver.scripts.handlers.skillhandlers.Blow;
 import l2r.gameserver.scripts.handlers.skillhandlers.Continuous;
 import l2r.gameserver.scripts.handlers.skillhandlers.CpDamPercent;
-import l2r.gameserver.scripts.handlers.skillhandlers.Craft;
 import l2r.gameserver.scripts.handlers.skillhandlers.DeluxeKey;
 import l2r.gameserver.scripts.handlers.skillhandlers.Detection;
 import l2r.gameserver.scripts.handlers.skillhandlers.Disablers;
@@ -36,7 +34,6 @@ import l2r.gameserver.scripts.handlers.skillhandlers.Fishing;
 import l2r.gameserver.scripts.handlers.skillhandlers.FishingSkill;
 import l2r.gameserver.scripts.handlers.skillhandlers.GetPlayer;
 import l2r.gameserver.scripts.handlers.skillhandlers.GiveReco;
-import l2r.gameserver.scripts.handlers.skillhandlers.GiveVitality;
 import l2r.gameserver.scripts.handlers.skillhandlers.InstantJump;
 import l2r.gameserver.scripts.handlers.skillhandlers.Manadam;
 import l2r.gameserver.scripts.handlers.skillhandlers.Mdam;
@@ -64,11 +61,9 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		_datatable = new HashMap<>();
 		
 		registerHandler(new BallistaBomb());
-		registerHandler(new BeastSkills());
 		registerHandler(new Blow());
 		registerHandler(new Continuous());
 		registerHandler(new CpDamPercent());
-		registerHandler(new Craft());
 		registerHandler(new DeluxeKey());
 		registerHandler(new Detection());
 		registerHandler(new Disablers());
@@ -77,7 +72,6 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		registerHandler(new FishingSkill());
 		registerHandler(new GetPlayer());
 		registerHandler(new GiveReco());
-		registerHandler(new GiveVitality());
 		registerHandler(new InstantJump());
 		registerHandler(new Manadam());
 		registerHandler(new Mdam());
