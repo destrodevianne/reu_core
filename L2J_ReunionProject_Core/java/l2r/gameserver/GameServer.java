@@ -36,6 +36,7 @@ import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.ArmorSetsData;
 import l2r.gameserver.datatables.AugmentationData;
+import l2r.gameserver.datatables.BotReportTable;
 import l2r.gameserver.datatables.BuyListData;
 import l2r.gameserver.datatables.CategoryData;
 import l2r.gameserver.datatables.CharNameTable;
@@ -70,6 +71,7 @@ import l2r.gameserver.datatables.OptionsData;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.ProductItemData;
 import l2r.gameserver.datatables.RecipeData;
+import l2r.gameserver.datatables.SecondaryAuthData;
 import l2r.gameserver.datatables.SkillLearnData;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
@@ -219,6 +221,7 @@ public class GameServer
 		
 		printSection("Data");
 		CategoryData.getInstance();
+		SecondaryAuthData.getInstance();
 		
 		printSection("Skills");
 		EffectHandler.getInstance().executeScript();
@@ -317,6 +320,7 @@ public class GameServer
 		AugmentationData.getInstance();
 		CursedWeaponsManager.getInstance();
 		TransformData.getInstance();
+		BotReportTable.getInstance();
 		
 		// Custom settings section
 		printSection("Custom");

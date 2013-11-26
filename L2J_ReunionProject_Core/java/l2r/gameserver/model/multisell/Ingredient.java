@@ -91,7 +91,7 @@ public class Ingredient
 		_itemId = itemId;
 	}
 	
-	public final int getItemId()
+	public final int getId()
 	{
 		return _itemId;
 	}

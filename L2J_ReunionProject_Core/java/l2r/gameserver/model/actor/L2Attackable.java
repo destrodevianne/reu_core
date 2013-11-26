@@ -47,12 +47,12 @@ import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.AbsorberInfo;
 import l2r.gameserver.model.AggroInfo;
 import l2r.gameserver.model.DamageDoneInfo;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2CommandChannel;
 import l2r.gameserver.model.L2DropCategory;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -1045,7 +1045,7 @@ public class L2Attackable extends L2Npc
 				// We should multiply by the server's drop rate, so we always get a low chance of drop for deep blue mobs.
 				// NOTE: This is valid only for adena drops! Others drops will still obey server's rate
 				deepBlueDrop = 3;
-				if (drop.getItemId() == PcInventory.ADENA_ID)
+				if (drop.getId() == PcInventory.ADENA_ID)
 				{
 					deepBlueDrop *= (int) lastAttacker.getRate(Rates.DROP_ITEM, PcInventory.ADENA_ID, (isRaid() && !isRaidMinion()));
 				}
@@ -1065,7 +1065,7 @@ public class L2Attackable extends L2Npc
 		}
 		
 		// Applies Drop rates
-		dropChance *= lastAttacker.getRate(isSweep ? Rates.SPOIL : Rates.DROP_ITEM, drop.getItemId(), (isRaid() && !isRaidMinion()));
+		dropChance *= lastAttacker.getRate(isSweep ? Rates.SPOIL : Rates.DROP_ITEM, drop.getId(), (isRaid() && !isRaidMinion()));
 		
 		if (Config.L2JMOD_CHAMPION_ENABLE && isChampion())
 		{
@@ -1125,14 +1125,14 @@ public class L2Attackable extends L2Npc
 			dropChance -= L2DropData.MAX_CHANCE;
 		}
 		
-		if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getItemId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getItemId())))
+		if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId())))
 		{
 			itemCount *= Config.L2JMOD_CHAMPION_ADENAS_REWARDS;
 		}
 		
 		if (itemCount > 0)
 		{
-			return new ItemHolder(drop.getItemId(), itemCount);
+			return new ItemHolder(drop.getId(), itemCount);
 		}
 		return null;
 	}
@@ -1218,17 +1218,17 @@ public class L2Attackable extends L2Npc
 			// At least 1 item will be dropped for sure. So the chance will be adjusted to 100%
 			// if smaller.
 			
-			double dropChance = drop.getChance() * lastAttacker.getRate(Rates.DROP_ITEM, drop.getItemId(), (isRaid() && !isRaidMinion()));
+			double dropChance = drop.getChance() * lastAttacker.getRate(Rates.DROP_ITEM, drop.getId(), (isRaid() && !isRaidMinion()));
 			
 			if (lastAttacker.isPremium())
 			{
-				if (PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.containsKey(drop.getItemId())) // check for overriden rate in premium list first
+				if (PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.containsKey(drop.getId())) // check for overriden rate in premium list first
 				{
-					dropChance *= PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.get(drop.getItemId());
+					dropChance *= PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.get(drop.getId());
 				}
-				else if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getItemId()))
+				else if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getId()))
 				{
-					dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getItemId());
+					dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getId());
 				}
 				else
 				{
@@ -1237,9 +1237,9 @@ public class L2Attackable extends L2Npc
 			}
 			else
 			{
-				if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getItemId()))
+				if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getId()))
 				{
-					dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getItemId());
+					dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getId());
 				}
 				else
 				{
@@ -1309,19 +1309,19 @@ public class L2Attackable extends L2Npc
 				dropChance -= L2DropData.MAX_CHANCE;
 			}
 			
-			if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getItemId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getItemId())))
+			if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId())))
 			{
 				itemCount *= Config.L2JMOD_CHAMPION_ADENAS_REWARDS;
 			}
 			
-			if (!Config.MULTIPLE_ITEM_DROP && !ItemTable.getInstance().getTemplate(drop.getItemId()).isStackable() && (itemCount > 1))
+			if (!Config.MULTIPLE_ITEM_DROP && !ItemTable.getInstance().getTemplate(drop.getId()).isStackable() && (itemCount > 1))
 			{
 				itemCount = 1;
 			}
 			
 			if (itemCount > 0)
 			{
-				return new ItemHolder(drop.getItemId(), itemCount);
+				return new ItemHolder(drop.getId(), itemCount);
 			}
 		}
 		return null;
@@ -1503,7 +1503,7 @@ public class L2Attackable extends L2Npc
 			
 			if (itemCount > 0)
 			{
-				return new ItemHolder(drop.getItemId(), itemCount);
+				return new ItemHolder(drop.getId(), itemCount);
 			}
 		}
 		return null;
@@ -1720,7 +1720,7 @@ public class L2Attackable extends L2Npc
 		{
 			if (Rnd.get(L2DropData.MAX_CHANCE) < drop.getEventDrop().getDropChance())
 			{
-				final ItemHolder rewardItem = new ItemHolder(drop.getEventDrop().getItemIdList()[Rnd.get(drop.getEventDrop().getItemIdList().length)], Rnd.get(drop.getEventDrop().getMinCount(), drop.getEventDrop().getMaxCount()));
+				final ItemHolder rewardItem = new ItemHolder(drop.getEventDrop().getIdList()[Rnd.get(drop.getEventDrop().getIdList().length)], Rnd.get(drop.getEventDrop().getMinCount(), drop.getEventDrop().getMaxCount()));
 				
 				if (Config.AUTO_LOOT || isFlying())
 				{
@@ -2326,7 +2326,7 @@ public class L2Attackable extends L2Npc
 		
 		if (hasAI() && (getSpawn() != null))
 		{
-			getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz(), 0));
+			getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(getSpawn().getX(), getSpawn().getY(), getSpawn().getZ(), 0));
 		}
 	}
 	

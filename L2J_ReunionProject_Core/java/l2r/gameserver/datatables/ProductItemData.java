@@ -52,7 +52,7 @@ import org.w3c.dom.Node;
  */
 public class ProductItemData
 {
-	protected static final Logger _log = LoggerFactory.getLogger(ProductItemData.class.getName());
+	protected static final Logger _log = LoggerFactory.getLogger(ProductItemData.class);
 	
 	private final Map<Integer, L2ProductItem> _itemsList = new TreeMap<>();
 	private final ConcurrentHashMap<Integer, List<L2ProductItem>> recentList;
@@ -198,7 +198,7 @@ public class ProductItemData
 		
 		for (L2ProductItemComponent com : product.getComponents())
 		{
-			L2Item item = ItemTable.getInstance().getTemplate(com.getItemId());
+			L2Item item = ItemTable.getInstance().getTemplate(com.getId());
 			if (item == null)
 			{
 				player.sendPacket(new ExBrBuyProduct(ExBrBuyProduct.RESULT_WRONG_PRODUCT));
@@ -215,7 +215,7 @@ public class ProductItemData
 		
 		for (L2ProductItemComponent $comp : product.getComponents())
 		{
-			player.getInventory().addItem("Buy Product" + _productId, $comp.getItemId(), $comp.getCount() * _count, player, null);
+			player.getInventory().addItem("Buy Product" + _productId, $comp.getId(), $comp.getCount() * _count, player, null);
 		}
 		
 		if (Config.GAME_POINT_ITEM_ID == -1)

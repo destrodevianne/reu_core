@@ -75,7 +75,7 @@ public class BoardsManager
 		{
 			TopBBSManager.getInstance().cbByPass(command, activeChar);
 		}
-		else if (command.startsWith("_maillist_0_1_0_"))
+		else if (command.startsWith("_maillist"))
 		{
 			MailBBSManager.getInstance().cbByPass(command, activeChar);
 		}

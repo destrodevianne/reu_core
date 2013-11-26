@@ -39,7 +39,6 @@ import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.instancemanager.WalkingManager;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Attackable;
@@ -357,7 +356,7 @@ public class L2CharacterAI extends AbstractAI
 	 * </ul>
 	 */
 	@Override
-	protected void onIntentionMoveTo(L2CharPosition pos)
+	protected void onIntentionMoveTo(Location loc)
 	{
 		if (getIntention() == AI_INTENTION_REST)
 		{
@@ -374,7 +373,7 @@ public class L2CharacterAI extends AbstractAI
 		}
 		
 		// Set the Intention of this AbstractAI to AI_INTENTION_MOVE_TO
-		changeIntention(AI_INTENTION_MOVE_TO, pos, null);
+		changeIntention(AI_INTENTION_MOVE_TO, loc, null);
 		
 		// Stop the actor auto-attack client side by sending Server->Client packet AutoAttackStop (broadcast)
 		clientStopAutoAttack();
@@ -383,7 +382,7 @@ public class L2CharacterAI extends AbstractAI
 		_actor.abortAttack();
 		
 		// Move the actor to Location (x,y,z) server side AND client side by sending Server->Client packet CharMoveToLocation (broadcast)
-		moveTo(pos.x, pos.y, pos.z);
+		moveTo(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
 	/**
@@ -472,7 +471,7 @@ public class L2CharacterAI extends AbstractAI
 		// Stop the actor auto-attack client side by sending Server->Client packet AutoAttackStop (broadcast)
 		clientStopAutoAttack();
 		
-		if ((object instanceof L2ItemInstance) && (((L2ItemInstance) object).getLocation() != ItemLocation.VOID))
+		if ((object instanceof L2ItemInstance) && (((L2ItemInstance) object).getItemLocation() != ItemLocation.VOID))
 		{
 			return;
 		}
@@ -792,7 +791,7 @@ public class L2CharacterAI extends AbstractAI
 	 * </ul>
 	 */
 	@Override
-	protected void onEvtArrivedBlocked(L2CharPosition blocked_at_pos)
+	protected void onEvtArrivedBlocked(Location blocked_at_pos)
 	{
 		// If the Intention was AI_INTENTION_MOVE_TO, set the Intention to AI_INTENTION_ACTIVE
 		if ((getIntention() == AI_INTENTION_MOVE_TO) || (getIntention() == AI_INTENTION_CAST))
@@ -981,7 +980,7 @@ public class L2CharacterAI extends AbstractAI
 			return false; // skill radius -1
 		}
 		
-		if (!_actor.isInsideRadius(worldPosition.getX(), worldPosition.getY(), offset + _actor.getTemplate().getCollisionRadius(), false))
+		if (!_actor.isInsideRadius(worldPosition, offset + _actor.getTemplate().getCollisionRadius(), false, false))
 		{
 			if (_actor.isMovementDisabled())
 			{
@@ -1266,7 +1265,7 @@ public class L2CharacterAI extends AbstractAI
 			// water movement analysis
 			if (_actor instanceof L2Npc)
 			{
-				int npcId = ((L2Npc) _actor).getNpcId();
+				int npcId = ((L2Npc) _actor).getId();
 				
 				switch (npcId)
 				{

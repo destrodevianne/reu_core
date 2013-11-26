@@ -16,30 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.actor.position;
-
-import l2r.gameserver.model.actor.instance.L2PcInstance;
+package l2r.gameserver.model.interfaces;
 
 /**
- * @author Erb
+ * @author UnAfraid
  */
-public class PcPosition extends CharPosition
+public interface IStorable
 {
-	public PcPosition(L2PcInstance activeObject)
-	{
-		super(activeObject);
-	}
-	
-	@Override
-	public L2PcInstance getActiveObject()
-	{
-		return ((L2PcInstance) super.getActiveObject());
-	}
-	
-	@Override
-	protected void badCoords()
-	{
-		getActiveObject().teleToLocation(0, 0, 0, false);
-		getActiveObject().sendMessage("Error with your coords, Please ask a GM for help!");
-	}
+	public boolean storeMe();
 }

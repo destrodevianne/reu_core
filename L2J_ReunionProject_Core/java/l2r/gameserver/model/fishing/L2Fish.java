@@ -89,7 +89,7 @@ public class L2Fish implements Cloneable
 	/**
 	 * @return the fish Item Id.
 	 */
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}

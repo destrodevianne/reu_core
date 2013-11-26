@@ -46,7 +46,7 @@ public class L2QueenAntZone extends L2ZoneType
 	{
 		if (character instanceof L2GrandBossInstance)
 		{
-			if (((L2Npc) character).getNpcId() == 29001)
+			if (((L2Npc) character).getId() == 29001)
 			{
 				character.teleToLocation(-21610, 181594, -5734);
 			}

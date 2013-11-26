@@ -54,8 +54,8 @@ public final class BuyList extends L2GameServerPacket
 		{
 			if ((product.getCount() > 0) || !product.hasLimitedStock())
 			{
-				writeD(product.getItemId());
-				writeD(product.getItemId());
+				writeD(product.getId());
+				writeD(product.getId());
 				writeD(0);
 				writeQ(product.getCount() < 0 ? 0 : product.getCount());
 				writeH(product.getItem().getType2());
@@ -78,7 +78,7 @@ public final class BuyList extends L2GameServerPacket
 				writeH(0x00);
 				writeH(0x00);
 				
-				if ((product.getItemId() >= 3960) && (product.getItemId() <= 4026))
+				if ((product.getId() >= 3960) && (product.getId() <= 4026))
 				{
 					writeQ((long) (product.getPrice() * Config.RATE_SIEGE_GUARDS_PRICE * (1 + _taxRate)));
 				}

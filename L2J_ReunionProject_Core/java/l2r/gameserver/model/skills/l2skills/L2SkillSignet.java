@@ -47,7 +47,7 @@ public final class L2SkillSignet extends L2Skill
 			return;
 		}
 		
-		L2NpcTemplate template = NpcTable.getInstance().getTemplate(getNpcId());
+		L2NpcTemplate template = NpcTable.getInstance().getTemplate(getId());
 		L2EffectPointInstance effectPoint = new L2EffectPointInstance(IdFactory.getInstance().getNextId(), template, caster);
 		effectPoint.setCurrentHp(effectPoint.getMaxHp());
 		effectPoint.setCurrentMp(effectPoint.getMaxMp());

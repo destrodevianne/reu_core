@@ -20,7 +20,7 @@ package l2r.gameserver.ai;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.CtrlEvent;
-import l2r.gameserver.model.L2CharPosition;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2DefenderInstance;
@@ -64,7 +64,7 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onIntentionMoveTo(L2CharPosition destination)
+	protected void onIntentionMoveTo(Location destination)
 	{
 	}
 	
@@ -136,7 +136,7 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onEvtArrivedBlocked(L2CharPosition blocked_at_pos)
+	protected void onEvtArrivedBlocked(Location blocked_at_pos)
 	{
 	}
 	

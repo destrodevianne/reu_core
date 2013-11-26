@@ -219,7 +219,7 @@ public class CursedWeaponsManager
 					}
 					
 					// Do an item check to be sure that the cursed weapon isn't hold by someone
-					int itemId = cw.getItemId();
+					int itemId = cw.getId();
 					ps.setInt(1, itemId);
 					try (ResultSet rset = ps.executeQuery())
 					{
@@ -288,7 +288,7 @@ public class CursedWeaponsManager
 	
 	public void activate(L2PcInstance player, L2ItemInstance item)
 	{
-		CursedWeapon cw = _cursedWeapons.get(item.getItemId());
+		CursedWeapon cw = _cursedWeapons.get(item.getId());
 		if (player.isCursedWeaponEquipped()) // cannot own 2 cursed swords
 		{
 			CursedWeapon cw2 = _cursedWeapons.get(player.getCursedWeaponEquippedId());
@@ -348,13 +348,13 @@ public class CursedWeaponsManager
 			if (cw.isActivated() && (player.getObjectId() == cw.getPlayerId()))
 			{
 				cw.setPlayer(player);
-				cw.setItem(player.getInventory().getItemByItemId(cw.getItemId()));
+				cw.setItem(player.getInventory().getItemByItemId(cw.getId()));
 				cw.giveSkill();
-				player.setCursedWeaponEquippedId(cw.getItemId());
+				player.setCursedWeaponEquippedId(cw.getId());
 				
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_MINUTE_OF_USAGE_TIME_ARE_LEFT_FOR_S1);
 				sm.addString(cw.getName());
-				// sm.addItemName(cw.getItemId());
+				// sm.addItemName(cw.getId());
 				sm.addNumber((int) ((cw.getEndTime() - System.currentTimeMillis()) / 60000));
 				player.sendPacket(sm);
 			}
@@ -367,7 +367,7 @@ public class CursedWeaponsManager
 		{
 			if (cw.isActivated() && (ownerId == cw.getPlayerId()))
 			{
-				return cw.getItemId();
+				return cw.getId();
 			}
 		}
 		return -1;

@@ -131,7 +131,7 @@ public class CharSummonTable
 		}
 		catch (Exception e)
 		{
-			_log.error(getClass().getSimpleName() + ": Failed to store summon [SummonId: " + summon.getNpcId() + "] from Char [CharId: " + summon.getOwner().getObjectId() + "] data", e);
+			_log.error(getClass().getSimpleName() + ": Failed to store summon [SummonId: " + summon.getId() + "] from Char [CharId: " + summon.getOwner().getObjectId() + "] data", e);
 		}
 		
 	}
@@ -164,7 +164,7 @@ public class CharSummonTable
 						return;
 					}
 					
-					summonTemplate = NpcTable.getInstance().getTemplate(skill.getNpcId());
+					summonTemplate = NpcTable.getInstance().getTemplate(skill.getId());
 					if (summonTemplate == null)
 					{
 						_log.warn(getClass().getSimpleName() + ": Summon attemp for nonexisting Skill ID:" + skillId);
@@ -195,7 +195,7 @@ public class CharSummonTable
 					if (summon.getLevel() >= ExperienceTable.getInstance().getMaxPetLevel())
 					{
 						summon.getStat().setExp(ExperienceTable.getInstance().getExpForLevel(ExperienceTable.getInstance().getMaxPetLevel() - 1));
-						_log.warn(getClass().getSimpleName() + ": Summon (" + summon.getName() + ") NpcID: " + summon.getNpcId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
+						_log.warn(getClass().getSimpleName() + ": Summon (" + summon.getName() + ") NpcID: " + summon.getId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
 					}
 					else
 					{
@@ -237,7 +237,7 @@ public class CharSummonTable
 	public void restorePet(L2PcInstance activeChar)
 	{
 		L2ItemInstance item = activeChar.getInventory().getItemByObjectId(_pets.get(activeChar.getObjectId()));
-		final L2PetData petData = PetDataTable.getInstance().getPetDataByItemId(item.getItemId());
+		final L2PetData petData = PetDataTable.getInstance().getPetDataByItemId(item.getId());
 		L2NpcTemplate npcTemplate = NpcTable.getInstance().getTemplate(petData.getNpcId());
 		
 		if (npcTemplate == null)

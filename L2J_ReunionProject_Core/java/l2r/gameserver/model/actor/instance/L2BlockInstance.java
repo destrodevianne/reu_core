@@ -19,7 +19,7 @@
 package l2r.gameserver.model.actor.instance;
 
 import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.instancemanager.HandysBlockCheckerManager.ArenaParticipantsHolder;
+import l2r.gameserver.model.ArenaParticipantsHolder;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.BlockCheckerEngine;
@@ -113,12 +113,6 @@ public class L2BlockInstance extends L2MonsterInstance
 		{
 			return (attacker.getActingPlayer() != null) && (attacker.getActingPlayer().getBlockCheckerArena() > -1);
 		}
-		return true;
-	}
-	
-	@Override
-	public boolean isAttackable()
-	{
 		return true;
 	}
 	

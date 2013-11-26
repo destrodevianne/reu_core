@@ -45,7 +45,7 @@ public class PreparedEntry extends Entry
 		_ingredients = new ArrayList<>(template.getIngredients().size());
 		for (Ingredient ing : template.getIngredients())
 		{
-			if (ing.getItemId() == ADENA_ID)
+			if (ing.getId() == ADENA_ID)
 			{
 				// Tax ingredients added only if taxes enabled
 				if (ing.isTaxIngredient())

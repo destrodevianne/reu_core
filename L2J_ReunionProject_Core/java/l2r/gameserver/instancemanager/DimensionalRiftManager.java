@@ -192,15 +192,15 @@ public class DimensionalRiftManager
 												DimensionalRiftRoom riftRoom = _rooms.get(type).get(roomId);
 												x = riftRoom.getRandomX();
 												y = riftRoom.getRandomY();
-												z = riftRoom.getTeleportCoords()[2];
+												z = riftRoom.getTeleportCoorinates()[2];
 												
 												if ((template != null) && _rooms.containsKey(type) && _rooms.get(type).containsKey(roomId))
 												{
 													spawnDat = new L2Spawn(template);
 													spawnDat.setAmount(1);
-													spawnDat.setLocx(x);
-													spawnDat.setLocy(y);
-													spawnDat.setLocz(z);
+													spawnDat.setX(x);
+													spawnDat.setY(y);
+													spawnDat.setZ(z);
 													spawnDat.setHeading(-1);
 													spawnDat.setRespawnDelay(delay);
 													SpawnTable.getInstance().addNewSpawn(spawnDat, false);
@@ -266,7 +266,7 @@ public class DimensionalRiftManager
 	
 	public void teleportToWaitingRoom(L2PcInstance player)
 	{
-		int[] coords = getRoom((byte) 0, (byte) 0).getTeleportCoords();
+		int[] coords = getRoom((byte) 0, (byte) 0).getTeleportCoorinates();
 		player.teleToLocation(coords[0], coords[1], coords[2]);
 	}
 	
@@ -474,7 +474,7 @@ public class DimensionalRiftManager
 			return Rnd.get(_yMin, _yMax);
 		}
 		
-		public int[] getTeleportCoords()
+		public int[] getTeleportCoorinates()
 		{
 			return _teleportCoords;
 		}

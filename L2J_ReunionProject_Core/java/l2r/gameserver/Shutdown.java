@@ -20,6 +20,7 @@ package l2r.gameserver;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
+import l2r.gameserver.datatables.BotReportTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.OfflineTradersTable;
 import l2r.gameserver.instancemanager.CHSiegeManager;
@@ -577,7 +578,7 @@ public class Shutdown extends Thread
 		_log.info("Quest Manager: Data saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		
 		// Save all global variables data
-		GlobalVariablesManager.getInstance().saveVars();
+		GlobalVariablesManager.getInstance().storeMe();
 		_log.info("Global Variables Manager: Variables saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		
 		ReunionEvents.serverShutDown();
@@ -589,6 +590,13 @@ public class Shutdown extends Thread
 			_log.info("Items On Ground Manager: Data saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 			ItemsOnGroundManager.getInstance().cleanUp();
 			_log.info("Items On Ground Manager: Cleaned up(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
+		}
+		
+		// Save bot reports to database
+		if (Config.BOTREPORT_ENABLE)
+		{
+			BotReportTable.getInstance().saveReportedCharData();
+			_log.info("Bot Report Table: Sucessfully saved reports to database!");
 		}
 		
 		try

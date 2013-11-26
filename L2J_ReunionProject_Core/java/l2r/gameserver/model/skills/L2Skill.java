@@ -51,6 +51,7 @@ import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.interfaces.IChanceSkillTrigger;
+import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.skills.funcs.Func;
 import l2r.gameserver.model.skills.funcs.FuncTemplate;
 import l2r.gameserver.model.skills.targets.L2TargetType;
@@ -67,7 +68,7 @@ import org.slf4j.LoggerFactory;
 
 import gr.reunion.interf.ReunionEvents;
 
-public abstract class L2Skill implements IChanceSkillTrigger
+public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 {
 	protected static final Logger _log = LoggerFactory.getLogger(L2Skill.class);
 	
@@ -786,8 +787,10 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	}
 	
 	/**
-	 * @return Returns the id.
+	 * Gets the skill ID.
+	 * @return the skill ID
 	 */
+	@Override
 	public final int getId()
 	{
 		return _id;

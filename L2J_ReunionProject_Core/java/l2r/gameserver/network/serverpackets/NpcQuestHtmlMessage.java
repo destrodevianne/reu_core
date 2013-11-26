@@ -151,7 +151,13 @@ public final class NpcQuestHtmlMessage extends L2GameServerPacket
 	
 	public void setHtml(String text)
 	{
-		if (!text.contains("<html>"))
+		if (text.length() > 17200)
+		{
+			_log.warn("Html is too long! this will crash the client!", new Throwable());
+			text = "<html><body>Html is too long...<br>Report this to Reunion team!</body></html>";
+		}
+		
+		if (!text.contains("<html"))
 		{
 			text = "<html><body>" + text + "</body></html>";
 		}

@@ -30,7 +30,7 @@ import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.HandysBlockCheckerManager;
-import l2r.gameserver.instancemanager.HandysBlockCheckerManager.ArenaParticipantsHolder;
+import l2r.gameserver.model.ArenaParticipantsHolder;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2BlockInstance;
@@ -60,7 +60,7 @@ public final class BlockCheckerEngine
 {
 	protected static final Logger _log = LoggerFactory.getLogger(BlockCheckerEngine.class);
 	// The object which holds all basic members info
-	protected HandysBlockCheckerManager.ArenaParticipantsHolder _holder;
+	protected ArenaParticipantsHolder _holder;
 	// Maps to hold player of each team and his points
 	protected FastMap<L2PcInstance, Integer> _redTeamPoints = new FastMap<>();
 	protected FastMap<L2PcInstance, Integer> _blueTeamPoints = new FastMap<>();
@@ -129,7 +129,7 @@ public final class BlockCheckerEngine
 	// Preserve from exploit reward by logging out
 	protected boolean _abnormalEnd = false;
 	
-	public BlockCheckerEngine(HandysBlockCheckerManager.ArenaParticipantsHolder holder, int arena)
+	public BlockCheckerEngine(ArenaParticipantsHolder holder, int arena)
 	{
 		_holder = holder;
 		if ((arena > -1) && (arena < 4))
@@ -485,9 +485,9 @@ public final class BlockCheckerEngine
 				for (int i = 0; i < _numOfBoxes; i++)
 				{
 					L2Spawn spawn = new L2Spawn(template);
-					spawn.setLocx(_arenaCoordinates[_arena][4] + Rnd.get(-400, 400));
-					spawn.setLocy(_arenaCoordinates[_arena][5] + Rnd.get(-400, 400));
-					spawn.setLocz(_zCoord);
+					spawn.setX(_arenaCoordinates[_arena][4] + Rnd.get(-400, 400));
+					spawn.setY(_arenaCoordinates[_arena][5] + Rnd.get(-400, 400));
+					spawn.setZ(_zCoord);
 					spawn.setAmount(1);
 					spawn.setHeading(1);
 					spawn.setRespawnDelay(1);
@@ -521,9 +521,9 @@ public final class BlockCheckerEngine
 				try
 				{
 					final L2Spawn girlSpawn = new L2Spawn(girl);
-					girlSpawn.setLocx(_arenaCoordinates[_arena][4] + Rnd.get(-400, 400));
-					girlSpawn.setLocy(_arenaCoordinates[_arena][5] + Rnd.get(-400, 400));
-					girlSpawn.setLocz(_zCoord);
+					girlSpawn.setX(_arenaCoordinates[_arena][4] + Rnd.get(-400, 400));
+					girlSpawn.setY(_arenaCoordinates[_arena][5] + Rnd.get(-400, 400));
+					girlSpawn.setZ(_zCoord);
 					girlSpawn.setAmount(1);
 					girlSpawn.setHeading(1);
 					girlSpawn.setRespawnDelay(1);

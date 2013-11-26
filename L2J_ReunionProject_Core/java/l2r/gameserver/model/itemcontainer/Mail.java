@@ -75,7 +75,7 @@ public class Mail extends ItemContainer
 				continue;
 			}
 			
-			item.setLocation(getBaseLocation(), messageId);
+			item.setItemLocation(getBaseLocation(), messageId);
 		}
 		
 		updateDatabase();
@@ -91,7 +91,7 @@ public class Mail extends ItemContainer
 			}
 			if (wh == null)
 			{
-				item.setLocation(ItemLocation.WAREHOUSE);
+				item.setItemLocation(ItemLocation.WAREHOUSE);
 			}
 			else
 			{
@@ -104,7 +104,7 @@ public class Mail extends ItemContainer
 	protected void addItem(L2ItemInstance item)
 	{
 		super.addItem(item);
-		item.setLocation(getBaseLocation(), _messageId);
+		item.setItemLocation(getBaseLocation(), _messageId);
 	}
 	
 	/*
@@ -145,7 +145,7 @@ public class Mail extends ItemContainer
 					L2World.getInstance().storeObject(item);
 					
 					// If stackable item is found just add to current quantity
-					if (item.isStackable() && (getItemByItemId(item.getItemId()) != null))
+					if (item.isStackable() && (getItemByItemId(item.getId()) != null))
 					{
 						addItem("Restore", item, null, null);
 					}

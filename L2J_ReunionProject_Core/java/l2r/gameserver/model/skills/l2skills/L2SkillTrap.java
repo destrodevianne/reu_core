@@ -60,7 +60,7 @@ public class L2SkillTrap extends L2SkillSummon
 			return;
 		}
 		
-		if (getNpcId() == 0)
+		if (getId() == 0)
 		{
 			return;
 		}
@@ -95,7 +95,7 @@ public class L2SkillTrap extends L2SkillSummon
 			return;
 		}
 		
-		L2NpcTemplate TrapTemplate = NpcTable.getInstance().getTemplate(getNpcId());
+		L2NpcTemplate TrapTemplate = NpcTable.getInstance().getTemplate(getId());
 		trap = new L2TrapInstance(IdFactory.getInstance().getNextId(), TrapTemplate, activeChar, getTotalLifeTime(), skill);
 		trap.setCurrentHp(trap.getMaxHp());
 		trap.setCurrentMp(trap.getMaxMp());

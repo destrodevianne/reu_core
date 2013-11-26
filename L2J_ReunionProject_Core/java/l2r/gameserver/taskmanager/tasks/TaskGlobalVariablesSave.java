@@ -18,11 +18,11 @@
  */
 package l2r.gameserver.taskmanager.tasks;
 
-import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.instancemanager.GlobalVariablesManager;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
+import l2r.gameserver.taskmanager.TaskTypes;
 
 /**
  * @author Gigiikun
@@ -40,13 +40,13 @@ public class TaskGlobalVariablesSave extends Task
 	@Override
 	public void onTimeElapsed(ExecutedTask task)
 	{
-		GlobalVariablesManager.getInstance().saveVars();
+		GlobalVariablesManager.getInstance().storeMe();
 	}
 	
 	@Override
 	public void initializate()
 	{
 		super.initializate();
-		TaskManager.addUniqueTask(NAME, TaskType.TYPE_FIXED_SHEDULED, "500000", "1800000", "");
+		TaskManager.addUniqueTask(NAME, TaskTypes.TYPE_FIXED_SHEDULED, "500000", "1800000", "");
 	}
 }

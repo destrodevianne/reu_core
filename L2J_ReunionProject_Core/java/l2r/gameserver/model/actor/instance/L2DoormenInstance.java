@@ -102,11 +102,11 @@ public class L2DoormenInstance extends L2NpcInstance
 		
 		if (!isOwnerClan(player))
 		{
-			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getNpcId() + "-no.htm");
+			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + "-no.htm");
 		}
 		else
 		{
-			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getNpcId() + ".htm");
+			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + ".htm");
 		}
 		
 		html.replace("%objectId%", String.valueOf(getObjectId()));
@@ -140,7 +140,7 @@ public class L2DoormenInstance extends L2NpcInstance
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		
 		NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getNpcId() + "-busy.htm");
+		html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + "-busy.htm");
 		player.sendPacket(html);
 	}
 	
@@ -152,7 +152,7 @@ public class L2DoormenInstance extends L2NpcInstance
 		{
 			if (!player.isAlikeDead())
 			{
-				player.teleToLocation(list.getLocX(), list.getLocY(), list.getLocZ(), false);
+				player.teleToLocation(list.getX(), list.getY(), list.getZ(), false);
 			}
 		}
 		else

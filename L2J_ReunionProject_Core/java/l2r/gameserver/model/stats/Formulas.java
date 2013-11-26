@@ -20,6 +20,7 @@ package l2r.gameserver.model.stats;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
@@ -34,6 +35,7 @@ import l2r.gameserver.instancemanager.SiegeManager;
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.L2SiegeClan;
+import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2CubicInstance;
@@ -78,15 +80,12 @@ import l2r.gameserver.model.zone.type.L2CastleZone;
 import l2r.gameserver.model.zone.type.L2ClanHallZone;
 import l2r.gameserver.model.zone.type.L2FortZone;
 import l2r.gameserver.model.zone.type.L2MotherTreeZone;
+import l2r.gameserver.network.Debug;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import l2r.util.StringUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gr.reunion.balanceEngine.BalanceHandler;
 import gr.reunion.configsEngine.BalanceConfigs;
 
@@ -95,7 +94,7 @@ import gr.reunion.configsEngine.BalanceConfigs;
  */
 public final class Formulas
 {
-	private static final Logger _log = LoggerFactory.getLogger(Formulas.class);
+	private static final Logger _log = Logger.getLogger(Formulas.class.getName());
 	
 	/** Regen Task period. */
 	private static final int HP_REGENERATE_PERIOD = 3000; // 3 secs
@@ -581,13 +580,13 @@ public final class Formulas
 			return 0;
 		}
 		
-		Siege siege = SiegeManager.getInstance().getSiege(activeChar.getPosition().getX(), activeChar.getPosition().getY(), activeChar.getPosition().getZ());
+		Siege siege = SiegeManager.getInstance().getSiege(activeChar.getX(), activeChar.getY(), activeChar.getZ());
 		if ((siege == null) || !siege.getIsInProgress())
 		{
 			return 0;
 		}
 		
-		L2SiegeClan siegeClan = siege.getAttackerClan(activeChar.getClan().getClanId());
+		L2SiegeClan siegeClan = siege.getAttackerClan(activeChar.getClan().getId());
 		if ((siegeClan == null) || siegeClan.getFlag().isEmpty() || !Util.checkIfInRange(200, activeChar, siegeClan.getFlag().get(0), true))
 		{
 			return 0;
@@ -1774,42 +1773,30 @@ public final class Formulas
 		double statMod = calcSkillStatMod(skill, target);
 		double rate = (baseRate / statMod);
 		
-		// Resists.
-		double vuln = calcSkillVulnerability(attacker, target, skill);
-		double prof = calcSkillProficiency(skill, attacker, target);
-		double resMod = 1 + ((vuln + prof) / 100);
-		
-		// Check ResMod Limits.
-		rate *= Math.min(Math.max(resMod, 0.1), 1.9);
-		
 		// Lvl Bonus Modifier.
 		double lvlBonusMod = calcLvlBonusMod(attacker, target, skill);
 		rate *= lvlBonusMod;
 		
 		// Element Modifier.
-		double elementMod = calcElementMod(attacker, target, skill);
+		double elementMod = calcAttributeBonus(attacker, target, skill);
 		rate *= elementMod;
 		
 		// Add Matk/Mdef Bonus (TODO: Pending)
+		double finalRate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
+		if (attacker.isDebug())
+		{
+			final StatsSet set = new StatsSet();
+			set.set("statMod", statMod);
+			set.set("elementMod", elementMod);
+			set.set("lvlBonusMod", lvlBonusMod);
+			set.set("rate", rate);
+			set.set("finalRate", finalRate);
+			Debug.sendSkillDebug(attacker, target, skill, set);
+		}
 		
 		// Check the Rate Limits.
-		rate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 		
-		if (attacker.isDebug() || Config.DEVELOPER)
-		{
-			final StringBuilder stat = new StringBuilder(100);
-			StringUtil.append(stat, skill.getName(), " type:", skill.getSkillType().toString(), " power:", String.valueOf(baseRate), " stat:", String.format("%1.2f", statMod), " res:", String.format("%1.2f", resMod), "(", String.format("%1.2f", prof), "/", String.format("%1.2f", vuln), ") elem:", String.format("%1.2f", elementMod), " lvl:", String.format("%1.2f", lvlBonusMod), " total:", String.valueOf(rate));
-			final String result = stat.toString();
-			if (attacker.isDebug())
-			{
-				attacker.sendDebugMessage(result);
-			}
-			if (Config.DEVELOPER)
-			{
-				_log.info(result);
-			}
-		}
-		return (Rnd.get(100) < rate);
+		return (Rnd.get(100) < finalRate);
 	}
 	
 	public static boolean calcCubicSkillSuccess(L2CubicInstance attacker, L2Character target, L2Skill skill, byte shld)
@@ -1862,23 +1849,22 @@ public final class Formulas
 		// Add Matk/Mdef Bonus (TODO: Pending)
 		
 		// Check the Rate Limits.
-		rate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
+		double finalRate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 		
-		if (attacker.getOwner().isDebug() || Config.DEVELOPER)
+		if (attacker.getOwner().isDebug())
 		{
-			final StringBuilder stat = new StringBuilder(100);
-			StringUtil.append(stat, skill.getName(), " type:", skill.getSkillType().toString(), " power:", String.valueOf(baseRate), " stat:", String.format("%1.2f", statMod), " res:", String.format("%1.2f", resMod), "(", String.format("%1.2f", prof), "/", String.format("%1.2f", vuln), ") elem:", String.format("%1.2f", elementMod), " lvl:", String.format("%1.2f", lvlBonusMod), " total:", String.valueOf(rate));
-			final String result = stat.toString();
-			if (attacker.getOwner().isDebug())
-			{
-				attacker.getOwner().sendDebugMessage(result);
-			}
-			if (Config.DEVELOPER)
-			{
-				_log.info(result);
-			}
+			final StatsSet set = new StatsSet();
+			set.set("baseMod", baseRate);
+			set.set("resMod", resMod);
+			set.set("statMod", statMod);
+			set.set("elementMod", elementMod);
+			set.set("lvlBonusMod", lvlBonusMod);
+			set.set("rate", rate);
+			set.set("finalRate", finalRate);
+			Debug.sendSkillDebug(attacker.getOwner(), target, skill, set);
 		}
-		return (Rnd.get(100) < rate);
+		
+		return (Rnd.get(100) < finalRate);
 	}
 	
 	public static boolean calcMagicSuccess(L2Character attacker, L2Character target, L2Skill skill)
@@ -1888,36 +1874,40 @@ public final class Formulas
 			return true;
 		}
 		
-		int rate = 0;
-		double resModifier = 0;
-		double failureModifier = 0;
-		int mLevel = attacker.getLevel();// Gracia Epilogue + (skill.getMagicLevel() > 0 && skill.getMagicLevel() <= attacker.getLevel() ? skill.getMagicLevel() : attacker.getLevel());
-		int lvlDiff = target.getLevel() - mLevel;
-		double lvlModifier = Math.pow(1.3, lvlDiff);
-		if (lvlDiff > -4)
+		// FIXME: Fix this LevelMod Formula.
+		int lvlDifference = (target.getLevel() - (skill.getMagicLevel() > 0 ? skill.getMagicLevel() : attacker.getLevel()));
+		double lvlModifier = Math.pow(1.3, lvlDifference);
+		float targetModifier = 1;
+		if (target.isL2Attackable() && !target.isRaid() && !target.isRaidMinion() && (target.getLevel() >= Config.MIN_NPC_LVL_MAGIC_PENALTY) && (attacker.getActingPlayer() != null) && ((target.getLevel() - attacker.getActingPlayer().getLevel()) >= 3))
 		{
-			lvlDiff = Math.max(1, lvlDiff);
-			// general magic resist
-			resModifier = target.calcStat(Stats.MAGIC_SUCCESS_RES, 1, null, skill);
-			failureModifier = attacker.calcStat(Stats.MAGIC_FAILURE_RATE, 1, target, skill);
-			rate = (int) ((float) ((float) ((lvlModifier * 100) + 500) * resModifier * failureModifier)); // base failure chance 5% on level diff >-4
+			int lvlDiff = target.getLevel() - attacker.getActingPlayer().getLevel() - 2;
+			if (lvlDiff >= Config.NPC_SKILL_CHANCE_PENALTY.size())
+			{
+				targetModifier = Config.NPC_SKILL_CHANCE_PENALTY.get(Config.NPC_SKILL_CHANCE_PENALTY.size() - 1);
+			}
+			else
+			{
+				targetModifier = Config.NPC_SKILL_CHANCE_PENALTY.get(lvlDiff);
+			}
+		}
+		// general magic resist
+		final double resModifier = target.calcStat(Stats.MAGIC_SUCCESS_RES, 1, null, skill);
+		final double failureModifier = attacker.calcStat(Stats.MAGIC_FAILURE_RATE, 1, target, skill);
+		int rate = 100 - Math.round((float) (lvlModifier * targetModifier * resModifier * failureModifier));
+		
+		if (attacker.isDebug())
+		{
+			final StatsSet set = new StatsSet();
+			set.set("lvlDifference", lvlDifference);
+			set.set("lvlModifier", lvlModifier);
+			set.set("resModifier", resModifier);
+			set.set("failureModifier", failureModifier);
+			set.set("targetModifier", targetModifier);
+			set.set("rate", rate);
+			Debug.sendSkillDebug(attacker, target, skill, set);
 		}
 		
-		if (attacker.isDebug() || Config.DEVELOPER)
-		{
-			final StringBuilder stat = new StringBuilder(100);
-			StringUtil.append(stat, skill.getName(), " lvlDiff:", String.valueOf(lvlDiff), " lvlMod:", String.format("%1.2f", lvlModifier), " res:", String.format("%1.2f", resModifier), " fail:", String.format("%1.2f", failureModifier), " total:", String.valueOf(rate));
-			final String result = stat.toString();
-			if (attacker.isDebug())
-			{
-				attacker.sendDebugMessage(result);
-			}
-			if (Config.DEVELOPER)
-			{
-				_log.info(result);
-			}
-		}
-		return (Rnd.get(10000) > rate);
+		return (Rnd.get(100) < rate);
 	}
 	
 	public static double calcManaDam(L2Character attacker, L2Character target, L2Skill skill, boolean ss, boolean bss)
@@ -2297,29 +2287,27 @@ public final class Formulas
 	
 	public static boolean calcBlowSuccess(L2Character activeChar, L2Character target, L2Skill skill)
 	{
-		if (((skill.getCondition() & L2Skill.COND_BEHIND) != 0) && !activeChar.isBehindTarget())
-		{
-			return false;
-		}
-		
+		double dexMod = BaseStats.DEX.calcBonus(activeChar);
 		// Apply DEX Mod.
-		double blowChance = skill.getBlowChance() * BaseStats.DEX.calcBonus(activeChar);
-		
+		double blowChance = skill.getBlowChance();
 		// Apply Position Bonus (TODO: values are unconfirmed, possibly custom, remove or update when confirmed).
-		if (activeChar.isInFrontOfTarget())
+		double sideMod = (activeChar.isInFrontOfTarget()) ? 1 : (activeChar.isBehindTarget()) ? 2 : 1.5;
+		// Apply all mods.
+		double baseRate = blowChance * dexMod * sideMod;
+		// Apply blow rates
+		double rate = activeChar.calcStat(Stats.BLOW_RATE, baseRate, target, null);
+		// Debug
+		if (activeChar.isDebug())
 		{
-			blowChance *= 1;
+			final StatsSet set = new StatsSet();
+			set.set("dexMod", dexMod);
+			set.set("blowChance", blowChance);
+			set.set("sideMod", sideMod);
+			set.set("baseRate", baseRate);
+			set.set("rate", rate);
+			Debug.sendSkillDebug(activeChar, target, skill, set);
 		}
-		else if (activeChar.isBehindTarget())
-		{
-			blowChance *= 2;
-		}
-		else
-		{
-			blowChance *= 1.5;
-		}
-		
-		return Rnd.get(100) < activeChar.calcStat(Stats.BLOW_RATE, blowChance, target, null);
+		return Rnd.get(100) < rate;
 	}
 	
 	public static List<L2Effect> calcCancelStealEffects(L2Character activeChar, L2Character target, L2Skill skill, double power)
@@ -2332,19 +2320,14 @@ public final class Formulas
 		double resMod = 1 + (((vuln + prof) * -1) / 100);
 		double rate = power / resMod;
 		
-		if (activeChar.isDebug() || Config.DEVELOPER)
+		if (activeChar.isDebug())
 		{
-			final StringBuilder stat = new StringBuilder(100);
-			StringUtil.append(stat, skill.getName(), " Base Rate:", String.valueOf((int) power), " Magiclvl:", String.valueOf(cancelMagicLvl), " resMod:", String.format("%1.2f", resMod), "(", String.format("%1.2f", prof), "/", String.format("%1.2f", vuln), ") Rate:", String.valueOf(rate));
-			final String result = stat.toString();
-			if (activeChar.isDebug())
-			{
-				activeChar.sendDebugMessage(result);
-			}
-			if (Config.DEVELOPER)
-			{
-				_log.info(result);
-			}
+			final StatsSet set = new StatsSet();
+			set.set("baseMod", rate);
+			set.set("magicLevel", cancelMagicLvl);
+			set.set("resMod", resMod);
+			set.set("rate", rate);
+			Debug.sendSkillDebug(activeChar, target, skill, set);
 		}
 		
 		// Cancel for Abnormals.
@@ -2479,6 +2462,10 @@ public final class Formulas
 	public static int calculateKarmaLost(L2PcInstance player, long exp)
 	{
 		double karmaLooseMul = KarmaData.getInstance().getMultiplier(player.getLevel());
+		if (exp > 0) // Received exp
+		{
+			exp /= Config.RATE_KARMA_LOST;
+		}
 		return (int) ((Math.abs(exp) / karmaLooseMul) / 15);
 	}
 	

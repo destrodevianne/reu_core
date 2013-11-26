@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.ai;
 
-import l2r.gameserver.model.L2CharPosition;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2BoatInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.VehicleDeparture;
@@ -52,7 +52,7 @@ public class L2BoatAI extends L2VehicleAI
 	}
 	
 	@Override
-	protected void clientStopMoving(L2CharPosition pos)
+	protected void clientStopMoving(Location pos)
 	{
 		if (_actor.isMoving())
 		{

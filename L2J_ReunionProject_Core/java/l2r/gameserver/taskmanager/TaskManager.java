@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.taskmanager;
 
-import static l2r.gameserver.enums.TaskType.TYPE_NONE;
-import static l2r.gameserver.enums.TaskType.TYPE_SHEDULED;
-import static l2r.gameserver.enums.TaskType.TYPE_TIME;
+import static l2r.gameserver.taskmanager.TaskTypes.TYPE_NONE;
+import static l2r.gameserver.taskmanager.TaskTypes.TYPE_SHEDULED;
+import static l2r.gameserver.taskmanager.TaskTypes.TYPE_TIME;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +35,6 @@ import java.util.concurrent.ScheduledFuture;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.taskmanager.tasks.SoIStageUpdater;
 import l2r.gameserver.taskmanager.tasks.TaskAdvent;
 import l2r.gameserver.taskmanager.tasks.TaskBirthday;
@@ -87,11 +86,11 @@ public final class TaskManager
 		int id;
 		long lastActivation;
 		Task task;
-		TaskType type;
+		TaskTypes type;
 		String[] params;
 		ScheduledFuture<?> scheduled;
 		
-		public ExecutedTask(Task ptask, TaskType ptype, ResultSet rset) throws SQLException
+		public ExecutedTask(Task ptask, TaskTypes ptype, ResultSet rset) throws SQLException
 		{
 			task = ptask;
 			type = ptype;
@@ -153,7 +152,7 @@ public final class TaskManager
 			return task;
 		}
 		
-		public TaskType getType()
+		public TaskTypes getType()
 		{
 			return type;
 		}
@@ -230,7 +229,7 @@ public final class TaskManager
 					continue;
 				}
 				
-				final TaskType type = TaskType.valueOf(rset.getString("type"));
+				final TaskTypes type = TaskTypes.valueOf(rset.getString("type"));
 				if (type != TYPE_NONE)
 				{
 					ExecutedTask current = new ExecutedTask(task, type, rset);
@@ -250,7 +249,7 @@ public final class TaskManager
 	private boolean launchTask(ExecutedTask task)
 	{
 		final ThreadPoolManager scheduler = ThreadPoolManager.getInstance();
-		final TaskType type = task.getType();
+		final TaskTypes type = task.getType();
 		long delay, interval;
 		switch (type)
 		{
@@ -330,12 +329,12 @@ public final class TaskManager
 		return false;
 	}
 	
-	public static boolean addUniqueTask(String task, TaskType type, String param1, String param2, String param3)
+	public static boolean addUniqueTask(String task, TaskTypes type, String param1, String param2, String param3)
 	{
 		return addUniqueTask(task, type, param1, param2, param3, 0);
 	}
 	
-	public static boolean addUniqueTask(String task, TaskType type, String param1, String param2, String param3, long lastActivation)
+	public static boolean addUniqueTask(String task, TaskTypes type, String param1, String param2, String param3, long lastActivation)
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps1 = con.prepareStatement(SQL_STATEMENTS[2]))
@@ -366,12 +365,12 @@ public final class TaskManager
 		return false;
 	}
 	
-	public static boolean addTask(String task, TaskType type, String param1, String param2, String param3)
+	public static boolean addTask(String task, TaskTypes type, String param1, String param2, String param3)
 	{
 		return addTask(task, type, param1, param2, param3, 0);
 	}
 	
-	public static boolean addTask(String task, TaskType type, String param1, String param2, String param3, long lastActivation)
+	public static boolean addTask(String task, TaskTypes type, String param1, String param2, String param3, long lastActivation)
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement(SQL_STATEMENTS[3]))

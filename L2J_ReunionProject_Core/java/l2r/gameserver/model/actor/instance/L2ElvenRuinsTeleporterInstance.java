@@ -414,9 +414,9 @@ public class L2ElvenRuinsTeleporterInstance extends L2Npc
 				L2Spawn spawn = new L2Spawn(template);
 				spawn.setInstanceId(0);
 				spawn.setHeading(1);
-				spawn.setLocx(x);
-				spawn.setLocy(y);
-				spawn.setLocz(z);
+				spawn.setX(x);
+				spawn.setY(y);
+				spawn.setZ(z);
 				spawn.stopRespawn();
 				result = spawn.spawnOne(true);
 				

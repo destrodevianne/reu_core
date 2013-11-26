@@ -104,7 +104,7 @@ public class CastleManager implements InstanceListManager
 	{
 		for (Castle temp : getCastles())
 		{
-			if (temp.getOwnerId() == clan.getClanId())
+			if (temp.getOwnerId() == clan.getId())
 			{
 				return temp;
 			}

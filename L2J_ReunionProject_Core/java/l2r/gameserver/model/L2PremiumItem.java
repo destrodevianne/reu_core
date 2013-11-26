@@ -39,7 +39,7 @@ public class L2PremiumItem
 		_count = newcount;
 	}
 	
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}

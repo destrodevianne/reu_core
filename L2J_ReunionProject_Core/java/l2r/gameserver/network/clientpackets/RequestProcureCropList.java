@@ -122,7 +122,7 @@ public class RequestProcureCropList extends L2GameClientPacket
 			{
 				slots += i.getCount();
 			}
-			else if (player.getInventory().getItemByItemId(i.getItemId()) == null)
+			else if (player.getInventory().getItemByItemId(i.getId()) == null)
 			{
 				slots++;
 			}
@@ -160,7 +160,7 @@ public class RequestProcureCropList extends L2GameClientPacket
 			if (rewardItemCount < 1)
 			{
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.FAILED_IN_TRADING_S2_OF_CROP_S1);
-				sm.addItemName(i.getItemId());
+				sm.addItemName(i.getId());
 				sm.addItemNumber(i.getCount());
 				player.sendPacket(sm);
 				continue;
@@ -169,7 +169,7 @@ public class RequestProcureCropList extends L2GameClientPacket
 			if (player.getAdena() < fee)
 			{
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.FAILED_IN_TRADING_S2_OF_CROP_S1);
-				sm.addItemName(i.getItemId());
+				sm.addItemName(i.getId());
 				sm.addItemNumber(i.getCount());
 				player.sendPacket(sm);
 				sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_NOT_ENOUGH_ADENA);
@@ -226,7 +226,7 @@ public class RequestProcureCropList extends L2GameClientPacket
 			return _objectId;
 		}
 		
-		public int getItemId()
+		public int getId()
 		{
 			return _itemId;
 		}

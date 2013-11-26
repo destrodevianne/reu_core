@@ -30,9 +30,9 @@ import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.BypassHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.handler.IBypassHandler;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Hero;
@@ -358,7 +358,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 		{
 			L2Npc temp = (L2Npc) obj;
 			temp.setTarget(activeChar);
-			temp.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(activeChar.getX(), activeChar.getY(), activeChar.getZ(), 0));
+			temp.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(activeChar.getX(), activeChar.getY(), activeChar.getZ(), 0));
 		}
 	}
 	

@@ -60,7 +60,7 @@ public class L2DropCategory
 				// If the drop exists is replaced
 				for (L2DropData d : _drops)
 				{
-					if (d.getItemId() == drop.getItemId())
+					if (d.getId() == drop.getId())
 					{
 						d.setMinDrop(drop.getMinDrop());
 						d.setMaxDrop(drop.getMaxDrop());
@@ -143,7 +143,7 @@ public class L2DropCategory
 		int subCatChance = 0;
 		for (L2DropData drop : getAllDrops())
 		{
-			if ((drop.getItemId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getItemId()))
+			if ((drop.getId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId()))
 			{
 				drops.add(drop);
 				subCatChance += drop.getChance();

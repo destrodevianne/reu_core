@@ -26,9 +26,9 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2AttackableAI;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.knownlist.GuardKnownList;
@@ -111,11 +111,11 @@ public class L2GuardInstance extends L2Attackable
 	@Override
 	public void returnHome()
 	{
-		if (!isInsideRadius(getSpawn().getLocx(), getSpawn().getLocy(), 150, false))
+		if (!isInsideRadius(getSpawn(), 150, false, false))
 		{
 			clearAggroList();
 			
-			getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz(), 0));
+			getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(getSpawn().getX(), getSpawn().getY(), getSpawn().getZ(), 0));
 		}
 	}
 	

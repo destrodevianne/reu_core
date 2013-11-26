@@ -370,7 +370,7 @@ public abstract class L2Script extends Quest
 		List<L2JListener> removeList = new ArrayList<>();
 		for (L2JListener listener : _listeners)
 		{
-			if ((listener instanceof SkillUseListener) && (((SkillUseListener) listener).getNpcId() == npcId))
+			if ((listener instanceof SkillUseListener) && (((SkillUseListener) listener).getId() == npcId))
 			{
 				removeList.add(listener);
 			}

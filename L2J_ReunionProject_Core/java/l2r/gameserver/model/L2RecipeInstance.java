@@ -43,7 +43,7 @@ public class L2RecipeInstance
 	/**
 	 * @return the Identifier of the L2RecipeInstance Item needed.
 	 */
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}

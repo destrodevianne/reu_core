@@ -145,7 +145,7 @@ public class L2SkillSummon extends L2Skill
 		
 		L2PcInstance activeChar = caster.getActingPlayer();
 		
-		if (getNpcId() == 0)
+		if (getId() == 0)
 		{
 			activeChar.sendMessage("Summon skill " + getId() + " not described yet");
 			return;
@@ -189,12 +189,12 @@ public class L2SkillSummon extends L2Skill
 						player.getCubics().clear();
 					}
 					// TODO: Should remove first cubic summoned and replace with new cubic
-					if (player.getCubics().containsKey(getNpcId()))
+					if (player.getCubics().containsKey(getId()))
 					{
-						L2CubicInstance cubic = player.getCubic(getNpcId());
+						L2CubicInstance cubic = player.getCubic(getId());
 						cubic.stopAction();
 						cubic.cancelDisappear();
-						player.delCubic(getNpcId());
+						player.delCubic(getId());
 					}
 					if (player.getCubics().size() > mastery)
 					{
@@ -202,11 +202,11 @@ public class L2SkillSummon extends L2Skill
 					}
 					if (player == activeChar)
 					{
-						player.addCubic(getNpcId(), _cubicSkillLevel, _cubicPower, _cubicDelay, _cubicSkillChance, _cubicMaxCount, _cubicDuration, false);
+						player.addCubic(getId(), _cubicSkillLevel, _cubicPower, _cubicDelay, _cubicSkillChance, _cubicMaxCount, _cubicDuration, false);
 					}
 					else
 					{
-						player.addCubic(getNpcId(), _cubicSkillLevel, _cubicPower, _cubicDelay, _cubicSkillChance, _cubicMaxCount, _cubicDuration, true);
+						player.addCubic(getId(), _cubicSkillLevel, _cubicPower, _cubicDelay, _cubicSkillChance, _cubicMaxCount, _cubicDuration, true);
 					}
 					player.broadcastUserInfo();
 				}
@@ -219,12 +219,12 @@ public class L2SkillSummon extends L2Skill
 				{
 					mastery = 0;
 				}
-				if (activeChar.getCubics().containsKey(getNpcId()))
+				if (activeChar.getCubics().containsKey(getId()))
 				{
-					L2CubicInstance cubic = activeChar.getCubic(getNpcId());
+					L2CubicInstance cubic = activeChar.getCubic(getId());
 					cubic.stopAction();
 					cubic.cancelDisappear();
-					activeChar.delCubic(getNpcId());
+					activeChar.delCubic(getId());
 				}
 				if (activeChar.getCubics().size() > mastery)
 				{
@@ -235,7 +235,7 @@ public class L2SkillSummon extends L2Skill
 					activeChar.sendPacket(SystemMessageId.CUBIC_SUMMONING_FAILED);
 					return;
 				}
-				activeChar.addCubic(getNpcId(), _cubicSkillLevel, _cubicPower, _cubicDelay, _cubicSkillChance, _cubicMaxCount, _cubicDuration, false);
+				activeChar.addCubic(getId(), _cubicSkillLevel, _cubicPower, _cubicDelay, _cubicSkillChance, _cubicMaxCount, _cubicDuration, false);
 				activeChar.broadcastUserInfo();
 			}
 			return;
@@ -251,10 +251,10 @@ public class L2SkillSummon extends L2Skill
 		}
 		
 		L2ServitorInstance summon;
-		L2NpcTemplate summonTemplate = NpcTable.getInstance().getTemplate(getNpcId());
+		L2NpcTemplate summonTemplate = NpcTable.getInstance().getTemplate(getId());
 		if (summonTemplate == null)
 		{
-			_log.warn("Summon attempt for nonexisting NPC ID:" + getNpcId() + ", skill ID:" + getId());
+			_log.warn("Summon attempt for nonexisting NPC ID:" + getId() + ", skill ID:" + getId());
 			return; // npcID doesn't exist
 		}
 		
@@ -277,7 +277,7 @@ public class L2SkillSummon extends L2Skill
 		if (summon.getLevel() >= ExperienceTable.getInstance().getMaxPetLevel())
 		{
 			summon.getStat().setExp(ExperienceTable.getInstance().getExpForLevel(ExperienceTable.getInstance().getMaxPetLevel() - 1));
-			_log.warn("Summon (" + summon.getName() + ") NpcID: " + summon.getNpcId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
+			_log.warn("Summon (" + summon.getName() + ") NpcID: " + summon.getId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
 		}
 		else
 		{

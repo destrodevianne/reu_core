@@ -24,6 +24,7 @@ import l2r.Config;
 import l2r.gameserver.ai.L2SummonAI;
 import l2r.gameserver.ai.NextAction;
 import l2r.gameserver.ai.NextAction.NextActionCallback;
+import l2r.gameserver.datatables.BotReportTable;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SummonSkillsTable;
@@ -31,15 +32,17 @@ import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MountType;
 import l2r.gameserver.instancemanager.AirShipManager;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.L2Object;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2BabyPetInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2SiegeFlagInstance;
 import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
+import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.network.NpcStringId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -108,6 +111,14 @@ public final class RequestActionUse extends L2GameClientPacket
 		if (activeChar.isOutOfControl())
 		{
 			sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
+		L2Effect ef = null;
+		if (((ef = activeChar.getFirstEffect(L2EffectType.ACTION_BLOCK)) != null) && !ef.checkCondition(_actionId))
+		{
+			activeChar.sendPacket(SystemMessageId.YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED);
+			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
@@ -348,7 +359,7 @@ public final class RequestActionUse extends L2GameClientPacket
 					if ((target != null) && (summon != target) && !summon.isMovementDisabled())
 					{
 						summon.setFollowStatus(false);
-						summon.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(target.getX(), target.getY(), target.getZ(), 0));
+						summon.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(target.getX(), target.getY(), target.getZ(), 0));
 					}
 				}
 				break;
@@ -358,15 +369,22 @@ public final class RequestActionUse extends L2GameClientPacket
 					if ((target != null) && (summon != target) && !summon.isMovementDisabled())
 					{
 						summon.setFollowStatus(false);
-						summon.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(target.getX(), target.getY(), target.getZ(), 0));
+						summon.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(target.getX(), target.getY(), target.getZ(), 0));
 					}
 				}
 				break;
 			case 61: // Private Store Package Sell
 				activeChar.tryOpenPrivateSellStore(true);
 				break;
-			case 65: // TODO: Bot Report Button
-				activeChar.sendMessage("This action is not handled yet.");
+			case 65: // Bot Report Button
+				if (Config.BOTREPORT_ENABLE)
+				{
+					BotReportTable.getInstance().reportBot(activeChar);
+				}
+				else
+				{
+					activeChar.sendMessage("This feature is disabled.");
+				}
 				break;
 			case 67: // Steer
 				if (activeChar.isInAirShip())
@@ -417,9 +435,9 @@ public final class RequestActionUse extends L2GameClientPacket
 				}
 				break;
 			case 1001: // Sin Eater - Ultimate Bombastic Buster
-				if (validateSummon(summon, true) && (summon.getNpcId() == SIN_EATER_ID))
+				if (validateSummon(summon, true) && (summon.getId() == SIN_EATER_ID))
 				{
-					summon.broadcastPacket(new NpcSay(summon.getObjectId(), Say2.NPC_ALL, summon.getNpcId(), NPC_STRINGS[Rnd.get(NPC_STRINGS.length)]));
+					summon.broadcastPacket(new NpcSay(summon.getObjectId(), Say2.NPC_ALL, summon.getId(), NPC_STRINGS[Rnd.get(NPC_STRINGS.length)]));
 				}
 				break;
 			case 1003: // Wind Hatchling/Strider - Wild Stun
@@ -789,7 +807,7 @@ public final class RequestActionUse extends L2GameClientPacket
 		
 		if (!activeChar.isSitting() && (target instanceof L2StaticObjectInstance) && (((L2StaticObjectInstance) target).getType() == 1) && activeChar.isInsideRadius(target, L2StaticObjectInstance.INTERACTION_DISTANCE, false, false))
 		{
-			final ChairSit cs = new ChairSit(activeChar, ((L2StaticObjectInstance) target).getStaticObjectId());
+			final ChairSit cs = new ChairSit(activeChar, ((L2StaticObjectInstance) target).getId());
 			sendPacket(cs);
 			activeChar.sitDown();
 			activeChar.broadcastPacket(cs);
@@ -845,7 +863,7 @@ public final class RequestActionUse extends L2GameClientPacket
 				sendPacket(SystemMessageId.PET_TOO_HIGH_TO_CONTROL);
 				return;
 			}
-			lvl = PetDataTable.getInstance().getPetData(summon.getNpcId()).getAvailableLevel(skillId, summon.getLevel());
+			lvl = PetDataTable.getInstance().getPetData(summon.getId()).getAvailableLevel(skillId, summon.getLevel());
 		}
 		else
 		{

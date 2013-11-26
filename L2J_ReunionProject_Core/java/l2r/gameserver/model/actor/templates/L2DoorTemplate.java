@@ -20,11 +20,12 @@ package l2r.gameserver.model.actor.templates;
 
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
+import l2r.gameserver.model.interfaces.IIdentifiable;
 
 /**
  * @author JIV
  */
-public class L2DoorTemplate extends L2CharTemplate
+public class L2DoorTemplate extends L2CharTemplate implements IIdentifiable
 {
 	private final int _doorId;
 	private final int _nodeX[];
@@ -107,7 +108,12 @@ public class L2DoorTemplate extends L2CharTemplate
 		_clanhallId = set.getInteger("clanhall_id", 0);
 	}
 	
-	public int getDoorId()
+	/**
+	 * Gets the door ID.
+	 * @return the door ID
+	 */
+	@Override
+	public int getId()
 	{
 		return _doorId;
 	}

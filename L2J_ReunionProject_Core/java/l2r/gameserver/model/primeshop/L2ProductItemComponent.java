@@ -50,7 +50,7 @@ public class L2ProductItemComponent
 		}
 	}
 	
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}

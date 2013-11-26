@@ -81,7 +81,7 @@ public class NpcBufferTable
 		}
 		
 		@SuppressWarnings("unused")
-		public int getNpcId()
+		public int getId()
 		{
 			return _npcId;
 		}

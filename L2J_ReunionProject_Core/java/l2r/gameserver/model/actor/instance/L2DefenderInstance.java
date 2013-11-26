@@ -28,7 +28,6 @@ import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
@@ -141,7 +140,7 @@ public class L2DefenderInstance extends L2Attackable
 		{
 			return;
 		}
-		if (!isInsideRadius(getSpawn().getLocx(), getSpawn().getLocy(), 40, false))
+		if (!isInsideRadius(getSpawn(), 40, false, false))
 		{
 			if (Config.DEBUG)
 			{
@@ -152,7 +151,7 @@ public class L2DefenderInstance extends L2Attackable
 			
 			if (hasAI())
 			{
-				getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz(), 0));
+				getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, getSpawn().getLocation());
 			}
 		}
 	}
@@ -167,7 +166,7 @@ public class L2DefenderInstance extends L2Attackable
 		_hall = getConquerableHall();
 		if ((_fort == null) && (_castle == null) && (_hall == null))
 		{
-			_log.warn("L2DefenderInstance spawned outside of Fortress, Castle or Siegable hall Zone! NpcId: " + getNpcId() + " x=" + getX() + " y=" + getY() + " z=" + getZ());
+			_log.warn("L2DefenderInstance spawned outside of Fortress, Castle or Siegable hall Zone! NpcId: " + getId() + " x=" + getX() + " y=" + getY() + " z=" + getZ());
 		}
 	}
 	

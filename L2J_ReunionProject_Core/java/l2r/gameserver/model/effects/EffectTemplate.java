@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import l2r.gameserver.handler.EffectHandler;
 import l2r.gameserver.model.ChanceCondition;
+import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.skills.funcs.FuncTemplate;
 import l2r.gameserver.model.skills.funcs.Lambda;
@@ -59,8 +60,9 @@ public class EffectTemplate
 	public final int triggeredId;
 	public final int triggeredLevel;
 	public final ChanceCondition chanceCondition;
+	private final StatsSet _parameters;
 	
-	public EffectTemplate(Condition pAttachCond, Condition pApplayCond, String func, Lambda pLambda, int pCounter, int pAbnormalTime, AbnormalEffect pAbnormalEffect, AbnormalEffect[] pSpecialEffect, AbnormalEffect pEventEffect, String pAbnormalType, byte pAbnormalLvl, boolean showicon, double ePower, int trigId, int trigLvl, ChanceCondition chanceCond)
+	public EffectTemplate(Condition pAttachCond, Condition pApplayCond, String func, Lambda pLambda, int pCounter, int pAbnormalTime, AbnormalEffect pAbnormalEffect, AbnormalEffect[] pSpecialEffect, AbnormalEffect pEventEffect, String pAbnormalType, byte pAbnormalLvl, boolean showicon, double ePower, int trigId, int trigLvl, ChanceCondition chanceCond, StatsSet params)
 	{
 		attachCond = pAttachCond;
 		applayCond = pApplayCond;
@@ -79,6 +81,7 @@ public class EffectTemplate
 		triggeredId = trigId;
 		triggeredLevel = trigLvl;
 		chanceCondition = chanceCond;
+		_parameters = params;
 		
 		_func = EffectHandler.getInstance().getHandler(func);
 		if (_func == null)
@@ -195,5 +198,15 @@ public class EffectTemplate
 			tmp[len] = f;
 			funcTemplates = tmp;
 		}
+	}
+	
+	public StatsSet getParameters()
+	{
+		return _parameters;
+	}
+	
+	public boolean hasParameters()
+	{
+		return _parameters != null;
 	}
 }

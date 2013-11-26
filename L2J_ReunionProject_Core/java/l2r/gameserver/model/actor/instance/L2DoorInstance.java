@@ -33,9 +33,9 @@ import l2r.gameserver.instancemanager.ClanHallManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.knownlist.DoorKnownList;
@@ -102,7 +102,7 @@ public class L2DoorInstance extends L2Character
 		
 		if (getGroupName() != null)
 		{
-			DoorTable.addDoorGroup(getGroupName(), getDoorId());
+			DoorTable.addDoorGroup(getGroupName(), getId());
 		}
 		
 		if (isOpenableByTime())
@@ -146,7 +146,7 @@ public class L2DoorInstance extends L2Character
 		}
 		
 		@Override
-		public void stopMove(L2CharPosition pos)
+		public void stopMove(Location pos)
 		{
 		}
 		
@@ -279,11 +279,13 @@ public class L2DoorInstance extends L2Character
 	}
 	
 	/**
-	 * @return Returns the doorId.
+	 * Gets the door ID.
+	 * @return the door ID
 	 */
-	public int getDoorId()
+	@Override
+	public int getId()
 	{
-		return getTemplate().getDoorId();
+		return getTemplate().getId();
 	}
 	
 	/**
@@ -447,7 +449,7 @@ public class L2DoorInstance extends L2Character
 		else if (isCastle)
 		{
 			L2Clan clan = actingPlayer.getClan();
-			if ((clan != null) && (clan.getClanId() == getCastle().getOwnerId()))
+			if ((clan != null) && (clan.getId() == getCastle().getOwnerId()))
 			{
 				return false;
 			}
@@ -608,7 +610,7 @@ public class L2DoorInstance extends L2Character
 	@Override
 	public String toString()
 	{
-		return getClass().getSimpleName() + "[" + getTemplate().getDoorId() + "](" + getObjectId() + ")";
+		return getClass().getSimpleName() + "[" + getTemplate().getId() + "](" + getObjectId() + ")";
 	}
 	
 	public String getDoorName()

@@ -40,7 +40,7 @@ public final class TempItem
 	public TempItem(L2ItemInstance item, int quantity)
 	{
 		super();
-		_itemId = item.getItemId();
+		_itemId = item.getId();
 		_quantity = quantity;
 		_itemName = item.getItem().getName();
 		_referencePrice = item.getReferencePrice();
@@ -70,7 +70,7 @@ public final class TempItem
 	/**
 	 * @return the itemId.
 	 */
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}

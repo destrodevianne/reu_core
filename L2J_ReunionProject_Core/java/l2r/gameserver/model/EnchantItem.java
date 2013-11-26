@@ -77,7 +77,7 @@ public class EnchantItem
 		{
 			return false;
 		}
-		else if (((enchantItem.isEnchantable() > 1) && (_itemIds.isEmpty() || !_itemIds.contains(enchantItem.getItemId()))) || (!_itemIds.isEmpty() && !_itemIds.contains(enchantItem.getItemId())))
+		else if (((enchantItem.isEnchantable() > 1) && (_itemIds.isEmpty() || !_itemIds.contains(enchantItem.getId()))) || (!_itemIds.isEmpty() && !_itemIds.contains(enchantItem.getId())))
 		{
 			return false;
 		}

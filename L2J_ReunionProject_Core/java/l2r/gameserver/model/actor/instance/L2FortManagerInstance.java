@@ -64,7 +64,7 @@ public class L2FortManagerInstance extends L2MerchantInstance
 	private void sendHtmlMessage(L2PcInstance player, NpcHtmlMessage html)
 	{
 		html.replace("%objectId%", String.valueOf(getObjectId()));
-		html.replace("%npcId%", String.valueOf(getNpcId()));
+		html.replace("%npcId%", String.valueOf(getId()));
 		player.sendPacket(html);
 	}
 	
@@ -215,7 +215,7 @@ public class L2FortManagerInstance extends L2MerchantInstance
 					else
 					{
 						NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-						html.setFile(player.getHtmlPrefix(), "data/html/fortress/" + getTemplate().getNpcId() + "-d.htm");
+						html.setFile(player.getHtmlPrefix(), "data/html/fortress/" + getTemplate().getId() + "-d.htm");
 						html.replace("%objectId%", String.valueOf(getObjectId()));
 						html.replace("%npcname%", getName());
 						player.sendPacket(html);
@@ -303,7 +303,7 @@ public class L2FortManagerInstance extends L2MerchantInstance
 					}
 					else
 					{
-						html.setFile(player.getHtmlPrefix(), "data/html/fortress/" + getNpcId() + "-t" + getFort().getFunction(Fort.FUNC_TELEPORT).getLvl() + ".htm");
+						html.setFile(player.getHtmlPrefix(), "data/html/fortress/" + getId() + "-t" + getFort().getFunction(Fort.FUNC_TELEPORT).getLvl() + ".htm");
 					}
 					sendHtmlMessage(player, html);
 				}
@@ -978,13 +978,13 @@ public class L2FortManagerInstance extends L2MerchantInstance
 		L2TeleportLocation list = TeleportLocationTable.getInstance().getTemplate(val);
 		if (list != null)
 		{
-			if (player.destroyItemByItemId("Teleport", list.getItemId(), list.getPrice(), this, true))
+			if (player.destroyItemByItemId("Teleport", list.getId(), list.getPrice(), this, true))
 			{
 				if (Config.DEBUG)
 				{
-					_log.warn("Teleporting player " + player.getName() + " for Fortress to new location: " + list.getLocX() + ":" + list.getLocY() + ":" + list.getLocZ());
+					_log.warn("Teleporting player " + player.getName() + " for Fortress to new location: " + list.getX() + ":" + list.getY() + ":" + list.getZ());
 				}
-				player.teleToLocation(list.getLocX(), list.getLocY(), list.getLocZ());
+				player.teleToLocation(list.getX(), list.getY(), list.getZ());
 			}
 		}
 		else
@@ -1004,7 +1004,7 @@ public class L2FortManagerInstance extends L2MerchantInstance
 				{
 					return COND_BUSY_BECAUSE_OF_SIEGE; // Busy because of siege
 				}
-				else if ((getFort().getOwnerClan() != null) && (getFort().getOwnerClan().getClanId() == player.getClanId()))
+				else if ((getFort().getOwnerClan() != null) && (getFort().getOwnerClan().getId() == player.getClanId()))
 				{
 					return COND_OWNER; // Owner
 				}

@@ -114,7 +114,7 @@ public class ConfirmDlg extends L2GameServerPacket
 	
 	public ConfirmDlg addNpcName(L2Summon npc)
 	{
-		return addNpcName(npc.getNpcId());
+		return addNpcName(npc.getId());
 	}
 	
 	public ConfirmDlg addNpcName(L2NpcTemplate tpl)
@@ -123,7 +123,7 @@ public class ConfirmDlg extends L2GameServerPacket
 		{
 			return addString(tpl.getName());
 		}
-		return addNpcName(tpl.getNpcId());
+		return addNpcName(tpl.getId());
 	}
 	
 	public ConfirmDlg addNpcName(int id)
@@ -134,13 +134,13 @@ public class ConfirmDlg extends L2GameServerPacket
 	
 	public ConfirmDlg addItemName(L2ItemInstance item)
 	{
-		return addItemName(item.getItem().getItemId());
+		return addItemName(item.getItem().getId());
 	}
 	
 	public ConfirmDlg addItemName(L2Item item)
 	{
 		// TODO: template id for items
-		return addItemName(item.getItemId());
+		return addItemName(item.getId());
 	}
 	
 	public ConfirmDlg addItemName(int id)

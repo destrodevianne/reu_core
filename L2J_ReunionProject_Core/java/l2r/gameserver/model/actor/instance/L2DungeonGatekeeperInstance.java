@@ -168,7 +168,7 @@ public class L2DungeonGatekeeperInstance extends L2Npc
 				return;
 			}
 			
-			player.teleToLocation(list.getLocX(), list.getLocY(), list.getLocZ(), true);
+			player.teleToLocation(list.getX(), list.getY(), list.getZ(), true);
 		}
 		else
 		{

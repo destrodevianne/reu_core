@@ -140,7 +140,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 				{
 					L2Clan clan = ClanTable.getInstance().getClan(cha.getCastle().getOwnerId());
 					_clanCrest = clan.getCrestId();
-					_clanId = clan.getClanId();
+					_clanId = clan.getId();
 					_allyCrest = clan.getAllyCrestId();
 					_allyId = clan.getAllyId();
 				}
@@ -152,7 +152,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 		@Override
 		protected void writeImpl()
 		{
-			FakePc fpc = FakePcsTable.getInstance().getFakePc(_npc.getNpcId());
+			FakePc fpc = FakePcsTable.getInstance().getFakePc(_npc.getId());
 			if (fpc != null)
 			{
 				writeC(0x31);
@@ -488,7 +488,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 				_val = 2; // override for spawn
 			}
 			
-			int npcId = cha.getTemplate().getNpcId();
+			int npcId = cha.getTemplate().getId();
 			
 			if ((npcId == 16041) || (npcId == 16042))
 			{

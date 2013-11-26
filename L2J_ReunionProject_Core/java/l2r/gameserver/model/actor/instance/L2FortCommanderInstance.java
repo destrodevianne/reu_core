@@ -25,8 +25,8 @@ import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.FortSiegeManager.SiegeSpawn;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Spawn;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
@@ -102,7 +102,7 @@ public class L2FortCommanderInstance extends L2DefenderInstance
 	@Override
 	public void returnHome()
 	{
-		if (!isInsideRadius(getSpawn().getLocx(), getSpawn().getLocy(), 200, false))
+		if (!isInsideRadius(getSpawn(), 200, false, false))
 		{
 			if (Config.DEBUG)
 			{
@@ -113,7 +113,7 @@ public class L2FortCommanderInstance extends L2DefenderInstance
 			
 			if (hasAI())
 			{
-				getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz(), 0));
+				getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(getSpawn().getX(), getSpawn().getY(), getSpawn().getZ(), 0));
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public class L2FortCommanderInstance extends L2DefenderInstance
 			FastList<SiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId());
 			for (SiegeSpawn spawn2 : commanders)
 			{
-				if (spawn2.getNpcId() == spawn.getNpcid())
+				if (spawn2.getId() == spawn.getId())
 				{
 					NpcStringId npcString = null;
 					switch (spawn2.getId())
@@ -148,7 +148,7 @@ public class L2FortCommanderInstance extends L2DefenderInstance
 					}
 					if (npcString != null)
 					{
-						NpcSay ns = new NpcSay(getObjectId(), Say2.NPC_SHOUT, getNpcId(), npcString);
+						NpcSay ns = new NpcSay(getObjectId(), Say2.NPC_SHOUT, getId(), npcString);
 						if (npcString.getParamCount() == 1)
 						{
 							ns.addStringParameter(attacker.getName());

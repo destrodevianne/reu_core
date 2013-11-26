@@ -120,11 +120,11 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 		
 		if (!itemToRemove.getItem().isCrystallizable() || (itemToRemove.getItem().getCrystalCount() <= 0) || (itemToRemove.getItem().getCrystalType() == L2Item.CRYSTAL_NONE))
 		{
-			_log.warn(activeChar.getName() + " (" + activeChar.getObjectId() + ") tried to crystallize " + itemToRemove.getItem().getItemId());
+			_log.warn(activeChar.getName() + " (" + activeChar.getObjectId() + ") tried to crystallize " + itemToRemove.getItem().getId());
 			return;
 		}
 		
-		if (!activeChar.getInventory().canManipulateWithItemId(itemToRemove.getItemId()))
+		if (!activeChar.getInventory().canManipulateWithItemId(itemToRemove.getId()))
 		{
 			activeChar.sendMessage("You cannot use this item.");
 			return;

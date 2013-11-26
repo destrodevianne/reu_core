@@ -27,7 +27,6 @@ import java.util.concurrent.ScheduledFuture;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.CtrlIntention;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2NpcWalkerNode;
 import l2r.gameserver.model.L2WalkRoute;
 import l2r.gameserver.model.Location;
@@ -93,7 +92,7 @@ public class WalkingManager extends DocumentParser
 		{
 			if (npc.getSpawn() != null)
 			{
-				String key = getUniqueKey(npc.getSpawn().getSpawnLocation());
+				String key = getUniqueKey(npc.getSpawn().getLocation());
 				return _correspondences.containsKey(key) ? _correspondences.get(key) : "";
 			}
 			return "";
@@ -202,7 +201,7 @@ public class WalkingManager extends DocumentParser
 							_currentNode = 0;
 							break;
 						case REPEAT_TELE_FIRST:
-							npc.teleToLocation(npc.getSpawn().getLocx(), npc.getSpawn().getLocy(), npc.getSpawn().getLocz());
+							npc.teleToLocation(npc.getSpawn().getX(), npc.getSpawn().getY(), npc.getSpawn().getZ());
 							_currentNode = 0;
 							break;
 					}
@@ -426,7 +425,7 @@ public class WalkingManager extends DocumentParser
 					
 					npc.sendDebugMessage("Starting to move at route " + routeName);
 					npc.setIsRunning(node.getRunning());
-					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(node.getMoveX(), node.getMoveY(), node.getMoveZ(), 0));
+					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(node.getMoveX(), node.getMoveY(), node.getMoveZ(), 0));
 					walk._walkCheckTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new Runnable()
 					{
 						@Override
@@ -476,7 +475,7 @@ public class WalkingManager extends DocumentParser
 					L2NpcWalkerNode node = walk.getCurrentNode();
 					npc.sendDebugMessage("Route id: " + routeName + ", continue to node " + walk._currentNode);
 					npc.setIsRunning(node.getRunning());
-					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(node.getMoveX(), node.getMoveY(), node.getMoveZ(), 0));
+					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(node.getMoveX(), node.getMoveY(), node.getMoveZ(), 0));
 					walk._blocked = false;
 					walk._stoppedByAttack = false;
 				}
@@ -632,9 +631,9 @@ public class WalkingManager extends DocumentParser
 	 */
 	public void onSpawn(L2Npc npc)
 	{
-		if (_routesToAttach.containsKey(npc.getNpcId()))
+		if (_routesToAttach.containsKey(npc.getId()))
 		{
-			final String routeName = _routesToAttach.get(npc.getNpcId()).getRouteName(npc);
+			final String routeName = _routesToAttach.get(npc.getId()).getRouteName(npc);
 			if (!routeName.isEmpty())
 			{
 				startMoving(npc, routeName);

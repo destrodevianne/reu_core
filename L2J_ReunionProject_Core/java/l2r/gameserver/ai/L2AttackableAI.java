@@ -37,8 +37,8 @@ import l2r.gameserver.enums.AIType;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
@@ -103,7 +103,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 	public L2AttackableAI(L2Character.AIAccessor accessor)
 	{
 		super(accessor);
-		_skillrender = NpcTable.getInstance().getTemplate(getActiveChar().getTemplate().getNpcId());
+		_skillrender = NpcTable.getInstance().getTemplate(getActiveChar().getTemplate().getId());
 		_attackTimeout = Integer.MAX_VALUE;
 		_globalAggro = -10; // 10 seconds timeout of ATTACK after respawn
 	}
@@ -353,7 +353,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 					if (npc.getSpawn() != null)
 					{
 						final int range = Config.MAX_DRIFT_RANGE;
-						if (!npc.isInsideRadius(npc.getSpawn().getLocx(), npc.getSpawn().getLocy(), npc.getSpawn().getLocz(), range + range, true, false))
+						if (!npc.isInsideRadius(npc.getSpawn().getX(), npc.getSpawn().getY(), npc.getSpawn().getZ(), range + range, true, false))
 						{
 							intention = AI_INTENTION_ACTIVE;
 						}
@@ -645,10 +645,10 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			}
 			
 			// If NPC with random coord in territory
-			if ((npc.getSpawn().getLocx() == 0) && (npc.getSpawn().getLocy() == 0))
+			if ((npc.getSpawn().getX() == 0) && (npc.getSpawn().getY() == 0) && (npc.getSpawn().getSpawnTerritory() == null))
 			{
 				// Calculate a destination point in the spawn area
-				int p[] = TerritoryTable.getInstance().getRandomPoint(npc.getSpawn().getLocation());
+				int p[] = TerritoryTable.getInstance().getRandomPoint(npc.getSpawn().getLocationId());
 				x1 = p[0];
 				y1 = p[1];
 				z1 = p[2];
@@ -665,29 +665,28 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 				}
 				
 				// If NPC with random fixed coord, don't move (unless needs to return to spawnpoint)
-				if ((TerritoryTable.getInstance().getProcMax(npc.getSpawn().getLocation()) > 0) && !npc.isReturningToSpawnPoint())
+				if ((TerritoryTable.getInstance().getProcMax(npc.getSpawn().getLocationId()) > 0) && !npc.isReturningToSpawnPoint())
 				{
 					return;
 				}
 			}
 			else
 			{
-				// If NPC with fixed coord
-				x1 = npc.getSpawn().getLocx();
-				y1 = npc.getSpawn().getLocy();
-				z1 = npc.getSpawn().getLocz();
+				x1 = npc.getSpawn().getX(npc);
+				y1 = npc.getSpawn().getY(npc);
+				z1 = npc.getSpawn().getZ(npc);
 				
-				if (!npc.isInsideRadius(x1, y1, range, false))
+				if (!npc.isInsideRadius(x1, y1, 0, range, false, false))
 				{
 					npc.setisReturningToSpawnPoint(true);
 				}
 				else
 				{
-					x1 = Rnd.nextInt(range * 2); // x
-					y1 = Rnd.get(x1, range * 2); // distance
-					y1 = (int) Math.sqrt((y1 * y1) - (x1 * x1)); // y
-					x1 += npc.getSpawn().getLocx() - range;
-					y1 += npc.getSpawn().getLocy() - range;
+					int deltaX = Rnd.nextInt(range * 2); // x
+					int deltaY = Rnd.get(deltaX, range * 2); // distance
+					deltaY = (int) Math.sqrt((deltaY * deltaY) - (deltaX * deltaX)); // y
+					x1 = (deltaX + x1) - range;
+					y1 = (deltaY + y1) - range;
 					z1 = npc.getZ();
 				}
 			}
@@ -887,7 +886,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 						newY = mostHate.getY() - newY;
 					}
 					
-					if (!npc.isInsideRadius(newX, newY, collision, false))
+					if (!npc.isInsideRadius(newX, newY, 0, collision, false, false))
 					{
 						int newZ = npc.getZ() + 30;
 						if ((Config.GEODATA == 0) || GeoData.getInstance().canMoveFromToTarget(npc.getX(), npc.getY(), npc.getZ(), newX, newY, newZ, npc.getInstanceId()))
@@ -932,7 +931,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 					
 					if ((Config.GEODATA == 0) || GeoData.getInstance().canMoveFromToTarget(npc.getX(), npc.getY(), npc.getZ(), posX, posY, posZ, npc.getInstanceId()))
 					{
-						setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(posX, posY, posZ, 0));
+						setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(posX, posY, posZ, 0));
 					}
 					return;
 				}

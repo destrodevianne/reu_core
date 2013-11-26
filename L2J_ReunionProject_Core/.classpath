@@ -21,5 +21,7 @@
 	<classpathentry kind="lib" path="dist/libs/slf4j-api-1.6.4.jar"/>
 	<classpathentry kind="lib" path="dist/libs/commons-dbcp-1.4.jar"/>
 	<classpathentry kind="lib" path="dist/libs/commons-pool-1.5.6.jar"/>
+	<classpathentry kind="lib" path="dist/libs/L2JGeoAbstraction.jar"/>
+	<classpathentry kind="lib" path="dist/libs/L2JGeoDriver.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

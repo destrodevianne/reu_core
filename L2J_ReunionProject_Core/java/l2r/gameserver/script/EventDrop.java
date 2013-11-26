@@ -50,7 +50,7 @@ public class EventDrop
 	/**
 	 * @return the _itemId
 	 */
-	public int[] getItemIdList()
+	public int[] getIdList()
 	{
 		return _itemIdList;
 	}

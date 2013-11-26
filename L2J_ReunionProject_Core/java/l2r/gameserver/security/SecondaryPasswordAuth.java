@@ -25,9 +25,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.LoginServerThread;
+import l2r.gameserver.datatables.SecondaryAuthData;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.serverpackets.Ex2ndPasswordAck;
 import l2r.gameserver.network.serverpackets.Ex2ndPasswordCheck;
@@ -203,18 +203,18 @@ public class SecondaryPasswordAuth
 		if (!password.equals(_password))
 		{
 			_wrongAttempts++;
-			if (_wrongAttempts < Config.SECOND_AUTH_MAX_ATTEMPTS)
+			if (_wrongAttempts < SecondaryAuthData.getInstance().getMaxAttempts())
 			{
 				_activeClient.sendPacket(new Ex2ndPasswordVerify(Ex2ndPasswordVerify.PASSWORD_WRONG, _wrongAttempts));
 				insertWrongAttempt(_wrongAttempts);
 			}
 			else
 			{
-				LoginServerThread.getInstance().sendTempBan(_activeClient.getAccountName(), _activeClient.getConnectionAddress().getHostAddress(), Config.SECOND_AUTH_BAN_TIME);
-				LoginServerThread.getInstance().sendMail(_activeClient.getAccountName(), "SATempBan", _activeClient.getConnectionAddress().getHostAddress(), Integer.toString(Config.SECOND_AUTH_MAX_ATTEMPTS), Long.toString(Config.SECOND_AUTH_BAN_TIME), Config.SECOND_AUTH_REC_LINK);
+				LoginServerThread.getInstance().sendTempBan(_activeClient.getAccountName(), _activeClient.getConnectionAddress().getHostAddress(), SecondaryAuthData.getInstance().getBanTime());
+				LoginServerThread.getInstance().sendMail(_activeClient.getAccountName(), "SATempBan", _activeClient.getConnectionAddress().getHostAddress(), Integer.toString(SecondaryAuthData.getInstance().getMaxAttempts()), Long.toString(SecondaryAuthData.getInstance().getBanTime()), SecondaryAuthData.getInstance().getRecoveryLink());
 				_log.warn(_activeClient.getAccountName() + " - (" + _activeClient.getConnectionAddress().getHostAddress() + ") has inputted the wrong password " + _wrongAttempts + " times in row.");
 				insertWrongAttempt(0);
-				_activeClient.close(new Ex2ndPasswordVerify(Ex2ndPasswordVerify.PASSWORD_BAN, Config.SECOND_AUTH_MAX_ATTEMPTS));
+				_activeClient.close(new Ex2ndPasswordVerify(Ex2ndPasswordVerify.PASSWORD_BAN, SecondaryAuthData.getInstance().getMaxAttempts()));
 			}
 			return false;
 		}

@@ -30,6 +30,7 @@ import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.NpcPersonalAIData;
 import l2r.gameserver.enums.AIType;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
@@ -71,6 +72,7 @@ import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
+import l2r.gameserver.model.variables.NpcVariables;
 import l2r.gameserver.model.zone.type.L2TownZone;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AbstractNpcInfo;
@@ -148,7 +150,6 @@ public class L2Npc extends L2Character
 	private int _soulshotamount = 0;
 	private int _spiritshotamount = 0;
 	private int _displayEffect = 0;
-	private int _scriptVal = 0;
 	private FakePc _fakePc = null;
 	private boolean _isRunner = false;
 	
@@ -516,7 +517,7 @@ public class L2Npc extends L2Character
 			return;
 		}
 		
-		_fakePc = FakePcsTable.getInstance().getFakePc(template.getNpcId());
+		_fakePc = FakePcsTable.getInstance().getFakePc(template.getId());
 		// Set the name of the L2Character
 		setName(template.getName());
 	}
@@ -565,11 +566,13 @@ public class L2Npc extends L2Character
 	}
 	
 	/**
-	 * @return the generic Identifier of this L2NpcInstance contained in the L2NpcTemplate.
+	 * Gets the NPC ID.
+	 * @return the NPC ID
 	 */
-	public int getNpcId()
+	@Override
+	public int getId()
 	{
-		return getTemplate().getNpcId();
+		return getTemplate().getId();
 	}
 	
 	@Override
@@ -991,7 +994,7 @@ public class L2Npc extends L2Character
 				}
 				else
 				{
-					_log.info(getClass().getSimpleName() + ": Unknown NPC bypass: \"" + command + "\" NpcId: " + getNpcId());
+					_log.info(getClass().getSimpleName() + ": Unknown NPC bypass: \"" + command + "\" NpcId: " + getId());
 				}
 			}
 		}
@@ -1140,7 +1143,7 @@ public class L2Npc extends L2Character
 	 */
 	private boolean showPkDenyChatWindow(L2PcInstance player, String type)
 	{
-		String html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/html/" + type + "/" + getNpcId() + "-pk.htm");
+		String html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/html/" + type + "/" + getId() + "-pk.htm");
 		
 		if (html != null)
 		{
@@ -1167,7 +1170,7 @@ public class L2Npc extends L2Character
 	 */
 	public void showChatWindow(L2PcInstance player, int val)
 	{
-		if (Config.NON_TALKING_NPCS.contains(getNpcId()))
+		if (Config.NON_TALKING_NPCS.contains(getId()))
 		{
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
@@ -1214,7 +1217,7 @@ public class L2Npc extends L2Character
 			return;
 		}
 		
-		int npcId = getTemplate().getNpcId();
+		int npcId = getTemplate().getId();
 		
 		/* For use with Seven Signs implementation */
 		String filename = SevenSigns.SEVEN_SIGNS_HTML_PATH;
@@ -1620,7 +1623,7 @@ public class L2Npc extends L2Character
 	@Override
 	public String toString()
 	{
-		return getClass().getSimpleName() + ":" + getName() + "(" + getNpcId() + ")" + "[" + getObjectId() + "]";
+		return getClass().getSimpleName() + ":" + getName() + "(" + getId() + ")" + "[" + getObjectId() + "]";
 	}
 	
 	public boolean isDecayed()
@@ -1725,7 +1728,7 @@ public class L2Npc extends L2Character
 	
 	public void showNoTeachHtml(L2PcInstance player)
 	{
-		int npcId = getNpcId();
+		int npcId = getId();
 		String html = "";
 		
 		if (this instanceof L2WarehouseInstance)
@@ -1857,7 +1860,7 @@ public class L2Npc extends L2Character
 	
 	public void broadcastNpcSay(int messageType, String text)
 	{
-		broadcastPacket(new NpcSay(getObjectId(), messageType, getNpcId(), text));
+		broadcastPacket(new NpcSay(getObjectId(), messageType, getId(), text));
 	}
 	
 	/**
@@ -1967,19 +1970,84 @@ public class L2Npc extends L2Character
 		}
 	}
 	
+	/**
+	 * Short wrapper for backward compatibility
+	 * @return stored script value
+	 */
 	public int getScriptValue()
 	{
-		return _scriptVal;
+		return getVariables().getInteger("SCRIPT_VAL");
 	}
 	
+	/**
+	 * Short wrapper for backward compatibility. Stores script value
+	 * @param val value to store
+	 */
 	public void setScriptValue(int val)
 	{
-		_scriptVal = val;
+		getVariables().set("SCRIPT_VAL", val);
 	}
 	
+	/**
+	 * Short wrapper for backward compatibility.
+	 * @param val value to store
+	 * @return {@code true} if stored script value equals given value, {@code false} otherwise
+	 */
 	public boolean isScriptValue(int val)
 	{
-		return _scriptVal == val;
+		return getVariables().getInteger("SCRIPT_VAL") == val;
+	}
+	
+	/**
+	 * @param paramName the parameter name to check
+	 * @return given AI parameter value
+	 */
+	public int getAIValue(final String paramName)
+	{
+		return hasAIValue(paramName) ? NpcPersonalAIData.getInstance().getAIValue(getSpawn().getName(), paramName) : -1;
+	}
+	
+	/**
+	 * @param paramName the parameter name to check
+	 * @return {@code true} if given parameter is set for NPC, {@code false} otherwise
+	 */
+	public boolean hasAIValue(final String paramName)
+	{
+		return (getSpawn() != null) && (getSpawn().getName() != null) && NpcPersonalAIData.getInstance().hasAIValue(getSpawn().getName(), paramName);
+	}
+	
+	/**
+	 * @param npc NPC to check
+	 * @return {@code true} if both given NPC and this NPC is in the same spawn group, {@code false} otherwise
+	 */
+	public boolean isInMySpawnGroup(L2Npc npc)
+	{
+		return ((getSpawn() != null) && (npc.getSpawn() != null) && (getSpawn().getName() != null) && (getSpawn().getName().equals(npc.getSpawn().getName())));
+	}
+	
+	/**
+	 * @return {@code true} if NPC currently located in own spawn point, {@code false} otherwise
+	 */
+	public boolean staysInSpawnLoc()
+	{
+		return ((getSpawn() != null) && (getSpawn().getX(this) == getX()) && (getSpawn().getY(this) == getY()));
+	}
+	
+	/**
+	 * @return {@code true} if {@link NpcVariables} instance is attached to current player's scripts, {@code false} otherwise.
+	 */
+	public boolean hasVariables()
+	{
+		return getScript(NpcVariables.class) != null;
+	}
+	
+	/**
+	 * @return {@link NpcVariables} instance containing parameters regarding NPC.
+	 */
+	public NpcVariables getVariables()
+	{
+		final NpcVariables vars = getScript(NpcVariables.class);
+		return vars != null ? vars : addScript(new NpcVariables());
 	}
 	
 	/**

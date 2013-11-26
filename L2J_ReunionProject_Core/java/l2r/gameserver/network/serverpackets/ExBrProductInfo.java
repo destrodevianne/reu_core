@@ -33,7 +33,7 @@ public class ExBrProductInfo extends L2GameServerPacket
 		
 		for (L2ProductItemComponent com : _productId.getComponents())
 		{
-			writeD(com.getItemId());
+			writeD(com.getId());
 			writeD(com.getCount());
 			writeD(com.getWeight());
 			writeD(com.isDropable() ? 1 : 0);

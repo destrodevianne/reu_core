@@ -46,7 +46,7 @@ public class L2SkillDecoy extends L2Skill
 			return;
 		}
 		
-		if (getNpcId() == 0)
+		if (getId() == 0)
 		{
 			return;
 		}
@@ -62,7 +62,7 @@ public class L2SkillDecoy extends L2Skill
 			return;
 		}
 		
-		final L2NpcTemplate DecoyTemplate = NpcTable.getInstance().getTemplate(getNpcId());
+		final L2NpcTemplate DecoyTemplate = NpcTable.getInstance().getTemplate(getId());
 		final L2DecoyInstance decoy = new L2DecoyInstance(IdFactory.getInstance().getNextId(), DecoyTemplate, activeChar, this);
 		decoy.setCurrentHp(decoy.getMaxHp());
 		decoy.setCurrentMp(decoy.getMaxMp());

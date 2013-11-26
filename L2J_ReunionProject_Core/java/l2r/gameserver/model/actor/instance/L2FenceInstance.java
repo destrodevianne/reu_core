@@ -83,6 +83,12 @@ public final class L2FenceInstance extends L2Object
 	}
 	
 	@Override
+	public int getId()
+	{
+		return 0;
+	}
+	
+	@Override
 	public boolean isAutoAttackable(L2Character attacker)
 	{
 		return false;

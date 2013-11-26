@@ -40,11 +40,11 @@ import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.enums.TeleportWhereType;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.L2World;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.SpawnListener;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Npc;
@@ -1755,7 +1755,7 @@ public class SevenSignsFestival implements SpawnListener
 			return;
 		}
 		
-		int npcId = npc.getNpcId();
+		int npcId = npc.getId();
 		
 		// If the spawned NPC ID matches the ones we need, assign their instances.
 		if (npcId == 31127)
@@ -2129,7 +2129,7 @@ public class SevenSignsFestival implements SpawnListener
 						}
 						
 						participant.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
-						participant.teleToLocation(x, y, _startLocation._z, true);
+						participant.teleToLocation(new Location(x, y, _startLocation._z), true);
 						
 						// Remove all buffs from all participants on entry. Works like the skill Cancel.
 						participant.stopAllEffectsExceptThoseThatLastThroughDeath();
@@ -2155,9 +2155,9 @@ public class SevenSignsFestival implements SpawnListener
 			{
 				L2Spawn npcSpawn = new L2Spawn(witchTemplate);
 				
-				npcSpawn.setLocx(_witchSpawn._x);
-				npcSpawn.setLocy(_witchSpawn._y);
-				npcSpawn.setLocz(_witchSpawn._z);
+				npcSpawn.setX(_witchSpawn._x);
+				npcSpawn.setY(_witchSpawn._y);
+				npcSpawn.setZ(_witchSpawn._z);
 				npcSpawn.setHeading(_witchSpawn._heading);
 				npcSpawn.setAmount(1);
 				npcSpawn.setRespawnDelay(1);
@@ -2228,7 +2228,7 @@ public class SevenSignsFestival implements SpawnListener
 					y -= Rnd.nextInt(FESTIVAL_MAX_OFFSET_Y);
 				}
 				
-				L2CharPosition moveTo = new L2CharPosition(x, y, _startLocation._z, Rnd.nextInt(65536));
+				Location moveTo = new Location(x, y, _startLocation._z, Rnd.nextInt(65536));
 				
 				festivalMob.setRunning();
 				festivalMob.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, moveTo);
@@ -2281,9 +2281,9 @@ public class SevenSignsFestival implements SpawnListener
 				{
 					L2Spawn npcSpawn = new L2Spawn(npcTemplate);
 					
-					npcSpawn.setLocx(currSpawn._x);
-					npcSpawn.setLocy(currSpawn._y);
-					npcSpawn.setLocz(currSpawn._z);
+					npcSpawn.setX(currSpawn._x);
+					npcSpawn.setY(currSpawn._y);
+					npcSpawn.setZ(currSpawn._z);
 					npcSpawn.setHeading(Rnd.nextInt(65536));
 					npcSpawn.setAmount(1);
 					npcSpawn.setRespawnDelay(respawnDelay);
@@ -2417,7 +2417,7 @@ public class SevenSignsFestival implements SpawnListener
 				}
 				
 				participant.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
-				participant.teleToLocation(origPosition._x, origPosition._y, origPosition._z, true);
+				participant.teleToLocation(new Location(origPosition._x, origPosition._y, origPosition._z), true);
 				participant.sendMessage("You have been removed from the festival arena.");
 			}
 			catch (Exception e)

@@ -38,6 +38,7 @@ import l2r.gameserver.model.conditions.ConditionPetType;
 import l2r.gameserver.model.effects.EffectTemplate;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.holders.SkillHolder;
+import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.type.L2ActionType;
 import l2r.gameserver.model.items.type.L2EtcItemType;
@@ -64,7 +65,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * @version $Revision: 1.7.2.2.2.5 $ $Date: 2005/04/06 18:25:18 $
  */
-public abstract class L2Item
+public abstract class L2Item implements IIdentifiable
 {
 	protected static final Logger _log = LoggerFactory.getLogger(L2Item.class);
 	
@@ -411,6 +412,14 @@ public abstract class L2Item
 	public abstract L2ItemType getItemType();
 	
 	/**
+	 * @return {@code true} if the weapon is magic, {@code false} otherwise.
+	 */
+	public boolean isMagicWeapon()
+	{
+		return false;
+	}
+	
+	/**
 	 * @return the _equipReuseDelay
 	 */
 	public int getEquipReuseDelay()
@@ -448,7 +457,8 @@ public abstract class L2Item
 	 * Returns the ID of the item
 	 * @return int
 	 */
-	public final int getItemId()
+	@Override
+	public final int getId()
 	{
 		return _itemId;
 	}
@@ -743,7 +753,7 @@ public abstract class L2Item
 	 */
 	public final int isEnchantable()
 	{
-		return Arrays.binarySearch(Config.ENCHANT_BLACKLIST, getItemId()) < 0 ? _enchantable : 0;
+		return Arrays.binarySearch(Config.ENCHANT_BLACKLIST, getId()) < 0 ? _enchantable : 0;
 	}
 	
 	/**

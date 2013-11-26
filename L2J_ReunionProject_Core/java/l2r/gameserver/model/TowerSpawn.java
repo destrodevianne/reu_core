@@ -20,10 +20,12 @@ package l2r.gameserver.model;
 
 import java.util.List;
 
+import l2r.gameserver.model.interfaces.IIdentifiable;
+
 /**
  * @author malyelfik
  */
-public class TowerSpawn
+public class TowerSpawn implements IIdentifiable
 {
 	private final int _npcId;
 	private final Location _location;
@@ -43,7 +45,12 @@ public class TowerSpawn
 		_zoneList = zoneList;
 	}
 	
-	public int getNpcId()
+	/**
+	 * Gets the NPC ID.
+	 * @return the NPC ID
+	 */
+	@Override
+	public int getId()
 	{
 		return _npcId;
 	}

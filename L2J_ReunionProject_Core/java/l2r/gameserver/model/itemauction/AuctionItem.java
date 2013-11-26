@@ -73,7 +73,7 @@ public final class AuctionItem
 		return _auctionInitBid;
 	}
 	
-	public final int getItemId()
+	public final int getId()
 	{
 		return _itemId;
 	}

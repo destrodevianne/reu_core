@@ -26,15 +26,15 @@ import java.util.Map;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.ZoneIdType;
+import l2r.gameserver.instancemanager.tasks.PenaltyRemoveTask;
+import l2r.gameserver.model.ArenaParticipantsHolder;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.entity.BlockCheckerEngine;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.olympiad.OlympiadManager;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExCubeGameAddPlayer;
 import l2r.gameserver.network.serverpackets.ExCubeGameChangeTeam;
 import l2r.gameserver.network.serverpackets.ExCubeGameRemovePlayer;
-import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
 /**
@@ -252,7 +252,7 @@ public final class HandysBlockCheckerManager
 		
 		synchronized (holder)
 		{
-			boolean isFromRed = holder._redPlayers.contains(player);
+			boolean isFromRed = holder.getRedPlayers().contains(player);
 			
 			if (isFromRed && (holder.getBlueTeamSize() == 6))
 			{
@@ -355,173 +355,20 @@ public final class HandysBlockCheckerManager
 		}
 	}
 	
-	public class ArenaParticipantsHolder
+	public void removePenalty(int objectId)
 	{
-		int _arena;
-		List<L2PcInstance> _redPlayers;
-		List<L2PcInstance> _bluePlayers;
-		BlockCheckerEngine _engine;
-		
-		public ArenaParticipantsHolder(int arena)
-		{
-			_arena = arena;
-			_redPlayers = new ArrayList<>(6);
-			_bluePlayers = new ArrayList<>(6);
-			_engine = new BlockCheckerEngine(this, _arena);
-		}
-		
-		public List<L2PcInstance> getRedPlayers()
-		{
-			return _redPlayers;
-		}
-		
-		public List<L2PcInstance> getBluePlayers()
-		{
-			return _bluePlayers;
-		}
-		
-		public ArrayList<L2PcInstance> getAllPlayers()
-		{
-			ArrayList<L2PcInstance> all = new ArrayList<>(12);
-			all.addAll(_redPlayers);
-			all.addAll(_bluePlayers);
-			return all;
-		}
-		
-		public void addPlayer(L2PcInstance player, int team)
-		{
-			if (team == 0)
-			{
-				_redPlayers.add(player);
-			}
-			else
-			{
-				_bluePlayers.add(player);
-			}
-		}
-		
-		public void removePlayer(L2PcInstance player, int team)
-		{
-			if (team == 0)
-			{
-				_redPlayers.remove(player);
-			}
-			else
-			{
-				_bluePlayers.remove(player);
-			}
-		}
-		
-		public int getPlayerTeam(L2PcInstance player)
-		{
-			if (_redPlayers.contains(player))
-			{
-				return 0;
-			}
-			else if (_bluePlayers.contains(player))
-			{
-				return 1;
-			}
-			else
-			{
-				return -1;
-			}
-		}
-		
-		public int getRedTeamSize()
-		{
-			return _redPlayers.size();
-		}
-		
-		public int getBlueTeamSize()
-		{
-			return _bluePlayers.size();
-		}
-		
-		public void broadCastPacketToTeam(L2GameServerPacket packet)
-		{
-			for (L2PcInstance p : _redPlayers)
-			{
-				p.sendPacket(packet);
-			}
-			for (L2PcInstance p : _bluePlayers)
-			{
-				p.sendPacket(packet);
-			}
-		}
-		
-		public void clearPlayers()
-		{
-			_redPlayers.clear();
-			_bluePlayers.clear();
-		}
-		
-		public BlockCheckerEngine getEvent()
-		{
-			return _engine;
-		}
-		
-		public void updateEvent()
-		{
-			_engine.updatePlayersOnStart(this);
-		}
-		
-		protected void checkAndShuffle()
-		{
-			int redSize = _redPlayers.size();
-			int blueSize = _bluePlayers.size();
-			if (redSize > (blueSize + 1))
-			{
-				broadCastPacketToTeam(SystemMessage.getSystemMessage(SystemMessageId.TEAM_ADJUSTED_BECAUSE_WRONG_POPULATION_RATIO));
-				int needed = redSize - (blueSize + 1);
-				for (int i = 0; i < (needed + 1); i++)
-				{
-					L2PcInstance plr = _redPlayers.get(i);
-					if (plr == null)
-					{
-						continue;
-					}
-					changePlayerToTeam(plr, _arena, 1);
-				}
-			}
-			else if (blueSize > (redSize + 1))
-			{
-				broadCastPacketToTeam(SystemMessage.getSystemMessage(SystemMessageId.TEAM_ADJUSTED_BECAUSE_WRONG_POPULATION_RATIO));
-				int needed = blueSize - (redSize + 1);
-				for (int i = 0; i < (needed + 1); i++)
-				{
-					L2PcInstance plr = _bluePlayers.get(i);
-					if (plr == null)
-					{
-						continue;
-					}
-					changePlayerToTeam(plr, _arena, 0);
-				}
-			}
-		}
+		_registrationPenalty.remove(objectId);
 	}
 	
 	private void schedulePenaltyRemoval(int objId)
 	{
-		ThreadPoolManager.getInstance().scheduleGeneral(new PenaltyRemove(objId), 10000);
+		ThreadPoolManager.getInstance().scheduleGeneral(new PenaltyRemoveTask(objId), 10000);
 	}
 	
-	private class PenaltyRemove implements Runnable
-	{
-		private final Integer objectId;
-		
-		public PenaltyRemove(Integer id)
-		{
-			objectId = id;
-		}
-		
-		@Override
-		public void run()
-		{
-			_registrationPenalty.remove(objectId);
-		}
-	}
-	
+	/**
+	 * Gets the single instance of {@code HandysBlockCheckerManager}.
+	 * @return single instance of {@code HandysBlockCheckerManager}
+	 */
 	public static HandysBlockCheckerManager getInstance()
 	{
 		return SingletonHolder._instance;

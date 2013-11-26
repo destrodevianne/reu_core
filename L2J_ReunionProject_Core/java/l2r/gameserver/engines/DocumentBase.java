@@ -48,6 +48,7 @@ import l2r.gameserver.model.conditions.ConditionMinDistance;
 import l2r.gameserver.model.conditions.ConditionPlayerActiveEffectId;
 import l2r.gameserver.model.conditions.ConditionPlayerActiveSkillId;
 import l2r.gameserver.model.conditions.ConditionPlayerAgathionId;
+import l2r.gameserver.model.conditions.ConditionPlayerCanRefuelAirship;
 import l2r.gameserver.model.conditions.ConditionPlayerCanSweep;
 import l2r.gameserver.model.conditions.ConditionPlayerCanTransform;
 import l2r.gameserver.model.conditions.ConditionPlayerCanUntransform;
@@ -354,6 +355,7 @@ public abstract class DocumentBase
 				icon = false;
 			}
 		}
+		final StatsSet parameters = parseParameters(n.getFirstChild(), template);
 		Lambda lambda = getLambda(n, template);
 		Condition applayCond = parseCondition(n.getFirstChild(), template);
 		AbnormalEffect abnormalVisualEffect = AbnormalEffect.NULL;
@@ -455,7 +457,7 @@ public abstract class DocumentBase
 			throw new NoSuchElementException("Invalid chance condition: " + chanceCond + " " + activationChance);
 		}
 		
-		final EffectTemplate lt = new EffectTemplate(attachCond, applayCond, name, lambda, count, abnormalTime, abnormalVisualEffect, special, event, abnormalType, abnormalLvl, icon, effectPower, trigId, trigLvl, chance);
+		final EffectTemplate lt = new EffectTemplate(attachCond, applayCond, name, lambda, count, abnormalTime, abnormalVisualEffect, special, event, abnormalType, abnormalLvl, icon, effectPower, trigId, trigLvl, chance, parameters);
 		parseTemplate(n, lt);
 		if (template instanceof L2Item)
 		{
@@ -476,6 +478,29 @@ public abstract class DocumentBase
 				((L2Skill) template).attach(lt);
 			}
 		}
+	}
+	
+	private StatsSet parseParameters(Node n, Object template)
+	{
+		StatsSet parameters = null;
+		while ((n != null))
+		{
+			if ((n.getNodeType() == Node.ELEMENT_NODE) && "param".equals(n.getNodeName()))
+			{
+				if (parameters == null)
+				{
+					parameters = new StatsSet();
+				}
+				NamedNodeMap params = n.getAttributes();
+				for (int i = 0; i < params.getLength(); i++)
+				{
+					Node att = params.item(i);
+					parameters.set(att.getNodeName(), getValue(att.getNodeValue(), template));
+				}
+			}
+			n = n.getNextSibling();
+		}
+		return parameters;
 	}
 	
 	protected Condition parseCondition(Node n, Object template)
@@ -866,6 +891,10 @@ public abstract class DocumentBase
 					radius = Integer.decode(getValue(st.nextToken().trim(), null));
 				}
 				cond = joinAnd(cond, new ConditionPlayerRangeFromNpc(npcId, radius));
+			}
+			else if ("canRefuelAirship".equalsIgnoreCase(a.getNodeName()))
+			{
+				cond = joinAnd(cond, new ConditionPlayerCanRefuelAirship(Integer.parseInt(a.getNodeValue())));
 			}
 			else if ("canSweep".equalsIgnoreCase(a.getNodeName()))
 			{

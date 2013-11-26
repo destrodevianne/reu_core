@@ -25,7 +25,7 @@ import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.stats.Env;
 
 /**
- * The Class ConditionTargetNpcId.
+ * The Class ConditionTargetId.
  */
 public class ConditionTargetNpcId extends Condition
 {
@@ -45,11 +45,11 @@ public class ConditionTargetNpcId extends Condition
 	{
 		if (env.getTarget() instanceof L2Npc)
 		{
-			return _npcIds.contains(((L2Npc) env.getTarget()).getNpcId());
+			return _npcIds.contains(((L2Npc) env.getTarget()).getId());
 		}
 		if (env.getTarget() instanceof L2DoorInstance)
 		{
-			return _npcIds.contains(((L2DoorInstance) env.getTarget()).getDoorId());
+			return _npcIds.contains(((L2DoorInstance) env.getTarget()).getId());
 		}
 		return false;
 	}

@@ -78,9 +78,9 @@ public class HerbDropTable
 				
 				int categoryType = dropData.getInt("category");
 				
-				if (ItemTable.getInstance().getTemplate(dropDat.getItemId()) == null)
+				if (ItemTable.getInstance().getTemplate(dropDat.getId()) == null)
 				{
-					_log.warn(getClass().getSimpleName() + ": Data for undefined item template! GroupId: " + groupId + " itemId: " + dropDat.getItemId());
+					_log.warn(getClass().getSimpleName() + ": Data for undefined item template! GroupId: " + groupId + " itemId: " + dropDat.getId());
 					continue;
 				}
 				

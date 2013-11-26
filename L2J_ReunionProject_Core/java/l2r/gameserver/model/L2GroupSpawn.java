@@ -71,23 +71,23 @@ public class L2GroupSpawn extends L2Spawn
 			
 			int newlocx, newlocy, newlocz;
 			
-			if ((getLocx() == 0) && (getLocy() == 0))
+			if ((getX() == 0) && (getY() == 0))
 			{
-				if (getLocation() == 0)
+				if (getLocationId() == 0)
 				{
 					return null;
 				}
 				
-				int p[] = TerritoryTable.getInstance().getRandomPoint(getLocation());
+				int p[] = TerritoryTable.getInstance().getRandomPoint(getLocationId());
 				newlocx = p[0];
 				newlocy = p[1];
 				newlocz = p[2];
 			}
 			else
 			{
-				newlocx = getLocx();
-				newlocy = getLocy();
-				newlocz = getLocz();
+				newlocx = getX();
+				newlocy = getY();
+				newlocz = getZ();
 			}
 			
 			mob.setCurrentHpMp(mob.getMaxHp(), mob.getMaxMp());
@@ -107,7 +107,7 @@ public class L2GroupSpawn extends L2Spawn
 			
 			if (Config.DEBUG)
 			{
-				_log.info("Spawned Mob Id: " + _template.getNpcId() + " ,at: X: " + mob.getX() + " Y: " + mob.getY() + " Z: " + mob.getZ());
+				_log.info("Spawned Mob Id: " + _template.getId() + " ,at: X: " + mob.getX() + " Y: " + mob.getY() + " Z: " + mob.getZ());
 			}
 			return mob;
 			

@@ -94,7 +94,7 @@ public abstract class SkillUseListener extends L2JListener
 	 * Returns the npcId this listener will be triggered for
 	 * @return
 	 */
-	public int getNpcId()
+	public int getId()
 	{
 		return _npcId;
 	}

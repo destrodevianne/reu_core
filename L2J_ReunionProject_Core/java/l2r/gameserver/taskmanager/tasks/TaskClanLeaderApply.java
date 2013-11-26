@@ -22,12 +22,12 @@ import java.util.Calendar;
 
 import l2r.Config;
 import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
+import l2r.gameserver.taskmanager.TaskTypes;
 
 /**
  * @author UnAfraid
@@ -68,6 +68,6 @@ public class TaskClanLeaderApply extends Task
 	@Override
 	public void initializate()
 	{
-		TaskManager.addUniqueTask(NAME, TaskType.TYPE_GLOBAL_TASK, "1", Config.ALT_CLAN_LEADER_HOUR_CHANGE, "");
+		TaskManager.addUniqueTask(NAME, TaskTypes.TYPE_GLOBAL_TASK, "1", Config.ALT_CLAN_LEADER_HOUR_CHANGE, "");
 	}
 }

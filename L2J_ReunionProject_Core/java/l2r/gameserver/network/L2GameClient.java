@@ -39,6 +39,7 @@ import l2r.gameserver.LoginServerThread.SessionKey;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.SecondaryAuthData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.AntiFeedManager;
@@ -244,7 +245,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	{
 		_accountName = pAccountName;
 		
-		if (Config.SECOND_AUTH_ENABLED)
+		if (SecondaryAuthData.getInstance().isEnabled())
 		{
 			_secondaryAuth = new SecondaryPasswordAuth(this);
 		}

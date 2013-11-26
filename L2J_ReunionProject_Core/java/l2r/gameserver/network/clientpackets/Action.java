@@ -23,6 +23,8 @@ import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 
@@ -69,6 +71,14 @@ public final class Action extends L2GameClientPacket
 		{
 			activeChar.sendPacket(SystemMessageId.OBSERVERS_CANNOT_PARTICIPATE);
 			sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
+		L2Effect ef = null;
+		if (((ef = activeChar.getFirstEffect(L2EffectType.ACTION_BLOCK)) != null) && !ef.checkCondition(-4))
+		{
+			activeChar.sendPacket(SystemMessageId.YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED);
+			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
