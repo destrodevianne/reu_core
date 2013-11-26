@@ -5756,8 +5756,6 @@ public final class L2PcInstance extends L2Playable
 			spreeKills = 0;
 		}
 		
-		stopSpecialEffect(AbnormalEffect.ARCANE_SHIELD);
-		
 		if (isMounted())
 		{
 			stopFeed();
@@ -9662,7 +9660,6 @@ public final class L2PcInstance extends L2Playable
 				{
 					switch (sklType)
 					{
-						case BEAST_FEED:
 						case DELUXE_KEY_UNLOCK:
 						case UNLOCK:
 							break;

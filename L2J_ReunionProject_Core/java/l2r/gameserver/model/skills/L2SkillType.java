@@ -67,8 +67,6 @@ public enum L2SkillType
 	DISARM,
 	// reco
 	GIVE_RECO,
-	// vitality
-	GIVE_VITALITY,
 	// Aggro
 	AGGDAMAGE,
 	AGGREDUCE,
@@ -98,8 +96,6 @@ public enum L2SkillType
 	DETECTION,
 	DUMMY,
 	// Creation
-	COMMON_CRAFT,
-	DWARVEN_CRAFT,
 	CREATE_ITEM(L2SkillCreateItem.class),
 	LEARN_SKILL(L2SkillLearnSkill.class),
 	// Summons
@@ -120,11 +116,6 @@ public enum L2SkillType
 	RECALL(L2SkillTeleport.class),
 	TELEPORT(L2SkillTeleport.class),
 	SUMMON_FRIEND,
-	BEAST_FEED,
-	BEAST_RELEASE,
-	BEAST_RELEASE_ALL,
-	BEAST_SKILL,
-	BEAST_ACCOMPANY,
 	TRANSFORMDISPEL,
 	SUMMON_TRAP(L2SkillTrap.class),
 	DETECT_TRAP,
