@@ -240,10 +240,10 @@ public class HellboundManager
 	
 	private final void loadData()
 	{
-		if (GlobalVariablesManager.getInstance().isVariableStored("HBLevel"))
+		if (GlobalVariablesManager.getInstance().hasVariable("HBLevel"))
 		{
-			_level = Integer.parseInt(GlobalVariablesManager.getInstance().getStoredVariable("HBLevel"));
-			_trust = Integer.parseInt(GlobalVariablesManager.getInstance().getStoredVariable("HBTrust"));
+			_level = GlobalVariablesManager.getInstance().getInteger("HBLevel");
+			_trust = GlobalVariablesManager.getInstance().getInteger("HBTrust");
 		}
 		else
 		{
@@ -253,8 +253,8 @@ public class HellboundManager
 	
 	public final void saveData()
 	{
-		GlobalVariablesManager.getInstance().storeVariable("HBLevel", String.valueOf(_level));
-		GlobalVariablesManager.getInstance().storeVariable("HBTrust", String.valueOf(_trust));
+		GlobalVariablesManager.getInstance().set("HBLevel", _level);
+		GlobalVariablesManager.getInstance().set("HBTrust", _trust);
 	}
 	
 	private final void loadSpawns()
@@ -272,9 +272,9 @@ public class HellboundManager
 				{
 					spawnDat = new HellboundSpawn(template);
 					spawnDat.setAmount(1);
-					spawnDat.setLocx(rs.getInt("locx"));
-					spawnDat.setLocy(rs.getInt("locy"));
-					spawnDat.setLocz(rs.getInt("locz"));
+					spawnDat.setX(rs.getInt("locx"));
+					spawnDat.setY(rs.getInt("locy"));
+					spawnDat.setZ(rs.getInt("locz"));
 					spawnDat.setHeading(rs.getInt("heading"));
 					spawnDat.setRespawnDelay(rs.getInt("respawn_delay"), rs.getInt("respawn_random"));
 					spawnDat.setMinLvl(rs.getInt("min_hellbound_level"));

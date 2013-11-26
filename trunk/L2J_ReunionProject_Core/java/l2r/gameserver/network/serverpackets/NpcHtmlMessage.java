@@ -190,9 +190,10 @@ public final class NpcHtmlMessage extends L2GameServerPacket
 		if (text.length() > 17200)
 		{
 			_log.warn("Html is too long! this will crash the client!", new Throwable());
-			_html = text.substring(0, 17200);
+			text = "<html><body>Html is too long...<br>Report this to Pegasus team!</body></html>";
 		}
-		if (!text.contains("<html>"))
+		
+		if (!text.contains("<html"))
 		{
 			text = "<html><body>" + text + "</body></html>";
 		}
@@ -220,15 +221,29 @@ public final class NpcHtmlMessage extends L2GameServerPacket
 		return setFile(null, path);
 	}
 	
-	public void replace(String pattern, String value)
+	public final void replace(String pattern, String value)
 	{
 		_html = _html.replaceAll(pattern, value.replaceAll("\\$", "\\\\\\$"));
 	}
 	
-	public void replace(String pattern, int value)
+	public final void replace(String pattern, boolean val)
 	{
-		String replacableValue = String.valueOf(value);
-		_html = _html.replaceAll(pattern, replacableValue.replaceAll("\\$", "\\\\\\$"));
+		replace(pattern, String.valueOf(val));
+	}
+	
+	public final void replace(String pattern, int val)
+	{
+		replace(pattern, String.valueOf(val));
+	}
+	
+	public final void replace(String pattern, long val)
+	{
+		replace(pattern, String.valueOf(val));
+	}
+	
+	public final void replace(String pattern, double val)
+	{
+		replace(pattern, String.valueOf(val));
 	}
 	
 	public void replace2(String pattern, String value)
@@ -250,6 +265,11 @@ public final class NpcHtmlMessage extends L2GameServerPacket
 	}
 	
 	public String getText()
+	{
+		return _html;
+	}
+	
+	public final String getHtml()
 	{
 		return _html;
 	}

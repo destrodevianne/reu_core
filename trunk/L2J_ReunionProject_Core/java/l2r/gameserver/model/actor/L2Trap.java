@@ -114,11 +114,13 @@ public class L2Trap extends L2Character
 	}
 	
 	/**
-	 * @return
+	 * Gets the trap ID.
+	 * @return the trap ID
 	 */
-	public final int getNpcId()
+	@Override
+	public final int getId()
 	{
-		return getTemplate().getNpcId();
+		return getTemplate().getId();
 	}
 	
 	@Override

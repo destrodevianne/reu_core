@@ -118,18 +118,18 @@ public class ItemsOnGroundManager implements Runnable
 					{
 						item.setEnchantLevel(rs.getInt(4));
 					}
-					item.getPosition().setWorldPosition(rs.getInt(5), rs.getInt(6), rs.getInt(7));
-					item.getPosition().setWorldRegion(L2World.getInstance().getRegion(item.getPosition().getWorldPosition()));
-					item.getPosition().getWorldRegion().addVisibleObject(item);
+					item.setXYZ(rs.getInt(5), rs.getInt(6), rs.getInt(7));
+					item.setWorldRegion(L2World.getInstance().getRegion(item.getLocation()));
+					item.getWorldRegion().addVisibleObject(item);
 					final long dropTime = rs.getLong(8);
 					item.setDropTime(dropTime);
 					item.setProtected(dropTime == -1);
 					item.setIsVisible(true);
-					L2World.getInstance().addVisibleObject(item, item.getPosition().getWorldRegion());
+					L2World.getInstance().addVisibleObject(item, item.getWorldRegion());
 					_items.add(item);
 					count++;
 					// add to ItemsAutoDestroy only items not protected
-					if (!Config.LIST_PROTECTED_ITEMS.contains(item.getItemId()))
+					if (!Config.LIST_PROTECTED_ITEMS.contains(item.getId()))
 					{
 						if (dropTime > -1)
 						{
@@ -219,7 +219,7 @@ public class ItemsOnGroundManager implements Runnable
 					continue;
 				}
 				
-				if (CursedWeaponsManager.getInstance().isCursed(item.getItemId()))
+				if (CursedWeaponsManager.getInstance().isCursed(item.getId()))
 				{
 					continue; // Cursed Items not saved to ground, prevent double save
 				}
@@ -227,7 +227,7 @@ public class ItemsOnGroundManager implements Runnable
 				try
 				{
 					statement.setInt(1, item.getObjectId());
-					statement.setInt(2, item.getItemId());
+					statement.setInt(2, item.getId());
 					statement.setLong(3, item.getCount());
 					statement.setInt(4, item.getEnchantLevel());
 					statement.setInt(5, item.getX());

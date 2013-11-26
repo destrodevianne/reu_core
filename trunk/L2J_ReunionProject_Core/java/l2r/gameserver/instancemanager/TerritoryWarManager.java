@@ -53,6 +53,7 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.Siegable;
+import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
@@ -320,7 +321,7 @@ public class TerritoryWarManager implements Siegable
 		}
 		
 		_registeredClans.get(castleId).add(clan);
-		changeRegistration(castleId, clan.getClanId(), false);
+		changeRegistration(castleId, clan.getId(), false);
 	}
 	
 	public void registerMerc(int castleId, L2PcInstance player)
@@ -347,7 +348,7 @@ public class TerritoryWarManager implements Siegable
 		else if ((_registeredClans.get(castleId) != null) && _registeredClans.get(castleId).contains(clan))
 		{
 			_registeredClans.get(castleId).remove(clan);
-			changeRegistration(castleId, clan.getClanId(), true);
+			changeRegistration(castleId, clan.getId(), true);
 		}
 	}
 	
@@ -592,7 +593,7 @@ public class TerritoryWarManager implements Siegable
 					{
 						for (TerritoryNPCSpawn wardSpawn : _territoryList.get(twWard.getOwnerCastleId()).getOwnedWard())
 						{
-							if (wardSpawn.getNpcId() == twWard.getTerritoryId())
+							if (wardSpawn.getId() == twWard.getTerritoryId())
 							{
 								wardSpawn.setNPC(wardSpawn.getNpc().getSpawn().doSpawn());
 								twWard.unSpawnMe();
@@ -775,9 +776,9 @@ public class TerritoryWarManager implements Siegable
 			{
 				spawnDat = new L2Spawn(template);
 				spawnDat.setAmount(1);
-				spawnDat.setLocx(loc.getX());
-				spawnDat.setLocy(loc.getY());
-				spawnDat.setLocz(loc.getZ());
+				spawnDat.setX(loc.getX());
+				spawnDat.setY(loc.getY());
+				spawnDat.setZ(loc.getZ());
 				spawnDat.setHeading(loc.getHeading());
 				spawnDat.stopRespawn();
 				return spawnDat.spawnOne(false);
@@ -1025,7 +1026,7 @@ public class TerritoryWarManager implements Siegable
 					{
 						ward.setNPC(ward.getNpc().getSpawn().doSpawn());
 					}
-					_territoryWards.add(new TerritoryWard(ward.getNpcId(), ward.getLocation().getX(), ward.getLocation().getY(), ward.getLocation().getZ(), 0, ward.getNpcId() + 13479, t.getCastleId(), ward.getNpc()));
+					_territoryWards.add(new TerritoryWard(ward.getId(), ward.getLocation().getX(), ward.getLocation().getY(), ward.getLocation().getZ(), 0, ward.getId() + 13479, t.getCastleId(), ward.getNpc()));
 				}
 			}
 			t.getQuestDone()[0] = 0; // killed npc
@@ -1154,7 +1155,7 @@ public class TerritoryWarManager implements Siegable
 		{
 			for (L2Clan clan : _registeredClans.get(castleId))
 			{
-				changeRegistration(castleId, clan.getClanId(), true);
+				changeRegistration(castleId, clan.getId(), true);
 			}
 		}
 		for (Integer castleId : _registeredMercenaries.keySet())
@@ -1502,7 +1503,7 @@ public class TerritoryWarManager implements Siegable
 		}
 	}
 	
-	public static class TerritoryNPCSpawn
+	public static class TerritoryNPCSpawn implements IIdentifiable
 	{
 		private final Location _location;
 		protected int _npcId;
@@ -1524,7 +1525,12 @@ public class TerritoryWarManager implements Siegable
 			return _castleId;
 		}
 		
-		public int getNpcId()
+		/**
+		 * Gets the NPC ID.
+		 * @return the NPC ID
+		 */
+		@Override
+		public int getId()
 		{
 			return _npcId;
 		}
@@ -1637,7 +1643,7 @@ public class TerritoryWarManager implements Siegable
 				}
 				if (isSpawn)
 				{
-					twSpawn.setNPC(spawnNPC(twSpawn.getNpcId(), twSpawn.getLocation()));
+					twSpawn.setNPC(spawnNPC(twSpawn.getId(), twSpawn.getLocation()));
 				}
 				else
 				{
@@ -1655,7 +1661,7 @@ public class TerritoryWarManager implements Siegable
 		{
 			for (TerritoryNPCSpawn wardSpawn : _territoryWardSpawnPlaces)
 			{
-				if (wardSpawn.getNpcId() == wardId)
+				if (wardSpawn.getId() == wardId)
 				{
 					wardSpawn.getNpc().deleteMe();
 					wardSpawn.setNPC(null);
@@ -1716,9 +1722,9 @@ public class TerritoryWarManager implements Siegable
 			FastList<Integer> ret = new FastList<>();
 			for (TerritoryNPCSpawn wardSpawn : _territoryWardSpawnPlaces)
 			{
-				if (wardSpawn.getNpcId() > 0)
+				if (wardSpawn.getId() > 0)
 				{
-					ret.add(wardSpawn.getNpcId());
+					ret.add(wardSpawn.getId());
 				}
 			}
 			return ret;

@@ -71,7 +71,7 @@ public class RequestExTryToPutEnchantTargetItem extends L2GameClientPacket
 			activeChar.sendPacket(new ExPutEnchantTargetItemResult(0));
 			if (scrollTemplate == null)
 			{
-				_log.warn(getClass().getSimpleName() + ": Undefined scroll have been used id: " + scroll.getItemId());
+				_log.warn(getClass().getSimpleName() + ": Undefined scroll have been used id: " + scroll.getId());
 			}
 			return;
 		}

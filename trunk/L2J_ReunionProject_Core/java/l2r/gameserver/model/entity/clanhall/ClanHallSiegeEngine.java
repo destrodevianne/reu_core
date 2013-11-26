@@ -163,9 +163,9 @@ public abstract class ClanHallSiegeEngine extends Quest implements Siegable
 						final int npcId = rset.getInt("npcId");
 						final L2NpcTemplate template = NpcTable.getInstance().getTemplate(npcId);
 						L2Spawn spawn = new L2Spawn(template);
-						spawn.setLocx(rset.getInt("x"));
-						spawn.setLocy(rset.getInt("y"));
-						spawn.setLocz(rset.getInt("z"));
+						spawn.setX(rset.getInt("x"));
+						spawn.setY(rset.getInt("y"));
+						spawn.setZ(rset.getInt("z"));
 						spawn.setHeading(rset.getInt("heading"));
 						spawn.setRespawnDelay(rset.getInt("respawnDelay"));
 						spawn.setAmount(1);
@@ -235,7 +235,7 @@ public abstract class ClanHallSiegeEngine extends Quest implements Siegable
 			return false;
 		}
 		
-		return _attackers.containsKey(clan.getClanId());
+		return _attackers.containsKey(clan.getId());
 	}
 	
 	@Override
@@ -253,7 +253,7 @@ public abstract class ClanHallSiegeEngine extends Quest implements Siegable
 	@Override
 	public L2SiegeClan getAttackerClan(L2Clan clan)
 	{
-		return getAttackerClan(clan.getClanId());
+		return getAttackerClan(clan.getId());
 	}
 	
 	@Override
@@ -273,7 +273,7 @@ public abstract class ClanHallSiegeEngine extends Quest implements Siegable
 		for (L2PcInstance pc : list)
 		{
 			final L2Clan clan = pc.getClan();
-			if ((clan != null) && getAttackers().containsKey(clan.getClanId()))
+			if ((clan != null) && getAttackers().containsKey(clan.getId()))
 			{
 				attackers.add(pc);
 			}
@@ -480,7 +480,7 @@ public abstract class ClanHallSiegeEngine extends Quest implements Siegable
 	
 	public final void broadcastNpcSay(final L2Npc npc, final int type, final NpcStringId messageId)
 	{
-		final NpcSay npcSay = new NpcSay(npc.getObjectId(), type, npc.getNpcId(), messageId);
+		final NpcSay npcSay = new NpcSay(npc.getObjectId(), type, npc.getId(), messageId);
 		int sourceRegion = MapRegionManager.getInstance().getMapRegionLocId(npc);
 		final L2PcInstance[] charsInside = L2World.getInstance().getAllPlayersArray();
 		

@@ -446,10 +446,10 @@ public abstract class L2Effect implements IChanceSkillTrigger
 		}
 	}
 	
-	/**
-	 * @return true for continuation of this effect
-	 */
-	public abstract boolean onActionTime();
+	public boolean onActionTime()
+	{
+		return getAbnormalTime() < 0;
+	}
 	
 	public final void scheduleEffect()
 	{
@@ -711,6 +711,11 @@ public abstract class L2Effect implements IChanceSkillTrigger
 		return false;
 	}
 	
+	public boolean checkCondition(Object obj)
+	{
+		return true;
+	}
+	
 	@Override
 	public boolean triggersChanceSkill()
 	{
@@ -733,5 +738,11 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	public ChanceCondition getTriggeredChanceCondition()
 	{
 		return null;
+	}
+	
+	// TODO implemente me
+	public boolean isInstant()
+	{
+		return false;
 	}
 }

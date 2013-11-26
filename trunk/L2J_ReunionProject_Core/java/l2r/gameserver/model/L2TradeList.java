@@ -59,14 +59,14 @@ public class L2TradeList
 		_npcId = id;
 	}
 	
-	public String getNpcId()
+	public String getId()
 	{
 		return _npcId;
 	}
 	
 	public void addItem(L2TradeItem item)
 	{
-		_items.put(item.getItemId(), item);
+		_items.put(item.getId(), item);
 		if (item.hasLimitedStock())
 		{
 			setHasLimitedStockItem(true);
@@ -199,7 +199,7 @@ public class L2TradeList
 		/**
 		 * @return Returns the itemId.
 		 */
-		public int getItemId()
+		public int getId()
 		{
 			return _itemId;
 		}

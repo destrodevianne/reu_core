@@ -162,9 +162,9 @@ public class L2WarehouseItem
 	/**
 	 * @return the ItemId.
 	 */
-	public final int getItemId()
+	public final int getId()
 	{
-		return _item.getItemId();
+		return _item.getId();
 	}
 	
 	/**

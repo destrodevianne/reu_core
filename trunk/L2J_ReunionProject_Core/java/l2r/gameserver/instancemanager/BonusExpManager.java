@@ -131,7 +131,7 @@ public class BonusExpManager
 			for (int itemId : _bonusItems.keySet())
 			{
 				L2ItemInstance item = inv.getItemByItemId(itemId);
-				if ((item != null) && (item.getLocation() == ItemLocation.INVENTORY))
+				if ((item != null) && (item.getItemLocation() == ItemLocation.INVENTORY))
 				{
 					bonus = _bonusItems.get(itemId);
 					bonusExp += bonus.getBonusExpMultiplyer();

@@ -21,7 +21,6 @@ package l2r.gameserver.model.actor.instance;
 import l2r.gameserver.ai.L2AirShipAI;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.AirShipManager;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Vehicle;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
@@ -106,6 +105,12 @@ public class L2AirShipInstance extends L2Vehicle
 	}
 	
 	@Override
+	public int getId()
+	{
+		return 0;
+	}
+	
+	@Override
 	public boolean moveToNextRoutePoint()
 	{
 		final boolean result = super.moveToNextRoutePoint();
@@ -160,7 +165,7 @@ public class L2AirShipInstance extends L2Vehicle
 	}
 	
 	@Override
-	public void stopMove(L2CharPosition pos, boolean updateKnownObjects)
+	public void stopMove(Location pos, boolean updateKnownObjects)
 	{
 		super.stopMove(pos, updateKnownObjects);
 		

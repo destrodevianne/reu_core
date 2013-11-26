@@ -58,16 +58,16 @@ public class L2SkillSpawn extends L2Skill
 			return;
 		}
 		
-		if (getNpcId() == 0)
+		if (getId() == 0)
 		{
 			_log.warn("NPC ID not defined for skill ID:" + getId());
 			return;
 		}
 		
-		final L2NpcTemplate template = NpcTable.getInstance().getTemplate(getNpcId());
+		final L2NpcTemplate template = NpcTable.getInstance().getTemplate(getId());
 		if (template == null)
 		{
-			_log.warn("Spawn of the nonexisting NPC ID:" + getNpcId() + ", skill ID:" + getId());
+			_log.warn("Spawn of the nonexisting NPC ID:" + getId() + ", skill ID:" + getId());
 			return;
 		}
 		
@@ -90,9 +90,9 @@ public class L2SkillSpawn extends L2Skill
 			y += (Rnd.nextBoolean() ? Rnd.get(20, 50) : Rnd.get(-50, -20));
 		}
 		
-		spawn.setLocx(x);
-		spawn.setLocy(y);
-		spawn.setLocz(caster.getZ());
+		spawn.setX(x);
+		spawn.setY(y);
+		spawn.setZ(caster.getZ());
 		spawn.setHeading(caster.getHeading());
 		spawn.stopRespawn();
 		

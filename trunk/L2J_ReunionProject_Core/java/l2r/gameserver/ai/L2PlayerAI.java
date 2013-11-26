@@ -26,8 +26,8 @@ import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_MOVE_TO;
 import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_PICK_UP;
 import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_REST;
 import l2r.gameserver.enums.CtrlIntention;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Character.AIAccessor;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -184,7 +184,7 @@ public class L2PlayerAI extends L2PlayableAI
 	 * </ul>
 	 */
 	@Override
-	protected void onIntentionMoveTo(L2CharPosition pos)
+	protected void onIntentionMoveTo(Location loc)
 	{
 		if (getIntention() == AI_INTENTION_REST)
 		{
@@ -196,12 +196,12 @@ public class L2PlayerAI extends L2PlayableAI
 		if (_actor.isAllSkillsDisabled() || _actor.isCastingNow() || _actor.isAttackingNow())
 		{
 			clientActionFailed();
-			saveNextIntention(AI_INTENTION_MOVE_TO, pos, null);
+			saveNextIntention(AI_INTENTION_MOVE_TO, loc, null);
 			return;
 		}
 		
 		// Set the Intention of this AbstractAI to AI_INTENTION_MOVE_TO
-		changeIntention(AI_INTENTION_MOVE_TO, pos, null);
+		changeIntention(AI_INTENTION_MOVE_TO, loc, null);
 		
 		// Stop the actor auto-attack client side by sending Server->Client packet AutoAttackStop (broadcast)
 		clientStopAutoAttack();
@@ -210,7 +210,7 @@ public class L2PlayerAI extends L2PlayableAI
 		_actor.abortAttack();
 		
 		// Move the actor to Location (x,y,z) server side AND client side by sending Server->Client packet CharMoveToLocation (broadcast)
-		moveTo(pos.x, pos.y, pos.z);
+		moveTo(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
 	@Override

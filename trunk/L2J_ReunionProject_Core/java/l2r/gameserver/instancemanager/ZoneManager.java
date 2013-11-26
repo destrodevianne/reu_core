@@ -33,6 +33,7 @@ import l2r.gameserver.model.L2WorldRegion;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.zone.AbstractZoneSettings;
+import l2r.gameserver.model.zone.L2ZoneForm;
 import l2r.gameserver.model.zone.L2ZoneRespawn;
 import l2r.gameserver.model.zone.L2ZoneType;
 import l2r.gameserver.model.zone.form.ZoneCuboid;
@@ -41,6 +42,7 @@ import l2r.gameserver.model.zone.form.ZoneNPoly;
 import l2r.gameserver.model.zone.type.L2ArenaZone;
 import l2r.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import l2r.gameserver.model.zone.type.L2RespawnZone;
+import l2r.gameserver.model.zone.type.NpcSpawnTerritory;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -49,11 +51,12 @@ import org.w3c.dom.Node;
  * This class manages the zones
  * @author durgus
  */
-public class ZoneManager extends DocumentParser
+public final class ZoneManager extends DocumentParser
 {
 	private static final Map<String, AbstractZoneSettings> _settings = new HashMap<>();
 	
 	private final Map<Class<? extends L2ZoneType>, Map<Integer, ? extends L2ZoneType>> _classZones = new HashMap<>();
+	private final Map<String, NpcSpawnTerritory> _spawnTerritories = new HashMap<>();
 	private int _lastDynamicId = 300000;
 	private List<L2ItemInstance> _debugItems;
 	
@@ -72,7 +75,7 @@ public class ZoneManager extends DocumentParser
 	{
 		// Get the world regions
 		int count = 0;
-		L2WorldRegion[][] worldRegions = L2World.getInstance().getAllWorldRegions();
+		final L2WorldRegion[][] worldRegions = L2World.getInstance().getAllWorldRegions();
 		
 		// Backup old zone settings
 		for (Map<Integer, ? extends L2ZoneType> map : _classZones.values())
@@ -116,14 +119,14 @@ public class ZoneManager extends DocumentParser
 	protected void parseDocument()
 	{
 		// Get the world regions
-		L2WorldRegion[][] worldRegions = L2World.getInstance().getAllWorldRegions();
+		final L2WorldRegion[][] worldRegions = L2World.getInstance().getAllWorldRegions();
 		NamedNodeMap attrs;
 		Node attribute;
 		String zoneName;
 		int[][] coords;
 		int zoneId, minZ, maxZ;
 		String zoneType, zoneShape;
-		List<int[]> rs = new ArrayList<>();
+		final List<int[]> rs = new ArrayList<>();
 		
 		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
 		{
@@ -142,6 +145,17 @@ public class ZoneManager extends DocumentParser
 					{
 						attrs = d.getAttributes();
 						
+						attribute = attrs.getNamedItem("type");
+						if (attribute != null)
+						{
+							zoneType = attribute.getNodeValue();
+						}
+						else
+						{
+							_log.warn("ZoneData: Missing type for zone in file: " + getCurrentFile().getName());
+							continue;
+						}
+						
 						attribute = attrs.getNamedItem("id");
 						if (attribute != null)
 						{
@@ -149,7 +163,7 @@ public class ZoneManager extends DocumentParser
 						}
 						else
 						{
-							zoneId = _lastDynamicId++;
+							zoneId = zoneType.equalsIgnoreCase("NpcSpawnTerritory") ? 0 : _lastDynamicId++;
 						}
 						
 						attribute = attrs.getNamedItem("name");
@@ -162,29 +176,29 @@ public class ZoneManager extends DocumentParser
 							zoneName = null;
 						}
 						
+						// Check zone name for NpcSpawnTerritory. Must exist and to be unique
+						if (zoneType.equalsIgnoreCase("NpcSpawnTerritory"))
+						{
+							if (zoneName == null)
+							{
+								_log.warn("ZoneData: Missing name for NpcSpawnTerritory in file: " + getCurrentFile().getName() + ", skipping zone");
+								continue;
+							}
+							else if (_spawnTerritories.containsKey(zoneName))
+							{
+								_log.warn("ZoneData: Name " + zoneName + " already used for another zone, check file: " + getCurrentFile().getName() + ". Skipping zone");
+								continue;
+							}
+						}
+						
 						minZ = parseInt(attrs, "minZ");
 						maxZ = parseInt(attrs, "maxZ");
 						
 						zoneType = attrs.getNamedItem("type").getNodeValue();
 						zoneShape = attrs.getNamedItem("shape").getNodeValue();
 						
-						// Create the zone
-						Class<?> newZone = null;
-						Constructor<?> zoneConstructor = null;
-						L2ZoneType temp;
-						try
-						{
-							newZone = Class.forName("l2r.gameserver.model.zone.type.L2" + zoneType);
-							zoneConstructor = newZone.getConstructor(int.class);
-							temp = (L2ZoneType) zoneConstructor.newInstance(zoneId);
-						}
-						catch (Exception e)
-						{
-							_log.warn(getClass().getSimpleName() + ": ZoneData: No such zone type: " + zoneType + " in file: " + getCurrentFile().getName());
-							continue;
-						}
-						
 						// Get the zone shape from xml
+						L2ZoneForm zoneForm = null;
 						try
 						{
 							coords = null;
@@ -220,7 +234,7 @@ public class ZoneManager extends DocumentParser
 							{
 								if (coords.length == 2)
 								{
-									temp.setZone(new ZoneCuboid(coords[0][0], coords[1][0], coords[0][1], coords[1][1], minZ, maxZ));
+									zoneForm = new ZoneCuboid(coords[0][0], coords[1][0], coords[0][1], coords[1][1], minZ, maxZ);
 								}
 								else
 								{
@@ -240,7 +254,7 @@ public class ZoneManager extends DocumentParser
 										aX[i] = coords[i][0];
 										aY[i] = coords[i][1];
 									}
-									temp.setZone(new ZoneNPoly(aX, aY, minZ, maxZ));
+									zoneForm = new ZoneNPoly(aX, aY, minZ, maxZ);
 								}
 								else
 								{
@@ -256,7 +270,7 @@ public class ZoneManager extends DocumentParser
 								final int zoneRad = Integer.parseInt(attrs.getNamedItem("rad").getNodeValue());
 								if ((coords.length == 1) && (zoneRad > 0))
 								{
-									temp.setZone(new ZoneCylinder(coords[0][0], coords[0][1], minZ, maxZ, zoneRad));
+									zoneForm = new ZoneCylinder(coords[0][0], coords[0][1], minZ, maxZ, zoneRad);
 								}
 								else
 								{
@@ -264,10 +278,39 @@ public class ZoneManager extends DocumentParser
 									continue;
 								}
 							}
+							else
+							{
+								_log.warn(getClass().getSimpleName() + ": ZoneData: Unknown shape: \"" + zoneShape + "\"  for zone: " + zoneId + " in file: " + getCurrentFile().getName());
+								continue;
+							}
 						}
 						catch (Exception e)
 						{
 							_log.warn(getClass().getSimpleName() + ": ZoneData: Failed to load zone " + zoneId + " coordinates: " + e.getMessage(), e);
+						}
+						
+						// No further parameters needed, if NpcSpawnTerritory is loading
+						if (zoneType.equalsIgnoreCase("NpcSpawnTerritory"))
+						{
+							_spawnTerritories.put(zoneName, new NpcSpawnTerritory(zoneName, zoneForm));
+							continue;
+						}
+						
+						// Create the zone
+						Class<?> newZone = null;
+						Constructor<?> zoneConstructor = null;
+						L2ZoneType temp;
+						try
+						{
+							newZone = Class.forName("l2r.gameserver.model.zone.type.L2" + zoneType);
+							zoneConstructor = newZone.getConstructor(int.class);
+							temp = (L2ZoneType) zoneConstructor.newInstance(zoneId);
+							temp.setZone(zoneForm);
+						}
+						catch (Exception e)
+						{
+							_log.warn(getClass().getSimpleName() + ": ZoneData: No such zone type: " + zoneType + " in file: " + getCurrentFile().getName());
+							continue;
 						}
 						
 						// Check for additional parameters
@@ -339,10 +382,12 @@ public class ZoneManager extends DocumentParser
 	@Override
 	public final void load()
 	{
-		_log.info(getClass().getSimpleName() + ": Loading zones...");
 		_classZones.clear();
-		parseDirectory("data/zones");
+		_spawnTerritories.clear();
+		parseDirectory("data/zones", false);
+		parseDirectory("data/zones/npcSpawnTerritories", false);
 		_log.info(getClass().getSimpleName() + ": Loaded " + _classZones.size() + " zone classes and " + getSize() + " zones.");
+		_log.info(getClass().getSimpleName() + ": Loaded " + _spawnTerritories.size() + " NPC spawn territoriers.");
 	}
 	
 	/**
@@ -406,7 +451,7 @@ public class ZoneManager extends DocumentParser
 	@Deprecated
 	public Collection<L2ZoneType> getAllZones()
 	{
-		List<L2ZoneType> zones = new ArrayList<>();
+		final List<L2ZoneType> zones = new ArrayList<>();
 		for (Map<Integer, ? extends L2ZoneType> map : _classZones.values())
 		{
 			zones.addAll(map.values());
@@ -491,8 +536,8 @@ public class ZoneManager extends DocumentParser
 	 */
 	public List<L2ZoneType> getZones(int x, int y)
 	{
-		L2WorldRegion region = L2World.getInstance().getRegion(x, y);
-		List<L2ZoneType> temp = new ArrayList<>();
+		final L2WorldRegion region = L2World.getInstance().getRegion(x, y);
+		final List<L2ZoneType> temp = new ArrayList<>();
 		for (L2ZoneType zone : region.getZones())
 		{
 			if (zone.isInsideZone(x, y))
@@ -512,8 +557,8 @@ public class ZoneManager extends DocumentParser
 	 */
 	public List<L2ZoneType> getZones(int x, int y, int z)
 	{
-		L2WorldRegion region = L2World.getInstance().getRegion(x, y);
-		List<L2ZoneType> temp = new ArrayList<>();
+		final L2WorldRegion region = L2World.getInstance().getRegion(x, y);
+		final List<L2ZoneType> temp = new ArrayList<>();
 		for (L2ZoneType zone : region.getZones())
 		{
 			if (zone.isInsideZone(x, y, z))
@@ -536,7 +581,7 @@ public class ZoneManager extends DocumentParser
 	@SuppressWarnings("unchecked")
 	public <T extends L2ZoneType> T getZone(int x, int y, int z, Class<T> type)
 	{
-		L2WorldRegion region = L2World.getInstance().getRegion(x, y);
+		final L2WorldRegion region = L2World.getInstance().getRegion(x, y);
 		for (L2ZoneType zone : region.getZones())
 		{
 			if (zone.isInsideZone(x, y, z) && type.isInstance(zone))
@@ -545,6 +590,35 @@ public class ZoneManager extends DocumentParser
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Get spawm territory by name
+	 * @param name name of territory to search
+	 * @return link to zone form
+	 */
+	public NpcSpawnTerritory getSpawnTerritory(String name)
+	{
+		return _spawnTerritories.containsKey(name) ? _spawnTerritories.get(name) : null;
+	}
+	
+	/**
+	 * Returns all spawm territories from where the object is located
+	 * @param object
+	 * @return zones
+	 */
+	public List<NpcSpawnTerritory> getSpawnTerritories(L2Object object)
+	{
+		List<NpcSpawnTerritory> temp = new ArrayList<>();
+		for (NpcSpawnTerritory territory : _spawnTerritories.values())
+		{
+			if (territory.isInsideZone(object.getX(), object.getY(), object.getZ()))
+			{
+				temp.add(territory);
+			}
+		}
+		
+		return temp;
 	}
 	
 	/**
@@ -639,10 +713,10 @@ public class ZoneManager extends DocumentParser
 	{
 		if (_debugItems != null)
 		{
-			Iterator<L2ItemInstance> it = _debugItems.iterator();
+			final Iterator<L2ItemInstance> it = _debugItems.iterator();
 			while (it.hasNext())
 			{
-				L2ItemInstance item = it.next();
+				final L2ItemInstance item = it.next();
 				if (item != null)
 				{
 					item.decayMe();

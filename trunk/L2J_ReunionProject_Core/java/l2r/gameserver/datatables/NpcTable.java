@@ -635,7 +635,7 @@ public class NpcTable
 		{
 			for (L2NpcTemplate template : _npcs.values())
 			{
-				final List<ClassId> teachInfo = SkillLearnData.getInstance().getSkillLearnData(template.getNpcId());
+				final List<ClassId> teachInfo = SkillLearnData.getInstance().getSkillLearnData(template.getId());
 				if (teachInfo != null)
 				{
 					template.addTeachInfo(teachInfo);
@@ -683,9 +683,9 @@ public class NpcTable
 					dropDat.setChance(rs.getInt("chance"));
 					
 					int category = rs.getInt("category");
-					if (ItemTable.getInstance().getTemplate(dropDat.getItemId()) == null)
+					if (ItemTable.getInstance().getTemplate(dropDat.getId()) == null)
 					{
-						_log.warn(getClass().getSimpleName() + ": Drop data for undefined item template! NpcId: " + mobId + " itemId: " + dropDat.getItemId());
+						_log.warn(getClass().getSimpleName() + ": Drop data for undefined item template! NpcId: " + mobId + " itemId: " + dropDat.getId());
 						continue;
 					}
 					count++;

@@ -43,7 +43,7 @@ public class L2TeleportLocation
 	/**
 	 * @param locX
 	 */
-	public void setLocX(int locX)
+	public void setX(int locX)
 	{
 		_locX = locX;
 	}
@@ -51,7 +51,7 @@ public class L2TeleportLocation
 	/**
 	 * @param locY
 	 */
-	public void setLocY(int locY)
+	public void setY(int locY)
 	{
 		_locY = locY;
 	}
@@ -59,7 +59,7 @@ public class L2TeleportLocation
 	/**
 	 * @param locZ
 	 */
-	public void setLocZ(int locZ)
+	public void setZ(int locZ)
 	{
 		_locZ = locZ;
 	}
@@ -99,7 +99,7 @@ public class L2TeleportLocation
 	/**
 	 * @return
 	 */
-	public int getLocX()
+	public int getX()
 	{
 		return _locX;
 	}
@@ -107,7 +107,7 @@ public class L2TeleportLocation
 	/**
 	 * @return
 	 */
-	public int getLocY()
+	public int getY()
 	{
 		return _locY;
 	}
@@ -115,7 +115,7 @@ public class L2TeleportLocation
 	/**
 	 * @return
 	 */
-	public int getLocZ()
+	public int getZ()
 	{
 		return _locZ;
 	}
@@ -139,7 +139,7 @@ public class L2TeleportLocation
 	/**
 	 * @return
 	 */
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}

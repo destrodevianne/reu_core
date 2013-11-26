@@ -474,7 +474,7 @@ public class DimensionalRift
 	
 	public int[] getRoomCoord(byte room)
 	{
-		return DimensionalRiftManager.getInstance().getRoom(_type, room).getTeleportCoords();
+		return DimensionalRiftManager.getInstance().getRoom(_type, room).getTeleportCoorinates();
 	}
 	
 	public byte getMaxJumps()

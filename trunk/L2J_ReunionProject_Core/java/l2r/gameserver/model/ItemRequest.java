@@ -48,7 +48,7 @@ public class ItemRequest
 		return _objectId;
 	}
 	
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}

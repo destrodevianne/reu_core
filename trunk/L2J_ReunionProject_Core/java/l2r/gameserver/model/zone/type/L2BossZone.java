@@ -26,6 +26,7 @@ import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.GrandBossManager;
 import l2r.gameserver.instancemanager.ZoneManager;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
@@ -284,7 +285,7 @@ public class L2BossZone extends L2ZoneType
 							{
 								continue;
 							}
-							if (!raid.isInsideRadius(raid.getSpawn().getLocx(), raid.getSpawn().getLocy(), 150, false))
+							if (!raid.isInsideRadius(raid.getSpawn(), 150, false, false))
 							{
 								raid.returnHome();
 							}
@@ -354,11 +355,9 @@ public class L2BossZone extends L2ZoneType
 	
 	/**
 	 * Some GrandBosses send all players in zone to a specific part of the zone, rather than just removing them all. If this is the case, this command should be used. If this is no the case, then use oustAllPlayers().
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param loc
 	 */
-	public void movePlayersTo(int x, int y, int z)
+	public void movePlayersTo(Location loc)
 	{
 		if (_characterList.isEmpty())
 		{
@@ -372,7 +371,7 @@ public class L2BossZone extends L2ZoneType
 				L2PcInstance player = character.getActingPlayer();
 				if (player.isOnline())
 				{
-					player.teleToLocation(x, y, z);
+					player.teleToLocation(loc);
 				}
 			}
 		}

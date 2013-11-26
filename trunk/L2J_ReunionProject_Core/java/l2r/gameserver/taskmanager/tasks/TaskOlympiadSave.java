@@ -18,11 +18,11 @@
  */
 package l2r.gameserver.taskmanager.tasks;
 
-import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
+import l2r.gameserver.taskmanager.TaskTypes;
 
 /**
  * Updates all data of Olympiad nobles in db
@@ -52,6 +52,6 @@ public class TaskOlympiadSave extends Task
 	public void initializate()
 	{
 		super.initializate();
-		TaskManager.addUniqueTask(NAME, TaskType.TYPE_FIXED_SHEDULED, "900000", "1800000", "");
+		TaskManager.addUniqueTask(NAME, TaskTypes.TYPE_FIXED_SHEDULED, "900000", "1800000", "");
 	}
 }

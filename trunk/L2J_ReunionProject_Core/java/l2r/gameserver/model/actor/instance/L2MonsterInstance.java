@@ -177,7 +177,7 @@ public class L2MonsterInstance extends L2Attackable
 		// TODO: Find Better way! (Achievement function)
 		if ((killer != null) && killer.isPlayer())
 		{
-			if (getNpcId() == AchievementsManager.getInstance().getMobId())
+			if (getId() == AchievementsManager.getInstance().getMobId())
 			{
 				((L2PcInstance) killer).setKilledSpecificMob(true);
 			}
@@ -298,9 +298,9 @@ public class L2MonsterInstance extends L2Attackable
 			return;
 		}
 		
-		final int spawnX = spawn.getLocx();
-		final int spawnY = spawn.getLocy();
-		final int spawnZ = spawn.getLocz();
+		final int spawnX = spawn.getX();
+		final int spawnY = spawn.getY();
+		final int spawnZ = spawn.getZ();
 		_returnToSpawnTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 		{
 			@Override

@@ -51,7 +51,7 @@ public class ItemCreateEvent implements L2Event
 	/**
 	 * @return the itemId
 	 */
-	public int getItemId()
+	public int getId()
 	{
 		return itemId;
 	}

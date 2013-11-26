@@ -132,7 +132,7 @@ public class RequestPackageSend extends L2GameClientPacket
 			}
 			
 			// Calculate needed adena and slots
-			if (item.getItemId() == PcInventory.ADENA_ID)
+			if (item.getId() == PcInventory.ADENA_ID)
 			{
 				currentAdena -= i.getCount();
 			}
@@ -140,7 +140,7 @@ public class RequestPackageSend extends L2GameClientPacket
 			{
 				slots += i.getCount();
 			}
-			else if (warehouse.getItemByItemId(item.getItemId()) == null)
+			else if (warehouse.getItemByItemId(item.getId()) == null)
 			{
 				slots++;
 			}

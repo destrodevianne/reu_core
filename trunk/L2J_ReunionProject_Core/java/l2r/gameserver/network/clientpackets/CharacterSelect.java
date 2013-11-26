@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.datatables.SecondaryAuthData;
 import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.model.CharSelectInfoPackage;
@@ -82,7 +83,7 @@ public class CharacterSelect extends L2GameClientPacket
 			return;
 		}
 		
-		if (Config.SECOND_AUTH_ENABLED && !client.getSecondaryAuth().isAuthed())
+		if (SecondaryAuthData.getInstance().isEnabled() && !client.getSecondaryAuth().isAuthed())
 		{
 			client.getSecondaryAuth().openDialog();
 			return;

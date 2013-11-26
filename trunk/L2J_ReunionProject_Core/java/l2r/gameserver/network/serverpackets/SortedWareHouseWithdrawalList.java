@@ -292,8 +292,8 @@ public class SortedWareHouseWithdrawalList extends L2GameServerPacket
 			{
 				try
 				{
-					L2RecipeList rp1 = rd.getRecipeByItemId(o1.getItemId());
-					L2RecipeList rp2 = rd.getRecipeByItemId(o2.getItemId());
+					L2RecipeList rp1 = rd.getRecipeByItemId(o1.getId());
+					L2RecipeList rp2 = rd.getRecipeByItemId(o2.getId());
 					
 					if (rp1 == null)
 					{

@@ -100,7 +100,7 @@ public class L2RaidBossInstance extends L2MonsterInstance
 		if (player != null)
 		{
 			// TODO: Find Better way! (Achievement function)
-			if (getNpcId() == AchievementsManager.getInstance().getMobId())
+			if (getId() == AchievementsManager.getInstance().getMobId())
 			{
 				player.setKilledSpecificMob(true);
 			}
@@ -116,19 +116,19 @@ public class L2RaidBossInstance extends L2MonsterInstance
 			{
 				for (L2PcInstance member : player.getParty().getMembers())
 				{
-					RaidBossPointsManager.getInstance().addPoints(member, getNpcId(), (getLevel() / 2) + Rnd.get(-5, 5));
+					RaidBossPointsManager.getInstance().addPoints(member, getId(), (getLevel() / 2) + Rnd.get(-5, 5));
 					if (member.isNoble())
 					{
-						Hero.getInstance().setRBkilled(member.getObjectId(), getNpcId());
+						Hero.getInstance().setRBkilled(member.getObjectId(), getId());
 					}
 				}
 			}
 			else
 			{
-				RaidBossPointsManager.getInstance().addPoints(player, getNpcId(), (getLevel() / 2) + Rnd.get(-5, 5));
+				RaidBossPointsManager.getInstance().addPoints(player, getId(), (getLevel() / 2) + Rnd.get(-5, 5));
 				if (player.isNoble())
 				{
-					Hero.getInstance().setRBkilled(player.getObjectId(), getNpcId());
+					Hero.getInstance().setRBkilled(player.getObjectId(), getId());
 				}
 			}
 		}
@@ -171,9 +171,9 @@ public class L2RaidBossInstance extends L2MonsterInstance
 			return;
 		}
 		
-		final int spawnX = spawn.getLocx();
-		final int spawnY = spawn.getLocy();
-		final int spawnZ = spawn.getLocz();
+		final int spawnX = spawn.getX();
+		final int spawnY = spawn.getY();
+		final int spawnZ = spawn.getZ();
 		
 		if (!isInCombat() && !isMovementDisabled())
 		{

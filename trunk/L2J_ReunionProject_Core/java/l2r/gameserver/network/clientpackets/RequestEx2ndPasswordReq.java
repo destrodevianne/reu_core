@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.Config;
+import l2r.gameserver.datatables.SecondaryAuthData;
 import l2r.gameserver.network.serverpackets.Ex2ndPasswordAck;
 import l2r.gameserver.security.SecondaryPasswordAuth;
 
@@ -47,7 +47,7 @@ public class RequestEx2ndPasswordReq extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		if (!Config.SECOND_AUTH_ENABLED)
+		if (!SecondaryAuthData.getInstance().isEnabled())
 		{
 			return;
 		}

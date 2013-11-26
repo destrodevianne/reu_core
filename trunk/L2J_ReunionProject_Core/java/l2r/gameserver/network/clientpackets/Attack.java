@@ -22,6 +22,8 @@ import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 
@@ -66,6 +68,14 @@ public final class Attack extends L2GameClientPacket
 		if (activeChar.isPlayable() && activeChar.isInBoat())
 		{
 			activeChar.sendPacket(SystemMessageId.NOT_ALLOWED_ON_BOAT);
+			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
+		L2Effect ef = null;
+		if (((ef = activeChar.getFirstEffect(L2EffectType.ACTION_BLOCK)) != null) && !ef.checkCondition(-1))
+		{
+			activeChar.sendPacket(SystemMessageId.YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED);
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}

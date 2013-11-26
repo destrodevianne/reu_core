@@ -155,7 +155,7 @@ public class TradeList
 		{
 			for (TradeItem exclItem : _items)
 			{
-				if (exclItem.getItem().getItemId() == item.getItemId())
+				if (exclItem.getItem().getId() == item.getId())
 				{
 					if (item.getCount() <= exclItem.getCount())
 					{
@@ -228,7 +228,7 @@ public class TradeList
 			return null;
 		}
 		
-		if (!getOwner().getInventory().canManipulateWithItemId(item.getItemId()))
+		if (!getOwner().getInventory().canManipulateWithItemId(item.getId()))
 		{
 			_log.warn(_owner.getName() + ": Attempt to add an item that can't manipualte!");
 			return null;
@@ -333,7 +333,7 @@ public class TradeList
 		
 		for (TradeItem titem : _items)
 		{
-			if ((titem.getObjectId() == objectId) || (titem.getItem().getItemId() == itemId))
+			if ((titem.getObjectId() == objectId) || (titem.getItem().getId() == itemId))
 			{
 				// If Partner has already confirmed this trade, invalidate the confirmation
 				if (_partner != null)
@@ -567,7 +567,7 @@ public class TradeList
 			{
 				continue;
 			}
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getItemId());
+			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getId());
 			if (template == null)
 			{
 				continue;
@@ -576,7 +576,7 @@ public class TradeList
 			{
 				slots += item.getCount();
 			}
-			else if (partner.getInventory().getItemByItemId(item.getItem().getItemId()) == null)
+			else if (partner.getInventory().getItemByItemId(item.getItem().getId()) == null)
 			{
 				slots++;
 			}
@@ -598,7 +598,7 @@ public class TradeList
 			{
 				continue;
 			}
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getItemId());
+			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getId());
 			if (template == null)
 			{
 				continue;
@@ -763,7 +763,7 @@ public class TradeList
 				return 2;
 			}
 			
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItemId());
+			L2Item template = ItemTable.getInstance().getTemplate(item.getId());
 			if (template == null)
 			{
 				continue;
@@ -773,7 +773,7 @@ public class TradeList
 			{
 				slots += item.getCount();
 			}
-			else if (playerInventory.getItemByItemId(item.getItemId()) == null)
+			else if (playerInventory.getItemByItemId(item.getId()) == null)
 			{
 				slots++;
 			}
@@ -956,7 +956,7 @@ public class TradeList
 			
 			for (TradeItem ti : _items)
 			{
-				if (ti.getItem().getItemId() == item.getItemId())
+				if (ti.getItem().getId() == item.getId())
 				{
 					// price should be the same
 					if (ti.getPrice() == item.getPrice())
@@ -1014,7 +1014,7 @@ public class TradeList
 			if (oldItem == null)
 			{
 				// searching other items using same itemId
-				oldItem = playerInventory.getItemByItemId(item.getItemId());
+				oldItem = playerInventory.getItemByItemId(item.getId());
 				if (oldItem == null)
 				{
 					continue;
@@ -1026,7 +1026,7 @@ public class TradeList
 					continue;
 				}
 			}
-			if (oldItem.getItemId() != item.getItemId())
+			if (oldItem.getId() != item.getId())
 			{
 				Util.handleIllegalPlayerAction(player, player + " is cheating with sell items", Config.DEFAULT_PUNISH);
 				return false;
@@ -1044,7 +1044,7 @@ public class TradeList
 				continue;
 			}
 			
-			removeItem(-1, item.getItemId(), item.getCount());
+			removeItem(-1, item.getId(), item.getCount());
 			ok = true;
 			
 			// increase total price only after successful transaction

@@ -276,7 +276,7 @@ public class FortSiege implements Siegable
 			int ownerId = -1;
 			if (getFort().getOwnerClan() != null)
 			{
-				ownerId = getFort().getOwnerClan().getClanId();
+				ownerId = getFort().getOwnerClan().getId();
 			}
 			getFort().getZone().banishForeigners(ownerId);
 			getFort().getZone().setIsActive(false);
@@ -389,7 +389,7 @@ public class FortSiege implements Siegable
 		}
 		if (getFort().getOwnerClan() != null)
 		{
-			clan = ClanTable.getInstance().getClan(getFort().getOwnerClan().getClanId());
+			clan = ClanTable.getInstance().getClan(getFort().getOwnerClan().getId());
 			for (L2PcInstance member : clan.getOnlineMembers(0))
 			{
 				if (member != null)
@@ -441,7 +441,7 @@ public class FortSiege implements Siegable
 		}
 		if (getFort().getOwnerClan() != null)
 		{
-			clan = ClanTable.getInstance().getClan(getFort().getOwnerClan().getClanId());
+			clan = ClanTable.getInstance().getClan(getFort().getOwnerClan().getId());
 			for (L2PcInstance member : clan.getOnlineMembers(0))
 			{
 				if (member == null)
@@ -529,7 +529,7 @@ public class FortSiege implements Siegable
 			{
 				try (PreparedStatement delete = con.prepareStatement("DELETE FROM fortsiege_clans WHERE clan_id=?"))
 				{
-					delete.setInt(1, getFort().getOwnerClan().getClanId());
+					delete.setInt(1, getFort().getOwnerClan().getId());
 					delete.execute();
 				}
 			}
@@ -605,7 +605,7 @@ public class FortSiege implements Siegable
 		L2Clan clan;
 		if (getFort().getOwnerClan() != null)
 		{
-			clan = ClanTable.getInstance().getClan(getFort().getOwnerClan().getClanId());
+			clan = ClanTable.getInstance().getClan(getFort().getOwnerClan().getId());
 			if (clan != getFort().getOwnerClan())
 			{
 				return null;
@@ -641,7 +641,7 @@ public class FortSiege implements Siegable
 				FastList<SiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId());
 				for (SiegeSpawn spawn2 : commanders)
 				{
-					if (spawn2.getNpcId() == spawn.getNpcid())
+					if (spawn2.getId() == spawn.getId())
 					{
 						NpcStringId npcString = null;
 						switch (spawn2.getId())
@@ -661,7 +661,7 @@ public class FortSiege implements Siegable
 						}
 						if (npcString != null)
 						{
-							instance.broadcastPacket(new NpcSay(instance.getObjectId(), Say2.NPC_SHOUT, instance.getNpcId(), npcString));
+							instance.broadcastPacket(new NpcSay(instance.getObjectId(), Say2.NPC_SHOUT, instance.getId(), npcString));
 						}
 					}
 				}
@@ -701,7 +701,7 @@ public class FortSiege implements Siegable
 			}
 			else
 			{
-				_log.warn("FortSiege.killedCommander(): killed commander, but commander not registered for fortress. NpcId: " + instance.getNpcId() + " FortId: " + getFort().getResidenceId());
+				_log.warn("FortSiege.killedCommander(): killed commander, but commander not registered for fortress. NpcId: " + instance.getId() + " FortId: " + getFort().getResidenceId());
 			}
 		}
 	}
@@ -813,7 +813,7 @@ public class FortSiege implements Siegable
 			return;
 		}
 		
-		removeSiegeClan(clan.getClanId());
+		removeSiegeClan(clan.getId());
 	}
 	
 	/**
@@ -1139,11 +1139,11 @@ public class FortSiege implements Siegable
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement("INSERT INTO fortsiege_clans (clan_id,fort_id) values (?,?)"))
 		{
-			statement.setInt(1, clan.getClanId());
+			statement.setInt(1, clan.getId());
 			statement.setInt(2, getFort().getResidenceId());
 			statement.execute();
 			
-			addAttacker(clan.getClanId());
+			addAttacker(clan.getId());
 		}
 		catch (Exception e)
 		{
@@ -1162,14 +1162,14 @@ public class FortSiege implements Siegable
 			L2NpcTemplate template1;
 			for (SiegeSpawn _sp : FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId()))
 			{
-				template1 = NpcTable.getInstance().getTemplate(_sp.getNpcId());
+				template1 = NpcTable.getInstance().getTemplate(_sp.getId());
 				if (template1 != null)
 				{
 					spawnDat = new L2Spawn(template1);
 					spawnDat.setAmount(1);
-					spawnDat.setLocx(_sp.getLocation().getX());
-					spawnDat.setLocy(_sp.getLocation().getY());
-					spawnDat.setLocz(_sp.getLocation().getZ());
+					spawnDat.setX(_sp.getLocation().getX());
+					spawnDat.setY(_sp.getLocation().getY());
+					spawnDat.setZ(_sp.getLocation().getZ());
 					spawnDat.setHeading(_sp.getLocation().getHeading());
 					spawnDat.setRespawnDelay(60);
 					spawnDat.doSpawn();
@@ -1178,7 +1178,7 @@ public class FortSiege implements Siegable
 				}
 				else
 				{
-					_log.warn("FortSiege.spawnCommander: Data missing in NPC table for ID: " + _sp.getNpcId() + ".");
+					_log.warn("FortSiege.spawnCommander: Data missing in NPC table for ID: " + _sp.getId() + ".");
 				}
 			}
 		}
@@ -1227,7 +1227,7 @@ public class FortSiege implements Siegable
 			return null;
 		}
 		
-		return getAttackerClan(clan.getClanId());
+		return getAttackerClan(clan.getId());
 	}
 	
 	@Override

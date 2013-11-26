@@ -42,7 +42,6 @@ import l2r.gameserver.scripts.handlers.skillhandlers.Manadam;
 import l2r.gameserver.scripts.handlers.skillhandlers.Mdam;
 import l2r.gameserver.scripts.handlers.skillhandlers.NornilsPower;
 import l2r.gameserver.scripts.handlers.skillhandlers.Pdam;
-import l2r.gameserver.scripts.handlers.skillhandlers.RefuelAirShip;
 import l2r.gameserver.scripts.handlers.skillhandlers.Resurrect;
 import l2r.gameserver.scripts.handlers.skillhandlers.ShiftTarget;
 import l2r.gameserver.scripts.handlers.skillhandlers.Sow;
@@ -84,7 +83,6 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		registerHandler(new Mdam());
 		registerHandler(new NornilsPower());
 		registerHandler(new Pdam());
-		registerHandler(new RefuelAirShip());
 		registerHandler(new Resurrect());
 		registerHandler(new ShiftTarget());
 		registerHandler(new Sow());

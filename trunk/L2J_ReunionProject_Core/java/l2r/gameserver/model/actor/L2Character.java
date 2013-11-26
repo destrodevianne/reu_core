@@ -51,7 +51,6 @@ import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;
-import l2r.gameserver.instancemanager.GlobalVariablesManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
@@ -60,7 +59,6 @@ import l2r.gameserver.model.ChanceSkillList;
 import l2r.gameserver.model.CharEffectList;
 import l2r.gameserver.model.FusionSkill;
 import l2r.gameserver.model.L2AccessLevel;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2World;
@@ -73,7 +71,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance.SkillDat;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2RiftInvaderInstance;
 import l2r.gameserver.model.actor.knownlist.CharKnownList;
-import l2r.gameserver.model.actor.position.CharPosition;
 import l2r.gameserver.model.actor.stat.CharStat;
 import l2r.gameserver.model.actor.status.CharStatus;
 import l2r.gameserver.model.actor.tasks.character.FlyToLocationTask;
@@ -91,6 +88,7 @@ import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.interfaces.IChanceSkillTrigger;
+import l2r.gameserver.model.interfaces.ILocational;
 import l2r.gameserver.model.interfaces.ISkillsHolder;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2Item;
@@ -502,7 +500,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			{
 				return;
 			}
-			spawnMe(getPosition().getX(), getPosition().getY(), getPosition().getZ());
+			spawnMe(getX(), getY(), getZ());
 			setIsTeleporting(false);
 		}
 		finally
@@ -651,11 +649,26 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 * @param y
 	 * @param z
 	 * @param heading
+	 * @param instanceId
 	 * @param randomOffset
 	 */
-	public void teleToLocation(int x, int y, int z, int heading, int randomOffset)
+	public void teleToLocation(int x, int y, int z, int heading, int instanceId, int randomOffset)
 	{
-		// Stop movement
+		setInstanceId(instanceId);
+		
+		if (isPlayer() && DimensionalRiftManager.getInstance().checkIfInRiftZone(getX(), getY(), getZ(), false)) // true -> ignore waiting room :)
+		{
+			L2PcInstance player = getActingPlayer();
+			player.sendMessage("You have been sent to the waiting room.");
+			if (player.isInParty() && player.getParty().isInDimensionalRift())
+			{
+				player.getParty().getDimensionalRift().usedTeleport(player);
+			}
+			int[] newCoords = DimensionalRiftManager.getInstance().getRoom((byte) 0, (byte) 0).getTeleportCoorinates();
+			x = newCoords[0];
+			y = newCoords[1];
+			z = newCoords[2];
+		}
 		stopMove(null, false);
 		abortAttack();
 		abortCast();
@@ -680,12 +693,12 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		decayMe();
 		
 		// Set the x,y,z position of the L2Object and if necessary modify its _worldRegion
-		getPosition().setXYZ(x, y, z);
+		setXYZ(x, y, z);
 		
 		// temporary fix for heading on teleports
 		if (heading != 0)
 		{
-			getPosition().setHeading(heading);
+			setHeading(heading);
 		}
 		
 		// allow recall of the detached characters
@@ -697,77 +710,54 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		revalidateZone(true);
 	}
 	
+	public void teleToLocation(int x, int y, int z, int heading, int instanceId, boolean randomOffset)
+	{
+		teleToLocation(x, y, z, heading, instanceId, (randomOffset) ? Config.MAX_OFFSET_ON_TELEPORT : 0);
+	}
+	
+	public void teleToLocation(int x, int y, int z, int heading, int instanceId)
+	{
+		teleToLocation(x, y, z, heading, instanceId, 0);
+	}
+	
+	public void teleToLocation(int x, int y, int z, int heading, boolean randomOffset)
+	{
+		teleToLocation(x, y, z, heading, -1, (randomOffset) ? Config.MAX_OFFSET_ON_TELEPORT : 0);
+	}
+	
+	public void teleToLocation(int x, int y, int z, int heading)
+	{
+		teleToLocation(x, y, z, heading, -1, 0);
+	}
+	
+	public void teleToLocation(int x, int y, int z, boolean randomOffset)
+	{
+		teleToLocation(x, y, z, 0, -1, (randomOffset) ? Config.MAX_OFFSET_ON_TELEPORT : 0);
+	}
+	
 	public void teleToLocation(int x, int y, int z)
 	{
-		teleToLocation(x, y, z, getHeading(), 0);
+		teleToLocation(x, y, z, 0, -1, 0);
 	}
 	
-	public void teleToLocation(int x, int y, int z, int randomOffset)
+	public void teleToLocation(ILocational loc, int randomOffset)
 	{
-		teleToLocation(x, y, z, getHeading(), randomOffset);
+		teleToLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), loc.getInstanceId(), randomOffset);
 	}
 	
-	/**
-	 * Teleports a character to the given location and set its instance Id.
-	 * @param loc the location to teleport the character
-	 * @param randomOffset the random offset for the teleport location
-	 */
-	public void teleToLocation(Location loc, int randomOffset)
+	public void teleToLocation(ILocational loc, boolean randomOffset)
 	{
-		setInstanceId(loc.getInstanceId());
-		
-		int x = loc.getX();
-		int y = loc.getY();
-		int z = loc.getZ();
-		
-		if (isPlayer() && DimensionalRiftManager.getInstance().checkIfInRiftZone(getX(), getY(), getZ(), false)) // true -> ignore waiting room :)
-		{
-			L2PcInstance player = getActingPlayer();
-			player.sendMessage("You have been sent to the waiting room.");
-			if (player.isInParty() && player.getParty().isInDimensionalRift())
-			{
-				player.getParty().getDimensionalRift().usedTeleport(player);
-			}
-			int[] newCoords = DimensionalRiftManager.getInstance().getRoom((byte) 0, (byte) 0).getTeleportCoords();
-			x = newCoords[0];
-			y = newCoords[1];
-			z = newCoords[2];
-		}
-		teleToLocation(x, y, z, getHeading(), randomOffset);
+		teleToLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), loc.getInstanceId(), (randomOffset) ? Config.MAX_OFFSET_ON_TELEPORT : 0);
+	}
+	
+	public void teleToLocation(ILocational loc)
+	{
+		teleToLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), loc.getInstanceId(), 0);
 	}
 	
 	public void teleToLocation(TeleportWhereType teleportWhere)
 	{
 		teleToLocation(MapRegionManager.getInstance().getTeleToLocation(this, teleportWhere), true);
-	}
-	
-	public void teleToLocation(Location loc, boolean allowRandomOffset)
-	{
-		teleToLocation(loc, (allowRandomOffset ? Config.MAX_OFFSET_ON_TELEPORT : 0));
-	}
-	
-	public void teleToLocation(int x, int y, int z, boolean allowRandomOffset)
-	{
-		if (allowRandomOffset)
-		{
-			teleToLocation(x, y, z, Config.MAX_OFFSET_ON_TELEPORT);
-		}
-		else
-		{
-			teleToLocation(x, y, z, 0);
-		}
-	}
-	
-	public void teleToLocation(int x, int y, int z, int heading, boolean allowRandomOffset)
-	{
-		if (allowRandomOffset)
-		{
-			teleToLocation(x, y, z, heading, Config.MAX_OFFSET_ON_TELEPORT);
-		}
-		else
-		{
-			teleToLocation(x, y, z, heading, 0);
-		}
 	}
 	
 	/**
@@ -2973,18 +2963,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		_status = value;
 	}
 	
-	@Override
-	public CharPosition getPosition()
-	{
-		return (CharPosition) super.getPosition();
-	}
-	
-	@Override
-	public void initPosition()
-	{
-		setObjectPosition(new CharPosition(this));
-	}
-	
 	public L2CharTemplate getTemplate()
 	{
 		return _template;
@@ -3745,7 +3723,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		 * Accessor to L2Character stopMove() method.
 		 * @param pos
 		 */
-		public void stopMove(L2CharPosition pos)
+		public void stopMove(Location pos)
 		{
 			L2Character.this.stopMove(pos);
 		}
@@ -4193,6 +4171,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	/**
 	 * @return the orientation of the L2Character.
 	 */
+	@Override
 	public final int getHeading()
 	{
 		return _heading;
@@ -4202,14 +4181,10 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 * Set the orientation of the L2Character.
 	 * @param heading
 	 */
+	@Override
 	public final void setHeading(int heading)
 	{
 		_heading = heading;
-	}
-	
-	public Location getLocation()
-	{
-		return new Location(getX(), getY(), getZ(), getHeading(), getInstanceId());
 	}
 	
 	public final int getXdestination()
@@ -4481,7 +4456,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		if ((Config.GEODATA > 0) && (Config.COORD_SYNCHRONIZE == 2) && !isFloating && !m.disregardingGeodata && ((GameTimeController.getInstance().getGameTicks() % 10) == 0 // once a second to reduce possible cpu load
 		) && GeoData.getInstance().hasGeo(xPrev, yPrev))
 		{
-			short geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30, null);
+			int geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30);
 			dz = m._zDestination - geoHeight;
 			// quite a big difference, compare to validatePosition packet
 			if (isPlayer() && (Math.abs(getActingPlayer().getClientZ() - geoHeight) > 200) && (Math.abs(getActingPlayer().getClientZ() - geoHeight) < 1500))
@@ -4525,7 +4500,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		if (distFraction > 1)
 		{
 			// Set the position of the L2Character to the destination
-			super.getPosition().setXYZ(m._xDestination, m._yDestination, m._zDestination);
+			super.setXYZ(m._xDestination, m._yDestination, m._zDestination);
 		}
 		else
 		{
@@ -4533,7 +4508,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			m._yAccurate += dy * distFraction;
 			
 			// Set the position of the L2Character to estimated after parcial move
-			super.getPosition().setXYZ((int) (m._xAccurate), (int) (m._yAccurate), zPrev + (int) ((dz * distFraction) + 0.5));
+			super.setXYZ((int) (m._xAccurate), (int) (m._yAccurate), zPrev + (int) ((dz * distFraction) + 0.5));
 		}
 		revalidateZone(false);
 		
@@ -4581,14 +4556,14 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 * <li>Remove object from _knownObjects and _knownPlayer of all surrounding L2WorldRegion L2Characters</li>
 	 * </ul>
 	 * <FONT COLOR=#FF0000><B><U>Caution</U>: This method DOESN'T send Server->Client packet StopMove/StopRotation</B></FONT>
-	 * @param pos
+	 * @param loc
 	 */
-	public void stopMove(L2CharPosition pos)
+	public void stopMove(Location loc)
 	{
-		stopMove(pos, false);
+		stopMove(loc, false);
 	}
 	
-	public void stopMove(L2CharPosition pos, boolean updateKnownObjects)
+	public void stopMove(Location loc, boolean updateKnownObjects)
 	{
 		// Delete movement data of the L2Character
 		_move = null;
@@ -4597,11 +4572,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		// getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		
 		// Set the current position (x,y,z), its current L2WorldRegion if necessary and its heading
-		// All data are contained in a L2CharPosition object
-		if (pos != null)
+		// All data are contained in a Location object
+		if (loc != null)
 		{
-			getPosition().setXYZ(pos.x, pos.y, pos.z);
-			setHeading(pos.heading);
+			setXYZ(loc.getX(), loc.getY(), loc.getZ());
+			setHeading(loc.getHeading());
 			revalidateZone(true);
 		}
 		broadcastPacket(new StopMove(this));
@@ -5182,35 +5157,16 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	}
 	
 	/**
-	 * Check if this object is inside the given radius around the given object. Warning: doesn't cover collision radius!
-	 * @param object the target
+	 * Check if this object is inside the given radius around the given point.
+	 * @param loc Location of the target
 	 * @param radius the radius around the target
-	 * @param checkZ should we check Z axis also
+	 * @param checkZAxis should we check Z axis also
 	 * @param strictCheck true if (distance < radius), false if (distance <= radius)
-	 * @return true is the L2Character is inside the radius.
-	 * @see #isInsideRadius(int, int, int, int, boolean, boolean)
+	 * @return true if the L2Character is inside the radius.
 	 */
-	public final boolean isInsideRadius(L2Object object, int radius, boolean checkZ, boolean strictCheck)
+	public final boolean isInsideRadius(ILocational loc, int radius, boolean checkZAxis, boolean strictCheck)
 	{
-		return isInsideRadius(object.getX(), object.getY(), object.getZ(), radius, checkZ, strictCheck);
-	}
-	
-	/**
-	 * Check if this object is inside the given plan radius around the given point. Warning: doesn't cover collision radius!
-	 * @param x X position of the target
-	 * @param y Y position of the target
-	 * @param radius the radius around the target
-	 * @param strictCheck true if (distance < radius), false if (distance <= radius)
-	 * @return true is the L2Character is inside the radius.
-	 */
-	public final boolean isInsideRadius(int x, int y, int radius, boolean strictCheck)
-	{
-		return isInsideRadius(x, y, 0, radius, false, strictCheck);
-	}
-	
-	public final boolean isInsideRadius(Location loc, int radius, boolean checkZ, boolean strictCheck)
-	{
-		return isInsideRadius(loc.getX(), loc.getY(), loc.getZ(), radius, checkZ, strictCheck);
+		return isInsideRadius(loc.getX(), loc.getY(), loc.getZ(), radius, checkZAxis, strictCheck);
 	}
 	
 	/**
@@ -5219,39 +5175,14 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 * @param y Y position of the target
 	 * @param z Z position of the target
 	 * @param radius the radius around the target
-	 * @param checkZ should we check Z axis also
+	 * @param checkZAxis should we check Z axis also
 	 * @param strictCheck true if (distance < radius), false if (distance <= radius)
-	 * @return true is the L2Character is inside the radius.
+	 * @return true if the L2Character is inside the radius.
 	 */
-	public final boolean isInsideRadius(int x, int y, int z, int radius, boolean checkZ, boolean strictCheck)
+	public final boolean isInsideRadius(int x, int y, int z, int radius, boolean checkZAxis, boolean strictCheck)
 	{
-		double dx = x - getX();
-		double dy = y - getY();
-		double dz = z - getZ();
-		boolean isInsideRadius = false;
-		if (strictCheck)
-		{
-			if (checkZ)
-			{
-				isInsideRadius = ((dx * dx) + (dy * dy) + (dz * dz)) < (radius * radius);
-			}
-			else
-			{
-				isInsideRadius = ((dx * dx) + (dy * dy)) < (radius * radius);
-			}
-		}
-		else
-		{
-			if (checkZ)
-			{
-				isInsideRadius = ((dx * dx) + (dy * dy) + (dz * dz)) <= (radius * radius);
-			}
-			else
-			{
-				isInsideRadius = ((dx * dx) + (dy * dy)) <= (radius * radius);
-			}
-		}
-		return isInsideRadius;
+		final double distance = calculateDistance(x, y, z, checkZAxis, true);
+		return (strictCheck) ? (distance < (radius * radius)) : (distance <= (radius * radius));
 	}
 	
 	// /**
@@ -6022,7 +5953,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			if (isPlayer())
 			{
 				// TODO: Unhardcode it!
-				if ((oldSkill instanceof L2SkillSummon) && (oldSkill.getId() == 710) && hasSummon() && (getSummon().getNpcId() == 14870))
+				if ((oldSkill instanceof L2SkillSummon) && (oldSkill.getId() == 710) && hasSummon() && (getSummon().getId() == 14870))
 				{
 					getActingPlayer().getSummon().unSummon(getActingPlayer());
 				}
@@ -7622,7 +7553,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			_exceptions |= exc.getMask();
 		}
-		GlobalVariablesManager.getInstance().storeVariable(COND_EXCEPTIONS, Long.toString(_exceptions));
 	}
 	
 	public void removeOverridedCond(PcCondOverride... excs)
@@ -7631,12 +7561,16 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			_exceptions &= ~exc.getMask();
 		}
-		GlobalVariablesManager.getInstance().storeVariable(COND_EXCEPTIONS, Long.toString(_exceptions));
 	}
 	
 	public boolean canOverrideCond(PcCondOverride excs)
 	{
 		return (_exceptions & excs.getMask()) == excs.getMask();
+	}
+	
+	public void setOverrideCond(long masks)
+	{
+		_exceptions = masks;
 	}
 	
 	public void setLethalable(boolean val)
@@ -7819,10 +7753,10 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					}
 					for (SkillUseListener listener : globalSkillUseListeners)
 					{
-						int npcId = listener.getNpcId();
+						int npcId = listener.getId();
 						int skillId = listener.getSkillId();
 						boolean skillOk = (skillId == -1) || (skillId == skill.getId());
-						boolean charOk = ((npcId == -1) && (this instanceof L2NpcInstance)) || ((npcId == -2) && isPlayer()) || (npcId == -3) || ((this instanceof L2NpcInstance) && (((L2NpcInstance) this).getNpcId() == npcId));
+						boolean charOk = ((npcId == -1) && (this instanceof L2NpcInstance)) || ((npcId == -2) && isPlayer()) || (npcId == -3) || ((this instanceof L2NpcInstance) && (((L2NpcInstance) this).getId() == npcId));
 						if (skillOk && charOk)
 						{
 							if (!listener.onSkillUse(event))
@@ -8017,6 +7951,12 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public static void removeGlobalSkillUseListener(SkillUseListener listener)
 	{
 		globalSkillUseListeners.remove(listener);
+	}
+	
+	@Override
+	public boolean isCharacter()
+	{
+		return true;
 	}
 	
 	// User panel system start

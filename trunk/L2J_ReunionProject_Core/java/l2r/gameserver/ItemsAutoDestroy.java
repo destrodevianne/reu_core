@@ -65,7 +65,7 @@ public class ItemsAutoDestroy
 		long curtime = System.currentTimeMillis();
 		for (L2ItemInstance item : _items)
 		{
-			if ((item == null) || (item.getDropTime() == 0) || (item.getLocation() != ItemLocation.VOID))
+			if ((item == null) || (item.getDropTime() == 0) || (item.getItemLocation() != ItemLocation.VOID))
 			{
 				_items.remove(item);
 			}

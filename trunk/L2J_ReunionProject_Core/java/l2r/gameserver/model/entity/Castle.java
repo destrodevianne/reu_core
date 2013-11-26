@@ -58,13 +58,13 @@ import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.zone.type.L2CastleZone;
 import l2r.gameserver.model.zone.type.L2ResidenceTeleportZone;
 import l2r.gameserver.model.zone.type.L2SiegeZone;
+import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.PledgeShowInfoUpdate;
+import l2r.gameserver.network.serverpackets.SystemMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.trove.map.hash.TIntIntHashMap;
 
 public final class Castle extends AbstractResidence
 {
@@ -91,7 +91,6 @@ public final class Castle extends AbstractResidence
 	private L2ResidenceTeleportZone _teleZone;
 	private L2Clan _formerOwner = null;
 	private final List<L2ArtefactInstance> _artefacts = new ArrayList<>(1);
-	private final TIntIntHashMap _engrave = new TIntIntHashMap(1);
 	private final Map<Integer, CastleFunction> _function;
 	private int _ticketBuyCount = 0;
 	
@@ -287,19 +286,10 @@ public final class Castle extends AbstractResidence
 		{
 			return;
 		}
-		_engrave.put(target.getObjectId(), clan.getClanId());
-		if (_engrave.size() == _artefacts.size())
-		{
-			for (L2ArtefactInstance art : _artefacts)
-			{
-				if (_engrave.get(art.getObjectId()) != clan.getClanId())
-				{
-					return;
-				}
-			}
-			_engrave.clear();
-			setOwner(clan);
-		}
+		setOwner(clan);
+		final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.CLAN_S1_ENGRAVED_RULER);
+		msg.addString(clan.getName());
+		getSiege().announceToPlayer(msg, true);
 	}
 	
 	// This method add to the treasury
@@ -513,7 +503,7 @@ public final class Castle extends AbstractResidence
 	public void setOwner(L2Clan clan)
 	{
 		// Remove old owner
-		if ((getOwnerId() > 0) && ((clan == null) || (clan.getClanId() != getOwnerId())))
+		if ((getOwnerId() > 0) && ((clan == null) || (clan.getId() != getOwnerId())))
 		{
 			L2Clan oldOwner = ClanTable.getInstance().getClan(getOwnerId()); // Try to find clan instance
 			if (oldOwner != null)
@@ -881,7 +871,7 @@ public final class Castle extends AbstractResidence
 	{
 		if (clan != null)
 		{
-			_ownerId = clan.getClanId(); // Update owner id property
+			_ownerId = clan.getId(); // Update owner id property
 		}
 		else
 		{
@@ -928,7 +918,7 @@ public final class Castle extends AbstractResidence
 		
 		for (L2DoorInstance door : getDoors())
 		{
-			if (door.getDoorId() == doorId)
+			if (door.getId() == doorId)
 			{
 				return door;
 			}

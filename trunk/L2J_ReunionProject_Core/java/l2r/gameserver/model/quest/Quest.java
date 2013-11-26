@@ -60,6 +60,7 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.AcquireSkillType;
 import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.holders.ItemHolder;
+import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.interfaces.IL2Procedure;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Item;
@@ -95,7 +96,7 @@ import org.slf4j.LoggerFactory;
  * Quest main class.
  * @author Luis Arias
  */
-public class Quest extends ManagedScript
+public class Quest extends ManagedScript implements IIdentifiable
 {
 	public static final Logger _log = LoggerFactory.getLogger(Quest.class);
 	
@@ -401,9 +402,11 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
-	 * @return the Id of the quest
+	 * Gets the quest ID.
+	 * @return the quest ID
 	 */
-	public int getQuestIntId()
+	@Override
+	public int getId()
 	{
 		return _questId;
 	}
@@ -2681,7 +2684,7 @@ public class Quest extends ManagedScript
 	public String showHtmlFile(L2PcInstance player, String fileName)
 	{
 		boolean questwindow = !fileName.endsWith(".html");
-		int questId = getQuestIntId();
+		int questId = getId();
 		
 		// Create handler to file linked to the quest
 		String content = getHtm(player.getHtmlPrefix(), fileName);
@@ -2882,9 +2885,9 @@ public class Quest extends ManagedScript
 				L2Spawn spawn = new L2Spawn(template);
 				spawn.setInstanceId(instanceId);
 				spawn.setHeading(heading);
-				spawn.setLocx(x);
-				spawn.setLocy(y);
-				spawn.setLocz(z);
+				spawn.setX(x);
+				spawn.setY(y);
+				spawn.setZ(z);
 				spawn.stopRespawn();
 				result = spawn.spawnOne(isSummonSpawn);
 				
@@ -3133,7 +3136,7 @@ public class Quest extends ManagedScript
 			
 			for (int itemId : itemIds)
 			{
-				if (item.getItemId() == itemId)
+				if (item.getId() == itemId)
 				{
 					if ((count + item.getCount()) > Long.MAX_VALUE)
 					{
@@ -3144,6 +3147,62 @@ public class Quest extends ManagedScript
 			}
 		}
 		return count;
+	}
+	
+	/**
+	 * Check if the player has the specified item in his inventory.
+	 * @param player the player whose inventory to check for the specified item
+	 * @param item the {@link ItemHolder} object containing the ID and count of the item to check
+	 * @return {@code true} if the player has the required count of the item
+	 */
+	protected static boolean hasItem(L2PcInstance player, ItemHolder item)
+	{
+		return hasItem(player, item, true);
+	}
+	
+	/**
+	 * Check if the player has the required count of the specified item in his inventory.
+	 * @param player the player whose inventory to check for the specified item
+	 * @param item the {@link ItemHolder} object containing the ID and count of the item to check
+	 * @param checkCount if {@code true}, check if each item is at least of the count specified in the ItemHolder,<br>
+	 *            otherwise check only if the player has the item at all
+	 * @return {@code true} if the player has the item
+	 */
+	protected static boolean hasItem(L2PcInstance player, ItemHolder item, boolean checkCount)
+	{
+		if (item == null)
+		{
+			return false;
+		}
+		if (checkCount)
+		{
+			return (getQuestItemsCount(player, item.getId()) >= item.getCount());
+		}
+		return hasQuestItems(player, item.getId());
+	}
+	
+	/**
+	 * Check if the player has all the specified items in his inventory and, if necessary, if their count is also as required.
+	 * @param player the player whose inventory to check for the specified item
+	 * @param checkCount if {@code true}, check if each item is at least of the count specified in the ItemHolder,<br>
+	 *            otherwise check only if the player has the item at all
+	 * @param itemList a list of {@link ItemHolder} objects containing the IDs of the items to check
+	 * @return {@code true} if the player has all the items from the list
+	 */
+	protected static boolean hasAllItems(L2PcInstance player, boolean checkCount, ItemHolder... itemList)
+	{
+		if ((itemList == null) || (itemList.length == 0))
+		{
+			return false;
+		}
+		for (ItemHolder item : itemList)
+		{
+			if (!hasItem(player, item, checkCount))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**
@@ -3318,7 +3377,7 @@ public class Quest extends ManagedScript
 	private static void sendItemGetMessage(L2PcInstance player, L2ItemInstance item, long count)
 	{
 		// If item for reward is gold, send message of gold reward to client
-		if (item.getItemId() == PcInventory.ADENA_ID)
+		if (item.getId() == PcInventory.ADENA_ID)
 		{
 			SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.EARNED_S1_ADENA);
 			smsg.addItemNumber(count);
@@ -3582,14 +3641,46 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
-	 * Take an amount of a specified item from player's inventory.
-	 * @param player
-	 * @param holder
-	 * @return {@code true} if any items were taken, {@code false} otherwise
+	 * Take a set amount of a specified item from player's inventory.
+	 * @param player the player whose item to take
+	 * @param holder the {@link ItemHolder} object containing the ID and count of the item to take
+	 * @return {@code true} if the item was taken, {@code false} otherwise
 	 */
-	protected static boolean takeItems(L2PcInstance player, ItemHolder holder)
+	protected static boolean takeItem(L2PcInstance player, ItemHolder holder)
 	{
+		if (holder == null)
+		{
+			return false;
+		}
 		return takeItems(player, holder.getId(), holder.getCount());
+	}
+	
+	/**
+	 * Take a set amount of all specified items from player's inventory.
+	 * @param player the player whose items to take
+	 * @param itemList the list of {@link ItemHolder} objects containing the IDs and counts of the items to take
+	 * @return {@code true} if all items were taken, {@code false} otherwise
+	 */
+	protected static boolean takeAllItems(L2PcInstance player, ItemHolder... itemList)
+	{
+		if ((itemList == null) || (itemList.length == 0))
+		{
+			return false;
+		}
+		// first check if the player has all items to avoid taking half the items from the list
+		if (!hasAllItems(player, true, itemList))
+		{
+			return false;
+		}
+		for (ItemHolder item : itemList)
+		{
+			// this should never be false, but just in case
+			if (!takeItem(player, item))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**
@@ -3849,9 +3940,9 @@ public class Quest extends ManagedScript
 		try
 		{
 			L2Spawn npcSpawn = new L2Spawn(npcTemplate);
-			npcSpawn.setLocx(x);
-			npcSpawn.setLocy(y);
-			npcSpawn.setLocz(z);
+			npcSpawn.setX(x);
+			npcSpawn.setY(y);
+			npcSpawn.setZ(z);
 			npcSpawn.setHeading(heading);
 			npcSpawn.setAmount(1);
 			npcSpawn.setInstanceId(instId);
@@ -3873,9 +3964,9 @@ public class Quest extends ManagedScript
 		try
 		{
 			L2Spawn npcSpawn = new L2Spawn(npcTemplate);
-			npcSpawn.setLocx(loc.getX());
-			npcSpawn.setLocy(loc.getY());
-			npcSpawn.setLocz(loc.getZ());
+			npcSpawn.setX(loc.getX());
+			npcSpawn.setY(loc.getY());
+			npcSpawn.setZ(loc.getZ());
 			npcSpawn.setHeading(loc.getHeading());
 			npcSpawn.setAmount(1);
 			npcSpawn.setInstanceId(instId);

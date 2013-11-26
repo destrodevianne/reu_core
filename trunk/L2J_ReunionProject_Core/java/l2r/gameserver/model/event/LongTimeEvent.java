@@ -266,7 +266,7 @@ public class LongTimeEvent extends Quest
 		{
 			for (L2DropData drop : _dropList)
 			{
-				EventDroplist.getInstance().addGlobalDrop(drop.getItemId(), drop.getMinDrop(), drop.getMaxDrop(), (int) drop.getChance(), _dropPeriod);
+				EventDroplist.getInstance().addGlobalDrop(drop.getId(), drop.getMinDrop(), drop.getMaxDrop(), (int) drop.getChance(), _dropPeriod);
 			}
 		}
 		

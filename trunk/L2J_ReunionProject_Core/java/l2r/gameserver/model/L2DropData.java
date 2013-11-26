@@ -51,7 +51,7 @@ public class L2DropData
 	 * Returns the ID of the item dropped
 	 * @return int
 	 */
-	public int getItemId()
+	public int getId()
 	{
 		return _itemId;
 	}
@@ -171,7 +171,7 @@ public class L2DropData
 	@Override
 	public String toString()
 	{
-		String out = "ItemID: " + getItemId() + " Min: " + getMinDrop() + " Max: " + getMaxDrop() + " Chance: " + (getChance() / 10000.0) + "%";
+		String out = "ItemID: " + getId() + " Min: " + getMinDrop() + " Max: " + getMaxDrop() + " Chance: " + (getChance() / 10000.0) + "%";
 		if (isQuestDrop())
 		{
 			out += " QuestID: " + getQuestID() + " StateID's: " + Arrays.toString(getStateIDs());

@@ -23,19 +23,20 @@ import java.sql.PreparedStatement;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.model.items.L2Item;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nos
  */
 public final class Product
 {
-	private final static Logger _log = Logger.getLogger(Product.class.getName());
+	private final static Logger _log = LoggerFactory.getLogger(Product.class);
 	
 	private final int _buyListId;
 	private final L2Item _item;
@@ -68,9 +69,9 @@ public final class Product
 		return _item;
 	}
 	
-	public int getItemId()
+	public int getId()
 	{
-		return getItem().getItemId();
+		return getItem().getId();
 	}
 	
 	public long getPrice()
@@ -165,7 +166,7 @@ public final class Product
 			PreparedStatement statement = con.prepareStatement("INSERT INTO `buylists`(`buylist_id`, `item_id`, `count`, `next_restock_time`) VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE `count` = ?, `next_restock_time` = ?"))
 		{
 			statement.setInt(1, getBuyListId());
-			statement.setInt(2, getItemId());
+			statement.setInt(2, getId());
 			statement.setLong(3, getCount());
 			statement.setLong(5, getCount());
 			if ((_restockTask != null) && (_restockTask.getDelay(TimeUnit.MILLISECONDS) > 0))
@@ -183,7 +184,7 @@ public final class Product
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Failed to save Product buylist_id:" + getBuyListId() + " item_id:" + getItemId(), e);
+			_log.warn("Failed to save Product buylist_id:" + getBuyListId() + " item_id:" + getId(), e);
 		}
 	}
 }

@@ -20,10 +20,10 @@ package l2r.gameserver.taskmanager.tasks;
 
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.SevenSignsFestival;
-import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;
+import l2r.gameserver.taskmanager.TaskTypes;
 
 /**
  * Updates all data for the Seven Signs and Festival of Darkness engines, when time is elapsed.
@@ -61,6 +61,6 @@ public class TaskSevenSignsUpdate extends Task
 	public void initializate()
 	{
 		super.initializate();
-		TaskManager.addUniqueTask(NAME, TaskType.TYPE_FIXED_SHEDULED, "1800000", "1800000", "");
+		TaskManager.addUniqueTask(NAME, TaskTypes.TYPE_FIXED_SHEDULED, "1800000", "1800000", "");
 	}
 }

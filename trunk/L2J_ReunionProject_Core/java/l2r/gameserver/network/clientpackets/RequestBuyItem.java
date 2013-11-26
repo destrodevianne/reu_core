@@ -132,7 +132,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 		{
 			if (merchant instanceof L2MerchantInstance)
 			{
-				if (!buyList.isNpcAllowed(((L2MerchantInstance) merchant).getNpcId()))
+				if (!buyList.isNpcAllowed(((L2MerchantInstance) merchant).getId()))
 				{
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
@@ -173,7 +173,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 			}
 			
 			price = product.getPrice();
-			if ((product.getItemId() >= 3960) && (product.getItemId() <= 4026))
+			if ((product.getId() >= 3960) && (product.getId() <= 4026))
 			{
 				price *= Config.RATE_SIEGE_GUARDS_PRICE;
 			}
@@ -217,7 +217,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 			}
 			
 			weight += i.getCount() * product.getItem().getWeight();
-			if (player.getInventory().getItemByItemId(product.getItemId()) == null)
+			if (player.getInventory().getItemByItemId(product.getId()) == null)
 			{
 				slots++;
 			}

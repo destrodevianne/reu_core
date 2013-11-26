@@ -31,7 +31,6 @@ import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.MapRegionManager;
-import l2r.gameserver.model.L2CharPosition;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
 import l2r.gameserver.model.Location;
@@ -40,6 +39,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.knownlist.VehicleKnownList;
 import l2r.gameserver.model.actor.stat.VehicleStat;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
+import l2r.gameserver.model.interfaces.ILocational;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -112,7 +112,7 @@ public abstract class L2Vehicle extends L2Character
 				getStat().setRotationSpeed(point.rotationSpeed);
 			}
 			
-			getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(point.x, point.y, point.z, 0));
+			getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(point.x, point.y, point.z, 0));
 			return;
 		}
 		getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
@@ -348,7 +348,7 @@ public abstract class L2Vehicle extends L2Character
 		{
 			if ((player != null) && (player.getVehicle() == this))
 			{
-				player.getPosition().setXYZ(getX(), getY(), getZ());
+				player.setXYZ(getX(), getY(), getZ());
 				player.revalidateZone(false);
 			}
 		}
@@ -357,7 +357,7 @@ public abstract class L2Vehicle extends L2Character
 	}
 	
 	@Override
-	public void teleToLocation(int x, int y, int z, int heading, boolean allowRandomOffset)
+	public void teleToLocation(ILocational loc, boolean allowRandomOffset)
 	{
 		if (isMoving())
 		{
@@ -372,17 +372,17 @@ public abstract class L2Vehicle extends L2Character
 		{
 			if (player != null)
 			{
-				player.teleToLocation(x, y, z);
+				player.teleToLocation(loc, false);
 			}
 		}
 		
 		decayMe();
-		setXYZ(x, y, z);
+		setXYZ(loc.getX(), loc.getY(), loc.getZ());
 		
 		// temporary fix for heading on teleports
-		if (heading != 0)
+		if (loc.getHeading() != 0)
 		{
-			getPosition().setHeading(heading);
+			setHeading(loc.getHeading());
 		}
 		
 		onTeleported();
@@ -390,13 +390,13 @@ public abstract class L2Vehicle extends L2Character
 	}
 	
 	@Override
-	public void stopMove(L2CharPosition pos, boolean updateKnownObjects)
+	public void stopMove(Location loc, boolean updateKnownObjects)
 	{
 		_move = null;
-		if (pos != null)
+		if (loc != null)
 		{
-			setXYZ(pos.x, pos.y, pos.z);
-			setHeading(pos.heading);
+			setXYZ(loc.getX(), loc.getY(), loc.getZ());
+			setHeading(loc.getHeading());
 			revalidateZone(true);
 		}
 		

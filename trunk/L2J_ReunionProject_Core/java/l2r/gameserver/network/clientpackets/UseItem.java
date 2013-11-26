@@ -150,7 +150,7 @@ public final class UseItem extends L2GameClientPacket
 		}
 		
 		// Char cannot use item when dead
-		if (activeChar.isDead() || !activeChar.getInventory().canManipulateWithItemId(item.getItemId()))
+		if (activeChar.isDead() || !activeChar.getInventory().canManipulateWithItemId(item.getId()))
 		{
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED);
 			sm.addItemName(item);
@@ -171,7 +171,7 @@ public final class UseItem extends L2GameClientPacket
 			return;
 		}
 		
-		_itemId = item.getItemId();
+		_itemId = item.getId();
 		if (activeChar.isFishing() && ((_itemId < 6535) || (_itemId > 6540)))
 		{
 			// You cannot do anything else while fishing
@@ -253,7 +253,7 @@ public final class UseItem extends L2GameClientPacket
 				case L2Item.SLOT_R_HAND:
 				{
 					// Prevent players to equip weapon while wearing combat flag
-					if ((activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemId() == 9819))
+					if ((activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getId() == 9819))
 					{
 						activeChar.sendPacket(SystemMessageId.CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION);
 						return;

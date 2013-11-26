@@ -21,89 +21,102 @@ package l2r.gameserver.instancemanager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import l2r.L2DatabaseFactory;
-import l2r.util.L2FastMap;
+import l2r.gameserver.model.variables.AbstractVariables;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Gigiikun
+ * Global Variables Manager.
+ * @author xban1x
  */
-public class GlobalVariablesManager
+public final class GlobalVariablesManager extends AbstractVariables
 {
 	private static final Logger _log = LoggerFactory.getLogger(GlobalVariablesManager.class);
 	
-	private static final String LOAD_VAR = "SELECT var,value FROM global_variables";
-	private static final String SAVE_VAR = "INSERT INTO global_variables (var,value) VALUES (?,?) ON DUPLICATE KEY UPDATE value=?";
-	
-	private final Map<String, String> _variablesMap = new L2FastMap<>(true);
+	// SQL Queries.
+	private static final String SELECT_QUERY = "SELECT * FROM global_variables";
+	private static final String DELETE_QUERY = "DELETE FROM global_variables";
+	private static final String INSERT_QUERY = "INSERT INTO global_variables (var, value) VALUES (?, ?)";
 	
 	protected GlobalVariablesManager()
 	{
-		loadVars();
+		restoreMe();
 	}
 	
-	private final void loadVars()
+	@Override
+	public boolean restoreMe()
 	{
+		// Restore previous variables.
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-			Statement statement = con.createStatement();
-			ResultSet rset = statement.executeQuery(LOAD_VAR))
+			Statement st = con.createStatement();
+			ResultSet rset = st.executeQuery(SELECT_QUERY))
 		{
-			String var, value;
 			while (rset.next())
 			{
-				var = rset.getString(1);
-				value = rset.getString(2);
-				
-				_variablesMap.put(var, value);
+				set(rset.getString("var"), rset.getString("value"));
 			}
 		}
-		catch (Exception e)
+		catch (SQLException e)
 		{
-			_log.warn(getClass().getSimpleName() + ": problem while loading variables: " + e);
+			_log.warn(getClass().getSimpleName() + ": Couldn't restore global variables");
+			return false;
 		}
+		finally
+		{
+			compareAndSetChanges(true, false);
+		}
+		_log.info(getClass().getSimpleName() + ": Loaded " + getSet().size() + " variables.");
+		return true;
 	}
 	
-	public final void saveVars()
+	@Override
+	public boolean storeMe()
 	{
+		// No changes, nothing to store.
+		if (!hasChanges())
+		{
+			return false;
+		}
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement(SAVE_VAR))
+			Statement del = con.createStatement();
+			PreparedStatement st = con.prepareStatement(INSERT_QUERY))
 		{
-			for (String var : _variablesMap.keySet())
+			// Clear previous entries.
+			del.execute(DELETE_QUERY);
+			
+			// Insert all variables.
+			for (Entry<String, Object> entry : getSet().entrySet())
 			{
-				statement.setString(1, var);
-				statement.setString(2, _variablesMap.get(var));
-				statement.setString(3, _variablesMap.get(var));
-				statement.execute();
-				statement.clearParameters();
+				st.setString(1, entry.getKey());
+				st.setString(2, String.valueOf(entry.getValue()));
+				st.addBatch();
 			}
+			st.executeBatch();
 		}
-		catch (Exception e)
+		catch (SQLException e)
 		{
-			_log.warn(getClass().getSimpleName() + ": problem while saving variables: " + e);
+			_log.warn(getClass().getSimpleName() + ": Couldn't save global variables to database.", e);
+			return false;
 		}
+		finally
+		{
+			compareAndSetChanges(true, false);
+		}
+		_log.info(getClass().getSimpleName() + ": Stored " + getSet().size() + " variables.");
+		return true;
 	}
 	
-	public void storeVariable(String var, String value)
-	{
-		_variablesMap.put(var, value);
-	}
-	
-	public boolean isVariableStored(String var)
-	{
-		return _variablesMap.containsKey(var);
-	}
-	
-	public String getStoredVariable(String var)
-	{
-		return _variablesMap.get(var);
-	}
-	
+	/**
+	 * Gets the single instance of {@code GlobalVariablesManager}.
+	 * @return single instance of {@code GlobalVariablesManager}
+	 */
 	public static final GlobalVariablesManager getInstance()
 	{
 		return SingletonHolder._instance;

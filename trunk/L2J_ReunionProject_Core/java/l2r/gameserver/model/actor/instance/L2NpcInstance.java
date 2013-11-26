@@ -94,7 +94,7 @@ public class L2NpcInstance extends L2Npc
 			_log.info("SkillList activated on: " + npc.getObjectId());
 		}
 		
-		final int npcId = npc.getTemplate().getNpcId();
+		final int npcId = npc.getTemplate().getId();
 		if (npcId == 32611) // Tolonis (Officer)
 		{
 			final List<L2SkillLearn> skills = SkillTreesData.getInstance().getAvailableCollectSkills(player);

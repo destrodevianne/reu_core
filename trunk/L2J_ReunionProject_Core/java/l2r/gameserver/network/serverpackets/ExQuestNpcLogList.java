@@ -53,7 +53,7 @@ public class ExQuestNpcLogList extends L2GameServerPacket
 		writeC(_npcs.size());
 		for (NpcHolder holder : _npcs)
 		{
-			writeD((holder.getNpcId() + 1000000));
+			writeD((holder.getId() + 1000000));
 			writeC(holder.getUnknown());
 			writeD(holder.getCount());
 		}
@@ -72,7 +72,7 @@ public class ExQuestNpcLogList extends L2GameServerPacket
 			_count = count;
 		}
 		
-		public int getNpcId()
+		public int getId()
 		{
 			return _npcId;
 		}

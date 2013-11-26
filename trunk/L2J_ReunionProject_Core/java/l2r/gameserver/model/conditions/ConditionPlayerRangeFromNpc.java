@@ -48,7 +48,7 @@ public class ConditionPlayerRangeFromNpc extends Condition
 		{
 			if (target instanceof L2Npc)
 			{
-				if (((L2Npc) target).getNpcId() == _npcId)
+				if (((L2Npc) target).getId() == _npcId)
 				{
 					return true;
 				}

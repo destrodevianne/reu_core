@@ -1427,7 +1427,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 			else if (actualCommand.equalsIgnoreCase("list_back"))
 			{
 				NpcHtmlMessage html = new NpcHtmlMessage(1);
-				String file = "data/html/clanHallManager/chamberlain-" + getNpcId() + ".htm";
+				String file = "data/html/clanHallManager/chamberlain-" + getId() + ".htm";
 				if (!HtmCache.getInstance().isLoadable(file))
 				{
 					file = "data/html/clanHallManager/chamberlain.htm";
@@ -1463,7 +1463,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 	private void sendHtmlMessage(L2PcInstance player, NpcHtmlMessage html)
 	{
 		html.replace("%objectId%", String.valueOf(getObjectId()));
-		html.replace("%npcId%", String.valueOf(getNpcId()));
+		html.replace("%npcId%", String.valueOf(getId()));
 		player.sendPacket(html);
 	}
 	
@@ -1476,7 +1476,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 		int condition = validateCondition(player);
 		if (condition == COND_OWNER)
 		{
-			filename = "data/html/clanHallManager/chamberlain-" + getNpcId() + ".htm";
+			filename = "data/html/clanHallManager/chamberlain-" + getId() + ".htm";
 			if (!HtmCache.getInstance().isLoadable(filename))
 			{
 				filename = "data/html/clanHallManager/chamberlain.htm";// Owner message window
@@ -1489,7 +1489,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 		NpcHtmlMessage html = new NpcHtmlMessage(1);
 		html.setFile(player.getHtmlPrefix(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
-		html.replace("%npcId%", String.valueOf(getNpcId()));
+		html.replace("%npcId%", String.valueOf(getId()));
 		player.sendPacket(html);
 	}
 	
@@ -1554,13 +1554,13 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 				player.sendPacket(SystemMessageId.YOU_CANNOT_TELEPORT_WHILE_IN_POSSESSION_OF_A_WARD);
 				return;
 			}
-			else if (player.destroyItemByItemId("Teleport", list.getItemId(), list.getPrice(), this, true))
+			else if (player.destroyItemByItemId("Teleport", list.getId(), list.getPrice(), this, true))
 			{
 				if (Config.DEBUG)
 				{
-					_log.warn("Teleporting player " + player.getName() + " for CH to new location: " + list.getLocX() + ":" + list.getLocY() + ":" + list.getLocZ());
+					_log.warn("Teleporting player " + player.getName() + " for CH to new location: " + list.getX() + ":" + list.getY() + ":" + list.getZ());
 				}
-				player.teleToLocation(list.getLocX(), list.getLocY(), list.getLocZ());
+				player.teleToLocation(list.getX(), list.getY(), list.getZ());
 			}
 		}
 		else

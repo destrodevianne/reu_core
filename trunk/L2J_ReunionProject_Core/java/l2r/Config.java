@@ -51,6 +51,7 @@ import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.util.FloodProtectorConfig;
+import l2r.gameserver.util.Util;
 import l2r.util.PropertiesParser;
 import l2r.util.StringUtil;
 
@@ -97,7 +98,6 @@ public final class Config
 	public static final String OLYMPIAD_CONFIG_FILE = "./config/main/Olympiad.ini";
 	public static final String GRACIASEEDS_CONFIG_FILE = "./config/main/GraciaSeeds.ini";
 	public static final String CHAT_FILTER_FILE = "./config/main/chatfilter.txt";
-	public static final String SECURITY_CONFIG_FILE = "./config/main/Security.ini";
 	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini";
 	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
 	public static final String ITEM_MALL_CONFIG_FILE = "./config/main/ItemMall.ini";
@@ -347,9 +347,7 @@ public final class Config
 	public static long CS_SUPPORT_FEE_RATIO;
 	public static int CS_SUPPORT1_FEE;
 	public static int CS_SUPPORT2_FEE;
-	public static List<String> CL_SET_SIEGE_TIME_LIST;
-	public static List<Integer> SIEGE_HOUR_LIST_MORNING;
-	public static List<Integer> SIEGE_HOUR_LIST_AFTERNOON;
+	public static List<Integer> SIEGE_HOUR_LIST;
 	public static int OUTER_DOOR_UPGRADE_PRICE2;
 	public static int OUTER_DOOR_UPGRADE_PRICE3;
 	public static int OUTER_DOOR_UPGRADE_PRICE5;
@@ -533,7 +531,7 @@ public final class Config
 	public static int WORLD_Y_MIN;
 	public static int WORLD_Y_MAX;
 	public static int GEODATA;
-	public static File GEODATA_DIR;
+	public static String GEODATA_DRIVER;
 	public static File PATHNODE_DIR;
 	public static boolean GEODATA_CELLFINDING;
 	public static String PATHFIND_BUFFERS;
@@ -675,6 +673,10 @@ public final class Config
 	public static int PLAYER_MOVEMENT_BLOCK_TIME;
 	public static int NORMAL_ENCHANT_COST_MULTIPLIER;
 	public static int SAFE_ENCHANT_COST_MULTIPLIER;
+	public static boolean BOTREPORT_ENABLE;
+	public static String[] BOTREPORT_RESETPOINT_HOUR;
+	public static long BOTREPORT_REPORT_DELAY;
+	public static boolean BOTREPORT_ALLOW_REPORTS_FROM_SAME_CLAN_MEMBERS;
 	
 	// --------------------------------------------------
 	// FloodProtector Settings
@@ -859,6 +861,7 @@ public final class Config
 	public static float RATE_QUEST_REWARD_RECIPE;
 	public static float RATE_QUEST_REWARD_MATERIAL;
 	public static Map<Integer, Float> RATE_DROP_ITEMS_ID;
+	public static float RATE_KARMA_LOST;
 	public static float RATE_KARMA_EXP_LOST;
 	public static float RATE_SIEGE_GUARDS_PRICE;
 	public static float RATE_DROP_COMMON_HERBS;
@@ -1156,14 +1159,6 @@ public final class Config
 	public static ArrayList<String> FILTER_LIST;
 	
 	// --------------------------------------------------
-	// Security Settings
-	// --------------------------------------------------
-	public static boolean SECOND_AUTH_ENABLED;
-	public static int SECOND_AUTH_MAX_ATTEMPTS;
-	public static long SECOND_AUTH_BAN_TIME;
-	public static String SECOND_AUTH_REC_LINK;
-	
-	// --------------------------------------------------
 	// Email Settings
 	// --------------------------------------------------
 	public static String EMAIL_SERVERINFO_NAME;
@@ -1328,57 +1323,12 @@ public final class Config
 			CH_FRONT1_FEE = Feature.getInt("ClanHallFrontPlatformFunctionFeeLvl1", 1300);
 			CH_FRONT2_FEE = Feature.getInt("ClanHallFrontPlatformFunctionFeeLvl2", 4000);
 			CH_BUFF_FREE = Feature.getBoolean("AltClanHallMpBuffFree", false);
-			
-			CL_SET_SIEGE_TIME_LIST = new ArrayList<>();
-			SIEGE_HOUR_LIST_MORNING = new ArrayList<>();
-			SIEGE_HOUR_LIST_AFTERNOON = new ArrayList<>();
-			String[] sstl = Feature.getString("CLSetSiegeTimeList", "").split(",");
-			if (sstl.length != 0)
+			SIEGE_HOUR_LIST = new ArrayList<>();
+			for (String hour : Feature.getString("SiegeHourList", "").split(","))
 			{
-				boolean isHour = false;
-				for (String st : sstl)
+				if (Util.isDigit(hour))
 				{
-					if (st.equalsIgnoreCase("day") || st.equalsIgnoreCase("hour") || st.equalsIgnoreCase("minute"))
-					{
-						if (st.equalsIgnoreCase("hour"))
-						{
-							isHour = true;
-						}
-						CL_SET_SIEGE_TIME_LIST.add(st.toLowerCase());
-					}
-					else
-					{
-						_log.warn(StringUtil.concat("[CLSetSiegeTimeList]: invalid config property -> CLSetSiegeTimeList \"", st, "\""));
-					}
-				}
-				if (isHour)
-				{
-					String[] shl = Feature.getString("SiegeHourList", "").split(",");
-					for (String st : shl)
-					{
-						if (!st.equalsIgnoreCase(""))
-						{
-							int val = Integer.parseInt(st);
-							if ((val > 23) || (val < 0))
-							{
-								_log.warn(StringUtil.concat("[SiegeHourList]: invalid config property -> SiegeHourList \"", st, "\""));
-							}
-							else if (val < 12)
-							{
-								SIEGE_HOUR_LIST_MORNING.add(val);
-							}
-							else
-							{
-								val -= 12;
-								SIEGE_HOUR_LIST_AFTERNOON.add(val);
-							}
-						}
-					}
-					if (Config.SIEGE_HOUR_LIST_AFTERNOON.isEmpty() && Config.SIEGE_HOUR_LIST_AFTERNOON.isEmpty())
-					{
-						_log.warn("[SiegeHourList]: invalid config property -> SiegeHourList is empty");
-						CL_SET_SIEGE_TIME_LIST.remove("hour");
-					}
+					SIEGE_HOUR_LIST.add(Integer.parseInt(hour));
 				}
 			}
 			CS_TELE_FEE_RATIO = Feature.getLong("CastleTeleportFunctionFeeRatio", 604800000);
@@ -1961,15 +1911,7 @@ public final class Config
 			WORLD_Y_MIN = General.getInt("WorldYMin", 10);
 			WORLD_Y_MAX = General.getInt("WorldYMax", 26);
 			GEODATA = General.getInt("GeoData", 0);
-			try
-			{
-				GEODATA_DIR = new File(General.getString("GeodataDirectory", "data/geodata").replaceAll("\\\\", "/")).getCanonicalFile();
-			}
-			catch (IOException e)
-			{
-				_log.warn("Error setting geodata directory!", e);
-				GEODATA_DIR = new File("data/geodata");
-			}
+			GEODATA_DRIVER = General.getString("GeoDataDriver", "l2r.gameserver.geoengine.NullDriver");
 			try
 			{
 				PATHNODE_DIR = new File(General.getString("PathnodeDirectory", "data/pathnode").replaceAll("\\\\", "/")).getCanonicalFile();
@@ -2123,6 +2065,11 @@ public final class Config
 			NORMAL_ENCHANT_COST_MULTIPLIER = General.getInt("NormalEnchantCostMultipiler", 1);
 			SAFE_ENCHANT_COST_MULTIPLIER = General.getInt("SafeEnchantCostMultipiler", 5);
 			
+			BOTREPORT_ENABLE = General.getBoolean("EnableBotReportButton", false);
+			BOTREPORT_RESETPOINT_HOUR = General.getString("BotReportPointsResetHour", "00:00").split(":");
+			BOTREPORT_REPORT_DELAY = General.getInt("BotReportDelay", 30) * 60000;
+			BOTREPORT_ALLOW_REPORTS_FROM_SAME_CLAN_MEMBERS = General.getBoolean("AllowReportsFromSameClanMembers", false);
+			
 			// Load FloodProtector L2Properties file
 			final PropertiesParser FloodProtectors = new PropertiesParser(FLOOD_PROTECTOR_FILE);
 			
@@ -2251,6 +2198,11 @@ public final class Config
 			RATE_VITALITY_LOST = RatesSettings.getFloat("RateVitalityLost", 1);
 			RATE_VITALITY_GAIN = RatesSettings.getFloat("RateVitalityGain", 1);
 			RATE_RECOVERY_ON_RECONNECT = RatesSettings.getFloat("RateRecoveryOnReconnect", 4);
+			RATE_KARMA_LOST = RatesSettings.getFloat("RateKarmaLost", -1);
+			if (RATE_KARMA_LOST == -1)
+			{
+				RATE_KARMA_LOST = RATE_XP;
+			}
 			RATE_KARMA_EXP_LOST = RatesSettings.getFloat("RateKarmaExpLost", 1);
 			RATE_SIEGE_GUARDS_PRICE = RatesSettings.getFloat("RateSiegeGuardsPrice", 1);
 			RATE_DROP_COMMON_HERBS = RatesSettings.getFloat("RateCommonHerbs", 1);
@@ -2789,15 +2741,6 @@ public final class Config
 			{
 				_log.warn("Error while loading chat filter words!", e);
 			}
-			
-			// Security
-			final PropertiesParser SecuritySettings = new PropertiesParser(SECURITY_CONFIG_FILE);
-			
-			// Second Auth Settings
-			SECOND_AUTH_ENABLED = SecuritySettings.getBoolean("SecondAuthEnabled", false);
-			SECOND_AUTH_MAX_ATTEMPTS = SecuritySettings.getInt("SecondAuthMaxAttempts", 5);
-			SECOND_AUTH_BAN_TIME = SecuritySettings.getInt("SecondAuthBanTime", 480);
-			SECOND_AUTH_REC_LINK = SecuritySettings.getString("SecondAuthRecoveryLink", "");
 			
 			final PropertiesParser ClanHallSiege = new PropertiesParser(CH_SIEGE_FILE);
 			

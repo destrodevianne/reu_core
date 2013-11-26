@@ -55,7 +55,7 @@ public final class L2BuyList
 	
 	public void addProduct(Product product)
 	{
-		_products.put(product.getItemId(), product);
+		_products.put(product.getId(), product);
 	}
 	
 	public void addAllowedNpc(int npcId)

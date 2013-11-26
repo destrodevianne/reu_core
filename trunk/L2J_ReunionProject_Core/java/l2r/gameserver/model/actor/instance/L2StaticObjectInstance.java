@@ -20,7 +20,7 @@ package l2r.gameserver.model.actor.instance;
 
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.model.L2CharPosition;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.knownlist.StaticObjectKnownList;
 import l2r.gameserver.model.actor.stat.StaticObjStat;
@@ -66,7 +66,7 @@ public final class L2StaticObjectInstance extends L2Character
 		}
 		
 		@Override
-		public void stopMove(L2CharPosition pos)
+		public void stopMove(Location pos)
 		{
 		}
 		
@@ -88,9 +88,11 @@ public final class L2StaticObjectInstance extends L2Character
 	}
 	
 	/**
-	 * @return Returns the StaticObjectId.
+	 * Gets the static object ID.
+	 * @return the static object ID
 	 */
-	public int getStaticObjectId()
+	@Override
+	public int getId()
 	{
 		return _staticObjectId;
 	}

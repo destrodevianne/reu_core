@@ -111,7 +111,7 @@ public class MultiSell
 			}
 			else
 			{
-				_log.warn(getClass().getSimpleName() + ": can't find list id: " + listId + " requested by player: " + player.getName() + ", npcId:" + (npc != null ? npc.getNpcId() : 0));
+				_log.warn(getClass().getSimpleName() + ": can't find list id: " + listId + " requested by player: " + player.getName() + ", npcId:" + (npc != null ? npc.getId() : 0));
 			}
 			return;
 		}
@@ -445,14 +445,14 @@ public class MultiSell
 				{
 					if (!verifyIngredient(ing))
 					{
-						_log.warn(getClass().getSimpleName() + ": can't find ingredient with itemId: " + ing.getItemId() + " in list: " + list.getListId());
+						_log.warn(getClass().getSimpleName() + ": can't find ingredient with itemId: " + ing.getId() + " in list: " + list.getListId());
 					}
 				}
 				for (Ingredient ing : ent.getProducts())
 				{
 					if (!verifyIngredient(ing))
 					{
-						_log.warn(getClass().getSimpleName() + ": can't find product with itemId: " + ing.getItemId() + " in list: " + list.getListId());
+						_log.warn(getClass().getSimpleName() + ": can't find product with itemId: " + ing.getId() + " in list: " + list.getListId());
 					}
 				}
 			}
@@ -461,7 +461,7 @@ public class MultiSell
 	
 	private final boolean verifyIngredient(Ingredient ing)
 	{
-		switch (ing.getItemId())
+		switch (ing.getId())
 		{
 			case PC_BANG_POINTS:
 			case CLAN_REPUTATION:

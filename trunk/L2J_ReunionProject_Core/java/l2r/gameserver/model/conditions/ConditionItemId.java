@@ -45,6 +45,6 @@ public final class ConditionItemId extends Condition
 	@Override
 	public boolean testImpl(Env env)
 	{
-		return (env.getItem() != null) && (env.getItem().getItemId() == _itemId);
+		return (env.getItem() != null) && (env.getItem().getId() == _itemId);
 	}
 }

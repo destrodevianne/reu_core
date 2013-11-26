@@ -36,6 +36,7 @@ import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.l2skills.L2SkillDrain;
@@ -51,7 +52,7 @@ import org.slf4j.LoggerFactory;
 
 import gr.reunion.interf.ReunionEvents;
 
-public final class L2CubicInstance
+public final class L2CubicInstance implements IIdentifiable
 {
 	protected static final Logger _log = LoggerFactory.getLogger(L2CubicInstance.class);
 	
@@ -258,6 +259,7 @@ public final class L2CubicInstance
 		}
 	}
 	
+	@Override
 	public int getId()
 	{
 		return _id;

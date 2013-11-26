@@ -44,7 +44,7 @@ public class ConditionPetType extends Condition
 			return false;
 		}
 		
-		int npcid = ((L2Summon) env.getCharacter()).getNpcId();
+		int npcid = ((L2Summon) env.getCharacter()).getId();
 		
 		if (PetDataTable.isStrider(npcid) && (petType == L2Item.STRIDER))
 		{

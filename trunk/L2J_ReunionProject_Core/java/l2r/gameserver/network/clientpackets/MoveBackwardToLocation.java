@@ -23,7 +23,7 @@ import java.nio.BufferUnderflowException;
 import l2r.Config;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.TaskPriority;
-import l2r.gameserver.model.L2CharPosition;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -140,7 +140,7 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(_targetX, _targetY, _targetZ, 0));
+			activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(_targetX, _targetY, _targetZ, 0));
 			
 			/*
 			 * if (activeChar.getParty() != null) activeChar.getParty().broadcastToPartyMembers(activeChar, new PartyMemberPosition(activeChar));

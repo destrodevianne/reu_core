@@ -293,7 +293,7 @@ public final class Instance
 	{
 		for (L2Npc npc : getNpcs())
 		{
-			if (npc.getNpcId() == npcId)
+			if (npc.getId() == npcId)
 			{
 				return npc;
 			}
@@ -596,9 +596,9 @@ public final class Instance
 								if (npcTemplate != null)
 								{
 									spawnDat = new L2Spawn(npcTemplate);
-									spawnDat.setLocx(x);
-									spawnDat.setLocy(y);
-									spawnDat.setLocz(z);
+									spawnDat.setX(x);
+									spawnDat.setY(y);
+									spawnDat.setZ(z);
 									spawnDat.setAmount(1);
 									spawnDat.setHeading(heading);
 									spawnDat.setRespawnDelay(respawn, respawnRandom);

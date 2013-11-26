@@ -25,6 +25,7 @@ import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
+import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.AskJoinParty;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import gr.reunion.interf.ReunionEvents;
@@ -67,6 +68,21 @@ public final class RequestJoinParty extends L2GameClientPacket
 		if ((target.getClient() == null) || target.getClient().isDetached())
 		{
 			requestor.sendMessage("Player is in offline mode.");
+			return;
+		}
+		
+		if (requestor.isPartyBanned())
+		{
+			requestor.sendPacket(SystemMessageId.YOU_HAVE_BEEN_REPORTED_SO_PARTY_NOT_ALLOWED);
+			requestor.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
+		if (target.isPartyBanned())
+		{
+			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_REPORTED_AND_CANNOT_PARTY);
+			sm.addCharName(target);
+			requestor.sendPacket(sm);
 			return;
 		}
 		

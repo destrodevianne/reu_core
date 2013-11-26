@@ -142,7 +142,7 @@ public final class RequestPetUseItem extends L2GameClientPacket
 			else
 			{
 				activeChar.sendPacket(SystemMessageId.PET_CANNOT_USE_ITEM);
-				_log.warn("No item handler registered for itemId: " + item.getItemId());
+				_log.warn("No item handler registered for itemId: " + item.getId());
 			}
 		}
 	}

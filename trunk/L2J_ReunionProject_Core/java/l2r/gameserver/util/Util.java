@@ -26,8 +26,12 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javolution.text.TextBuilder;
 import javolution.util.FastList;
@@ -128,6 +132,24 @@ public final class Util
 	}
 	
 	/**
+	 * Calculates distance between one set of x, y, z and another set of x, y, z.
+	 * @param x1 - X coordinate of first point.
+	 * @param y1 - Y coordinate of first point.
+	 * @param z1 - Z coordinate of first point.
+	 * @param x2 - X coordinate of second point.
+	 * @param y2 - Y coordinate of second point.
+	 * @param z2 - Z coordinate of second point.
+	 * @param includeZAxis - If set to true, Z coordinates will be included.
+	 * @param squared - If set to true, distance returned will be squared.
+	 * @return {@code double} - Distance between object and given x, y , z.
+	 */
+	public static double calculateDistance(int x1, int y1, int z1, int x2, int y2, int z2, boolean includeZAxis, boolean squared)
+	{
+		final double distance = Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + (includeZAxis ? Math.pow(z1 - z2, 2) : 0);
+		return (squared) ? distance : Math.sqrt(distance);
+	}
+	
+	/**
 	 * @param x1
 	 * @param y1
 	 * @param x2
@@ -175,7 +197,7 @@ public final class Util
 			return 1000000;
 		}
 		
-		return calculateDistance(obj1.getPosition().getX(), obj1.getPosition().getY(), obj1.getPosition().getZ(), obj2.getPosition().getX(), obj2.getPosition().getY(), obj2.getPosition().getZ(), includeZAxis);
+		return calculateDistance(obj1.getX(), obj1.getY(), obj1.getZ(), obj2.getX(), obj2.getY(), obj2.getZ(), includeZAxis);
 	}
 	
 	/**
@@ -719,5 +741,21 @@ public final class Util
 			start++;
 		}
 		return range;
+	}
+	
+	private static Pattern _pattern = Pattern.compile("<!--TEMPLET(\\d+)(.*?)TEMPLET-->", Pattern.DOTALL);
+	
+	public static Map<Integer, String> parseTemplate(String html)
+	{
+		Matcher m = _pattern.matcher(html);
+		Map<Integer, String> tpls = new HashMap<>();
+		while (m.find())
+		{
+			tpls.put(Integer.parseInt(m.group(1)), m.group(2));
+			html = html.replace(m.group(0), "");
+		}
+		
+		tpls.put(0, html);
+		return tpls;
 	}
 }

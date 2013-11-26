@@ -1,10 +1,10 @@
 package l2r.gameserver.taskmanager.tasks;
 
-import l2r.gameserver.enums.TaskType;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
+import l2r.gameserver.taskmanager.TaskTypes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +42,6 @@ public class TaskAdvent extends Task
 	public void initializate()
 	{
 		super.initializate();
-		TaskManager.addUniqueTask(NAME, TaskType.TYPE_GLOBAL_TASK, "1", "06:30:00", "");
+		TaskManager.addUniqueTask(NAME, TaskTypes.TYPE_GLOBAL_TASK, "1", "06:30:00", "");
 	}
 }

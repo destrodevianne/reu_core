@@ -19,26 +19,48 @@
 package l2r.gameserver.model;
 
 /**
- * This class permit to pass (x, y, z, heading) position data to method.
+ * Macro Cmd data transfer object.
+ * @author Zoey76
  */
-public final class L2CharPosition
+public class MacroCmd
 {
+	private final int _entry;
+	private final int _type;
+	private final int _d1; // skill_id or page for shortcuts
+	private final int _d2; // shortcut
+	private final String _cmd;
 	
-	public final int x, y, z, heading;
-	
-	/**
-	 * Constructor of L2CharPosition.
-	 * @param pX
-	 * @param pY
-	 * @param pZ
-	 * @param pHeading
-	 */
-	public L2CharPosition(int pX, int pY, int pZ, int pHeading)
+	public MacroCmd(int entry, int type, int d1, int d2, String cmd)
 	{
-		x = pX;
-		y = pY;
-		z = pZ;
-		heading = pHeading;
+		_entry = entry;
+		_type = type;
+		_d1 = d1;
+		_d2 = d2;
+		_cmd = cmd;
 	}
 	
+	public int getEntry()
+	{
+		return _entry;
+	}
+	
+	public int getType()
+	{
+		return _type;
+	}
+	
+	public int getD1()
+	{
+		return _d1;
+	}
+	
+	public int getD2()
+	{
+		return _d2;
+	}
+	
+	public String getCmd()
+	{
+		return _cmd;
+	}
 }

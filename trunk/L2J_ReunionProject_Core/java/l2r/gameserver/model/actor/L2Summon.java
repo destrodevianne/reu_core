@@ -283,9 +283,14 @@ public abstract class L2Summon extends L2Playable
 		return _owner;
 	}
 	
-	public final int getNpcId()
+	/**
+	 * Gets the summon ID.
+	 * @return the summon ID
+	 */
+	@Override
+	public final int getId()
 	{
-		return getTemplate().getNpcId();
+		return getTemplate().getId();
 	}
 	
 	public short getSoulShotsPerHit()
@@ -948,13 +953,13 @@ public abstract class L2Summon extends L2Playable
 	public void onTeleported()
 	{
 		super.onTeleported();
-		sendPacket(new TeleportToLocation(this, getPosition().getX(), getPosition().getY(), getPosition().getZ(), getPosition().getHeading()));
+		sendPacket(new TeleportToLocation(this, getX(), getY(), getZ(), getHeading()));
 	}
 	
 	@Override
 	public String toString()
 	{
-		return super.toString() + "(" + getNpcId() + ") Owner: " + getOwner();
+		return super.toString() + "(" + getId() + ") Owner: " + getOwner();
 	}
 	
 	@Override
@@ -1017,7 +1022,7 @@ public abstract class L2Summon extends L2Playable
 		}
 		
 		// Sin eater, Big Boom, Wyvern can't attack with attack button.
-		final int npcId = getNpcId();
+		final int npcId = getId();
 		if (Util.contains(PASSIVE_SUMMONS, npcId))
 		{
 			getOwner().sendPacket(ActionFailed.STATIC_PACKET);

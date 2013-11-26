@@ -25,7 +25,7 @@ public class L2BufferInstance extends L2Npc
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		
 		NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), "data/html/NpcBuffer/" + getTemplate().getNpcId() + ".htm");
+		html.setFile(player.getHtmlPrefix(), "data/html/NpcBuffer/" + getTemplate().getId() + ".htm");
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		player.sendPacket(html);
 	}
