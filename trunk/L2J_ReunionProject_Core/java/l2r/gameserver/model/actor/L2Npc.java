@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 
 import l2r.Config;
+import l2r.gameserver.ItemsAutoDestroy;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.ThreadPoolManager;
@@ -64,9 +65,11 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
+import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.items.type.L2EtcItemType;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.Quest.QuestEventType;
@@ -108,36 +111,27 @@ public class L2Npc extends L2Character
 {
 	/** The interaction distance of the L2NpcInstance(is used as offset in MovetoLocation method) */
 	public static final int INTERACTION_DISTANCE = 150;
-	
+	/** Maximum distance where the drop may appear given this NPC position. */
+	public static final int RANDOM_ITEM_DROP_LIMIT = 70;
 	/** The L2Spawn object that manage this L2NpcInstance */
 	private L2Spawn _spawn;
-	
 	/** The flag to specify if this L2NpcInstance is busy */
 	private boolean _isBusy = false;
-	
 	/** The busy message for this L2NpcInstance */
 	private String _busyMessage = "";
-	
 	/** True if endDecayTask has already been called */
 	volatile boolean _isDecayed = false;
-	
 	/** The castle index in the array of L2Castle this L2NpcInstance belongs to */
 	private int _castleIndex = -2;
-	
 	/** The fortress index in the array of L2Fort this L2NpcInstance belongs to */
 	private int _fortIndex = -2;
-	
 	private boolean _isInTown = false;
-	
 	/** True if this L2Npc is autoattackable **/
 	private boolean _isAutoAttackable = false;
-	
 	/** Time of last social packet broadcast */
 	private long _lastSocialBroadcast = 0;
-	
 	/** Minimum interval between social packets */
 	private final int _minimalSocialInterval = 6000;
-	
 	/** Support for random animation switching */
 	private boolean _isRandomAnimationEnabled = true;
 	protected RandomAnimationTask _rAniTask = null;
@@ -2068,6 +2062,72 @@ public class L2Npc extends L2Character
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Drops an item.
+	 * @param player the last attacker or main damage dealer
+	 * @param itemId the item ID
+	 * @param itemCount the item count
+	 * @return the dropped item
+	 */
+	public L2ItemInstance dropItem(L2PcInstance player, int itemId, long itemCount)
+	{
+		L2ItemInstance item = null;
+		for (int i = 0; i < itemCount; i++)
+		{
+			// Randomize drop position.
+			final int newX = (getX() + Rnd.get((RANDOM_ITEM_DROP_LIMIT * 2) + 1)) - RANDOM_ITEM_DROP_LIMIT;
+			final int newY = (getY() + Rnd.get((RANDOM_ITEM_DROP_LIMIT * 2) + 1)) - RANDOM_ITEM_DROP_LIMIT;
+			final int newZ = getZ() + 20;
+			
+			if (ItemTable.getInstance().getTemplate(itemId) == null)
+			{
+				_log.error("Item doesn't exist so cannot be dropped. Item ID: " + itemId + " Quest: " + getName());
+				return null;
+			}
+			
+			item = ItemTable.getInstance().createItem("Loot", itemId, itemCount, player, this);
+			if (item == null)
+			{
+				return null;
+			}
+			
+			if (player != null)
+			{
+				item.getDropProtection().protect(player);
+			}
+			
+			item.dropMe(this, newX, newY, newZ);
+			
+			// Add drop to auto destroy item task.
+			if (!Config.LIST_PROTECTED_ITEMS.contains(itemId))
+			{
+				if (((Config.AUTODESTROY_ITEM_AFTER > 0) && (item.getItemType() != L2EtcItemType.HERB)) || ((Config.HERB_AUTO_DESTROY_TIME > 0) && (item.getItemType() == L2EtcItemType.HERB)))
+				{
+					ItemsAutoDestroy.getInstance().addItem(item);
+				}
+			}
+			item.setProtected(false);
+			
+			// If stackable, end loop as entire count is included in 1 instance of item.
+			if (item.isStackable() || !Config.MULTIPLE_ITEM_DROP)
+			{
+				break;
+			}
+		}
+		return item;
+	}
+	
+	/**
+	 * Method overload for {@link L2Attackable#dropItem(L2PcInstance, int, long)}
+	 * @param player the last attacker or main damage dealer
+	 * @param item the item holder
+	 * @return the dropped item
+	 */
+	public L2ItemInstance dropItem(L2PcInstance player, ItemHolder item)
+	{
+		return dropItem(player, item.getId(), item.getCount());
 	}
 	
 	private boolean _blocked;

@@ -32,7 +32,6 @@ import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
-import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.itemcontainer.PcInventory;
@@ -1202,11 +1201,6 @@ public final class QuestState
 	public void onTutorialClientEvent(int number)
 	{
 		_player.sendPacket(new TutorialEnableClientEvent(number));
-	}
-	
-	public void dropItem(L2MonsterInstance npc, L2PcInstance player, int itemId, int count)
-	{
-		npc.dropItem(player, itemId, count);
 	}
 	
 	/**

@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javolution.util.FastMap;
 import l2r.Config;
-import l2r.gameserver.ItemsAutoDestroy;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2AttackableAI;
@@ -67,7 +66,6 @@ import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Stats;
@@ -1610,8 +1608,7 @@ public class L2Attackable extends L2Npc
 					// Broadcast message if RaidBoss was defeated
 					if (isRaid() && !isRaidMinion())
 					{
-						SystemMessage sm;
-						sm = SystemMessage.getSystemMessage(SystemMessageId.C1_DIED_DROPPED_S3_S2);
+						final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_DIED_DROPPED_S3_S2);
 						sm.addCharName(this);
 						sm.addItemName(item.getId());
 						sm.addItemNumber(item.getCount());
@@ -1720,72 +1717,19 @@ public class L2Attackable extends L2Npc
 		{
 			if (Rnd.get(L2DropData.MAX_CHANCE) < drop.getEventDrop().getDropChance())
 			{
-				final ItemHolder rewardItem = new ItemHolder(drop.getEventDrop().getIdList()[Rnd.get(drop.getEventDrop().getIdList().length)], Rnd.get(drop.getEventDrop().getMinCount(), drop.getEventDrop().getMaxCount()));
+				final int itemId = drop.getEventDrop().getIdList()[Rnd.get(drop.getEventDrop().getIdList().length)];
+				final long itemCount = Rnd.get(drop.getEventDrop().getMinCount(), drop.getEventDrop().getMaxCount());
 				
 				if (Config.AUTO_LOOT || isFlying())
 				{
-					player.doAutoLoot(this, rewardItem); // Give the item(s) to the L2PcInstance that has killed the L2Attackable
+					player.doAutoLoot(this, itemId, itemCount); // Give the item(s) to the L2PcInstance that has killed the L2Attackable
 				}
 				else
 				{
-					dropItem(player, rewardItem); // drop the item on the ground
+					dropItem(player, itemId, itemCount); // drop the item on the ground
 				}
 			}
 		}
-	}
-	
-	/**
-	 * Drop reward item.
-	 * @param mainDamageDealer
-	 * @param item
-	 * @return
-	 */
-	public L2ItemInstance dropItem(L2PcInstance mainDamageDealer, ItemHolder item)
-	{
-		int randDropLim = 70;
-		
-		L2ItemInstance ditem = null;
-		for (int i = 0; i < item.getCount(); i++)
-		{
-			// Randomize drop position
-			int newX = (getX() + Rnd.get((randDropLim * 2) + 1)) - randDropLim;
-			int newY = (getY() + Rnd.get((randDropLim * 2) + 1)) - randDropLim;
-			int newZ = Math.max(getZ(), mainDamageDealer.getZ()) + 20; // TODO: temp hack, do something nicer when we have geodatas
-			
-			if (ItemTable.getInstance().getTemplate(item.getId()) != null)
-			{
-				// Init the dropped L2ItemInstance and add it in the world as a visible object at the position where mob was last
-				ditem = ItemTable.getInstance().createItem("Loot", item.getId(), item.getCount(), mainDamageDealer, this);
-				ditem.getDropProtection().protect(mainDamageDealer);
-				ditem.dropMe(this, newX, newY, newZ);
-				
-				// Add drop to auto destroy item task
-				if (!Config.LIST_PROTECTED_ITEMS.contains(item.getId()))
-				{
-					if (((Config.AUTODESTROY_ITEM_AFTER > 0) && (ditem.getItemType() != L2EtcItemType.HERB)) || ((Config.HERB_AUTO_DESTROY_TIME > 0) && (ditem.getItemType() == L2EtcItemType.HERB)))
-					{
-						ItemsAutoDestroy.getInstance().addItem(ditem);
-					}
-				}
-				ditem.setProtected(false);
-				
-				// If stackable, end loop as entire count is included in 1 instance of item
-				if (ditem.isStackable() || !Config.MULTIPLE_ITEM_DROP)
-				{
-					break;
-				}
-			}
-			else
-			{
-				_log.error("Item doesn't exist so cannot be dropped. Item ID: " + item.getId());
-			}
-		}
-		return ditem;
-	}
-	
-	public L2ItemInstance dropItem(L2PcInstance lastAttacker, int itemId, int itemCount)
-	{
-		return dropItem(lastAttacker, new ItemHolder(itemId, itemCount));
 	}
 	
 	/**
