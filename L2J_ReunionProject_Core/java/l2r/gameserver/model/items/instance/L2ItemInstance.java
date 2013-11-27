@@ -1776,9 +1776,9 @@ public final class L2ItemInstance extends L2Object
 		return itemLootShedule;
 	}
 	
-	public void setProtected(boolean is_protected)
+	public void setProtected(boolean isProtected)
 	{
-		_protected = is_protected;
+		_protected = isProtected;
 	}
 	
 	public boolean isProtected()
