@@ -168,6 +168,13 @@ public final class NpcHtmlMessage extends L2GameServerPacket
 		_npcObjId = npcObjId;
 	}
 	
+	public NpcHtmlMessage(String html)
+	{
+		_npcObjId = 0;
+		_itemId = 0;
+		setHtml(html);
+	}
+	
 	/**
 	 * disable building bypass validation cache for this packet
 	 */

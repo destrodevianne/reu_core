@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public interface IItemHandler
 {
-	public static Logger _log = LoggerFactory.getLogger(IItemHandler.class);
+	public static final Logger _log = LoggerFactory.getLogger(IItemHandler.class);
 	
 	/**
 	 * Launch task associated to the item.

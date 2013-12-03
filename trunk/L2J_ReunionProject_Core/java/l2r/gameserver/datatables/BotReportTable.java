@@ -8,8 +8,6 @@ import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -25,6 +23,8 @@ import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -35,7 +35,7 @@ import gnu.trove.map.hash.TIntLongHashMap;
  */
 public final class BotReportTable
 {
-	static final Logger _log = Logger.getLogger(BotReportTable.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(BotReportTable.class);
 	
 	private static final int COLUMN_BOT_ID = 1;
 	private static final int COLUMN_REPORTER_ID = 2;
@@ -78,7 +78,7 @@ public final class BotReportTable
 			}
 			catch (Exception e)
 			{
-				_log.log(Level.WARNING, "BotReportTable: Could not load punishments from /config/botreport_punishments.xml", e);
+				_log.warn("BotReportTable: Could not load punishments from /config/botreport_punishments.xml", e);
 			}
 			
 			loadReportedCharData();
@@ -155,7 +155,7 @@ public final class BotReportTable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "BotReportTable: Could not load reported char data!", e);
+			_log.warn("BotReportTable: Could not load reported char data!", e);
 		}
 	}
 	
@@ -187,7 +187,7 @@ public final class BotReportTable
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "BotReportTable: Could not update reported char data in database!", e);
+			_log.error("BotReportTable: Could not update reported char data in database!", e);
 		}
 	}
 	
@@ -372,7 +372,7 @@ public final class BotReportTable
 		}
 		else
 		{
-			_log.warning("BotReportTable: Could not add punishment for " + neededReports + " report(s): Skill " + skillId + "-" + skillLevel + " does not exist!");
+			_log.warn("BotReportTable: Could not add punishment for " + neededReports + " report(s): Skill " + skillId + "-" + skillLevel + " does not exist!");
 		}
 	}
 	
@@ -408,7 +408,7 @@ public final class BotReportTable
 		catch (Exception e)
 		{
 			ThreadPoolManager.getInstance().scheduleGeneral(new ResetPointTask(), 24 * 3600 * 1000);
-			_log.log(Level.WARNING, "BotReportTable: Could not properly schedule bot report points reset task. Scheduled in 24 hours.", e);
+			_log.warn("BotReportTable: Could not properly schedule bot report points reset task. Scheduled in 24 hours.", e);
 		}
 	}
 	

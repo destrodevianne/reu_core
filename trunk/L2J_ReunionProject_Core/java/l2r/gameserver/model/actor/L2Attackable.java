@@ -721,6 +721,7 @@ public class L2Attackable extends L2Npc
 								if (skill == null)
 								{
 									_log.warn("Logger: Skill is NULL (L2Attackable) Report this to team.");
+									_log.warn("Logger: MobId is: " + this.getId() + " (L2Attackable) Report this to team.");
 								}
 								
 								if (damage == 0)

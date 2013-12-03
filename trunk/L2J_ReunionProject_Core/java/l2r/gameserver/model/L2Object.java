@@ -76,9 +76,9 @@ public abstract class L2Object implements IIdentifiable, INamable, IUniqueId, IP
 		initKnownList();
 	}
 	
-	protected final void setInstanceType(InstanceType i)
+	protected final void setInstanceType(InstanceType instanceType)
 	{
-		_instanceType = i;
+		_instanceType = instanceType;
 	}
 	
 	public final InstanceType getInstanceType()
@@ -86,14 +86,14 @@ public abstract class L2Object implements IIdentifiable, INamable, IUniqueId, IP
 		return _instanceType;
 	}
 	
-	public final boolean isInstanceType(InstanceType i)
+	public final boolean isInstanceType(InstanceType instanceType)
 	{
-		return _instanceType.isType(i);
+		return _instanceType.isType(instanceType);
 	}
 	
-	public final boolean isInstanceTypes(InstanceType... i)
+	public final boolean isInstanceTypes(InstanceType... instanceType)
 	{
-		return _instanceType.isTypes(i);
+		return _instanceType.isTypes(instanceType);
 	}
 	
 	public void onAction(L2PcInstance player)

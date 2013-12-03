@@ -44,6 +44,7 @@ import l2r.gameserver.datatables.OptionsData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.ItemsOnGroundManager;
 import l2r.gameserver.instancemanager.MercTicketManager;
 import l2r.gameserver.instancemanager.QuestManager;
@@ -226,6 +227,16 @@ public final class L2ItemInstance extends L2Object
 		_mana = _item.getDuration();
 		_time = _item.getTime() == -1 ? -1 : System.currentTimeMillis() + ((long) _item.getTime() * 60 * 1000);
 		scheduleLifeTimeTask();
+	}
+	
+	/**
+	 * Constructor overload.<br>
+	 * Sets the next free object ID in the ID factory.
+	 * @param itemId the item template ID
+	 */
+	public L2ItemInstance(int itemId)
+	{
+		this(IdFactory.getInstance().getNextId(), itemId);
 	}
 	
 	@Override

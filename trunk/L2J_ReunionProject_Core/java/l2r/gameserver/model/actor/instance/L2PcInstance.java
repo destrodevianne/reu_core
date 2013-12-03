@@ -161,7 +161,6 @@ import l2r.gameserver.model.actor.tasks.player.AdventPointsTask;
 import l2r.gameserver.model.actor.tasks.player.DismountTask;
 import l2r.gameserver.model.actor.tasks.player.FameTask;
 import l2r.gameserver.model.actor.tasks.player.GameGuardCheckTask;
-import l2r.gameserver.model.actor.tasks.player.HerbTask;
 import l2r.gameserver.model.actor.tasks.player.InventoryEnableTask;
 import l2r.gameserver.model.actor.tasks.player.LookingForFishTask;
 import l2r.gameserver.model.actor.tasks.player.PetFeedTask;
@@ -955,9 +954,6 @@ public final class L2PcInstance extends L2Playable
 	
 	// Character UI
 	private UIKeysSettings _uiKeySettings;
-	
-	/** Herbs Task Time **/
-	private int _herbstask = 0;
 	
 	/** ShortBuff clearing Task */
 	ScheduledFuture<?> _shortBuffTask = null;
@@ -3831,27 +3827,14 @@ public final class L2PcInstance extends L2Playable
 			// Auto use herbs - autoloot
 			if (item.getItemType() == L2EtcItemType.HERB) // If item is herb dont add it to iv :]
 			{
-				if (!isCastingNow())
+				final IItemHandler handler = ItemHandler.getInstance().getHandler(item.getEtcItem());
+				if (handler == null)
 				{
-					L2ItemInstance herb = new L2ItemInstance(IdFactory.getInstance().getNextId(), itemId);
-					IItemHandler handler = ItemHandler.getInstance().getHandler(herb.getEtcItem());
-					if (handler == null)
-					{
-						_log.warn("No item handler registered for Herb - item ID " + herb.getId() + ".");
-					}
-					else
-					{
-						handler.useItem(this, herb, false);
-						if (_herbstask >= 100)
-						{
-							_herbstask -= 100;
-						}
-					}
+					_log.warn("No item handler registered for Herb ID " + item.getId() + "!");
 				}
 				else
 				{
-					_herbstask += 100;
-					ThreadPoolManager.getInstance().scheduleAi(new HerbTask(this, process, itemId, count, reference, sendMessage), _herbstask);
+					handler.useItem(this, new L2ItemInstance(itemId), false);
 				}
 			}
 			else

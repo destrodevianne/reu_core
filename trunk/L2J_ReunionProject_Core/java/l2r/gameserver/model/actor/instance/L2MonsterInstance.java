@@ -44,7 +44,7 @@ public class L2MonsterInstance extends L2Attackable
 	protected boolean _enableMinions = true;
 	
 	private L2MonsterInstance _master = null;
-	private MinionList _minionList = null;
+	private volatile MinionList _minionList = null;
 	
 	protected ScheduledFuture<?> _maintenanceTask = null;
 	
@@ -249,7 +249,13 @@ public class L2MonsterInstance extends L2Attackable
 	{
 		if (_minionList == null)
 		{
-			_minionList = new MinionList(this);
+			synchronized (this)
+			{
+				if (_minionList == null)
+				{
+					_minionList = new MinionList(this);
+				}
+			}
 		}
 		
 		return _minionList;
