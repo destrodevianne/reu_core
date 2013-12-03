@@ -161,11 +161,6 @@ public class GameServer
 	private static Status _statusServer;
 	public static final Calendar dateTimeServerStarted = Calendar.getInstance();
 	
-	public long getUsedMemoryMB()
-	{
-		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576; // ;
-	}
-	
 	public SelectorThread<L2GameClient> getSelectorThread()
 	{
 		return _selectorThread;
@@ -336,6 +331,9 @@ public class GameServer
 		printSection("Leaderboards");
 		CustomServerMods.getInstance().checkLeaderboardsMod();
 		
+		printSection("Reunion Events");
+		ReunionEvents.start();
+		
 		printSection("Scripts");
 		QuestManager.getInstance();
 		BoatManager.getInstance();
@@ -346,7 +344,7 @@ public class GameServer
 		FortManager.getInstance().activateInstances();
 		MerchantPriceConfigTable.getInstance().updateReferences();
 		
-		_log.info("Loading Server Core and data Scripts");
+		_log.info("Loading Python Scripts");
 		L2ScriptEngineManager.getInstance().executeScriptList();
 		
 		QuestManager.getInstance().report();
@@ -380,9 +378,6 @@ public class GameServer
 		TaskManager.getInstance();
 		
 		AntiFeedManager.getInstance().registerEvent(AntiFeedManager.GAME_ID);
-		
-		printSection("Reunion Events");
-		ReunionEvents.start();
 		
 		if (Config.ALLOW_MAIL)
 		{

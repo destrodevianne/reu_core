@@ -731,7 +731,6 @@ public final class L2ScriptEngineManager
 	
 	public void executeScriptList()
 	{
-		_log.info("Load core and darapack scripts.");
 		executeCoreScripts();
 		File scripts = new File(Config.DATAPACK_ROOT + "/data/scripts.ini");
 		try
