@@ -101,8 +101,7 @@ public class L2Fishing implements Runnable
 		}
 		_mode = Rnd.get(100) >= 80 ? 1 : 0;
 		
-		ExFishingStartCombat efsc = new ExFishingStartCombat(_fisher, _time, _fishMaxHp, _mode, _lureType, _deceptiveMode);
-		_fisher.broadcastPacket(efsc);
+		_fisher.broadcastPacket(new ExFishingStartCombat(_fisher, _time, _fishMaxHp, _mode, _lureType, _deceptiveMode));
 		_fisher.sendPacket(new PlaySound(1, "SF_S_01", 0, 0, 0, 0, 0));
 		// Succeeded in getting a bite
 		_fisher.sendPacket(SystemMessageId.GOT_A_BITE);
@@ -111,7 +110,6 @@ public class L2Fishing implements Runnable
 		{
 			_fishAiTask = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(this, 1000, 1000);
 		}
-		
 	}
 	
 	public void changeHp(int hp, int pen)
@@ -153,21 +151,18 @@ public class L2Fishing implements Runnable
 		
 		if (win)
 		{
-			L2FishingMonster fishingMonster = FishingMonstersData.getInstance().getFishingMonster(_fisher.getLevel());
-			if (Rnd.get(100) <= fishingMonster.getProbability())
+			final L2FishingMonster fishingMonster = FishingMonstersData.getInstance().getFishingMonster(_fisher.getLevel());
+			if (fishingMonster != null)
 			{
-				L2NpcTemplate monster = NpcTable.getInstance().getTemplate(fishingMonster.getFishingMonsterId());
-				_fisher.sendPacket(SystemMessageId.YOU_CAUGHT_SOMETHING_SMELLY_THROW_IT_BACK);
-				spawnMonster(monster);
-			}
-			else
-			{
-				_fisher.sendPacket(SystemMessageId.YOU_CAUGHT_SOMETHING);
-				_fisher.addItem("Fishing", _fishId, 1, null, true);
-				
-				if (LeaderboardsConfigs.RANK_FISHERMAN_ENABLED)
+				if (Rnd.get(100) <= fishingMonster.getProbability())
 				{
-					FishermanLeaderboard.getInstance().onCatch(_fisher.getObjectId(), _fisher.getName());
+					_fisher.sendPacket(SystemMessageId.YOU_CAUGHT_SOMETHING_SMELLY_THROW_IT_BACK);
+					spawnMonster(fishingMonster.getFishingMonsterId());
+				}
+				else
+				{
+					_fisher.sendPacket(SystemMessageId.YOU_CAUGHT_SOMETHING);
+					_fisher.addItem("Fishing", _fishId, 1, null, true);
 				}
 			}
 		}
@@ -383,8 +378,9 @@ public class L2Fishing implements Runnable
 		}
 	}
 	
-	private void spawnMonster(L2NpcTemplate monster)
+	private void spawnMonster(int npcId)
 	{
+		final L2NpcTemplate monster = NpcTable.getInstance().getTemplate(npcId);
 		if (monster != null)
 		{
 			try
