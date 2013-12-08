@@ -95,6 +95,17 @@ public class PcStat extends PlayableStat
 			return false;
 		}
 		
+		// GodFather Fix
+		boolean hadKarma;
+		if (activeChar.getKarma() > 0)
+		{
+			hadKarma = true;
+		}
+		else
+		{
+			hadKarma = false;
+		}
+		
 		// Set new karma
 		if (!activeChar.isCursedWeaponEquipped() && (activeChar.getKarma() > 0) && (activeChar.isGM() || !activeChar.isInsideZone(ZoneIdType.PVP)))
 		{
@@ -105,6 +116,16 @@ public class PcStat extends PlayableStat
 				final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOUR_KARMA_HAS_BEEN_CHANGED_TO_S1);
 				msg.addNumber(activeChar.getKarma());
 				activeChar.sendPacket(msg);
+				
+				// GodFather Fix
+				if (activeChar.getKarma() <= 0)
+				{
+					if (hadKarma)
+					{
+						activeChar.setPvpFlagLasts(System.currentTimeMillis() + Config.PVP_PVP_TIME);
+						activeChar.startPvPFlag();
+					}
+				}
 			}
 		}
 		
@@ -363,6 +384,8 @@ public class PcStat extends PlayableStat
 			{
 				pet.getStat().setLevel(getLevel());
 				pet.getStat().getExpForLevel(getActiveChar().getLevel());
+				pet.setCurrentHp(pet.getMaxHp());
+				pet.setCurrentMp(pet.getMaxMp());
 				pet.broadcastPacket(new SocialAction(getActiveChar().getObjectId(), SocialAction.LEVEL_UP));
 				pet.updateAndBroadcastStatus(1);
 			}

@@ -43,6 +43,7 @@ import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.tasks.player.IllegalPlayerActionTask;
+import l2r.gameserver.model.interfaces.ILocational;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.ShowBoard;
 import l2r.util.file.filter.ExtFilter;
@@ -150,54 +151,16 @@ public final class Util
 	}
 	
 	/**
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @return the distance between the two coordinates in 2D plane
+	 * Calculates distance between 2 locations.
+	 * @param loc1 - First location.
+	 * @param loc2 - Second location.
+	 * @param includeZAxis - If set to true, Z coordinates will be included.
+	 * @param squared - If set to true, distance returned will be squared.
+	 * @return {@code double} - Distance between object and given location.
 	 */
-	public static double calculateDistance(int x1, int y1, int x2, int y2)
+	public static double calculateDistance(ILocational loc1, ILocational loc2, boolean includeZAxis, boolean squared)
 	{
-		return calculateDistance(x1, y1, 0, x2, y2, 0, false);
-	}
-	
-	/**
-	 * @param x1
-	 * @param y1
-	 * @param z1
-	 * @param x2
-	 * @param y2
-	 * @param z2
-	 * @param includeZAxis - if true, includes also the Z axis in the calculation
-	 * @return the distance between the two coordinates
-	 */
-	public static double calculateDistance(int x1, int y1, int z1, int x2, int y2, int z2, boolean includeZAxis)
-	{
-		double dx = (double) x1 - x2;
-		double dy = (double) y1 - y2;
-		
-		if (includeZAxis)
-		{
-			double dz = z1 - z2;
-			return Math.sqrt((dx * dx) + (dy * dy) + (dz * dz));
-		}
-		return Math.sqrt((dx * dx) + (dy * dy));
-	}
-	
-	/**
-	 * @param obj1
-	 * @param obj2
-	 * @param includeZAxis - if true, includes also the Z axis in the calculation
-	 * @return the distance between the two objects
-	 */
-	public static double calculateDistance(L2Object obj1, L2Object obj2, boolean includeZAxis)
-	{
-		if ((obj1 == null) || (obj2 == null))
-		{
-			return 1000000;
-		}
-		
-		return calculateDistance(obj1.getX(), obj1.getY(), obj1.getZ(), obj2.getX(), obj2.getY(), obj2.getZ(), includeZAxis);
+		return calculateDistance(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ(), includeZAxis, squared);
 	}
 	
 	/**
@@ -757,5 +720,56 @@ public final class Util
 		
 		tpls.put(0, html);
 		return tpls;
+	}
+	
+	/**
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return the distance between the two coordinates in 2D plane
+	 */
+	public static double calculateDistance(int x1, int y1, int x2, int y2)
+	{
+		return calculateDistance(x1, y1, 0, x2, y2, 0, false);
+	}
+	
+	/**
+	 * @param x1
+	 * @param y1
+	 * @param z1
+	 * @param x2
+	 * @param y2
+	 * @param z2
+	 * @param includeZAxis - if true, includes also the Z axis in the calculation
+	 * @return the distance between the two coordinates
+	 */
+	public static double calculateDistance(int x1, int y1, int z1, int x2, int y2, int z2, boolean includeZAxis)
+	{
+		double dx = (double) x1 - x2;
+		double dy = (double) y1 - y2;
+		
+		if (includeZAxis)
+		{
+			double dz = z1 - z2;
+			return Math.sqrt((dx * dx) + (dy * dy) + (dz * dz));
+		}
+		return Math.sqrt((dx * dx) + (dy * dy));
+	}
+	
+	/**
+	 * @param obj1
+	 * @param obj2
+	 * @param includeZAxis - if true, includes also the Z axis in the calculation
+	 * @return the distance between the two objects
+	 */
+	public static double calculateDistance(L2Object obj1, L2Object obj2, boolean includeZAxis)
+	{
+		if ((obj1 == null) || (obj2 == null))
+		{
+			return 1000000;
+		}
+		
+		return calculateDistance(obj1.getX(), obj1.getY(), obj1.getZ(), obj2.getX(), obj2.getY(), obj2.getZ(), includeZAxis);
 	}
 }
