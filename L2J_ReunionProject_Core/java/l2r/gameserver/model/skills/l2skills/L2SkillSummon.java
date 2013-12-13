@@ -144,8 +144,7 @@ public class L2SkillSummon extends L2Skill
 		}
 		
 		L2PcInstance activeChar = caster.getActingPlayer();
-		
-		if (getId() == 0)
+		if (getNpcId() <= 0)
 		{
 			activeChar.sendMessage("Summon skill " + getId() + " not described yet");
 			return;
@@ -251,10 +250,10 @@ public class L2SkillSummon extends L2Skill
 		}
 		
 		L2ServitorInstance summon;
-		L2NpcTemplate summonTemplate = NpcTable.getInstance().getTemplate(getId());
+		final L2NpcTemplate summonTemplate = NpcTable.getInstance().getTemplate(getNpcId());
 		if (summonTemplate == null)
 		{
-			_log.warn("Summon attempt for nonexisting NPC ID:" + getId() + ", skill ID:" + getId());
+			_log.warn("Summon attempt for nonexisting NPC ID:" + getNpcId() + ", skill ID:" + getId());
 			return; // npcID doesn't exist
 		}
 		

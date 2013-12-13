@@ -28,7 +28,6 @@ import l2r.gameserver.model.actor.L2Decoy;
 import l2r.gameserver.model.actor.knownlist.DecoyKnownList;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.skills.L2Skill;
-import l2r.gameserver.model.skills.l2skills.L2SkillDecoy;
 import l2r.gameserver.taskmanager.DecayTaskManager;
 
 public class L2DecoyInstance extends L2Decoy
@@ -38,18 +37,11 @@ public class L2DecoyInstance extends L2Decoy
 	private Future<?> _DecoyLifeTask;
 	private Future<?> _HateSpam;
 	
-	public L2DecoyInstance(int objectId, L2NpcTemplate template, L2PcInstance owner, L2Skill skill)
+	public L2DecoyInstance(int objectId, L2NpcTemplate template, L2PcInstance owner, int totalLifeTime)
 	{
 		super(objectId, template, owner);
 		setInstanceType(InstanceType.L2DecoyInstance);
-		if (skill != null)
-		{
-			_totalLifeTime = ((L2SkillDecoy) skill).getTotalLifeTime();
-		}
-		else
-		{
-			_totalLifeTime = 20000;
-		}
+		_totalLifeTime = totalLifeTime;
 		_timeRemaining = _totalLifeTime;
 		int delay = 1000;
 		int skilllevel = getTemplate().getIdTemplate() - 13070;

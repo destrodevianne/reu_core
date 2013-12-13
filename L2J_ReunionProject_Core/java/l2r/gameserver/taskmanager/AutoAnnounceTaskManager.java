@@ -203,7 +203,7 @@ public class AutoAnnounceTaskManager
 		Broadcast.announceToOnlinePlayers(text, isCritical);
 		if (Config.LOG_AUTO_ANNOUNCEMENTS)
 		{
-			_log.info((isCritical ? "Critical AutoAnnounce" : "AutoAnnounce") + text);
+			_log.info((isCritical ? "Critical AutoAnnounce" : "AutoAnnounce") + ": " + text);
 		}
 	}
 	
