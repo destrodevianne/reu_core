@@ -23,14 +23,12 @@ import java.lang.reflect.Constructor;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.skills.l2skills.L2SkillChargeDmg;
 import l2r.gameserver.model.skills.l2skills.L2SkillCreateItem;
-import l2r.gameserver.model.skills.l2skills.L2SkillDecoy;
 import l2r.gameserver.model.skills.l2skills.L2SkillDefault;
 import l2r.gameserver.model.skills.l2skills.L2SkillDrain;
 import l2r.gameserver.model.skills.l2skills.L2SkillLearnSkill;
 import l2r.gameserver.model.skills.l2skills.L2SkillSiegeFlag;
 import l2r.gameserver.model.skills.l2skills.L2SkillSignet;
 import l2r.gameserver.model.skills.l2skills.L2SkillSignetCasttime;
-import l2r.gameserver.model.skills.l2skills.L2SkillSpawn;
 import l2r.gameserver.model.skills.l2skills.L2SkillSummon;
 import l2r.gameserver.model.skills.l2skills.L2SkillTeleport;
 
@@ -102,8 +100,6 @@ public enum L2SkillType
 	FEED_PET,
 	ERASE,
 	BETRAY,
-	DECOY(L2SkillDecoy.class),
-	SPAWN(L2SkillSpawn.class),
 	
 	BUFF,
 	DEBUFF,
