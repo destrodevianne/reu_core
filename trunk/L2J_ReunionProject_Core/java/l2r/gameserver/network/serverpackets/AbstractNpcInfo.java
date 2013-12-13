@@ -32,11 +32,11 @@ import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.L2Summon;
-import l2r.gameserver.model.actor.L2Trap;
 import l2r.gameserver.model.actor.instance.L2GuardInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.actor.instance.L2TrapInstance;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.effects.AbnormalEffect;
 import gr.reunion.datatables.FakePcsTable;
@@ -383,9 +383,9 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 	
 	public static class TrapInfo extends AbstractNpcInfo
 	{
-		private final L2Trap _trap;
+		private final L2TrapInstance _trap;
 		
-		public TrapInfo(L2Trap cha, L2Character attacker)
+		public TrapInfo(L2TrapInstance cha, L2Character attacker)
 		{
 			super(cha);
 			
@@ -401,8 +401,6 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 				_name = cha.getName();
 			}
 			_title = cha.getOwner() != null ? cha.getOwner().getName() : "";
-			_runSpd = Math.round(_trap.getRunSpeed() / _moveMultiplier);
-			_walkSpd = Math.round(_trap.getWalkSpeed() / _moveMultiplier);
 		}
 		
 		@Override
@@ -421,13 +419,13 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			writeD(_pAtkSpd);
 			writeD(_runSpd);
 			writeD(_walkSpd);
-			writeD(_runSpd); // swim run speed
-			writeD(_walkSpd); // swim walk speed
-			writeD(_runSpd); // fly run speed
-			writeD(_walkSpd); // fly walk speed
-			writeD(_runSpd); // fly run speed
-			writeD(_walkSpd); // fly walk speed
-			writeF(_trap.getMovementSpeedMultiplier());
+			writeD(_swimRunSpd);
+			writeD(_swimWalkSpd);
+			writeD(_flRunSpd);
+			writeD(_flWalkSpd);
+			writeD(_flyRunSpd);
+			writeD(_flyWalkSpd);
+			writeF(_moveMultiplier);
 			writeF(_trap.getAttackSpeedMultiplier());
 			writeF(_collisionRadius);
 			writeF(_collisionHeight);

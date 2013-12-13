@@ -33,7 +33,6 @@ import l2r.gameserver.model.skills.l2skills.L2SkillSignetCasttime;
 import l2r.gameserver.model.skills.l2skills.L2SkillSpawn;
 import l2r.gameserver.model.skills.l2skills.L2SkillSummon;
 import l2r.gameserver.model.skills.l2skills.L2SkillTeleport;
-import l2r.gameserver.model.skills.l2skills.L2SkillTrap;
 
 /**
  * @author nBd
@@ -117,7 +116,6 @@ public enum L2SkillType
 	TELEPORT(L2SkillTeleport.class),
 	SUMMON_FRIEND,
 	TRANSFORMDISPEL,
-	SUMMON_TRAP(L2SkillTrap.class),
 	DETECT_TRAP,
 	REMOVE_TRAP,
 	SHIFT_TARGET,
