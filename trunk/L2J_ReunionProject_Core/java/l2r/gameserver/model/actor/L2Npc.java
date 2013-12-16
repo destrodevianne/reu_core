@@ -36,6 +36,7 @@ import l2r.gameserver.enums.AIType;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.enums.Team;
 import l2r.gameserver.handler.BypassHandler;
 import l2r.gameserver.handler.IBypassHandler;
 import l2r.gameserver.instancemanager.CHSiegeManager;
@@ -1881,9 +1882,9 @@ public class L2Npc extends L2Character
 	}
 	
 	@Override
-	public void setTeam(int id)
+	public void setTeam(Team team)
 	{
-		super.setTeam(id);
+		super.setTeam(team);
 		for (L2PcInstance player : getKnownList().getKnownPlayers().values())
 		{
 			player.sendPacket(new AbstractNpcInfo.NpcInfo(this, player));

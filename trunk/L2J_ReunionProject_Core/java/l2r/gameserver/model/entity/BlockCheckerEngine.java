@@ -28,6 +28,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.HandysBlockCheckerManager;
 import l2r.gameserver.model.ArenaParticipantsHolder;
@@ -379,12 +380,12 @@ public final class BlockCheckerEngine
 				if (isRed)
 				{
 					_redTeamPoints.put(player, 0);
-					player.setTeam(2);
+					player.setTeam(Team.RED);
 				}
 				else
 				{
 					_blueTeamPoints.put(player, 0);
-					player.setTeam(1);
+					player.setTeam(Team.BLUE);
 				}
 				player.stopAllEffects();
 				
@@ -745,7 +746,7 @@ public final class BlockCheckerEngine
 				
 				player.stopAllEffects();
 				// Remove team aura
-				player.setTeam(0);
+				player.setTeam(Team.NONE);
 				// Set default arena
 				player.setBlockCheckerArena(DEFAULT_ARENA);
 				// Remove the event items

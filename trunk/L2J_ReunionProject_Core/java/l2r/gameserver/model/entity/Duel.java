@@ -23,6 +23,7 @@ import java.util.Calendar;
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.DuelManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -381,7 +382,7 @@ public class Duel
 			{
 				temp.cancelActiveTrade();
 				temp.setIsInDuel(_duelId);
-				temp.setTeam(1);
+				temp.setTeam(Team.BLUE);
 				temp.broadcastUserInfo();
 				broadcastToTeam2(new ExDuelUpdateUserInfo(temp));
 			}
@@ -389,7 +390,7 @@ public class Duel
 			{
 				temp.cancelActiveTrade();
 				temp.setIsInDuel(_duelId);
-				temp.setTeam(2);
+				temp.setTeam(Team.RED);
 				temp.broadcastUserInfo();
 				broadcastToTeam1(new ExDuelUpdateUserInfo(temp));
 			}
@@ -407,9 +408,9 @@ public class Duel
 		{
 			// set isInDuel() state
 			_playerA.setIsInDuel(_duelId);
-			_playerA.setTeam(1);
+			_playerA.setTeam(Team.BLUE);
 			_playerB.setIsInDuel(_duelId);
-			_playerB.setTeam(2);
+			_playerB.setTeam(Team.RED);
 			
 			// Send duel Start packets
 			ExDuelReady ready = new ExDuelReady(0);
@@ -471,23 +472,23 @@ public class Duel
 			for (L2PcInstance temp : _playerA.getParty().getMembers())
 			{
 				temp.setIsInDuel(0);
-				temp.setTeam(0);
+				temp.setTeam(Team.NONE);
 				temp.broadcastUserInfo();
 			}
 			for (L2PcInstance temp : _playerB.getParty().getMembers())
 			{
 				temp.setIsInDuel(0);
-				temp.setTeam(0);
+				temp.setTeam(Team.NONE);
 				temp.broadcastUserInfo();
 			}
 		}
 		else
 		{
 			_playerA.setIsInDuel(0);
-			_playerA.setTeam(0);
+			_playerA.setTeam(Team.NONE);
 			_playerA.broadcastUserInfo();
 			_playerB.setIsInDuel(0);
-			_playerB.setTeam(0);
+			_playerB.setTeam(Team.NONE);
 			_playerB.broadcastUserInfo();
 		}
 		

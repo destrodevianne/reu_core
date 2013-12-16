@@ -46,6 +46,7 @@ import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.ISkillHandler;
@@ -225,7 +226,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	
 	private final ReentrantLock _teleportLock;
 	
-	private int _team;
+	private Team _team = Team.NONE;
 	
 	protected long _exceptions = 0L;
 	
@@ -7523,17 +7524,14 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		broadcastPacket(new SocialAction(getObjectId(), id));
 	}
 	
-	public int getTeam()
+	public Team getTeam()
 	{
 		return _team;
 	}
 	
-	public void setTeam(int id)
+	public void setTeam(Team team)
 	{
-		if ((id >= 0) && (id <= 2))
-		{
-			_team = id;
-		}
+		_team = team;
 	}
 	
 	public void addOverrideCond(PcCondOverride... excs)

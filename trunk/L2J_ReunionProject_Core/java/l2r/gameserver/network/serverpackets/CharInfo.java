@@ -185,7 +185,7 @@ public class CharInfo extends L2GameServerPacket
 				writeD(_activeChar.getAllyCrestId()); // all crest
 				
 				writeC(_activeChar.isFlying() ? 2 : 0); // is Flying
-				writeC(_activeChar.getTeam()); // C3 team circle 1-blue, 2-red
+				writeC(_activeChar.getTeam().getId());
 				
 				writeF(template.getfCollisionRadius());
 				writeF(template.getfCollisionHeight());
@@ -412,7 +412,7 @@ public class CharInfo extends L2GameServerPacket
 			writeD(0x00); // ?
 			writeC(_activeChar.isMounted() || (_airShipHelm != 0) ? 0 : _activeChar.getEnchantEffect());
 			
-			writeC(_activeChar.getTeam()); // team circle around feet 1= Blue, 2 = red
+			writeC(_activeChar.getTeam().getId());
 			
 			if (antifeed)
 			{

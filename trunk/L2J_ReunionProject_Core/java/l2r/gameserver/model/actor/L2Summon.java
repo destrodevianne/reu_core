@@ -27,6 +27,7 @@ import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
@@ -273,9 +274,9 @@ public abstract class L2Summon extends L2Playable
 	}
 	
 	@Override
-	public final int getTeam()
+	public final Team getTeam()
 	{
-		return getOwner() != null ? getOwner().getTeam() : 0;
+		return getOwner() != null ? getOwner().getTeam() : Team.NONE;
 	}
 	
 	public final L2PcInstance getOwner()

@@ -36,12 +36,14 @@ import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.l2skills.L2SkillDrain;
 import l2r.gameserver.model.stats.BaseStats;
 import l2r.gameserver.model.stats.Formulas;
+import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
@@ -530,7 +532,7 @@ public final class L2CubicInstance implements IIdentifiable
 				if (_owner.isDead() || !_owner.isOnline())
 				{
 					stopAction();
-					_owner.delCubic(_id);
+					_owner.getCubics().remove(this);
 					_owner.broadcastUserInfo();
 					cancelDisappear();
 					return;
@@ -663,7 +665,14 @@ public final class L2CubicInstance implements IIdentifiable
 								}
 							}
 							
-							// The cubic has done an action, increase the currentcount
+							if (skill.hasEffectType(L2EffectType.DMG_OVER_TIME, L2EffectType.DMG_OVER_TIME_PERCENT))
+							{
+								if (Config.DEBUG)
+								{
+									_log.info("L2CubicInstance: Action.run() handler " + type);
+								}
+								useCubicContinuous(L2CubicInstance.this, skill, targets);
+							}
 							_currentcount++;
 						}
 					}
@@ -700,14 +709,14 @@ public final class L2CubicInstance implements IIdentifiable
 			// if this is a debuff let the duel manager know about it
 			// so the debuff can be removed after the duel
 			// (player & target must be in the same duel)
-			if ((target instanceof L2PcInstance) && ((L2PcInstance) target).isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF) && (activeCubic.getOwner().getDuelId() == ((L2PcInstance) target).getDuelId()))
+			if ((target.isPlayer()) && target.getActingPlayer().isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF) && (activeCubic.getOwner().getDuelId() == target.getActingPlayer().getDuelId()))
 			{
 				DuelManager dm = DuelManager.getInstance();
 				for (L2Effect debuff : skill.getEffects(activeCubic.getOwner(), target))
 				{
 					if (debuff != null)
 					{
-						dm.onBuff(((L2PcInstance) target), debuff);
+						dm.onBuff(target.getActingPlayer(), debuff);
 					}
 				}
 			}
@@ -729,7 +738,7 @@ public final class L2CubicInstance implements IIdentifiable
 			
 			if (target.isAlikeDead())
 			{
-				if (target instanceof L2PcInstance)
+				if (target.isPlayer())
 				{
 					target.stopFakeDeath(true);
 				}
@@ -739,17 +748,9 @@ public final class L2CubicInstance implements IIdentifiable
 				}
 			}
 			
-			boolean mcrit = Formulas.calcMCrit(activeCubic.getMCriticalHit(target, skill));
+			boolean mcrit = Formulas.calcMCrit(activeCubic.getOwner().getMCriticalHit(target, skill));
 			byte shld = Formulas.calcShldUse(activeCubic.getOwner(), target, skill);
 			int damage = (int) Formulas.calcMagicDam(activeCubic, target, skill, mcrit, shld);
-			
-			/*
-			 * If target is reflecting the skill then no damage is done Ignoring vengance-like reflections
-			 */
-			if ((Formulas.calcSkillReflect(target, skill) & Formulas.SKILL_REFLECT_SUCCEED) > 0)
-			{
-				damage = 0;
-			}
 			
 			if (Config.DEBUG)
 			{
@@ -765,23 +766,15 @@ public final class L2CubicInstance implements IIdentifiable
 					target.breakCast();
 				}
 				
-				activeCubic.getOwner().sendDamageMessage(target, damage, mcrit, false, false);
-				
-				if (skill.hasEffects())
+				if (target.getStat().calcStat(Stats.VENGEANCE_SKILL_MAGIC_DAMAGE, 0, target, skill) > Rnd.get(100))
 				{
-					// activate attacked effects, if any
-					target.stopSkillEffects(skill.getId());
-					if (target.getFirstEffect(skill) != null)
-					{
-						target.removeEffect(target.getFirstEffect(skill));
-					}
-					if (Formulas.calcCubicSkillSuccess(activeCubic, target, skill, shld))
-					{
-						skill.getEffects(activeCubic, target, null);
-					}
+					damage = 0;
 				}
-				
-				target.reduceCurrentHp(damage, activeCubic.getOwner(), skill);
+				else
+				{
+					activeCubic.getOwner().sendDamageMessage(target, damage, mcrit, false, false);
+					target.reduceCurrentHp(damage, activeCubic.getOwner(), skill);
+				}
 			}
 		}
 	}
@@ -813,7 +806,7 @@ public final class L2CubicInstance implements IIdentifiable
 						// if this is a debuff let the duel manager know about it
 						// so the debuff can be removed after the duel
 						// (player & target must be in the same duel)
-						if ((target instanceof L2PcInstance) && ((L2PcInstance) target).isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF) && (activeCubic.getOwner().getDuelId() == ((L2PcInstance) target).getDuelId()))
+						if ((target.isPlayer()) && ((L2PcInstance) target).isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF) && (activeCubic.getOwner().getDuelId() == ((L2PcInstance) target).getDuelId()))
 						{
 							DuelManager dm = DuelManager.getInstance();
 							for (L2Effect debuff : skill.getEffects(activeCubic.getOwner(), target))
@@ -993,7 +986,7 @@ public final class L2CubicInstance implements IIdentifiable
 			if (_owner.isDead() || !_owner.isOnline())
 			{
 				stopAction();
-				_owner.delCubic(_id);
+				_owner.getCubics().remove(this);
 				_owner.broadcastUserInfo();
 				cancelDisappear();
 				return;
@@ -1056,7 +1049,7 @@ public final class L2CubicInstance implements IIdentifiable
 		public void run()
 		{
 			stopAction();
-			_owner.delCubic(_id);
+			_owner.getCubics().remove(this);
 			_owner.broadcastUserInfo();
 		}
 	}
