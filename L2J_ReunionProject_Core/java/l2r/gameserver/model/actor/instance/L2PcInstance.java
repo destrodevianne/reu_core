@@ -87,6 +87,7 @@ import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.enums.Sex;
 import l2r.gameserver.enums.ShotType;
+import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.IItemHandler;
@@ -227,7 +228,6 @@ import l2r.gameserver.model.quest.State;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.l2skills.L2SkillSiegeFlag;
-import l2r.gameserver.model.skills.l2skills.L2SkillSummon;
 import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Formulas;
@@ -4579,18 +4579,9 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if (skill.getSkillType() == L2SkillType.SUMMON)
+		if (isMounted() || inObserverMode())
 		{
-			if (!((L2SkillSummon) skill).isCubic() && (hasSummon() || isMounted() || CharSummonTable.getInstance().getPets().contains(getObjectId()) || CharSummonTable.getInstance().getPets().contains(getObjectId())))
-			{
-				if (Config.DEBUG)
-				{
-					_log.info("player has a pet already. ignore summon skill");
-				}
-				
-				sendPacket(SystemMessageId.YOU_ALREADY_HAVE_A_PET);
-				return false;
-			}
+			return false;
 		}
 		
 		// TODO: Should possibly be checked only in L2PcInstance's useMagic
@@ -7656,7 +7647,7 @@ public final class L2PcInstance extends L2Playable
 					player.setTitle(rset.getString("title"));
 					player.setAccessLevel(rset.getInt("accesslevel"));
 					int titleColor = rset.getInt("title_color");
-					if (titleColor != 0xFFFFFF)
+					if (titleColor != PcAppearance.DEFAULT_TITLE_COLOR)
 					{
 						player.getAppearance().setTitleColor(titleColor);
 					}
@@ -10189,11 +10180,6 @@ public final class L2PcInstance extends L2Playable
 		return _inventoryDisable;
 	}
 	
-	public FastMap<Integer, L2CubicInstance> getCubics()
-	{
-		return _cubics;
-	}
-	
 	/**
 	 * Add a L2CubicInstance to the L2PcInstance _cubics.
 	 * @param id
@@ -10211,20 +10197,22 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * @param id a L2CubicInstance from the L2PcInstance _cubics.
+	 * Get the player's cubics.
+	 * @return the cubics
 	 */
-	public void delCubic(int id)
+	public Map<Integer, L2CubicInstance> getCubics()
 	{
-		_cubics.remove(id);
+		return _cubics;
 	}
 	
 	/**
-	 * @param id
-	 * @return the L2CubicInstance corresponding to the Identifier of the L2PcInstance _cubics.
+	 * Get the player cubic by cubic ID, if any.
+	 * @param cubicId the cubic ID
+	 * @return the cubic with the given cubic ID, {@code null} otherwise
 	 */
-	public L2CubicInstance getCubic(int id)
+	public L2CubicInstance getCubicById(int cubicId)
 	{
-		return _cubics.get(id);
+		return _cubics.get(cubicId);
 	}
 	
 	/**
@@ -10915,7 +10903,7 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	@Override
-	public void setTeam(int team)
+	public void setTeam(Team team)
 	{
 		super.setTeam(team);
 		broadcastUserInfo();

@@ -453,7 +453,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			writeD(0000); // C2
 			writeC(0000); // C2
 			
-			writeC(_trap.getTeam()); // team color 0=none, 1 = blue, 2 = red
+			writeC(_trap.getTeam().getId());
 			
 			writeF(_collisionRadius);
 			writeF(_collisionHeight);
@@ -594,7 +594,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			writeD(0x00); // C2
 			writeC(0x00); // C2
 			
-			writeC(_summon.getTeam()); // team color 0=none, 1 = blue, 2 = red
+			writeC(_summon.getTeam().getId());
 			
 			writeF(_collisionRadius);
 			writeF(_collisionHeight);
