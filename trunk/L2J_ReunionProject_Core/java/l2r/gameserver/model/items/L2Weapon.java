@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javolution.util.FastList;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.model.L2Object;
@@ -35,7 +36,6 @@ import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.items.type.L2WeaponType;
 import l2r.gameserver.model.quest.Quest;
-import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Formulas;

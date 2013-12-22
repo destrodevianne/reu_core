@@ -21,6 +21,7 @@ package l2r.gameserver.network.serverpackets;
 import l2r.Config;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.model.actor.L2Decoy;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -36,15 +37,15 @@ public class CharInfo extends L2GameServerPacket
 	private int _x, _y, _z, _heading;
 	private final int _mAtkSpd, _pAtkSpd;
 	
-	/**
-	 * Run speed, swimming run speed and flying run speed
-	 */
-	private final int _runSpd;
-	/**
-	 * Walking speed, swimming walking speed and flying walking speed
-	 */
-	private final int _walkSpd;
-	private final float _moveMultiplier, _attackSpeedMultiplier;
+	private final int _runSpd, _walkSpd;
+	private final int _swimRunSpd;
+	private final int _swimWalkSpd;
+	private final int _flRunSpd = 0;
+	private final int _flWalkSpd = 0;
+	private final int _flyRunSpd;
+	private final int _flyWalkSpd;
+	private final float _moveMultiplier;
+	private final float _attackSpeedMultiplier;
 	
 	private int _vehicleId, _airShipHelm;
 	
@@ -82,11 +83,16 @@ public class CharInfo extends L2GameServerPacket
 		_heading = _activeChar.getHeading();
 		_mAtkSpd = _activeChar.getMAtkSpd();
 		_pAtkSpd = _activeChar.getPAtkSpd();
-		_moveMultiplier = _activeChar.getMovementSpeedMultiplier();
 		_attackSpeedMultiplier = _activeChar.getAttackSpeedMultiplier();
-		_runSpd = (int) (_activeChar.getRunSpeed() / _moveMultiplier);
-		_walkSpd = (int) (_activeChar.getWalkSpeed() / _moveMultiplier);
 		_invisible = cha.getAppearance().getInvisible();
+		
+		_moveMultiplier = cha.getMovementSpeedMultiplier();
+		_runSpd = Math.round(cha.getRunSpeed() / _moveMultiplier);
+		_walkSpd = Math.round(cha.getWalkSpeed() / _moveMultiplier);
+		_swimRunSpd = Math.round(cha.getSwimRunSpeed() / _moveMultiplier);
+		_swimWalkSpd = Math.round(cha.getSwimWalkSpeed() / _moveMultiplier);
+		_flyRunSpd = cha.isFlying() ? _runSpd : 0;
+		_flyWalkSpd = cha.isFlying() ? _walkSpd : 0;
 	}
 	
 	public CharInfo(L2Decoy decoy)
@@ -149,12 +155,12 @@ public class CharInfo extends L2GameServerPacket
 				writeD(_pAtkSpd);
 				writeD(_runSpd);
 				writeD(_walkSpd);
-				writeD(_runSpd); // swim run speed
-				writeD(_walkSpd); // swim walk speed
-				writeD(_runSpd); // fly run speed
-				writeD(_walkSpd); // fly walk speed
-				writeD(_runSpd); // fly run speed ?
-				writeD(_walkSpd); // fly walk speed ?
+				writeD(_swimRunSpd);
+				writeD(_swimWalkSpd);
+				writeD(_flRunSpd);
+				writeD(_flWalkSpd);
+				writeD(_flyRunSpd);
+				writeD(_flyWalkSpd);
 				writeF(_moveMultiplier);
 				writeF(_attackSpeedMultiplier);
 				writeF(template.getfCollisionRadius());
@@ -304,14 +310,14 @@ public class CharInfo extends L2GameServerPacket
 			
 			writeD(_runSpd);
 			writeD(_walkSpd);
-			writeD(_runSpd); // swim run speed
-			writeD(_walkSpd); // swim walk speed
-			writeD(_runSpd); // fly run speed
-			writeD(_walkSpd); // fly walk speed
-			writeD(_runSpd); // fly run speed ?
-			writeD(_walkSpd); // fly walk speed ?
-			writeF(_activeChar.getMovementSpeedMultiplier()); // _activeChar.getProperMultiplier()
-			writeF(_activeChar.getAttackSpeedMultiplier()); // _activeChar.getAttackSpeedMultiplier()
+			writeD(_swimRunSpd);
+			writeD(_swimWalkSpd);
+			writeD(_flRunSpd);
+			writeD(_flWalkSpd);
+			writeD(_flyRunSpd);
+			writeD(_flyWalkSpd);
+			writeF(_moveMultiplier);
+			writeF(_activeChar.getAttackSpeedMultiplier());
 			
 			if (antifeed)
 			{
@@ -390,7 +396,7 @@ public class CharInfo extends L2GameServerPacket
 			
 			writeD(gmSeeInvis ? (_activeChar.getAbnormalEffect() | AbnormalEffect.STEALTH.getMask()) : _activeChar.getAbnormalEffect());
 			
-			writeC(_activeChar.isFlyingMounted() ? 2 : 0);
+			writeC(_activeChar.isInsideZone(ZoneIdType.WATER) ? 1 : _activeChar.isFlyingMounted() ? 2 : 0);
 			
 			if (antifeed)
 			{

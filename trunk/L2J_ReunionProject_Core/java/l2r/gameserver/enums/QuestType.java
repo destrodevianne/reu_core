@@ -16,26 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.actor.stat;
+package l2r.gameserver.enums;
 
-import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
-
-public class StaticObjStat extends CharStat
+/**
+ * @author Luis Arias
+ */
+public enum QuestType
 {
-	public StaticObjStat(L2StaticObjectInstance activeChar)
-	{
-		super(activeChar);
-	}
-	
-	@Override
-	public L2StaticObjectInstance getActiveChar()
-	{
-		return (L2StaticObjectInstance) super.getActiveChar();
-	}
-	
-	@Override
-	public final byte getLevel()
-	{
-		return (byte) getActiveChar().getLevel();
-	}
+	REPEATABLE,
+	ONE_TIME,
+	DAILY
 }

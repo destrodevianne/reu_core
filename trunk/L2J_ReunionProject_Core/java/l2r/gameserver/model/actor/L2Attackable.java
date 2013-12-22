@@ -40,6 +40,7 @@ import l2r.gameserver.datatables.ManorData;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.instancemanager.WalkingManager;
@@ -387,9 +388,9 @@ public class L2Attackable extends L2Npc
 					ReunionEvents.onKill(player, this);
 				}
 				
-				if (getTemplate().getEventQuests(Quest.QuestEventType.ON_KILL) != null)
+				if (getTemplate().getEventQuests(QuestEventType.ON_KILL) != null)
 				{
-					for (Quest quest : getTemplate().getEventQuests(Quest.QuestEventType.ON_KILL))
+					for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_KILL))
 					{
 						ThreadPoolManager.getInstance().scheduleEffect(new OnKillNotifyTask(this, quest, player, (killer != null) && killer.isSummon()), _onKillDelay);
 					}
@@ -708,9 +709,9 @@ public class L2Attackable extends L2Npc
 				L2PcInstance player = attacker.getActingPlayer();
 				if (player != null)
 				{
-					if (getTemplate().getEventQuests(Quest.QuestEventType.ON_ATTACK) != null)
+					if (getTemplate().getEventQuests(QuestEventType.ON_ATTACK) != null)
 					{
-						for (Quest quest : getTemplate().getEventQuests(Quest.QuestEventType.ON_ATTACK))
+						for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_ATTACK))
 						{
 							try
 							{
@@ -783,9 +784,9 @@ public class L2Attackable extends L2Npc
 		
 		if ((targetPlayer != null) && (aggro == 0))
 		{
-			if (getTemplate().getEventQuests(Quest.QuestEventType.ON_AGGRO_RANGE_ENTER) != null)
+			if (getTemplate().getEventQuests(QuestEventType.ON_AGGRO_RANGE_ENTER) != null)
 			{
-				for (Quest quest : getTemplate().getEventQuests(Quest.QuestEventType.ON_AGGRO_RANGE_ENTER))
+				for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_AGGRO_RANGE_ENTER))
 				{
 					quest.notifyAggroRangeEnter(this, targetPlayer, attacker.isSummon());
 				}

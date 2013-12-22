@@ -21,7 +21,6 @@ package l2r.gameserver.model.actor.stat;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
@@ -608,11 +607,9 @@ public class PcStat extends PlayableStat
 	public float getBaseMoveSpeed(MoveType type)
 	{
 		final L2PcInstance player = getActiveChar();
-		float val = super.getBaseMoveSpeed(type);
-		
-		if (getActiveChar().isTransformed())
+		if (player.isTransformed())
 		{
-			final TransformTemplate template = getActiveChar().getTransformation().getTemplate(getActiveChar());
+			final TransformTemplate template = player.getTransformation().getTemplate(player);
 			if (template != null)
 			{
 				return template.getBaseMoveSpeed(type);
@@ -620,13 +617,13 @@ public class PcStat extends PlayableStat
 		}
 		else if (player.isMounted())
 		{
-			final L2PetLevelData data = PetDataTable.getInstance().getPetLevelData(getActiveChar().getMountNpcId(), getActiveChar().getMountLevel());
+			final L2PetLevelData data = PetDataTable.getInstance().getPetLevelData(player.getMountNpcId(), player.getMountLevel());
 			if (data != null)
 			{
 				return data.getSpeedOnRide(type);
 			}
 		}
-		return val;
+		return super.getBaseMoveSpeed(type);
 	}
 	
 	@Override
@@ -723,19 +720,6 @@ public class PcStat extends PlayableStat
 		}
 		
 		return val;
-	}
-	
-	@Override
-	public float getMovementSpeedMultiplier()
-	{
-		if (getActiveChar().isMounted())
-		{
-			final L2PetLevelData data = PetDataTable.getInstance().getPetLevelData(getActiveChar().getMountNpcId(), getActiveChar().getMountLevel());
-			float baseSpeed = data != null ? data.getSpeedOnRide(MoveType.RUN) : NpcTable.getInstance().getTemplate(getActiveChar().getMountNpcId()).getBaseMoveSpeed(MoveType.RUN);
-			return (getRunSpeed() / baseSpeed);
-		}
-		
-		return super.getMovementSpeedMultiplier();
 	}
 	
 	private void updateVitalityLevel(boolean quiet)

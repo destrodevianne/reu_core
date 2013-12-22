@@ -27,6 +27,7 @@ import java.util.concurrent.ScheduledFuture;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.L2NpcWalkerNode;
 import l2r.gameserver.model.L2WalkRoute;
 import l2r.gameserver.model.Location;
@@ -176,9 +177,9 @@ public class WalkingManager extends DocumentParser
 				if (_currentNode == getRoute().getNodesCount()) // Last node arrived
 				{
 					// Notify quest
-					if (npc.getTemplate().getEventQuests(Quest.QuestEventType.ON_ROUTE_FINISHED) != null)
+					if (npc.getTemplate().getEventQuests(QuestEventType.ON_ROUTE_FINISHED) != null)
 					{
-						for (Quest quest : npc.getTemplate().getEventQuests(Quest.QuestEventType.ON_ROUTE_FINISHED))
+						for (Quest quest : npc.getTemplate().getEventQuests(QuestEventType.ON_ROUTE_FINISHED))
 						{
 							quest.notifyRouteFinished(npc);
 						}
@@ -571,9 +572,9 @@ public class WalkingManager extends DocumentParser
 		if (_activeRoutes.containsKey(npc.getObjectId()))
 		{
 			// Notify quest
-			if (npc.getTemplate().getEventQuests(Quest.QuestEventType.ON_NODE_ARRIVED) != null)
+			if (npc.getTemplate().getEventQuests(QuestEventType.ON_NODE_ARRIVED) != null)
 			{
-				for (Quest quest : npc.getTemplate().getEventQuests(Quest.QuestEventType.ON_NODE_ARRIVED))
+				for (Quest quest : npc.getTemplate().getEventQuests(QuestEventType.ON_NODE_ARRIVED))
 				{
 					quest.notifyNodeArrived(npc);
 				}

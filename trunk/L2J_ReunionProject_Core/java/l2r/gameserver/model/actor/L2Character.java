@@ -45,6 +45,7 @@ import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.TeleportWhereType;
@@ -6855,9 +6856,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					{
 						L2Npc npcMob = (L2Npc) spMob;
 						
-						if ((npcMob.isInsideRadius(player, 1000, true, true)) && (npcMob.getTemplate().getEventQuests(Quest.QuestEventType.ON_SKILL_SEE) != null))
+						if ((npcMob.isInsideRadius(player, 1000, true, true)) && (npcMob.getTemplate().getEventQuests(QuestEventType.ON_SKILL_SEE) != null))
 						{
-							for (Quest quest : npcMob.getTemplate().getEventQuests(Quest.QuestEventType.ON_SKILL_SEE))
+							for (Quest quest : npcMob.getTemplate().getEventQuests(QuestEventType.ON_SKILL_SEE))
 							{
 								quest.notifySkillSee(npcMob, player, skill, targets, isSummon());
 							}

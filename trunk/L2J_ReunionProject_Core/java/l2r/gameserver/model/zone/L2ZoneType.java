@@ -26,12 +26,12 @@ import java.util.Map;
 
 import javolution.util.FastMap;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.quest.Quest;
-import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 
 import org.slf4j.Logger;
@@ -427,7 +427,7 @@ public abstract class L2ZoneType
 			// Was the character not yet inside this zone?
 			if (!_characterList.containsKey(character.getObjectId()))
 			{
-				List<Quest> quests = getQuestByEvent(Quest.QuestEventType.ON_ENTER_ZONE);
+				List<Quest> quests = getQuestByEvent(QuestEventType.ON_ENTER_ZONE);
 				if (quests != null)
 				{
 					for (Quest quest : quests)
@@ -444,7 +444,7 @@ public abstract class L2ZoneType
 			// Was the character inside this zone?
 			if (_characterList.containsKey(character.getObjectId()))
 			{
-				List<Quest> quests = getQuestByEvent(Quest.QuestEventType.ON_EXIT_ZONE);
+				List<Quest> quests = getQuestByEvent(QuestEventType.ON_EXIT_ZONE);
 				if (quests != null)
 				{
 					for (Quest quest : quests)
@@ -466,7 +466,7 @@ public abstract class L2ZoneType
 	{
 		if (_characterList.containsKey(character.getObjectId()))
 		{
-			List<Quest> quests = getQuestByEvent(Quest.QuestEventType.ON_EXIT_ZONE);
+			List<Quest> quests = getQuestByEvent(QuestEventType.ON_EXIT_ZONE);
 			if (quests != null)
 			{
 				for (Quest quest : quests)
@@ -535,7 +535,7 @@ public abstract class L2ZoneType
 		return players;
 	}
 	
-	public void addQuestEvent(Quest.QuestEventType EventType, Quest q)
+	public void addQuestEvent(QuestEventType EventType, Quest q)
 	{
 		if (_questEvents == null)
 		{
@@ -553,7 +553,7 @@ public abstract class L2ZoneType
 		_questEvents.put(EventType, questByEvents);
 	}
 	
-	public List<Quest> getQuestByEvent(Quest.QuestEventType EventType)
+	public List<Quest> getQuestByEvent(QuestEventType EventType)
 	{
 		if (_questEvents == null)
 		{

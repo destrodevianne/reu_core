@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2MinionData;
@@ -38,7 +39,6 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.quest.Quest;
-import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.BaseStats;
 

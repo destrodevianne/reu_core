@@ -70,7 +70,7 @@ public final class TempItem
 	/**
 	 * @return the itemId.
 	 */
-	public int getId()
+	public int getItemId()
 	{
 		return _itemId;
 	}

@@ -38,6 +38,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.ItemLocation;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
@@ -748,9 +749,9 @@ public class L2CharacterAI extends AbstractAI
 			WalkingManager.getInstance().onArrived(npc); // Walking Manager support
 			
 			// Notify quest
-			if (npc.getTemplate().getEventQuests(Quest.QuestEventType.ON_MOVE_FINISHED) != null)
+			if (npc.getTemplate().getEventQuests(QuestEventType.ON_MOVE_FINISHED) != null)
 			{
-				for (Quest quest : npc.getTemplate().getEventQuests(Quest.QuestEventType.ON_MOVE_FINISHED))
+				for (Quest quest : npc.getTemplate().getEventQuests(QuestEventType.ON_MOVE_FINISHED))
 				{
 					quest.notifyMoveFinished(npc);
 				}
