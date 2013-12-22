@@ -50,11 +50,12 @@ import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.configsEngine.LeaderboardsConfigs;
-import gr.reunion.leaderboards.CraftLeaderboard;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gr.reunion.configsEngine.LeaderboardsConfigs;
+import gr.reunion.leaderboards.CraftLeaderboard;
 
 public class RecipeController
 {
@@ -150,7 +151,7 @@ public class RecipeController
 		if (Config.ALT_GAME_CREATION && _activeMakers.containsKey(player.getObjectId()))
 		{
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_S1);
-			sm.addItemName(recipeList.getId());
+			sm.addItemName(recipeList.getItemId());
 			sm.addString("You are busy creating.");
 			player.sendPacket(sm);
 			return;
@@ -428,13 +429,13 @@ public class RecipeController
 				{
 					SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.CREATION_OF_S2_FOR_C1_AT_S3_ADENA_FAILED);
 					msg.addString(_target.getName());
-					msg.addItemName(_recipeList.getId());
+					msg.addItemName(_recipeList.getItemId());
 					msg.addItemNumber(_price);
 					_player.sendPacket(msg);
 					
 					msg = SystemMessage.getSystemMessage(SystemMessageId.C1_FAILED_TO_CREATE_S2_FOR_S3_ADENA);
 					msg.addString(_player.getName());
-					msg.addItemName(_recipeList.getId());
+					msg.addItemName(_recipeList.getItemId());
 					msg.addItemNumber(_price);
 					_target.sendPacket(msg);
 				}
@@ -512,7 +513,7 @@ public class RecipeController
 				{
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_S2_EQUIPPED); // you equipped ...
 					sm.addItemNumber(count);
-					sm.addItemName(item.getId());
+					sm.addItemName(item.getItemId());
 					_player.sendPacket(sm);
 				}
 				else
@@ -626,14 +627,14 @@ public class RecipeController
 				
 				if (quantity > 0)
 				{
-					L2ItemInstance item = inv.getItemByItemId(recipe.getId());
+					L2ItemInstance item = inv.getItemByItemId(recipe.getItemId());
 					long itemQuantityAmount = item == null ? 0 : item.getCount();
 					
 					// check materials
 					if (itemQuantityAmount < quantity)
 					{
 						sm = SystemMessage.getSystemMessage(SystemMessageId.MISSING_S2_S1_TO_CREATE);
-						sm.addItemName(recipe.getId());
+						sm.addItemName(recipe.getItemId());
 						sm.addItemNumber(quantity - itemQuantityAmount);
 						_target.sendPacket(sm);
 						
@@ -652,19 +653,19 @@ public class RecipeController
 			{
 				for (TempItem tmp : materials)
 				{
-					inv.destroyItemByItemId("Manufacture", tmp.getId(), tmp.getQuantity(), _target, _player);
+					inv.destroyItemByItemId("Manufacture", tmp.getItemId(), tmp.getQuantity(), _target, _player);
 					
 					if (tmp.getQuantity() > 1)
 					{
 						sm = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
-						sm.addItemName(tmp.getId());
+						sm.addItemName(tmp.getItemId());
 						sm.addItemNumber(tmp.getQuantity());
 						_target.sendPacket(sm);
 					}
 					else
 					{
 						sm = SystemMessage.getSystemMessage(SystemMessageId.S1_DISAPPEARED);
-						sm.addItemName(tmp.getId());
+						sm.addItemName(tmp.getItemId());
 						_target.sendPacket(sm);
 					}
 				}
@@ -682,7 +683,7 @@ public class RecipeController
 		private void rewardPlayer()
 		{
 			int rareProdId = _recipeList.getRareItemId();
-			int itemId = _recipeList.getId();
+			int itemId = _recipeList.getItemId();
 			int itemCount = _recipeList.getCount();
 			L2Item template = ItemTable.getInstance().getTemplate(itemId);
 			

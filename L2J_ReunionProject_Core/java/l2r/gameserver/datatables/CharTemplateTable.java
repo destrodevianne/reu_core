@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.Location;
@@ -29,8 +30,6 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.base.ClassId;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -40,7 +39,7 @@ import org.w3c.dom.Node;
  */
 public final class CharTemplateTable extends DocumentParser
 {
-	private static final Logger _log = LoggerFactory.getLogger(CharTemplateTable.class);
+	private static final Logger _log = Logger.getLogger(CharTemplateTable.class.getName());
 	
 	private static final Map<ClassId, L2PcTemplate> _charTemplates = new HashMap<>();
 	
@@ -54,9 +53,10 @@ public final class CharTemplateTable extends DocumentParser
 	@Override
 	public void load()
 	{
-		parseDirectory("data/stats/chars/baseStats/");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _charTemplates.size() + " Character Templates.");
-		_log.info(getClass().getSimpleName() + ": loaded " + _dataCount + " level upgain records");
+		_charTemplates.clear();
+		parseDirectory("data/stats/chars/baseStats", false);
+		_log.info(getClass().getSimpleName() + ": Loaded " + _charTemplates.size() + " character templates.");
+		_log.info(getClass().getSimpleName() + ": Loaded " + _dataCount + " level up gain records.");
 	}
 	
 	@Override
@@ -117,6 +117,14 @@ public final class CharTemplateTable extends DocumentParser
 									else if ("run".equalsIgnoreCase(cnd.getNodeName()))
 									{
 										set.set("baseRunSpd", cnd.getTextContent());
+									}
+									else if ("slowSwim".equals(cnd.getNodeName()))
+									{
+										set.set("baseSwimWalkSpd", cnd.getTextContent());
+									}
+									else if ("fastSwim".equals(cnd.getNodeName()))
+									{
+										set.set("baseSwimRunSpd", cnd.getTextContent());
 									}
 									else if (!cnd.getNodeName().equals("#text"))
 									{

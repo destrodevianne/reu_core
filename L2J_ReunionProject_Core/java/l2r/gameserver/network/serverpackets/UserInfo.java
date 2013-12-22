@@ -22,6 +22,7 @@ import l2r.Config;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.model.Elementals;
@@ -33,32 +34,23 @@ import l2r.gameserver.model.itemcontainer.Inventory;
 public final class UserInfo extends L2GameServerPacket
 {
 	private final L2PcInstance _activeChar;
-	
-	/**
-	 * Run speed, swimming run speed and flying run speed
-	 */
-	private final int _runSpd;
-	/**
-	 * Walking speed, swimming walking speed and flying walking speed
-	 */
-	private final int _walkSpd;
 	private int _relation;
-	private final float _moveMultiplier;
-	// private int _territoryId;
-	// private boolean _isDisguised;
 	private int _airShipHelm;
 	
-	/**
-	 * @param character
-	 */
-	public UserInfo(L2PcInstance character)
+	private final int _runSpd, _walkSpd;
+	private final int _swimRunSpd;
+	private final int _swimWalkSpd;
+	private final int _flRunSpd = 0;
+	private final int _flWalkSpd = 0;
+	private final int _flyRunSpd;
+	private final int _flyWalkSpd;
+	private final float _moveMultiplier;
+	
+	public UserInfo(L2PcInstance cha)
 	{
-		_activeChar = character;
+		_activeChar = cha;
 		
-		_moveMultiplier = _activeChar.getMovementSpeedMultiplier();
-		_runSpd = Math.round((_activeChar.getRunSpeed() / _moveMultiplier));
-		_walkSpd = (int) (_activeChar.getWalkSpeed() / _moveMultiplier);
-		int _territoryId = TerritoryWarManager.getInstance().getRegisteredTerritoryId(character);
+		int _territoryId = TerritoryWarManager.getInstance().getRegisteredTerritoryId(cha);
 		_relation = _activeChar.isClanLeader() ? 0x40 : 0;
 		if (_activeChar.getSiegeState() == 1)
 		{
@@ -84,6 +76,14 @@ public final class UserInfo extends L2GameServerPacket
 		{
 			_airShipHelm = 0;
 		}
+		
+		_moveMultiplier = cha.getMovementSpeedMultiplier();
+		_runSpd = Math.round(cha.getRunSpeed() / _moveMultiplier);
+		_walkSpd = Math.round(cha.getWalkSpeed() / _moveMultiplier);
+		_swimRunSpd = Math.round(cha.getSwimRunSpeed() / _moveMultiplier);
+		_swimWalkSpd = Math.round(cha.getSwimWalkSpeed() / _moveMultiplier);
+		_flyRunSpd = cha.isFlying() ? _runSpd : 0;
+		_flyWalkSpd = cha.isFlying() ? _walkSpd : 0;
 	}
 	
 	@Override
@@ -226,12 +226,12 @@ public final class UserInfo extends L2GameServerPacket
 		
 		writeD(_runSpd);
 		writeD(_walkSpd);
-		writeD(_runSpd); // swim run speed
-		writeD(_walkSpd); // swim walk speed
-		writeD(0x00);
-		writeD(0x00);
-		writeD(_activeChar.isFlying() ? _runSpd : 0); // fly speed
-		writeD(_activeChar.isFlying() ? _walkSpd : 0); // fly speed
+		writeD(_swimRunSpd);
+		writeD(_swimWalkSpd);
+		writeD(_flRunSpd);
+		writeD(_flWalkSpd);
+		writeD(_flyRunSpd);
+		writeD(_flyWalkSpd);
 		writeF(_moveMultiplier);
 		writeF(_activeChar.getAttackSpeedMultiplier());
 		
@@ -280,7 +280,7 @@ public final class UserInfo extends L2GameServerPacket
 		writeC(_activeChar.isInPartyMatchRoom() ? 1 : 0);
 		
 		writeD(_activeChar.getAppearance().getInvisible() && _activeChar.isGM() ? _activeChar.getAbnormalEffect() | AbnormalEffect.STEALTH.getMask() : _activeChar.getAbnormalEffect());
-		writeC(_activeChar.isFlyingMounted() ? 2 : 0);
+		writeC(_activeChar.isInsideZone(ZoneIdType.WATER) ? 1 : _activeChar.isFlyingMounted() ? 2 : 0);
 		
 		writeD(_activeChar.getClanPrivileges());
 		

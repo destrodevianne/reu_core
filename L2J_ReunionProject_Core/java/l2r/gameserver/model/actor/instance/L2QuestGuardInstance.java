@@ -20,6 +20,7 @@ package l2r.gameserver.model.actor.instance;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.tasks.attackable.OnKillNotifyTask;
@@ -49,9 +50,9 @@ public final class L2QuestGuardInstance extends L2GuardInstance
 		
 		if (attacker instanceof L2Attackable)
 		{
-			if (getTemplate().getEventQuests(Quest.QuestEventType.ON_ATTACK) != null)
+			if (getTemplate().getEventQuests(QuestEventType.ON_ATTACK) != null)
 			{
-				for (Quest quest : getTemplate().getEventQuests(Quest.QuestEventType.ON_ATTACK))
+				for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_ATTACK))
 				{
 					quest.notifyAttack(this, null, damage, false, skill);
 				}
@@ -70,9 +71,9 @@ public final class L2QuestGuardInstance extends L2GuardInstance
 		
 		if (killer instanceof L2Attackable)
 		{
-			if (getTemplate().getEventQuests(Quest.QuestEventType.ON_KILL) != null)
+			if (getTemplate().getEventQuests(QuestEventType.ON_KILL) != null)
 			{
-				for (Quest quest : getTemplate().getEventQuests(Quest.QuestEventType.ON_KILL))
+				for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_KILL))
 				{
 					ThreadPoolManager.getInstance().scheduleEffect(new OnKillNotifyTask(this, quest, null, false), _onKillDelay);
 				}

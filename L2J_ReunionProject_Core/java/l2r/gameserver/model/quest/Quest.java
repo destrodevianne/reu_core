@@ -41,6 +41,8 @@ import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.enums.QuestEventType;
+import l2r.gameserver.enums.QuestSound;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.QuestManager;
@@ -78,7 +80,6 @@ import l2r.gameserver.network.serverpackets.ExShowScreenMessage;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.NpcQuestHtmlMessage;
-import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.scripting.ManagedScript;
@@ -128,156 +129,6 @@ public class Quest extends ManagedScript implements IIdentifiable
 	
 	private static final int RESET_HOUR = 6;
 	private static final int RESET_MINUTES = 30;
-	
-	/**
-	 * This enum contains known sound effects used by quests.<br>
-	 * The idea is to have only a single object of each quest sound instead of constructing a new one every time a script calls the playSound method.<br>
-	 * This is pretty much just a memory and CPU cycle optimization; avoids constructing/deconstructing objects all the time if they're all the same.<br>
-	 * For datapack scripts written in Java and extending the Quest class, this does not need an extra import.
-	 * @author jurchiks
-	 */
-	public static enum QuestSound
-	{
-		ITEMSOUND_SYS_SHORTAGE(new PlaySound("ItemSound3.sys_shortage")),
-		ITEMSOUND_QUEST_ACCEPT(new PlaySound("ItemSound.quest_accept")),
-		ITEMSOUND_QUEST_MIDDLE(new PlaySound("ItemSound.quest_middle")),
-		ITEMSOUND_QUEST_FINISH(new PlaySound("ItemSound.quest_finish")),
-		ITEMSOUND_QUEST_ITEMGET(new PlaySound("ItemSound.quest_itemget")),
-		// Newbie Guide tutorial (incl. some quests), Mutated Kaneus quests, Quest 192
-		ITEMSOUND_QUEST_TUTORIAL(new PlaySound("ItemSound.quest_tutorial")),
-		// Quests 107, 363, 364
-		ITEMSOUND_QUEST_GIVEUP(new PlaySound("ItemSound.quest_giveup")),
-		// Quests 212, 217, 224, 226, 416
-		ITEMSOUND_QUEST_BEFORE_BATTLE(new PlaySound("ItemSound.quest_before_battle")),
-		// Quests 211, 258, 266, 330
-		ITEMSOUND_QUEST_JACKPOT(new PlaySound("ItemSound.quest_jackpot")),
-		// Quests 508, 509 and 510
-		ITEMSOUND_QUEST_FANFARE_1(new PlaySound("ItemSound.quest_fanfare_1")),
-		// Played only after class transfer via Test Server Helpers (Id 31756 and 31757)
-		ITEMSOUND_QUEST_FANFARE_2(new PlaySound("ItemSound.quest_fanfare_2")),
-		// Quest 336
-		ITEMSOUND_QUEST_FANFARE_MIDDLE(new PlaySound("ItemSound.quest_fanfare_middle")),
-		// Quest 114
-		ITEMSOUND_ARMOR_WOOD(new PlaySound("ItemSound.armor_wood_3")),
-		// Quest 21
-		ITEMSOUND_ARMOR_CLOTH(new PlaySound("ItemSound.item_drop_equip_armor_cloth")),
-		AMDSOUND_ED_CHIMES(new PlaySound("AmdSound.ed_chimes_05")),
-		HORROR_01(new PlaySound("horror_01")), // played when spawned monster sees player
-		// Quest 22
-		AMBSOUND_HORROR_01(new PlaySound("AmbSound.dd_horror_01")),
-		AMBSOUND_HORROR_03(new PlaySound("AmbSound.d_horror_03")),
-		AMBSOUND_HORROR_15(new PlaySound("AmbSound.d_horror_15")),
-		// Quest 23
-		ITEMSOUND_ARMOR_LEATHER(new PlaySound("ItemSound.itemdrop_armor_leather")),
-		ITEMSOUND_WEAPON_SPEAR(new PlaySound("ItemSound.itemdrop_weapon_spear")),
-		AMBSOUND_MT_CREAK(new PlaySound("AmbSound.mt_creak01")),
-		AMBSOUND_EG_DRON(new PlaySound("AmbSound.eg_dron_02")),
-		SKILLSOUND_HORROR_02(new PlaySound("SkillSound5.horror_02")),
-		CHRSOUND_MHFIGHTER_CRY(new PlaySound("ChrSound.MHFighter_cry")),
-		// Quest 24
-		AMDSOUND_WIND_LOOT(new PlaySound("AmdSound.d_wind_loot_02")),
-		INTERFACESOUND_CHARSTAT_OPEN(new PlaySound("InterfaceSound.charstat_open_01")),
-		// Quest 25
-		AMDSOUND_HORROR_02(new PlaySound("AmdSound.dd_horror_02")),
-		CHRSOUND_FDELF_CRY(new PlaySound("ChrSound.FDElf_Cry")),
-		// Quest 115
-		AMBSOUND_WINGFLAP(new PlaySound("AmbSound.t_wingflap_04")),
-		AMBSOUND_THUNDER(new PlaySound("AmbSound.thunder_02")),
-		// Quest 120
-		AMBSOUND_DRONE(new PlaySound("AmbSound.ed_drone_02")),
-		AMBSOUND_CRYSTAL_LOOP(new PlaySound("AmbSound.cd_crystal_loop")),
-		AMBSOUND_PERCUSSION_01(new PlaySound("AmbSound.dt_percussion_01")),
-		AMBSOUND_PERCUSSION_02(new PlaySound("AmbSound.ac_percussion_02")),
-		// Quest 648 and treasure chests
-		ITEMSOUND_BROKEN_KEY(new PlaySound("ItemSound2.broken_key")),
-		// Quest 184
-		ITEMSOUND_SIREN(new PlaySound("ItemSound3.sys_siren")),
-		// Quest 648
-		ITEMSOUND_ENCHANT_SUCCESS(new PlaySound("ItemSound3.sys_enchant_success")),
-		ITEMSOUND_ENCHANT_FAILED(new PlaySound("ItemSound3.sys_enchant_failed")),
-		// Best farm mobs
-		ITEMSOUND_SOW_SUCCESS(new PlaySound("ItemSound3.sys_sow_success")),
-		// Quest 25
-		SKILLSOUND_HORROR_1(new PlaySound("SkillSound5.horror_01")),
-		// Quests 21 and 23
-		SKILLSOUND_HORROR_2(new PlaySound("SkillSound5.horror_02")),
-		// Quest 22
-		SKILLSOUND_ANTARAS_FEAR(new PlaySound("SkillSound3.antaras_fear")),
-		// Quest 505
-		SKILLSOUND_JEWEL_CELEBRATE(new PlaySound("SkillSound2.jewel.celebrate")),
-		// Quest 373
-		SKILLSOUND_LIQUID_MIX(new PlaySound("SkillSound5.liquid_mix_01")),
-		SKILLSOUND_LIQUID_SUCCESS(new PlaySound("SkillSound5.liquid_success_01")),
-		SKILLSOUND_LIQUID_FAIL(new PlaySound("SkillSound5.liquid_fail_01")),
-		// Quest 111
-		ETCSOUND_ELROKI_SONG_FULL(new PlaySound("EtcSound.elcroki_song_full")),
-		ETCSOUND_ELROKI_SONG_1ST(new PlaySound("EtcSound.elcroki_song_1st")),
-		ETCSOUND_ELROKI_SONG_2ND(new PlaySound("EtcSound.elcroki_song_2nd")),
-		ETCSOUND_ELROKI_SONG_3RD(new PlaySound("EtcSound.elcroki_song_3rd")),
-		// Long duration AI sounds
-		BS01_A(new PlaySound("BS01_A")),
-		BS02_A(new PlaySound("BS02_A")),
-		BS03_A(new PlaySound("BS03_A")),
-		BS04_A(new PlaySound("BS04_A")),
-		BS06_A(new PlaySound("BS06_A")),
-		BS07_A(new PlaySound("BS07_A")),
-		BS08_A(new PlaySound("BS08_A")),
-		BS01_D(new PlaySound("BS01_D")),
-		BS02_D(new PlaySound("BS02_D")),
-		BS05_D(new PlaySound("BS05_D")),
-		BS07_D(new PlaySound("BS07_D"));
-		
-		private final PlaySound _playSound;
-		
-		private static Map<String, PlaySound> soundPackets = new HashMap<>();
-		
-		private QuestSound(PlaySound playSound)
-		{
-			_playSound = playSound;
-		}
-		
-		/**
-		 * Get a {@link PlaySound} packet by its name.
-		 * @param soundName : the name of the sound to look for
-		 * @return the {@link PlaySound} packet with the specified sound or {@code null} if one was not found
-		 */
-		public static PlaySound getSound(String soundName)
-		{
-			if (soundPackets.containsKey(soundName))
-			{
-				return soundPackets.get(soundName);
-			}
-			
-			for (QuestSound qs : QuestSound.values())
-			{
-				if (qs._playSound.getSoundName().equals(soundName))
-				{
-					soundPackets.put(soundName, qs._playSound); // cache in map to avoid looping repeatedly
-					return qs._playSound;
-				}
-			}
-			
-			_log.info("Missing QuestSound enum for sound: " + soundName);
-			soundPackets.put(soundName, new PlaySound(soundName));
-			return soundPackets.get(soundName);
-		}
-		
-		/**
-		 * @return the name of the sound of this QuestSound object
-		 */
-		public String getSoundName()
-		{
-			return _playSound.getSoundName();
-		}
-		
-		/**
-		 * @return the {@link PlaySound} packet of this QuestSound object
-		 */
-		public PlaySound getPacket()
-		{
-			return _playSound;
-		}
-	}
 	
 	/**
 	 * @return the reset hour for a daily quest, could be overridden on a script.
@@ -360,44 +211,6 @@ public class Quest extends ManagedScript implements IIdentifiable
 		TRAP_TRIGGERED,
 		TRAP_DETECTED,
 		TRAP_DISARMED
-	}
-	
-	public static enum QuestEventType
-	{
-		ON_FIRST_TALK(false), // control the first dialog shown by NPCs when they are clicked (some quests must override the default npc action)
-		QUEST_START(true), // onTalk action from start npcs
-		ON_TALK(true), // onTalk action from npcs participating in a quest
-		ON_ATTACK(true), // onAttack action triggered when a mob gets attacked by someone
-		ON_KILL(true), // onKill action triggered when a mob gets killed.
-		ON_SPAWN(true), // onSpawn action triggered when an NPC is spawned or respawned.
-		ON_SKILL_SEE(true), // NPC or Mob saw a person casting a skill (regardless what the target is).
-		ON_FACTION_CALL(true), // NPC or Mob saw a person casting a skill (regardless what the target is).
-		ON_AGGRO_RANGE_ENTER(true), // a person came within the Npc/Mob's range
-		ON_SPELL_FINISHED(true), // on spell finished action when npc finish casting skill
-		ON_SKILL_LEARN(false), // control the AcquireSkill dialog from quest script
-		ON_ENTER_ZONE(true), // on zone enter
-		ON_EXIT_ZONE(true), // on zone exit
-		ON_TRAP_ACTION(true), // on zone exit
-		ON_ITEM_USE(true),
-		ON_EVENT_RECEIVED(true), // onEventReceived action, triggered when NPC receiving an event, sent by other NPC
-		ON_MOVE_FINISHED(true), // onMoveFinished action, triggered when NPC stops after moving
-		ON_NODE_ARRIVED(true), // onNodeArrived action, triggered when NPC, controlled by Walking Manager, arrives to next node
-		ON_SEE_CREATURE(true), // onSeeCreature action, triggered when NPC's known list include the character
-		ON_ROUTE_FINISHED(true); // onRouteFinished action, triggered when NPC, controlled by Walking Manager, arrives to last node
-		
-		// control whether this event type is allowed for the same npc template in multiple quests
-		// or if the npc must be registered in at most one quest for the specified event
-		private boolean _allowMultipleRegistration;
-		
-		private QuestEventType(boolean allowMultipleRegistration)
-		{
-			_allowMultipleRegistration = allowMultipleRegistration;
-		}
-		
-		public boolean isMultipleRegistrationAllowed()
-		{
-			return _allowMultipleRegistration;
-		}
 	}
 	
 	/**
@@ -2484,6 +2297,64 @@ public class Quest extends ManagedScript implements IIdentifiable
 	}
 	
 	/**
+	 * Get a random party member from the specified player's party.<br>
+	 * If the player is not in a party, only the player himself is checked.<br>
+	 * The lucky member is chosen by standard loot roll rules -<br>
+	 * each member rolls a random number, the one with the highest roll wins.
+	 * @param player the player whose party to check
+	 * @param npc the NPC used for distance and other checks (if {@link #checkPartyMember(L2PcInstance, L2Npc)} is overriden)
+	 * @return the random party member or {@code null}
+	 */
+	public L2PcInstance getRandomPartyMember(L2PcInstance player, L2Npc npc)
+	{
+		if ((player == null) || !checkDistanceToTarget(player, npc))
+		{
+			return null;
+		}
+		final L2Party party = player.getParty();
+		L2PcInstance luckyPlayer = null;
+		if (party == null)
+		{
+			if (checkPartyMember(player, npc))
+			{
+				luckyPlayer = player;
+			}
+		}
+		else
+		{
+			int highestRoll = 0;
+			
+			for (L2PcInstance member : party.getMembers())
+			{
+				final int rnd = getRandom(1000);
+				
+				if ((rnd > highestRoll) && checkPartyMember(member, npc))
+				{
+					highestRoll = rnd;
+					luckyPlayer = member;
+				}
+			}
+		}
+		if ((luckyPlayer != null) && checkDistanceToTarget(luckyPlayer, npc))
+		{
+			return luckyPlayer;
+		}
+		return null;
+	}
+	
+	/**
+	 * This method is called for every party member in {@link #getRandomPartyMember(L2PcInstance, L2Npc)}.<br>
+	 * It is intended to be overriden by the specific quest implementations.
+	 * @param player the player to check
+	 * @param npc the NPC that was passed to {@link #getRandomPartyMember(L2PcInstance, L2Npc)}
+	 * @return {@code true} if this party member passes the check, {@code false} otherwise
+	 */
+	public boolean checkPartyMember(L2PcInstance player, L2Npc npc)
+	{
+		return true;
+	}
+	
+	/**
 	 * Auxiliary function for party quests.<br>
 	 * Note: This function is only here because of how commonly it may be used by quest developers.<br>
 	 * For any variations on this function, the quest script can always handle things on its own.
@@ -3210,7 +3081,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 	 */
 	public static boolean hasQuestItems(L2PcInstance player, int itemId)
 	{
-		return player.getInventory().getItemByItemId(itemId) != null;
+		return (player.getInventory().getItemByItemId(itemId) != null);
 	}
 	
 	/**
@@ -3221,6 +3092,10 @@ public class Quest extends ManagedScript implements IIdentifiable
 	 */
 	public static boolean hasQuestItems(L2PcInstance player, int... itemIds)
 	{
+		if ((itemIds == null) || (itemIds.length == 0))
+		{
+			return false;
+		}
 		final PcInventory inv = player.getInventory();
 		for (int itemId : itemIds)
 		{

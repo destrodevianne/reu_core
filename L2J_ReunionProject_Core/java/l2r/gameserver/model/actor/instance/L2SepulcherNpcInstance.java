@@ -26,6 +26,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.FourSepulchersManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Npc;
@@ -236,8 +237,8 @@ public class L2SepulcherNpcInstance extends L2Npc
 			
 			default:
 			{
-				List<Quest> qlsa = getTemplate().getEventQuests(Quest.QuestEventType.QUEST_START);
-				List<Quest> qlst = getTemplate().getEventQuests(Quest.QuestEventType.ON_FIRST_TALK);
+				List<Quest> qlsa = getTemplate().getEventQuests(QuestEventType.QUEST_START);
+				List<Quest> qlst = getTemplate().getEventQuests(QuestEventType.ON_FIRST_TALK);
 				
 				if ((qlsa != null) && !qlsa.isEmpty())
 				{

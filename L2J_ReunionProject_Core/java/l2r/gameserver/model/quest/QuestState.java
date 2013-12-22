@@ -28,6 +28,8 @@ import java.util.Map;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.cache.HtmCache;
+import l2r.gameserver.enums.QuestSound;
+import l2r.gameserver.enums.QuestType;
 import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.actor.L2Character;
@@ -35,7 +37,6 @@ import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.itemcontainer.PcInventory;
-import l2r.gameserver.model.quest.Quest.QuestSound;
 import l2r.gameserver.network.serverpackets.ExShowQuestMark;
 import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.QuestList;
@@ -73,16 +74,6 @@ public final class QuestState
 	 * boolean flag letting QuestStateManager know to exit quest when cleaning up
 	 */
 	private boolean _isExitQuestOnCleanUp = false;
-	
-	/**
-	 * This enumerate represent the different quest types.
-	 */
-	public static enum QuestType
-	{
-		REPEATABLE,
-		ONE_TIME,
-		DAILY
-	}
 	
 	/**
 	 * Constructor of the QuestState. Creates the QuestState object and sets the player's progress of the quest to this QuestState.

@@ -23,6 +23,7 @@ import java.util.List;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
@@ -35,7 +36,6 @@ import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.olympiad.OlympiadGameManager;
 import l2r.gameserver.model.quest.Quest;
-import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.quest.Quest.TrapAction;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
@@ -86,26 +86,7 @@ public final class L2TrapInstance extends L2Npc
 	
 	public L2TrapInstance(int objectId, L2NpcTemplate template, L2PcInstance owner, int lifeTime)
 	{
-		super(objectId, template);
-		setInstanceType(InstanceType.L2TrapInstance);
-		setInstanceId(owner.getInstanceId());
-		setName(template.getName());
-		setIsInvul(false);
-		
-		_owner = owner;
-		_isTriggered = false;
-		// TODO: Manage this properly when NPC templates are complete and in XML.
-		for (L2Skill skill : template.getSkills().values())
-		{
-			_skill = skill; // Last skill
-		}
-		_hasLifeTime = lifeTime >= 0;
-		_lifeTime = lifeTime != 0 ? lifeTime : 30000;
-		_remainingTime = getLifeTime();
-		if (_skill != null)
-		{
-			ThreadPoolManager.getInstance().scheduleGeneral(new TrapTask(this), TICK);
-		}
+		this(objectId, template, owner.getInstanceId(), lifeTime);
 	}
 	
 	@Override
@@ -365,7 +346,10 @@ public final class L2TrapInstance extends L2Npc
 	{
 		if (_isInArena)
 		{
-			detector.sendPacket(new TrapInfo(this, detector));
+			if (detector.isPlayable())
+			{
+				sendInfo(detector.getActingPlayer());
+			}
 			return;
 		}
 		
@@ -383,7 +367,10 @@ public final class L2TrapInstance extends L2Npc
 				quest.notifyTrapAction(this, detector, TrapAction.TRAP_DETECTED);
 			}
 		}
-		detector.sendPacket(new TrapInfo(this, detector));
+		if (detector.isPlayable())
+		{
+			sendInfo(detector.getActingPlayer());
+		}
 	}
 	
 	public void stopDecay()

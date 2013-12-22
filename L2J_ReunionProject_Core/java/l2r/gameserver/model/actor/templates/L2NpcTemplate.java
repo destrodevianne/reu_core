@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import javolution.util.FastMap;
 import l2r.gameserver.datatables.HerbDropTable;
 import l2r.gameserver.enums.NpcRace;
+import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.L2DropCategory;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2MinionData;
@@ -36,7 +37,6 @@ import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.quest.Quest;
-import l2r.gameserver.model.quest.Quest.QuestEventType;
 import l2r.gameserver.model.skills.L2Skill;
 
 import org.slf4j.Logger;
