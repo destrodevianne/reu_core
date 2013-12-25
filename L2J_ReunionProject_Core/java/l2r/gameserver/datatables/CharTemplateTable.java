@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.Location;
@@ -30,6 +29,8 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.base.ClassId;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -39,7 +40,7 @@ import org.w3c.dom.Node;
  */
 public final class CharTemplateTable extends DocumentParser
 {
-	private static final Logger _log = Logger.getLogger(CharTemplateTable.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(CharTemplateTable.class.getName());
 	
 	private static final Map<ClassId, L2PcTemplate> _charTemplates = new HashMap<>();
 	
