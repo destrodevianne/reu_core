@@ -15,7 +15,6 @@
 	<classpathentry kind="lib" path="dist/libs/Subnet.jar"/>
 	<classpathentry kind="lib" path="dist/libs/reunion_events.jar"/>
 	<classpathentry kind="lib" path="dist/libs/reunion_interface.jar"/>
-	<classpathentry kind="lib" path="dist/libs/CatsByteGuard.jar"/>
 	<classpathentry kind="lib" path="dist/libs/reunion-scripts.jar"/>
 	<classpathentry kind="lib" path="dist/libs/trove-3.0.2.jar"/>
 	<classpathentry kind="lib" path="dist/libs/slf4j-api-1.6.4.jar"/>
