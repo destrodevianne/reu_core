@@ -66,7 +66,7 @@
 		<java classname="ru.catssoftware.CatsByteGuard">
 			<arg value="${build.bin}" />
 				<classpath>
-					<path location="${libs}/CatsByteGuard.jar"/>
+					<path location="CatsByteGuard.jar"/>
 				</classpath>
 		</java>
 		<echo message="Protecting Reunion Core Done...." />
