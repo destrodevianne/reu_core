@@ -78,7 +78,7 @@ public abstract class DocumentParser
 	 */
 	protected void parseFile(File f)
 	{
-		if (!xmlFilter.accept(f))
+		if (!getCurrentFileFilter().accept(f))
 		{
 			_log.warn(getClass().getSimpleName() + ": Could not parse " + f.getName() + " is not a file or it doesn't exist!");
 			return;
@@ -175,12 +175,23 @@ public abstract class DocumentParser
 			{
 				parseDirectory(f, recursive);
 			}
-			else if (xmlFilter.accept(f))
+			else if (getCurrentFileFilter().accept(f))
 			{
 				parseFile(f);
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Wrapper for {@link #parseDirectory(File, boolean)}.
+	 * @param path the path to the directory where the XML files are
+	 * @param recursive parses all sub folders if there is
+	 * @return {@code false} if it fails to find the directory, {@code true} otherwise
+	 */
+	protected boolean parseDatapackDirectory(String path, boolean recursive)
+	{
+		return parseDirectory(new File(Config.DATAPACK_ROOT, path), recursive);
 	}
 	
 	/**
@@ -198,91 +209,197 @@ public abstract class DocumentParser
 	 */
 	protected abstract void parseDocument();
 	
-	/**
-	 * Parses the int.
-	 * @param n the named node map.
-	 * @param name the attribute name.
-	 * @return a parsed integer.
-	 */
-	protected static int parseInt(NamedNodeMap n, String name)
+	protected Boolean parseBoolean(Node node, Boolean defaultValue)
 	{
-		return Integer.parseInt(n.getNamedItem(name).getNodeValue());
+		return node != null ? Boolean.valueOf(node.getNodeValue()) : defaultValue;
 	}
 	
-	/**
-	 * Parses the integer.
-	 * @param n the named node map.
-	 * @param name the attribute name.
-	 * @return a parsed integer object.
-	 */
-	protected static Integer parseInteger(NamedNodeMap n, String name)
+	protected Boolean parseBoolean(Node node)
 	{
-		return Integer.valueOf(n.getNamedItem(name).getNodeValue());
+		return parseBoolean(node, null);
 	}
 	
-	/**
-	 * Parses the int.
-	 * @param n the node to parse.
-	 * @return the parsed integer.
-	 */
-	protected static int parseInt(Node n)
+	protected Boolean parseBoolean(NamedNodeMap attrs, String name)
 	{
-		return Integer.parseInt(n.getNodeValue());
+		return parseBoolean(attrs.getNamedItem(name));
 	}
 	
-	/**
-	 * Parses the integer.
-	 * @param n the node to parse.
-	 * @return the parsed integer object.
-	 */
-	protected static Integer parseInteger(Node n)
+	protected Boolean parseBoolean(NamedNodeMap attrs, String name, Boolean defaultValue)
 	{
-		return Integer.valueOf(n.getNodeValue());
+		return parseBoolean(attrs.getNamedItem(name), defaultValue);
 	}
 	
-	/**
-	 * Parses the long.
-	 * @param n the named node map.
-	 * @param name the attribute name.
-	 * @return a parsed integer.
-	 */
-	protected static Long parseLong(NamedNodeMap n, String name)
+	protected Byte parseByte(Node node, Byte defaultValue)
 	{
-		return Long.valueOf(n.getNamedItem(name).getNodeValue());
+		return node != null ? Byte.valueOf(node.getNodeValue()) : defaultValue;
 	}
 	
-	/**
-	 * Parses the double.
-	 * @param n the named node map.
-	 * @param name the attribute name.
-	 * @return a parsed double.
-	 */
-	protected static Double parseDouble(NamedNodeMap n, String name)
+	protected Byte parseByte(Node node)
 	{
-		return Double.valueOf(n.getNamedItem(name).getNodeValue());
+		return parseByte(node, null);
 	}
 	
-	/**
-	 * Parses the boolean.
-	 * @param n the named node map.
-	 * @param name the attribute name.
-	 * @return {@code true} if the attribute exists and it's value is {@code true}, {@code false} otherwise.
-	 */
-	protected static boolean parseBoolean(NamedNodeMap n, String name)
+	protected Byte parseByte(NamedNodeMap attrs, String name)
 	{
-		final Node b = n.getNamedItem(name);
-		return (b != null) && Boolean.parseBoolean(b.getNodeValue());
+		return parseByte(attrs.getNamedItem(name));
 	}
 	
-	/**
-	 * @param n the named node map
-	 * @param name the attribute name
-	 * @return the node string value for the given node name and named node map if exist, otherwise an empty string
-	 */
-	protected static String parseString(NamedNodeMap n, String name)
+	protected Byte parseByte(NamedNodeMap attrs, String name, Byte defaultValue)
 	{
-		final Node b = n.getNamedItem(name);
-		return (b == null) ? "" : b.getNodeValue();
+		return parseByte(attrs.getNamedItem(name), defaultValue);
+	}
+	
+	protected Short parseShort(Node node, Short defaultValue)
+	{
+		return node != null ? Short.valueOf(node.getNodeValue()) : defaultValue;
+	}
+	
+	protected Short parseShort(Node node)
+	{
+		return parseShort(node, null);
+	}
+	
+	protected Short parseShort(NamedNodeMap attrs, String name)
+	{
+		return parseShort(attrs.getNamedItem(name));
+	}
+	
+	protected Short parseShort(NamedNodeMap attrs, String name, Short defaultValue)
+	{
+		return parseShort(attrs.getNamedItem(name), defaultValue);
+	}
+	
+	protected Integer parseInteger(Node node, Integer defaultValue)
+	{
+		return node != null ? Integer.valueOf(node.getNodeValue()) : defaultValue;
+	}
+	
+	protected Integer parseInteger(Node node)
+	{
+		return parseInteger(node, null);
+	}
+	
+	protected Integer parseInteger(NamedNodeMap attrs, String name)
+	{
+		return parseInteger(attrs.getNamedItem(name));
+	}
+	
+	protected Integer parseInteger(NamedNodeMap attrs, String name, Integer defaultValue)
+	{
+		return parseInteger(attrs.getNamedItem(name), defaultValue);
+	}
+	
+	protected Long parseLong(Node node, Long defaultValue)
+	{
+		return node != null ? Long.valueOf(node.getNodeValue()) : defaultValue;
+	}
+	
+	protected Long parseLong(Node node)
+	{
+		return parseLong(node, null);
+	}
+	
+	protected Long parseLong(NamedNodeMap attrs, String name)
+	{
+		return parseLong(attrs.getNamedItem(name));
+	}
+	
+	protected Long parseLong(NamedNodeMap attrs, String name, Long defaultValue)
+	{
+		return parseLong(attrs.getNamedItem(name), defaultValue);
+	}
+	
+	protected Float parseFloat(Node node, Float defaultValue)
+	{
+		return node != null ? Float.valueOf(node.getNodeValue()) : defaultValue;
+	}
+	
+	protected Float parseFloat(Node node)
+	{
+		return parseFloat(node, null);
+	}
+	
+	protected Float parseFloat(NamedNodeMap attrs, String name)
+	{
+		return parseFloat(attrs.getNamedItem(name));
+	}
+	
+	protected Float parseFloat(NamedNodeMap attrs, String name, Float defaultValue)
+	{
+		return parseFloat(attrs.getNamedItem(name), defaultValue);
+	}
+	
+	protected Double parseDouble(Node node, Double defaultValue)
+	{
+		return node != null ? Double.valueOf(node.getNodeValue()) : defaultValue;
+	}
+	
+	protected Double parseDouble(Node node)
+	{
+		return parseDouble(node, null);
+	}
+	
+	protected Double parseDouble(NamedNodeMap attrs, String name)
+	{
+		return parseDouble(attrs.getNamedItem(name));
+	}
+	
+	protected Double parseDouble(NamedNodeMap attrs, String name, Double defaultValue)
+	{
+		return parseDouble(attrs.getNamedItem(name), defaultValue);
+	}
+	
+	protected String parseString(Node node, String defaultValue)
+	{
+		return node != null ? node.getNodeValue() : defaultValue;
+	}
+	
+	protected String parseString(Node node)
+	{
+		return parseString(node, null);
+	}
+	
+	protected String parseString(NamedNodeMap attrs, String name)
+	{
+		return parseString(attrs.getNamedItem(name));
+	}
+	
+	protected String parseString(NamedNodeMap attrs, String name, String defaultValue)
+	{
+		return parseString(attrs.getNamedItem(name), defaultValue);
+	}
+	
+	protected <T extends Enum<T>> T parseEnum(Node node, Class<T> clazz, T defaultValue)
+	{
+		if (node == null)
+		{
+			return defaultValue;
+		}
+		
+		try
+		{
+			return Enum.valueOf(clazz, node.getNodeValue());
+		}
+		catch (IllegalArgumentException e)
+		{
+			_log.warn("[" + getCurrentFile().getName() + "] Invalid value specified for node: " + node.getNodeName() + " specified value: " + node.getNodeValue() + " should be enum value of \"" + clazz.getSimpleName() + "\" using default value: " + defaultValue);
+			return defaultValue;
+		}
+	}
+	
+	protected <T extends Enum<T>> T parseEnum(Node node, Class<T> clazz)
+	{
+		return parseEnum(node, clazz, null);
+	}
+	
+	protected <T extends Enum<T>> T parseEnum(NamedNodeMap attrs, Class<T> clazz, String name)
+	{
+		return parseEnum(attrs.getNamedItem(name), clazz);
+	}
+	
+	protected <T extends Enum<T>> T parseEnum(NamedNodeMap attrs, Class<T> clazz, String name, T defaultValue)
+	{
+		return parseEnum(attrs.getNamedItem(name), clazz, defaultValue);
 	}
 	
 	public void setCurrentFileFilter(FileFilter filter)

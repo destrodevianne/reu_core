@@ -85,6 +85,7 @@ import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.enums.MountType;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.PcRace;
+import l2r.gameserver.enums.PlayerAction;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.Sex;
 import l2r.gameserver.enums.ShotType;
@@ -632,9 +633,7 @@ public final class L2PcInstance extends L2Playable
 	private boolean _waitTypeSitting;
 	
 	/** Location before entering Observer Mode */
-	private int _lastX;
-	private int _lastY;
-	private int _lastZ;
+	private final Location _lastLoc = new Location(0, 0, 0);
 	private boolean _observerMode = false;
 	
 	/** Stored from last ValidatePosition **/
@@ -911,6 +910,8 @@ public final class L2PcInstance extends L2Playable
 	
 	/** Map containing all custom skills of this player. */
 	private Map<Integer, L2Skill> _customSkills = null;
+	
+	private volatile int _actionMask;
 	
 	public void setPvpFlagLasts(long time)
 	{
@@ -8138,9 +8139,9 @@ public final class L2PcInstance extends L2Playable
 			statement.setInt(10, getAppearance().getHairColor());
 			statement.setInt(11, getAppearance().getSex() ? 1 : 0);
 			statement.setInt(12, getHeading());
-			statement.setInt(13, _observerMode ? _lastX : getX());
-			statement.setInt(14, _observerMode ? _lastY : getY());
-			statement.setInt(15, _observerMode ? _lastZ : getZ());
+			statement.setInt(13, _observerMode ? _lastLoc.getX() : getX());
+			statement.setInt(14, _observerMode ? _lastLoc.getY() : getY());
+			statement.setInt(15, _observerMode ? _lastLoc.getZ() : getZ());
 			statement.setLong(16, exp);
 			statement.setLong(17, getExpBeforeDeath());
 			statement.setInt(18, sp);
@@ -10450,12 +10451,11 @@ public final class L2PcInstance extends L2Playable
 		sendPacket(new ExShowScreenMessage2(text, timeonscreenins * 1000, ScreenMessageAlign.TOP_CENTER, text.length() > 30 ? false : true));
 	}
 	
-	public void enterObserverMode(int x, int y, int z)
+	public void enterObserverMode(Location loc)
 	{
-		_lastX = getX();
-		_lastY = getY();
-		_lastZ = getZ();
+		setLastLocation();
 		
+		// Remove Hide.
 		stopEffects(L2EffectType.HIDE);
 		
 		_observerMode = true;
@@ -10464,18 +10464,21 @@ public final class L2PcInstance extends L2Playable
 		startParalyze();
 		setIsInvul(true);
 		getAppearance().setInvisible();
-		// sendPacket(new GMHide(1));
-		sendPacket(new ObservationMode(x, y, z));
-		getKnownList().removeAllKnownObjects(); // reinit knownlist
-		setXYZ(x, y, z);
+		sendPacket(new ObservationMode(loc));
+		
+		teleToLocation(loc, false);
+		
 		broadcastUserInfo();
 	}
 	
-	public void setLastCords(int x, int y, int z)
+	public void setLastLocation()
 	{
-		_lastX = getX();
-		_lastY = getY();
-		_lastZ = getZ();
+		_lastLoc.setXYZ(getX(), getY(), getZ());
+	}
+	
+	public void unsetLastLocation()
+	{
+		_lastLoc.setXYZ(0, 0, 0);
 	}
 	
 	public void enterOlympiadObserverMode(Location loc, int id)
@@ -10509,9 +10512,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		if (!_observerMode)
 		{
-			_lastX = getX();
-			_lastY = getY();
-			_lastZ = getZ();
+			setLastLocation();
 		}
 		
 		_observerMode = true;
@@ -10527,8 +10528,11 @@ public final class L2PcInstance extends L2Playable
 	public void leaveObserverMode()
 	{
 		setTarget(null);
-		getKnownList().removeAllKnownObjects(); // reinit knownlist
-		setXYZ(_lastX, _lastY, _lastZ);
+		
+		teleToLocation(_lastLoc, false);
+		unsetLastLocation();
+		sendPacket(new ObservationReturn(getLocation()));
+		
 		setIsParalyzed(false);
 		if (!isGM())
 		{
@@ -10542,8 +10546,7 @@ public final class L2PcInstance extends L2Playable
 		
 		setFalling(); // prevent receive falling damage
 		_observerMode = false;
-		setLastCords(0, 0, 0);
-		sendPacket(new ObservationReturn(this));
+		
 		broadcastUserInfo();
 	}
 	
@@ -10558,7 +10561,7 @@ public final class L2PcInstance extends L2Playable
 		setTarget(null);
 		sendPacket(new ExOlympiadMode(0));
 		setInstanceId(0);
-		teleToLocation(_lastX, _lastY, _lastZ, true);
+		teleToLocation(_lastLoc, true);
 		if (!isGM())
 		{
 			getAppearance().setVisible();
@@ -10568,7 +10571,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		}
-		setLastCords(0, 0, 0);
+		unsetLastLocation();
 		broadcastUserInfo();
 	}
 	
@@ -10592,19 +10595,9 @@ public final class L2PcInstance extends L2Playable
 		return _olympiadGameId;
 	}
 	
-	public int getLastX()
+	public Location getLastLocation()
 	{
-		return _lastX;
-	}
-	
-	public int getLastY()
-	{
-		return _lastY;
-	}
-	
-	public int getLastZ()
-	{
-		return _lastZ;
+		return _lastLoc;
 	}
 	
 	public boolean inObserverMode()
@@ -12467,7 +12460,7 @@ public final class L2PcInstance extends L2Playable
 			// before entering in observer mode
 			if (inObserverMode())
 			{
-				setXYZInvisible(_lastX, _lastY, _lastZ);
+				setLocationInvisible(_lastLoc);
 			}
 			
 			if (getVehicle() != null)
@@ -14966,6 +14959,43 @@ public final class L2PcInstance extends L2Playable
 	public boolean isPartyBanned()
 	{
 		return PunishmentManager.getInstance().hasPunishment(getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.PARTY_BAN);
+	}
+	
+	/**
+	 * @param act
+	 * @return {@code true} if action was added successfully, {@code false} otherwise.
+	 */
+	public boolean addAction(PlayerAction act)
+	{
+		if (!hasAction(act))
+		{
+			_actionMask |= act.getMask();
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param act
+	 * @return {@code true} if action was removed successfully, {@code false} otherwise.
+	 */
+	public boolean removeAction(PlayerAction act)
+	{
+		if (hasAction(act))
+		{
+			_actionMask &= ~act.getMask();
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param act
+	 * @return {@code true} if action is present, {@code false} otherwise.
+	 */
+	public boolean hasAction(PlayerAction act)
+	{
+		return (_actionMask & act.getMask()) == act.getMask();
 	}
 	
 	/**

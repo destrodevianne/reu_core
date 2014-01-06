@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -16,25 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.network.serverpackets;
+package l2r.gameserver.enums;
 
-import l2r.gameserver.model.Location;
-
-public class ObservationReturn extends L2GameServerPacket
+/**
+ * @author UnAfraid
+ */
+public enum PlayerAction
 {
-	private final Location _loc;
+	ADMIN_COMMAND,
+	USER_ENGAGE;
 	
-	public ObservationReturn(Location loc)
+	private final int _mask;
+	
+	private PlayerAction()
 	{
-		_loc = loc;
+		_mask = (1 << ordinal());
 	}
 	
-	@Override
-	protected final void writeImpl()
+	public int getMask()
 	{
-		writeC(0xEC);
-		writeD(_loc.getX());
-		writeD(_loc.getY());
-		writeD(_loc.getZ());
+		return _mask;
 	}
 }

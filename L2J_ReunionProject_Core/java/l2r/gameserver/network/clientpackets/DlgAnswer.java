@@ -23,6 +23,7 @@ import java.util.List;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.enums.PlayerAction;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -73,16 +74,16 @@ public final class DlgAnswer extends L2GameClientPacket
 		}
 		else if (_messageId == SystemMessageId.S1.getId())
 		{
-			String _command = activeChar.getAdminConfirmCmd();
-			if (_command == null)
+			if (activeChar.removeAction(PlayerAction.USER_ENGAGE))
 			{
 				if (Config.L2JMOD_ALLOW_WEDDING)
 				{
 					activeChar.engageAnswer(_answer);
 				}
 			}
-			else
+			else if (activeChar.removeAction(PlayerAction.ADMIN_COMMAND))
 			{
+				String _command = activeChar.getAdminConfirmCmd();
 				activeChar.setAdminConfirmCmd(null);
 				if (_answer == 0)
 				{

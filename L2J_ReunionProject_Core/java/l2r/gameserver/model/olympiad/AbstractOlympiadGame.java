@@ -198,7 +198,7 @@ public abstract class AbstractOlympiadGame
 		
 		try
 		{
-			player.setLastCords(player.getX(), player.getY(), player.getZ());
+			player.setLastLocation();
 			if (player.isSitting())
 			{
 				player.standUp();
@@ -448,7 +448,8 @@ public abstract class AbstractOlympiadGame
 			return;
 		}
 		
-		if ((player.getLastX() == 0) && (player.getLastY() == 0))
+		final Location loc = player.getLastLocation();
+		if ((loc.getX() == 0) && (loc.getY() == 0))
 		{
 			return;
 		}
@@ -459,8 +460,8 @@ public abstract class AbstractOlympiadGame
 			player.setAntiFeedProtection(false);
 			player.startAntifeedProtection(false, true);
 		}
-		player.teleToLocation(player.getLastX(), player.getLastY(), player.getLastZ());
-		player.setLastCords(0, 0, 0);
+		player.teleToLocation(loc);
+		player.unsetLastLocation();
 	}
 	
 	public static final void rewardParticipant(L2PcInstance player, int[][] reward)

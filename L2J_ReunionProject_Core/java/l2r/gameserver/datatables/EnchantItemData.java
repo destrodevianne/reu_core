@@ -91,7 +91,7 @@ public class EnchantItemData extends DocumentParser
 							}
 							else if ("step".equalsIgnoreCase(cd.getNodeName()))
 							{
-								enchantSteps.put(parseInt(cd.getAttributes(), "level"), parseDouble(cd.getAttributes(), "successRate"));
+								enchantSteps.put(parseInteger(cd.getAttributes(), "level"), parseDouble(cd.getAttributes(), "successRate"));
 							}
 						}
 						EnchantScroll item = new EnchantScroll(set, items, enchantSteps);
