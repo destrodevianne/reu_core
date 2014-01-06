@@ -164,7 +164,7 @@ public class CharSummonTable
 						return;
 					}
 					
-					summonTemplate = NpcTable.getInstance().getTemplate(skill.getId());
+					summonTemplate = NpcTable.getInstance().getTemplate(skill.getNpcId());
 					if (summonTemplate == null)
 					{
 						_log.warn(getClass().getSimpleName() + ": Summon attemp for nonexisting Skill ID:" + skillId);
