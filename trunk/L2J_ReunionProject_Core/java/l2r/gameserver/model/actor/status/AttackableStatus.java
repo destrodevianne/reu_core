@@ -18,12 +18,8 @@
  */
 package l2r.gameserver.model.actor.status;
 
-import java.util.Collection;
-
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
-import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.network.serverpackets.AbstractNpcInfo;
 
 public class AttackableStatus extends NpcStatus
 {
@@ -75,23 +71,5 @@ public class AttackableStatus extends NpcStatus
 	public L2Attackable getActiveChar()
 	{
 		return (L2Attackable) super.getActiveChar();
-	}
-	
-	@Override
-	public void setCurrentHp(double newHp, boolean broadcastPacket)
-	{
-		super.setCurrentHp(newHp, broadcastPacket);
-		
-		if (getActiveChar().getFakePc() != null)
-		{
-			Collection<L2PcInstance> plrs = getActiveChar().getKnownList().getKnownPlayers().values();
-			for (L2PcInstance player : plrs)
-			{
-				if (player != null)
-				{
-					player.sendPacket(new AbstractNpcInfo.NpcInfo(getActiveChar(), player));
-				}
-			}
-		}
 	}
 }

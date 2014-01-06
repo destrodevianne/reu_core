@@ -49,6 +49,7 @@ import l2r.gameserver.model.conditions.ConditionPlayerActiveEffectId;
 import l2r.gameserver.model.conditions.ConditionPlayerActiveSkillId;
 import l2r.gameserver.model.conditions.ConditionPlayerAgathionId;
 import l2r.gameserver.model.conditions.ConditionPlayerCanRefuelAirship;
+import l2r.gameserver.model.conditions.ConditionPlayerCanSummon;
 import l2r.gameserver.model.conditions.ConditionPlayerCanSweep;
 import l2r.gameserver.model.conditions.ConditionPlayerCanTransform;
 import l2r.gameserver.model.conditions.ConditionPlayerCanUntransform;
@@ -899,6 +900,10 @@ public abstract class DocumentBase
 			else if ("canRefuelAirship".equalsIgnoreCase(a.getNodeName()))
 			{
 				cond = joinAnd(cond, new ConditionPlayerCanRefuelAirship(Integer.parseInt(a.getNodeValue())));
+			}
+			else if ("canSummon".equalsIgnoreCase(a.getNodeName()))
+			{
+				cond = joinAnd(cond, new ConditionPlayerCanSummon(Boolean.parseBoolean(a.getNodeValue())));
 			}
 			else if ("canSweep".equalsIgnoreCase(a.getNodeName()))
 			{
