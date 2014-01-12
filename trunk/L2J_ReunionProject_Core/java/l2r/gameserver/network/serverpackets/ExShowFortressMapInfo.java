@@ -20,7 +20,7 @@ package l2r.gameserver.network.serverpackets;
 
 import javolution.util.FastList;
 import l2r.gameserver.instancemanager.FortSiegeManager;
-import l2r.gameserver.instancemanager.FortSiegeManager.SiegeSpawn;
+import l2r.gameserver.model.FortSiegeSpawn;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.entity.Fort;
 
@@ -46,14 +46,14 @@ public class ExShowFortressMapInfo extends L2GameServerPacket
 		writeD(_fortress.getSiege().getIsInProgress() ? 1 : 0); // fortress siege status
 		writeD(_fortress.getFortSize()); // barracks count
 		
-		FastList<SiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(_fortress.getResidenceId());
+		FastList<FortSiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(_fortress.getResidenceId());
 		if ((commanders != null) && (commanders.size() != 0) && _fortress.getSiege().getIsInProgress())
 		{
 			switch (commanders.size())
 			{
 				case 3:
 				{
-					for (SiegeSpawn spawn : commanders)
+					for (FortSiegeSpawn spawn : commanders)
 					{
 						if (isSpawned(spawn.getId()))
 						{
@@ -69,7 +69,7 @@ public class ExShowFortressMapInfo extends L2GameServerPacket
 				case 4: // TODO: change 4 to 5 once control room supported
 				{
 					int count = 0;
-					for (SiegeSpawn spawn : commanders)
+					for (FortSiegeSpawn spawn : commanders)
 					{
 						count++;
 						if (count == 4)

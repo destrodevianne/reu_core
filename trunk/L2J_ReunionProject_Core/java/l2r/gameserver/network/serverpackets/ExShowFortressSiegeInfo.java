@@ -20,7 +20,7 @@ package l2r.gameserver.network.serverpackets;
 
 import javolution.util.FastList;
 import l2r.gameserver.instancemanager.FortSiegeManager;
-import l2r.gameserver.instancemanager.FortSiegeManager.SiegeSpawn;
+import l2r.gameserver.model.FortSiegeSpawn;
 import l2r.gameserver.model.entity.Fort;
 
 /**
@@ -42,7 +42,7 @@ public class ExShowFortressSiegeInfo extends L2GameServerPacket
 		_fort = fort;
 		_fortId = fort.getResidenceId();
 		_size = fort.getFortSize();
-		FastList<SiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(_fortId);
+		FastList<FortSiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(_fortId);
 		if (commanders != null)
 		{
 			_csize = commanders.size();

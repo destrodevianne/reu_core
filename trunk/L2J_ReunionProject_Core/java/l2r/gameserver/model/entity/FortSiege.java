@@ -38,8 +38,8 @@ import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.FortSiegeGuardManager;
 import l2r.gameserver.instancemanager.FortSiegeManager;
-import l2r.gameserver.instancemanager.FortSiegeManager.SiegeSpawn;
 import l2r.gameserver.model.CombatFlag;
+import l2r.gameserver.model.FortSiegeSpawn;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2SiegeClan;
@@ -638,13 +638,13 @@ public class FortSiege implements Siegable
 			L2Spawn spawn = instance.getSpawn();
 			if (spawn != null)
 			{
-				FastList<SiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId());
-				for (SiegeSpawn spawn2 : commanders)
+				FastList<FortSiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId());
+				for (FortSiegeSpawn spawn2 : commanders)
 				{
 					if (spawn2.getId() == spawn.getId())
 					{
 						NpcStringId npcString = null;
-						switch (spawn2.getId())
+						switch (spawn2.getMessageId())
 						{
 							case 1:
 								npcString = NpcStringId.YOU_MAY_HAVE_BROKEN_OUR_ARROWS_BUT_YOU_WILL_NEVER_BREAK_OUR_WILL_ARCHERS_RETREAT;
@@ -1160,7 +1160,7 @@ public class FortSiege implements Siegable
 			_commanders.clear();
 			L2Spawn spawnDat;
 			L2NpcTemplate template1;
-			for (SiegeSpawn _sp : FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId()))
+			for (FortSiegeSpawn _sp : FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId()))
 			{
 				template1 = NpcTable.getInstance().getTemplate(_sp.getId());
 				if (template1 != null)
