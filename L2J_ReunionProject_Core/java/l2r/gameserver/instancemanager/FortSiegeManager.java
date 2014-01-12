@@ -34,9 +34,9 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.model.CombatFlag;
+import l2r.gameserver.model.FortSiegeSpawn;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
-import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Fort;
@@ -60,7 +60,7 @@ public class FortSiegeManager
 	private int _attackerMaxClans = 500; // Max number of clans
 	
 	// Fort Siege settings
-	private FastMap<Integer, FastList<SiegeSpawn>> _commanderSpawnList;
+	private FastMap<Integer, FastList<FortSiegeSpawn>> _commanderSpawnList;
 	private FastMap<Integer, FastList<CombatFlag>> _flagList;
 	private int _flagMaxCount = 1; // Changeable in fortsiege.properties
 	private int _siegeClanMinLevel = 4; // Changeable in fortsiege.properties
@@ -187,7 +187,7 @@ public class FortSiegeManager
 		
 		for (Fort fort : FortManager.getInstance().getForts())
 		{
-			FastList<SiegeSpawn> _commanderSpawns = new FastList<>();
+			FastList<FortSiegeSpawn> _commanderSpawns = new FastList<>();
 			FastList<CombatFlag> _flagSpawns = new FastList<>();
 			for (int i = 1; i < 5; i++)
 			{
@@ -206,7 +206,7 @@ public class FortSiegeManager
 					int heading = Integer.parseInt(st.nextToken());
 					int npc_id = Integer.parseInt(st.nextToken());
 					
-					_commanderSpawns.add(new SiegeSpawn(fort.getResidenceId(), x, y, z, heading, npc_id, i));
+					_commanderSpawns.add(new FortSiegeSpawn(fort.getResidenceId(), x, y, z, heading, npc_id, i));
 				}
 				catch (Exception e)
 				{
@@ -243,7 +243,7 @@ public class FortSiegeManager
 		}
 	}
 	
-	public final FastList<SiegeSpawn> getCommanderSpawnList(int _fortId)
+	public final FastList<FortSiegeSpawn> getCommanderSpawnList(int _fortId)
 	{
 		if (_commanderSpawnList.containsKey(_fortId))
 		{
@@ -401,49 +401,6 @@ public class FortSiegeManager
 					cf.spawnMe();
 				}
 			}
-		}
-	}
-	
-	public static class SiegeSpawn
-	{
-		Location _location;
-		private final int _npcId;
-		private final int _heading;
-		private final int _fortId;
-		private final int _id;
-		
-		public SiegeSpawn(int fort_id, int x, int y, int z, int heading, int npc_id, int id)
-		{
-			_fortId = fort_id;
-			_location = new Location(x, y, z, heading);
-			_heading = heading;
-			_npcId = npc_id;
-			_id = id;
-		}
-		
-		public int getResidenceId()
-		{
-			return _fortId;
-		}
-		
-		public int getNpcId()
-		{
-			return _npcId;
-		}
-		
-		public int getHeading()
-		{
-			return _heading;
-		}
-		
-		public int getId()
-		{
-			return _id;
-		}
-		
-		public Location getLocation()
-		{
-			return _location;
 		}
 	}
 	
