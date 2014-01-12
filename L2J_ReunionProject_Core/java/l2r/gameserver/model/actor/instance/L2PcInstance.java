@@ -9870,7 +9870,8 @@ public final class L2PcInstance extends L2Playable
 						return false;
 					}
 					
-					if ((getOlympiadGameId() != 0) && (getOlympiadGameId() == targetPlayer.getOlympiadGameId()))
+					// TODO: temp fix!
+					if (((getOlympiadGameId() + 1) != 0) && (getOlympiadGameId() == targetPlayer.getOlympiadGameId()))
 					{
 						return true;
 					}
