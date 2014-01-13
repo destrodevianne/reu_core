@@ -28,6 +28,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2Party;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.quest.Quest;
@@ -83,7 +84,7 @@ public class DimensionalRift
 					qs.startQuest();
 				}
 			}
-			p.teleToLocation(coords[0], coords[1], coords[2]);
+			p.teleToLocation(new Location(coords[0], coords[1], coords[2]));
 		}
 		createSpawnTimer(_choosenRoom);
 		createTeleporterTimer(true);
@@ -101,6 +102,11 @@ public class DimensionalRift
 	
 	protected void createTeleporterTimer(final boolean reasonTP)
 	{
+		if (_party == null)
+		{
+			return;
+		}
+		
 		if (teleporterTimerTask != null)
 		{
 			teleporterTimerTask.cancel();
@@ -315,13 +321,13 @@ public class DimensionalRift
 				}
 				_choosenRoom = emptyRooms.get(Rnd.get(1, emptyRooms.size()) - 1);
 			}
-			while (DimensionalRiftManager.getInstance().getRoom(_type, _choosenRoom).ispartyInside());
+			while (DimensionalRiftManager.getInstance().getRoom(_type, _choosenRoom).isPartyInside());
 		}
 		
 		DimensionalRiftManager.getInstance().getRoom(_type, _choosenRoom).setPartyInside(true);
 		checkBossRoom(_choosenRoom);
 		int[] coords = getRoomCoord(_choosenRoom);
-		player.teleToLocation(coords[0], coords[1], coords[2]);
+		player.teleToLocation(new Location(coords[0], coords[1], coords[2]));
 	}
 	
 	protected void teleportToWaitingRoom(L2PcInstance player)
