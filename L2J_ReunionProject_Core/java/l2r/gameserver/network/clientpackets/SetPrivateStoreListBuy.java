@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
 import l2r.Config;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.TradeList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -87,7 +88,7 @@ public final class SetPrivateStoreListBuy extends L2GameClientPacket
 		
 		if (_items == null)
 		{
-			player.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+			player.setPrivateStoreType(PrivateStoreType.NONE);
 			player.broadcastUserInfo();
 			return;
 		}
@@ -170,7 +171,7 @@ public final class SetPrivateStoreListBuy extends L2GameClientPacket
 		}
 		
 		player.sitDown();
-		player.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_BUY);
+		player.setPrivateStoreType(PrivateStoreType.BUY);
 		player.broadcastUserInfo();
 		player.broadcastPacket(new PrivateStoreMsgBuy(player));
 	}

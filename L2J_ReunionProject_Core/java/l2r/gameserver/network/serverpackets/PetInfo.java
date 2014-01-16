@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.network.serverpackets;
 
+import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2ServitorInstance;
@@ -53,8 +54,8 @@ public class PetInfo extends L2GameServerPacket
 		_moveMultiplier = summon.getMovementSpeedMultiplier();
 		_runSpd = Math.round(summon.getRunSpeed() / _moveMultiplier);
 		_walkSpd = Math.round(summon.getWalkSpeed() / _moveMultiplier);
-		_swimRunSpd = summon.getSwimRunSpeed();
-		_swimWalkSpd = summon.getSwimWalkSpeed();
+		_swimRunSpd = Math.round(summon.getSwimRunSpeed() / _moveMultiplier);
+		_swimWalkSpd = Math.round(summon.getSwimWalkSpeed() / _moveMultiplier);
 		_flyRunSpd = summon.isFlying() ? _runSpd : 0;
 		_flyWalkSpd = summon.isFlying() ? _walkSpd : 0;
 		_maxHp = summon.getMaxHp();
@@ -160,7 +161,7 @@ public class PetInfo extends L2GameServerPacket
 		writeD(_summon.getAbnormalEffect());// c2 abnormal visual effect... bleed=1; poison=2; poison & bleed=3; flame=4;
 		writeH(_summon.isMountable() ? 1 : 0);// c2 ride button
 		
-		writeC(0); // c2
+		writeC(_summon.isInsideZone(ZoneIdType.WATER) ? 1 : _summon.isFlying() ? 2 : 0); // c2
 		
 		// Following all added in C4.
 		writeH(0); // ??

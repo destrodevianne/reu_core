@@ -86,6 +86,7 @@ import l2r.gameserver.enums.MountType;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.enums.PlayerAction;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.Sex;
 import l2r.gameserver.enums.ShotType;
@@ -410,11 +411,6 @@ public final class L2PcInstance extends L2Playable
 	private static final String COND_OVERRIDE_KEY = "cond_override";
 	
 	public static final int REQUEST_TIMEOUT = 15;
-	public static final int STORE_PRIVATE_NONE = 0;
-	public static final int STORE_PRIVATE_SELL = 1;
-	public static final int STORE_PRIVATE_BUY = 3;
-	public static final int STORE_PRIVATE_MANUFACTURE = 5;
-	public static final int STORE_PRIVATE_PACKAGE_SELL = 8;
 	
 	public static final FastList<PlayerDespawnListener> despawnListeners = new FastList<PlayerDespawnListener>().shared();
 	public static final FastList<HennaListener> hennaListeners = new FastList<HennaListener>().shared();
@@ -657,8 +653,7 @@ public final class L2PcInstance extends L2Playable
 	private PcWarehouse _warehouse;
 	private PcRefund _refund;
 	
-	/** The Private Store type of the L2PcInstance (STORE_PRIVATE_NONE=0, STORE_PRIVATE_SELL=1, sellmanage=2, STORE_PRIVATE_BUY=3, buymanage=4, STORE_PRIVATE_MANUFACTURE=5) */
-	private int _privatestore;
+	private PrivateStoreType _privateStoreType = PrivateStoreType.NONE;
 	
 	private TradeList _activeTradeList;
 	private ItemContainer _activeWarehouse;
@@ -1426,7 +1421,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean isInStoreMode()
 	{
-		return (getPrivateStoreType() > L2PcInstance.STORE_PRIVATE_NONE);
+		return getPrivateStoreType() != PrivateStoreType.NONE;
 	}
 	
 	public boolean isInCraftMode()
@@ -4894,15 +4889,15 @@ public final class L2PcInstance extends L2Playable
 			L2PcInstance temp = (L2PcInstance) target;
 			sendPacket(ActionFailed.STATIC_PACKET);
 			
-			if ((temp.getPrivateStoreType() == STORE_PRIVATE_SELL) || (temp.getPrivateStoreType() == STORE_PRIVATE_PACKAGE_SELL))
+			if ((temp.getPrivateStoreType() == PrivateStoreType.SELL) || (temp.getPrivateStoreType() == PrivateStoreType.PACKAGE_SELL))
 			{
 				sendPacket(new PrivateStoreListSell(this, temp));
 			}
-			else if (temp.getPrivateStoreType() == STORE_PRIVATE_BUY)
+			else if (temp.getPrivateStoreType() == PrivateStoreType.BUY)
 			{
 				sendPacket(new PrivateStoreListBuy(this, temp));
 			}
-			else if (temp.getPrivateStoreType() == STORE_PRIVATE_MANUFACTURE)
+			else if (temp.getPrivateStoreType() == PrivateStoreType.MANUFACTURE)
 			{
 				sendPacket(new RecipeShopSellList(this, temp));
 			}
@@ -5168,7 +5163,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			for (L2Character cha : getKnownList().getKnownCharacters())
 			{
-				if (cha.isPlayer() && (((L2PcInstance) cha).getPrivateStoreType() != 0))
+				if (cha.isPlayer() && (((L2PcInstance) cha).getPrivateStoreType() != PrivateStoreType.NONE))
 				{
 					if (Util.checkIfInRange(cha.getMinShopDistancePlayer(), this, cha, true))
 					{
@@ -5186,17 +5181,17 @@ public final class L2PcInstance extends L2Playable
 		// Player shouldn't be able to set stores if he/she is alike dead (dead or fake death)
 		if (canOpenPrivateStore())
 		{
-			if ((getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_BUY) || (getPrivateStoreType() == (L2PcInstance.STORE_PRIVATE_BUY + 1)))
+			if ((getPrivateStoreType() == PrivateStoreType.BUY) || (getPrivateStoreType() == PrivateStoreType.BUY_MANAGE))
 			{
-				setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+				setPrivateStoreType(PrivateStoreType.NONE);
 			}
-			if (getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_NONE)
+			if (getPrivateStoreType() == PrivateStoreType.NONE)
 			{
 				if (isSitting())
 				{
 					standUp();
 				}
-				setPrivateStoreType(L2PcInstance.STORE_PRIVATE_BUY + 1);
+				setPrivateStoreType(PrivateStoreType.BUY_MANAGE);
 				sendPacket(new PrivateStoreManageListBuy(this));
 			}
 		}
@@ -5215,18 +5210,18 @@ public final class L2PcInstance extends L2Playable
 		// Player shouldn't be able to set stores if he/she is alike dead (dead or fake death)
 		if (canOpenPrivateStore())
 		{
-			if ((getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_SELL) || (getPrivateStoreType() == (L2PcInstance.STORE_PRIVATE_SELL + 1)) || (getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_PACKAGE_SELL))
+			if ((getPrivateStoreType() == PrivateStoreType.SELL) || (getPrivateStoreType() == PrivateStoreType.SELL_MANAGE) || (getPrivateStoreType() == PrivateStoreType.PACKAGE_SELL))
 			{
-				setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+				setPrivateStoreType(PrivateStoreType.NONE);
 			}
 			
-			if (getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_NONE)
+			if (getPrivateStoreType() == PrivateStoreType.NONE)
 			{
 				if (isSitting())
 				{
 					standUp();
 				}
-				setPrivateStoreType(L2PcInstance.STORE_PRIVATE_SELL + 1);
+				setPrivateStoreType(PrivateStoreType.SELL_MANAGE);
 				sendPacket(new PrivateStoreManageListSell(this, isPackageSale));
 			}
 		}
@@ -6730,13 +6725,13 @@ public final class L2PcInstance extends L2Playable
 	 * <li>3 : STORE_PRIVATE_BUY</li><BR>
 	 * <li>4 : buymanage</li><BR>
 	 * <li>5 : STORE_PRIVATE_MANUFACTURE</li><BR>
-	 * @param type
+	 * @param privateStoreType
 	 */
-	public void setPrivateStoreType(int type)
+	public void setPrivateStoreType(PrivateStoreType privateStoreType)
 	{
-		_privatestore = type;
+		_privateStoreType = privateStoreType;
 		
-		if (Config.OFFLINE_DISCONNECT_FINISHED && (_privatestore == STORE_PRIVATE_NONE) && ((getClient() == null) || getClient().isDetached()))
+		if (Config.OFFLINE_DISCONNECT_FINISHED && (privateStoreType == PrivateStoreType.NONE) && ((getClient() == null) || getClient().isDetached()))
 		{
 			deleteMe();
 		}
@@ -6749,9 +6744,9 @@ public final class L2PcInstance extends L2Playable
 	 * <li>5 : STORE_PRIVATE_MANUFACTURE</li><BR>
 	 * @return the Private Store type of the L2PcInstance.
 	 */
-	public int getPrivateStoreType()
+	public PrivateStoreType getPrivateStoreType()
 	{
-		return _privatestore;
+		return _privateStoreType;
 	}
 	
 	/**
@@ -9226,6 +9221,11 @@ public final class L2PcInstance extends L2Playable
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return false;
 			}
+			else if (isSkillDisabled(skill))
+			{
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return false;
+			}
 			
 			// Create a new SkillDat object and queue it in the player _queuedSkill
 			setQueuedSkill(skill, forceUse, dontMove);
@@ -10817,7 +10817,7 @@ public final class L2PcInstance extends L2Playable
 			_noDuelReason = SystemMessageId.C1_CANNOT_DUEL_BECAUSE_C1_IS_IN_A_CHAOTIC_STATE;
 			return false;
 		}
-		if (getPrivateStoreType() != STORE_PRIVATE_NONE)
+		if (getPrivateStoreType() != PrivateStoreType.NONE)
 		{
 			_noDuelReason = SystemMessageId.C1_CANNOT_DUEL_BECAUSE_C1_IS_CURRENTLY_ENGAGED_IN_A_PRIVATE_STORE_OR_MANUFACTURE;
 			return false;
@@ -14636,16 +14636,16 @@ public final class L2PcInstance extends L2Playable
 		
 		switch (getPrivateStoreType())
 		{
-			case L2PcInstance.STORE_PRIVATE_SELL:
+			case SELL:
 				activeChar.sendPacket(new PrivateStoreMsgSell(this));
 				break;
-			case L2PcInstance.STORE_PRIVATE_PACKAGE_SELL:
+			case PACKAGE_SELL:
 				activeChar.sendPacket(new ExPrivateStoreSetWholeMsg(this));
 				break;
-			case L2PcInstance.STORE_PRIVATE_BUY:
+			case BUY:
 				activeChar.sendPacket(new PrivateStoreMsgBuy(this));
 				break;
-			case L2PcInstance.STORE_PRIVATE_MANUFACTURE:
+			case MANUFACTURE:
 				activeChar.sendPacket(new RecipeShopMsg(this));
 				break;
 		}
@@ -15299,11 +15299,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean canMakeSocialAction()
 	{
-		if ((getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_NONE) && (getActiveRequester() == null) && !isAlikeDead() && (!isAllSkillsDisabled() || isInDuel()) && !isCastingNow() && !isCastingSimultaneouslyNow() && (getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE) && !AttackStanceTaskManager.getInstance().hasAttackStanceTask(this) && !isInOlympiadMode())
-		{
-			return true;
-		}
-		return false;
+		return ((getPrivateStoreType() == PrivateStoreType.NONE) && (getActiveRequester() == null) && !isAlikeDead() && !isAllSkillsDisabled() && !isInDuel() && !isCastingNow() && !isCastingSimultaneouslyNow() && (getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE) && !AttackStanceTaskManager.getInstance().hasAttackStanceTask(this) && !isInOlympiadMode());
 	}
 	
 	public void setMultiSocialAction(int id, int targetId)
@@ -16582,7 +16578,7 @@ public final class L2PcInstance extends L2Playable
 	// DUPE items fix
 	public void resetOfflineShop()
 	{
-		setPrivateStoreType(0);
+		setPrivateStoreType(PrivateStoreType.NONE);
 		isInCraftMode(false);
 	}
 	

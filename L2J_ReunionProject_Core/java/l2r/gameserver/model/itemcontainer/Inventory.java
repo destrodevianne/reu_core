@@ -31,6 +31,7 @@ import l2r.gameserver.datatables.ArmorSetsData;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.model.L2ArmorSet;
@@ -1381,7 +1382,7 @@ public abstract class Inventory extends ItemContainer
 	 */
 	public void equipItem(L2ItemInstance item)
 	{
-		if ((getOwner() instanceof L2PcInstance) && (((L2PcInstance) getOwner()).getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE))
+		if ((getOwner() instanceof L2PcInstance) && (((L2PcInstance) getOwner()).getPrivateStoreType() != PrivateStoreType.NONE))
 		{
 			return;
 		}

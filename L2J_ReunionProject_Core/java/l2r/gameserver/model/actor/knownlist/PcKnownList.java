@@ -19,6 +19,7 @@
 package l2r.gameserver.model.actor.knownlist;
 
 import l2r.Config;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
@@ -69,7 +70,7 @@ public class PcKnownList extends PlayableKnownList
 		
 		if (getActiveChar().isHideStores() && (object instanceof L2PcInstance))
 		{
-			if (object.getActingPlayer().getClient().isDetached() || (object.getActingPlayer().getPrivateStoreType() > 0))
+			if (object.getActingPlayer().getClient().isDetached() || (object.getActingPlayer().getPrivateStoreType() != PrivateStoreType.NONE))
 			{
 				return false;
 			}

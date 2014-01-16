@@ -25,6 +25,7 @@ import java.util.List;
 
 import l2r.Config;
 import l2r.gameserver.datatables.RecipeData;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.L2ManufactureItem;
 import l2r.gameserver.model.L2ManufactureList;
@@ -81,7 +82,7 @@ public final class RequestRecipeShopListSet extends L2GameClientPacket
 		
 		if (_items == null)
 		{
-			player.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+			player.setPrivateStoreType(PrivateStoreType.NONE);
 			player.broadcastUserInfo();
 			return;
 		}
@@ -130,7 +131,7 @@ public final class RequestRecipeShopListSet extends L2GameClientPacket
 		createList.setStoreName(player.getCreateList() != null ? player.getCreateList().getStoreName() : "");
 		player.setCreateList(createList);
 		
-		player.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_MANUFACTURE);
+		player.setPrivateStoreType(PrivateStoreType.MANUFACTURE);
 		player.sitDown();
 		player.broadcastUserInfo();
 		player.sendPacket(new RecipeShopMsg(player));

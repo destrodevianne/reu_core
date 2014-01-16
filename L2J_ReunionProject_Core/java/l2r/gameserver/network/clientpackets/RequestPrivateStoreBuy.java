@@ -21,6 +21,7 @@ package l2r.gameserver.network.clientpackets;
 import static l2r.gameserver.model.actor.L2Npc.INTERACTION_DISTANCE;
 import javolution.util.FastSet;
 import l2r.Config;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.ItemRequest;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
@@ -112,7 +113,7 @@ public final class RequestPrivateStoreBuy extends L2GameClientPacket
 			return;
 		}
 		
-		if (!((storePlayer.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_SELL) || (storePlayer.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_PACKAGE_SELL)))
+		if (!((storePlayer.getPrivateStoreType() == PrivateStoreType.SELL) || (storePlayer.getPrivateStoreType() == PrivateStoreType.PACKAGE_SELL)))
 		{
 			return;
 		}
@@ -130,7 +131,7 @@ public final class RequestPrivateStoreBuy extends L2GameClientPacket
 			return;
 		}
 		
-		if (storePlayer.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_PACKAGE_SELL)
+		if (storePlayer.getPrivateStoreType() == PrivateStoreType.PACKAGE_SELL)
 		{
 			if (storeList.getItemCount() > _items.size())
 			{
@@ -153,7 +154,7 @@ public final class RequestPrivateStoreBuy extends L2GameClientPacket
 		
 		if (storeList.getItemCount() == 0)
 		{
-			storePlayer.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+			storePlayer.setPrivateStoreType(PrivateStoreType.NONE);
 			storePlayer.broadcastUserInfo();
 		}
 	}

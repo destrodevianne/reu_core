@@ -31,6 +31,7 @@ import l2r.gameserver.datatables.SummonSkillsTable;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MountType;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.instancemanager.AirShipManager;
 import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.L2Object;
@@ -261,9 +262,9 @@ public final class RequestActionUse extends L2GameClientPacket
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
 				}
-				if (activeChar.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE)
+				if (activeChar.getPrivateStoreType() != PrivateStoreType.NONE)
 				{
-					activeChar.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+					activeChar.setPrivateStoreType(PrivateStoreType.NONE);
 					activeChar.broadcastUserInfo();
 				}
 				if (activeChar.isSitting())
@@ -325,9 +326,9 @@ public final class RequestActionUse extends L2GameClientPacket
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
 				}
-				if (activeChar.getPrivateStoreType() != 0)
+				if (activeChar.getPrivateStoreType() != PrivateStoreType.NONE)
 				{
-					activeChar.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+					activeChar.setPrivateStoreType(PrivateStoreType.NONE);
 					activeChar.broadcastUserInfo();
 				}
 				if (activeChar.isSitting())

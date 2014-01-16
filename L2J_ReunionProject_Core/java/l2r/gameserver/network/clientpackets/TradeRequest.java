@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.datatables.BotReportTable;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.BlockList;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
@@ -126,7 +127,7 @@ public final class TradeRequest extends L2GameClientPacket
 			return;
 		}
 		
-		if ((player.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE) || (partner.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE))
+		if ((player.getPrivateStoreType() != PrivateStoreType.NONE) || (partner.getPrivateStoreType() != PrivateStoreType.NONE))
 		{
 			player.sendPacket(SystemMessageId.CANNOT_TRADE_DISCARD_DROP_ITEM_WHILE_IN_SHOPMODE);
 			return;

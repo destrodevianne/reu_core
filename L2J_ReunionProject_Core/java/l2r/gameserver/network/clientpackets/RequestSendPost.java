@@ -23,6 +23,7 @@ import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.model.BlockList;
@@ -147,7 +148,7 @@ public final class RequestSendPost extends L2GameClientPacket
 			return;
 		}
 		
-		if (activeChar.getPrivateStoreType() > L2PcInstance.STORE_PRIVATE_NONE)
+		if (activeChar.getPrivateStoreType() != PrivateStoreType.NONE)
 		{
 			activeChar.sendPacket(SystemMessageId.CANT_FORWARD_PRIVATE_STORE);
 			return;

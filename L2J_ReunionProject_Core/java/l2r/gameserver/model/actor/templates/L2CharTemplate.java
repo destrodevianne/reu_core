@@ -51,7 +51,7 @@ public class L2CharTemplate
 	private final int _baseMAtkSpd;
 	private final float _baseMReuseRate;
 	private final int _baseShldDef;
-	private final int _baseAtkRange;
+	private final int _baseAttackRange;
 	private final int _baseShldRate;
 	private final int _baseCritRate;
 	private final int _baseMCritRate;
@@ -126,7 +126,7 @@ public class L2CharTemplate
 		_baseMAtkSpd = set.getInteger("baseMAtkSpd", 333);
 		_baseMReuseRate = set.getFloat("baseMReuseDelay", 1.f);
 		_baseShldDef = set.getInteger("baseShldDef", 0);
-		_baseAtkRange = set.getInteger("baseAtkRange", 0);
+		_baseAttackRange = set.getInteger("baseAtkRange", 0);
 		_baseShldRate = set.getInteger("baseShldRate", 0);
 		_baseCritRate = set.getInteger("baseCritRate", 4);
 		_baseMCritRate = set.getInteger("baseMCritRate", 0);
@@ -429,11 +429,11 @@ public class L2CharTemplate
 	}
 	
 	/**
-	 * @return the baseAtkRange
+	 * @return the baseAttackRange
 	 */
-	public int getBaseAtkRange()
+	public int getBaseAttackRange()
 	{
-		return _baseAtkRange;
+		return _baseAttackRange;
 	}
 	
 	/**

@@ -25,7 +25,6 @@ import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2WeaponType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Calculator;
 import l2r.gameserver.model.stats.Env;
@@ -277,7 +276,7 @@ public class CharStat
 			return (int) calcStat(Stats.MAGIC_ATTACK_RANGE, skill.getCastRange(), null, skill);
 		}
 		
-		return _activeChar.getTemplate().getBaseAtkRange();
+		return _activeChar.getTemplate().getBaseAttackRange();
 	}
 	
 	public int getMaxCp()
@@ -680,24 +679,37 @@ public class CharStat
 	 */
 	public final int getPhysicalAttackRange()
 	{
-		if (_activeChar == null)
+		final L2Weapon weapon = _activeChar.getActiveWeaponItem();
+		int baseAttackRange;
+		if (_activeChar.isTransformed() && _activeChar.isPlayer())
 		{
-			return 1;
+			baseAttackRange = _activeChar.getTransformation().getBaseAttackRange(_activeChar.getActingPlayer());
+		}
+		else if (weapon != null)
+		{
+			baseAttackRange = weapon.getBaseAttackRange();
+		}
+		else
+		{
+			baseAttackRange = _activeChar.getTemplate().getBaseAttackRange();
 		}
 		
-		if (_activeChar.isTransformed())
+		return (int) calcStat(Stats.POWER_ATTACK_RANGE, baseAttackRange, null, null);
+	}
+	
+	public int getPhysicalAttackAngle()
+	{
+		final L2Weapon weapon = _activeChar.getActiveWeaponItem();
+		final int baseAttackAngle;
+		if (weapon != null)
 		{
-			return _activeChar.getTemplate().getBaseAtkRange();
+			baseAttackAngle = weapon.getBaseAttackAngle();
 		}
-		// Polearm handled here for now. Basically L2PcInstance could have a function
-		// similar to FuncBowAtkRange and NPC are defined in DP.
-		L2Weapon weaponItem = _activeChar.getActiveWeaponItem();
-		if ((weaponItem != null) && (weaponItem.getItemType() == L2WeaponType.POLE))
+		else
 		{
-			return (int) calcStat(Stats.POWER_ATTACK_RANGE, 66);
+			baseAttackAngle = 120;
 		}
-		
-		return (int) calcStat(Stats.POWER_ATTACK_RANGE, _activeChar.getTemplate().getBaseAtkRange());
+		return baseAttackAngle;
 	}
 	
 	/**
