@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.enums.ItemLocation;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.model.L2World;
@@ -93,7 +94,7 @@ public final class RequestCancelPostAttachment extends L2GameClientPacket
 			return;
 		}
 		
-		if (activeChar.getPrivateStoreType() > L2PcInstance.STORE_PRIVATE_NONE)
+		if (activeChar.getPrivateStoreType() != PrivateStoreType.NONE)
 		{
 			activeChar.sendPacket(SystemMessageId.CANT_CANCEL_PRIVATE_STORE);
 			return;

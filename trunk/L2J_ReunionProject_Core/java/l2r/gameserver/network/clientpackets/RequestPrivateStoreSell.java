@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.actor.L2Npc.INTERACTION_DISTANCE;
 import l2r.Config;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.ItemRequest;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.TradeList;
@@ -106,7 +107,7 @@ public final class RequestPrivateStoreSell extends L2GameClientPacket
 			return;
 		}
 		
-		if (storePlayer.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_BUY)
+		if (storePlayer.getPrivateStoreType() != PrivateStoreType.BUY)
 		{
 			return;
 		}
@@ -138,7 +139,7 @@ public final class RequestPrivateStoreSell extends L2GameClientPacket
 		
 		if (storeList.getItemCount() == 0)
 		{
-			storePlayer.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+			storePlayer.setPrivateStoreType(PrivateStoreType.NONE);
 			storePlayer.broadcastUserInfo();
 		}
 	}

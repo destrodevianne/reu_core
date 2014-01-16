@@ -30,14 +30,15 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.Announcements;
-import l2r.gameserver.SevenSigns;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.SiegeScheduleData;
 import l2r.gameserver.enums.EventStage;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.SiegeClanType;
 import l2r.gameserver.enums.TeleportWhereType;
+import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.MercTicketManager;
 import l2r.gameserver.instancemanager.SiegeGuardManager;
 import l2r.gameserver.instancemanager.SiegeManager;
@@ -46,6 +47,7 @@ import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2SiegeClan;
 import l2r.gameserver.model.L2Spawn;
+import l2r.gameserver.model.SiegeScheduleDate;
 import l2r.gameserver.model.TowerSpawn;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2ControlTowerInstance;
@@ -59,6 +61,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.scripting.scriptengine.events.SiegeEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.events.SiegeListener;
+import l2r.gameserver.util.Broadcast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1274,14 +1277,6 @@ public class Siege implements Siegable
 			setNextSiegeDate();
 		}
 		
-		if (!SevenSigns.getInstance().isDateInSealValidPeriod(getCastle().getSiegeDate()))
-		{
-			// no sieges in Quest period! reschedule it to the next SealValidationPeriod
-			// This is usually caused by server being down
-			corrected = true;
-			setNextSiegeDate();
-		}
-		
 		if (corrected)
 		{
 			saveSiegeDate();
@@ -1492,25 +1487,34 @@ public class Siege implements Siegable
 	/** Set the date for the next siege. */
 	private void setNextSiegeDate()
 	{
-		while (getCastle().getSiegeDate().getTimeInMillis() < Calendar.getInstance().getTimeInMillis())
+		final Calendar cal = getCastle().getSiegeDate();
+		if (cal.getTimeInMillis() < System.currentTimeMillis())
 		{
-			if ((getCastle().getSiegeDate().get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) && (getCastle().getSiegeDate().get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY))
-			{
-				getCastle().getSiegeDate().set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-			}
-			// from CT2.3 Castle sieges are on Sunday, but if server admins allow to set day of the siege than sieges can occur on Saturdays as well
-			if ((getCastle().getSiegeDate().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))
-			{
-				getCastle().getSiegeDate().set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-			}
-			// set the next siege day to the next weekend
-			getCastle().getSiegeDate().add(Calendar.DAY_OF_MONTH, 7);
+			cal.setTimeInMillis(System.currentTimeMillis());
 		}
 		
-		if (!SevenSigns.getInstance().isDateInSealValidPeriod(getCastle().getSiegeDate()))
+		for (SiegeScheduleDate holder : SiegeScheduleData.getInstance().getScheduleDates())
 		{
-			getCastle().getSiegeDate().add(Calendar.DAY_OF_MONTH, 7);
+			cal.set(Calendar.DAY_OF_WEEK, holder.getDay());
+			cal.set(Calendar.HOUR_OF_DAY, holder.getHour());
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			if (cal.before(Calendar.getInstance()))
+			{
+				cal.add(Calendar.WEEK_OF_YEAR, 2);
+			}
+			
+			if (CastleManager.getInstance().getSiegeDates(cal.getTimeInMillis()) < holder.getMaxConcurrent())
+			{
+				CastleManager.getInstance().registerSiegeDate(getCastle().getResidenceId(), cal.getTimeInMillis());
+				break;
+			}
 		}
+		
+		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_ANNOUNCED_SIEGE_TIME);
+		sm.addCastleId(getCastle().getResidenceId());
+		Broadcast.toAllOnlinePlayers(sm);
+		
 		_isRegistrationOver = false; // Allow registration for next siege
 	}
 	

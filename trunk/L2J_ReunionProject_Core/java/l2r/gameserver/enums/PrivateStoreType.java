@@ -16,40 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.skills.funcs.formulas;
-
-import l2r.gameserver.model.conditions.ConditionUsingItemType;
-import l2r.gameserver.model.items.type.L2WeaponType;
-import l2r.gameserver.model.skills.funcs.Func;
-import l2r.gameserver.model.stats.Env;
-import l2r.gameserver.model.stats.Stats;
+package l2r.gameserver.enums;
 
 /**
- * @author UnAfraid
+ * @author Nos
  */
-public class FuncBowAtkRange extends Func
+public enum PrivateStoreType
 {
-	private static final FuncBowAtkRange _fbar_instance = new FuncBowAtkRange();
+	NONE(0),
+	SELL(1),
+	SELL_MANAGE(2),
+	BUY(3),
+	BUY_MANAGE(4),
+	MANUFACTURE(5),
+	PACKAGE_SELL(8);
 	
-	public static Func getInstance()
+	private int _id;
+	
+	private PrivateStoreType(int id)
 	{
-		return _fbar_instance;
+		_id = id;
 	}
 	
-	private FuncBowAtkRange()
+	public int getId()
 	{
-		super(Stats.POWER_ATTACK_RANGE, 0x10, null);
-		setCondition(new ConditionUsingItemType(L2WeaponType.BOW.mask()));
+		return _id;
 	}
 	
-	@Override
-	public void calc(Env env)
+	public static PrivateStoreType findById(int id)
 	{
-		if (!cond.test(env))
+		for (PrivateStoreType privateStoreType : values())
 		{
-			return;
+			if (privateStoreType.getId() == id)
+			{
+				return privateStoreType;
+			}
 		}
-		// default is 40 and with bow should be 500
-		env.addValue(460);
+		return null;
 	}
 }

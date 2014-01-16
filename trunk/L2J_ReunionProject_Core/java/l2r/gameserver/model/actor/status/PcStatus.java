@@ -20,6 +20,7 @@ package l2r.gameserver.model.actor.status;
 
 import l2r.Config;
 import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.instancemanager.DuelManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
@@ -79,7 +80,7 @@ public class PcStatus extends PlayableStatus
 		}
 		
 		// If OFFLINE_MODE_NO_DAMAGE is enabled and player is offline and he is in store/craft mode, no damage is taken.
-		if (Config.OFFLINE_MODE_NO_DAMAGE && (getActiveChar().getClient() != null) && getActiveChar().getClient().isDetached() && ((Config.OFFLINE_TRADE_ENABLE && ((getActiveChar().getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_SELL) || (getActiveChar().getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_BUY))) || (Config.OFFLINE_CRAFT_ENABLE && (getActiveChar().isInCraftMode() || (getActiveChar().getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_MANUFACTURE)))))
+		if (Config.OFFLINE_MODE_NO_DAMAGE && (getActiveChar().getClient() != null) && getActiveChar().getClient().isDetached() && ((Config.OFFLINE_TRADE_ENABLE && ((getActiveChar().getPrivateStoreType() == PrivateStoreType.SELL) || (getActiveChar().getPrivateStoreType() == PrivateStoreType.BUY))) || (Config.OFFLINE_CRAFT_ENABLE && (getActiveChar().isInCraftMode() || (getActiveChar().getPrivateStoreType() == PrivateStoreType.MANUFACTURE)))))
 		{
 			return;
 		}
@@ -95,7 +96,7 @@ public class PcStatus extends PlayableStatus
 			// Attacked players in craft/shops stand up.
 			if (getActiveChar().isInCraftMode() || getActiveChar().isInStoreMode())
 			{
-				getActiveChar().setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+				getActiveChar().setPrivateStoreType(PrivateStoreType.NONE);
 				getActiveChar().standUp();
 				getActiveChar().broadcastUserInfo();
 			}

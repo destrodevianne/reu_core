@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.RecipeShopItemInfo;
@@ -50,7 +51,7 @@ public final class RequestRecipeShopMakeInfo extends L2GameClientPacket
 		}
 		
 		final L2PcInstance shop = L2World.getInstance().getPlayer(_playerObjectId);
-		if ((shop == null) || (shop.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_MANUFACTURE))
+		if ((shop == null) || (shop.getPrivateStoreType() != PrivateStoreType.MANUFACTURE))
 		{
 			return;
 		}

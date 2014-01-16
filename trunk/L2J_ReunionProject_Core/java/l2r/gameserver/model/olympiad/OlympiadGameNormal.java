@@ -172,7 +172,7 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 	protected final boolean makeCompetitionStart()
 	{
 		// Dual Box Check pcIp based in Olys.
-		if (PcDualBoxCheck.isDualBox(_playerOne.getPlayer(), _playerTwo.getPlayer()))
+		if (Config.ENABLE_OLY_ANTIFEED && PcDualBoxCheck.isDualBox(_playerOne.getPlayer(), _playerTwo.getPlayer()))
 		{
 			_playerOne.getPlayer().sendMessage("Competiton canceled, Dual Box detected!");
 			_playerTwo.getPlayer().sendMessage("Competiton canceled, Dual Box detected!");

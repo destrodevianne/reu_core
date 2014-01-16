@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.SevenSignsFestival;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.model.L2Party;
@@ -79,7 +80,7 @@ public final class RequestRestart extends L2GameClientPacket
 			return;
 		}
 		
-		if (player.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE)
+		if (player.getPrivateStoreType() != PrivateStoreType.NONE)
 		{
 			player.sendMessage("Cannot restart while trading");
 			sendPacket(RestartResponse.valueOf(false));

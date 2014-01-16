@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.enums.PcRace;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.PcInventory;
@@ -73,7 +74,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 			return;
 		}
 		
-		if ((activeChar.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE) || activeChar.isInCrystallize())
+		if ((activeChar.getPrivateStoreType() != PrivateStoreType.NONE) || activeChar.isInCrystallize())
 		{
 			activeChar.sendPacket(SystemMessageId.CANNOT_TRADE_DISCARD_DROP_ITEM_WHILE_IN_SHOPMODE);
 			return;

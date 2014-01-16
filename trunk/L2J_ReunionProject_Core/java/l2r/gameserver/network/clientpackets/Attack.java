@@ -19,6 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.enums.PcCondOverride;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -123,7 +124,7 @@ public final class Attack extends L2GameClientPacket
 		}
 		else
 		{
-			if ((target.getObjectId() != activeChar.getObjectId()) && (activeChar.getPrivateStoreType() == L2PcInstance.STORE_PRIVATE_NONE) && (activeChar.getActiveRequester() == null))
+			if ((target.getObjectId() != activeChar.getObjectId()) && (activeChar.getPrivateStoreType() == PrivateStoreType.NONE) && (activeChar.getActiveRequester() == null))
 			{
 				target.onForcedAttack(activeChar);
 			}

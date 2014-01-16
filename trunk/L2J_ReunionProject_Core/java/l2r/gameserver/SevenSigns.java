@@ -34,15 +34,12 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.CastleManager;
-import l2r.gameserver.instancemanager.QuestManager;
-import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.model.AutoSpawnHandler;
 import l2r.gameserver.model.AutoSpawnHandler.AutoSpawnInstance;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SSQInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
@@ -1534,17 +1531,12 @@ public class SevenSigns
 					
 					// Perform initial Seal Validation set up.
 					initializeSeals();
+					
 					// Buff/Debuff members of the event when Seal of Strife captured.
 					giveCPMult(getSealOwner(SEAL_STRIFE));
+					
 					// Send message that Seal Validation has begun.
 					sendMessageToAll(SystemMessageId.SEAL_VALIDATION_PERIOD_BEGUN);
-					
-					// Change next Territory War date
-					Quest twQuest = QuestManager.getInstance().getQuest(TerritoryWarManager.qn);
-					if (twQuest != null)
-					{
-						twQuest.startQuestTimer("setNextTWDate", 30000, null, null);
-					}
 					
 					_log.info("SevenSigns: The " + getCabalName(_previousWinner) + " have won the competition with " + getCurrentScore(_previousWinner) + " points!");
 					break;

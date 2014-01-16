@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -52,9 +53,9 @@ public final class RequestRecipeShopManageList extends L2GameClientPacket
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		if (player.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE)
+		if (player.getPrivateStoreType() != PrivateStoreType.NONE)
 		{
-			player.setPrivateStoreType(L2PcInstance.STORE_PRIVATE_NONE);
+			player.setPrivateStoreType(PrivateStoreType.NONE);
 			player.broadcastUserInfo();
 			if (player.isSitting())
 			{

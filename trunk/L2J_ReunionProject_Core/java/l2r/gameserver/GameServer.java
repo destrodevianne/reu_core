@@ -72,6 +72,7 @@ import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.ProductItemData;
 import l2r.gameserver.datatables.RecipeData;
 import l2r.gameserver.datatables.SecondaryAuthData;
+import l2r.gameserver.datatables.SiegeScheduleData;
 import l2r.gameserver.datatables.SkillLearnData;
 import l2r.gameserver.datatables.SkillTable;
 import l2r.gameserver.datatables.SkillTreesData;
@@ -283,6 +284,7 @@ public class GameServer
 		EventDroplist.getInstance();
 		
 		printSection("Siege");
+		SiegeScheduleData.getInstance();
 		SiegeManager.getInstance().getSieges();
 		FortSiegeManager.getInstance();
 		TerritoryWarManager.getInstance();
@@ -301,6 +303,9 @@ public class GameServer
 		{
 			_log.info("Olympiad is disable by config.");
 		}
+		
+		printSection("Seven Signs");
+		SevenSigns.getInstance();
 		
 		// Call to load caches
 		printSection("Cache");

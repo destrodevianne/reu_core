@@ -27,6 +27,7 @@ import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.PcRace;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
 import l2r.gameserver.instancemanager.FortSiegeManager;
@@ -124,7 +125,7 @@ public final class UseItem extends L2GameClientPacket
 			activeChar.cancelActiveTrade();
 		}
 		
-		if (activeChar.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE)
+		if (activeChar.getPrivateStoreType() != PrivateStoreType.NONE)
 		{
 			activeChar.sendPacket(SystemMessageId.CANNOT_TRADE_DISCARD_DROP_ITEM_WHILE_IN_SHOPMODE);
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);

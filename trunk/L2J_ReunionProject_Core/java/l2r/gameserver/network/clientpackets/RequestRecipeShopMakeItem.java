@@ -19,6 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.RecipeController;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.util.Util;
@@ -68,12 +69,12 @@ public final class RequestRecipeShopMakeItem extends L2GameClientPacket
 			return;
 		}
 		
-		if (activeChar.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE)
+		if (activeChar.getPrivateStoreType() != PrivateStoreType.NONE)
 		{
 			activeChar.sendMessage("You cannot create items while trading.");
 			return;
 		}
-		if (manufacturer.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_MANUFACTURE)
+		if (manufacturer.getPrivateStoreType() != PrivateStoreType.MANUFACTURE)
 		{
 			// activeChar.sendMessage("You cannot create items while trading.");
 			return;

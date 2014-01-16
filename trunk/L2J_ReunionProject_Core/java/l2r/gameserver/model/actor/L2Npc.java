@@ -35,6 +35,7 @@ import l2r.gameserver.datatables.NpcPersonalAIData;
 import l2r.gameserver.enums.AIType;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.enums.Team;
@@ -812,7 +813,7 @@ public class L2Npc extends L2Character
 		{
 			return false;
 		}
-		if (player.getPrivateStoreType() != L2PcInstance.STORE_PRIVATE_NONE)
+		if (player.getPrivateStoreType() != PrivateStoreType.NONE)
 		{
 			return false;
 		}
