@@ -51,8 +51,10 @@ import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.Location;
+import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
+import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -1372,6 +1374,16 @@ public class Quest extends ManagedScript implements IIdentifiable
 	}
 	
 	/**
+	 * @param mob
+	 * @param playable
+	 * @return {@code true} if npc can hate the playable, {@code false} otherwise.
+	 */
+	public boolean onNpcHate(L2Attackable mob, L2Playable playable)
+	{
+		return true;
+	}
+	
+	/**
 	 * Show an error message to the specified player.
 	 * @param player the player to whom to send the error (must be a GM)
 	 * @param t the {@link Throwable} to get the message/stacktrace from
@@ -2194,6 +2206,24 @@ public class Quest extends ManagedScript implements IIdentifiable
 	public void addRouteFinishedId(Collection<Integer> npcIds)
 	{
 		addEventId(QuestEventType.ON_ROUTE_FINISHED, npcIds);
+	}
+	
+	/**
+	 * Register onNpcHate trigger for NPC
+	 * @param npcIds
+	 */
+	public void addNpcHateId(int... npcIds)
+	{
+		addEventId(QuestEventType.ON_NPC_HATE, npcIds);
+	}
+	
+	/**
+	 * Register onNpcHate trigger for NPC
+	 * @param npcIds
+	 */
+	public void addNpcHateId(Collection<Integer> npcIds)
+	{
+		addEventId(QuestEventType.ON_NPC_HATE, npcIds);
 	}
 	
 	/**

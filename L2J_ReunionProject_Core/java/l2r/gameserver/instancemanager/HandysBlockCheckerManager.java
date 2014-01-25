@@ -18,10 +18,11 @@
  */
 package l2r.gameserver.instancemanager;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
@@ -55,7 +56,7 @@ public final class HandysBlockCheckerManager
 	private static final Map<Integer, Boolean> _arenaStatus = new HashMap<>();
 	
 	// Registration request penalty (10 seconds)
-	protected static List<Integer> _registrationPenalty = new ArrayList<>();
+	protected static Set<Integer> _registrationPenalty = Collections.synchronizedSet(new HashSet<Integer>());
 	
 	/**
 	 * Return the number of event-start votes for the specified arena id
@@ -232,12 +233,8 @@ public final class HandysBlockCheckerManager
 				holder.getEvent().endEventAbnormally();
 			}
 			
-			Integer objId = player.getObjectId();
-			if (!_registrationPenalty.contains(objId))
-			{
-				_registrationPenalty.add(objId);
-			}
-			schedulePenaltyRemoval(objId);
+			_registrationPenalty.add(player.getObjectId());
+			schedulePenaltyRemoval(player.getObjectId());
 		}
 	}
 	

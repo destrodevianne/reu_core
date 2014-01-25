@@ -308,7 +308,7 @@ public final class L2TeleporterInstance extends L2Npc
 					_log.info("Teleporting player " + player.getName() + " to new location: " + list.getX() + ":" + list.getY() + ":" + list.getZ());
 				}
 				
-				player.teleToLocation(list.getX(), list.getY(), list.getZ(), true);
+				player.teleToLocation(list.getX(), list.getY(), list.getZ(), false);
 			}
 		}
 		else

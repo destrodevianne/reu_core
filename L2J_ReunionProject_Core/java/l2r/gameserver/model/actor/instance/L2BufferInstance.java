@@ -118,7 +118,16 @@ public class L2BufferInstance extends L2Npc
 		
 		else if (command.startsWith("saveProfile"))
 		{
-			JavaBufferBypass.callSaveProfile(player, subCommand[1], getObjectId());
+			try
+			{
+				JavaBufferBypass.callSaveProfile(player, subCommand[1], getObjectId());
+			}
+			catch (Exception e)
+			{
+				player.sendMessage("Please specify a valid profile name.");
+				BufferPacketSender.sendPacket(player, "555-11.htm", BufferPacketCategories.FILE, getObjectId());
+				return;
+			}
 		}
 		else if (command.startsWith("showAvaliable"))
 		{
