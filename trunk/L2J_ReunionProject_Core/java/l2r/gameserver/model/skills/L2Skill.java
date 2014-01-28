@@ -1390,7 +1390,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		else
 		{
 			// target is mob
-			if ((targetPlayer == null) && (target instanceof L2Attackable) && (caster instanceof L2Attackable))
+			if ((targetPlayer == null) && (target.isAttackable()) && (caster.isAttackable()))
 			{
 				String casterEnemyClan = ((L2Attackable) caster).getEnemyClan();
 				if ((casterEnemyClan == null) || casterEnemyClan.isEmpty())
@@ -1451,7 +1451,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 			return _emptyFunctionSet;
 		}
 		
-		if (!(player instanceof L2Playable) && !(player instanceof L2Attackable))
+		if (!(player instanceof L2Playable) && !(player.isAttackable()))
 		{
 			return _emptyFunctionSet;
 		}

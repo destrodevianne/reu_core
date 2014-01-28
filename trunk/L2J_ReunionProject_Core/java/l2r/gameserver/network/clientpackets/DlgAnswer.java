@@ -23,7 +23,6 @@ import java.util.List;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
-import l2r.gameserver.enums.PlayerAction;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -74,30 +73,30 @@ public final class DlgAnswer extends L2GameClientPacket
 		}
 		else if (_messageId == SystemMessageId.S1.getId())
 		{
-			if (activeChar.removeAction(PlayerAction.USER_ENGAGE))
+			String cmd = activeChar.getAdminConfirmCmd();
+			if (cmd == null)
 			{
 				if (Config.L2JMOD_ALLOW_WEDDING)
 				{
 					activeChar.engageAnswer(_answer);
 				}
 			}
-			else if (activeChar.removeAction(PlayerAction.ADMIN_COMMAND))
+			else
 			{
-				String _command = activeChar.getAdminConfirmCmd();
 				activeChar.setAdminConfirmCmd(null);
 				if (_answer == 0)
 				{
 					return;
 				}
-				String command = _command.split(" ")[0];
+				String command = cmd.split(" ")[0];
 				IAdminCommandHandler ach = AdminCommandHandler.getInstance().getHandler(command);
 				if (AdminTable.getInstance().hasAccess(command, activeChar.getAccessLevel()))
 				{
 					if (Config.GMAUDIT)
 					{
-						GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", _command, (activeChar.getTarget() != null ? activeChar.getTarget().getName() : "no-target"));
+						GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", cmd, (activeChar.getTarget() != null ? activeChar.getTarget().getName() : "no-target"));
 					}
-					ach.useAdminCommand(_command, activeChar);
+					ach.useAdminCommand(cmd, activeChar);
 				}
 			}
 		}

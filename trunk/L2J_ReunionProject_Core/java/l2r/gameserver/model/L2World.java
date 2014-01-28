@@ -117,11 +117,14 @@ public final class L2World
 	{
 		if (_allObjects.containsKey(object.getObjectId()))
 		{
-			_log.warn(getClass().getSimpleName() + ": Current object: " + object + " already exist in OID map!");
-			_log.warn(StringUtil.getTraceString(Thread.currentThread().getStackTrace()));
-			_log.warn(getClass().getSimpleName() + ": Previous object: " + _allObjects.get(object.getObjectId()) + " already exist in OID map!");
-			_log.warn(_allObjectsDebug.get(object.getObjectId()));
-			_log.warn("---------------------- End ---------------------");
+			if (Config.DEBUG)
+			{
+				_log.warn(getClass().getSimpleName() + ": Current object: " + object + " already exist in OID map!");
+				_log.warn(StringUtil.getTraceString(Thread.currentThread().getStackTrace()));
+				_log.warn(getClass().getSimpleName() + ": Previous object: " + _allObjects.get(object.getObjectId()) + " already exist in OID map!");
+				_log.warn(_allObjectsDebug.get(object.getObjectId()));
+				_log.warn("---------------------- End ---------------------");
+			}
 			return;
 		}
 		

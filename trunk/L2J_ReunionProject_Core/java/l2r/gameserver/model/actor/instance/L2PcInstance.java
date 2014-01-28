@@ -85,7 +85,6 @@ import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.enums.MountType;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.PcRace;
-import l2r.gameserver.enums.PlayerAction;
 import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.Sex;
@@ -905,8 +904,6 @@ public final class L2PcInstance extends L2Playable
 	
 	/** Map containing all custom skills of this player. */
 	private Map<Integer, L2Skill> _customSkills = null;
-	
-	private volatile int _actionMask;
 	
 	public void setPvpFlagLasts(long time)
 	{
@@ -4564,7 +4561,7 @@ public final class L2PcInstance extends L2Playable
 	public void enableSkill(L2Skill skill)
 	{
 		super.enableSkill(skill);
-		_reuseTimeStampsSkills.remove(skill.getReuseHashCode());
+		removeTimeStamp(skill);
 	}
 	
 	@Override
@@ -8299,19 +8296,11 @@ public final class L2PcInstance extends L2Playable
 						statement.setInt(4, effect.getCount());
 						statement.setInt(5, effect.getTime());
 						
-						if (_reuseTimeStampsSkills.containsKey(skill.getReuseHashCode()))
-						{
-							TimeStamp t = _reuseTimeStampsSkills.get(skill.getReuseHashCode());
-							statement.setLong(6, t.hasNotPassed() ? t.getReuse() : 0);
-							statement.setDouble(7, t.hasNotPassed() ? t.getStamp() : 0);
-						}
-						else
-						{
-							statement.setLong(6, 0);
-							statement.setDouble(7, 0);
-						}
+						final TimeStamp t = getSkillReuseTimeStamp(skill.getReuseHashCode());
+						statement.setLong(6, (t != null) && t.hasNotPassed() ? t.getReuse() : 0);
+						statement.setDouble(7, (t != null) && t.hasNotPassed() ? t.getStamp() : 0);
 						
-						statement.setInt(8, 0);
+						statement.setInt(8, 0); // Store type 0, active buffs/debuffs.
 						statement.setInt(9, getClassIndex());
 						statement.setInt(10, ++buff_index);
 						statement.execute();
@@ -8319,33 +8308,35 @@ public final class L2PcInstance extends L2Playable
 				}
 			}
 			
-			// Store the reuse delays of remaining skills which
-			// lost effect but still under reuse delay. 'restore_type' 1.
-			int hash;
-			TimeStamp t;
-			for (Entry<Integer, TimeStamp> ts : _reuseTimeStampsSkills.entrySet())
+			// Skills under reuse.
+			final Map<Integer, TimeStamp> reuseTimeStamps = getSkillReuseTimeStamps();
+			if (reuseTimeStamps != null)
 			{
-				hash = ts.getKey();
-				if (storedSkills.contains(hash))
+				for (Entry<Integer, TimeStamp> ts : reuseTimeStamps.entrySet())
 				{
-					continue;
-				}
-				t = ts.getValue();
-				if ((t != null) && t.hasNotPassed())
-				{
-					storedSkills.add(hash);
+					final int hash = ts.getKey();
+					if (storedSkills.contains(hash))
+					{
+						continue;
+					}
 					
-					statement.setInt(1, getObjectId());
-					statement.setInt(2, t.getSkillId());
-					statement.setInt(3, t.getSkillLvl());
-					statement.setInt(4, -1);
-					statement.setInt(5, -1);
-					statement.setLong(6, t.getReuse());
-					statement.setDouble(7, t.getStamp());
-					statement.setInt(8, 1);
-					statement.setInt(9, getClassIndex());
-					statement.setInt(10, ++buff_index);
-					statement.execute();
+					final TimeStamp t = ts.getValue();
+					if ((t != null) && t.hasNotPassed())
+					{
+						storedSkills.add(hash);
+						
+						statement.setInt(1, getObjectId());
+						statement.setInt(2, t.getSkillId());
+						statement.setInt(3, t.getSkillLvl());
+						statement.setInt(4, -1);
+						statement.setInt(5, -1);
+						statement.setLong(6, t.getReuse());
+						statement.setDouble(7, t.getStamp());
+						statement.setInt(8, 1); // Restore type 1, skill reuse.
+						statement.setInt(9, getClassIndex());
+						statement.setInt(10, ++buff_index);
+						statement.execute();
+					}
 				}
 			}
 			statement.close();
@@ -8365,16 +8356,20 @@ public final class L2PcInstance extends L2Playable
 			ps1.setInt(1, getObjectId());
 			ps1.execute();
 			
-			for (TimeStamp ts : _reuseTimeStampsItems.values())
+			final Map<Integer, TimeStamp> itemReuseTimeStamps = getItemReuseTimeStamps();
+			if (itemReuseTimeStamps != null)
 			{
-				if ((ts != null) && ts.hasNotPassed())
+				for (TimeStamp ts : itemReuseTimeStamps.values())
 				{
-					ps2.setInt(1, getObjectId());
-					ps2.setInt(2, ts.getId());
-					ps2.setInt(3, ts.getItemObjectId());
-					ps2.setLong(4, ts.getReuse());
-					ps2.setDouble(5, ts.getStamp());
-					ps2.execute();
+					if ((ts != null) && ts.hasNotPassed())
+					{
+						ps2.setInt(1, getObjectId());
+						ps2.setInt(2, ts.getItemId());
+						ps2.setInt(3, ts.getItemObjectId());
+						ps2.setLong(4, ts.getReuse());
+						ps2.setDouble(5, ts.getStamp());
+						ps2.execute();
+					}
 				}
 			}
 		}
@@ -9438,10 +9433,10 @@ public final class L2PcInstance extends L2Playable
 		// Check if this skill is enabled (ex : reuse time)
 		if (isSkillDisabled(skill))
 		{
-			SystemMessage sm = null;
-			if (_reuseTimeStampsSkills.containsKey(skill.getReuseHashCode()))
+			final SystemMessage sm;
+			if (hasSkillReuse(skill.getReuseHashCode()))
 			{
-				int remainingTime = (int) (_reuseTimeStampsSkills.get(skill.getReuseHashCode()).getRemaining() / 1000);
+				int remainingTime = (int) (getSkillRemainingReuseTime(skill.getReuseHashCode()) / 1000);
 				int hours = remainingTime / 3600;
 				int minutes = (remainingTime % 3600) / 60;
 				int seconds = (remainingTime % 60);
@@ -9522,7 +9517,7 @@ public final class L2PcInstance extends L2Playable
 			}
 			
 			// Check if the target is attackable
-			if (!target.isAttackable() && !getAccessLevel().allowPeaceAttack())
+			if (!target.canBeAttacked() && !getAccessLevel().allowPeaceAttack())
 			{
 				// If target is not attackable, send a Server->Client packet ActionFailed
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -11251,7 +11246,8 @@ public final class L2PcInstance extends L2Playable
 			// 1. Call store() before modifying _classIndex to avoid skill effects rollover.
 			// 2. Register the correct _classId against applied 'classIndex'.
 			store(Config.SUBCLASS_STORE_SKILL_COOLTIME);
-			_reuseTimeStampsSkills.clear();
+			
+			resetTimeStamps();
 			
 			// clear charges
 			_charges.set(0);
@@ -11316,10 +11312,7 @@ public final class L2PcInstance extends L2Playable
 			regiveTemporarySkills();
 			
 			// Prevents some issues when changing between subclases that shares skills
-			if ((_disabledSkills != null) && !_disabledSkills.isEmpty())
-			{
-				_disabledSkills.clear();
-			}
+			resetDisabledSkills();
 			
 			restoreEffects();
 			updateEffectIcons();
@@ -13530,97 +13523,6 @@ public final class L2PcInstance extends L2Playable
 		}
 	}
 	
-	private final Map<Integer, TimeStamp> _reuseTimeStampsItems = new FastMap<>();
-	
-	@Override
-	public void addTimeStampItem(L2ItemInstance item, long reuse)
-	{
-		_reuseTimeStampsItems.put(item.getObjectId(), new TimeStamp(item, reuse));
-	}
-	
-	public void addTimeStampItem(L2ItemInstance item, long reuse, long systime)
-	{
-		_reuseTimeStampsItems.put(item.getObjectId(), new TimeStamp(item, reuse, systime));
-	}
-	
-	@Override
-	public long getItemRemainingReuseTime(int itemObjId)
-	{
-		if (!_reuseTimeStampsItems.containsKey(itemObjId))
-		{
-			return -1;
-		}
-		return _reuseTimeStampsItems.get(itemObjId).getRemaining();
-	}
-	
-	public long getReuseDelayOnGroup(int group)
-	{
-		if (group > 0)
-		{
-			for (TimeStamp ts : _reuseTimeStampsItems.values())
-			{
-				if ((ts.getSharedReuseGroup() == group) && ts.hasNotPassed())
-				{
-					return ts.getRemaining();
-				}
-			}
-		}
-		return 0;
-	}
-	
-	private final Map<Integer, TimeStamp> _reuseTimeStampsSkills = new FastMap<>();
-	
-	public Map<Integer, TimeStamp> getSkillReuseTimeStamps()
-	{
-		return _reuseTimeStampsSkills;
-	}
-	
-	@Override
-	public long getSkillRemainingReuseTime(int skillReuseHashId)
-	{
-		if (!_reuseTimeStampsSkills.containsKey(skillReuseHashId))
-		{
-			return -1;
-		}
-		return _reuseTimeStampsSkills.get(skillReuseHashId).getRemaining();
-	}
-	
-	public boolean hasSkillReuse(int skillReuseHashId)
-	{
-		if (!_reuseTimeStampsSkills.containsKey(skillReuseHashId))
-		{
-			return false;
-		}
-		return _reuseTimeStampsSkills.get(skillReuseHashId).hasNotPassed();
-	}
-	
-	public TimeStamp getSkillReuseTimeStamp(int skillReuseHashId)
-	{
-		return _reuseTimeStampsSkills.get(skillReuseHashId);
-	}
-	
-	/**
-	 * Index according to skill id the current timestamp of use.
-	 * @param skill
-	 * @param reuse delay
-	 */
-	@Override
-	public void addTimeStamp(L2Skill skill, long reuse)
-	{
-		_reuseTimeStampsSkills.put(skill.getReuseHashCode(), new TimeStamp(skill, reuse));
-	}
-	
-	/**
-	 * Index according to skill this TimeStamp instance for restoration purposes only.
-	 * @param skill
-	 * @param reuse
-	 * @param systime
-	 */
-	public void addTimeStamp(L2Skill skill, long reuse, long systime)
-	{
-		_reuseTimeStampsSkills.put(skill.getReuseHashCode(), new TimeStamp(skill, reuse, systime));
-	}
-	
 	@Override
 	public L2PcInstance getActingPlayer()
 	{
@@ -14963,43 +14865,6 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * @param act
-	 * @return {@code true} if action was added successfully, {@code false} otherwise.
-	 */
-	public boolean addAction(PlayerAction act)
-	{
-		if (!hasAction(act))
-		{
-			_actionMask |= act.getMask();
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * @param act
-	 * @return {@code true} if action was removed successfully, {@code false} otherwise.
-	 */
-	public boolean removeAction(PlayerAction act)
-	{
-		if (hasAction(act))
-		{
-			_actionMask &= ~act.getMask();
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * @param act
-	 * @return {@code true} if action is present, {@code false} otherwise.
-	 */
-	public boolean hasAction(PlayerAction act)
-	{
-		return (_actionMask & act.getMask()) == act.getMask();
-	}
-	
-	/**
 	 * @param z
 	 * @return true if character falling now on the start of fall return false for correct coord sync!
 	 */
@@ -15286,13 +15151,19 @@ public final class L2PcInstance extends L2Playable
 		
 		if (nextLevel == -1) // there is no lower skill
 		{
-			_log.info("Removing skill id " + id + " level " + getSkillLevel(id) + " from player " + this);
+			if (Config.DEBUG)
+			{
+				_log.info("Removing skill id " + id + " level " + getSkillLevel(id) + " from player " + this);
+			}
 			removeSkill(getSkills().get(id), true);
 		}
 		else
 		// replace with lower one
 		{
-			_log.info("Decreasing skill id " + id + " from " + getSkillLevel(id) + " to " + nextLevel + " for " + this);
+			if (Config.DEBUG)
+			{
+				_log.info("Decreasing skill id " + id + " from " + getSkillLevel(id) + " to " + nextLevel + " for " + this);
+			}
 			addSkill(SkillTable.getInstance().getInfo(id, nextLevel), true);
 		}
 	}

@@ -32,7 +32,6 @@ import l2r.gameserver.scripts.handlers.skillhandlers.Disablers;
 import l2r.gameserver.scripts.handlers.skillhandlers.Dummy;
 import l2r.gameserver.scripts.handlers.skillhandlers.Fishing;
 import l2r.gameserver.scripts.handlers.skillhandlers.FishingSkill;
-import l2r.gameserver.scripts.handlers.skillhandlers.GetPlayer;
 import l2r.gameserver.scripts.handlers.skillhandlers.GiveReco;
 import l2r.gameserver.scripts.handlers.skillhandlers.InstantJump;
 import l2r.gameserver.scripts.handlers.skillhandlers.Manadam;
@@ -70,7 +69,6 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		registerHandler(new Dummy());
 		registerHandler(new Fishing());
 		registerHandler(new FishingSkill());
-		registerHandler(new GetPlayer());
 		registerHandler(new GiveReco());
 		registerHandler(new InstantJump());
 		registerHandler(new Manadam());

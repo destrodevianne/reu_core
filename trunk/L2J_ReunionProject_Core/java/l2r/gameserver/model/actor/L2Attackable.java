@@ -2044,7 +2044,7 @@ public class L2Attackable extends L2Npc
 	 * Return True.
 	 */
 	@Override
-	public boolean isAttackable()
+	public boolean canBeAttacked()
 	{
 		return true;
 	}
@@ -2368,7 +2368,7 @@ public class L2Attackable extends L2Npc
 	}
 	
 	@Override
-	public boolean isL2Attackable()
+	public boolean isAttackable()
 	{
 		return true;
 	}
