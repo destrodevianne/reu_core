@@ -222,7 +222,10 @@ public final class RequestDropItem extends L2GameClientPacket
 		if ((dropedItem != null) && (dropedItem.getId() == PcInventory.ADENA_ID) && (dropedItem.getCount() >= 1000000))
 		{
 			String msg = "Character (" + activeChar.getName() + ") has dropped (" + dropedItem.getCount() + ")adena at (" + _x + "," + _y + "," + _z + ")";
-			_log.warn(msg);
+			if (Config.DEBUG)
+			{
+				_log.warn(msg);
+			}
 			AdminTable.getInstance().broadcastMessageToGMs(msg);
 		}
 	}

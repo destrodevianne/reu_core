@@ -24,6 +24,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.CtrlIntention;
+import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2Object;
@@ -139,7 +140,7 @@ public class NpcKnownList extends CharKnownList
 					{
 						for (L2PcInstance pl : players)
 						{
-							if (!pl.isDead() && !pl.isInvul() && pl.isInsideRadius(monster, monster.getAggroRange(), true, false))
+							if (!pl.isDead() && !pl.isInvul() && pl.isInsideRadius(monster, monster.getAggroRange(), true, false) && (monster.isMonster() || (monster.isInstanceTypes(InstanceType.L2GuardInstance) && (pl.getKarma() > 0))))
 							{
 								// Send aggroRangeEnter
 								if (monster.getHating(pl) == 0)

@@ -840,7 +840,7 @@ public final class L2CubicInstance implements IIdentifiable
 				{
 					if (Formulas.calcCubicSkillSuccess(activeCubic, target, skill, shld))
 					{
-						if (target instanceof L2Attackable)
+						if (target.isAttackable())
 						{
 							target.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, activeCubic.getOwner(), (int) ((150 * skill.getPower()) / (target.getLevel() + 7)));
 						}
