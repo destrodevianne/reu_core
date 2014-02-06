@@ -2328,12 +2328,19 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		if (group > 0)
 		{
-			for (TimeStamp ts : _reuseTimeStampsItems.values())
+			try
 			{
-				if ((ts.getSharedReuseGroup() == group) && ts.hasNotPassed())
+				for (TimeStamp ts : _reuseTimeStampsItems.values())
 				{
-					return ts.getRemaining();
+					if ((ts.getSharedReuseGroup() == group) && ts.hasNotPassed())
+					{
+						return ts.getRemaining();
+					}
 				}
+			}
+			catch (Exception e)
+			{
+				return -1;
 			}
 		}
 		return -1;
