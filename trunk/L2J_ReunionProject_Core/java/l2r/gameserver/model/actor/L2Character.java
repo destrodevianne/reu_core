@@ -6718,12 +6718,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	}
 	
 	/**
-	 * <B><U>Concept</U>:</B><br>
-	 * All skills disabled are identified by their reuse hashcodes in <B>_disabledSkills</B> of the L2Character
-	 * @param reuseHashcode The reuse hashcode of the skillId/level to check
-	 * @return true if a skill is disabled.
+	 * Verifies if the skill is disabled.
+	 * @param hashCode the skill hash code
+	 * @return {@code true} if the skill is disabled, {@code false} otherwise
 	 */
-	public boolean isSkillDisabled(int reuseHashcode)
+	public boolean isSkillDisabled(int hashCode)
 	{
 		if (isAllSkillsDisabled())
 		{
@@ -6735,18 +6734,17 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			return false;
 		}
 		
-		final Long timeStamp = _disabledSkills.get(Integer.valueOf(reuseHashcode));
-		if (timeStamp == null)
+		final Long stamp = _disabledSkills.get(hashCode);
+		if (stamp == null)
 		{
 			return false;
 		}
 		
-		if (timeStamp < System.currentTimeMillis())
+		if (stamp < System.currentTimeMillis())
 		{
-			_disabledSkills.remove(Integer.valueOf(reuseHashcode));
+			_disabledSkills.remove(hashCode);
 			return false;
 		}
-		
 		return true;
 	}
 	
