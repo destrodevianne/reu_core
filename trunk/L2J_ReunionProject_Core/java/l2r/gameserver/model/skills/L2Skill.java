@@ -59,6 +59,7 @@ import l2r.gameserver.model.stats.BaseStats;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Formulas;
 import l2r.gameserver.network.SystemMessageId;
+import l2r.gameserver.network.serverpackets.FlyToLocation.FlyType;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
@@ -232,7 +233,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	protected ChanceCondition _chanceCondition = null;
 	
 	// Flying support
-	private final String _flyType;
+	private final FlyType _flyType;
 	private final int _flyRadius;
 	private final float _flyCourse;
 	
@@ -491,7 +492,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		_sSBoost = set.getFloat("SSBoost", 0.f);
 		_aggroPoints = set.getInteger("aggroPoints", 0);
 		
-		_flyType = set.getString("flyType", null);
+		_flyType = set.getEnum("flyType", FlyType.class, null);
 		_flyRadius = set.getInteger("flyRadius", 0);
 		_flyCourse = set.getFloat("flyCourse", 0);
 		_canBeReflected = set.getBool("canBeReflected", true);
@@ -1133,7 +1134,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		return _directHpDmg;
 	}
 	
-	public final String getFlyType()
+	public final FlyType getFlyType()
 	{
 		return _flyType;
 	}
