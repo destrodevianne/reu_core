@@ -27,7 +27,6 @@ import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.model.L2Spawn;
-import l2r.gameserver.model.actor.instance.L2FortBallistaInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.Fort;
 
@@ -60,7 +59,7 @@ public class FortSiegeGuardManager
 				for (L2Spawn spawnDat : monsterList)
 				{
 					spawnDat.doSpawn();
-					if (spawnDat.getLastSpawn() instanceof L2FortBallistaInstance)
+					if (spawnDat.getRespawnDelay() == 0)
 					{
 						spawnDat.stopRespawn();
 					}

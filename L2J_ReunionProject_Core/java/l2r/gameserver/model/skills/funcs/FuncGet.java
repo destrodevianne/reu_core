@@ -23,14 +23,14 @@ import l2r.gameserver.model.stats.Stats;
 
 public class FuncGet extends Func
 {
-	public FuncGet(Stats stat, int order, Object owner, double value)
+	public FuncGet(Stats stat, int order, Object owner, Lambda lambda)
 	{
-		super(stat, order, owner, value);
+		super(stat, order, owner, lambda);
 	}
 	
 	@Override
 	public void calc(Env env)
 	{
-		env.setValue(value);
+		env.setValue(_lambda.calc(env));
 	}
 }

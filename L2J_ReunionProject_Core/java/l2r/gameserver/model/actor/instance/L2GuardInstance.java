@@ -19,17 +19,14 @@
 package l2r.gameserver.model.actor.instance;
 
 import java.util.List;
-import java.util.concurrent.Future;
 
 import l2r.Config;
-import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2AttackableAI;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
-import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.knownlist.GuardKnownList;
@@ -49,22 +46,6 @@ public class L2GuardInstance extends L2Attackable
 {
 	private static Logger _log = LoggerFactory.getLogger(L2GuardInstance.class);
 	
-	private static final int RETURN_INTERVAL = 60000;
-	
-	private Future<?> _returnTask;
-	
-	public class ReturnTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			if (getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE)
-			{
-				returnHome();
-			}
-		}
-	}
-	
 	/**
 	 * Constructor of L2GuardInstance (use L2Character and L2NpcInstance constructor).<br>
 	 * <B><U> Actions</U> :</B>
@@ -80,8 +61,6 @@ public class L2GuardInstance extends L2Attackable
 	{
 		super(objectId, template);
 		setInstanceType(InstanceType.L2GuardInstance);
-		
-		ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new ReturnTask(), RETURN_INTERVAL, RETURN_INTERVAL + Rnd.nextInt(60000));
 	}
 	
 	@Override
@@ -106,20 +85,6 @@ public class L2GuardInstance extends L2Attackable
 	}
 	
 	/**
-	 * Notify the L2GuardInstance to return to its home location (AI_INTENTION_MOVE_TO) and clear its _aggroList.
-	 */
-	@Override
-	public void returnHome()
-	{
-		if (!isInsideRadius(getSpawn(), 150, false, false))
-		{
-			clearAggroList();
-			
-			getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(getSpawn().getX(), getSpawn().getY(), getSpawn().getZ(), 0));
-		}
-	}
-	
-	/**
 	 * Set the home location of its L2GuardInstance.
 	 */
 	@Override
@@ -127,11 +92,6 @@ public class L2GuardInstance extends L2Attackable
 	{
 		setIsNoRndWalk(true);
 		super.onSpawn();
-		
-		if ((_returnTask == null) && !isWalker() && !isRunner())
-		{
-			_returnTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new ReturnTask(), RETURN_INTERVAL, RETURN_INTERVAL + Rnd.nextInt(60000));
-		}
 		
 		// check the region where this mob is, do not activate the AI if region is inactive.
 		L2WorldRegion region = L2World.getInstance().getRegion(getX(), getY());

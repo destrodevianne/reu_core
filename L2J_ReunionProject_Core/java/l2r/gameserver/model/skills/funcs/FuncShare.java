@@ -29,12 +29,9 @@ import l2r.gameserver.model.stats.Stats;
  */
 public class FuncShare extends Func
 {
-	private final Lambda _lambda;
-	
 	public FuncShare(Stats pStat, int pOrder, Object owner, Lambda lambda)
 	{
-		super(pStat, pOrder, owner);
-		_lambda = lambda;
+		super(pStat, pOrder, owner, lambda);
 	}
 	
 	@Override
@@ -47,8 +44,11 @@ public class FuncShare extends Func
 			{
 				final L2Summon summon = (L2Summon) ch;
 				final L2PcInstance player = summon.getOwner();
-				final double value = player.calcStat(stat, 0, null, null) * _lambda.calc(env);
-				env.addValue(value);
+				if (player != null)
+				{
+					final double value = player.calcStat(stat, 0, null, null) * _lambda.calc(env);
+					env.addValue(value);
+				}
 			}
 		}
 	}

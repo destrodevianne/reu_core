@@ -21,6 +21,7 @@ package l2r.gameserver.model.itemcontainer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import javolution.util.FastList;
@@ -48,11 +49,10 @@ public abstract class ItemContainer
 {
 	protected static final Logger _log = LoggerFactory.getLogger(ItemContainer.class);
 	
-	protected final List<L2ItemInstance> _items;
+	protected final List<L2ItemInstance> _items = new FastList<L2ItemInstance>().shared();
 	
 	protected ItemContainer()
 	{
-		_items = new FastList<L2ItemInstance>().shared();
 	}
 	
 	protected abstract L2Character getOwner();
@@ -110,7 +110,7 @@ public abstract class ItemContainer
 	 */
 	public List<L2ItemInstance> getItemsByItemId(int itemId)
 	{
-		List<L2ItemInstance> returnList = new FastList<>();
+		final List<L2ItemInstance> returnList = new ArrayList<>();
 		for (L2ItemInstance item : _items)
 		{
 			if ((item != null) && (item.getId() == itemId))
@@ -599,7 +599,7 @@ public abstract class ItemContainer
 		{
 			_log.error("deletedMe()", e);
 		}
-		List<L2Object> items = new FastList<L2Object>(_items);
+		final List<L2Object> items = new ArrayList<L2Object>(_items);
 		_items.clear();
 		
 		L2World.getInstance().removeObjects(items);

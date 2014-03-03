@@ -97,7 +97,7 @@ public abstract class AbstractOlympiadGame
 		par.updateStat(POINTS, points);
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_GAINED_S2_OLYMPIAD_POINTS);
 		sm.addString(par.getName());
-		sm.addNumber(points);
+		sm.addInt(points);
 		broadcastPacket(sm);
 		
 		for (Quest quest : QuestManager.getInstance().getAllManagedScripts())
@@ -114,7 +114,7 @@ public abstract class AbstractOlympiadGame
 		par.updateStat(POINTS, -points);
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_LOST_S2_OLYMPIAD_POINTS);
 		sm.addString(par.getName());
-		sm.addNumber(points);
+		sm.addInt(points);
 		broadcastPacket(sm);
 		
 		for (Quest quest : QuestManager.getInstance().getAllManagedScripts())
@@ -492,7 +492,7 @@ public abstract class AbstractOlympiadGame
 				iu.addModifiedItem(item);
 				sm = SystemMessage.getSystemMessage(SystemMessageId.EARNED_S2_S1_S);
 				sm.addItemName(it[0]);
-				sm.addNumber(it[1]);
+				sm.addInt(it[1]);
 				player.sendPacket(sm);
 			}
 			player.sendPacket(iu);

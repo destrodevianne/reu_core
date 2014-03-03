@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -16,14 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model;
+package l2r.gameserver.model.holders;
 
-import l2r.gameserver.model.actor.instance.L2PcInstance;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author JIV
+ * @author UnAfraid
  */
-public interface L2SquadTrainer
+public class InvulSkillHolder extends SkillHolder
 {
-	public void showSubUnitSkillList(L2PcInstance player);
+	private final AtomicInteger _instances = new AtomicInteger(1);
+	
+	public InvulSkillHolder(int skillId, int skillLevel)
+	{
+		super(skillId, skillLevel);
+	}
+	
+	public InvulSkillHolder(SkillHolder holder)
+	{
+		super(holder.getSkill());
+	}
+	
+	public int getInstances()
+	{
+		return _instances.get();
+	}
+	
+	public int increaseInstances()
+	{
+		return _instances.incrementAndGet();
+	}
+	
+	public int decreaseInstances()
+	{
+		return _instances.decrementAndGet();
+	}
 }

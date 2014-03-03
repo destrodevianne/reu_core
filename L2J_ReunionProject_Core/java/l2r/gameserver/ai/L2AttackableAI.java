@@ -567,21 +567,21 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			}
 		}
 		
-		// Check if the actor is a L2GuardInstance
-		if ((npc instanceof L2GuardInstance) && !npc.isWalker() && !npc.isRunner())
-		{
-			// Order to the L2GuardInstance to return to its home location because there's no target to attack
-			((L2GuardInstance) npc).returnHome();
-		}
-		
-		// If this is a festival monster, then it remains in the same location.
-		if (npc instanceof L2FestivalMonsterInstance)
+		// Check if the mob should not return to spawn point
+		if (!npc.canReturnToSpawnPoint())
 		{
 			return;
 		}
 		
-		// Check if the mob should not return to spawn point
-		if (!npc.canReturnToSpawnPoint())
+		// Check if the actor is a L2GuardInstance
+		if ((npc instanceof L2GuardInstance) && !npc.isWalker() && !npc.isRunner())
+		{
+			// Order to the L2GuardInstance to return to its home location because there's no target to attack
+			npc.returnHome();
+		}
+		
+		// If this is a festival monster, then it remains in the same location.
+		if (npc instanceof L2FestivalMonsterInstance)
 		{
 			return;
 		}
@@ -1436,19 +1436,22 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 					if (caster.isMinion() && (sk.getTargetType() != L2TargetType.SELF))
 					{
 						L2Character leader = caster.getLeader();
-						if ((leader != null) && leader.isDead())
+						if (leader != null)
 						{
-							if (!Util.checkIfInRange((sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius()), caster, leader, false) && !isParty(sk) && !caster.isMovementDisabled())
+							if (leader.isDead())
 							{
-								moveToPawn(leader, sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius());
+								if (!Util.checkIfInRange((sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius()), caster, leader, false) && !isParty(sk) && !caster.isMovementDisabled())
+								{
+									moveToPawn(leader, sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius());
+								}
 							}
-						}
-						if (GeoData.getInstance().canSeeTarget(caster, leader))
-						{
-							clientStopMoving(null);
-							caster.setTarget(leader);
-							caster.doCast(sk);
-							return true;
+							if (GeoData.getInstance().canSeeTarget(caster, leader))
+							{
+								clientStopMoving(null);
+								caster.setTarget(leader);
+								caster.doCast(sk);
+								return true;
+							}
 						}
 					}
 					

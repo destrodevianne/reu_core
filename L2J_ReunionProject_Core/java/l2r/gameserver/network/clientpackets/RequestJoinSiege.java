@@ -22,6 +22,7 @@ package l2r.gameserver.network.clientpackets;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.L2Clan;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
@@ -56,7 +57,7 @@ public final class RequestJoinSiege extends L2GameClientPacket
 			return;
 		}
 		
-		if (!activeChar.hasClanPrivilege(L2Clan.CP_CS_MANAGE_SIEGE))
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CS_MANAGE_SIEGE))
 		{
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;

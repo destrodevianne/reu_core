@@ -32,6 +32,7 @@ import l2r.gameserver.scripts.handlers.targethandlers.BehindArea;
 import l2r.gameserver.scripts.handlers.targethandlers.BehindAura;
 import l2r.gameserver.scripts.handlers.targethandlers.Clan;
 import l2r.gameserver.scripts.handlers.targethandlers.ClanMember;
+import l2r.gameserver.scripts.handlers.targethandlers.CommandChannel;
 import l2r.gameserver.scripts.handlers.targethandlers.CorpseClan;
 import l2r.gameserver.scripts.handlers.targethandlers.CorpseMob;
 import l2r.gameserver.scripts.handlers.targethandlers.CorpsePet;
@@ -75,6 +76,7 @@ public class TargetHandler implements IHandler<ITargetTypeHandler, Enum<L2Target
 		registerHandler(new BehindAura());
 		registerHandler(new Clan());
 		registerHandler(new ClanMember());
+		registerHandler(new CommandChannel());
 		registerHandler(new CorpseClan());
 		registerHandler(new CorpseMob());
 		registerHandler(new CorpsePet());

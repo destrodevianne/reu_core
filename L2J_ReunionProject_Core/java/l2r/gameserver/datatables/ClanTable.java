@@ -38,6 +38,7 @@ import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.SiegeManager;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -56,6 +57,7 @@ import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.scripting.scriptengine.events.ClanWarEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.clan.ClanWarListener;
 import l2r.gameserver.util.Util;
+import l2r.util.EnumIntBitmask;
 import l2r.util.L2FastList;
 
 import org.slf4j.Logger;
@@ -198,7 +200,7 @@ public class ClanTable
 		clan.store();
 		player.setClan(clan);
 		player.setPledgeClass(L2ClanMember.calculatePledgeClass(player));
-		player.setClanPrivileges(L2Clan.CP_ALL);
+		player.setClanPrivileges(new EnumIntBitmask<>(ClanPrivilege.class, true));
 		
 		_clans.put(Integer.valueOf(clan.getId()), clan);
 		

@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
 /**
@@ -54,7 +55,7 @@ public final class RequestPledgeSetMemberPowerGrade extends L2GameClientPacket
 			return;
 		}
 		
-		if (!activeChar.hasClanPrivilege(L2Clan.CP_CL_MANAGE_RANKS))
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_MANAGE_RANKS))
 		{
 			return;
 		}

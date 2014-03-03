@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
@@ -54,7 +55,7 @@ public final class RequestPledgeSetAcademyMaster extends L2GameClientPacket
 			return;
 		}
 		
-		if (!activeChar.hasClanPrivilege(L2Clan.CP_CL_APPRENTICE))
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_APPRENTICE))
 		{
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_DISMISS_AN_APPRENTICE);
 			return;

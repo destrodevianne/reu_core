@@ -400,7 +400,15 @@ public abstract class L2Summon extends L2Playable
 	
 	public void deleteMe(L2PcInstance owner)
 	{
-		owner.sendPacket(new PetDelete(getSummonType(), getObjectId()));
+		if (owner != null)
+		{
+			owner.sendPacket(new PetDelete(getSummonType(), getObjectId()));
+			final L2Party party = owner.getParty();
+			if (party != null)
+			{
+				party.broadcastToPartyMembers(owner, new ExPartyPetWindowDelete(this));
+			}
+		}
 		
 		// pet will be deleted along with all his items
 		if (getInventory() != null)
@@ -409,7 +417,10 @@ public abstract class L2Summon extends L2Playable
 		}
 		decayMe();
 		getKnownList().removeAllKnownObjects();
-		owner.setPet(null);
+		if (owner != null)
+		{
+			owner.setPet(null);
+		}
 		super.deleteMe();
 	}
 	
@@ -418,26 +429,33 @@ public abstract class L2Summon extends L2Playable
 		if (isVisible() && !isDead())
 		{
 			getAI().stopFollow();
-			owner.sendPacket(new PetDelete(getSummonType(), getObjectId()));
-			L2Party party;
-			if ((party = owner.getParty()) != null)
+			if (owner != null)
 			{
-				party.broadcastToPartyMembers(owner, new ExPartyPetWindowDelete(this));
-			}
-			
-			if ((getInventory() != null) && (getInventory().getSize() > 0))
-			{
-				getOwner().setPetInvItems(true);
-				sendPacket(SystemMessageId.ITEMS_IN_PET_INVENTORY);
-			}
-			else
-			{
-				getOwner().setPetInvItems(false);
+				owner.sendPacket(new PetDelete(getSummonType(), getObjectId()));
+				final L2Party party = owner.getParty();
+				if (party != null)
+				{
+					party.broadcastToPartyMembers(owner, new ExPartyPetWindowDelete(this));
+				}
+				
+				if ((getInventory() != null) && (getInventory().getSize() > 0))
+				{
+					getOwner().setPetInvItems(true);
+					sendPacket(SystemMessageId.ITEMS_IN_PET_INVENTORY);
+				}
+				else
+				{
+					getOwner().setPetInvItems(false);
+				}
 			}
 			
 			store();
 			storeEffect(true);
-			owner.setPet(null);
+			if (owner != null)
+			{
+				owner.setPet(null);
+			}
+			setOwner(null);
 			
 			// Stop AI tasks
 			if (hasAI())
@@ -454,12 +472,15 @@ public abstract class L2Summon extends L2Playable
 			}
 			getKnownList().removeAllKnownObjects();
 			setTarget(null);
-			for (int itemId : owner.getAutoSoulShot())
+			if (owner != null)
 			{
-				String handler = ((L2EtcItem) ItemTable.getInstance().getTemplate(itemId)).getHandlerName();
-				if ((handler != null) && handler.contains("Beast"))
+				for (int itemId : owner.getAutoSoulShot())
 				{
-					owner.disableAutoShot(itemId);
+					String handler = ((L2EtcItem) ItemTable.getInstance().getTemplate(itemId)).getHandlerName();
+					if ((handler != null) && handler.contains("Beast"))
+					{
+						owner.disableAutoShot(itemId);
+					}
 				}
 			}
 		}
@@ -496,7 +517,7 @@ public abstract class L2Summon extends L2Playable
 	@Override
 	public boolean isAutoAttackable(L2Character attacker)
 	{
-		return _owner.isAutoAttackable(attacker);
+		return (_owner != null) && _owner.isAutoAttackable(attacker);
 	}
 	
 	public int getControlObjectId()
@@ -638,6 +659,7 @@ public abstract class L2Summon extends L2Playable
 			case BEHIND_AURA:
 			case SELF:
 			case AURA_CORPSE_MOB:
+			case COMMAND_CHANNEL:
 				target = this;
 				break;
 			default:
@@ -806,7 +828,7 @@ public abstract class L2Summon extends L2Playable
 				sm = SystemMessage.getSystemMessage(SystemMessageId.C1_DONE_S3_DAMAGE_TO_C2);
 				sm.addNpcName(this);
 				sm.addCharName(target);
-				sm.addNumber(damage);
+				sm.addInt(damage);
 			}
 			
 			sendPacket(sm);
@@ -822,7 +844,7 @@ public abstract class L2Summon extends L2Playable
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RECEIVED_DAMAGE_OF_S3_FROM_C2);
 			sm.addNpcName(this);
 			sm.addCharName(attacker);
-			sm.addNumber((int) damage);
+			sm.addInt((int) damage);
 			sendPacket(sm);
 		}
 	}

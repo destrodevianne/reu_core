@@ -39,7 +39,6 @@ import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2DefenderInstance;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
-import l2r.gameserver.model.actor.instance.L2FortBallistaInstance;
 import l2r.gameserver.model.actor.instance.L2FortCommanderInstance;
 import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -131,7 +130,7 @@ public class L2FortSiegeGuardAI extends L2CharacterAI implements Runnable
 	private boolean autoAttackCondition(L2Character target)
 	{
 		// Check if the target isn't another guard, folk or a door
-		if ((target == null) || (target instanceof L2DefenderInstance) || (target instanceof L2NpcInstance) || (target instanceof L2DoorInstance) || target.isAlikeDead() || (target instanceof L2FortBallistaInstance) || (target instanceof L2FortCommanderInstance) || (target instanceof L2Playable))
+		if ((target == null) || (target instanceof L2DefenderInstance) || (target instanceof L2NpcInstance) || (target instanceof L2DoorInstance) || target.isAlikeDead() || (target instanceof L2FortCommanderInstance) || (target instanceof L2Playable))
 		{
 			L2PcInstance player = null;
 			if (target instanceof L2PcInstance)

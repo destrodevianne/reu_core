@@ -345,7 +345,7 @@ public class L2ServitorInstance extends L2Summon
 			return;
 		}
 		
-		if (getOwner().isInOlympiadMode())
+		if ((getOwner() == null) || getOwner().isInOlympiadMode())
 		{
 			return;
 		}

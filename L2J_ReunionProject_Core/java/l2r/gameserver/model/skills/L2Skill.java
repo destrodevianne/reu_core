@@ -1525,23 +1525,16 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 			return _emptyEffectSet;
 		}
 		
-		if (effector != effected)
+		// Check bad skills against target.
+		if ((effector != effected) && isOffensive() && (effected.isInvul() || (effector.isGM() && !effector.getAccessLevel().canGiveDamage())))
 		{
-			if (isOffensive() || isDebuff())
-			{
-				if (effected.isInvul())
-				{
-					return _emptyEffectSet;
-				}
-				
-				if ((effector instanceof L2PcInstance) && ((L2PcInstance) effector).isGM())
-				{
-					if (!((L2PcInstance) effector).getAccessLevel().canGiveDamage())
-					{
-						return _emptyEffectSet;
-					}
-				}
-			}
+			return _emptyEffectSet;
+		}
+		
+		if (effected.isInvulAgainst(getId(), getLevel()))
+		{
+			effected.sendDebugMessage("Skill " + toString() + " has been ignored (invul against)");
+			return _emptyEffectSet;
 		}
 		
 		List<L2Effect> effects = new ArrayList<>(_effectTemplates.length);

@@ -54,7 +54,7 @@ public class SkillHolder
 	
 	public final L2Skill getSkill()
 	{
-		return SkillTable.getInstance().getInfo(_skillId, _skillLvl);
+		return SkillTable.getInstance().getInfo(_skillId, Math.max(_skillLvl, 1));
 	}
 	
 	@Override

@@ -90,6 +90,7 @@ import l2r.gameserver.model.effects.EffectFlag;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.entity.Instance;
+import l2r.gameserver.model.holders.InvulSkillHolder;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.interfaces.IChanceSkillTrigger;
 import l2r.gameserver.model.interfaces.ILocational;
@@ -117,6 +118,7 @@ import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.Attack;
 import l2r.gameserver.network.serverpackets.ChangeMoveType;
 import l2r.gameserver.network.serverpackets.ChangeWaitType;
+import l2r.gameserver.network.serverpackets.ExRotation;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.MagicSkillCanceld;
 import l2r.gameserver.network.serverpackets.MagicSkillLaunched;
@@ -241,6 +243,8 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	protected final String COND_EXCEPTIONS = "COND_EX_" + getObjectId();
 	
 	private volatile Map<Integer, OptionsSkillHolder> _triggerSkills;
+	
+	private volatile Map<Integer, InvulSkillHolder> _invulAgainst;
 	
 	/**
 	 * @return True if debugging is enabled for this L2Character
@@ -1720,6 +1724,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			case PARTY:
 			case CLAN:
 			case PARTY_CLAN:
+			case COMMAND_CHANNEL:
 				doit = true;
 			default:
 				if (targets.length == 0)
@@ -1930,6 +1935,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		if (target != this)
 		{
 			setHeading(Util.calculateHeadingFrom(this, target));
+			broadcastPacket(new ExRotation(getObjectId(), getHeading()));
 		}
 		
 		// For force buff skills, start the effect as long as the player is casting.
@@ -2250,7 +2256,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				{
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.SUMMONING_SERVITOR_COSTS_S2_S1);
 					sm.addItemName(skill.getItemConsumeId());
-					sm.addNumber(skill.getItemConsume());
+					sm.addInt(skill.getItemConsume());
 					sendPacket(sm);
 				}
 				else
@@ -6537,7 +6543,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					}
 					else if (mut.getSkill().useSpiritShot())
 					{
-						setChargedShot(ShotType.SPIRITSHOTS, true);
+						setChargedShot(ShotType.BLESSED_SPIRITSHOTS, true);
 					}
 				}
 			}
@@ -6908,25 +6914,23 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					// EVT_ATTACKED and PvPStatus
 					if (target instanceof L2Character)
 					{
-						if (skill.isOffensive())
+						if (target.isPlayer())
 						{
 							if (target.isPlayer() || target.isSummon() || target.isTrap())
 							{
 								// Signets are a special case, casted on target_self but don't harm self
 								if ((skill.getSkillType() != L2SkillType.SIGNET) && (skill.getSkillType() != L2SkillType.SIGNET_CASTTIME))
 								{
-									if (target.isPlayer())
+									target.getActingPlayer().getAI().clientStartAutoAttack();
+								}
+								else if (target.isSummon() && ((L2Character) target).hasAI())
+								{
+									L2PcInstance owner = ((L2Summon) target).getOwner();
+									if (owner != null)
 									{
-										target.getActingPlayer().getAI().clientStartAutoAttack();
+										owner.getAI().clientStartAutoAttack();
 									}
-									else if (target.isSummon() && ((L2Character) target).hasAI())
-									{
-										L2PcInstance owner = ((L2Summon) target).getOwner();
-										if (owner != null)
-										{
-											owner.getAI().clientStartAutoAttack();
-										}
-									}
+									
 									// attack of the own pet does not flag player
 									// triggering trap not flag trap owner
 									if ((player.getSummon() != target) && !isTrap())
@@ -8098,6 +8102,51 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public void setSsAnimation(boolean ssAnimation)
 	{
 		_ssAnimation = ssAnimation;
+	}
+	
+	public void addInvulAgainst(SkillHolder holder)
+	{
+		final InvulSkillHolder invulHolder = getInvulAgainstSkills().get(holder.getSkillId());
+		if (invulHolder != null)
+		{
+			invulHolder.increaseInstances();
+			return;
+		}
+		getInvulAgainstSkills().put(holder.getSkillId(), new InvulSkillHolder(holder));
+	}
+	
+	public void removeInvulAgainst(SkillHolder holder)
+	{
+		final InvulSkillHolder invulHolder = getInvulAgainstSkills().get(holder.getSkillId());
+		if ((invulHolder != null) && (invulHolder.decreaseInstances() < 1))
+		{
+			getInvulAgainstSkills().remove(holder.getSkillId());
+		}
+	}
+	
+	public boolean isInvulAgainst(int skillId, int skillLvl)
+	{
+		if (_invulAgainst != null)
+		{
+			final SkillHolder holder = getInvulAgainstSkills().get(skillId);
+			return ((holder != null) && ((holder.getSkillLvl() < 1) || (holder.getSkillLvl() == skillLvl)));
+		}
+		return false;
+	}
+	
+	private Map<Integer, InvulSkillHolder> getInvulAgainstSkills()
+	{
+		if (_invulAgainst == null)
+		{
+			synchronized (this)
+			{
+				if (_invulAgainst == null)
+				{
+					return _invulAgainst = new ConcurrentHashMap<>();
+				}
+			}
+		}
+		return _invulAgainst;
 	}
 	
 	public int getMinShopDistanceNPC()
