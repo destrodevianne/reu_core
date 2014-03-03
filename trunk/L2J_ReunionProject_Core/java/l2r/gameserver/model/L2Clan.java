@@ -74,6 +74,7 @@ import l2r.gameserver.scripting.scriptengine.events.ClanLevelUpEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.clan.ClanCreationListener;
 import l2r.gameserver.scripting.scriptengine.listeners.clan.ClanMembershipListener;
 import l2r.gameserver.util.Util;
+import l2r.util.EnumIntBitmask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,40 +96,6 @@ public class L2Clan implements IIdentifiable, INamable
 	public static final int PENALTY_TYPE_DISMISS_CLAN = 3;
 	/** Leader clan dissolve ally */
 	public static final int PENALTY_TYPE_DISSOLVE_ALLY = 4;
-	// Clan Privileges
-	/** No privilege to manage any clan activity */
-	public static final int CP_NOTHING = 0;
-	/** Privilege to join clan */
-	public static final int CP_CL_JOIN_CLAN = 2;
-	/** Privilege to give a title */
-	public static final int CP_CL_GIVE_TITLE = 4;
-	/** Privilege to view warehouse content */
-	public static final int CP_CL_VIEW_WAREHOUSE = 8;
-	/** Privilege to manage clan ranks */
-	public static final int CP_CL_MANAGE_RANKS = 16;
-	public static final int CP_CL_PLEDGE_WAR = 32;
-	public static final int CP_CL_DISMISS = 64;
-	/** Privilege to register clan crest */
-	public static final int CP_CL_REGISTER_CREST = 128;
-	public static final int CP_CL_APPRENTICE = 256;
-	public static final int CP_CL_TROOPS_FAME = 512;
-	public static final int CP_CL_SUMMON_AIRSHIP = 1024;
-	/** Privilege to open a door */
-	public static final int CP_CH_OPEN_DOOR = 2048;
-	public static final int CP_CH_OTHER_RIGHTS = 4096;
-	public static final int CP_CH_AUCTION = 8192;
-	public static final int CP_CH_DISMISS = 16384;
-	public static final int CP_CH_SET_FUNCTIONS = 32768;
-	public static final int CP_CS_OPEN_DOOR = 65536;
-	public static final int CP_CS_MANOR_ADMIN = 131072;
-	public static final int CP_CS_MANAGE_SIEGE = 262144;
-	public static final int CP_CS_USE_FUNCTIONS = 524288;
-	public static final int CP_CS_DISMISS = 1048576;
-	public static final int CP_CS_TAXES = 2097152;
-	public static final int CP_CS_MERCENARIES = 4194304;
-	public static final int CP_CS_SET_FUNCTIONS = 8388608;
-	/** Privilege to manage all clan activity */
-	public static final int CP_ALL = 16777214;
 	// Sub-unit types
 	/** Clan subunit type of Academy */
 	public static final int SUBUNIT_ACADEMY = -1;
@@ -283,18 +250,18 @@ public class L2Clan implements IIdentifiable, INamable
 			{
 				SiegeManager.getInstance().removeSiegeSkills(exLeader);
 			}
-			exLeader.setClanPrivileges(L2Clan.CP_NOTHING);
+			exLeader.getClanPrivileges().clear();
 			exLeader.broadcastUserInfo();
 			
 		}
 		else
 		{
 			try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-				PreparedStatement statement = con.prepareStatement("UPDATE characters SET clan_privs = ? WHERE charId = ?"))
+				PreparedStatement ps = con.prepareStatement("UPDATE characters SET clan_privs = ? WHERE charId = ?"))
 			{
-				statement.setInt(1, L2Clan.CP_NOTHING);
-				statement.setInt(2, getLeaderId());
-				statement.execute();
+				ps.setInt(1, 0);
+				ps.setInt(2, getLeaderId());
+				ps.execute();
 			}
 			catch (Exception e)
 			{
@@ -319,7 +286,7 @@ public class L2Clan implements IIdentifiable, INamable
 		if (newLeader != null)
 		{
 			newLeader.setPledgeClass(L2ClanMember.calculatePledgeClass(newLeader));
-			newLeader.setClanPrivileges(L2Clan.CP_ALL);
+			newLeader.getClanPrivileges().setAll();
 			
 			if (getLevel() >= SiegeManager.getInstance().getSiegeClanMinLevel())
 			{
@@ -330,11 +297,11 @@ public class L2Clan implements IIdentifiable, INamable
 		else
 		{
 			try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-				PreparedStatement statement = con.prepareStatement("UPDATE characters SET clan_privs = ? WHERE charId = ?"))
+				PreparedStatement ps = con.prepareStatement("UPDATE characters SET clan_privs = ? WHERE charId = ?"))
 			{
-				statement.setInt(1, L2Clan.CP_ALL);
-				statement.setInt(2, getLeaderId());
-				statement.execute();
+				ps.setInt(1, EnumIntBitmask.getAllBitmask(ClanPrivilege.class));
+				ps.setInt(2, getLeaderId());
+				ps.execute();
 			}
 			catch (Exception e)
 			{
@@ -1848,13 +1815,20 @@ public class L2Clan implements IIdentifiable, INamable
 	{
 		private final int _rankId;
 		private final int _party;// TODO find out what this stuff means and implement it
-		private int _rankPrivs;
+		private final EnumIntBitmask<ClanPrivilege> _rankPrivs;
 		
 		public RankPrivs(int rank, int party, int privs)
 		{
 			_rankId = rank;
 			_party = party;
-			_rankPrivs = privs;
+			_rankPrivs = new EnumIntBitmask<>(ClanPrivilege.class, privs);
+		}
+		
+		public RankPrivs(int rank, int party, EnumIntBitmask<ClanPrivilege> rankPrivs)
+		{
+			_rankId = rank;
+			_party = party;
+			_rankPrivs = rankPrivs;
 		}
 		
 		public int getRank()
@@ -1867,14 +1841,14 @@ public class L2Clan implements IIdentifiable, INamable
 			return _party;
 		}
 		
-		public int getPrivs()
+		public EnumIntBitmask<ClanPrivilege> getPrivs()
 		{
 			return _rankPrivs;
 		}
 		
 		public void setPrivs(int privs)
 		{
-			_rankPrivs = privs;
+			_rankPrivs.setBitmask(privs);
 		}
 	}
 	
@@ -2122,18 +2096,18 @@ public class L2Clan implements IIdentifiable, INamable
 		RankPrivs privs;
 		for (int i = 1; i < 10; i++)
 		{
-			privs = new RankPrivs(i, 0, CP_NOTHING);
+			privs = new RankPrivs(i, 0, new EnumIntBitmask<>(ClanPrivilege.class, false));
 			_privs.put(i, privs);
 		}
 	}
 	
-	public int getRankPrivs(int rank)
+	public EnumIntBitmask<ClanPrivilege> getRankPrivs(int rank)
 	{
 		if (_privs.get(rank) != null)
 		{
 			return _privs.get(rank).getPrivs();
 		}
-		return CP_NOTHING;
+		return new EnumIntBitmask<>(ClanPrivilege.class, false);
 	}
 	
 	public void setRankPrivs(int rank, int privs)
@@ -2166,7 +2140,7 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						if (cm.getPlayerInstance() != null)
 						{
-							cm.getPlayerInstance().setClanPrivileges(privs);
+							cm.getPlayerInstance().getClanPrivileges().setBitmask(privs);
 							cm.getPlayerInstance().sendPacket(new UserInfo(cm.getPlayerInstance()));
 							cm.getPlayerInstance().sendPacket(new ExBrExtraUserInfo(cm.getPlayerInstance()));
 						}
@@ -2329,7 +2303,7 @@ public class L2Clan implements IIdentifiable, INamable
 		{
 			return false;
 		}
-		if (!activeChar.hasClanPrivilege(L2Clan.CP_CL_JOIN_CLAN))
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_JOIN_CLAN))
 		{
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return false;
@@ -2660,7 +2634,7 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						player.setSp(player.getSp() - 20000);
 						SystemMessage sp = SystemMessage.getSystemMessage(SystemMessageId.SP_DECREASED_S1);
-						sp.addNumber(20000);
+						sp.addInt(20000);
 						player.sendPacket(sp);
 						sp = null;
 						increaseClanLevel = true;
@@ -2677,7 +2651,7 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						player.setSp(player.getSp() - 100000);
 						SystemMessage sp = SystemMessage.getSystemMessage(SystemMessageId.SP_DECREASED_S1);
-						sp.addNumber(100000);
+						sp.addInt(100000);
 						player.sendPacket(sp);
 						sp = null;
 						increaseClanLevel = true;
@@ -2695,7 +2669,7 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						player.setSp(player.getSp() - 350000);
 						SystemMessage sp = SystemMessage.getSystemMessage(SystemMessageId.SP_DECREASED_S1);
-						sp.addNumber(350000);
+						sp.addInt(350000);
 						player.sendPacket(sp);
 						sp = null;
 						SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_DISAPPEARED);
@@ -2717,7 +2691,7 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						player.setSp(player.getSp() - 1000000);
 						SystemMessage sp = SystemMessage.getSystemMessage(SystemMessageId.SP_DECREASED_S1);
-						sp.addNumber(1000000);
+						sp.addInt(1000000);
 						player.sendPacket(sp);
 						sp = null;
 						SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_DISAPPEARED);
@@ -2739,7 +2713,7 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						player.setSp(player.getSp() - 2500000);
 						SystemMessage sp = SystemMessage.getSystemMessage(SystemMessageId.SP_DECREASED_S1);
-						sp.addNumber(2500000);
+						sp.addInt(2500000);
 						player.sendPacket(sp);
 						sp = null;
 						SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_DISAPPEARED);
@@ -2757,7 +2731,7 @@ public class L2Clan implements IIdentifiable, INamable
 				{
 					setReputationScore(getReputationScore() - Config.CLAN_LEVEL_6_COST, true);
 					SystemMessage cr = SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP);
-					cr.addNumber(Config.CLAN_LEVEL_6_COST);
+					cr.addInt(Config.CLAN_LEVEL_6_COST);
 					player.sendPacket(cr);
 					cr = null;
 					increaseClanLevel = true;
@@ -2770,7 +2744,7 @@ public class L2Clan implements IIdentifiable, INamable
 				{
 					setReputationScore(getReputationScore() - Config.CLAN_LEVEL_7_COST, true);
 					SystemMessage cr = SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP);
-					cr.addNumber(Config.CLAN_LEVEL_7_COST);
+					cr.addInt(Config.CLAN_LEVEL_7_COST);
 					player.sendPacket(cr);
 					cr = null;
 					increaseClanLevel = true;
@@ -2782,7 +2756,7 @@ public class L2Clan implements IIdentifiable, INamable
 				{
 					setReputationScore(getReputationScore() - Config.CLAN_LEVEL_8_COST, true);
 					SystemMessage cr = SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP);
-					cr.addNumber(Config.CLAN_LEVEL_8_COST);
+					cr.addInt(Config.CLAN_LEVEL_8_COST);
 					player.sendPacket(cr);
 					cr = null;
 					increaseClanLevel = true;
@@ -2797,12 +2771,12 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						setReputationScore(getReputationScore() - Config.CLAN_LEVEL_9_COST, true);
 						SystemMessage cr = SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP);
-						cr.addNumber(Config.CLAN_LEVEL_9_COST);
+						cr.addInt(Config.CLAN_LEVEL_9_COST);
 						player.sendPacket(cr);
 						cr = null;
 						SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 						sm.addItemName(9910);
-						sm.addItemNumber(150);
+						sm.addLong(150);
 						player.sendPacket(sm);
 						increaseClanLevel = true;
 					}
@@ -2817,12 +2791,12 @@ public class L2Clan implements IIdentifiable, INamable
 					{
 						setReputationScore(getReputationScore() - Config.CLAN_LEVEL_10_COST, true);
 						SystemMessage cr = SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP);
-						cr.addNumber(Config.CLAN_LEVEL_10_COST);
+						cr.addInt(Config.CLAN_LEVEL_10_COST);
 						player.sendPacket(cr);
 						cr = null;
 						SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 						sm.addItemName(9911);
-						sm.addItemNumber(5);
+						sm.addLong(5);
 						player.sendPacket(sm);
 						increaseClanLevel = true;
 					}
@@ -2843,7 +2817,7 @@ public class L2Clan implements IIdentifiable, INamable
 				{
 					setReputationScore(getReputationScore() - Config.CLAN_LEVEL_11_COST, true);
 					SystemMessage cr = SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP);
-					cr.addNumber(Config.CLAN_LEVEL_11_COST);
+					cr.addInt(Config.CLAN_LEVEL_11_COST);
 					player.sendPacket(cr);
 					cr = null;
 					increaseClanLevel = true;

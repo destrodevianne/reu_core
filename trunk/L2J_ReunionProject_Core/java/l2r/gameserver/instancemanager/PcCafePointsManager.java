@@ -75,7 +75,7 @@ public class PcCafePointsManager
 			{
 				_points = PcBangConfigs.MAX_PC_BANG_POINTS - player.getPcBangPoints();
 			}
-			sm.addNumber(_points);
+			sm.addInt(_points);
 			player.sendPacket(sm);
 			player.setPcBangPoints(player.getPcBangPoints() + _points);
 			player.sendPacket(new ExPCCafePointInfo(player.getPcBangPoints(), _points, true, doublepoint, 1));

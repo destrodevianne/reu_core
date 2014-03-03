@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.model.L2Clan;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -56,7 +56,7 @@ public class RequestGiveNickName extends L2GameClientPacket
 		else
 		{
 			// Can the player change/give a title?
-			if (!activeChar.hasClanPrivilege(L2Clan.CP_CL_GIVE_TITLE))
+			if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_GIVE_TITLE))
 			{
 				activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 				return;

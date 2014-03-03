@@ -27,6 +27,7 @@ import l2r.gameserver.datatables.HennaData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.instancemanager.CastleManager;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.actor.FakePc;
@@ -995,7 +996,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		
-		if ((player.getClanPrivileges() & L2Clan.CP_CL_VIEW_WAREHOUSE) != L2Clan.CP_CL_VIEW_WAREHOUSE)
+		if (player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE))
 		{
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_CLAN_WAREHOUSE);
 			return;

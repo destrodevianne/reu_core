@@ -36,8 +36,8 @@ import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.GrandBossManager;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Augmentation;
-import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.FakePc;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
@@ -1466,7 +1466,7 @@ public final class L2AioNpcInstance extends L2Npc
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		
-		if ((player.getClanPrivileges() & L2Clan.CP_CL_VIEW_WAREHOUSE) != L2Clan.CP_CL_VIEW_WAREHOUSE)
+		if (player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE))
 		{
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_CLAN_WAREHOUSE);
 			return;

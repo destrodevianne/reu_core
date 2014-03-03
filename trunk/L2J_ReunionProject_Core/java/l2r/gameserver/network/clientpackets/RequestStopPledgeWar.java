@@ -19,6 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.L2World;
@@ -71,7 +72,7 @@ public final class RequestStopPledgeWar extends L2GameClientPacket
 		}
 		
 		// Check if player who does the request has the correct rights to do it
-		if (!player.hasClanPrivilege(L2Clan.CP_CL_PLEDGE_WAR))
+		if (!player.hasClanPrivilege(ClanPrivilege.CL_PLEDGE_WAR))
 		{
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;

@@ -23,12 +23,9 @@ import l2r.gameserver.model.stats.Stats;
 
 public class FuncBaseMul extends Func
 {
-	private final Lambda _lambda;
-	
 	public FuncBaseMul(Stats pStat, int pOrder, Object owner, Lambda lambda)
 	{
-		super(pStat, pOrder, owner);
-		_lambda = lambda;
+		super(pStat, pOrder, owner, lambda);
 	}
 	
 	@Override

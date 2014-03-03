@@ -21,7 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.model.L2Clan;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
 
@@ -74,7 +74,7 @@ public class L2CastleDoormenInstance extends L2DoormenInstance
 	@Override
 	protected final boolean isOwnerClan(L2PcInstance player)
 	{
-		if ((player.getClan() != null) && player.hasClanPrivilege(L2Clan.CP_CS_OPEN_DOOR))
+		if ((player.getClan() != null) && player.hasClanPrivilege(ClanPrivilege.CS_OPEN_DOOR))
 		{
 			SiegableHall hall = getConquerableHall();
 			// save in variable because it's a costly call

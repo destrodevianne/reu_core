@@ -41,6 +41,7 @@ import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.model.CombatFlag;
 import l2r.gameserver.model.FortSiegeSpawn;
 import l2r.gameserver.model.L2Clan;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2SiegeClan;
 import l2r.gameserver.model.L2Spawn;
@@ -129,49 +130,49 @@ public class FortSiege implements Siegable
 				{
 					getFort().despawnSuspiciousMerchant();
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_THE_FORTRESS_BATTLE_STARTS);
-					sm.addNumber(10);
+					sm.addInt(10);
 					announceToPlayer(sm);
 					ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleStartSiegeTask(300), 300000); // Prepare task for 5 minutes left.
 				}
 				else if (_time == 300) // 5min remains
 				{
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_THE_FORTRESS_BATTLE_STARTS);
-					sm.addNumber(5);
+					sm.addInt(5);
 					announceToPlayer(sm);
 					ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleStartSiegeTask(60), 240000); // Prepare task for 1 minute left.
 				}
 				else if (_time == 60) // 1min remains
 				{
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_THE_FORTRESS_BATTLE_STARTS);
-					sm.addNumber(1);
+					sm.addInt(1);
 					announceToPlayer(sm);
 					ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleStartSiegeTask(30), 30000); // Prepare task for 30 seconds left.
 				}
 				else if (_time == 30) // 30seconds remains
 				{
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_SECONDS_UNTIL_THE_FORTRESS_BATTLE_STARTS);
-					sm.addNumber(30);
+					sm.addInt(30);
 					announceToPlayer(sm);
 					ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleStartSiegeTask(10), 20000); // Prepare task for 10 seconds left.
 				}
 				else if (_time == 10) // 10seconds remains
 				{
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_SECONDS_UNTIL_THE_FORTRESS_BATTLE_STARTS);
-					sm.addNumber(10);
+					sm.addInt(10);
 					announceToPlayer(sm);
 					ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleStartSiegeTask(5), 5000); // Prepare task for 5 seconds left.
 				}
 				else if (_time == 5) // 5seconds remains
 				{
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_SECONDS_UNTIL_THE_FORTRESS_BATTLE_STARTS);
-					sm.addNumber(5);
+					sm.addInt(5);
 					announceToPlayer(sm);
 					ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleStartSiegeTask(1), 4000); // Prepare task for 1 seconds left.
 				}
 				else if (_time == 1) // 1seconds remains
 				{
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_SECONDS_UNTIL_THE_FORTRESS_BATTLE_STARTS);
-					sm.addNumber(1);
+					sm.addInt(1);
 					announceToPlayer(sm);
 					ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleStartSiegeTask(0), 1000); // Prepare task start siege.
 				}
@@ -956,7 +957,7 @@ public class FortSiege implements Siegable
 			b = false;
 			player.sendMessage("Only clans with Level " + FortSiegeManager.getInstance().getSiegeClanMinLevel() + " and higher may register for a fortress siege.");
 		}
-		else if (!player.hasClanPrivilege(L2Clan.CP_CS_MANAGE_SIEGE))
+		else if (!player.hasClanPrivilege(ClanPrivilege.CS_MANAGE_SIEGE))
 		{
 			b = false;
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);

@@ -84,7 +84,7 @@ public final class CHSiegeManager
 		}
 		catch (Exception e)
 		{
-			_log.warn("CHSiegeManager: Could not load siegable clan halls!:");
+			_log.warn("CHSiegeManager: Could not load siegable clan halls!:" + e.getMessage());
 		}
 	}
 	

@@ -21,6 +21,7 @@ package l2r.gameserver.network.clientpackets;
 import l2r.Config;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.PledgeShowMemberListDelete;
@@ -55,7 +56,7 @@ public final class RequestOustPledgeMember extends L2GameClientPacket
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_A_CLAN_MEMBER);
 			return;
 		}
-		if (!activeChar.hasClanPrivilege(L2Clan.CP_CL_DISMISS))
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_DISMISS))
 		{
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;

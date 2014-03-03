@@ -26,7 +26,6 @@ import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.instancemanager.DayNightSpawnManager;
 import l2r.gameserver.model.actor.L2Character;
-import l2r.util.StackTrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class GameTimeController extends Thread
 {
-	private static final Logger _log = LoggerFactory.getLogger(GameTimeController.class);
+	protected static final Logger _log = LoggerFactory.getLogger(GameTimeController.class);
 	
 	public static final int TICKS_PER_SECOND = 10; // not able to change this without checking through code
 	public static final int MILLIS_IN_TICK = 1000 / TICKS_PER_SECOND;
@@ -170,7 +169,7 @@ public final class GameTimeController extends Thread
 				}
 				catch (final Throwable e)
 				{
-					StackTrace.displayStackTraceInformation(e);
+					_log.warn("", e);
 				}
 			}
 		});
@@ -212,7 +211,7 @@ public final class GameTimeController extends Thread
 			}
 			catch (final Throwable e)
 			{
-				StackTrace.displayStackTraceInformation(e);
+				_log.warn("", e);
 			}
 			
 			sleepTime = nextTickTime - System.currentTimeMillis();

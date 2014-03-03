@@ -199,14 +199,14 @@ public class MultiSell
 				final int cost = player.getPcBangPoints() - (int) (amount);
 				player.setPcBangPoints(cost);
 				SystemMessage smsgpc = SystemMessage.getSystemMessage(SystemMessageId.USING_S1_PCPOINT);
-				smsgpc.addNumber((int) amount);
+				smsgpc.addInt((int) amount);
 				player.sendPacket(smsgpc);
 				player.sendPacket(new ExPCCafePointInfo(player.getPcBangPoints(), (int) amount, false, false, 1));
 				return true;
 			case CLAN_REPUTATION:
 				player.getClan().takeReputationScore((int) amount, true);
 				SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP);
-				smsg.addItemNumber(amount);
+				smsg.addLong(amount);
 				player.sendPacket(smsg);
 				return true;
 			case FAME:

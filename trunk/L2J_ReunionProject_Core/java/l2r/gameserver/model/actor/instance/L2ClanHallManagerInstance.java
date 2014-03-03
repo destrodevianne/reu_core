@@ -29,7 +29,7 @@ import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
-import l2r.gameserver.model.L2Clan;
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2TeleportLocation;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.ClanHall;
@@ -94,7 +94,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 			if (actualCommand.equalsIgnoreCase("banish_foreigner"))
 			{
 				NpcHtmlMessage html = new NpcHtmlMessage(1);
-				if (player.hasClanPrivilege(L2Clan.CP_CH_DISMISS))
+				if (player.hasClanPrivilege(ClanPrivilege.CH_DISMISS))
 				{
 					if (val.equalsIgnoreCase("list"))
 					{
@@ -116,7 +116,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 			else if (actualCommand.equalsIgnoreCase("manage_vault"))
 			{
 				NpcHtmlMessage html = new NpcHtmlMessage(1);
-				if (player.hasClanPrivilege(L2Clan.CP_CL_VIEW_WAREHOUSE))
+				if (player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE))
 				{
 					if (getClanHall().getLease() <= 0)
 					{
@@ -140,7 +140,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 			else if (actualCommand.equalsIgnoreCase("door"))
 			{
 				NpcHtmlMessage html = new NpcHtmlMessage(1);
-				if (player.hasClanPrivilege(L2Clan.CP_CH_OPEN_DOOR))
+				if (player.hasClanPrivilege(ClanPrivilege.CH_OPEN_DOOR))
 				{
 					if (val.equalsIgnoreCase("open"))
 					{
@@ -249,7 +249,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 			}
 			else if (actualCommand.equalsIgnoreCase("manage"))
 			{
-				if (player.hasClanPrivilege(L2Clan.CP_CH_SET_FUNCTIONS))
+				if (player.hasClanPrivilege(ClanPrivilege.CH_SET_FUNCTIONS))
 				{
 					if (val.equalsIgnoreCase("recovery"))
 					{

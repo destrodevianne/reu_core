@@ -359,7 +359,7 @@ public class L2SignsPriestInstance extends L2Npc
 							contribStonesFound = true;
 							SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 							msg.addItemName(SevenSigns.SEAL_STONE_RED_ID);
-							msg.addItemNumber(redContrib);
+							msg.addLong(redContrib);
 							player.sendPacket(msg);
 						}
 					}
@@ -370,7 +370,7 @@ public class L2SignsPriestInstance extends L2Npc
 							contribStonesFound = true;
 							SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 							msg.addItemName(SevenSigns.SEAL_STONE_GREEN_ID);
-							msg.addItemNumber(greenContrib);
+							msg.addLong(greenContrib);
 							player.sendPacket(msg);
 						}
 					}
@@ -381,7 +381,7 @@ public class L2SignsPriestInstance extends L2Npc
 							contribStonesFound = true;
 							SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 							msg.addItemName(SevenSigns.SEAL_STONE_BLUE_ID);
-							msg.addItemNumber(blueContrib);
+							msg.addLong(blueContrib);
 							player.sendPacket(msg);
 						}
 					}
@@ -401,7 +401,7 @@ public class L2SignsPriestInstance extends L2Npc
 					{
 						score = SevenSigns.getInstance().addPlayerStoneContrib(player.getObjectId(), blueContrib, greenContrib, redContrib);
 						sm = SystemMessage.getSystemMessage(SystemMessageId.CONTRIB_SCORE_INCREASED_S1);
-						sm.addItemNumber(score);
+						sm.addLong(score);
 						player.sendPacket(sm);
 						
 						if (this instanceof L2DawnPriestInstance)
@@ -493,7 +493,7 @@ public class L2SignsPriestInstance extends L2Npc
 										stonesFound = true;
 										SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 										msg.addItemName(SevenSigns.SEAL_STONE_RED_ID);
-										msg.addItemNumber(redContribCount);
+										msg.addLong(redContribCount);
 										player.sendPacket(msg);
 									}
 								}
@@ -504,7 +504,7 @@ public class L2SignsPriestInstance extends L2Npc
 										stonesFound = true;
 										SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 										msg.addItemName(SevenSigns.SEAL_STONE_GREEN_ID);
-										msg.addItemNumber(greenContribCount);
+										msg.addLong(greenContribCount);
 										player.sendPacket(msg);
 									}
 								}
@@ -515,7 +515,7 @@ public class L2SignsPriestInstance extends L2Npc
 										stonesFound = true;
 										SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S2_S1_DISAPPEARED);
 										msg.addItemName(SevenSigns.SEAL_STONE_BLUE_ID);
-										msg.addItemNumber(blueContribCount);
+										msg.addLong(blueContribCount);
 										player.sendPacket(msg);
 									}
 								}
@@ -535,7 +535,7 @@ public class L2SignsPriestInstance extends L2Npc
 								{
 									contribScore = SevenSigns.getInstance().addPlayerStoneContrib(player.getObjectId(), blueContribCount, greenContribCount, redContribCount);
 									sm = SystemMessage.getSystemMessage(SystemMessageId.CONTRIB_SCORE_INCREASED_S1);
-									sm.addItemNumber(contribScore);
+									sm.addLong(contribScore);
 									player.sendPacket(sm);
 									
 									if (this instanceof L2DawnPriestInstance)

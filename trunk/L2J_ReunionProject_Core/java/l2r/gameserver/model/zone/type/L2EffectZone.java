@@ -46,7 +46,7 @@ public class L2EffectZone extends L2ZoneType
 	private int _reuse;
 	protected boolean _bypassConditions;
 	private boolean _isShowDangerIcon;
-	protected FastMap<Integer, Integer> _skills;
+	protected volatile FastMap<Integer, Integer> _skills;
 	
 	public L2EffectZone(int id)
 	{
@@ -196,6 +196,7 @@ public class L2EffectZone extends L2ZoneType
 			removeSkill(skillId);
 			return;
 		}
+		
 		if (_skills == null)
 		{
 			synchronized (this)

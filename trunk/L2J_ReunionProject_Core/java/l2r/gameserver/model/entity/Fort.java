@@ -23,7 +23,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -40,6 +42,7 @@ import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.datatables.StaticObjects;
 import l2r.gameserver.enums.FortUpdaterType;
 import l2r.gameserver.enums.MountType;
+import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.L2Clan;
@@ -89,6 +92,7 @@ public final class Fort extends AbstractResidence
 	private final FastList<L2Spawn> _specialEnvoys = new FastList<>();
 	
 	private final TIntIntHashMap _envoyCastles = new TIntIntHashMap(2);
+	private final Set<Integer> _availableCastles = new HashSet<>(1);
 	
 	/** Fortress Functions */
 	public static final int FUNC_TELEPORT = 1;
@@ -260,7 +264,6 @@ public final class Fort extends AbstractResidence
 		if ((getOwnerClan() != null) && (getFortState() == 0))
 		{
 			spawnSpecialEnvoys();
-			ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleSpecialEnvoysDeSpawn(this), 3600000); // Prepare 1hr task for special envoys despawn
 		}
 	}
 	
@@ -276,34 +279,6 @@ public final class Fort extends AbstractResidence
 			return _function.get(type);
 		}
 		return null;
-	}
-	
-	public static class ScheduleSpecialEnvoysDeSpawn implements Runnable
-	{
-		private final Fort _fortInst;
-		
-		public ScheduleSpecialEnvoysDeSpawn(Fort pFort)
-		{
-			_fortInst = pFort;
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				// if state not decided, change state to indenpendent
-				if (_fortInst.getFortState() == 0)
-				{
-					_fortInst.setFortState(1, 0);
-				}
-				_fortInst.despawnSpecialEnvoys();
-			}
-			catch (Exception e)
-			{
-				_log.warn("Exception: ScheduleSpecialEnvoysSpawn() for Fort " + _fortInst.getName() + ": " + e.getMessage(), e);
-			}
-		}
 	}
 	
 	public void endOfSiege(L2Clan clan)
@@ -456,7 +431,6 @@ public final class Fort extends AbstractResidence
 		}
 		
 		spawnSpecialEnvoys();
-		ThreadPoolManager.getInstance().scheduleGeneral(new ScheduleSpecialEnvoysDeSpawn(this), 3600000); // Prepare 1hr task for special envoys despawn
 		// if clan have already fortress, remove it
 		if (clan.getFortId() > 0)
 		{
@@ -1086,9 +1060,47 @@ public final class Fort extends AbstractResidence
 		return _fortType;
 	}
 	
-	public final int getCastleIdFromEnvoy(int npcId)
+	/**
+	 * @param npcId the Id of the ambassador NPC
+	 * @return the Id of the castle this ambassador represents
+	 */
+	public final int getCastleIdByAmbassador(int npcId)
 	{
 		return _envoyCastles.get(npcId);
+	}
+	
+	/**
+	 * @param npcId the Id of the ambassador NPC
+	 * @return the castle this ambassador represents
+	 */
+	public final Castle getCastleByAmbassador(int npcId)
+	{
+		return CastleManager.getInstance().getCastleById(getCastleIdByAmbassador(npcId));
+	}
+	
+	/**
+	 * @return the Id of the castle contracted with this fortress
+	 */
+	public final int getContractedCastleId()
+	{
+		return _castleId;
+	}
+	
+	/**
+	 * @return the castle contracted with this fortress ({@code null} if no contract with any castle)
+	 */
+	public final Castle getContractedCastle()
+	{
+		return CastleManager.getInstance().getCastleById(getContractedCastleId());
+	}
+	
+	/**
+	 * Check if this is a border fortress (associated with multiple castles).
+	 * @return {@code true} if this is a border fortress (associated with more than one castle), {@code false} otherwise
+	 */
+	public final boolean isBorderFortress()
+	{
+		return _availableCastles.size() > 1;
 	}
 	
 	/**
@@ -1153,15 +1165,6 @@ public final class Fort extends AbstractResidence
 		{
 			spawnDat.doSpawn();
 			spawnDat.startRespawn();
-		}
-	}
-	
-	public void despawnSpecialEnvoys()
-	{
-		for (L2Spawn spawnDat : _specialEnvoys)
-		{
-			spawnDat.stopRespawn();
-			spawnDat.getLastSpawn().deleteMe();
 		}
 	}
 	
@@ -1288,6 +1291,7 @@ public final class Fort extends AbstractResidence
 	{
 		_specialEnvoys.clear();
 		_envoyCastles.clear();
+		_availableCastles.clear();
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT id, npcId, x, y, z, heading, castleId FROM fort_spawnlist WHERE fortId = ? AND spawnType = ? ORDER BY id"))
 		{
@@ -1313,6 +1317,7 @@ public final class Fort extends AbstractResidence
 						spawnDat.setRespawnDelay(60);
 						_specialEnvoys.add(spawnDat);
 						_envoyCastles.put(npcId, castleId);
+						_availableCastles.add(castleId);
 					}
 					else
 					{

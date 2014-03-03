@@ -118,7 +118,7 @@ public class L2NpcInstance extends L2Npc
 				if (minLevel > 0)
 				{
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.DO_NOT_HAVE_FURTHER_SKILLS_TO_LEARN_S1);
-					sm.addNumber(minLevel);
+					sm.addInt(minLevel);
 					player.sendPacket(sm);
 				}
 				else
@@ -169,7 +169,7 @@ public class L2NpcInstance extends L2Npc
 			if (minLevel > 0)
 			{
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.DO_NOT_HAVE_FURTHER_SKILLS_TO_LEARN_S1);
-				sm.addNumber(minLevel);
+				sm.addInt(minLevel);
 				player.sendPacket(sm);
 			}
 			else
@@ -177,7 +177,7 @@ public class L2NpcInstance extends L2Npc
 				if (player.getClassId().level() == 1)
 				{
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.NO_SKILLS_TO_LEARN_RETURN_AFTER_S1_CLASS_CHANGE);
-					sm.addNumber(2);
+					sm.addInt(2);
 					player.sendPacket(sm);
 				}
 				else
