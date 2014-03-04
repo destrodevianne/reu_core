@@ -6921,16 +6921,18 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 								// Signets are a special case, casted on target_self but don't harm self
 								if ((skill.getSkillType() != L2SkillType.SIGNET) && (skill.getSkillType() != L2SkillType.SIGNET_CASTTIME))
 								{
-									target.getActingPlayer().getAI().clientStartAutoAttack();
-								}
-								else if (target.isSummon() && ((L2Character) target).hasAI())
-								{
-									L2PcInstance owner = ((L2Summon) target).getOwner();
-									if (owner != null)
+									if (target.isPlayer())
 									{
-										owner.getAI().clientStartAutoAttack();
+										target.getActingPlayer().getAI().clientStartAutoAttack();
 									}
-									
+									else if (target.isSummon() && ((L2Character) target).hasAI())
+									{
+										L2PcInstance owner = ((L2Summon) target).getOwner();
+										if (owner != null)
+										{
+											owner.getAI().clientStartAutoAttack();
+										}
+									}
 									// attack of the own pet does not flag player
 									// triggering trap not flag trap owner
 									if ((player.getSummon() != target) && !isTrap())
