@@ -84,7 +84,6 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	public static final int SKILL_ONYX_BEAST_TRANSFORMATION = 617;
 	
 	public static final int SKILL_SOUL_MASTERY = 467;
-	public static final boolean geoEnabled = Config.GEODATA > 0;
 	
 	// conditional values
 	public static final int COND_RUNNING = 0x0001;
@@ -1303,6 +1302,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 			return false;
 		}
 		
+		boolean geoEnabled = Config.GEODATA > 0;
 		boolean geoCanSeeTarget = geoEnabled ? GeoData.getInstance().canSeeTarget(caster, target) : true;
 		
 		final L2PcInstance player = caster.getActingPlayer();

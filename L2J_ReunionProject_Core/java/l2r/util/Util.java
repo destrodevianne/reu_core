@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Useful utilities common to L2J Server.
  */
-public class Util
+public final class Util
 {
 	private static final Logger _log = LoggerFactory.getLogger(Util.class);
 	
@@ -169,6 +169,16 @@ public class Util
 		{
 			return false;
 		}
+	}
+	
+	/**
+	 * Split words with a space.
+	 * @param input the string to split
+	 * @return the split string
+	 */
+	public static String splitWords(String input)
+	{
+		return input.replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
 	}
 	
 	// Valanths
