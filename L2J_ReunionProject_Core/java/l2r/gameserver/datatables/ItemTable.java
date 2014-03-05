@@ -32,7 +32,6 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.engines.DocumentEngine;
-import l2r.gameserver.engines.items.Item;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.L2Object;
@@ -54,8 +53,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class ...
- * @version $Revision: 1.9.2.6.2.9 $ $Date: 2005/04/02 15:57:34 $
+ * This class serves as a container for all item templates in the game.
  */
 public class ItemTable
 {
@@ -168,25 +166,13 @@ public class ItemTable
 	}
 	
 	/**
-	 * Returns instance of ItemTable
-	 * @return ItemTable
+	 * @return a reference to this ItemTable object
 	 */
 	public static ItemTable getInstance()
 	{
 		return SingletonHolder._instance;
 	}
 	
-	/**
-	 * @return a new object Item
-	 */
-	public Item newItem()
-	{
-		return new Item();
-	}
-	
-	/**
-	 * Constructor.
-	 */
 	protected ItemTable()
 	{
 		_etcItems = new FastMap<>();

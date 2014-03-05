@@ -81,6 +81,7 @@ import l2r.gameserver.network.serverpackets.ExShowScreenMessage;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.NpcQuestHtmlMessage;
+import l2r.gameserver.network.serverpackets.SpecialCamera;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.scripting.ManagedScript;
@@ -164,7 +165,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 		{
 			QuestManager.getInstance().addScript(this);
 		}
- 		
+		
 		loadGlobalData();
 	}
 	
@@ -3822,6 +3823,21 @@ public class Quest extends ManagedScript implements IIdentifiable
 	{
 		loc.setInstanceId(instanceId);
 		player.teleToLocation(loc, allowRandomOffset);
+	}
+	
+	public static final void specialCamera(L2PcInstance player, L2Character creature, int force, int angle1, int angle2, int time, int range, int duration, int relYaw, int relPitch, int isWide, int relAngle)
+	{
+		player.sendPacket(new SpecialCamera(creature, force, angle1, angle2, time, range, duration, relYaw, relPitch, isWide, relAngle));
+	}
+	
+	public static final void specialCameraEx(L2PcInstance player, L2Character creature, int force, int angle1, int angle2, int time, int duration, int relYaw, int relPitch, int isWide, int relAngle)
+	{
+		player.sendPacket(new SpecialCamera(creature, player, force, angle1, angle2, time, duration, relYaw, relPitch, isWide, relAngle));
+	}
+	
+	public static final void specialCamera3(L2PcInstance player, L2Character creature, int force, int angle1, int angle2, int time, int range, int duration, int relYaw, int relPitch, int isWide, int relAngle, int unk)
+	{
+		player.sendPacket(new SpecialCamera(creature, force, angle1, angle2, time, range, duration, relYaw, relPitch, isWide, relAngle, unk));
 	}
 	
 	public L2Npc spawnNpc(int npcId, int x, int y, int z, int heading, int instId)
