@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -162,7 +162,7 @@ public class TopBBSManager extends BaseBBSManager
 	public String getRealOnline()
 	{
 		int counter = 0;
-		for (L2PcInstance onlinePlayer : L2World.getInstance().getAllPlayersArray())
+		for (L2PcInstance onlinePlayer : L2World.getInstance().getPlayers())
 		{
 			if (onlinePlayer.isOnline() && ((onlinePlayer.getClient() != null) && !onlinePlayer.getClient().isDetached()))
 			{

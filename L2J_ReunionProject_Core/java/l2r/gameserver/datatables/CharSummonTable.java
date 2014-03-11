@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -23,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -40,14 +42,14 @@ import l2r.gameserver.network.serverpackets.PetItemList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-
 /**
  * @author Nyaran
  */
 public class CharSummonTable
 {
 	private static Logger _log = LoggerFactory.getLogger(CharSummonTable.class);
+	private static final Map<Integer, Integer> _pets = new ConcurrentHashMap<>();
+	private static final Map<Integer, Integer> _servitors = new ConcurrentHashMap<>();
 	
 	private static final String INIT_SUMMONS = "SELECT ownerId, summonSkillId FROM character_summons";
 	private static final String INIT_PET = "SELECT ownerId, item_obj_id FROM pets WHERE restore = 'true'";
@@ -55,9 +57,6 @@ public class CharSummonTable
 	private static final String SAVE_SUMMON = "REPLACE INTO character_summons (ownerId,summonSkillId,curHp,curMp,time) VALUES (?,?,?,?,?)";
 	private static final String LOAD_SUMMON = "SELECT curHp, curMp, time FROM character_summons WHERE ownerId = ? AND summonSkillId = ?";
 	private static final String REMOVE_SUMMON = "DELETE FROM character_summons WHERE ownerId = ?";
-	
-	private static final TIntIntHashMap _servitors = new TIntIntHashMap();
-	private static final TIntIntHashMap _pets = new TIntIntHashMap();
 	
 	public static CharSummonTable getInstance()
 	{
@@ -101,14 +100,14 @@ public class CharSummonTable
 		}
 	}
 	
-	public TIntIntHashMap getServitors()
-	{
-		return _servitors;
-	}
-	
-	public TIntIntHashMap getPets()
+	public Map<Integer, Integer> getPets()
 	{
 		return _pets;
+	}
+	
+	public Map<Integer, Integer> getServitors()
+	{
+		return _servitors;
 	}
 	
 	public void saveSummon(L2ServitorInstance summon)
@@ -157,7 +156,7 @@ public class CharSummonTable
 					int curMp = rs.getInt("curMp");
 					int time = rs.getInt("time");
 					
-					skill = (L2SkillSummon) SkillTable.getInstance().getInfo(skillId, activeChar.getSkillLevel(skillId));
+					skill = (L2SkillSummon) SkillData.getInstance().getInfo(skillId, activeChar.getSkillLevel(skillId));
 					if (skill == null)
 					{
 						removeServitor(activeChar);

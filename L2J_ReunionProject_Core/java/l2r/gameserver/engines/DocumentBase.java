@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -20,9 +20,11 @@ package l2r.gameserver.engines;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,6 +33,7 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.NpcRace;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.model.ChanceCondition;
 import l2r.gameserver.model.StatsSet;
@@ -97,10 +100,10 @@ import l2r.gameserver.model.conditions.ConditionTargetInvSize;
 import l2r.gameserver.model.conditions.ConditionTargetLevel;
 import l2r.gameserver.model.conditions.ConditionTargetLevelRange;
 import l2r.gameserver.model.conditions.ConditionTargetNpcId;
+import l2r.gameserver.model.conditions.ConditionTargetNpcRace;
 import l2r.gameserver.model.conditions.ConditionTargetNpcType;
 import l2r.gameserver.model.conditions.ConditionTargetPlayable;
 import l2r.gameserver.model.conditions.ConditionTargetRace;
-import l2r.gameserver.model.conditions.ConditionTargetRaceId;
 import l2r.gameserver.model.conditions.ConditionTargetUsesWeaponKind;
 import l2r.gameserver.model.conditions.ConditionTargetWeight;
 import l2r.gameserver.model.conditions.ConditionUsingItemType;
@@ -1024,19 +1027,18 @@ public abstract class DocumentBase
 				int distance = Integer.decode(getValue(a.getNodeValue(), null));
 				cond = joinAnd(cond, new ConditionMinDistance(distance * distance));
 			}
-			// used for npc race
-			else if ("race_id".equalsIgnoreCase(a.getNodeName()))
+			else if ("npcrace".equalsIgnoreCase(a.getNodeName()))
 			{
-				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
-				ArrayList<Integer> array = new ArrayList<>(st.countTokens());
-				while (st.hasMoreTokens())
+				// used for npc race
+				final String[] values = a.getNodeValue().split(",");
+				final Set<NpcRace> array = new HashSet<>(values.length);
+				for (String value : values)
 				{
-					String item = st.nextToken().trim();
-					array.add(Integer.decode(getValue(item, null)));
+					array.add(NpcRace.valueOf(getValue(value, null)));
 				}
-				cond = joinAnd(cond, new ConditionTargetRaceId(array));
+				cond = joinAnd(cond, new ConditionTargetNpcRace(array));
+				break;
 			}
-			// used for pc race
 			else if ("races".equalsIgnoreCase(a.getNodeName()))
 			{
 				final String[] racesVal = a.getNodeValue().split(",");

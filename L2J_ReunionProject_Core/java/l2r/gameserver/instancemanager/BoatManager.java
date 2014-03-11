@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -29,8 +29,8 @@ import l2r.gameserver.model.VehiclePathPoint;
 import l2r.gameserver.model.actor.instance.L2BoatInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
-import gnu.trove.procedure.TObjectProcedure;
 
 public class BoatManager
 {
@@ -178,7 +178,7 @@ public class BoatManager
 		L2World.getInstance().forEachPlayer(new ForEachPlayerBroadcastPackets(point1, point2, packets));
 	}
 	
-	private final class ForEachPlayerBroadcastPackets implements TObjectProcedure<L2PcInstance>
+	private final class ForEachPlayerBroadcastPackets implements IProcedure<L2PcInstance, Boolean>
 	{
 		VehiclePathPoint _point1, _point2;
 		L2GameServerPacket[] _packets;
@@ -191,7 +191,7 @@ public class BoatManager
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance player)
+		public final Boolean execute(final L2PcInstance player)
 		{
 			if (player != null)
 			{

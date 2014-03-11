@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J DataPack
+ * Copyright (C) 2004-2014 L2J DataPack
  * 
  * This file is part of L2J DataPack.
  * 
@@ -23,10 +23,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.variables.AbstractVariables;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author UnAfraid
  */
-public class PlayerVariables extends StatsSet
+public class PlayerVariables extends AbstractVariables
 {
 	private static final Logger _log = LoggerFactory.getLogger(PlayerVariables.class);
 	
@@ -44,15 +44,15 @@ public class PlayerVariables extends StatsSet
 	private static final String INSERT_QUERY = "INSERT INTO character_variables (charId, var, val) VALUES (?, ?, ?)";
 	
 	private final int _objectId;
-	private final AtomicBoolean _hasChanges = new AtomicBoolean(false);
 	
 	public PlayerVariables(int objectId)
 	{
 		_objectId = objectId;
-		load();
+		restoreMe();
 	}
 	
-	private void load()
+	@Override
+	public boolean restoreMe()
 	{
 		// Restore previous variables.
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
@@ -63,22 +63,29 @@ public class PlayerVariables extends StatsSet
 			{
 				while (rset.next())
 				{
-					super.set(rset.getString("var"), rset.getString("val"));
+					set(rset.getString("var"), rset.getString("val"));
 				}
 			}
 		}
 		catch (SQLException e)
 		{
 			_log.warn(getClass().getSimpleName() + ": Couldn't restore variables for: " + getPlayer(), e);
+			return false;
 		}
+		finally
+		{
+			compareAndSetChanges(true, false);
+		}
+		return true;
 	}
 	
-	public void store()
+	@Override
+	public boolean storeMe()
 	{
 		// No changes, nothing to store.
-		if (!_hasChanges.get())
+		if (!hasChanges())
 		{
-			return;
+			return false;
 		}
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
@@ -106,57 +113,13 @@ public class PlayerVariables extends StatsSet
 		catch (SQLException e)
 		{
 			_log.warn(getClass().getSimpleName() + ": Couldn't update variables for: " + getPlayer(), e);
+			return false;
 		}
 		finally
 		{
-			_hasChanges.compareAndSet(true, false);
+			compareAndSetChanges(true, false);
 		}
-	}
-	
-	/**
-	 * Overriding following methods to prevent from doing useless database operations if there is no changes since player's login.
-	 */
-	
-	@Override
-	public void set(String name, boolean value)
-	{
-		_hasChanges.compareAndSet(false, true);
-		super.set(name, value);
-	}
-	
-	@Override
-	public void set(String name, double value)
-	{
-		_hasChanges.compareAndSet(false, true);
-		super.set(name, value);
-	}
-	
-	@Override
-	public void set(String name, Enum<?> value)
-	{
-		_hasChanges.compareAndSet(false, true);
-		super.set(name, value);
-	}
-	
-	@Override
-	public void set(String name, int value)
-	{
-		_hasChanges.compareAndSet(false, true);
-		super.set(name, value);
-	}
-	
-	@Override
-	public void set(String name, long value)
-	{
-		_hasChanges.compareAndSet(false, true);
-		super.set(name, value);
-	}
-	
-	@Override
-	public void set(String name, String value)
-	{
-		_hasChanges.compareAndSet(false, true);
-		super.set(name, value);
+		return true;
 	}
 	
 	public L2PcInstance getPlayer()

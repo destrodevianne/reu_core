@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -74,7 +74,7 @@ import l2r.gameserver.datatables.RecipeData;
 import l2r.gameserver.datatables.SecondaryAuthData;
 import l2r.gameserver.datatables.SiegeScheduleData;
 import l2r.gameserver.datatables.SkillLearnData;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.datatables.StaticObjects;
@@ -223,7 +223,7 @@ public class GameServer
 		EffectHandler.getInstance().executeScript();
 		EnchantGroupsData.getInstance();
 		SkillTreesData.getInstance();
-		SkillTable.getInstance();
+		SkillData.getInstance();
 		SummonSkillsTable.getInstance();
 		
 		printSection("Items");

@@ -29,7 +29,7 @@ import l2r.gameserver.datatables.HennaData;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.MultiSell;
 import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.TransformData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcRace;
@@ -872,7 +872,7 @@ public final class L2AioNpcInstance extends L2Npc
 			player.getClan().changeLevel(11);
 			player.sendMessage("Clan level set to 11");
 			player.getClan().addReputationScore(500000, true);
-			player.getClan().addNewSkill(SkillTable.getInstance().getInfo(391, 1));
+			player.getClan().addNewSkill(SkillData.getInstance().getInfo(391, 1));
 			int[] squad =
 			{
 				611,
@@ -908,11 +908,11 @@ public final class L2AioNpcInstance extends L2Npc
 			};
 			for (int ids : normal)
 			{
-				player.getClan().addNewSkill(SkillTable.getInstance().getInfo(ids, 3));
+				player.getClan().addNewSkill(SkillData.getInstance().getInfo(ids, 3));
 			}
 			for (int ids : squad)
 			{
-				player.getClan().addNewSkill(SkillTable.getInstance().getInfo(ids, 3), 0);
+				player.getClan().addNewSkill(SkillData.getInstance().getInfo(ids, 3), 0);
 			}
 			
 			player.sendMessage("You have successfully perform this action");

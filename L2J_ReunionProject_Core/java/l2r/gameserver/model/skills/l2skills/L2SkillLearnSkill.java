@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.skills.l2skills;
 
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
@@ -75,7 +75,7 @@ public class L2SkillLearnSkill extends L2Skill
 		{
 			if ((player.getSkillLevel(_learnSkillId[i]) < _learnSkillLvl[i]) && (_learnSkillId[i] != 0))
 			{
-				newSkill = SkillTable.getInstance().getInfo(_learnSkillId[i], _learnSkillLvl[i]);
+				newSkill = SkillData.getInstance().getInfo(_learnSkillId[i], _learnSkillLvl[i]);
 				if (newSkill != null)
 				{
 					player.addSkill(newSkill, true);

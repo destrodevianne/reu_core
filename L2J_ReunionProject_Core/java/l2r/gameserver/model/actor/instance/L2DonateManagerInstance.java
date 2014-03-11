@@ -7,7 +7,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.MultiSell;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.TransformData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.idfactory.IdFactory;
@@ -125,14 +125,14 @@ public class L2DonateManagerInstance extends L2Npc
 			player.getClan().changeLevel(11);
 			player.sendMessage("Clan level set to 11.");
 			player.getClan().addReputationScore(DonateManagerConfigs.REPUTATION_POINTS_TO_ADD, true);
-			player.getClan().addNewSkill(SkillTable.getInstance().getInfo(391, 1));
+			player.getClan().addNewSkill(SkillData.getInstance().getInfo(391, 1));
 			for (int mainSkill : DonateManagerConfigs.CLAN_MAIN_SKILLS)
 			{
-				player.getClan().addNewSkill(SkillTable.getInstance().getInfo(mainSkill, 3));
+				player.getClan().addNewSkill(SkillData.getInstance().getInfo(mainSkill, 3));
 			}
 			for (int squadSkill : DonateManagerConfigs.CLAN_SQUAD_SKILLS)
 			{
-				player.getClan().addNewSkill(SkillTable.getInstance().getInfo(squadSkill, 3), 0);
+				player.getClan().addNewSkill(SkillData.getInstance().getInfo(squadSkill, 3), 0);
 			}
 			player.sendMessage("You have successfully perform this action.");
 		}

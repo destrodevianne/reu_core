@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -26,7 +26,7 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.ZoneIdType;
@@ -334,9 +334,9 @@ public final class BlockCheckerEngine
 		public StartEvent()
 		{
 			// Initialize all used skills
-			_freeze = SkillTable.getInstance().getInfo(6034, 1);
-			_transformationRed = SkillTable.getInstance().getInfo(6035, 1);
-			_transformationBlue = SkillTable.getInstance().getInfo(6036, 1);
+			_freeze = SkillData.getInstance().getInfo(6034, 1);
+			_transformationRed = SkillData.getInstance().getInfo(6035, 1);
+			_transformationBlue = SkillData.getInstance().getInfo(6036, 1);
 		}
 		
 		/**

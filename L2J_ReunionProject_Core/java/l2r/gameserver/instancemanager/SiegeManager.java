@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
@@ -67,7 +67,7 @@ public class SiegeManager
 	
 	public final void addSiegeSkills(L2PcInstance character)
 	{
-		for (L2Skill sk : SkillTable.getInstance().getSiegeSkills(character.isNoble(), character.getClan().getCastleId() > 0))
+		for (L2Skill sk : SkillData.getInstance().getSiegeSkills(character.isNoble(), character.getClan().getCastleId() > 0))
 		{
 			character.addSkill(sk, false);
 		}
@@ -154,7 +154,7 @@ public class SiegeManager
 	
 	public final void removeSiegeSkills(L2PcInstance character)
 	{
-		for (L2Skill sk : SkillTable.getInstance().getSiegeSkills(character.isNoble(), character.getClan().getCastleId() > 0))
+		for (L2Skill sk : SkillData.getInstance().getSiegeSkills(character.isNoble(), character.getClan().getCastleId() > 0))
 		{
 			character.removeSkill(sk);
 		}

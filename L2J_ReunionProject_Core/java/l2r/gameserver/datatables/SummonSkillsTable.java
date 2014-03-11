@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -67,7 +67,7 @@ public class SummonSkillsTable
 						{
 							int id = skilltree.getInt("skillId");
 							int lvl = skilltree.getInt("skillLvl");
-							map.put(SkillTable.getSkillHashCode(id, lvl + 1), new L2PetSkillLearn(id, lvl, skilltree.getInt("minLvl")));
+							map.put(SkillData.getSkillHashCode(id, lvl + 1), new L2PetSkillLearn(id, lvl, skilltree.getInt("minLvl")));
 						}
 						_skillTrees.put(npcId, map);
 					}
@@ -114,7 +114,7 @@ public class SummonSkillsTable
 				}
 				
 				// formula usable for skill that have 10 or more skill levels
-				int maxLvl = SkillTable.getInstance().getMaxLevel(temp.getId());
+				int maxLvl = SkillData.getInstance().getMaxLevel(temp.getId());
 				if (lvl > maxLvl)
 				{
 					lvl = maxLvl;

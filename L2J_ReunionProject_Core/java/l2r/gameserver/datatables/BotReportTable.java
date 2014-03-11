@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,8 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-import gnu.trove.map.hash.TIntLongHashMap;
-
 /**
  * @author BiggBoss
  */
@@ -51,7 +50,7 @@ public final class BotReportTable
 	private static final String SQL_INSERT_REPORTED_CHAR_DATA = "INSERT INTO bot_reported_char_data VALUES (?,?,?)";
 	private static final String SQL_CLEAR_REPORTED_CHAR_DATA = "DELETE FROM bot_reported_char_data";
 	
-	private TIntLongHashMap _ipRegistry;
+	private Map<Integer, Long> _ipRegistry;
 	private Map<Integer, ReporterCharData> _charRegistry;
 	private Map<Integer, ReportedCharData> _reports;
 	private Map<Integer, PunishHolder> _punishments;
@@ -60,7 +59,7 @@ public final class BotReportTable
 	{
 		if (Config.BOTREPORT_ENABLE)
 		{
-			_ipRegistry = new TIntLongHashMap();
+			_ipRegistry = new HashMap<>();
 			_charRegistry = new ConcurrentHashMap<>();
 			_reports = new ConcurrentHashMap<>();
 			_punishments = new ConcurrentHashMap<>();
@@ -173,8 +172,8 @@ public final class BotReportTable
 			st = con.prepareStatement(SQL_INSERT_REPORTED_CHAR_DATA);
 			for (Map.Entry<Integer, ReportedCharData> entrySet : _reports.entrySet())
 			{
-				TIntLongHashMap reportTable = entrySet.getValue()._reporters;
-				for (int reporterId : reportTable.keys())
+				Map<Integer, Long> reportTable = entrySet.getValue()._reporters;
+				for (int reporterId : reportTable.keySet())
 				{
 					st.setInt(1, entrySet.getKey());
 					st.setInt(2, reporterId);
@@ -365,7 +364,7 @@ public final class BotReportTable
 	 */
 	void addPunishment(int neededReports, int skillId, int skillLevel, int sysMsg)
 	{
-		L2Skill sk = SkillTable.getInstance().getInfo(skillId, skillLevel);
+		L2Skill sk = SkillData.getInstance().getInfo(skillId, skillLevel);
 		if (sk != null)
 		{
 			_punishments.put(neededReports, new PunishHolder(sk, sysMsg));
@@ -437,18 +436,16 @@ public final class BotReportTable
 	
 	/**
 	 * Checks and return if the abstrat barrier specified by an integer (map key) has accomplished the waiting time
-	 * @param map (a TIntLongHashMap to study (Int = barrier, Long = fully qualified unix time)
+	 * @param map (a Map to study (Int = barrier, Long = fully qualified unix time)
 	 * @param objectId (an existent map key)
 	 * @return true if the time has passed.
 	 */
-	private static boolean timeHasPassed(TIntLongHashMap map, int objectId)
+	private static boolean timeHasPassed(Map<Integer, Long> map, int objectId)
 	{
-		long time;
-		if ((time = map.get(objectId)) != map.getNoEntryValue())
+		if (map.containsKey(objectId))
 		{
-			return (System.currentTimeMillis() - time) > Config.BOTREPORT_REPORT_DELAY;
+			return (System.currentTimeMillis() - map.get(objectId)) > Config.BOTREPORT_REPORT_DELAY;
 		}
-		
 		return true;
 	}
 	
@@ -493,11 +490,11 @@ public final class BotReportTable
 	 */
 	private final class ReportedCharData
 	{
-		TIntLongHashMap _reporters;
+		Map<Integer, Long> _reporters;
 		
 		ReportedCharData()
 		{
-			_reporters = new TIntLongHashMap();
+			_reporters = new HashMap<>();
 		}
 		
 		int getReportCount()
@@ -507,7 +504,7 @@ public final class BotReportTable
 		
 		boolean alredyReportedBy(int objectId)
 		{
-			return _reporters.contains(objectId);
+			return _reporters.containsKey(objectId);
 		}
 		
 		void addReporter(int objectId, long reportTime)
@@ -522,7 +519,7 @@ public final class BotReportTable
 				return false;
 			}
 			
-			for (int reporterId : _reporters.keys())
+			for (int reporterId : _reporters.keySet())
 			{
 				if (clan.isMember(reporterId))
 				{

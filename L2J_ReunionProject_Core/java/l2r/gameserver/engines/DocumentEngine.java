@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,7 @@ import java.util.Map;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.engines.items.DocumentItem;
 import l2r.gameserver.engines.skills.DocumentSkill;
 import l2r.gameserver.model.items.L2Item;
@@ -102,7 +102,7 @@ public class DocumentEngine
 			}
 			for (L2Skill skill : s)
 			{
-				allSkills.put(SkillTable.getSkillHashCode(skill), skill);
+				allSkills.put(SkillData.getSkillHashCode(skill), skill);
 				count++;
 			}
 		}

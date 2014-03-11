@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -36,6 +36,7 @@ import l2r.gameserver.instancemanager.RaidBossSpawnManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Hero;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.SystemMessageId;
@@ -47,7 +48,6 @@ import l2r.gameserver.util.Broadcast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gnu.trove.procedure.TObjectProcedure;
 import gr.reunion.backupManager.DatabaseBackupManager;
 import gr.reunion.configsEngine.BackupManagerConfigs;
 import gr.reunion.configsEngine.LeaderboardsConfigs;
@@ -615,15 +615,15 @@ public class Shutdown extends Thread
 	 */
 	private void disconnectAllCharacters()
 	{
-		L2World.getInstance().getAllPlayers().safeForEachValue(new DisconnectAllCharacters());
+		L2World.getInstance().forEachPlayer(new DisconnectAllCharacters());
 	}
 	
-	protected final class DisconnectAllCharacters implements TObjectProcedure<L2PcInstance>
+	protected final class DisconnectAllCharacters implements IProcedure<L2PcInstance, Boolean>
 	{
 		private final Logger _log = LoggerFactory.getLogger(DisconnectAllCharacters.class);
 		
 		@Override
-		public final boolean execute(final L2PcInstance player)
+		public final Boolean execute(final L2PcInstance player)
 		{
 			if (player != null)
 			{

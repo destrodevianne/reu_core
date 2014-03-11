@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,7 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.interfaces.IL2Procedure;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExCloseMPCC;
 import l2r.gameserver.network.serverpackets.ExMPCCPartyInfoUpdate;
@@ -235,10 +235,10 @@ public class L2CommandChannel extends AbstractPlayerGroup
 	
 	/**
 	 * Iterates over all command channel members without the need to allocate a new list
-	 * @see l2r.gameserver.model.AbstractPlayerGroup#forEachMember(IL2Procedure)
+	 * @see l2r.gameserver.model.AbstractPlayerGroup#forEachMember(IProcedure)
 	 */
 	@Override
-	public boolean forEachMember(IL2Procedure<L2PcInstance> procedure)
+	public boolean forEachMember(IProcedure<L2PcInstance, Boolean> procedure)
 	{
 		if ((_parties != null) && !_parties.isEmpty())
 		{

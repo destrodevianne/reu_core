@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import l2r.gameserver.model.interfaces.IL2EntryProcedure;
-import l2r.gameserver.model.interfaces.IL2Procedure;
+import l2r.gameserver.model.interfaces.IProcedure;
 
 /**
  * A custom version of HashMap: Extension for iterating without using temporary collection<br>
@@ -76,7 +76,7 @@ public class L2HashMap<K, V> extends HashMap<K, V>
 		return true;
 	}
 	
-	public boolean executeForEachKey(IL2Procedure<K> proc)
+	public boolean executeForEachKey(IProcedure<K, Boolean> proc)
 	{
 		for (K k : keySet())
 		{
@@ -88,7 +88,7 @@ public class L2HashMap<K, V> extends HashMap<K, V>
 		return true;
 	}
 	
-	public boolean executeForEachValue(IL2Procedure<V> proc)
+	public boolean executeForEachValue(IProcedure<V, Boolean> proc)
 	{
 		for (V v : values())
 		{

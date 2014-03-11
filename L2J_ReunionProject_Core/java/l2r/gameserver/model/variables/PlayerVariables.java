@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J DataPack
+ * Copyright (C) 2004-2014 L2J DataPack
  * 
  * This file is part of L2J DataPack.
  * 
@@ -23,20 +23,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
  */
 public class PlayerVariables extends AbstractVariables
 {
-	private static final Logger _log = LoggerFactory.getLogger(PlayerVariables.class);
+	private static final Logger _log = Logger.getLogger(PlayerVariables.class.getName());
 	
 	// SQL Queries.
 	private static final String SELECT_QUERY = "SELECT * FROM character_variables WHERE charId = ?";
@@ -69,7 +68,7 @@ public class PlayerVariables extends AbstractVariables
 		}
 		catch (SQLException e)
 		{
-			_log.warn(getClass().getSimpleName() + ": Couldn't restore variables for: " + getPlayer(), e);
+			_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldn't restore variables for: " + getPlayer(), e);
 			return false;
 		}
 		finally
@@ -112,7 +111,7 @@ public class PlayerVariables extends AbstractVariables
 		}
 		catch (SQLException e)
 		{
-			_log.warn(getClass().getSimpleName() + ": Couldn't update variables for: " + getPlayer(), e);
+			_log.log(Level.WARNING, getClass().getSimpleName() + ": Couldn't update variables for: " + getPlayer(), e);
 			return false;
 		}
 		finally

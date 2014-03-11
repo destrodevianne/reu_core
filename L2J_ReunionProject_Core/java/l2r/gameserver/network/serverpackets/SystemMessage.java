@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -25,7 +25,7 @@ import l2r.Config;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.ZoneManager;
@@ -492,7 +492,7 @@ public final class SystemMessage extends L2GameServerPacket
 				case TYPE_SKILL_NAME:
 				{
 					final int[] array = param.getIntArrayValue();
-					final L2Skill skill = SkillTable.getInstance().getInfo(array[0], array[1]);
+					final L2Skill skill = SkillData.getInstance().getInfo(array[0], array[1]);
 					params[i] = skill == null ? "Unknown" : skill.getName();
 					break;
 				}

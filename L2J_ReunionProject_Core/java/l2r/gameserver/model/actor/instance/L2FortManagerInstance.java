@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
 
 import l2r.Config;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.TeleportLocationTable;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -887,7 +887,7 @@ public class L2FortManagerInstance extends L2MerchantInstance
 						{
 							skill_lvl = Integer.parseInt(st.nextToken());
 						}
-						skill = SkillTable.getInstance().getInfo(skill_id, skill_lvl);
+						skill = SkillData.getInstance().getInfo(skill_id, skill_lvl);
 						if (skill.getSkillType() == L2SkillType.SUMMON)
 						{
 							player.doCast(skill);

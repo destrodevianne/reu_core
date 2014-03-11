@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -26,7 +26,6 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.TeleportWhereType;
@@ -502,15 +501,6 @@ public abstract class L2Vehicle extends L2Character
 	public boolean isAutoAttackable(L2Character attacker)
 	{
 		return false;
-	}
-	
-	@Override
-	public void setAI(L2CharacterAI newAI)
-	{
-		if (_ai == null)
-		{
-			_ai = newAI;
-		}
 	}
 	
 	public class AIAccessor extends L2Character.AIAccessor

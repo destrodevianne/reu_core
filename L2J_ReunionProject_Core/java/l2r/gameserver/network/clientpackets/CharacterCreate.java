@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -30,7 +30,7 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.CharTemplateTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2ShortCut;
@@ -322,7 +322,7 @@ public final class CharacterCreate extends L2GameClientPacket
 		
 		for (L2SkillLearn skill : SkillTreesData.getInstance().getAvailableSkills(newChar, newChar.getClassId(), false, true))
 		{
-			newChar.addSkill(SkillTable.getInstance().getInfo(skill.getSkillId(), skill.getSkillLevel()), true);
+			newChar.addSkill(SkillData.getInstance().getInfo(skill.getSkillId(), skill.getSkillLevel()), true);
 			if ((skill.getSkillId() == 1001) || (skill.getSkillId() == 1177))
 			{
 				shortcut = new L2ShortCut(1, 0, 2, skill.getSkillId(), skill.getSkillLevel(), 1);

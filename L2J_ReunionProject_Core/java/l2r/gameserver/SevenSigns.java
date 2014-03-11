@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.AutoSpawnHandler;
@@ -40,6 +40,7 @@ import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SSQInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
@@ -47,8 +48,6 @@ import l2r.gameserver.util.Broadcast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.trove.procedure.TObjectProcedure;
 
 /**
  * Seven Signs engine.
@@ -1432,7 +1431,7 @@ public class SevenSigns
 		L2World.getInstance().forEachPlayer(new TeleLosingCabalFromDungeons(compWinner));
 	}
 	
-	private final class TeleLosingCabalFromDungeons implements TObjectProcedure<L2PcInstance>
+	private final class TeleLosingCabalFromDungeons implements IProcedure<L2PcInstance, Boolean>
 	{
 		private final String _cmpWinner;
 		
@@ -1442,7 +1441,7 @@ public class SevenSigns
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance onlinePlayer)
+		public final Boolean execute(final L2PcInstance onlinePlayer)
 		{
 			if (onlinePlayer != null)
 			{
@@ -1658,7 +1657,7 @@ public class SevenSigns
 		L2World.getInstance().forEachPlayer(new GiveCPMult(StrifeOwner));
 	}
 	
-	private final class GiveCPMult implements TObjectProcedure<L2PcInstance>
+	private final class GiveCPMult implements IProcedure<L2PcInstance, Boolean>
 	{
 		private final int _strifeOwner;
 		
@@ -1668,7 +1667,7 @@ public class SevenSigns
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance character)
+		public final Boolean execute(final L2PcInstance character)
 		{
 			if (character != null)
 			{
@@ -1678,12 +1677,12 @@ public class SevenSigns
 				{
 					if (cabal == _strifeOwner)
 					{
-						character.addSkill(SkillTable.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
+						character.addSkill(SkillData.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
 					}
 					else
 					{
 						// Gives "The Vanquished of War" passive skill to all online characters with Cabal, which does not control Seal of Strife
-						character.addSkill(SkillTable.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
+						character.addSkill(SkillData.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
 					}
 				}
 			}
@@ -1696,16 +1695,16 @@ public class SevenSigns
 		L2World.getInstance().forEachPlayer(new RemoveCPMult());
 	}
 	
-	protected final class RemoveCPMult implements TObjectProcedure<L2PcInstance>
+	protected final class RemoveCPMult implements IProcedure<L2PcInstance, Boolean>
 	{
 		@Override
-		public final boolean execute(final L2PcInstance character)
+		public final Boolean execute(final L2PcInstance character)
 		{
 			if (character != null)
 			{
 				// Remove SevenSigns' buffs/debuffs.
-				character.removeSkill(SkillTable.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
-				character.removeSkill(SkillTable.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
+				character.removeSkill(SkillData.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
+				character.removeSkill(SkillData.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
 			}
 			return true;
 		}

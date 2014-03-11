@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -36,7 +36,7 @@ import l2r.gameserver.communitybbs.Managers.ForumsBBSManager;
 import l2r.gameserver.datatables.CharNameTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.CrestTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
@@ -158,8 +158,8 @@ public class L2Clan implements IIdentifiable, INamable
 	private static final int MAX_NOTICE_LENGTH = 8192;
 	private int _newLeaderId;
 	
-	private AtomicInteger _siegeKills;
-	private AtomicInteger _siegeDeaths;
+	private final AtomicInteger _siegeKills = new AtomicInteger();
+	private final AtomicInteger _siegeDeaths = new AtomicInteger();
 	
 	/**
 	 * Called if a clan is referenced only by id. In this case all other data needs to be fetched from db
@@ -1266,7 +1266,7 @@ public class L2Clan implements IIdentifiable, INamable
 					int id = rset.getInt("skill_id");
 					int level = rset.getInt("skill_level");
 					// Create a L2Skill object for each record
-					L2Skill skill = SkillTable.getInstance().getInfo(id, level);
+					L2Skill skill = SkillData.getInstance().getInfo(id, level);
 					// Add the L2Skill object to the L2Clan _skills
 					int subType = rset.getInt("sub_pledge_id");
 					
@@ -3118,58 +3118,32 @@ public class L2Clan implements IIdentifiable, INamable
 	
 	public int getSiegeKills()
 	{
-		return _siegeKills != null ? _siegeKills.get() : 0;
+		return _siegeKills.get();
 	}
 	
 	public int getSiegeDeaths()
 	{
-		return _siegeDeaths != null ? _siegeDeaths.get() : 0;
+		return _siegeDeaths.get();
 	}
 	
 	public int addSiegeKill()
 	{
-		if (_siegeKills == null)
-		{
-			synchronized (this)
-			{
-				if (_siegeKills == null)
-				{
-					_siegeKills = new AtomicInteger();
-				}
-			}
-		}
 		return _siegeKills.incrementAndGet();
 	}
 	
 	public int addSiegeDeath()
 	{
-		if (_siegeDeaths == null)
-		{
-			synchronized (this)
-			{
-				if (_siegeDeaths == null)
-				{
-					_siegeDeaths = new AtomicInteger();
-				}
-			}
-		}
 		return _siegeDeaths.incrementAndGet();
 	}
 	
 	public void clearSiegeKills()
 	{
-		if (_siegeKills != null)
-		{
-			_siegeKills.set(0);
-		}
+		_siegeKills.set(0);
 	}
 	
 	public void clearSiegeDeaths()
 	{
-		if (_siegeDeaths != null)
-		{
-			_siegeDeaths.set(0);
-		}
+		_siegeDeaths.set(0);
 	}
 	
 	// Listeners

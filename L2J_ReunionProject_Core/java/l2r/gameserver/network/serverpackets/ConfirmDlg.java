@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -31,6 +31,7 @@ import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
 
 /**
+ * ConfirmDlg server packet implementation.
  * @author kombat
  */
 public class ConfirmDlg extends L2GameServerPacket
@@ -70,7 +71,13 @@ public class ConfirmDlg extends L2GameServerPacket
 	
 	public ConfirmDlg(SystemMessageId messageId)
 	{
-		_messageId = messageId.getId();
+		this(messageId.getId());
+	}
+	
+	public ConfirmDlg(String text)
+	{
+		this(SystemMessageId.S1);
+		addString(text);
 	}
 	
 	public ConfirmDlg addString(String text)

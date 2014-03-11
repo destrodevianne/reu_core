@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -21,7 +21,7 @@ package l2r.util;
 import java.util.Collection;
 
 import javolution.util.FastList;
-import l2r.gameserver.model.interfaces.IL2Procedure;
+import l2r.gameserver.model.interfaces.IProcedure;
 
 /**
  * A custom version of FastList with extension for iterating without using temporary collection<br>
@@ -89,7 +89,7 @@ public class L2FastList<T> extends FastList<T>
 	 * @return - returns true if entire collection is iterated, false if it`s been interrupted by<br>
 	 *         check method (IL2Procedure.execute(T))<br>
 	 */
-	public boolean executeForEach(IL2Procedure<T> proc)
+	public boolean executeForEach(IProcedure<T, Boolean> proc)
 	{
 		for (T e : this)
 		{

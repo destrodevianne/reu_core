@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -75,8 +75,8 @@ import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.RecipeData;
-import l2r.gameserver.datatables.SkillTable;
-import l2r.gameserver.datatables.SkillTable.FrequentSkill;
+import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.SkillData.FrequentSkill;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
@@ -323,13 +323,12 @@ import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerDespawnListe
 import l2r.gameserver.scripting.scriptengine.listeners.player.ProfessionChangeListener;
 import l2r.gameserver.scripting.scriptengine.listeners.player.TransformListener;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
-import l2r.util.EnumIntBitmask;
 import l2r.gameserver.util.Broadcast;
 import l2r.gameserver.util.FloodProtectors;
 import l2r.gameserver.util.Util;
+import l2r.util.EnumIntBitmask;
 import l2r.util.L2FastList;
 import l2r.util.Rnd;
-import gnu.trove.list.array.TIntArrayList;
 import gr.reunion.achievementEngine.AchievementsHandler;
 import gr.reunion.configsEngine.AntibotConfigs;
 import gr.reunion.configsEngine.ColorSystemConfigs;
@@ -769,7 +768,7 @@ public final class L2PcInstance extends L2Playable
 	private boolean _messageRefusal = false; // message refusal mode
 	
 	private boolean _silenceMode = false; // silence mode
-	private final TIntArrayList _silenceModeExcluded = new TIntArrayList(); // silence mode
+	private List<Integer> _silenceModeExcluded; // silence mode
 	private boolean _dietMode = false; // ignore weight penalty
 	private boolean _tradeRefusal = false; // Trade refusal
 	private boolean _exchangeRefusal = false; // Exchange refusal
@@ -1265,7 +1264,7 @@ public final class L2PcInstance extends L2Playable
 		_appearance = app;
 		
 		// Create an AI
-		_ai = new L2PlayerAI(new L2PcInstance.AIAccessor());
+		getAI();
 		
 		// Create a L2Radar object
 		_radar = new L2Radar(this);
@@ -1349,25 +1348,10 @@ public final class L2PcInstance extends L2Playable
 		super.setTemplate(CharTemplateTable.getInstance().getTemplate(newclass));
 	}
 	
-	/**
-	 * Return the AI of the L2PcInstance (create it if necessary).
-	 */
 	@Override
-	public L2CharacterAI getAI()
+	protected L2CharacterAI initAI()
 	{
-		L2CharacterAI ai = _ai; // copy handle
-		if (ai == null)
-		{
-			synchronized (this)
-			{
-				if (_ai == null)
-				{
-					_ai = new L2PlayerAI(new L2PcInstance.AIAccessor());
-				}
-				return _ai;
-			}
-		}
-		return ai;
+		return new L2PlayerAI(new L2PcInstance.AIAccessor());
 	}
 	
 	/** Return the Level of the L2PcInstance. */
@@ -2413,7 +2397,7 @@ public final class L2PcInstance extends L2Playable
 				_curWeightPenalty = newWeightPenalty;
 				if ((newWeightPenalty > 0) && !_dietMode)
 				{
-					addSkill(SkillTable.getInstance().getInfo(4270, newWeightPenalty));
+					addSkill(SkillData.getInstance().getInfo(4270, newWeightPenalty));
 					setIsOverloaded(getCurrentLoad() > maxLoad);
 				}
 				else
@@ -2473,7 +2457,7 @@ public final class L2PcInstance extends L2Playable
 			_expertiseWeaponPenalty = weaponPenalty;
 			if (_expertiseWeaponPenalty > 0)
 			{
-				addSkill(SkillTable.getInstance().getInfo(FrequentSkill.WEAPON_GRADE_PENALTY.getId(), _expertiseWeaponPenalty));
+				addSkill(SkillData.getInstance().getInfo(FrequentSkill.WEAPON_GRADE_PENALTY.getId(), _expertiseWeaponPenalty));
 			}
 			else
 			{
@@ -2491,7 +2475,7 @@ public final class L2PcInstance extends L2Playable
 			_expertiseArmorPenalty = armorPenalty;
 			if (_expertiseArmorPenalty > 0)
 			{
-				addSkill(SkillTable.getInstance().getInfo(FrequentSkill.ARMOR_GRADE_PENALTY.getId(), _expertiseArmorPenalty));
+				addSkill(SkillData.getInstance().getInfo(FrequentSkill.ARMOR_GRADE_PENALTY.getId(), _expertiseArmorPenalty));
 			}
 			else
 			{
@@ -3003,7 +2987,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		// Get available skills
 		final List<L2SkillLearn> autoGetSkills = SkillTreesData.getInstance().getAvailableAutoGetSkills(this);
-		final SkillTable st = SkillTable.getInstance();
+		final SkillData st = SkillData.getInstance();
 		L2Skill skill;
 		for (L2SkillLearn s : autoGetSkills)
 		{
@@ -7197,7 +7181,7 @@ public final class L2PcInstance extends L2Playable
 		clearPetData();
 		if (wasFlying)
 		{
-			removeSkill(SkillTable.FrequentSkill.WYVERN_BREATH.getSkill());
+			removeSkill(SkillData.FrequentSkill.WYVERN_BREATH.getSkill());
 		}
 		broadcastPacket(new Ride(this));
 		setMountObjectID(0);
@@ -8093,7 +8077,7 @@ public final class L2PcInstance extends L2Playable
 		final PlayerVariables vars = getScript(PlayerVariables.class);
 		if (vars != null)
 		{
-			vars.store();
+			vars.storeMe();
 		}
 		
 		final AccountVariables aVars = getScript(AccountVariables.class);
@@ -8557,7 +8541,7 @@ public final class L2PcInstance extends L2Playable
 				final int level = rset.getInt("skill_level");
 				
 				// Create a L2Skill object for each record
-				final L2Skill skill = SkillTable.getInstance().getInfo(id, level);
+				final L2Skill skill = SkillData.getInstance().getInfo(id, level);
 				
 				if (skill == null)
 				{
@@ -8609,7 +8593,7 @@ public final class L2PcInstance extends L2Playable
 					long systime = rset.getLong("systime");
 					int restoreType = rset.getInt("restore_type");
 					
-					final L2Skill skill = SkillTable.getInstance().getInfo(rset.getInt("skill_id"), rset.getInt("skill_level"));
+					final L2Skill skill = SkillData.getInstance().getInfo(rset.getInt("skill_id"), rset.getInt("skill_level"));
 					if (skill == null)
 					{
 						continue;
@@ -10969,7 +10953,7 @@ public final class L2PcInstance extends L2Playable
 				isDisabled = s.isClanSkill() && (getClan().getReputationScore() < 0);
 			}
 			
-			boolean isEnchantable = SkillTable.getInstance().isEnchantable(s.getId());
+			boolean isEnchantable = SkillData.getInstance().isEnchantable(s.getId());
 			if (isEnchantable)
 			{
 				L2EnchantSkillLearn esl = EnchantGroupsData.getInstance().getSkillEnchantmentBySkillId(s.getId());
@@ -11055,7 +11039,7 @@ public final class L2PcInstance extends L2Playable
 				if (skillInfo.getGetLevel() <= 40)
 				{
 					L2Skill prevSkill = prevSkillList.get(skillInfo.getSkillId());
-					L2Skill newSkill = SkillTable.getInstance().getInfo(skillInfo.getSkillId(), skillInfo.getSkillLevel());
+					L2Skill newSkill = SkillData.getInstance().getInfo(skillInfo.getSkillId(), skillInfo.getSkillLevel());
 					
 					if ((prevSkill != null) && (prevSkill.getLevel() > newSkill.getLevel()))
 					{
@@ -12261,7 +12245,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			if (isFlying())
 			{
-				removeSkill(SkillTable.getInstance().getInfo(4289, 1));
+				removeSkill(SkillData.getInstance().getInfo(4289, 1));
 			}
 		}
 		catch (Exception e)
@@ -13474,7 +13458,7 @@ public final class L2PcInstance extends L2Playable
 		
 		if (getDeathPenaltyBuffLevel() != 0)
 		{
-			L2Skill skill = SkillTable.getInstance().getInfo(5076, getDeathPenaltyBuffLevel());
+			L2Skill skill = SkillData.getInstance().getInfo(5076, getDeathPenaltyBuffLevel());
 			
 			if (skill != null)
 			{
@@ -13484,7 +13468,7 @@ public final class L2PcInstance extends L2Playable
 		
 		_deathPenaltyBuffLevel++;
 		
-		addSkill(SkillTable.getInstance().getInfo(5076, getDeathPenaltyBuffLevel()), false);
+		addSkill(SkillData.getInstance().getInfo(5076, getDeathPenaltyBuffLevel()), false);
 		sendPacket(new EtcStatusUpdate(this));
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.DEATH_PENALTY_LEVEL_S1_ADDED);
 		sm.addInt(getDeathPenaltyBuffLevel());
@@ -13498,7 +13482,7 @@ public final class L2PcInstance extends L2Playable
 			return;
 		}
 		
-		L2Skill skill = SkillTable.getInstance().getInfo(5076, getDeathPenaltyBuffLevel());
+		L2Skill skill = SkillData.getInstance().getInfo(5076, getDeathPenaltyBuffLevel());
 		
 		if (skill != null)
 		{
@@ -13509,7 +13493,7 @@ public final class L2PcInstance extends L2Playable
 		
 		if (getDeathPenaltyBuffLevel() > 0)
 		{
-			addSkill(SkillTable.getInstance().getInfo(5076, getDeathPenaltyBuffLevel()), false);
+			addSkill(SkillData.getInstance().getInfo(5076, getDeathPenaltyBuffLevel()), false);
 			sendPacket(new EtcStatusUpdate(this));
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.DEATH_PENALTY_LEVEL_S1_ADDED);
 			sm.addInt(getDeathPenaltyBuffLevel());
@@ -13526,7 +13510,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (getDeathPenaltyBuffLevel() > 0)
 		{
-			addSkill(SkillTable.getInstance().getInfo(5076, getDeathPenaltyBuffLevel()), false);
+			addSkill(SkillData.getInstance().getInfo(5076, getDeathPenaltyBuffLevel()), false);
 		}
 	}
 	
@@ -13563,7 +13547,7 @@ public final class L2PcInstance extends L2Playable
 			sendPacket(sm);
 			if ((target instanceof L2Npc) && (getSkillLevel(467) > 0))
 			{
-				L2Skill skill = SkillTable.getInstance().getInfo(467, getSkillLevel(467));
+				L2Skill skill = SkillData.getInstance().getInfo(467, getSkillLevel(467));
 				if (Rnd.get(100) < skill.getCritChance())
 				{
 					absorbSoul(skill, ((L2Npc) target));
@@ -15077,43 +15061,43 @@ public final class L2PcInstance extends L2Playable
 					if ((level > (100 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)) && (level < 131))
 					{
 						level = (100 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL);
-						fixedSkill = SkillTable.getInstance().getInfo(id, level);
+						fixedSkill = SkillData.getInstance().getInfo(id, level);
 					}
 					else if ((level > (200 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)) && (level < 231))
 					{
 						level = (200 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL);
-						fixedSkill = SkillTable.getInstance().getInfo(id, level);
+						fixedSkill = SkillData.getInstance().getInfo(id, level);
 					}
 					else if ((level > (300 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)) && (level < 331))
 					{
 						level = (300 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL);
-						fixedSkill = SkillTable.getInstance().getInfo(id, level);
+						fixedSkill = SkillData.getInstance().getInfo(id, level);
 					}
 					else if ((level > (400 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)) && (level < 431))
 					{
 						level = (400 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL);
-						fixedSkill = SkillTable.getInstance().getInfo(id, level);
+						fixedSkill = SkillData.getInstance().getInfo(id, level);
 					}
 					else if ((level > (500 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)) && (level < 531))
 					{
 						level = (500 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL);
-						fixedSkill = SkillTable.getInstance().getInfo(id, level);
+						fixedSkill = SkillData.getInstance().getInfo(id, level);
 					}
 					else if ((level > (600 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)) && (level < 631))
 					{
 						level = (600 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL);
-						fixedSkill = SkillTable.getInstance().getInfo(id, level);
+						fixedSkill = SkillData.getInstance().getInfo(id, level);
 					}
 					else if ((level > (700 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)) && (level < 731))
 					{
 						level = (700 + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL);
-						fixedSkill = SkillTable.getInstance().getInfo(id, level);
+						fixedSkill = SkillData.getInstance().getInfo(id, level);
 					}
 				}
 				else if (CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL == 0)
 				{
-					level = SkillTable.getInstance().getMaxLevel(id);
-					fixedSkill = SkillTable.getInstance().getInfo(id, level);
+					level = SkillData.getInstance().getMaxLevel(id);
+					fixedSkill = SkillData.getInstance().getInfo(id, level);
 				}
 				// Setting the new level enchat for the skill.
 				if (fixedSkill != null)
@@ -15127,7 +15111,7 @@ public final class L2PcInstance extends L2Playable
 			}
 			if (level >= 100)
 			{
-				level = SkillTable.getInstance().getMaxLevel(id);
+				level = SkillData.getInstance().getMaxLevel(id);
 			}
 			final L2SkillLearn learn = SkillTreesData.getInstance().getClassSkill(id, level, getClassId());
 			// not found - not a learn skill?
@@ -15171,7 +15155,7 @@ public final class L2PcInstance extends L2Playable
 			{
 				_log.info("Decreasing skill id " + id + " from " + getSkillLevel(id) + " to " + nextLevel + " for " + this);
 			}
-			addSkill(SkillTable.getInstance().getInfo(id, nextLevel), true);
+			addSkill(SkillData.getInstance().getInfo(id, nextLevel), true);
 		}
 	}
 	

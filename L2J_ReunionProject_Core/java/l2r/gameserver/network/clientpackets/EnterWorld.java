@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -25,7 +25,7 @@ import l2r.gameserver.LoginServerThread;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.AdminTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.TaskPriority;
@@ -339,18 +339,18 @@ public class EnterWorld extends L2GameClientPacket
 			{
 				if (cabal == SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE))
 				{
-					activeChar.addSkill(SkillTable.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
+					activeChar.addSkill(SkillData.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
 				}
 				else
 				{
-					activeChar.addSkill(SkillTable.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
+					activeChar.addSkill(SkillData.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
 				}
 			}
 		}
 		else
 		{
-			activeChar.removeSkill(SkillTable.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
-			activeChar.removeSkill(SkillTable.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
+			activeChar.removeSkill(SkillData.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
+			activeChar.removeSkill(SkillData.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
 		}
 		
 		if (Config.ENABLE_VITALITY && Config.RECOVER_VITALITY_ON_RECONNECT)

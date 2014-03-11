@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.datatables.EnchantGroupsData;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 import l2r.gameserver.model.L2EnchantSkillLearn;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -106,7 +106,7 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 			return;
 		}
 		
-		final L2Skill skill = SkillTable.getInstance().getInfo(_skillId, _skillLvl);
+		final L2Skill skill = SkillData.getInstance().getInfo(_skillId, _skillLvl);
 		if (skill == null)
 		{
 			return;
@@ -191,7 +191,7 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 			}
 			else
 			{
-				player.addSkill(SkillTable.getInstance().getInfo(_skillId, s.getBaseLevel()), true);
+				player.addSkill(SkillData.getInstance().getInfo(_skillId, s.getBaseLevel()), true);
 				player.sendPacket(SystemMessageId.YOU_HAVE_FAILED_TO_ENCHANT_THE_SKILL_S1);
 				player.sendPacket(ExEnchantSkillResult.valueOf(false));
 				

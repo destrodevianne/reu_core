@@ -1,5 +1,7 @@
 package l2r.gameserver.taskmanager.tasks;
 
+import java.util.Collection;
+
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.taskmanager.Task;
@@ -26,7 +28,7 @@ public class TaskAdvent extends Task
 	public void onTimeElapsed(TaskManager.ExecutedTask task)
 	{
 		AdventTable.getInstance().execRecTask();
-		L2PcInstance[] onlinePlayers = L2World.getInstance().getAllPlayersArray();
+		Collection<L2PcInstance> onlinePlayers = L2World.getInstance().getPlayers();
 		for (L2PcInstance player : onlinePlayers)
 		{
 			if ((player != null) && (player.isOnline()))

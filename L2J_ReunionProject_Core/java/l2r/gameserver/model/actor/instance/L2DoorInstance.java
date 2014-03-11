@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -162,21 +162,9 @@ public class L2DoorInstance extends L2Character
 	}
 	
 	@Override
-	public L2CharacterAI getAI()
+	protected L2CharacterAI initAI()
 	{
-		L2CharacterAI ai = _ai; // copy handle
-		if (ai == null)
-		{
-			synchronized (this)
-			{
-				if (_ai == null)
-				{
-					_ai = new L2DoorAI(new AIAccessor());
-				}
-				return _ai;
-			}
-		}
-		return ai;
+		return new L2DoorAI(new AIAccessor());
 	}
 	
 	private void startTimerOpen()

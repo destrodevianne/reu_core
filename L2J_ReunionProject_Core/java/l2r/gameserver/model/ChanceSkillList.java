@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -19,7 +19,7 @@
 package l2r.gameserver.model;
 
 import javolution.util.FastMap;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.model.actor.L2Character;
@@ -161,7 +161,7 @@ public class ChanceSkillList extends FastMap<IChanceSkillTrigger, ChanceConditio
 				return;
 			}
 			
-			L2Skill triggered = SkillTable.getInstance().getInfo(effect.getTriggeredChanceId(), effect.getTriggeredChanceLevel());
+			L2Skill triggered = SkillData.getInstance().getInfo(effect.getTriggeredChanceId(), effect.getTriggeredChanceLevel());
 			if (triggered == null)
 			{
 				return;

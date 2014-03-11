@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -188,7 +188,7 @@ public class L2SignsPriestInstance extends L2Npc
 					}
 					break;
 				case 34: // Pay the participation fee request
-					if ((player.getClassId().level() > 1) && ((player.getAdena() >= Config.SSQ_JOIN_DAWN_ADENA_FEE) || (player.getInventory().getInventoryItemCount(Config.SSQ_MANORS_AGREEMENT_ID, -1) > 0)))
+					if ((player.getClassId().level() > 0) && ((player.getAdena() >= Config.SSQ_JOIN_DAWN_ADENA_FEE) || (player.getInventory().getInventoryItemCount(Config.SSQ_MANORS_AGREEMENT_ID, -1) > 0)))
 					{
 						showChatWindow(player, SevenSigns.SEVEN_SIGNS_HTML_PATH + "signs_33_dawn.htm");
 					}
@@ -204,7 +204,7 @@ public class L2SignsPriestInstance extends L2Npc
 				case 4: // Join a Cabal - SevenSigns 4 [0]1 x
 					int newSeal = Integer.parseInt(command.substring(15));
 					
-					if (player.getClassId().level() >= 2)
+					if (player.getClassId().level() >= 1)
 					{
 						if ((cabal == SevenSigns.CABAL_DUSK) && Config.ALT_GAME_CASTLE_DUSK)
 						{

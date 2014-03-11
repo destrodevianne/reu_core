@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -19,9 +19,12 @@
 package l2r.gameserver.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
@@ -30,13 +33,11 @@ import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2Players;
-import l2r.gameserver.util.L2TIntObjectHashMap;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.trove.procedure.TObjectProcedure;
 
 /**
  * This class ...
@@ -76,15 +77,14 @@ public final class L2World
 	
 	// private FastMap<String, L2PcInstance> _allGms;
 	
-	/** HashMap(Integer Player id, L2PcInstance) containing all the players in game */
-	private final L2TIntObjectHashMap<L2PcInstance> _allPlayers;
-	
-	/** L2ObjectHashMap(L2Object) containing all visible objects */
-	private final L2TIntObjectHashMap<L2Object> _allObjects;
-	private final L2TIntObjectHashMap<String> _allObjectsDebug;
-	
-	/** List with the pets instances and their owner id */
-	private final L2TIntObjectHashMap<L2PetInstance> _petsInstance;
+	/** Map containing all the players in game. */
+	private final Map<Integer, L2PcInstance> _allPlayers = new ConcurrentHashMap<>();
+	/** Map containing all visible objects. */
+	private final Map<Integer, L2Object> _allObjects = new ConcurrentHashMap<>();
+	/** Map used for debug. */
+	private final Map<Integer, String> _allObjectsDebug = new ConcurrentHashMap<>();
+	/** Map with the pets instances and their owner ID. */
+	private final Map<Integer, L2PetInstance> _petsInstance = new ConcurrentHashMap<>();
 	
 	private L2WorldRegion[][] _worldRegions;
 	
@@ -93,11 +93,6 @@ public final class L2World
 	 */
 	protected L2World()
 	{
-		_allPlayers = new L2TIntObjectHashMap<>();
-		_allObjects = new L2TIntObjectHashMap<>();
-		_allObjectsDebug = new L2TIntObjectHashMap<>();
-		_petsInstance = new L2TIntObjectHashMap<>();
-		
 		initRegions();
 	}
 	
@@ -164,7 +159,10 @@ public final class L2World
 	}
 	
 	/**
-	 * <B><U> Example of use </U> :</B> <li>Client packets : Action, AttackRequest, RequestJoinParty, RequestJoinPledge...</li>
+	 * <B><U> Example of use</U>:</B>
+	 * <ul>
+	 * <li>Client packets : Action, AttackRequest, RequestJoinParty, RequestJoinPledge...</li>
+	 * </ul>
 	 * @param oID Identifier of the L2Object
 	 * @return the L2Object object that belongs to an ID or null if no object found.
 	 */
@@ -173,21 +171,16 @@ public final class L2World
 		return _allObjects.get(oID);
 	}
 	
-	public final L2Object[] getAllVisibleObjectsArray()
+	public Collection<L2Object> getVisibleObjects()
 	{
-		return _allObjects.values(new L2Object[0]);
-	}
-	
-	public final boolean forEachObject(final TObjectProcedure<L2Object> proc)
-	{
-		return _allObjects.forEachValue(proc);
+		return _allObjects.values();
 	}
 	
 	/**
 	 * Get the count of all visible objects in world.
 	 * @return count off all L2World objects
 	 */
-	public final int getAllVisibleObjectsCount()
+	public int getVisibleObjectsCount()
 	{
 		return _allObjects.size();
 	}
@@ -227,19 +220,33 @@ public final class L2World
 		return AdminTable.getInstance().getAllGms(true);
 	}
 	
-	public L2TIntObjectHashMap<L2PcInstance> getAllPlayers()
+	public Collection<L2PcInstance> getPlayers()
 	{
-		return _allPlayers;
+		return _allPlayers.values();
 	}
 	
-	public final L2PcInstance[] getAllPlayersArray()
+	/**
+	 * Gets all players sorted by the given comparator.
+	 * @param comparator the comparator
+	 * @return the players sorted by the comparator
+	 */
+	public L2PcInstance[] getPlayersSortedBy(Comparator<L2PcInstance> comparator)
 	{
-		return _allPlayers.values(new L2PcInstance[0]);
+		final L2PcInstance[] players = _allPlayers.values().toArray(new L2PcInstance[_allPlayers.values().size()]);
+		Arrays.sort(players, comparator);
+		return players;
 	}
 	
-	public final boolean forEachPlayer(final TObjectProcedure<L2PcInstance> proc)
+	public boolean forEachPlayer(IProcedure<L2PcInstance, Boolean> procedure)
 	{
-		return _allPlayers.forEachValue(proc);
+		for (L2PcInstance player : _allPlayers.values())
+		{
+			if (!procedure.execute(player))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**

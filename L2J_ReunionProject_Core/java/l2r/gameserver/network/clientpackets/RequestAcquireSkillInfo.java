@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2SkillLearn;
@@ -75,7 +75,7 @@ public final class RequestAcquireSkillInfo extends L2GameClientPacket
 			return;
 		}
 		
-		final L2Skill skill = SkillTable.getInstance().getInfo(_id, _level);
+		final L2Skill skill = SkillData.getInstance().getInfo(_id, _level);
 		if (skill == null)
 		{
 			_log.warn(RequestAcquireSkillInfo.class.getSimpleName() + ": Skill Id: " + _id + " level: " + _level + " is undefined. " + RequestAcquireSkillInfo.class.getName() + " failed.");

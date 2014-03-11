@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -36,7 +36,7 @@ import l2r.gameserver.Announcements;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2SiegeClan;
@@ -410,7 +410,7 @@ public class TerritoryWarManager implements Siegable
 						final List<L2SkillLearn> residentialSkills = SkillTreesData.getInstance().getAvailableResidentialSkills(wardId);
 						for (L2SkillLearn s : residentialSkills)
 						{
-							final L2Skill sk = SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
+							final L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
 							if (sk != null)
 							{
 								for (L2PcInstance member : terNew.getOwnerClan().getOnlineMembers(0))
@@ -443,7 +443,7 @@ public class TerritoryWarManager implements Siegable
 					final List<L2SkillLearn> territorySkills = SkillTreesData.getInstance().getAvailableResidentialSkills(territoryId);
 					for (L2SkillLearn s : territorySkills)
 					{
-						final L2Skill sk = SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
+						final L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
 						if (sk != null)
 						{
 							for (L2PcInstance member : terOld.getOwnerClan().getOnlineMembers(0))
@@ -460,7 +460,7 @@ public class TerritoryWarManager implements Siegable
 							final List<L2SkillLearn> wardSkills = SkillTreesData.getInstance().getAvailableResidentialSkills(wardId);
 							for (L2SkillLearn s : wardSkills)
 							{
-								final L2Skill sk = SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
+								final L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
 								if (sk != null)
 								{
 									for (L2PcInstance member : terOld.getOwnerClan().getOnlineMembers(0))
@@ -1285,7 +1285,7 @@ public class TerritoryWarManager implements Siegable
 		{
 			if (isTWInProgress())
 			{
-				for (L2PcInstance player : L2World.getInstance().getAllPlayersArray())
+				for (L2PcInstance player : L2World.getInstance().getPlayers())
 				{
 					if ((player != null) && (player.getSiegeSide() > 0))
 					{

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.ChanceCondition;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;
@@ -523,7 +523,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 				
 				if (_skill.getAfterEffectId() > 0)
 				{
-					L2Skill skill = SkillTable.getInstance().getInfo(_skill.getAfterEffectId(), _skill.getAfterEffectLvl());
+					L2Skill skill = SkillData.getInstance().getInfo(_skill.getAfterEffectId(), _skill.getAfterEffectLvl());
 					if (skill != null)
 					{
 						getEffected().broadcastPacket(new MagicSkillUse(_effected, skill.getId(), skill.getLevel(), 0, 0));

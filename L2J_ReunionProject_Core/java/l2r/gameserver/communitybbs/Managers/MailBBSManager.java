@@ -878,7 +878,7 @@ public class MailBBSManager extends BaseBBSManager
 				else if (isBlocked(activeChar, recipId) && !activeChar.isGM())
 				{
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_BLOCKED_YOU_CANNOT_MAIL);
-					for (L2PcInstance player : L2World.getInstance().getAllPlayersArray())
+					for (L2PcInstance player : L2World.getInstance().getPlayers())
 					{
 						if ((player.getObjectId() == recipId) && player.isOnline())
 						{
@@ -891,7 +891,7 @@ public class MailBBSManager extends BaseBBSManager
 				{
 					activeChar.sendMessage(recipient.trim() + "'s inbox is full.");
 					activeChar.sendPacket(SystemMessageId.MESSAGE_NOT_SENT);
-					for (L2PcInstance player : L2World.getInstance().getAllPlayersArray())
+					for (L2PcInstance player : L2World.getInstance().getPlayers())
 					{
 						if ((player.getObjectId() == recipId) && player.isOnline())
 						{
@@ -916,7 +916,7 @@ public class MailBBSManager extends BaseBBSManager
 					statement.execute();
 					sent = true;
 					countRecips++;
-					for (L2PcInstance player : L2World.getInstance().getAllPlayersArray())
+					for (L2PcInstance player : L2World.getInstance().getPlayers())
 					{
 						if ((player.getObjectId() == recipId) && player.isOnline())
 						{
@@ -964,7 +964,7 @@ public class MailBBSManager extends BaseBBSManager
 	
 	private boolean isBlocked(L2PcInstance activeChar, int recipId)
 	{
-		for (L2PcInstance player : L2World.getInstance().getAllPlayersArray())
+		for (L2PcInstance player : L2World.getInstance().getPlayers())
 		{
 			if (player.getObjectId() == recipId)
 			{

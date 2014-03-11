@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -37,7 +37,7 @@ import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.interfaces.IL2Procedure;
+import l2r.gameserver.model.interfaces.IProcedure;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -496,7 +496,7 @@ public final class SpawnTable extends DocumentParser
 	 * @param procedure the procedure to execute
 	 * @return {@code true} if all procedures were executed, {@code false} otherwise
 	 */
-	public boolean forEachSpawn(IL2Procedure<L2Spawn> procedure)
+	public boolean forEachSpawn(IProcedure<L2Spawn, Boolean> procedure)
 	{
 		for (Set<L2Spawn> set : _spawnTable.values())
 		{

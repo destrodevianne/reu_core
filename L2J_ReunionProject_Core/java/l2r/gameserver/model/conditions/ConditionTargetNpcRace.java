@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -18,35 +18,33 @@
  */
 package l2r.gameserver.model.conditions;
 
-import java.util.ArrayList;
+import java.util.Set;
 
+import l2r.gameserver.enums.NpcRace;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.stats.Env;
 
 /**
- * The Class ConditionTargetRaceId.
- * @author nBd
+ * Condition that checks target NPC race.
+ * @author Nos
  */
-public class ConditionTargetRaceId extends Condition
+public class ConditionTargetNpcRace extends Condition
 {
-	private final ArrayList<Integer> _raceIds;
+	private final Set<NpcRace> _races;
 	
 	/**
-	 * Instantiates a new condition target race id.
-	 * @param raceId the race id
+	 * Instantiates a new condition target NPC race
+	 * @param races the races
 	 */
-	public ConditionTargetRaceId(ArrayList<Integer> raceId)
+	public ConditionTargetNpcRace(Set<NpcRace> races)
 	{
-		_raceIds = raceId;
+		_races = races;
 	}
 	
 	@Override
 	public boolean testImpl(Env env)
 	{
-		if (!(env.getTarget() instanceof L2Npc))
-		{
-			return false;
-		}
-		return (_raceIds.contains(((L2Npc) env.getTarget()).getTemplate().getRace().ordinal() + 1));
+		final L2Npc npc = env.getTarget() instanceof L2Npc ? (L2Npc) env.getTarget() : null;
+		return (npc != null) && _races.contains(npc.getTemplate().getRace());
 	}
 }

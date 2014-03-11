@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -63,32 +63,17 @@ public class L2DefenderInstance extends L2Attackable
 	}
 	
 	@Override
-	public L2CharacterAI getAI()
+	protected L2CharacterAI initAI()
 	{
-		L2CharacterAI ai = _ai; // copy handle
-		if (ai == null)
+		if ((getConquerableHall() == null) && (getCastle(10000) == null))
 		{
-			synchronized (this)
-			{
-				if (_ai == null)
-				{
-					if ((getConquerableHall() == null) && (getCastle(10000) == null))
-					{
-						_ai = new L2FortSiegeGuardAI(new AIAccessor());
-					}
-					else if (getCastle(10000) != null)
-					{
-						_ai = new L2SiegeGuardAI(new AIAccessor());
-					}
-					else
-					{
-						_ai = new L2SpecialSiegeGuardAI(new AIAccessor());
-					}
-				}
-				return _ai;
-			}
+			return new L2FortSiegeGuardAI(new AIAccessor());
 		}
-		return ai;
+		else if (getCastle(10000) != null)
+		{
+			return new L2SiegeGuardAI(new AIAccessor());
+		}
+		return new L2SpecialSiegeGuardAI(new AIAccessor());
 	}
 	
 	/**

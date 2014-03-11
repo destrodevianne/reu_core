@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -18,19 +18,17 @@
  */
 package l2r.gameserver.model;
 
+import java.util.Set;
+import java.util.TreeMap;
+
 import l2r.gameserver.datatables.EnchantGroupsData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
-import gnu.trove.map.hash.TIntIntHashMap;
 
-/**
- * This class ...
- * @version $Revision: 1.2.4.2 $ $Date: 2005/03/27 15:29:33 $
- */
 public final class L2EnchantSkillLearn
 {
 	private final int _id;
 	private final int _baseLvl;
-	private final TIntIntHashMap _enchantRoutes = new TIntIntHashMap();
+	private final TreeMap<Integer, Integer> _enchantRoutes = new TreeMap<>();
 	
 	public L2EnchantSkillLearn(int id, int baseLvl)
 	{
@@ -76,12 +74,12 @@ public final class L2EnchantSkillLearn
 	
 	public L2EnchantSkillGroup getFirstRouteGroup()
 	{
-		return EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.values()[0]);
+		return EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.firstEntry().getValue());
 	}
 	
-	public int[] getAllRoutes()
+	public Set<Integer> getAllRoutes()
 	{
-		return _enchantRoutes.keys();
+		return _enchantRoutes.keySet();
 	}
 	
 	public int getMinSkillLevel(int level)
@@ -95,12 +93,12 @@ public final class L2EnchantSkillLearn
 	
 	public boolean isMaxEnchant(int level)
 	{
-		int enchantType = L2EnchantSkillLearn.getEnchantRoute(level);
-		if ((enchantType < 1) || !_enchantRoutes.contains(enchantType))
+		int enchantType = getEnchantRoute(level);
+		if ((enchantType < 1) || !_enchantRoutes.containsKey(enchantType))
 		{
 			return false;
 		}
-		int index = L2EnchantSkillLearn.getEnchantIndex(level);
+		int index = getEnchantIndex(level);
 		
 		if ((index + 1) >= EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType)).getEnchantGroupDetails().size())
 		{
@@ -111,12 +109,12 @@ public final class L2EnchantSkillLearn
 	
 	public EnchantSkillHolder getEnchantSkillHolder(int level)
 	{
-		int enchantType = L2EnchantSkillLearn.getEnchantRoute(level);
-		if ((enchantType < 1) || !_enchantRoutes.contains(enchantType))
+		int enchantType = getEnchantRoute(level);
+		if ((enchantType < 1) || !_enchantRoutes.containsKey(enchantType))
 		{
 			return null;
 		}
-		int index = L2EnchantSkillLearn.getEnchantIndex(level);
+		int index = getEnchantIndex(level);
 		L2EnchantSkillGroup group = EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType));
 		
 		if (index < 0)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -31,6 +31,7 @@ import l2r.gameserver.instancemanager.FourSepulchersManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.network.NpcStringId;
@@ -41,7 +42,6 @@ import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gnu.trove.procedure.TObjectProcedure;
 
 /**
  * @author sandman
@@ -440,7 +440,7 @@ public class L2SepulcherNpcInstance extends L2Npc
 		L2World.getInstance().forEachPlayer(new SayInShout(this, new CreatureSay(0, Say2.NPC_SHOUT, getName(), msg)));
 	}
 	
-	private final class SayInShout implements TObjectProcedure<L2PcInstance>
+	private final class SayInShout implements IProcedure<L2PcInstance, Boolean>
 	{
 		L2SepulcherNpcInstance _npc;
 		CreatureSay _sm;
@@ -452,7 +452,7 @@ public class L2SepulcherNpcInstance extends L2Npc
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance player)
+		public final Boolean execute(final L2PcInstance player)
 		{
 			if (player != null)
 			{

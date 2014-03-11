@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -19,7 +19,9 @@
 package l2r.gameserver.datatables;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import l2r.Config;
 import l2r.gameserver.engines.DocumentEngine;
@@ -29,21 +31,18 @@ import l2r.gameserver.model.skills.L2Skill;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.hash.TIntIntHashMap;
-
 /**
  * 
  */
-public class SkillTable
+public class SkillData
 {
-	private static Logger _log = LoggerFactory.getLogger(SkillTable.class);
+	private static Logger _log = LoggerFactory.getLogger(SkillData.class);
 	
 	private final Map<Integer, L2Skill> _skills = new HashMap<>();
-	private final TIntIntHashMap _skillMaxLevel = new TIntIntHashMap();
-	private final TIntArrayList _enchantable = new TIntArrayList();
+	private final Map<Integer, Integer> _skillMaxLevel = new HashMap<>();
+	private final Set<Integer> _enchantable = new HashSet<>();
 	
-	protected SkillTable()
+	protected SkillData()
 	{
 		load();
 	}
@@ -75,15 +74,12 @@ public class SkillTable
 			}
 			
 			// only non-enchanted skills
-			final int maxLvl = _skillMaxLevel.get(skillId);
+			final int maxLvl = getMaxLevel(skillId);
 			if (skillLvl > maxLvl)
 			{
 				_skillMaxLevel.put(skillId, skillLvl);
 			}
 		}
-		
-		// Sorting for binarySearch
-		_enchantable.sort();
 	}
 	
 	/**
@@ -131,14 +127,20 @@ public class SkillTable
 		return null;
 	}
 	
-	public final int getMaxLevel(final int skillId)
+	public final int getMaxLevel(int skillId)
 	{
-		return _skillMaxLevel.get(skillId);
+		final Integer maxLevel = _skillMaxLevel.get(skillId);
+		return maxLevel != null ? maxLevel : 0;
 	}
 	
-	public final boolean isEnchantable(final int skillId)
+	/**
+	 * Verifies if the given skill ID correspond to an enchantable skill.
+	 * @param skillId the skill ID
+	 * @return {@code true} if the skill is enchantable, {@code false} otherwise
+	 */
+	public final boolean isEnchantable(int skillId)
 	{
-		return _enchantable.binarySearch(skillId) >= 0;
+		return _enchantable.contains(skillId);
 	}
 	
 	/**
@@ -150,17 +152,17 @@ public class SkillTable
 	{
 		L2Skill[] temp = new L2Skill[2 + (addNoble ? 1 : 0) + (hasCastle ? 2 : 0)];
 		int i = 0;
-		temp[i++] = _skills.get(SkillTable.getSkillHashCode(246, 1));
-		temp[i++] = _skills.get(SkillTable.getSkillHashCode(247, 1));
+		temp[i++] = _skills.get(SkillData.getSkillHashCode(246, 1));
+		temp[i++] = _skills.get(SkillData.getSkillHashCode(247, 1));
 		
 		if (addNoble)
 		{
-			temp[i++] = _skills.get(SkillTable.getSkillHashCode(326, 1));
+			temp[i++] = _skills.get(SkillData.getSkillHashCode(326, 1));
 		}
 		if (hasCastle)
 		{
-			temp[i++] = _skills.get(SkillTable.getSkillHashCode(844, 1));
-			temp[i++] = _skills.get(SkillTable.getSkillHashCode(845, 1));
+			temp[i++] = _skills.get(SkillData.getSkillHashCode(844, 1));
+			temp[i++] = _skills.get(SkillData.getSkillHashCode(845, 1));
 		}
 		return temp;
 	}
@@ -212,13 +214,13 @@ public class SkillTable
 		}
 	}
 	
-	public static SkillTable getInstance()
+	public static SkillData getInstance()
 	{
 		return SingletonHolder._instance;
 	}
 	
 	private static class SingletonHolder
 	{
-		protected static final SkillTable _instance = new SkillTable();
+		protected static final SkillData _instance = new SkillData();
 	}
 }
