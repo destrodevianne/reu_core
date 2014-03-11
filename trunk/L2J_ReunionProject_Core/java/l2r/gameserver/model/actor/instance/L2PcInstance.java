@@ -14714,32 +14714,39 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * While at silenceMode, checks if this PC Instance blocks PMs for this user
-	 * @param objId
-	 * @return
+	 * While at silenceMode, checks if this player blocks PMs for this user
+	 * @param playerObjId the player object Id
+	 * @return {@code true} if the given Id is not excluded and this player is in silence mode, {@code false} otherwise
 	 */
-	public boolean isSilenceMode(int objId)
+	public boolean isSilenceMode(int playerObjId)
 	{
-		if (Config.SILENCE_MODE_EXCLUDE && _silenceMode)
+		if (Config.SILENCE_MODE_EXCLUDE && _silenceMode && (_silenceModeExcluded != null))
 		{
-			return !_silenceModeExcluded.contains(objId);
+			return !_silenceModeExcluded.contains(playerObjId);
 		}
-		
 		return _silenceMode;
 	}
 	
 	/**
-	 * @param mode the _silenceMode to set
+	 * Set the silence mode.
+	 * @param mode the value
 	 */
 	public void setSilenceMode(boolean mode)
 	{
 		_silenceMode = mode;
-		_silenceModeExcluded.clear(); // Clear the excluded list on each setSilenceMode
+		if (_silenceModeExcluded != null)
+		{
+			_silenceModeExcluded.clear(); // Clear the excluded list on each setSilenceMode
+		}
 		sendPacket(new EtcStatusUpdate(this));
 	}
 	
 	public void addSilenceModeExcluded(int playerObjId)
 	{
+		if (_silenceModeExcluded == null)
+		{
+			_silenceModeExcluded = new ArrayList<>(1);
+		}
 		_silenceModeExcluded.add(playerObjId);
 	}
 	
