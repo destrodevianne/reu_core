@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -26,8 +26,8 @@ import java.util.concurrent.ScheduledFuture;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
-import l2r.gameserver.datatables.SkillTable.FrequentSkill;
+import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.SkillData.FrequentSkill;
 import l2r.gameserver.datatables.TransformData;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
@@ -89,7 +89,7 @@ public class CursedWeapon
 		_name = name;
 		_itemId = itemId;
 		_skillId = skillId;
-		_skillMaxLevel = SkillTable.getInstance().getMaxLevel(_skillId);
+		_skillMaxLevel = SkillData.getInstance().getMaxLevel(_skillId);
 	}
 	
 	public void endOfLife()
@@ -334,7 +334,7 @@ public class CursedWeapon
 			level = _skillMaxLevel;
 		}
 		
-		L2Skill skill = SkillTable.getInstance().getInfo(_skillId, level);
+		L2Skill skill = SkillData.getInstance().getInfo(_skillId, level);
 		// Yesod:
 		// To properly support subclasses this skill can not be stored.
 		_player.addSkill(skill, false);
@@ -382,8 +382,8 @@ public class CursedWeapon
 	public void removeSkill()
 	{
 		_player.removeSkill(_skillId);
-		_player.removeSkill(SkillTable.FrequentSkill.VOID_BURST.getSkill().getId());
-		_player.removeSkill(SkillTable.FrequentSkill.VOID_FLOW.getSkill().getId());
+		_player.removeSkill(SkillData.FrequentSkill.VOID_BURST.getSkill().getId());
+		_player.removeSkill(SkillData.FrequentSkill.VOID_FLOW.getSkill().getId());
 		_player.untransform();
 		_player.sendSkillList();
 	}

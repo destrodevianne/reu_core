@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.PetDataTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2PetData.L2PetSkillLearn;
@@ -81,7 +81,7 @@ public final class L2BabyPetInstance extends L2PetInstance
 			{
 				continue;
 			}
-			skill = SkillTable.getInstance().getInfo(id, lvl);
+			skill = SkillData.getInstance().getInfo(id, lvl);
 			if (skill != null)
 			{
 				if ((skill.getId() == BUFF_CONTROL) || (skill.getId() == AWAKENING))

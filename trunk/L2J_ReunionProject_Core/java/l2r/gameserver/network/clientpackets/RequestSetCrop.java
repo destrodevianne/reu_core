@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -27,8 +27,8 @@ import java.util.List;
 import l2r.Config;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.CastleManorManager;
-import l2r.gameserver.model.CropProcure;
 import l2r.gameserver.model.ClanPrivilege;
+import l2r.gameserver.model.CropProcure;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.util.Util;

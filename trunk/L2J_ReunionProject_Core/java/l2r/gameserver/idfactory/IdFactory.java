@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -23,14 +23,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.trove.list.array.TIntArrayList;
 
 /**
  * This class ...
@@ -343,30 +344,21 @@ public abstract class IdFactory
 	 * @throws Exception
 	 * @throws SQLException
 	 */
-	protected final int[] extractUsedObjectIDTable() throws Exception
+	protected final Integer[] extractUsedObjectIDTable() throws Exception
 	{
+		final List<Integer> temp = new ArrayList<>();
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			Statement s = con.createStatement())
 		{
-			final TIntArrayList temp = new TIntArrayList();
 			
-			String ensureCapacityQuery = "SELECT ";
 			String extractUsedObjectIdsQuery = "";
 			
 			for (String[] tblClmn : ID_EXTRACTS)
 			{
-				ensureCapacityQuery += "(SELECT COUNT(*) FROM " + tblClmn[0] + ") + ";
 				extractUsedObjectIdsQuery += "SELECT " + tblClmn[1] + " FROM " + tblClmn[0] + " UNION ";
 			}
-			ensureCapacityQuery = ensureCapacityQuery.substring(0, ensureCapacityQuery.length() - 3); // Remove the last " + "
+			
 			extractUsedObjectIdsQuery = extractUsedObjectIdsQuery.substring(0, extractUsedObjectIdsQuery.length() - 7); // Remove the last " UNION "
-			
-			try (ResultSet rs = s.executeQuery(ensureCapacityQuery))
-			{
-				rs.next();
-				temp.ensureCapacity(rs.getInt(1));
-			}
-			
 			try (ResultSet rs = s.executeQuery(extractUsedObjectIdsQuery))
 			{
 				while (rs.next())
@@ -374,10 +366,9 @@ public abstract class IdFactory
 					temp.add(rs.getInt(1));
 				}
 			}
-			
-			temp.sort();
-			return temp.toArray();
 		}
+		Collections.sort(temp);
+		return temp.toArray(new Integer[temp.size()]);
 	}
 	
 	public boolean isInitialized()

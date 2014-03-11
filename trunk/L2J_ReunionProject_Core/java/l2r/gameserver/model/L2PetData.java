@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.holders.SkillHolder;
 
 /**
@@ -202,7 +202,7 @@ public class L2PetData
 				}
 				
 				// formula usable for skill that have 10 or more skill levels
-				int maxLvl = SkillTable.getInstance().getMaxLevel(temp.getSkillId());
+				int maxLvl = SkillData.getInstance().getMaxLevel(temp.getSkillId());
 				if (lvl > maxLvl)
 				{
 					lvl = maxLvl;

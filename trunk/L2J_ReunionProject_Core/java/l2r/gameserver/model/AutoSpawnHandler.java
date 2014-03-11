@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -518,12 +518,15 @@ public class AutoSpawnHandler
 					}
 				}
 				
-				String nearestTown = MapRegionManager.getInstance().getClosestTownName(npcInst);
-				
-				// Announce to all players that the spawn has taken place, with the nearest town location.
-				if (spawnInst.isBroadcasting() && (npcInst != null))
+				if (npcInst != null)
 				{
-					Announcements.getInstance().announceToAll("The " + npcInst.getName() + " has spawned near " + nearestTown + "!");
+					String nearestTown = MapRegionManager.getInstance().getClosestTownName(npcInst);
+					
+					// Announce to all players that the spawn has taken place, with the nearest town location.
+					if (spawnInst.isBroadcasting())
+					{
+						Announcements.getInstance().announceToAll("The " + npcInst.getName() + " has spawned near " + nearestTown + "!");
+					}
 				}
 				
 				// If there is no despawn time, do not create a despawn task.

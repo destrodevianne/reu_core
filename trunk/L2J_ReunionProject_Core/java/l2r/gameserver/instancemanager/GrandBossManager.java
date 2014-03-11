@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
@@ -42,8 +44,6 @@ import l2r.util.L2FastList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
@@ -59,13 +59,13 @@ public class GrandBossManager
 	
 	protected static Logger _log = LoggerFactory.getLogger(GrandBossManager.class);
 	
-	protected static Map<Integer, L2GrandBossInstance> _bosses;
+	protected static Map<Integer, L2GrandBossInstance> _bosses = new FastMap<>();
 	
-	protected static TIntObjectHashMap<StatsSet> _storedInfo;
+	protected static Map<Integer, StatsSet> _storedInfo = new HashMap<>();
 	
-	private TIntIntHashMap _bossStatus;
+	private final Map<Integer, Integer> _bossStatus = new HashMap<>();
 	
-	private L2FastList<L2BossZone> _zones;
+	private final L2FastList<L2BossZone> _zones = new L2FastList<>();
 	
 	protected GrandBossManager()
 	{
@@ -74,11 +74,6 @@ public class GrandBossManager
 	
 	private void init()
 	{
-		_zones = new L2FastList<>();
-		
-		_bosses = new FastMap<>();
-		_storedInfo = new TIntObjectHashMap<>();
-		_bossStatus = new TIntIntHashMap();
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			Statement s = con.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * from grandboss_data ORDER BY boss_id"))
@@ -335,16 +330,16 @@ public class GrandBossManager
 					}
 				}
 			}
-			for (Integer bossId : _storedInfo.keys())
+			for (Entry<Integer, StatsSet> e : _storedInfo.entrySet())
 			{
-				final L2GrandBossInstance boss = _bosses.get(bossId);
-				StatsSet info = _storedInfo.get(bossId);
+				final L2GrandBossInstance boss = _bosses.get(e.getKey());
+				StatsSet info = e.getValue();
 				if ((boss == null) || (info == null))
 				{
 					try (PreparedStatement update = con.prepareStatement(UPDATE_GRAND_BOSS_DATA2))
 					{
-						update.setInt(1, _bossStatus.get(bossId));
-						update.setInt(2, bossId);
+						update.setInt(1, _bossStatus.get(e.getKey()));
+						update.setInt(2, e.getKey());
 						update.executeUpdate();
 						update.clearParameters();
 					}
@@ -367,8 +362,8 @@ public class GrandBossManager
 						}
 						update.setDouble(6, hp);
 						update.setDouble(7, mp);
-						update.setInt(8, _bossStatus.get(bossId));
-						update.setInt(9, bossId);
+						update.setInt(8, _bossStatus.get(e.getKey()));
+						update.setInt(9, e.getKey());
 						update.executeUpdate();
 						update.clearParameters();
 					}

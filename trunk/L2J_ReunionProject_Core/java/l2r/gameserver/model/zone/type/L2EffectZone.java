@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -22,7 +22,7 @@ import java.util.Map.Entry;
 
 import javolution.util.FastMap;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.ZoneManager;
@@ -181,7 +181,7 @@ public class L2EffectZone extends L2ZoneType
 	
 	protected L2Skill getSkill(int skillId, int skillLvl)
 	{
-		return SkillTable.getInstance().getInfo(skillId, skillLvl);
+		return SkillData.getInstance().getInfo(skillId, skillLvl);
 	}
 	
 	public int getChance()

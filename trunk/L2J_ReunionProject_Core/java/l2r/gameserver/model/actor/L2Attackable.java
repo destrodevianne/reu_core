@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -75,7 +75,6 @@ import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.CreatureSay;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.taskmanager.DecayTaskManager;
-import l2r.gameserver.util.L2TIntObjectHashMap;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 import gr.reunion.configsEngine.PremiumServiceConfigs;
@@ -108,7 +107,7 @@ public class L2Attackable extends L2Npc
 	
 	private boolean _absorbed;
 	
-	private final L2TIntObjectHashMap<AbsorberInfo> _absorbersList = new L2TIntObjectHashMap<>();
+	private final Map<Integer, AbsorberInfo> _absorbersList = new ConcurrentHashMap<>();
 	
 	private volatile boolean _mustGiveExpSp;
 	private volatile boolean _doItemDrop;
@@ -162,26 +161,10 @@ public class L2Attackable extends L2Npc
 		setStatus(new AttackableStatus(this));
 	}
 	
-	/**
-	 * Return the L2Character AI of the L2Attackable and if its null create a new one.
-	 */
 	@Override
-	public L2CharacterAI getAI()
+	protected L2CharacterAI initAI()
 	{
-		L2CharacterAI ai = _ai;
-		
-		if (ai == null)
-		{
-			synchronized (this)
-			{
-				if (_ai == null)
-				{
-					_ai = new L2AttackableAI(new AIAccessor());
-				}
-				return _ai;
-			}
-		}
-		return ai;
+		return new L2AttackableAI(new AIAccessor());
 	}
 	
 	public final Map<L2Character, AggroInfo> getAggroList()
@@ -1958,7 +1941,7 @@ public class L2Attackable extends L2Npc
 		_absorbersList.clear();
 	}
 	
-	public L2TIntObjectHashMap<AbsorberInfo> getAbsorbersList()
+	public Map<Integer, AbsorberInfo> getAbsorbersList()
 	{
 		return _absorbersList;
 	}

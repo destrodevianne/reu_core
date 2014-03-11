@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -31,7 +31,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.CharSummonTable;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.PetDataTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SummonEffectsTable;
 import l2r.gameserver.datatables.SummonEffectsTable.SummonEffect;
 import l2r.gameserver.enums.CtrlIntention;
@@ -1049,7 +1049,7 @@ public class L2PetInstance extends L2Summon
 		}
 		
 		// Clear list for overwrite
-		if (SummonEffectsTable.getInstance().getPetEffects().contains(getControlObjectId()))
+		if (SummonEffectsTable.getInstance().getPetEffects().containsKey(getControlObjectId()))
 		{
 			SummonEffectsTable.getInstance().getPetEffects().get(getControlObjectId()).clear();
 		}
@@ -1103,7 +1103,7 @@ public class L2PetInstance extends L2Summon
 						ps2.setInt(6, ++buff_index);
 						ps2.execute();
 						
-						if (!SummonEffectsTable.getInstance().getPetEffects().contains(getControlObjectId()))
+						if (!SummonEffectsTable.getInstance().getPetEffects().containsKey(getControlObjectId()))
 						{
 							SummonEffectsTable.getInstance().getPetEffects().put(getControlObjectId(), new FastList<SummonEffect>());
 						}
@@ -1126,7 +1126,7 @@ public class L2PetInstance extends L2Summon
 			PreparedStatement ps1 = con.prepareStatement(RESTORE_SKILL_SAVE);
 			PreparedStatement ps2 = con.prepareStatement(DELETE_SKILL_SAVE))
 		{
-			if (!SummonEffectsTable.getInstance().getPetEffects().contains(getControlObjectId()))
+			if (!SummonEffectsTable.getInstance().getPetEffects().containsKey(getControlObjectId()))
 			{
 				ps1.setInt(1, getControlObjectId());
 				try (ResultSet rset = ps1.executeQuery())
@@ -1136,7 +1136,7 @@ public class L2PetInstance extends L2Summon
 						int effectCount = rset.getInt("effect_count");
 						int effectCurTime = rset.getInt("effect_cur_time");
 						
-						final L2Skill skill = SkillTable.getInstance().getInfo(rset.getInt("skill_id"), rset.getInt("skill_level"));
+						final L2Skill skill = SkillData.getInstance().getInfo(rset.getInt("skill_id"), rset.getInt("skill_level"));
 						if (skill == null)
 						{
 							continue;
@@ -1144,7 +1144,7 @@ public class L2PetInstance extends L2Summon
 						
 						if (skill.hasEffects())
 						{
-							if (!SummonEffectsTable.getInstance().getPetEffects().contains(getControlObjectId()))
+							if (!SummonEffectsTable.getInstance().getPetEffects().containsKey(getControlObjectId()))
 							{
 								SummonEffectsTable.getInstance().getPetEffects().put(getControlObjectId(), new FastList<SummonEffect>());
 							}
@@ -1375,7 +1375,7 @@ public class L2PetInstance extends L2Summon
 				_curWeightPenalty = newWeightPenalty;
 				if (newWeightPenalty > 0)
 				{
-					addSkill(SkillTable.getInstance().getInfo(4270, newWeightPenalty));
+					addSkill(SkillData.getInstance().getInfo(4270, newWeightPenalty));
 					setIsOverloaded(getCurrentLoad() >= maxLoad);
 				}
 				else

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2Object;
@@ -467,7 +467,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 					
 					// emulate a call to the owner using food, but bypass all checks for range, etc
 					// this also causes a call to the AI tasks handling feeding, which may call onReceiveFood as required.
-					owner.callSkill(SkillTable.getInstance().getInfo(foodTypeSkillId, 1), targets);
+					owner.callSkill(SkillData.getInstance().getInfo(foodTypeSkillId, 1), targets);
 					owner.setTarget(oldTarget);
 				}
 				else

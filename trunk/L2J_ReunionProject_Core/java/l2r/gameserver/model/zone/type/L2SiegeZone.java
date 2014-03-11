@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -19,7 +19,7 @@
 package l2r.gameserver.model.zone.type;
 
 import l2r.Config;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.MountType;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
@@ -254,7 +254,7 @@ public class L2SiegeZone extends L2ZoneType
 					lvl = Math.min(lvl + e.getLevel(), 5);
 				}
 				
-				final L2Skill skill = SkillTable.getInstance().getInfo(5660, lvl);
+				final L2Skill skill = SkillData.getInstance().getInfo(5660, lvl);
 				if (skill != null)
 				{
 					skill.getEffects(character, character);

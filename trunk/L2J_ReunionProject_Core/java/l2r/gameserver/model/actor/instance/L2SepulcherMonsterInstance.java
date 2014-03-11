@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -21,7 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import java.util.concurrent.Future;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.FourSepulchersManager;
 import l2r.gameserver.model.actor.L2Character;
@@ -510,7 +510,7 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance
 		@Override
 		public void run()
 		{
-			L2Skill fp = SkillTable.FrequentSkill.FAKE_PETRIFICATION.getSkill(); // Invulnerable by petrification
+			L2Skill fp = SkillData.FrequentSkill.FAKE_PETRIFICATION.getSkill(); // Invulnerable by petrification
 			fp.getEffects(activeChar, activeChar);
 		}
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -23,6 +23,7 @@ import java.util.Collection;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.CharInfo;
 import l2r.gameserver.network.serverpackets.CreatureSay;
@@ -31,8 +32,6 @@ import l2r.gameserver.network.serverpackets.RelationChanged;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.trove.procedure.TObjectProcedure;
 
 /**
  * This class ...
@@ -210,7 +209,7 @@ public final class Broadcast
 		L2World.getInstance().forEachPlayer(new ForEachPlayerInInstanceBroadcast(mov, instanceId));
 	}
 	
-	private static final class ForEachPlayerBroadcast implements TObjectProcedure<L2PcInstance>
+	private static final class ForEachPlayerBroadcast implements IProcedure<L2PcInstance, Boolean>
 	{
 		L2GameServerPacket _packet;
 		
@@ -220,7 +219,7 @@ public final class Broadcast
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance onlinePlayer)
+		public final Boolean execute(final L2PcInstance onlinePlayer)
 		{
 			if ((onlinePlayer != null) && onlinePlayer.isOnline())
 			{
@@ -230,10 +229,10 @@ public final class Broadcast
 		}
 	}
 	
-	private static final class ForEachPlayerInInstanceBroadcast implements TObjectProcedure<L2PcInstance>
+	private static final class ForEachPlayerInInstanceBroadcast implements IProcedure<L2PcInstance, Boolean>
 	{
-		L2GameServerPacket _packet;
-		int _instanceId;
+		private final L2GameServerPacket _packet;
+		private final int _instanceId;
 		
 		protected ForEachPlayerInInstanceBroadcast(L2GameServerPacket packet, int instanceId)
 		{
@@ -242,7 +241,7 @@ public final class Broadcast
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance onlinePlayer)
+		public final Boolean execute(final L2PcInstance onlinePlayer)
 		{
 			if ((onlinePlayer != null) && onlinePlayer.isOnline() && (onlinePlayer.getInstanceId() == _instanceId))
 			{

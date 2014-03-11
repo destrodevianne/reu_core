@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.datatables.EnchantGroupsData;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 import l2r.gameserver.model.L2EnchantSkillLearn;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -91,7 +91,7 @@ public final class RequestExEnchantSkillRouteChange extends L2GameClientPacket
 			return;
 		}
 		
-		L2Skill skill = SkillTable.getInstance().getInfo(_skillId, _skillLvl);
+		L2Skill skill = SkillData.getInstance().getInfo(_skillId, _skillLvl);
 		if (skill == null)
 		{
 			return;
@@ -164,7 +164,7 @@ public final class RequestExEnchantSkillRouteChange extends L2GameClientPacket
 				_skillLvl = s.getBaseLevel();
 			}
 			
-			skill = SkillTable.getInstance().getInfo(_skillId, _skillLvl);
+			skill = SkillData.getInstance().getInfo(_skillId, _skillLvl);
 			
 			if (skill != null)
 			{

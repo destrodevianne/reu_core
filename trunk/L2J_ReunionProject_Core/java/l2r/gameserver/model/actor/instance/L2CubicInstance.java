@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.ISkillHandler;
@@ -116,46 +116,46 @@ public final class L2CubicInstance implements IIdentifiable
 		switch (_id)
 		{
 			case STORM_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4049, level));
+				_skills.add(SkillData.getInstance().getInfo(4049, level));
 				break;
 			case VAMPIRIC_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4050, level));
+				_skills.add(SkillData.getInstance().getInfo(4050, level));
 				break;
 			case LIFE_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4051, level));
+				_skills.add(SkillData.getInstance().getInfo(4051, level));
 				doAction();
 				break;
 			case VIPER_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4052, level));
+				_skills.add(SkillData.getInstance().getInfo(4052, level));
 				break;
 			case POLTERGEIST_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4053, level));
-				_skills.add(SkillTable.getInstance().getInfo(4054, level));
-				_skills.add(SkillTable.getInstance().getInfo(4055, level));
+				_skills.add(SkillData.getInstance().getInfo(4053, level));
+				_skills.add(SkillData.getInstance().getInfo(4054, level));
+				_skills.add(SkillData.getInstance().getInfo(4055, level));
 				break;
 			case BINDING_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4164, level));
+				_skills.add(SkillData.getInstance().getInfo(4164, level));
 				break;
 			case AQUA_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4165, level));
+				_skills.add(SkillData.getInstance().getInfo(4165, level));
 				break;
 			case SPARK_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(4166, level));
+				_skills.add(SkillData.getInstance().getInfo(4166, level));
 				break;
 			case ATTRACT_CUBIC:
-				_skills.add(SkillTable.getInstance().getInfo(5115, level));
-				_skills.add(SkillTable.getInstance().getInfo(5116, level));
+				_skills.add(SkillData.getInstance().getInfo(5115, level));
+				_skills.add(SkillData.getInstance().getInfo(5116, level));
 				break;
 			case SMART_CUBIC_ARCANALORD:
 				// _skills.add(SkillTable.getInstance().getInfo(4049,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4050,7)); no animation
-				_skills.add(SkillTable.getInstance().getInfo(4051, 7)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4051, 7)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4052,6)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4053,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4054,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4055,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4164,9)); no animation
-				_skills.add(SkillTable.getInstance().getInfo(4165, 9)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4165, 9)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4166,9)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(5115,4)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(5116,4)); no animation
@@ -163,7 +163,7 @@ public final class L2CubicInstance implements IIdentifiable
 				// cubic skills list
 				break;
 			case SMART_CUBIC_ELEMENTALMASTER:
-				_skills.add(SkillTable.getInstance().getInfo(4049, 8)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4049, 8)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4050,7)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4051,7)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4052,6)); no animation
@@ -172,17 +172,17 @@ public final class L2CubicInstance implements IIdentifiable
 				// _skills.add(SkillTable.getInstance().getInfo(4055,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4164,9)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4165,9)); no animation
-				_skills.add(SkillTable.getInstance().getInfo(4166, 9)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4166, 9)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(5115,4)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(5116,4)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(5579,4)); no need to add to the
 				// cubic skills list
 				break;
 			case SMART_CUBIC_SPECTRALMASTER:
-				_skills.add(SkillTable.getInstance().getInfo(4049, 8)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4049, 8)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4050,7)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4051,7)); no animation
-				_skills.add(SkillTable.getInstance().getInfo(4052, 6)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4052, 6)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4053,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4054,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4055,8)); no animation
@@ -199,11 +199,11 @@ public final class L2CubicInstance implements IIdentifiable
 				// _skills.add(SkillTable.getInstance().getInfo(4050,7)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4051,7)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4052,6)); no animation
-				_skills.add(SkillTable.getInstance().getInfo(4053, 8)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4053, 8)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4054,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4055,8)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4164,9)); no animation
-				_skills.add(SkillTable.getInstance().getInfo(4165, 9)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4165, 9)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4166,9)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(5115,4)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(5116,4)); no animation
@@ -211,7 +211,7 @@ public final class L2CubicInstance implements IIdentifiable
 				// cubic skills list
 				break;
 			case SMART_CUBIC_SHILLIENTEMPLAR:
-				_skills.add(SkillTable.getInstance().getInfo(4049, 8)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(4049, 8)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(4050,7)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4051,7)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4052,6)); no animation
@@ -221,7 +221,7 @@ public final class L2CubicInstance implements IIdentifiable
 				// _skills.add(SkillTable.getInstance().getInfo(4164,9)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4165,9)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(4166,9)); no animation
-				_skills.add(SkillTable.getInstance().getInfo(5115, 4)); // have animation
+				_skills.add(SkillData.getInstance().getInfo(5115, 4)); // have animation
 				// _skills.add(SkillTable.getInstance().getInfo(5116,4)); no animation
 				// _skills.add(SkillTable.getInstance().getInfo(5579,4)); no need to add to the
 				// cubic skills list

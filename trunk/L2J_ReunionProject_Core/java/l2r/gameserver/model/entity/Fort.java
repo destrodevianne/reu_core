@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -23,8 +23,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +55,7 @@ import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.zone.type.L2FortZone;
 import l2r.gameserver.model.zone.type.L2SiegeZone;
@@ -63,9 +66,6 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.procedure.TObjectProcedure;
 
 public final class Fort extends AbstractResidence
 {
@@ -91,7 +91,7 @@ public final class Fort extends AbstractResidence
 	private final FastList<L2Spawn> _npcCommanders = new FastList<>();
 	private final FastList<L2Spawn> _specialEnvoys = new FastList<>();
 	
-	private final TIntIntHashMap _envoyCastles = new TIntIntHashMap(2);
+	private final Map<Integer, Integer> _envoyCastles = new HashMap<>(2);
 	private final Set<Integer> _availableCastles = new HashSet<>(1);
 	
 	/** Fortress Functions */
@@ -1333,7 +1333,7 @@ public final class Fort extends AbstractResidence
 		}
 	}
 	
-	private final class ForEachPlayerSendMessage implements TObjectProcedure<L2PcInstance>
+	private final class ForEachPlayerSendMessage implements IProcedure<L2PcInstance, Boolean>
 	{
 		SystemMessage _sm;
 		
@@ -1343,7 +1343,7 @@ public final class Fort extends AbstractResidence
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance character)
+		public final Boolean execute(final L2PcInstance character)
 		{
 			character.sendPacket(_sm);
 			return true;

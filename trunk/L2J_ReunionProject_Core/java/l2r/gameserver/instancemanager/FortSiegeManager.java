@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -32,7 +32,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.CombatFlag;
 import l2r.gameserver.model.FortSiegeSpawn;
 import l2r.gameserver.model.L2Clan;
@@ -77,8 +77,8 @@ public class FortSiegeManager
 	
 	public final void addSiegeSkills(L2PcInstance character)
 	{
-		character.addSkill(SkillTable.FrequentSkill.SEAL_OF_RULER.getSkill(), false);
-		character.addSkill(SkillTable.FrequentSkill.BUILD_HEADQUARTERS.getSkill(), false);
+		character.addSkill(SkillData.FrequentSkill.SEAL_OF_RULER.getSkill(), false);
+		character.addSkill(SkillData.FrequentSkill.BUILD_HEADQUARTERS.getSkill(), false);
 	}
 	
 	/**
@@ -157,8 +157,8 @@ public class FortSiegeManager
 	
 	public final void removeSiegeSkills(L2PcInstance character)
 	{
-		character.removeSkill(SkillTable.FrequentSkill.SEAL_OF_RULER.getSkill());
-		character.removeSkill(SkillTable.FrequentSkill.BUILD_HEADQUARTERS.getSkill());
+		character.removeSkill(SkillData.FrequentSkill.SEAL_OF_RULER.getSkill());
+		character.removeSkill(SkillData.FrequentSkill.BUILD_HEADQUARTERS.getSkill());
 	}
 	
 	private final void load()

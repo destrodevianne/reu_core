@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -20,7 +20,7 @@ package l2r.gameserver.model.actor.instance;
 
 import l2r.Config;
 import l2r.gameserver.Announcements;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CoupleManager;
 import l2r.gameserver.model.L2World;
@@ -145,7 +145,7 @@ public class L2WeddingManagerInstance extends L2Npc
 			ptarget.broadcastPacket(MSU);
 			
 			// Fireworks
-			L2Skill skill = SkillTable.FrequentSkill.LARGE_FIREWORK.getSkill();
+			L2Skill skill = SkillData.FrequentSkill.LARGE_FIREWORK.getSkill();
 			if (skill != null)
 			{
 				MSU = new MagicSkillUse(player, player, 2025, 1, 1, 0);

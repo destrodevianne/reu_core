@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -53,6 +53,7 @@ import l2r.gameserver.scripts.handlers.targethandlers.PartyOther;
 import l2r.gameserver.scripts.handlers.targethandlers.Pet;
 import l2r.gameserver.scripts.handlers.targethandlers.Self;
 import l2r.gameserver.scripts.handlers.targethandlers.Summon;
+import l2r.gameserver.scripts.handlers.targethandlers.TargetParty;
 import l2r.gameserver.scripts.handlers.targethandlers.Unlockable;
 
 /**
@@ -97,6 +98,7 @@ public class TargetHandler implements IHandler<ITargetTypeHandler, Enum<L2Target
 		registerHandler(new Pet());
 		registerHandler(new Self());
 		registerHandler(new Summon());
+		registerHandler(new TargetParty());
 		registerHandler(new Unlockable());
 	}
 	

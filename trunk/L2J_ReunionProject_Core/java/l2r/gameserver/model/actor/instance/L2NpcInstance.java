@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import l2r.Config;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2SkillLearn;
@@ -103,7 +103,7 @@ public class L2NpcInstance extends L2Npc
 			int counts = 0;
 			for (L2SkillLearn s : skills)
 			{
-				final L2Skill sk = SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
+				final L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
 				
 				if (sk != null)
 				{
@@ -155,7 +155,7 @@ public class L2NpcInstance extends L2Npc
 		player.setLearningClass(classId);
 		for (L2SkillLearn s : skills)
 		{
-			if (SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel()) != null)
+			if (SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel()) != null)
 			{
 				asl.addSkill(s.getSkillId(), s.getSkillLevel(), s.getSkillLevel(), s.getCalculatedLevelUpSp(player.getClassId(), classId), 0);
 				count++;

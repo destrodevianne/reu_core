@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -105,7 +105,7 @@ public final class ZoneManager extends DocumentParser
 		load();
 		
 		// Re-validate all characters in zones
-		for (L2Object obj : L2World.getInstance().getAllVisibleObjectsArray())
+		for (L2Object obj : L2World.getInstance().getVisibleObjects())
 		{
 			if (obj instanceof L2Character)
 			{

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -66,7 +66,7 @@ public class OfflineTradersTable
 			con.setAutoCommit(false); // avoid halfway done
 			
 			// TextBuilder items = TextBuilder.newInstance();
-			for (L2PcInstance pc : L2World.getInstance().getAllPlayersArray())
+			for (L2PcInstance pc : L2World.getInstance().getPlayers())
 			{
 				try
 				{

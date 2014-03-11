@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,7 +24,7 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.interfaces.IL2Procedure;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.L2GameClient;
 import l2r.util.L2FastMap;
 import l2r.util.L2HashMap;
@@ -307,7 +307,7 @@ public class AntiFeedManager
 		}
 	}
 	
-	private static final class DisconnectProcedure implements IL2Procedure<Map<Integer, Connections>>
+	private static final class DisconnectProcedure implements IProcedure<Map<Integer, Connections>, Boolean>
 	{
 		private final Integer _addrHash;
 		
@@ -317,7 +317,7 @@ public class AntiFeedManager
 		}
 		
 		@Override
-		public final boolean execute(Map<Integer, Connections> event)
+		public final Boolean execute(Map<Integer, Connections> event)
 		{
 			final Connections conns = event.get(_addrHash);
 			if (conns != null)

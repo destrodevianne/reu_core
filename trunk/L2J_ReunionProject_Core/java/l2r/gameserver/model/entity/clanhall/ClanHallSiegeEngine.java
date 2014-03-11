@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -482,7 +482,7 @@ public abstract class ClanHallSiegeEngine extends Quest implements Siegable
 	{
 		final NpcSay npcSay = new NpcSay(npc.getObjectId(), type, npc.getId(), messageId);
 		int sourceRegion = MapRegionManager.getInstance().getMapRegionLocId(npc);
-		final L2PcInstance[] charsInside = L2World.getInstance().getAllPlayersArray();
+		final Collection<L2PcInstance> charsInside = L2World.getInstance().getPlayers();
 		
 		for (L2PcInstance pc : charsInside)
 		{

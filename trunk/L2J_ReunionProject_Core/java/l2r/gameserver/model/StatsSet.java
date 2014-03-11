@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -629,84 +629,16 @@ public class StatsSet
 		}
 	}
 	
-	/**
-	 * Add the String hold in param "value" for the key "name"
-	 * @param name : String designating the key in the set
-	 * @param value : String corresponding to the value associated with the key
-	 */
-	public void set(String name, String value)
+	@SuppressWarnings("unchecked")
+	public final <A> A getObject(String name, Class<A> type)
 	{
-		_set.put(name, value);
-	}
-	
-	/**
-	 * Add the boolean hold in param "value" for the key "name"
-	 * @param name : String designating the key in the set
-	 * @param value : boolean corresponding to the value associated with the key
-	 */
-	public void set(String name, boolean value)
-	{
-		_set.put(name, value);
-	}
-	
-	/**
-	 * Add the int hold in param "value" for the key "name"
-	 * @param name : String designating the key in the set
-	 * @param value : int corresponding to the value associated with the key
-	 */
-	public void set(String name, int value)
-	{
-		_set.put(name, value);
-	}
-	
-	/**
-	 * Safe version of "set". Expected values are within [min, max[<br>
-	 * Add the int hold in param "value" for the key "name".
-	 * @param name : String designating the key in the set
-	 * @param value : int corresponding to the value associated with the key
-	 * @param min
-	 * @param max
-	 * @param reference
-	 */
-	public void safeSet(String name, int value, int min, int max, String reference)
-	{
-		assert !(((min <= max) && ((value < min) || (value >= max))));
-		if ((min <= max) && ((value < min) || (value >= max)))
+		Object obj = _set.get(name);
+		if ((obj == null) || !type.isAssignableFrom(obj.getClass()))
 		{
-			_log.error("Incorrect value: " + value + "for: " + name + "Ref: " + reference);
+			return null;
 		}
 		
-		set(name, value);
-	}
-	
-	/**
-	 * Add the double hold in param "value" for the key "name"
-	 * @param name : String designating the key in the set
-	 * @param value : double corresponding to the value associated with the key
-	 */
-	public void set(String name, double value)
-	{
-		_set.put(name, value);
-	}
-	
-	/**
-	 * Add the long hold in param "value" for the key "name"
-	 * @param name : String designating the key in the set
-	 * @param value : double corresponding to the value associated with the key
-	 */
-	public void set(String name, long value)
-	{
-		_set.put(name, value);
-	}
-	
-	/**
-	 * Add the Enum hold in param "value" for the key "name"
-	 * @param name : String designating the key in the set
-	 * @param value : Enum corresponding to the value associated with the key
-	 */
-	public void set(String name, Enum<?> value)
-	{
-		_set.put(name, value);
+		return (A) obj;
 	}
 	
 	public long getLong(String name, long deflt)
@@ -731,6 +663,67 @@ public class StatsSet
 				throw new IllegalArgumentException("Integer value required, but found: " + val);
 			}
 		}
+	}
+	
+	public void set(String name, Object value)
+	{
+		_set.put(name, value);
+	}
+	
+	public void set(String key, boolean value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, byte value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, short value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, int value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, long value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, float value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, double value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, String value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void set(String key, Enum<?> value)
+	{
+		_set.put(key, value);
+	}
+	
+	public void safeSet(String key, int value, int min, int max, String reference)
+	{
+		assert !(((min <= max) && ((value < min) || (value >= max))));
+		if ((min <= max) && ((value < min) || (value >= max)))
+		{
+			_log.error("Incorrect value: " + value + "for: " + key + "Ref: " + reference);
+		}
+		
+		set(key, value);
 	}
 	
 	public void unset(String name)

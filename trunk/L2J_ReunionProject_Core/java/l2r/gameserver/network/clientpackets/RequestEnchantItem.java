@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.datatables.EnchantItemData;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.EnchantItem;
 import l2r.gameserver.model.EnchantScroll;
 import l2r.gameserver.model.L2Object;
@@ -261,7 +261,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					sm.addItemName(item);
 					activeChar.broadcastPacket(sm);
 					
-					L2Skill skill = SkillTable.FrequentSkill.FIREWORK.getSkill();
+					L2Skill skill = SkillData.FrequentSkill.FIREWORK.getSkill();
 					if (skill != null)
 					{
 						activeChar.broadcastPacket(new MagicSkillUse(activeChar, activeChar, skill.getId(), skill.getLevel(), skill.getHitTime(), skill.getReuseDelay()));

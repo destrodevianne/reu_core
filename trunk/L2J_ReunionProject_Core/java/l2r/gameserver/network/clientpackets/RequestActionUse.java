@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -26,7 +26,7 @@ import l2r.gameserver.ai.NextAction;
 import l2r.gameserver.ai.NextAction.NextActionCallback;
 import l2r.gameserver.datatables.BotReportTable;
 import l2r.gameserver.datatables.PetDataTable;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SummonSkillsTable;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
@@ -874,7 +874,7 @@ public final class RequestActionUse extends L2GameClientPacket
 		if (lvl > 0)
 		{
 			summon.setTarget(target);
-			summon.useMagic(SkillTable.getInstance().getInfo(skillId, lvl), _ctrlPressed, _shiftPressed);
+			summon.useMagic(SkillData.getInstance().getInfo(skillId, lvl), _ctrlPressed, _shiftPressed);
 		}
 		
 		if (skillId == SWITCH_STANCE_ID)

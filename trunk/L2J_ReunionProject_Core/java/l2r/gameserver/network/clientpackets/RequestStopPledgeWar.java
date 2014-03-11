@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -24,10 +24,10 @@ import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
-import gnu.trove.procedure.TObjectProcedure;
 
 public final class RequestStopPledgeWar extends L2GameClientPacket
 {
@@ -114,7 +114,7 @@ public final class RequestStopPledgeWar extends L2GameClientPacket
 		L2World.getInstance().forEachPlayer(new ForEachPlayerBroadcastUserInfo(clan, player));
 	}
 	
-	private final class ForEachPlayerBroadcastUserInfo implements TObjectProcedure<L2PcInstance>
+	private final class ForEachPlayerBroadcastUserInfo implements IProcedure<L2PcInstance, Boolean>
 	{
 		private final L2PcInstance _player;
 		private final L2Clan _cln;
@@ -126,7 +126,7 @@ public final class RequestStopPledgeWar extends L2GameClientPacket
 		}
 		
 		@Override
-		public final boolean execute(final L2PcInstance cha)
+		public final Boolean execute(final L2PcInstance cha)
 		{
 			if ((cha.getClan() == _player.getClan()) || (cha.getClan() == _cln))
 			{

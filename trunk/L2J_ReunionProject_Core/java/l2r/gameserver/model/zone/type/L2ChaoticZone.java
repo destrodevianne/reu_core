@@ -15,7 +15,7 @@
 package l2r.gameserver.model.zone.type;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -97,12 +97,12 @@ public class L2ChaoticZone extends L2RespawnZone
 	{
 		if (character.isPlayer())
 		{
-			SkillTable.getInstance().getInfo(1323, 1).getEffects(character, character);
+			SkillData.getInstance().getInfo(1323, 1).getEffects(character, character);
 			character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
 			character.setCurrentCp(character.getMaxCp());
 			if (ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_SKILL)
 			{
-				SkillTable.getInstance().getInfo(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID, 1).getEffects(character, character);
+				SkillData.getInstance().getInfo(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID, 1).getEffects(character, character);
 			}
 		}
 	}

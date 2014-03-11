@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -21,7 +21,7 @@ package l2r.gameserver.network.clientpackets;
 import java.util.List;
 
 import l2r.Config;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.QuestEventType;
@@ -109,7 +109,7 @@ public final class RequestAcquireSkill extends L2GameClientPacket
 			return;
 		}
 		
-		final L2Skill skill = SkillTable.getInstance().getInfo(_id, _level);
+		final L2Skill skill = SkillData.getInstance().getInfo(_id, _level);
 		if (skill == null)
 		{
 			_log.warn(RequestAcquireSkill.class.getSimpleName() + ": Player " + activeChar.getName() + " is trying to learn a null skill Id: " + _id + " level: " + _level + "!");
@@ -402,7 +402,7 @@ public final class RequestAcquireSkill extends L2GameClientPacket
 		
 		for (L2SkillLearn s : skills)
 		{
-			if (SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel()) != null)
+			if (SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel()) != null)
 			{
 				asl.addSkill(s.getSkillId(), s.getSkillLevel(), s.getSkillLevel(), s.getLevelUpSp(), 0);
 				++count;

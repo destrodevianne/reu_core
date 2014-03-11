@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -289,7 +289,7 @@ public class LoginServerThread extends Thread
 							if (L2World.getInstance().getAllPlayersCount() > 0)
 							{
 								FastList<String> playerList = new FastList<>();
-								for (L2PcInstance player : L2World.getInstance().getAllPlayersArray())
+								for (L2PcInstance player : L2World.getInstance().getPlayers())
 								{
 									playerList.add(player.getAccountName());
 								}
@@ -461,17 +461,13 @@ public class LoginServerThread extends Thread
 	 * Adds the game server login.
 	 * @param account the account
 	 * @param client the client
+	 * @return {@code true} if account was not already logged in, {@code false} otherwise
 	 */
-	public void addGameServerLogin(String account, L2GameClient client)
+	public boolean addGameServerLogin(String account, L2GameClient client)
 	{
-		_accountsInGameServer.put(account, client);
+		return _accountsInGameServer.putIfAbsent(account, client) == null;
 	}
 	
-	/**
-	 * Send access level.
-	 * @param account the account
-	 * @param level the access level
-	 */
 	public void sendAccessLevel(String account, int level)
 	{
 		ChangeAccessLevel cal = new ChangeAccessLevel(account, level);

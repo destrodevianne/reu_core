@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -51,6 +51,7 @@ import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2FestivalMonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.NpcStringId;
 import l2r.gameserver.network.SystemMessageId;
@@ -63,8 +64,6 @@ import l2r.util.Rnd;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.trove.procedure.TObjectProcedure;
 
 /**
  * Seven Signs Festival of Darkness Engine.<br>
@@ -2474,10 +2473,10 @@ public class SevenSignsFestival implements SpawnListener
 		}
 	}
 	
-	protected final class ForEachPlayerRemoveUnusedBloodOfferings implements TObjectProcedure<L2PcInstance>
+	protected final class ForEachPlayerRemoveUnusedBloodOfferings implements IProcedure<L2PcInstance, Boolean>
 	{
 		@Override
-		public final boolean execute(final L2PcInstance onlinePlayer)
+		public final Boolean execute(final L2PcInstance onlinePlayer)
 		{
 			try
 			{

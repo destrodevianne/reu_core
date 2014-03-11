@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -51,7 +51,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2DoorTemplate;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.instancezone.InstanceWorld;
-import l2r.gameserver.model.interfaces.IL2Procedure;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.CreatureSay;
@@ -861,10 +861,10 @@ public final class Instance
 		}
 	}
 	
-	public final class EjectProcedure implements IL2Procedure<Integer>
+	public final class EjectProcedure implements IProcedure<Integer, Boolean>
 	{
 		@Override
-		public boolean execute(Integer objectId)
+		public Boolean execute(Integer objectId)
 		{
 			final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
 			if ((player != null) && (player.getInstanceId() == getId()))
@@ -883,7 +883,7 @@ public final class Instance
 		}
 	}
 	
-	public final class BroadcastPacket implements IL2Procedure<Integer>
+	public final class BroadcastPacket implements IProcedure<Integer, Boolean>
 	{
 		private final L2GameServerPacket _packet;
 		
@@ -893,7 +893,7 @@ public final class Instance
 		}
 		
 		@Override
-		public boolean execute(Integer objectId)
+		public Boolean execute(Integer objectId)
 		{
 			final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
 			if ((player != null) && (player.getInstanceId() == getId()))

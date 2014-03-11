@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -16,19 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.interfaces;
+package l2r.gameserver.model;
 
 /**
- * Interface for procedures with one Object parameter.
- * @author Battlecruiser
- * @param <T> the type of object on which the procedure will be executed
+ * @author UnAfraid
  */
-public interface IL2Procedure<T>
+public class PageResult
 {
-	/**
-	 * Executes this procedure. A false return value indicates that the application executing this procedure should not invoke this procedure again.
-	 * @param arg the object on which the procedure will be executed
-	 * @return {@code true} if additional invocations of the procedure are allowed.
-	 */
-	public boolean execute(T arg);
+	private final int _pages;
+	private final StringBuilder _pagerTemplate;
+	private final StringBuilder _bodyTemplate;
+	
+	public PageResult(int pages, StringBuilder pagerTemplate, StringBuilder bodyTemplate)
+	{
+		_pages = pages;
+		_pagerTemplate = pagerTemplate;
+		_bodyTemplate = bodyTemplate;
+	}
+	
+	public int getPages()
+	{
+		return _pages;
+	}
+	
+	public StringBuilder getPagerTemplate()
+	{
+		return _pagerTemplate;
+	}
+	
+	public StringBuilder getBodyTemplate()
+	{
+		return _bodyTemplate;
+	}
 }

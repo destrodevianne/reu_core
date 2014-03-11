@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -26,7 +26,7 @@ import java.util.Map;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.GeoData;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
@@ -395,7 +395,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		_coolTime = set.getInteger("coolTime", 0);
 		_isDebuff = set.getBool("isDebuff", false);
 		_feed = set.getInteger("feed", 0);
-		_reuseHashCode = SkillTable.getSkillHashCode(_id, _level);
+		_reuseHashCode = SkillData.getSkillHashCode(_id, _level);
 		
 		if (Config.ENABLE_MODIFY_SKILL_REUSE && Config.SKILL_REUSE_LIST.containsKey(_id))
 		{
@@ -1970,7 +1970,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		{
 			_log.warn("Extractable skills data: Error in Skill Id: " + skillId + " Level: " + skillLvl + " -> There are no production items!");
 		}
-		return new L2ExtractableSkill(SkillTable.getSkillHashCode(skillId, skillLvl), products);
+		return new L2ExtractableSkill(SkillData.getSkillHashCode(skillId, skillLvl), products);
 	}
 	
 	public L2ExtractableSkill getExtractableSkill()

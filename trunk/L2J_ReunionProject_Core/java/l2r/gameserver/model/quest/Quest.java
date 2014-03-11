@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -63,7 +63,7 @@ import l2r.gameserver.model.base.AcquireSkillType;
 import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.interfaces.IIdentifiable;
-import l2r.gameserver.model.interfaces.IL2Procedure;
+import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -3701,10 +3701,10 @@ public class Quest extends ManagedScript implements IIdentifiable
 		{
 			if (includeCommandChannel && player.getParty().isInCommandChannel())
 			{
-				player.getParty().getCommandChannel().forEachMember(new IL2Procedure<L2PcInstance>()
+				player.getParty().getCommandChannel().forEachMember(new IProcedure<L2PcInstance, Boolean>()
 				{
 					@Override
-					public boolean execute(L2PcInstance member)
+					public Boolean execute(L2PcInstance member)
 					{
 						actionForEachPlayer(member, npc, isSummon);
 						return true;
@@ -3713,10 +3713,10 @@ public class Quest extends ManagedScript implements IIdentifiable
 			}
 			else if (includeParty)
 			{
-				player.getParty().forEachMember(new IL2Procedure<L2PcInstance>()
+				player.getParty().forEachMember(new IProcedure<L2PcInstance, Boolean>()
 				{
 					@Override
-					public boolean execute(L2PcInstance member)
+					public Boolean execute(L2PcInstance member)
 					{
 						actionForEachPlayer(member, npc, isSummon);
 						return true;

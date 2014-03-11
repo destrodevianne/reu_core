@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -34,7 +34,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.datatables.ManorData;
-import l2r.gameserver.datatables.SkillTable;
+import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.MountType;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -1406,7 +1406,7 @@ public final class Castle extends AbstractResidence
 				final List<L2SkillLearn> territorySkills = SkillTreesData.getInstance().getAvailableResidentialSkills(wardId);
 				for (L2SkillLearn s : territorySkills)
 				{
-					final L2Skill sk = SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
+					final L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
 					if (sk != null)
 					{
 						player.addSkill(sk, false);
@@ -1431,7 +1431,7 @@ public final class Castle extends AbstractResidence
 				final List<L2SkillLearn> territorySkills = SkillTreesData.getInstance().getAvailableResidentialSkills(wardId);
 				for (L2SkillLearn s : territorySkills)
 				{
-					final L2Skill sk = SkillTable.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
+					final L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
 					if (sk != null)
 					{
 						player.removeSkill(sk, false, true);

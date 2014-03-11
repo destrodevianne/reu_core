@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2013 L2J Server
+ * Copyright (C) 2004-2014 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
-import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
 /**
