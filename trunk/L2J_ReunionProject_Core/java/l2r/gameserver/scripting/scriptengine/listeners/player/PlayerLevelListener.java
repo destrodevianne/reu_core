@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.scripting.scriptengine.listeners.player;
 
+import l2r.gameserver.model.actor.events.AbstractCharEvents;
+import l2r.gameserver.model.actor.events.listeners.ILevelChangeEventListener;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.actor.stat.PcStat;
-import l2r.gameserver.scripting.scriptengine.events.PlayerLevelChangeEvent;
 import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
 
 /**
@@ -28,45 +28,37 @@ import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
  * If you wish to have a global listener for all the players logged in, set the L2PcInstance to null.<br>
  * @author TheOne
  */
-public abstract class PlayerLevelListener extends L2JListener
+public abstract class PlayerLevelListener extends L2JListener implements ILevelChangeEventListener
 {
-	
-	/**
-	 * constructor
-	 * @param player
-	 */
-	public PlayerLevelListener(L2PcInstance player)
+	public PlayerLevelListener(L2PcInstance activeChar)
 	{
-		super.player = player;
+		super(activeChar);
 		register();
 	}
-	
-	/**
-	 * The player's level has changed
-	 * @param event
-	 */
-	public abstract void levelChanged(PlayerLevelChangeEvent event);
 	
 	@Override
 	public void register()
 	{
-		if (player == null)
+		if (getPlayer() == null)
 		{
-			PcStat.addGlobalLevelListener(this);
-			return;
+			AbstractCharEvents.registerStaticListener(this);
 		}
-		player.getStat().addLevelListener(this);
-		
+		else
+		{
+			getPlayer().getEvents().registerListener(this);
+		}
 	}
 	
 	@Override
 	public void unregister()
 	{
-		if (player == null)
+		if (getPlayer() == null)
 		{
-			PcStat.removeGlobalLevelListener(this);
-			return;
+			AbstractCharEvents.unregisterStaticListener(this);
 		}
-		player.getStat().removeLevelListener(this);
+		else
+		{
+			getPlayer().getEvents().unregisterListener(this);
+		}
 	}
 }

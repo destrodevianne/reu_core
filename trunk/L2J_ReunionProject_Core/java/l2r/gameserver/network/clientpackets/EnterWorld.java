@@ -610,11 +610,6 @@ public class EnterWorld extends L2GameClientPacket
 		{
 			activeChar.sendPacket(ExNotifyPremiumItem.STATIC_PACKET);
 		}
-		
-		for (PlayerSpawnListener listener : listeners)
-		{
-			listener.onSpawn(activeChar);
-		}
 	}
 	
 	/**

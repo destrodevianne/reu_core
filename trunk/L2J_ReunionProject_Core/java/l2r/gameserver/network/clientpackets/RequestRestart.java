@@ -142,11 +142,6 @@ public final class RequestRestart extends L2GameClientPacket
 			}
 		}
 		
-		for (PlayerDespawnListener listener : despawnListeners)
-		{
-			listener.onDespawn(player);
-		}
-		
 		// Remove player from Boss Zone
 		player.removeFromBossZone();
 		

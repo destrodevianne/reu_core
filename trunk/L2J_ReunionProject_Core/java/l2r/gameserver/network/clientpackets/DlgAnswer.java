@@ -18,17 +18,12 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.List;
-
-import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.scripting.scriptengine.events.DlgAnswerEvent;
-import l2r.gameserver.scripting.scriptengine.listeners.talk.DlgAnswerListener;
 import l2r.gameserver.util.GMAudit;
 
 /**
@@ -37,7 +32,6 @@ import l2r.gameserver.util.GMAudit;
 public final class DlgAnswer extends L2GameClientPacket
 {
 	private static final String _C__C6_DLGANSWER = "[C] C6 DlgAnswer";
-	private static final List<DlgAnswerListener> _listeners = new FastList<DlgAnswerListener>().shared();
 	private int _messageId;
 	private int _answer;
 	private int _requesterId;
@@ -63,6 +57,12 @@ public final class DlgAnswer extends L2GameClientPacket
 		{
 			_log.info(getType() + ": Answer accepted. Message ID " + _messageId + ", answer " + _answer + ", Requester ID " + _requesterId);
 		}
+		
+		if (!activeChar.getEvents().onDlgAnswer(_messageId, _answer, _requesterId))
+		{
+			return;
+		}
+		
 		if ((_messageId == SystemMessageId.RESSURECTION_REQUEST_BY_C1_FOR_S2_XP.getId()) || (_messageId == SystemMessageId.RESURRECT_USING_CHARM_OF_COURAGE.getId()))
 		{
 			activeChar.reviveAnswer(_answer);
@@ -107,50 +107,6 @@ public final class DlgAnswer extends L2GameClientPacket
 		else if (_messageId == SystemMessageId.WOULD_YOU_LIKE_TO_CLOSE_THE_GATE.getId())
 		{
 			activeChar.gatesAnswer(_answer, 0);
-		}
-		
-		fireDlgAnswerListener();
-	}
-	
-	/**
-	 * Fires the event when packet arrived.
-	 */
-	private void fireDlgAnswerListener()
-	{
-		DlgAnswerEvent event = new DlgAnswerEvent();
-		event.setActiveChar(getActiveChar());
-		event.setMessageId(_messageId);
-		event.setAnswer(_answer);
-		event.setRequesterId(_requesterId);
-		
-		for (DlgAnswerListener listener : _listeners)
-		{
-			if ((listener.getMessageId() == -1) || (_messageId == listener.getMessageId()))
-			{
-				listener.onDlgAnswer(event);
-			}
-		}
-	}
-	
-	/**
-	 * @param listener
-	 */
-	public static void addDlgAnswerListener(DlgAnswerListener listener)
-	{
-		if (!_listeners.contains(listener))
-		{
-			_listeners.add(listener);
-		}
-	}
-	
-	/**
-	 * @param listener
-	 */
-	public static void removeDlgAnswerListener(DlgAnswerListener listener)
-	{
-		if (_listeners.contains(listener))
-		{
-			_listeners.remove(listener);
 		}
 	}
 	

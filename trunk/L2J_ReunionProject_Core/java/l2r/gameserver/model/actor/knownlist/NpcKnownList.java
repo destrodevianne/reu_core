@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
+import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
@@ -133,6 +134,16 @@ public class NpcKnownList extends CharKnownList
 			if (getActiveChar() instanceof L2Attackable)
 			{
 				final L2Attackable monster = (L2Attackable) getActiveChar();
+				
+				if (monster.getAI() == null)
+				{
+					if (Config.DEBUG)
+					{
+						System.out.println("Monster getAi() is NULL, MonsterId: " + monster.getId());
+					}
+					return;
+				}
+				
 				if (monster.getAI().getIntention() == CtrlIntention.AI_INTENTION_MOVE_TO)
 				{
 					final Collection<L2PcInstance> players = getKnownPlayers().values();

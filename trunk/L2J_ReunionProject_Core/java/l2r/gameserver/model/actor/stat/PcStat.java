@@ -45,7 +45,6 @@ import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
-import l2r.gameserver.scripting.scriptengine.events.PlayerLevelChangeEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerLevelListener;
 import l2r.gameserver.util.Util;
 import gr.reunion.configsEngine.CustomServerConfigs;
@@ -336,7 +335,11 @@ public class PcStat extends PlayableStat
 		{
 			return false;
 		}
-		fireLevelChangeListeners(value);
+		
+		if (!getActiveChar().getEvents().onLevelChange(value))
+		{
+			return false;
+		}
 		
 		boolean levelIncreased = super.addLevel(value);
 		if (levelIncreased)
@@ -982,73 +985,5 @@ public class PcStat extends PlayableStat
 		bonus = Math.min(bonus, Config.MAX_BONUS_SP);
 		
 		return bonus;
-	}
-	
-	/**
-	 * Listeners
-	 */
-	/**
-	 * Fires all the level change listeners, if any.
-	 * @param value
-	 */
-	private void fireLevelChangeListeners(byte value)
-	{
-		if (!levelListeners.isEmpty() || !globalLevelListeners.isEmpty())
-		{
-			PlayerLevelChangeEvent event = new PlayerLevelChangeEvent();
-			event.setPlayer(getActiveChar());
-			event.setOldLevel(getLevel());
-			event.setNewLevel(getLevel() + value);
-			for (PlayerLevelListener listener : levelListeners)
-			{
-				listener.levelChanged(event);
-			}
-			for (PlayerLevelListener listener : globalLevelListeners)
-			{
-				listener.levelChanged(event);
-			}
-		}
-	}
-	
-	/**
-	 * Adds a global player level listener
-	 * @param listener
-	 */
-	public static void addGlobalLevelListener(PlayerLevelListener listener)
-	{
-		if (!globalLevelListeners.contains(listener))
-		{
-			globalLevelListeners.add(listener);
-		}
-	}
-	
-	/**
-	 * Removes a global player level listener
-	 * @param listener
-	 */
-	public static void removeGlobalLevelListener(PlayerLevelListener listener)
-	{
-		globalLevelListeners.remove(listener);
-	}
-	
-	/**
-	 * Adds a player level listener
-	 * @param listener
-	 */
-	public void addLevelListener(PlayerLevelListener listener)
-	{
-		if (!levelListeners.contains(listener))
-		{
-			levelListeners.add(listener);
-		}
-	}
-	
-	/**
-	 * Removes a player level listener
-	 * @param listener
-	 */
-	public void removeLevelListener(PlayerLevelListener listener)
-	{
-		levelListeners.remove(listener);
 	}
 }

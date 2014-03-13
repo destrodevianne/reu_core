@@ -19,13 +19,14 @@
 package l2r.gameserver.scripting.scriptengine.listeners.character;
 
 import l2r.gameserver.model.actor.L2Character;
-import l2r.gameserver.scripting.scriptengine.events.AttackEvent;
+import l2r.gameserver.model.actor.events.AbstractCharEvents;
+import l2r.gameserver.model.actor.events.listeners.IAttackEventListener;
 import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
 
 /**
  * @author TheOne
  */
-public abstract class AttackListener extends L2JListener
+public abstract class AttackListener extends L2JListener implements IAttackEventListener
 {
 	private L2Character _character = null;
 	
@@ -41,30 +42,30 @@ public abstract class AttackListener extends L2JListener
 		register();
 	}
 	
-	/**
-	 * The player just attacked another character
-	 * @param event
-	 * @return
-	 */
-	public abstract boolean onAttack(AttackEvent event);
-	
-	/**
-	 * The player was just attacked by another character
-	 * @param event
-	 * @return
-	 */
-	public abstract boolean isAttacked(AttackEvent event);
-	
 	@Override
 	public void register()
 	{
-		_character.addAttackListener(this);
+		if (_character == null)
+		{
+			AbstractCharEvents.registerStaticListener(this);
+		}
+		else
+		{
+			_character.getEvents().registerListener(this);
+		}
 	}
 	
 	@Override
 	public void unregister()
 	{
-		_character.removeAttackListener(this);
+		if (_character == null)
+		{
+			AbstractCharEvents.unregisterStaticListener(this);
+		}
+		else
+		{
+			_character.getEvents().unregisterListener(this);
+		}
 	}
 	
 	/**

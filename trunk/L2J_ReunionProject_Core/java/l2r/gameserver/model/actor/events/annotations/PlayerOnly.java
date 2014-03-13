@@ -16,31 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.scripting.scriptengine.listeners.player;
+package l2r.gameserver.model.actor.events.annotations;
 
-import l2r.gameserver.model.actor.events.AbstractCharEvents;
-import l2r.gameserver.model.actor.events.listeners.IPlayerLogoutEventListener;
-import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * @author TheOne
+ * @author UnAfraid
  */
-public abstract class PlayerDespawnListener extends L2JListener implements IPlayerLogoutEventListener
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface PlayerOnly
 {
-	public PlayerDespawnListener()
-	{
-		register();
-	}
-	
-	@Override
-	public void register()
-	{
-		AbstractCharEvents.registerStaticListener(this);
-	}
-	
-	@Override
-	public void unregister()
-	{
-		AbstractCharEvents.unregisterStaticListener(this);
-	}
 }
