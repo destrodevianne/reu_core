@@ -18,29 +18,50 @@
  */
 package l2r.gameserver.scripting.scriptengine.listeners.player;
 
-import l2r.gameserver.model.actor.events.AbstractCharEvents;
-import l2r.gameserver.model.actor.events.listeners.IPlayerLogoutEventListener;
+import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
 
 /**
- * @author TheOne
+ * @author UnAfraid
  */
-public abstract class PlayerDespawnListener extends L2JListener implements IPlayerLogoutEventListener
+public abstract class EventListener extends L2JListener
 {
-	public PlayerDespawnListener()
+	public EventListener(L2PcInstance activeChar)
 	{
+		super(activeChar);
 		register();
 	}
+	
+	/**
+	 * @return {@code true} if player is on event, {@code false} otherwise.
+	 */
+	public abstract boolean isOnEvent();
+	
+	/**
+	 * @return {@code true} if player is blocked from leaving the game, {@code false} otherwise.
+	 */
+	public abstract boolean isBlockingExit();
+	
+	/**
+	 * @return {@code true} if player is blocked from receiving death penalty upon death, {@code false} otherwise.
+	 */
+	public abstract boolean isBlockingDeathPenalty();
 	
 	@Override
 	public void register()
 	{
-		AbstractCharEvents.registerStaticListener(this);
+		if (getPlayer() != null)
+		{
+			getPlayer().addEventListener(this);
+		}
 	}
 	
 	@Override
 	public void unregister()
 	{
-		AbstractCharEvents.unregisterStaticListener(this);
+		if (getPlayer() != null)
+		{
+			getPlayer().removeEventListener(this);
+		}
 	}
 }

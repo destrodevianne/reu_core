@@ -34,7 +34,16 @@ public abstract class L2JListener
 {
 	public static Logger log = LoggerFactory.getLogger(L2JListener.class);
 	
-	public L2PcInstance player = null;
+	private L2PcInstance _player = null;
+	
+	public L2JListener()
+	{
+	}
+	
+	public L2JListener(L2PcInstance player)
+	{
+		_player = player;
+	}
 	
 	/**
 	 * Convenience method to add this listener in its proper place.<br>
@@ -53,6 +62,6 @@ public abstract class L2JListener
 	 */
 	public L2PcInstance getPlayer()
 	{
-		return player;
+		return _player;
 	}
 }

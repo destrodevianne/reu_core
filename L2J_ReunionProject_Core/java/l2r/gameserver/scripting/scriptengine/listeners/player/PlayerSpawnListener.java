@@ -18,37 +18,30 @@
  */
 package l2r.gameserver.scripting.scriptengine.listeners.player;
 
-import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.network.clientpackets.EnterWorld;
+import l2r.gameserver.model.actor.events.AbstractCharEvents;
+import l2r.gameserver.model.actor.events.listeners.IPlayerLoginEventListener;
 import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
 
 /**
  * Gets triggered when a L2PcInstance is spawned in the world
  * @author TheOne
  */
-public abstract class PlayerSpawnListener extends L2JListener
+public abstract class PlayerSpawnListener extends L2JListener implements IPlayerLoginEventListener
 {
 	public PlayerSpawnListener()
 	{
 		register();
 	}
 	
-	/**
-	 * Triggered when a player is spawned
-	 * @param player
-	 */
-	public abstract void onSpawn(L2PcInstance player);
-	
 	@Override
 	public void register()
 	{
-		EnterWorld.addSpawnListener(this);
-		
+		AbstractCharEvents.registerStaticListener(this);
 	}
 	
 	@Override
 	public void unregister()
 	{
-		EnterWorld.removeSpawnListener(this);
+		AbstractCharEvents.unregisterStaticListener(this);
 	}
 }

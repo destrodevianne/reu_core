@@ -36,6 +36,7 @@ import l2r.gameserver.model.AggroInfo;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2WorldRegion;
+import l2r.gameserver.model.actor.events.SummonEvents;
 import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2SiegeSummonInstance;
@@ -183,6 +184,18 @@ public abstract class L2Summon extends L2Playable
 	public void initCharStatus()
 	{
 		setStatus(new SummonStatus(this));
+	}
+	
+	@Override
+	public void initCharEvents()
+	{
+		setCharEvents(new SummonEvents(this));
+	}
+	
+	@Override
+	public SummonEvents getEvents()
+	{
+		return (SummonEvents) super.getEvents();
 	}
 	
 	@Override

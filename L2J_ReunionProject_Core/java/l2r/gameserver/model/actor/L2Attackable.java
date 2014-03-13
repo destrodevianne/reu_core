@@ -53,6 +53,7 @@ import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.Location;
+import l2r.gameserver.model.actor.events.AttackableEvents;
 import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -159,6 +160,18 @@ public class L2Attackable extends L2Npc
 	public void initCharStatus()
 	{
 		setStatus(new AttackableStatus(this));
+	}
+	
+	@Override
+	public void initCharEvents()
+	{
+		setCharEvents(new AttackableEvents(this));
+	}
+	
+	@Override
+	public AttackableEvents getEvents()
+	{
+		return (AttackableEvents) super.getEvents();
 	}
 	
 	@Override
