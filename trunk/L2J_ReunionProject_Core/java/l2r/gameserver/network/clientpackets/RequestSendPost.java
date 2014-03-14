@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
-import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
+import static l2r.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 import l2r.Config;
 import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.CharNameTable;

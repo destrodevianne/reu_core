@@ -65,7 +65,7 @@ import l2r.gameserver.model.actor.tasks.attackable.CommandChannelTimer;
 import l2r.gameserver.model.actor.tasks.attackable.OnKillNotifyTask;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.holders.ItemHolder;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.quest.Quest;
@@ -1041,9 +1041,9 @@ public class L2Attackable extends L2Npc
 				// We should multiply by the server's drop rate, so we always get a low chance of drop for deep blue mobs.
 				// NOTE: This is valid only for adena drops! Others drops will still obey server's rate
 				deepBlueDrop = 3;
-				if (drop.getId() == PcInventory.ADENA_ID)
+				if (drop.getId() == Inventory.ADENA_ID)
 				{
-					deepBlueDrop *= (int) lastAttacker.getRate(Rates.DROP_ITEM, PcInventory.ADENA_ID, (isRaid() && !isRaidMinion()));
+					deepBlueDrop *= (int) lastAttacker.getRate(Rates.DROP_ITEM, Inventory.ADENA_ID, (isRaid() && !isRaidMinion()));
 				}
 			}
 		}
@@ -1121,7 +1121,7 @@ public class L2Attackable extends L2Npc
 			dropChance -= L2DropData.MAX_CHANCE;
 		}
 		
-		if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId())))
+		if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getId() == Inventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId())))
 		{
 			itemCount *= Config.L2JMOD_CHAMPION_ADENAS_REWARDS;
 		}
@@ -1305,7 +1305,7 @@ public class L2Attackable extends L2Npc
 				dropChance -= L2DropData.MAX_CHANCE;
 			}
 			
-			if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId())))
+			if (Config.L2JMOD_CHAMPION_ENABLE && isChampion() && ((drop.getId() == Inventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId())))
 			{
 				itemCount *= Config.L2JMOD_CHAMPION_ADENAS_REWARDS;
 			}

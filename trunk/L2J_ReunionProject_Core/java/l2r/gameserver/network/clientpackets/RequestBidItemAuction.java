@@ -22,7 +22,7 @@ import l2r.gameserver.instancemanager.ItemAuctionManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemauction.ItemAuction;
 import l2r.gameserver.model.itemauction.ItemAuctionInstance;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 
 /**
  * @author Forsaiken
@@ -57,7 +57,7 @@ public final class RequestBidItemAuction extends L2GameClientPacket
 			return;
 		}
 		
-		if ((_bid < 0) || (_bid > PcInventory.MAX_ADENA))
+		if ((_bid < 0) || (_bid > Inventory.MAX_ADENA))
 		{
 			return;
 		}

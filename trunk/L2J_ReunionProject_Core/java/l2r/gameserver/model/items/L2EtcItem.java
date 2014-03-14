@@ -23,7 +23,7 @@ import java.util.List;
 
 import l2r.gameserver.model.L2ExtractableProduct;
 import l2r.gameserver.model.StatsSet;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.type.L2EtcItemType;
 import l2r.util.StringUtil;
 
@@ -71,7 +71,7 @@ public final class L2EtcItem extends L2Item
 		{
 			_type2 = L2Item.TYPE2_QUEST;
 		}
-		else if ((getId() == PcInventory.ADENA_ID) || (getId() == PcInventory.ANCIENT_ADENA_ID))
+		else if ((getId() == Inventory.ADENA_ID) || (getId() == Inventory.ANCIENT_ADENA_ID))
 		{
 			_type2 = L2Item.TYPE2_MONEY;
 		}

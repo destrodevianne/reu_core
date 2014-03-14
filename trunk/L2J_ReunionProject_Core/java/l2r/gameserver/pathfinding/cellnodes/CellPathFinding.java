@@ -28,7 +28,7 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.idfactory.IdFactory;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.pathfinding.AbstractNode;
 import l2r.gameserver.pathfinding.AbstractNodeLoc;
@@ -153,7 +153,7 @@ public class CellPathFinding extends PathFinding
 					else
 					{
 						// known nodes
-						dropDebugItem(PcInventory.ADENA_ID, (int) (n.getCost() * 10), n.getLoc());
+						dropDebugItem(Inventory.ADENA_ID, (int) (n.getCost() * 10), n.getLoc());
 					}
 				}
 			}

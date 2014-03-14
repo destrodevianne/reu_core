@@ -31,7 +31,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.buylist.L2BuyList;
 import l2r.gameserver.model.buylist.Product;
 import l2r.gameserver.model.itemcontainer.Inventory;
-import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
@@ -225,9 +224,9 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			
 			_item_list.put(slot, itemId);
 			totalPrice += Config.WEAR_PRICE;
-			if (totalPrice > PcInventory.MAX_ADENA)
+			if (totalPrice > Inventory.MAX_ADENA)
 			{
-				Util.handleIllegalPlayerAction(_activeChar, "Warning!! Character " + _activeChar.getName() + " of account " + _activeChar.getAccountName() + " tried to purchase over " + PcInventory.MAX_ADENA + " adena worth of goods.", Config.DEFAULT_PUNISH);
+				Util.handleIllegalPlayerAction(_activeChar, "Warning!! Character " + _activeChar.getName() + " of account " + _activeChar.getAccountName() + " tried to purchase over " + Inventory.MAX_ADENA + " adena worth of goods.", Config.DEFAULT_PUNISH);
 				return;
 			}
 		}

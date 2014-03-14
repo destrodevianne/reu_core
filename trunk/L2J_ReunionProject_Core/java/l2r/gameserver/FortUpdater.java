@@ -23,7 +23,7 @@ import l2r.gameserver.enums.FortUpdaterType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.entity.Fort;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class FortUpdater implements Runnable
 					{
 						if (_clan.getWarehouse().getAdena() >= Config.FS_FEE_FOR_CASTLE)
 						{
-							_clan.getWarehouse().destroyItemByItemId("FS_fee_for_Castle", PcInventory.ADENA_ID, Config.FS_FEE_FOR_CASTLE, null, null);
+							_clan.getWarehouse().destroyItemByItemId("FS_fee_for_Castle", Inventory.ADENA_ID, Config.FS_FEE_FOR_CASTLE, null, null);
 							CastleManager.getInstance().getCastleById(_fort.getCastleId()).addToTreasuryNoTax(Config.FS_FEE_FOR_CASTLE);
 							_fort.raiseSupplyLvL();
 						}

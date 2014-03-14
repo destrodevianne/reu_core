@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
+import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

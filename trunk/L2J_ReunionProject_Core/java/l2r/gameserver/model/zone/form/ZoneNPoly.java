@@ -21,7 +21,7 @@ package l2r.gameserver.model.zone.form;
 import java.awt.Polygon;
 
 import l2r.gameserver.GeoData;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.zone.L2ZoneForm;
 import l2r.util.Rnd;
 
@@ -114,7 +114,7 @@ public class ZoneNPoly extends L2ZoneForm
 			for (int o = 1; o <= lenght; o++)
 			{
 				float k = o / lenght;
-				dropDebugItem(PcInventory.ADENA_ID, 1, (int) (_x[i] + (k * vx)), (int) (_y[i] + (k * vy)), z);
+				dropDebugItem(Inventory.ADENA_ID, 1, (int) (_x[i] + (k * vx)), (int) (_y[i] + (k * vy)), z);
 			}
 		}
 	}

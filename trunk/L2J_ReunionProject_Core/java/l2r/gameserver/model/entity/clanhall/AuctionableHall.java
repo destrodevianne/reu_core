@@ -29,7 +29,7 @@ import l2r.gameserver.instancemanager.ClanHallManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.entity.ClanHall;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
@@ -171,7 +171,7 @@ public final class AuctionableHall extends ClanHall
 					{
 						_paidUntil = _time + _chRate;
 					}
-					ClanTable.getInstance().getClan(getOwnerId()).getWarehouse().destroyItemByItemId("CH_rental_fee", PcInventory.ADENA_ID, getLease(), null, null);
+					ClanTable.getInstance().getClan(getOwnerId()).getWarehouse().destroyItemByItemId("CH_rental_fee", Inventory.ADENA_ID, getLease(), null, null);
 					ThreadPoolManager.getInstance().scheduleGeneral(new FeeTask(), _paidUntil - _time);
 					_paid = true;
 					updateDb();

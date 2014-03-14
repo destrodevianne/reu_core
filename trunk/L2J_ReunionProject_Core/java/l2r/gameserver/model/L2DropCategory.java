@@ -21,7 +21,7 @@ package l2r.gameserver.model;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 
@@ -143,7 +143,7 @@ public class L2DropCategory
 		int subCatChance = 0;
 		for (L2DropData drop : getAllDrops())
 		{
-			if ((drop.getId() == PcInventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId()))
+			if ((drop.getId() == Inventory.ADENA_ID) || Util.contains(SevenSigns.SEAL_STONE_IDS, drop.getId()))
 			{
 				drops.add(drop);
 				subCatChance += drop.getChance();

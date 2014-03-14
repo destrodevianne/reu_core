@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
+import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 import l2r.Config;
 import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
