@@ -67,7 +67,7 @@ import l2r.gameserver.datatables.CharSummonTable;
 import l2r.gameserver.datatables.CharTemplateTable;
 import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.ClassListData;
-import l2r.gameserver.datatables.EnchantGroupsData;
+import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.FishData;
 import l2r.gameserver.datatables.HennaData;
@@ -410,6 +410,8 @@ public final class L2PcInstance extends L2Playable
 	private static final String UPDATE_ZONE_RESTART_LIMIT = "REPLACE INTO character_norestart_zone_time (charId, time_limit) VALUES (?,?)";
 	
 	private static final String COND_OVERRIDE_KEY = "cond_override";
+	
+	public static final int ID_NONE = -1;
 	
 	public static final int REQUEST_TIMEOUT = 15;
 	
@@ -816,9 +818,9 @@ public final class L2PcInstance extends L2Playable
 	private int _expertisePenaltyBonus = 0;
 	
 	private boolean _isEnchanting = false;
-	private L2ItemInstance _activeEnchantItem = null;
-	private L2ItemInstance _activeEnchantSupportItem = null;
-	private L2ItemInstance _activeEnchantAttrItem = null;
+	private int _activeEnchantItemId = ID_NONE;
+	private int _activeEnchantSupportItemId = ID_NONE;
+	private int _activeEnchantAttrItemId = ID_NONE;
 	private long _activeEnchantTimestamp = 0;
 	
 	public boolean _inventoryDisable = false;
@@ -2754,41 +2756,41 @@ public final class L2PcInstance extends L2Playable
 		return getStat().getExp();
 	}
 	
-	public void setActiveEnchantAttrItem(L2ItemInstance stone)
+	public void setActiveEnchantAttrItemId(int objectId)
 	{
-		_activeEnchantAttrItem = stone;
+		_activeEnchantAttrItemId = objectId;
 	}
 	
-	public L2ItemInstance getActiveEnchantAttrItem()
+	public int getActiveEnchantAttrItemId()
 	{
-		return _activeEnchantAttrItem;
+		return _activeEnchantAttrItemId;
 	}
 	
-	public void setActiveEnchantItem(L2ItemInstance scroll)
+	public void setActiveEnchantItemId(int objectId)
 	{
 		// If we don't have a Enchant Item, we are not enchanting.
-		if (scroll == null)
+		if (objectId == ID_NONE)
 		{
-			setActiveEnchantSupportItem(null);
+			setActiveEnchantSupportItemId(ID_NONE);
 			setActiveEnchantTimestamp(0);
 			setIsEnchanting(false);
 		}
-		_activeEnchantItem = scroll;
+		_activeEnchantItemId = objectId;
 	}
 	
-	public L2ItemInstance getActiveEnchantItem()
+	public int getActiveEnchantItemId()
 	{
-		return _activeEnchantItem;
+		return _activeEnchantItemId;
 	}
 	
-	public void setActiveEnchantSupportItem(L2ItemInstance item)
+	public void setActiveEnchantSupportItemId(int objectId)
 	{
-		_activeEnchantSupportItem = item;
+		_activeEnchantSupportItemId = objectId;
 	}
 	
-	public L2ItemInstance getActiveEnchantSupportItem()
+	public int getActiveEnchantSupportItemId()
 	{
-		return _activeEnchantSupportItem;
+		return _activeEnchantSupportItemId;
 	}
 	
 	public long getActiveEnchantTimestamp()
@@ -4431,7 +4433,7 @@ public final class L2PcInstance extends L2Playable
 			return null;
 		}
 		
-		if ((getActiveEnchantItem() != null) && (getActiveEnchantItem().getObjectId() == objectId))
+		if (getActiveEnchantItemId() == objectId)
 		{
 			if (Config.DEBUG)
 			{
@@ -10985,7 +10987,7 @@ public final class L2PcInstance extends L2Playable
 			boolean isEnchantable = SkillData.getInstance().isEnchantable(s.getId());
 			if (isEnchantable)
 			{
-				L2EnchantSkillLearn esl = EnchantGroupsData.getInstance().getSkillEnchantmentBySkillId(s.getId());
+				L2EnchantSkillLearn esl = EnchantSkillGroupsData.getInstance().getSkillEnchantmentBySkillId(s.getId());
 				if (esl != null)
 				{
 					// if player dont have min level to enchant
@@ -12061,7 +12063,7 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if ((getActiveEnchantItem() != null) && (getActiveEnchantItem().getObjectId() == objectId))
+		if (getActiveEnchantItemId() == objectId)
 		{
 			if (Config.DEBUG)
 			{

@@ -1,115 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
-	debug="false">
-  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{HH:mm:ss}] %5p %m%n" />
-    </layout>
-  </appender>
-  <appender name="FILE" class="org.apache.log4j.FileAppender">
-    <param name="File" value="log/java.log"/>
-    <param name="Append" value="false"/>
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss:SSS}] %5p %c{2}: %m%n" />
-    </layout>
-  </appender>
-  <appender name="GAME" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="log/game.log"/>
-    <param name="Append" value="true"/>
-    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %m%n" />
-    </layout>
-  </appender>
-  <appender name="CHAT" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="log/chat.log"/>
-    <param name="Append" value="true"/>
-    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %m%n" />
-    </layout>
-  </appender>
-  <appender name="EVENTS" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="log/events.log"/>
-    <param name="Append" value="true"/>
-    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %m%n" />
-    </layout>
-  </appender>
-  <appender name="ITEM" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="log/item.log"/>
-    <param name="Append" value="true"/>
-    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %m%n" />
-    </layout>
-  </appender>
-  <appender name="GMACTIONS" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="log/gmactions.log"/>
-    <param name="Append" value="true"/>
-    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %m%n" />
-    </layout>
-  </appender>
-  <appender name="DEBUG" class="org.apache.log4j.FileAppender">
-    <param name="File" value="log/debug.log"/>
-    <param name="Append" value="false"/>
-    <layout class="org.apache.log4j.EnhancedPatternLayout">
-      <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss:SSS}] %m%n" />
-    </layout>
-  </appender>
-  <appender name="FILEASYNC" class="org.apache.log4j.AsyncAppender">
-    <param name="Blocking" value="false"/>
-    <appender-ref ref="FILE"/>
-  </appender>
-  <appender name="GAMEASYNC" class="org.apache.log4j.AsyncAppender">
-	<param name="Blocking" value="false"/>
-	<param name="BufferSize" value="512"/>
-    <appender-ref ref="GAME"/>
-  </appender>
-  <appender name="CHATASYNC" class="org.apache.log4j.AsyncAppender">
-	<param name="Blocking" value="false"/>
-	<param name="BufferSize" value="256"/>
-    <appender-ref ref="CHAT"/>
-  </appender>
-  <appender name="EVENTSASYNC" class="org.apache.log4j.AsyncAppender">
-	<param name="Blocking" value="false"/>
-	<param name="BufferSize" value="256"/>
-    <appender-ref ref="EVENTS"/>
-  </appender>
-  <appender name="ITEMASYNC" class="org.apache.log4j.AsyncAppender">
-	<param name="Blocking" value="false"/>
-	<param name="BufferSize" value="512"/>
-    <appender-ref ref="ITEM"/>
-  </appender>
-  <logger name="game" additivity="false">
-    <appender-ref ref="GAMEASYNC" />
-  </logger>
-  <logger name="chat" additivity="false">
-    <appender-ref ref="CHATASYNC" />
-  </logger>
-   <logger name="events" additivity="false">
-    <appender-ref ref="EVENTSASYNC" />
-  </logger>
-  <logger name="item" additivity="false">
-    <appender-ref ref="ITEMASYNC" />
-  </logger>
-  <logger name="gmactions" additivity="false">
-    <appender-ref ref="GMACTIONS" />
-  </logger>
-  <logger name="debug" additivity="false">
-    <level value="debug"/>
-    <appender-ref ref="DEBUG" />
-  </logger>  
-	<logger name="org.hibernate">
-		<level value="WARN" />
-	</logger>
-  <root>
-    <level value="info"/>
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILEASYNC"/>
-  </root>
+<!-- ===================================================================== -->
+<!-- -->
+<!-- Log4j Configuration -->
+<!-- -->
+<!-- ===================================================================== -->
+<!--
+| For more configuration infromation and examples see the Jakarta Log4j
+| owebsite: http://jakarta.apache.org/log4j
+
+debug=false => no debug informations from log4j
+threshold=info => overall trace level is info. Debug are filtered.
+
+For developer :
+To activate logs in debug, modify threshold to debug and don't forget to modify the threshold for the appender.
+
+-->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false" threshold="info" >
+
+    <!--
+ appenders definition :
+
+ log4j.appender."appender".layout.ConversionPattern
+ Error message format
+ char string with those patterns  :
+        %p : trace level
+        %t : thread name
+        %r : time since program start
+        %x : Nested Diagnostic Context
+        %c : Class name
+        %d{HH:mm:ss,SSS} or %d{dd MMM yyyy HH:mm:ss,SSS}.
+             If no date format is given, use format ISO8601.
+		 %m : message
+		 %X{localisation} : localisation for trace = class name(filename:line)
+		 %X{timestamp} :  date in milliseconds
+        %n : line carriage
+  With ExtendedPatternLayout :
+      : stacktrace
+
+    -->
+
+	<!--appender class="org.apache.log4j.AsyncAppender" name="ASYNC">
+        <appender-ref ref="FILELOG"/>
+		<appender-ref ref="CONSOLE"/>
+	</appender-->
+
+	 <!-- Setup the Root logger -->
+	
+    <!-- Console appender -->
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="INFO"/>
+        <param name="Target" value="System.out"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}] %p: %m %n"/>
+        </layout>
+    </appender>
+
+    <!-- file log appender -->
+    <appender name="FILELOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="INFO"/>
+        <param name="Encoding" value="UTF-8"/>
+        <param name="File" value="log/main/java.log"/>
+        <param name="Append" value="false"/>
+        <param name="MaxFileSize" value="1024KB"/>
+        <param name="MaxBackupIndex" value="5"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+             <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %p: %m%n"/>
+        </layout>
+    </appender>
+	
+	 <!-- game log appender -->
+    <appender name="GAMELOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="INFO"/>
+        <param name="Encoding" value="UTF-8"/>
+        <param name="File" value="log/main/game.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="1024KB"/>
+        <param name="MaxBackupIndex" value="5"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+             <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %p: %m%n"/>
+        </layout>
+    </appender>
+	
+    <!-- warnings log appender -->
+    <appender name="WARNLOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="WARN"/>
+        <param name="Encoding" value="UTF-8"/>
+        <param name="File" value="log/main/warnings.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="1024KB"/>
+        <param name="MaxBackupIndex" value="5"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %p:%m%n"/>
+        </layout>
+    </appender>
+	
+	<!-- errors log appender -->
+    <appender name="ERRORLOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="ERROR"/>
+        <param name="Encoding" value="UTF-8"/>
+        <param name="File" value="log/main/erros.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="1024KB"/>
+        <param name="MaxBackupIndex" value="5"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="[%d{dd.MM.yy HH:mm:ss}] %p:%m%n"/>
+        </layout>
+    </appender>
+	<root>
+		<appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILELOG"/>
+		<appender-ref ref="GAMELOG"/>
+		<appender-ref ref="WARNLOG"/>
+		<appender-ref ref="ERRORLOG"/>
+    </root>
 </log4j:configuration>

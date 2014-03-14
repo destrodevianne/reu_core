@@ -23,7 +23,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.datatables.EnchantGroupsData;
+import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 import l2r.gameserver.model.L2EnchantSkillLearn;
@@ -39,7 +39,6 @@ import l2r.gameserver.network.serverpackets.ExEnchantSkillResult;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.util.Rnd;
-import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * Format (ch) dd c: (id) 0xD0 h: (subid) 0x32 d: skill id d: skill lvl
@@ -74,22 +73,6 @@ public final class RequestExEnchantSkillSafe extends L2GameClientPacket
 			return;
 		}
 		
-		if (CustomServerConfigs.ENABLE_SKILL_ENCHANT)
-		{
-			if (CustomServerConfigs.ENABLE_SKILL_MAX_ENCHANT_LIMIT)
-			{
-				{
-					player.sendMessage("You have reached max skill enchant level. Allowed on this server up to " + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL + ".");
-					return;
-				}
-			}
-		}
-		else
-		{
-			player.sendMessage("You cannot use the skill enchanting function, it's currently turned off.");
-			return;
-		}
-		
 		if (player.getClassId().level() < 3) // requires to have 3rd class quest completed
 		{
 			player.sendPacket(SystemMessageId.YOU_CANNOT_USE_SKILL_ENCHANT_IN_THIS_CLASS);
@@ -114,10 +97,10 @@ public final class RequestExEnchantSkillSafe extends L2GameClientPacket
 			return;
 		}
 		
-		int costMultiplier = EnchantGroupsData.SAFE_ENCHANT_COST_MULTIPLIER;
-		int reqItemId = EnchantGroupsData.SAFE_ENCHANT_BOOK;
+		int costMultiplier = EnchantSkillGroupsData.SAFE_ENCHANT_COST_MULTIPLIER;
+		int reqItemId = EnchantSkillGroupsData.SAFE_ENCHANT_BOOK;
 		
-		L2EnchantSkillLearn s = EnchantGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId);
+		L2EnchantSkillLearn s = EnchantSkillGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId);
 		if (s == null)
 		{
 			return;

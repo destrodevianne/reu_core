@@ -16,35 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.skills.funcs;
-
-import l2r.gameserver.datatables.EnchantItemHPBonusData;
-import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.stats.Env;
-import l2r.gameserver.model.stats.Stats;
+package l2r.gameserver.model.items.enchant;
 
 /**
- * @author Yamaneko
+ * @author UnAfraid
  */
-public class FuncEnchantHp extends Func
+public enum EnchantResultType
 {
-	public FuncEnchantHp(Stats pStat, int pOrder, Object owner, Lambda lambda)
-	{
-		super(pStat, pOrder, owner, lambda);
-	}
-	
-	@Override
-	public void calc(Env env)
-	{
-		if ((cond != null) && !cond.test(env))
-		{
-			return;
-		}
-		
-		final L2ItemInstance item = (L2ItemInstance) funcOwner;
-		if (item.getEnchantLevel() > 0)
-		{
-			env.addValue(EnchantItemHPBonusData.getInstance().getHPBonus(item));
-		}
-	}
+	ERROR,
+	SUCCESS,
+	FAILURE
 }

@@ -551,7 +551,7 @@ public class SevenSigns
 				_nextPeriodChange.add(Calendar.MILLISECOND, PERIOD_MINOR_LENGTH);
 				break;
 		}
-		_log.info("SevenSigns: Next period changed to " + _nextPeriodChange.getTime());
+		_log.info("SevenSigns: Next period changed: " + _nextPeriodChange.getTime());
 	}
 	
 	public final String getCurrentPeriodName()

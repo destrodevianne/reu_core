@@ -19,8 +19,8 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.datatables.EnchantItemData;
-import l2r.gameserver.model.EnchantScroll;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.items.enchant.EnchantScroll;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPutEnchantTargetItemResult;
@@ -32,7 +32,7 @@ public class RequestExTryToPutEnchantTargetItem extends L2GameClientPacket
 {
 	private static final String _C__D0_4C_REQUESTEXTRYTOPUTENCHANTTARGETITEM = "[C] D0:4C RequestExTryToPutEnchantTargetItem";
 	
-	private int _objectId = 0;
+	private int _objectId;
 	
 	@Override
 	protected void readImpl()
@@ -43,8 +43,7 @@ public class RequestExTryToPutEnchantTargetItem extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		L2PcInstance activeChar = getClient().getActiveChar();
-		
+		final L2PcInstance activeChar = getClient().getActiveChar();
 		if ((_objectId == 0) || (activeChar == null))
 		{
 			return;
@@ -55,19 +54,18 @@ public class RequestExTryToPutEnchantTargetItem extends L2GameClientPacket
 			return;
 		}
 		
-		L2ItemInstance item = activeChar.getInventory().getItemByObjectId(_objectId);
-		L2ItemInstance scroll = activeChar.getActiveEnchantItem();
-		
+		final L2ItemInstance item = activeChar.getInventory().getItemByObjectId(_objectId);
+		final L2ItemInstance scroll = activeChar.getInventory().getItemByObjectId(activeChar.getActiveEnchantItemId());
 		if ((item == null) || (scroll == null))
 		{
 			return;
 		}
 		
-		EnchantScroll scrollTemplate = EnchantItemData.getInstance().getEnchantScroll(scroll);
-		if ((scrollTemplate == null) || !scrollTemplate.isValid(item))
+		final EnchantScroll scrollTemplate = EnchantItemData.getInstance().getEnchantScroll(scroll);
+		if ((scrollTemplate == null) || !scrollTemplate.isValid(item, null))
 		{
 			activeChar.sendPacket(SystemMessageId.DOES_NOT_FIT_SCROLL_CONDITIONS);
-			activeChar.setActiveEnchantItem(null);
+			activeChar.setActiveEnchantItemId(L2PcInstance.ID_NONE);
 			activeChar.sendPacket(new ExPutEnchantTargetItemResult(0));
 			if (scrollTemplate == null)
 			{

@@ -71,19 +71,14 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 			return;
 		}
 		
-		if (player.getActiveEnchantItem() != null)
+		if (player.getActiveEnchantItemId() != L2PcInstance.ID_NONE)
 		{
+			SecurityActions.startSecurity(player, SecurityType.ENCHANT_EXPLOIT);
 			return;
 		}
 		// Alt game - Karma punishment
 		if (!Config.ALT_GAME_KARMA_PLAYER_CAN_TRADE && (player.getKarma() > 0))
 		{
-			return;
-		}
-		
-		if (player.getActiveEnchantItem() != null)
-		{
-			SecurityActions.startSecurity(player, SecurityType.ENCHANT_EXPLOIT);
 			return;
 		}
 		

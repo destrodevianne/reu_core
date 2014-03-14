@@ -46,10 +46,11 @@ import l2r.gameserver.datatables.ClanTable;
 import l2r.gameserver.datatables.ClassListData;
 import l2r.gameserver.datatables.CrestTable;
 import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.EnchantGroupsData;
-import l2r.gameserver.datatables.EnchantHPBonusData;
 import l2r.gameserver.datatables.EnchantItemData;
-import l2r.gameserver.datatables.EnchantOptionsData;
+import l2r.gameserver.datatables.EnchantItemGroupsData;
+import l2r.gameserver.datatables.EnchantItemHPBonusData;
+import l2r.gameserver.datatables.EnchantItemOptionsData;
+import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.datatables.EventDroplist;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.FishData;
@@ -73,8 +74,8 @@ import l2r.gameserver.datatables.ProductItemData;
 import l2r.gameserver.datatables.RecipeData;
 import l2r.gameserver.datatables.SecondaryAuthData;
 import l2r.gameserver.datatables.SiegeScheduleData;
-import l2r.gameserver.datatables.SkillLearnData;
 import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.SkillLearnData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.datatables.StaticObjects;
@@ -221,7 +222,7 @@ public class GameServer
 		
 		printSection("Skills");
 		EffectHandler.getInstance().executeScript();
-		EnchantGroupsData.getInstance();
+		EnchantSkillGroupsData.getInstance();
 		SkillTreesData.getInstance();
 		SkillData.getInstance();
 		SummonSkillsTable.getInstance();
@@ -229,10 +230,11 @@ public class GameServer
 		printSection("Items");
 		ItemTable.getInstance();
 		ProductItemData.getInstance();
+		EnchantItemGroupsData.getInstance();
 		EnchantItemData.getInstance();
-		EnchantOptionsData.getInstance();
+		EnchantItemOptionsData.getInstance();
 		OptionsData.getInstance();
-		EnchantHPBonusData.getInstance();
+		EnchantItemHPBonusData.getInstance();
 		MerchantPriceConfigTable.getInstance().loadInstances();
 		BuyListData.getInstance();
 		MultiSell.getInstance();
@@ -514,7 +516,7 @@ public class GameServer
 	public static void printSection(String s)
 	{
 		s = "=[ " + s + " ]";
-		while (s.length() < 62)
+		while (s.length() < 61)
 		{
 			s = "-" + s;
 		}
