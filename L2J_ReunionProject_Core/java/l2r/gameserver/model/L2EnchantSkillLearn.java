@@ -21,7 +21,7 @@ package l2r.gameserver.model;
 import java.util.Set;
 import java.util.TreeMap;
 
-import l2r.gameserver.datatables.EnchantGroupsData;
+import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 
 public final class L2EnchantSkillLearn
@@ -74,7 +74,7 @@ public final class L2EnchantSkillLearn
 	
 	public L2EnchantSkillGroup getFirstRouteGroup()
 	{
-		return EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.firstEntry().getValue());
+		return EnchantSkillGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.firstEntry().getValue());
 	}
 	
 	public Set<Integer> getAllRoutes()
@@ -100,7 +100,7 @@ public final class L2EnchantSkillLearn
 		}
 		int index = getEnchantIndex(level);
 		
-		if ((index + 1) >= EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType)).getEnchantGroupDetails().size())
+		if ((index + 1) >= EnchantSkillGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType)).getEnchantGroupDetails().size())
 		{
 			return true;
 		}
@@ -115,7 +115,7 @@ public final class L2EnchantSkillLearn
 			return null;
 		}
 		int index = getEnchantIndex(level);
-		L2EnchantSkillGroup group = EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType));
+		L2EnchantSkillGroup group = EnchantSkillGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType));
 		
 		if (index < 0)
 		{
@@ -123,7 +123,7 @@ public final class L2EnchantSkillLearn
 		}
 		else if (index >= group.getEnchantGroupDetails().size())
 		{
-			return group.getEnchantGroupDetails().get(EnchantGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType)).getEnchantGroupDetails().size() - 1);
+			return group.getEnchantGroupDetails().get(EnchantSkillGroupsData.getInstance().getEnchantSkillGroupById(_enchantRoutes.get(enchantType)).getEnchantGroupDetails().size() - 1);
 		}
 		return group.getEnchantGroupDetails().get(index);
 	}

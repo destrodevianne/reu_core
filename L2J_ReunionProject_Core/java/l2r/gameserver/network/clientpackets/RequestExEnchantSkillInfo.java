@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.EnchantGroupsData;
+import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.L2Skill;
@@ -68,7 +68,7 @@ public final class RequestExEnchantSkillInfo extends L2GameClientPacket
 			return;
 		}
 		
-		if (EnchantGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId) == null)
+		if (EnchantSkillGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId) == null)
 		{
 			return;
 		}

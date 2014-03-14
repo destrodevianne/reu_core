@@ -19,8 +19,9 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.datatables.EnchantItemData;
-import l2r.gameserver.model.EnchantItem;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.items.enchant.EnchantScroll;
+import l2r.gameserver.model.items.enchant.EnchantSupportItem;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPutEnchantSupportItemResult;
@@ -45,32 +46,39 @@ public class RequestExTryToPutEnchantSupportItem extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		L2PcInstance activeChar = getClient().getActiveChar();
-		if (activeChar != null)
+		final L2PcInstance activeChar = getClient().getActiveChar();
+		if (activeChar == null)
 		{
-			if (activeChar.isEnchanting())
+			return;
+		}
+		
+		if (activeChar.isEnchanting())
+		{
+			final L2ItemInstance item = activeChar.getInventory().getItemByObjectId(_enchantObjectId);
+			final L2ItemInstance scroll = activeChar.getInventory().getItemByObjectId(activeChar.getActiveEnchantItemId());
+			final L2ItemInstance support = activeChar.getInventory().getItemByObjectId(_supportObjectId);
+			
+			if ((item == null) || (scroll == null) || (support == null))
 			{
-				L2ItemInstance item = activeChar.getInventory().getItemByObjectId(_enchantObjectId);
-				L2ItemInstance support = activeChar.getInventory().getItemByObjectId(_supportObjectId);
-				
-				if ((item == null) || (support == null))
-				{
-					return;
-				}
-				
-				EnchantItem supportTemplate = EnchantItemData.getInstance().getSupportItem(support);
-				
-				if ((supportTemplate == null) || !supportTemplate.isValid(item))
-				{
-					// message may be custom
-					activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITION);
-					activeChar.setActiveEnchantSupportItem(null);
-					activeChar.sendPacket(new ExPutEnchantSupportItemResult(0));
-					return;
-				}
-				activeChar.setActiveEnchantSupportItem(support);
-				activeChar.sendPacket(new ExPutEnchantSupportItemResult(_supportObjectId));
+				// message may be custom
+				activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITION);
+				activeChar.setActiveEnchantSupportItemId(L2PcInstance.ID_NONE);
+				return;
 			}
+			
+			final EnchantScroll scrollTemplate = EnchantItemData.getInstance().getEnchantScroll(scroll);
+			final EnchantSupportItem supportTemplate = EnchantItemData.getInstance().getSupportItem(support);
+			
+			if ((scrollTemplate == null) || (supportTemplate == null) || !scrollTemplate.isValid(item, supportTemplate))
+			{
+				// message may be custom
+				activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITION);
+				activeChar.setActiveEnchantSupportItemId(L2PcInstance.ID_NONE);
+				activeChar.sendPacket(new ExPutEnchantSupportItemResult(0));
+				return;
+			}
+			activeChar.setActiveEnchantSupportItemId(support.getObjectId());
+			activeChar.sendPacket(new ExPutEnchantSupportItemResult(_supportObjectId));
 		}
 	}
 	

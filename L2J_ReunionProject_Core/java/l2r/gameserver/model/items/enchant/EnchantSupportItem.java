@@ -16,35 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.skills.funcs;
+package l2r.gameserver.model.items.enchant;
 
-import l2r.gameserver.datatables.EnchantItemHPBonusData;
-import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.stats.Env;
-import l2r.gameserver.model.stats.Stats;
+import l2r.gameserver.model.StatsSet;
+import l2r.gameserver.model.items.type.L2EtcItemType;
 
 /**
- * @author Yamaneko
+ * @author UnAfraid
  */
-public class FuncEnchantHp extends Func
+public final class EnchantSupportItem extends AbstractEnchantItem
 {
-	public FuncEnchantHp(Stats pStat, int pOrder, Object owner, Lambda lambda)
+	private final boolean _isWeapon;
+	
+	public EnchantSupportItem(StatsSet set)
 	{
-		super(pStat, pOrder, owner, lambda);
+		super(set);
+		_isWeapon = getItem().getItemType() == L2EtcItemType.SCRL_INC_ENCHANT_PROP_WP;
 	}
 	
 	@Override
-	public void calc(Env env)
+	public boolean isWeapon()
 	{
-		if ((cond != null) && !cond.test(env))
-		{
-			return;
-		}
-		
-		final L2ItemInstance item = (L2ItemInstance) funcOwner;
-		if (item.getEnchantLevel() > 0)
-		{
-			env.addValue(EnchantItemHPBonusData.getInstance().getHPBonus(item));
-		}
+		return _isWeapon;
 	}
 }

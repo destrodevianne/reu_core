@@ -23,7 +23,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.datatables.EnchantGroupsData;
+import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 import l2r.gameserver.model.L2EnchantSkillLearn;
@@ -97,9 +97,9 @@ public final class RequestExEnchantSkillRouteChange extends L2GameClientPacket
 			return;
 		}
 		
-		int reqItemId = EnchantGroupsData.CHANGE_ENCHANT_BOOK;
+		int reqItemId = EnchantSkillGroupsData.CHANGE_ENCHANT_BOOK;
 		
-		L2EnchantSkillLearn s = EnchantGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId);
+		L2EnchantSkillLearn s = EnchantSkillGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId);
 		if (s == null)
 		{
 			return;

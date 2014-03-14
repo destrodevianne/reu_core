@@ -23,7 +23,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.datatables.EnchantGroupsData;
+import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 import l2r.gameserver.model.L2EnchantSkillLearn;
@@ -39,7 +39,6 @@ import l2r.gameserver.network.serverpackets.ExEnchantSkillResult;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.util.Rnd;
-import gr.reunion.configsEngine.CustomServerConfigs;
 
 /**
  * Format (ch) dd c: (id) 0xD0 h: (subid) 0x06 d: skill id d: skill lvl
@@ -74,20 +73,6 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 			return;
 		}
 		
-		if (CustomServerConfigs.ENABLE_SKILL_ENCHANT)
-		{
-			if ((_skillLvl % 100) >= CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL)
-			{
-				player.sendMessage("You have reached max skill enchant level. Allowed on this server up to " + CustomServerConfigs.SKILL_MAX_ENCHANT_LIMIT_LEVEL + ".");
-				return;
-			}
-		}
-		else
-		{
-			player.sendMessage("You cannot use the skill enchanting function, it's currently turned off.");
-			return;
-		}
-		
 		if (player.getClassId().level() < 3) // requires to have 3rd class quest completed
 		{
 			player.sendPacket(SystemMessageId.YOU_CANNOT_USE_SKILL_ENCHANT_IN_THIS_CLASS);
@@ -112,7 +97,7 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 			return;
 		}
 		
-		final L2EnchantSkillLearn s = EnchantGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId);
+		final L2EnchantSkillLearn s = EnchantSkillGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId);
 		if (s == null)
 		{
 			return;
@@ -124,13 +109,13 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 			return;
 		}
 		
-		final int costMultiplier = EnchantGroupsData.NORMAL_ENCHANT_COST_MULTIPLIER;
+		final int costMultiplier = EnchantSkillGroupsData.NORMAL_ENCHANT_COST_MULTIPLIER;
 		final int requiredSp = esd.getSpCost() * costMultiplier;
 		if (player.getSp() >= requiredSp)
 		{
 			// only first lvl requires book
 			final boolean usesBook = (_skillLvl % 100) == 1; // 101, 201, 301 ...
-			final int reqItemId = EnchantGroupsData.NORMAL_ENCHANT_BOOK;
+			final int reqItemId = EnchantSkillGroupsData.NORMAL_ENCHANT_BOOK;
 			final L2ItemInstance spb = player.getInventory().getItemByItemId(reqItemId);
 			
 			if (Config.ES_SP_BOOK_NEEDED && usesBook && (spb == null)) // Haven't spellbook

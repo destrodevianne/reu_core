@@ -16,35 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.skills.funcs;
-
-import l2r.gameserver.datatables.EnchantItemHPBonusData;
-import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.stats.Env;
-import l2r.gameserver.model.stats.Stats;
+package l2r.gameserver.model.holders;
 
 /**
- * @author Yamaneko
+ * @author UnAfraid
  */
-public class FuncEnchantHp extends Func
+public class RangeChanceHolder
 {
-	public FuncEnchantHp(Stats pStat, int pOrder, Object owner, Lambda lambda)
+	private final int _min;
+	private final int _max;
+	private final double _chance;
+	
+	public RangeChanceHolder(int min, int max, double chance)
 	{
-		super(pStat, pOrder, owner, lambda);
+		_min = min;
+		_max = max;
+		_chance = chance;
 	}
 	
-	@Override
-	public void calc(Env env)
+	/**
+	 * @return minimum value.
+	 */
+	public int getMin()
 	{
-		if ((cond != null) && !cond.test(env))
-		{
-			return;
-		}
-		
-		final L2ItemInstance item = (L2ItemInstance) funcOwner;
-		if (item.getEnchantLevel() > 0)
-		{
-			env.addValue(EnchantItemHPBonusData.getInstance().getHPBonus(item));
-		}
+		return _min;
+	}
+	
+	/**
+	 * @return maximum value.
+	 */
+	public int getMax()
+	{
+		return _max;
+	}
+	
+	/**
+	 * @return the chance.
+	 */
+	public double getChance()
+	{
+		return _chance;
 	}
 }

@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.w3c.dom.Node;
+
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -31,13 +33,11 @@ import l2r.gameserver.model.skills.funcs.FuncTemplate;
 import l2r.gameserver.model.skills.funcs.LambdaConst;
 import l2r.gameserver.model.stats.Stats;
 
-import org.w3c.dom.Node;
-
 /**
  * This class holds the Enchant HP Bonus Data.
  * @author MrPoke, Zoey76
  */
-public class EnchantHPBonusData extends DocumentParser
+public class EnchantItemHPBonusData extends DocumentParser
 {
 	private final Map<Integer, List<Integer>> _armorHPBonuses = new HashMap<>();
 	
@@ -46,7 +46,7 @@ public class EnchantHPBonusData extends DocumentParser
 	/**
 	 * Instantiates a new enchant hp bonus data.
 	 */
-	protected EnchantHPBonusData()
+	protected EnchantItemHPBonusData()
 	{
 		load();
 	}
@@ -131,7 +131,7 @@ public class EnchantHPBonusData extends DocumentParser
 	{
 		_armorHPBonuses.clear();
 		parseDatapackFile("data/stats/enchantHPBonus.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _armorHPBonuses.size() + " Enchant HP Bonuses!");
+		_log.info(getClass().getSimpleName() + ": Loaded " + _armorHPBonuses.size() + " Enchant HP Bonuses.");
 	}
 	
 	/**
@@ -159,13 +159,13 @@ public class EnchantHPBonusData extends DocumentParser
 	 * Gets the single instance of EnchantHPBonusData.
 	 * @return single instance of EnchantHPBonusData
 	 */
-	public static final EnchantHPBonusData getInstance()
+	public static final EnchantItemHPBonusData getInstance()
 	{
 		return SingletonHolder._instance;
 	}
 	
 	private static class SingletonHolder
 	{
-		protected static final EnchantHPBonusData _instance = new EnchantHPBonusData();
+		protected static final EnchantItemHPBonusData _instance = new EnchantItemHPBonusData();
 	}
 }
