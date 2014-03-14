@@ -49,7 +49,7 @@ import java.util.StringTokenizer;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.util.FloodProtectorConfig;
 import l2r.gameserver.util.Util;
 import l2r.util.PropertiesParser;
@@ -2278,9 +2278,9 @@ public final class Config
 					}
 				}
 			}
-			if (!RATE_DROP_ITEMS_ID.containsKey(PcInventory.ADENA_ID))
+			if (!RATE_DROP_ITEMS_ID.containsKey(Inventory.ADENA_ID))
 			{
-				RATE_DROP_ITEMS_ID.put(PcInventory.ADENA_ID, RATE_DROP_ITEMS); // for Adena rate if not defined
+				RATE_DROP_ITEMS_ID.put(Inventory.ADENA_ID, RATE_DROP_ITEMS); // for Adena rate if not defined
 			}
 			
 			// Load L2JMod L2Properties file (if exists)
@@ -2863,7 +2863,7 @@ public final class Config
 				RATE_DROP_ITEMS = Float.parseFloat(pValue);
 				break;
 			case "ratedropadena":
-				RATE_DROP_ITEMS_ID.put(PcInventory.ADENA_ID, Float.parseFloat(pValue));
+				RATE_DROP_ITEMS_ID.put(Inventory.ADENA_ID, Float.parseFloat(pValue));
 				break;
 			case "rateraiddropitems":
 				RATE_DROP_ITEMS_BY_RAID = Float.parseFloat(pValue);

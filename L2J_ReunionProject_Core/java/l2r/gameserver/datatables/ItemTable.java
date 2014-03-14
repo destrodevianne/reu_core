@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.datatables;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
+import static l2r.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

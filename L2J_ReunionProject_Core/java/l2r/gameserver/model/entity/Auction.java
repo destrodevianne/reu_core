@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.entity;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
-import static l2r.gameserver.model.itemcontainer.PcInventory.FADENA_ID;
-import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
+import static l2r.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+import static l2r.gameserver.model.itemcontainer.Inventory.FADENA_ID;
+import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

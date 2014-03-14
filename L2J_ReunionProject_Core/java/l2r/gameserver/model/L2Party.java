@@ -39,7 +39,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2ServitorInstance;
 import l2r.gameserver.model.entity.DimensionalRift;
 import l2r.gameserver.model.holders.ItemHolder;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.SystemMessageId;
@@ -615,7 +615,7 @@ public class L2Party extends AbstractPlayerGroup
 	public void distributeItem(L2PcInstance player, L2ItemInstance item)
 	{
 		final int itemId = item.getId();
-		if (itemId == PcInventory.ADENA_ID)
+		if (itemId == Inventory.ADENA_ID)
 		{
 			distributeAdena(player, item.getCount(), player);
 			ItemTable.getInstance().destroyItem("Party", item, player, null);
@@ -659,7 +659,7 @@ public class L2Party extends AbstractPlayerGroup
 	 */
 	public void distributeItem(L2PcInstance player, int itemId, long itemCount, boolean spoil, L2Attackable target)
 	{
-		if (itemId == PcInventory.ADENA_ID)
+		if (itemId == Inventory.ADENA_ID)
 		{
 			distributeAdena(player, itemCount, target);
 			return;

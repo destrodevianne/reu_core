@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.model.items.instance;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
-import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
+import static l2r.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,7 +59,7 @@ import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.knownlist.NullKnownList;
 import l2r.gameserver.model.holders.SkillHolder;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Item;
@@ -292,7 +292,7 @@ public final class L2ItemInstance extends L2Object
 			ItemsOnGroundManager.getInstance().removeObject(this);
 		}
 		
-		if (!Config.DISABLE_TUTORIAL && ((itemId == PcInventory.ADENA_ID) || (itemId == 6353)))
+		if (!Config.DISABLE_TUTORIAL && ((itemId == Inventory.ADENA_ID) || (itemId == 6353)))
 		{
 			// Note from UnAfraid:
 			// Unhardcode this?
@@ -883,7 +883,7 @@ public final class L2ItemInstance extends L2Object
 			&& (player.getActiveEnchantItemId() != getObjectId()) // Not momentarily used enchant scroll
 			&& (player.getActiveEnchantSupportItemId() != getObjectId()) // Not momentarily used enchant support item
 			&& (player.getActiveEnchantAttrItemId() != getObjectId()) // Not momentarily used enchant attribute item
-			&& (allowAdena || (getId() != PcInventory.ADENA_ID)) // Not Adena
+			&& (allowAdena || (getId() != Inventory.ADENA_ID)) // Not Adena
 			&& ((player.getCurrentSkill() == null) || (player.getCurrentSkill().getSkill().getItemConsumeId() != getId())) && (!player.isCastingSimultaneouslyNow() || (player.getLastSimultaneousSkillCast() == null) || (player.getLastSimultaneousSkillCast().getItemConsumeId() != getId())) && (allowNonTradeable || (isTradeable() && (!((getItem().getItemType() == L2EtcItemType.PET_COLLAR) && player.havePetInvItems())))));
 	}
 	

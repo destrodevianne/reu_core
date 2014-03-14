@@ -64,6 +64,7 @@ import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.interfaces.IProcedure;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -3172,11 +3173,11 @@ public class Quest extends ManagedScript implements IIdentifiable
 	{
 		if (applyRates)
 		{
-			rewardItems(player, PcInventory.ADENA_ID, count);
+			rewardItems(player, Inventory.ADENA_ID, count);
 		}
 		else
 		{
-			giveItems(player, PcInventory.ADENA_ID, count);
+			giveItems(player, Inventory.ADENA_ID, count);
 		}
 	}
 	
@@ -3211,7 +3212,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 		
 		try
 		{
-			if (itemId == PcInventory.ADENA_ID)
+			if (itemId == Inventory.ADENA_ID)
 			{
 				count *= Config.RATE_QUEST_REWARD_ADENA;
 			}
@@ -3269,7 +3270,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 	private static void sendItemGetMessage(L2PcInstance player, L2ItemInstance item, long count)
 	{
 		// If item for reward is gold, send message of gold reward to client
-		if (item.getId() == PcInventory.ADENA_ID)
+		if (item.getId() == Inventory.ADENA_ID)
 		{
 			SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.EARNED_S1_ADENA);
 			smsg.addLong(count);
@@ -3340,7 +3341,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 		}
 		
 		// set enchant level for item if that item is not adena
-		if ((enchantlevel > 0) && (itemId != PcInventory.ADENA_ID))
+		if ((enchantlevel > 0) && (itemId != Inventory.ADENA_ID))
 		{
 			item.setEnchantLevel(enchantlevel);
 		}
@@ -3449,7 +3450,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 		{
 			dropChance *= Config.L2JMOD_CHAMPION_REWARDS;
 			
-			if ((itemId == PcInventory.ADENA_ID) || (itemId == PcInventory.ANCIENT_ADENA_ID))
+			if ((itemId == Inventory.ADENA_ID) || (itemId == Inventory.ANCIENT_ADENA_ID))
 			{
 				minAmount *= Config.L2JMOD_CHAMPION_ADENAS_REWARDS;
 				maxAmount *= Config.L2JMOD_CHAMPION_ADENAS_REWARDS;

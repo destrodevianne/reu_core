@@ -23,7 +23,7 @@ import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.model.L2EnchantSkillGroup.EnchantSkillHolder;
 import l2r.gameserver.model.L2EnchantSkillLearn;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 
 /**
  * @author KenM
@@ -127,7 +127,7 @@ public class ExEnchantSkillInfoDetail extends L2GameServerPacket
 		writeD(_sp * multi); // sp
 		writeD(_chance); // exp
 		writeD(0x02); // items count?
-		writeD(PcInventory.ADENA_ID); // Adena
+		writeD(Inventory.ADENA_ID); // Adena
 		writeD(_adenacount); // Adena count
 		writeD(bookId); // ItemId Required
 		writeD(reqCount);

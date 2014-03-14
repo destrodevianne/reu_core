@@ -48,22 +48,13 @@ import l2r.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gr.reunion.configsEngine.CustomServerConfigs;
-
 public class PcInventory extends Inventory
 {
 	private static final Logger _log = LoggerFactory.getLogger(PcInventory.class);
 	
-	public static final int ADENA_ID = 57;
-	public static final int FA_ID = 40002;
-	public static final int FADENA_ID = CustomServerConfigs.ALTERNATE_PAYMENT_ID;
-	public static final int SKULL_ID = 41006;
-	public static final int ANCIENT_ADENA_ID = 5575;
-	public static final long MAX_ADENA = Config.MAX_ADENA;
-	
 	private final L2PcInstance _owner;
 	private L2ItemInstance _adena;
-	private L2ItemInstance _Fadena;
+	private L2ItemInstance _fAdena;
 	private L2ItemInstance _ancientAdena;
 	
 	private int[] _blockItems = null;
@@ -114,7 +105,7 @@ public class PcInventory extends Inventory
 	
 	public L2ItemInstance getFAdenaInstance()
 	{
-		return _Fadena;
+		return _fAdena;
 	}
 	
 	@Override
@@ -126,7 +117,7 @@ public class PcInventory extends Inventory
 	@Override
 	public long getFAdena()
 	{
-		return _Fadena != null ? _Fadena.getCount() : 0;
+		return _fAdena != null ? _fAdena.getCount() : 0;
 	}
 	
 	public L2ItemInstance getAncientAdenaInstance()
@@ -555,9 +546,9 @@ public class PcInventory extends Inventory
 			_adena = item;
 		}
 		
-		if ((item != null) && (item.getId() == FADENA_ID) && !item.equals(_Fadena))
+		if ((item != null) && (item.getId() == FADENA_ID) && !item.equals(_fAdena))
 		{
-			_Fadena = item;
+			_fAdena = item;
 		}
 		
 		if ((item != null) && (item.getId() == ANCIENT_ADENA_ID) && !item.equals(_ancientAdena))
@@ -588,9 +579,9 @@ public class PcInventory extends Inventory
 			_adena = item;
 		}
 		
-		if ((item != null) && (item.getId() == FADENA_ID) && !item.equals(_Fadena))
+		if ((item != null) && (item.getId() == FADENA_ID) && !item.equals(_fAdena))
 		{
-			_Fadena = item;
+			_fAdena = item;
 		}
 		
 		if ((item != null) && (item.getId() == ANCIENT_ADENA_ID) && !item.equals(_ancientAdena))
@@ -642,9 +633,9 @@ public class PcInventory extends Inventory
 			_adena = null;
 		}
 		
-		if ((_Fadena != null) && ((_Fadena.getCount() <= 0) || (_Fadena.getOwnerId() != getOwnerId())))
+		if ((_fAdena != null) && ((_fAdena.getCount() <= 0) || (_fAdena.getOwnerId() != getOwnerId())))
 		{
-			_Fadena = null;
+			_fAdena = null;
 		}
 		
 		if ((_ancientAdena != null) && ((_ancientAdena.getCount() <= 0) || (_ancientAdena.getOwnerId() != getOwnerId())))
@@ -688,9 +679,9 @@ public class PcInventory extends Inventory
 			_adena = null;
 		}
 		
-		if ((_Fadena != null) && (_Fadena.getCount() <= 0))
+		if ((_fAdena != null) && (_fAdena.getCount() <= 0))
 		{
-			_Fadena = null;
+			_fAdena = null;
 		}
 		
 		if ((_ancientAdena != null) && (_ancientAdena.getCount() <= 0))
@@ -761,9 +752,9 @@ public class PcInventory extends Inventory
 			_adena = null;
 		}
 		
-		if ((_Fadena != null) && ((_Fadena.getCount() <= 0) || (_Fadena.getOwnerId() != getOwnerId())))
+		if ((_fAdena != null) && ((_fAdena.getCount() <= 0) || (_fAdena.getOwnerId() != getOwnerId())))
 		{
-			_Fadena = null;
+			_fAdena = null;
 		}
 		
 		if ((_ancientAdena != null) && ((_ancientAdena.getCount() <= 0) || (_ancientAdena.getOwnerId() != getOwnerId())))
@@ -794,9 +785,9 @@ public class PcInventory extends Inventory
 			_adena = null;
 		}
 		
-		if ((_Fadena != null) && ((_Fadena.getCount() <= 0) || (_Fadena.getOwnerId() != getOwnerId())))
+		if ((_fAdena != null) && ((_fAdena.getCount() <= 0) || (_fAdena.getOwnerId() != getOwnerId())))
 		{
-			_Fadena = null;
+			_fAdena = null;
 		}
 		
 		if ((_ancientAdena != null) && ((_ancientAdena.getCount() <= 0) || (_ancientAdena.getOwnerId() != getOwnerId())))
@@ -830,7 +821,7 @@ public class PcInventory extends Inventory
 		}
 		if (item.getId() == FADENA_ID)
 		{
-			_Fadena = null;
+			_fAdena = null;
 		}
 		else if (item.getId() == ANCIENT_ADENA_ID)
 		{
@@ -870,7 +861,7 @@ public class PcInventory extends Inventory
 	{
 		super.restore();
 		_adena = getItemByItemId(ADENA_ID);
-		_Fadena = getItemByItemId(FADENA_ID);
+		_fAdena = getItemByItemId(FADENA_ID);
 		_ancientAdena = getItemByItemId(ANCIENT_ADENA_ID);
 	}
 	

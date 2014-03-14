@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.MAX_ADENA;
+import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 
 import java.util.List;
 
@@ -27,6 +27,7 @@ import javolution.util.FastSet;
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -246,7 +247,7 @@ public class TradeList
 			return null;
 		}
 		
-		if ((PcInventory.MAX_ADENA / count) < price)
+		if ((Inventory.MAX_ADENA / count) < price)
 		{
 			_log.warn(_owner.getName() + ": Attempt to overflow adena !");
 			return null;
@@ -302,7 +303,7 @@ public class TradeList
 			return null;
 		}
 		
-		if ((PcInventory.MAX_ADENA / count) < price)
+		if ((Inventory.MAX_ADENA / count) < price)
 		{
 			_log.warn(_owner.getName() + ": Attempt to overflow adena !");
 			return null;

@@ -56,7 +56,6 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.effects.EffectTemplate;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.itemcontainer.Inventory;
-import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.itemcontainer.PetInventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
@@ -573,7 +572,7 @@ public class L2PetInstance extends L2Summon
 			
 			if ((target.getOwnerId() != 0) && (target.getOwnerId() != getOwner().getObjectId()) && !getOwner().isInLooterParty(target.getOwnerId()))
 			{
-				if (target.getId() == PcInventory.ADENA_ID)
+				if (target.getId() == Inventory.ADENA_ID)
 				{
 					smsg = SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_PICKUP_S1_ADENA);
 					smsg.addLong(target.getCount());
@@ -626,7 +625,7 @@ public class L2PetInstance extends L2Summon
 		}
 		else
 		{
-			if (target.getId() == PcInventory.ADENA_ID)
+			if (target.getId() == Inventory.ADENA_ID)
 			{
 				smsg = SystemMessage.getSystemMessage(SystemMessageId.PET_PICKED_S1_ADENA);
 				smsg.addLong(target.getCount());

@@ -36,7 +36,7 @@ import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.holders.ItemHolder;
-import l2r.gameserver.model.itemcontainer.PcInventory;
+import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.network.serverpackets.ExShowQuestMark;
 import l2r.gameserver.network.serverpackets.PlaySound;
 import l2r.gameserver.network.serverpackets.QuestList;
@@ -674,7 +674,7 @@ public final class QuestState
 	 */
 	public void giveAdena(long count, boolean applyRates)
 	{
-		giveItems(PcInventory.ADENA_ID, count, applyRates ? 0 : 1);
+		giveItems(Inventory.ADENA_ID, count, applyRates ? 0 : 1);
 	}
 	
 	/**

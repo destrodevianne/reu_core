@@ -50,6 +50,8 @@ import l2r.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gr.reunion.configsEngine.CustomServerConfigs;
+
 /**
  * This class manages inventory
  * @version $Revision: 1.13.2.9.2.12 $ $Date: 2005/03/29 23:15:15 $ rewritten 23.2.2006 by Advi
@@ -64,6 +66,14 @@ public abstract class Inventory extends ItemContainer
 		
 		public void notifyUnequiped(int slot, L2ItemInstance inst, Inventory inventory);
 	}
+	
+	// Common Items
+	public static final int ADENA_ID = 57;
+	public static final int FADENA_ID = CustomServerConfigs.ALTERNATE_PAYMENT_ID;
+	public static final int SKULL_ID = 41006;
+	public static final int ANCIENT_ADENA_ID = 5575;
+	
+	public static final long MAX_ADENA = Config.MAX_ADENA;
 	
 	public static final int PAPERDOLL_UNDER = 0;
 	public static final int PAPERDOLL_HEAD = 1;

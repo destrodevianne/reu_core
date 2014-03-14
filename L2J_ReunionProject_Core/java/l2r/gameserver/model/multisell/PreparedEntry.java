@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.multisell;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
+import static l2r.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 
 import java.util.ArrayList;
 

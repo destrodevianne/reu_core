@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import static l2r.gameserver.model.itemcontainer.PcInventory.ADENA_ID;
+import static l2r.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 
 import java.util.ArrayList;
 import java.util.List;
