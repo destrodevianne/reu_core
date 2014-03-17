@@ -43,7 +43,6 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.effects.EffectTemplate;
 import l2r.gameserver.model.effects.L2Effect;
-import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.ClanHall;
 import l2r.gameserver.model.entity.Fort;
@@ -83,7 +82,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import l2r.util.StringUtil;
 import gr.reunion.balanceEngine.BalanceHandler;
 import gr.reunion.configsEngine.BalanceConfigs;
 
@@ -651,8 +649,7 @@ public final class Formulas
 			
 		}
 		
-		// TODO: Formulas.calcStunBreak(target, damage);
-		return damage < 1 ? 1. : damage;
+		return Math.max(damage, 1);
 	}
 	
 	/**
@@ -1624,11 +1621,6 @@ public final class Formulas
 		return multiplier;
 	}
 	
-	public static double calcSkillStatMod(L2Skill skill, L2Character target)
-	{
-		return skill.getSaveVs() != null ? skill.getSaveVs().calcBonus(target) : 1;
-	}
-	
 	public static double calcLvlBonusMod(L2Character attacker, L2Character target, L2Skill skill)
 	{
 		int attackerLvl = skill.getMagicLevel() > 0 ? skill.getMagicLevel() : attacker.getLevel();
@@ -1653,43 +1645,64 @@ public final class Formulas
 	
 	public static boolean calcEffectSuccess(L2Character attacker, L2Character target, EffectTemplate effect, L2Skill skill, byte shld, boolean ss, boolean sps, boolean bss)
 	{
-		// Effect base rate, if it's -1 (or less) always land.
-		final double baseRate = effect.effectPower;
-		if ((baseRate < 0) || skill.hasEffectType(L2EffectType.CANCEL_DEBUFF, L2EffectType.CANCEL))
-		{
-			return true;
-		}
-		
-		if (skill.isDebuff())
-		{
-			if (skill.getPower() == -1)
-			{
-				if (attacker.isDebug())
-				{
-					attacker.sendDebugMessage(skill.getName() + " effect ignoring resists");
-				}
-				return true;
-			}
-			else if (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, null, skill) > 0)
-			{
-				return false;
-			}
-		}
-		
 		// Perfect Shield Block.
 		if (shld == SHIELD_DEFENSE_PERFECT_BLOCK)
 		{
 			if (attacker.isDebug())
 			{
-				attacker.sendDebugMessage(skill.getName() + " effect blocked by shield");
+				attacker.sendDebugMessage(skill.getName() + " blocked by shield");
 			}
 			
 			return false;
 		}
 		
+		if (skill.isDebuff() && (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, attacker, skill) > 0))
+		{
+			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_YOUR_S2);
+			sm.addCharName(target);
+			sm.addSkillName(skill);
+			attacker.sendPacket(sm);
+			return false;
+		}
+		
+		final double activateRate = effect.effectPower;
+		if ((activateRate == -1) || (skill.getBasicProperty() == BaseStats.NONE))
+		{
+			return true;
+		}
+		
+		int magicLevel = skill.getMagicLevel();
+		if (magicLevel <= -1)
+		{
+			magicLevel = target.getLevel() + 3;
+		}
+		
+		int targetBaseStat = 0;
+		switch (skill.getBasicProperty())
+		{
+			case STR:
+				targetBaseStat = target.getSTR();
+				break;
+			case DEX:
+				targetBaseStat = target.getDEX();
+				break;
+			case CON:
+				targetBaseStat = target.getCON();
+				break;
+			case INT:
+				targetBaseStat = target.getINT();
+				break;
+			case MEN:
+				targetBaseStat = target.getMEN();
+				break;
+			case WIT:
+				targetBaseStat = target.getWIT();
+				break;
+		}
+		
 		// Calculate BaseRate.
-		double statMod = calcSkillStatMod(skill, target);
-		double rate = (baseRate / statMod);
+		final double baseMod = ((((((magicLevel - target.getLevel()) + 3) * skill.getLvlBonusRate()) + activateRate) + 30.0) - targetBaseStat);
+		double rate = baseMod;
 		
 		// Resists.
 		double vuln = calcSkillTraitVulnerability(0, target, skill);
@@ -1707,46 +1720,41 @@ public final class Formulas
 		double elementMod = calcElementMod(attacker, target, skill);
 		rate *= elementMod;
 		
-		// Add Matk/Mdef Bonus (TODO: Pending)
+		// Add Matk/Mdef Bonus
+		double mAtkMod = 1.0;
+		if (skill.isMagic())
+		{
+			double mAtk = attacker.getMAtk(null, null);
+			double val = 0;
+			// TODO: FIX Bless spiritshot multiplier
+			/*
+			 * if (skill.isBlessedSpiritShot())// only blessed spiritshot! { val = mAtk * 3.0;// 3.0 is the blessed spiritshot multiplier }
+			 */
+			val += mAtk;
+			val = (Math.sqrt(val) / target.getMDef(null, null)) * 11.0;
+			mAtkMod = val;
+		}
 		
-		// Check the Rate Limits.
-		rate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
+		rate *= mAtkMod;
+		double finalRate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 		
 		if (attacker.isDebug() || Config.DEVELOPER)
 		{
-			final StringBuilder stat = new StringBuilder(100);
-			StringUtil.append(stat, skill.getName(), " power:", String.valueOf(baseRate), " stat:", String.format("%1.2f", statMod), " res:", String.format("%1.2f", resMod), "(", String.format("%1.2f", prof), "/", String.format("%1.2f", vuln), ") elem:", String.format("%1.2f", elementMod), " lvl:", String.format("%1.2f", lvlBonusMod), " total:", String.valueOf(rate));
-			final String result = stat.toString();
-			if (attacker.isDebug())
-			{
-				attacker.sendDebugMessage(result);
-			}
-			if (Config.DEVELOPER)
-			{
-				_log.info(result);
-			}
+			final StatsSet set = new StatsSet();
+			set.set("baseMod", baseMod);
+			set.set("resMod", resMod);
+			set.set("mAtkMod", mAtkMod);
+			set.set("lvlBonusMod", lvlBonusMod);
+			set.set("mAtkMod", mAtkMod);
+			set.set("rate", rate);
+			set.set("finalRate", finalRate);
+			Debug.sendSkillDebug(attacker, target, skill, set);
 		}
 		return (Rnd.get(100) < rate);
 	}
 	
 	public static boolean calcSkillSuccess(L2Character attacker, L2Character target, L2Skill skill, byte shld, boolean ss, boolean sps, boolean bss)
 	{
-		if (skill.isDebuff())
-		{
-			if (skill.getPower() == -1)
-			{
-				if (attacker.isDebug())
-				{
-					attacker.sendDebugMessage(skill.getName() + " ignoring resists");
-				}
-				return true;
-			}
-			else if (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, null, skill) > 0)
-			{
-				return false;
-			}
-		}
-		
 		// Perfect Shield Block.
 		if (shld == SHIELD_DEFENSE_PERFECT_BLOCK)
 		{
@@ -1758,27 +1766,96 @@ public final class Formulas
 			return false;
 		}
 		
+		if (skill.isDebuff() && (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, attacker, skill) > 0))
+		{
+			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_YOUR_S2);
+			sm.addCharName(target);
+			sm.addSkillName(skill);
+			attacker.sendPacket(sm);
+			return false;
+		}
+		
+		final double activateRate = skill.getPower();
+		if ((activateRate == -1) || (skill.getBasicProperty() == BaseStats.NONE))
+		{
+			return true;
+		}
+		
+		int magicLevel = skill.getMagicLevel();
+		if (magicLevel <= -1)
+		{
+			magicLevel = target.getLevel() + 3;
+		}
+		
+		int targetBaseStat = 0;
+		switch (skill.getBasicProperty())
+		{
+			case STR:
+				targetBaseStat = target.getSTR();
+				break;
+			case DEX:
+				targetBaseStat = target.getDEX();
+				break;
+			case CON:
+				targetBaseStat = target.getCON();
+				break;
+			case INT:
+				targetBaseStat = target.getINT();
+				break;
+			case MEN:
+				targetBaseStat = target.getMEN();
+				break;
+			case WIT:
+				targetBaseStat = target.getWIT();
+				break;
+		}
+		
 		// Calculate BaseRate.
-		double baseRate = skill.getPower();
-		double statMod = calcSkillStatMod(skill, target);
-		double rate = (baseRate / statMod);
+		final double baseMod = ((((((magicLevel - target.getLevel()) + 3) * skill.getLvlBonusRate()) + activateRate) + 30.0) - targetBaseStat);
+		double rate = baseMod;
+		
+		// Resists.
+		double vuln = calcSkillTraitVulnerability(0, target, skill);
+		double prof = calcSkillTraitProficiency(0, attacker, target, skill);
+		double resMod = 1 + ((vuln + prof) / 100);
+		
+		// Check ResMod Limits.
+		rate *= Math.min(Math.max(resMod, 0.1), 1.9);
 		
 		// Lvl Bonus Modifier.
 		double lvlBonusMod = calcLvlBonusMod(attacker, target, skill);
 		rate *= lvlBonusMod;
 		
 		// Element Modifier.
-		double elementMod = calcAttributeBonus(attacker, target, skill);
+		double elementMod = calcElementMod(attacker, target, skill);
 		rate *= elementMod;
 		
-		// Add Matk/Mdef Bonus (TODO: Pending)
+		// Add Matk/Mdef Bonus
+		double mAtkMod = 1.0;
+		if (skill.isMagic())
+		{
+			double mAtk = attacker.getMAtk(null, null);
+			double val = 0;
+			// TODO: FIX Bless spiritshot multiplier
+			/*
+			 * if (skill.isBlessedSpiritShot())// only blessed spiritshot! { val = mAtk * 3.0;// 3.0 is the blessed spiritshot multiplier }
+			 */
+			val += mAtk;
+			val = (Math.sqrt(val) / target.getMDef(null, null)) * 11.0;
+			mAtkMod = val;
+		}
+		
+		rate *= mAtkMod;
 		double finalRate = Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
+		
 		if (attacker.isDebug())
 		{
 			final StatsSet set = new StatsSet();
-			set.set("statMod", statMod);
-			set.set("elementMod", elementMod);
+			set.set("baseMod", baseMod);
+			set.set("resMod", resMod);
+			set.set("mAtkMod", mAtkMod);
 			set.set("lvlBonusMod", lvlBonusMod);
+			set.set("mAtkMod", mAtkMod);
 			set.set("rate", rate);
 			set.set("finalRate", finalRate);
 			Debug.sendSkillDebug(attacker, target, skill, set);
@@ -1817,7 +1894,7 @@ public final class Formulas
 		
 		// Calculate BaseRate.
 		double baseRate = skill.getPower();
-		double statMod = calcSkillStatMod(skill, target);
+		double statMod = skill.getBasicProperty().calcBonus(target);
 		double rate = (baseRate / statMod);
 		
 		// Resists.

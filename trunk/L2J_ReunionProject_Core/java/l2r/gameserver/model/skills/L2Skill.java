@@ -186,7 +186,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	private final byte _element;
 	private final int _elementPower;
 	
-	private final BaseStats _saveVs;
+	private final BaseStats _basicProperty;
 	
 	private final int _condition;
 	private final int _conditionValue;
@@ -449,7 +449,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		_element = set.getByte("element", (byte) -1);
 		_elementPower = set.getInteger("elementPower", 0);
 		
-		_saveVs = set.getEnum("saveVs", BaseStats.class, BaseStats.NULL);
+		_basicProperty = set.getEnum("basicProperty", BaseStats.class, BaseStats.NONE);
 		
 		_condition = set.getInteger("condition", 0);
 		_conditionValue = set.getInteger("conditionValue", 0);
@@ -833,9 +833,9 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	 * Return skill saveVs base stat (STR, INT ...).
 	 * @return
 	 */
-	public final BaseStats getSaveVs()
+	public final BaseStats getBasicProperty()
 	{
-		return _saveVs;
+		return _basicProperty;
 	}
 	
 	/**

@@ -996,7 +996,7 @@ public final class L2ServicesManagerInstance extends L2NpcInstance
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		
-		if (player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE))
+		if (!player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE))
 		{
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_CLAN_WAREHOUSE);
 			return;
