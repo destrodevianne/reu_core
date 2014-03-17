@@ -21,13 +21,14 @@ package l2r.gameserver;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -35,12 +36,9 @@ import javolution.util.FastSet;
 import l2r.Config;
 import l2r.util.StringUtil;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * <p>
- * This class is made to handle all the ThreadPools used in L2j.
+ * This class is made to handle all the ThreadPools used in L2J.
  * </p>
  * <p>
  * Scheduled Tasks can either be sent to a {@link #_generalScheduledThreadPool "general"} or {@link #_effectsScheduledThreadPool "effects"} {@link ScheduledThreadPoolExecutor ScheduledThreadPool}: The "effects" one is used for every effects (skills, hp/mp regen ...) while the "general" one is used
@@ -50,15 +48,15 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Tasks can be sent to {@link ScheduledThreadPoolExecutor ScheduledThreadPool} either with:
  * <ul>
- * <li>{@link #scheduleEffect(Runnable, long)} : for effects Tasks that needs to be executed only once.</li>
- * <li>{@link #scheduleGeneral(Runnable, long)} : for scheduled Tasks that needs to be executed once.</li>
- * <li>{@link #scheduleAi(Runnable, long)} : for AI Tasks that needs to be executed once</li>
+ * <li>{@link #scheduleEffect(Runnable, long, TimeUnit)} and {@link #scheduleEffect(Runnable, long)} : for effects Tasks that needs to be executed only once.</li>
+ * <li>{@link #scheduleGeneral(Runnable, long, TimeUnit)} and {@link #scheduleGeneral(Runnable, long)} : for scheduled Tasks that needs to be executed once.</li>
+ * <li>{@link #scheduleAi(Runnable, long, TimeUnit)} and {@link #scheduleAi(Runnable, long)} : for AI Tasks that needs to be executed once</li>
  * </ul>
  * or
  * <ul>
- * <li>{@link #scheduleEffectAtFixedRate(Runnable, long, long)} : for effects Tasks that needs to be executed periodicaly.</li>
- * <li>{@link #scheduleGeneralAtFixedRate(Runnable, long, long)} : for scheduled Tasks that needs to be executed periodicaly.</li>
- * <li>{@link #scheduleAiAtFixedRate(Runnable, long, long)} : for AI Tasks that needs to be executed periodicaly</li>
+ * <li>{@link #scheduleEffectAtFixedRate(Runnable, long, long, TimeUnit)} and {@link #scheduleEffectAtFixedRate(Runnable, long, long)} : for effects Tasks that needs to be executed periodicaly.</li>
+ * <li>{@link #scheduleGeneralAtFixedRate(Runnable, long, long, TimeUnit)} and {@link #scheduleGeneralAtFixedRate(Runnable, long, long)} : for scheduled Tasks that needs to be executed periodicaly.</li>
+ * <li>{@link #scheduleAiAtFixedRate(Runnable, long, long, TimeUnit)} and {@link #scheduleAiAtFixedRate(Runnable, long, long)} : for AI Tasks that needs to be executed periodicaly</li>
  * </ul>
  * </p>
  * <p>
@@ -74,7 +72,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ThreadPoolManager
 {
-	protected static final Logger _log = LoggerFactory.getLogger(ThreadPoolManager.class);
+	protected static final Logger _log = Logger.getLogger(ThreadPoolManager.class.getName());
 	
 	private static final class RunnableWrapper implements Runnable
 	{
@@ -111,9 +109,6 @@ public class ThreadPoolManager
 	private final ThreadPoolExecutor _ioPacketsThreadPool;
 	private final ThreadPoolExecutor _generalThreadPool;
 	
-	/** temp workaround for VM issue */
-	private static final long MAX_DELAY = Long.MAX_VALUE / 1000000 / 2;
-	
 	private boolean _shutdown;
 	
 	public static ThreadPoolManager getInstance()
@@ -129,29 +124,22 @@ public class ThreadPoolManager
 		_generalPacketsThreadPool = new ThreadPoolExecutor(Config.GENERAL_PACKET_THREAD_CORE_SIZE, Config.GENERAL_PACKET_THREAD_CORE_SIZE + 2, 15L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new PriorityThreadFactory("Normal Packet Pool", Thread.NORM_PRIORITY + 1));
 		_generalThreadPool = new ThreadPoolExecutor(Config.GENERAL_THREAD_CORE_SIZE, Config.GENERAL_THREAD_CORE_SIZE + 2, 5L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new PriorityThreadFactory("General Pool", Thread.NORM_PRIORITY));
 		_aiScheduledThreadPool = new ScheduledThreadPoolExecutor(Config.AI_MAX_THREAD, new PriorityThreadFactory("AISTPool", Thread.NORM_PRIORITY));
-		// Initial 10 minutes, delay 5 minutes.
-		scheduleGeneralAtFixedRate(new PurgeTask(), 600000L, 300000L);
+		
+		scheduleGeneralAtFixedRate(new PurgeTask(), 10, 5, TimeUnit.MINUTES);
 	}
 	
-	public static long validateDelay(long delay)
-	{
-		if (delay < 0)
-		{
-			delay = 0;
-		}
-		else if (delay > MAX_DELAY)
-		{
-			delay = MAX_DELAY;
-		}
-		return delay;
-	}
-	
-	public ScheduledFuture<?> scheduleEffect(Runnable r, long delay)
+	/**
+	 * Schedules an effect task to be executed after the given delay.
+	 * @param task the task to execute
+	 * @param delay the delay in the given time unit
+	 * @param unit the time unit of the delay parameter
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleEffect(Runnable task, long delay, TimeUnit unit)
 	{
 		try
 		{
-			delay = ThreadPoolManager.validateDelay(delay);
-			return _effectsScheduledThreadPool.schedule(new RunnableWrapper(r), delay, TimeUnit.MILLISECONDS);
+			return _effectsScheduledThreadPool.schedule(new RunnableWrapper(task), delay, unit);
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -159,13 +147,30 @@ public class ThreadPoolManager
 		}
 	}
 	
-	public ScheduledFuture<?> scheduleEffectAtFixedRate(Runnable r, long initial, long delay)
+	/**
+	 * Schedules an effect task to be executed after the given delay.
+	 * @param task the task to execute
+	 * @param delay the delay in milliseconds
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleEffect(Runnable task, long delay)
+	{
+		return scheduleEffect(task, delay, TimeUnit.MILLISECONDS);
+	}
+	
+	/**
+	 * Schedules an effect task to be executed at fixed rate.
+	 * @param task the task to execute
+	 * @param initialDelay the initial delay in the given time unit
+	 * @param period the period between executions in the given time unit
+	 * @param unit the time unit of the initialDelay and period parameters
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleEffectAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit)
 	{
 		try
 		{
-			delay = ThreadPoolManager.validateDelay(delay);
-			initial = ThreadPoolManager.validateDelay(initial);
-			return _effectsScheduledThreadPool.scheduleAtFixedRate(new RunnableWrapper(r), initial, delay, TimeUnit.MILLISECONDS);
+			return _effectsScheduledThreadPool.scheduleAtFixedRate(new RunnableWrapper(task), initialDelay, period, unit);
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -173,18 +178,30 @@ public class ThreadPoolManager
 		}
 	}
 	
-	@Deprecated
-	public boolean removeEffect(RunnableScheduledFuture<?> r)
+	/**
+	 * Schedules an effect task to be executed at fixed rate.
+	 * @param task the task to execute
+	 * @param initialDelay the initial delay in milliseconds
+	 * @param period the period between executions in milliseconds
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleEffectAtFixedRate(Runnable task, long initialDelay, long period)
 	{
-		return _effectsScheduledThreadPool.remove(r);
+		return scheduleEffectAtFixedRate(task, initialDelay, period, TimeUnit.MILLISECONDS);
 	}
 	
-	public ScheduledFuture<?> scheduleGeneral(Runnable r, long delay)
+	/**
+	 * Schedules a general task to be executed after the given delay.
+	 * @param task the task to execute
+	 * @param delay the delay in the given time unit
+	 * @param unit the time unit of the delay parameter
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleGeneral(Runnable task, long delay, TimeUnit unit)
 	{
 		try
 		{
-			delay = ThreadPoolManager.validateDelay(delay);
-			return _generalScheduledThreadPool.schedule(new RunnableWrapper(r), delay, TimeUnit.MILLISECONDS);
+			return _generalScheduledThreadPool.schedule(new RunnableWrapper(task), delay, unit);
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -192,13 +209,30 @@ public class ThreadPoolManager
 		}
 	}
 	
-	public ScheduledFuture<?> scheduleGeneralAtFixedRate(Runnable r, long initial, long delay)
+	/**
+	 * Schedules a general task to be executed after the given delay.
+	 * @param task the task to execute
+	 * @param delay the delay in milliseconds
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleGeneral(Runnable task, long delay)
+	{
+		return scheduleGeneral(task, delay, TimeUnit.MILLISECONDS);
+	}
+	
+	/**
+	 * Schedules a general task to be executed at fixed rate.
+	 * @param task the task to execute
+	 * @param initialDelay the initial delay in the given time unit
+	 * @param period the period between executions in the given time unit
+	 * @param unit the time unit of the initialDelay and period parameters
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleGeneralAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit)
 	{
 		try
 		{
-			delay = ThreadPoolManager.validateDelay(delay);
-			initial = ThreadPoolManager.validateDelay(initial);
-			return _generalScheduledThreadPool.scheduleAtFixedRate(new RunnableWrapper(r), initial, delay, TimeUnit.MILLISECONDS);
+			return _generalScheduledThreadPool.scheduleAtFixedRate(new RunnableWrapper(task), initialDelay, period, unit);
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -206,18 +240,30 @@ public class ThreadPoolManager
 		}
 	}
 	
-	@Deprecated
-	public boolean removeGeneral(RunnableScheduledFuture<?> r)
+	/**
+	 * Schedules a general task to be executed at fixed rate.
+	 * @param task the task to execute
+	 * @param initialDelay the initial delay in milliseconds
+	 * @param period the period between executions in milliseconds
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleGeneralAtFixedRate(Runnable task, long initialDelay, long period)
 	{
-		return _generalScheduledThreadPool.remove(r);
+		return scheduleGeneralAtFixedRate(task, initialDelay, period, TimeUnit.MILLISECONDS);
 	}
 	
-	public ScheduledFuture<?> scheduleAi(Runnable r, long delay)
+	/**
+	 * Schedules an AI task to be executed after the given delay.
+	 * @param task the task to execute
+	 * @param delay the delay in the given time unit
+	 * @param unit the time unit of the delay parameter
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleAi(Runnable task, long delay, TimeUnit unit)
 	{
 		try
 		{
-			delay = ThreadPoolManager.validateDelay(delay);
-			return _aiScheduledThreadPool.schedule(new RunnableWrapper(r), delay, TimeUnit.MILLISECONDS);
+			return _aiScheduledThreadPool.schedule(new RunnableWrapper(task), delay, unit);
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -225,13 +271,30 @@ public class ThreadPoolManager
 		}
 	}
 	
-	public ScheduledFuture<?> scheduleAiAtFixedRate(Runnable r, long initial, long delay)
+	/**
+	 * Schedules an AI task to be executed after the given delay.
+	 * @param task the task to execute
+	 * @param delay the delay in milliseconds
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleAi(Runnable task, long delay)
+	{
+		return scheduleAi(task, delay, TimeUnit.MILLISECONDS);
+	}
+	
+	/**
+	 * Schedules a general task to be executed at fixed rate.
+	 * @param task the task to execute
+	 * @param initialDelay the initial delay in the given time unit
+	 * @param period the period between executions in the given time unit
+	 * @param unit the time unit of the initialDelay and period parameters
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleAiAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit)
 	{
 		try
 		{
-			delay = ThreadPoolManager.validateDelay(delay);
-			initial = ThreadPoolManager.validateDelay(initial);
-			return _aiScheduledThreadPool.scheduleAtFixedRate(new RunnableWrapper(r), initial, delay, TimeUnit.MILLISECONDS);
+			return _aiScheduledThreadPool.scheduleAtFixedRate(new RunnableWrapper(task), initialDelay, period, unit);
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -239,29 +302,52 @@ public class ThreadPoolManager
 		}
 	}
 	
-	public void executePacket(Runnable pkt)
+	/**
+	 * Schedules a general task to be executed at fixed rate.
+	 * @param task the task to execute
+	 * @param initialDelay the initial delay in milliseconds
+	 * @param period the period between executions in milliseconds
+	 * @return a ScheduledFuture representing pending completion of the task, and whose get() method will throw an exception upon cancellation
+	 */
+	public ScheduledFuture<?> scheduleAiAtFixedRate(Runnable task, long initialDelay, long period)
 	{
-		_generalPacketsThreadPool.execute(pkt);
+		return scheduleAiAtFixedRate(task, initialDelay, period, TimeUnit.MILLISECONDS);
 	}
 	
-	public void executeCommunityPacket(Runnable r)
+	/**
+	 * Executes a packet task sometime in future in another thread.
+	 * @param task the task to execute
+	 */
+	public void executePacket(Runnable task)
 	{
-		_generalPacketsThreadPool.execute(r);
+		_generalPacketsThreadPool.execute(task);
 	}
 	
-	public void executeIOPacket(Runnable pkt)
+	/**
+	 * Executes an IO packet task sometime in future in another thread.
+	 * @param task the task to execute
+	 */
+	public void executeIOPacket(Runnable task)
 	{
-		_ioPacketsThreadPool.execute(pkt);
+		_ioPacketsThreadPool.execute(task);
 	}
 	
-	public void executeTask(Runnable r)
+	/**
+	 * Executes a general task sometime in future in another thread.
+	 * @param task the task to execute
+	 */
+	public void executeGeneral(Runnable task)
 	{
-		_generalThreadPool.execute(r);
+		_generalThreadPool.execute(new RunnableWrapper(task));
 	}
 	
-	public void executeAi(Runnable r)
+	/**
+	 * Executes an AI task sometime in future in another thread.
+	 * @param task the task to execute
+	 */
+	public void executeAi(Runnable task)
 	{
-		_aiScheduledThreadPool.execute(new RunnableWrapper(r));
+		_aiScheduledThreadPool.execute(new RunnableWrapper(task));
 	}
 	
 	public String[] getStats()
@@ -376,7 +462,7 @@ public class ThreadPoolManager
 		}
 		catch (InterruptedException e)
 		{
-			_log.warn(String.valueOf(e));
+			_log.log(Level.WARNING, "", e);
 		}
 	}
 	

@@ -149,7 +149,7 @@ public class L2BufferInstance extends L2Npc
 		}
 		else if (command.startsWith("removeBuffs"))
 		{
-			ThreadPoolManager.getInstance().executeTask(new BuffDeleter(player, subCommand[1], Integer.parseInt(subCommand[2]), getObjectId()));
+			ThreadPoolManager.getInstance().executeGeneral(new BuffDeleter(player, subCommand[1], Integer.parseInt(subCommand[2]), getObjectId()));
 		}
 		else if (command.startsWith("showProfiles"))
 		{

@@ -1466,7 +1466,7 @@ public final class L2AioNpcInstance extends L2Npc
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		
-		if (player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE))
+		if (!player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE))
 		{
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_CLAN_WAREHOUSE);
 			return;
