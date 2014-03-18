@@ -53,7 +53,30 @@ public class QuestTimer
 				}
 				catch (Exception e)
 				{
+					if (getName() == null)
+					{
+						_log.error("Quest getName() is NULL");
+					}
+					else
+					{
+						_log.error("Quest getQuest() name is: " + getQuest().getName());
+					}
 					
+					if (getNpc() == null)
+					{
+						_log.error("Quest getNpc() is NULL");
+					}
+					else
+					{
+						_log.error("Quest getNpc() ID is: " + getNpc().getId());
+					}
+					
+					if (getPlayer() == null)
+					{
+						_log.error("Quest getPlayer() is NULL");
+					}
+					
+					_log.error("", e);
 				}
 			}
 			catch (Exception e)

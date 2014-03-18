@@ -997,6 +997,8 @@ public final class Config
 	public static double ENCHANT_CHANCE_ELEMENT_CRYSTAL;
 	public static double ENCHANT_CHANCE_ELEMENT_JEWEL;
 	public static double ENCHANT_CHANCE_ELEMENT_ENERGY;
+	public static int ENCHANT_SAFE_MAX;
+	public static int ENCHANT_SAFE_MAX_FULL;
 	public static int[] ENCHANT_BLACKLIST;
 	public static int AUGMENTATION_NG_SKILL_CHANCE;
 	public static int AUGMENTATION_NG_GLOW_CHANCE;
@@ -1595,6 +1597,8 @@ public final class Config
 			ENCHANT_CHANCE_ELEMENT_CRYSTAL = Character.getDouble("EnchantChanceElementCrystal", 30);
 			ENCHANT_CHANCE_ELEMENT_JEWEL = Character.getDouble("EnchantChanceElementJewel", 20);
 			ENCHANT_CHANCE_ELEMENT_ENERGY = Character.getDouble("EnchantChanceElementEnergy", 10);
+			ENCHANT_SAFE_MAX = Character.getInt("EnchantSafeMax", 3);
+			ENCHANT_SAFE_MAX_FULL = Character.getInt("EnchantSafeMaxFull", 4);
 			String[] notenchantable = Character.getString("EnchantBlackList", "7816,7817,7818,7819,7820,7821,7822,7823,7824,7825,7826,7827,7828,7829,7830,7831,13293,13294,13296").split(",");
 			ENCHANT_BLACKLIST = new int[notenchantable.length];
 			for (int i = 0; i < notenchantable.length; i++)
