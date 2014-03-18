@@ -78,7 +78,6 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.taskmanager.DecayTaskManager;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.configsEngine.PremiumServiceConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 public class L2Attackable extends L2Npc
@@ -1213,35 +1212,7 @@ public class L2Attackable extends L2Npc
 			// chance to give a 4th time.
 			// At least 1 item will be dropped for sure. So the chance will be adjusted to 100%
 			// if smaller.
-			
 			double dropChance = drop.getChance() * lastAttacker.getRate(Rates.DROP_ITEM, drop.getId(), (isRaid() && !isRaidMinion()));
-			
-			if (lastAttacker.isPremium())
-			{
-				if (PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.containsKey(drop.getId())) // check for overriden rate in premium list first
-				{
-					dropChance *= PremiumServiceConfigs.PR_RATE_DROP_ITEMS_ID.get(drop.getId());
-				}
-				else if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getId()))
-				{
-					dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getId());
-				}
-				else
-				{
-					dropChance *= isRaid() && !isRaidMinion() ? PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS_BY_RAID : PremiumServiceConfigs.PREMIUM_RATE_DROP_ITEMS;
-				}
-			}
-			else
-			{
-				if (Config.RATE_DROP_ITEMS_ID.containsKey(drop.getId()))
-				{
-					dropChance *= Config.RATE_DROP_ITEMS_ID.get(drop.getId());
-				}
-				else
-				{
-					dropChance *= isRaid() && !isRaidMinion() ? Config.RATE_DROP_ITEMS_BY_RAID : Config.RATE_DROP_ITEMS;
-				}
-			}
 			
 			if (Config.L2JMOD_CHAMPION_ENABLE && isChampion())
 			{
