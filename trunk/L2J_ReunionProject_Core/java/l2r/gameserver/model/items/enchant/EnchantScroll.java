@@ -21,9 +21,11 @@ package l2r.gameserver.model.items.enchant;
 import java.util.HashSet;
 import java.util.Set;
 
+import l2r.Config;
 import l2r.gameserver.datatables.EnchantItemGroupsData;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.type.L2EtcItemType;
 import l2r.gameserver.model.items.type.L2ItemType;
@@ -159,6 +161,12 @@ public final class EnchantScroll extends AbstractEnchantItem
 		if (!isValid(enchantItem, supportItem))
 		{
 			return EnchantResultType.ERROR;
+		}
+		
+		boolean fullBody = enchantItem.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR;
+		if ((enchantItem.getEnchantLevel() < Config.ENCHANT_SAFE_MAX) || (fullBody && (enchantItem.getEnchantLevel() < Config.ENCHANT_SAFE_MAX_FULL)))
+		{
+			return EnchantResultType.SUCCESS;
 		}
 		
 		final double chance = getChance(player, enchantItem);
