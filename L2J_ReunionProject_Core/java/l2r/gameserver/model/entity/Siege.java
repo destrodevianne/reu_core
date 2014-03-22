@@ -101,7 +101,7 @@ public class Siege implements Siegable
 		@Override
 		public void run()
 		{
-			if (!getIsInProgress())
+			if (!isInProgress())
 			{
 				return;
 			}
@@ -169,7 +169,7 @@ public class Siege implements Siegable
 		public void run()
 		{
 			_scheduledStartSiegeTask.cancel(false);
-			if (getIsInProgress())
+			if (isInProgress())
 			{
 				return;
 			}
@@ -257,7 +257,7 @@ public class Siege implements Siegable
 	@Override
 	public void endSiege()
 	{
-		if (getIsInProgress())
+		if (isInProgress())
 		{
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.SIEGE_OF_S1_HAS_ENDED);
 			sm.addCastleId(getCastle().getResidenceId());
@@ -388,7 +388,7 @@ public class Siege implements Siegable
 	 */
 	public void midVictory()
 	{
-		if (getIsInProgress()) // Siege still in progress
+		if (isInProgress()) // Siege still in progress
 		{
 			if (getCastle().getOwnerId() > 0)
 			{
@@ -482,7 +482,7 @@ public class Siege implements Siegable
 	@Override
 	public void startSiege()
 	{
-		if (!getIsInProgress())
+		if (!isInProgress())
 		{
 			if (!fireSiegeListeners(EventStage.START))
 			{
@@ -708,7 +708,7 @@ public class Siege implements Siegable
 	 */
 	public boolean checkIfInZone(int x, int y, int z)
 	{
-		return (getIsInProgress() && (getCastle().checkIfInZone(x, y, z))); // Castle zone during siege
+		return (isInProgress() && (getCastle().checkIfInZone(x, y, z))); // Castle zone during siege
 	}
 	
 	/**
@@ -1190,7 +1190,7 @@ public class Siege implements Siegable
 			sm.addCastleId(getCastle().getResidenceId());
 			player.sendPacket(sm);
 		}
-		else if (getIsInProgress())
+		else if (isInProgress())
 		{
 			player.sendPacket(SystemMessageId.NOT_SIEGE_REGISTRATION_TIME2);
 		}
@@ -1721,7 +1721,7 @@ public class Siege implements Siegable
 		return _defenderWaitingClans;
 	}
 	
-	public final boolean getIsInProgress()
+	public final boolean isInProgress()
 	{
 		return _isInProgress;
 	}

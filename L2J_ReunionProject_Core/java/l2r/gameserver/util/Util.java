@@ -943,6 +943,7 @@ public final class Util
 	 */
 	public static int map(int input, int inputMin, int inputMax, int outputMin, int outputMax)
 	{
+		input = constrain(input, inputMin, inputMax);
 		return (((input - inputMin) * (outputMax - outputMin)) / (inputMax - inputMin)) + outputMin;
 	}
 	
@@ -957,6 +958,7 @@ public final class Util
 	 */
 	public static long map(long input, long inputMin, long inputMax, long outputMin, long outputMax)
 	{
+		input = constrain(input, inputMin, inputMax);
 		return (((input - inputMin) * (outputMax - outputMin)) / (inputMax - inputMin)) + outputMin;
 	}
 	
@@ -971,6 +973,7 @@ public final class Util
 	 */
 	public static double map(double input, double inputMin, double inputMax, double outputMin, double outputMax)
 	{
+		input = constrain(input, inputMin, inputMax);
 		return (((input - inputMin) * (outputMax - outputMin)) / (inputMax - inputMin)) + outputMin;
 	}
 	

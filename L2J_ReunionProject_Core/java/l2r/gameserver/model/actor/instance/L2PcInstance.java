@@ -9409,14 +9409,14 @@ public final class L2PcInstance extends L2Playable
 		{
 			if ((((L2DoorInstance) target).getCastle() != null) && (((L2DoorInstance) target).getCastle().getResidenceId() > 0)) // If its castle door
 			{
-				if (!((L2DoorInstance) target).getCastle().getSiege().getIsInProgress())
+				if (!((L2DoorInstance) target).getCastle().getSiege().isInProgress())
 				{
 					return false;
 				}
 			}
 			else if ((((L2DoorInstance) target).getFort() != null) && (((L2DoorInstance) target).getFort().getResidenceId() > 0) && !((L2DoorInstance) target).getIsShowHp()) // If its fort door
 			{
-				if (!((L2DoorInstance) target).getFort().getSiege().getIsInProgress())
+				if (!((L2DoorInstance) target).getFort().getSiege().isInProgress())
 				{
 					return false;
 				}
@@ -9724,7 +9724,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			sm = SystemMessage.getSystemMessage(SystemMessageId.INCORRECT_TARGET);
 		}
-		else if (!castle.getSiege().getIsInProgress())
+		else if (!castle.getSiege().isInProgress())
 		{
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED);
 			sm.addSkillName(skill);
@@ -9765,7 +9765,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			sm = SystemMessage.getSystemMessage(SystemMessageId.INCORRECT_TARGET);
 		}
-		else if (!fort.getSiege().getIsInProgress())
+		else if (!fort.getSiege().isInProgress())
 		{
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED);
 			sm.addSkillName(skill);

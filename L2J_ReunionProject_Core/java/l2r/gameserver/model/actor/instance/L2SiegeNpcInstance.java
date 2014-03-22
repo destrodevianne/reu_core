@@ -78,7 +78,7 @@ public class L2SiegeNpcInstance extends L2NpcInstance
 		{
 			return false;
 		}
-		if (getCastle().getSiege().getIsInProgress())
+		if (getCastle().getSiege().isInProgress())
 		{
 			return false; // Busy because of siege
 		}

@@ -43,7 +43,7 @@ public class L2ControlTowerInstance extends L2Tower
 	@Override
 	public boolean doDie(L2Character killer)
 	{
-		if (getCastle().getSiege().getIsInProgress())
+		if (getCastle().getSiege().isInProgress())
 		{
 			getCastle().getSiege().killedCT(this);
 			

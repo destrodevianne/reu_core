@@ -186,7 +186,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		{
 			text = "You must be on castle ground to place a flag.";
 		}
-		else if (!castle.getSiege().getIsInProgress())
+		else if (!castle.getSiege().isInProgress())
 		{
 			text = "You can only place a flag during a siege.";
 		}
@@ -238,7 +238,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		{
 			text = "You must be on fort ground to place a flag.";
 		}
-		else if (!fort.getSiege().getIsInProgress())
+		else if (!fort.getSiege().isInProgress())
 		{
 			text = "You can only place a flag during a siege.";
 		}

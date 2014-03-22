@@ -19,6 +19,7 @@
 package l2r.gameserver.model.stats;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -569,7 +570,7 @@ public final class Formulas
 		}
 		
 		Siege siege = SiegeManager.getInstance().getSiege(activeChar.getX(), activeChar.getY(), activeChar.getZ());
-		if ((siege == null) || !siege.getIsInProgress())
+		if ((siege == null) || !siege.isInProgress())
 		{
 			return 0;
 		}
@@ -2384,7 +2385,7 @@ public final class Formulas
 		int count = skill.getMaxNegatedEffects();
 		final double vuln = target.calcStat(Stats.CANCEL_VULN, 0, target, null);
 		final double prof = activeChar.calcStat(Stats.CANCEL_PROF, 0, target, null);
-		double resMod = 1 + (((vuln + prof) * -1) / 100);
+		double resMod = 1 + ((vuln + prof) / 100);
 		double rate = power / resMod;
 		
 		if (activeChar.isDebug())
@@ -2421,95 +2422,54 @@ public final class Formulas
 				}
 			}
 		}
-		// Common Cancel/Steal.
 		else
 		{
-			// First Pass.
-			int lastCanceledSkillId = 0;
-			L2Effect effect;
-			for (int i = effects.length; --i >= 0;) // reverse order
+			List<L2Effect> _musicList = new ArrayList<>();
+			List<L2Effect> _buffList = new ArrayList<>();
+			
+			for (L2Effect eff : effects)
 			{
-				effect = effects[i];
-				if (effect == null)
+				// Just in case of NPE and remove effect if can't be stolen
+				if ((eff == null) || !eff.canBeStolen())
 				{
-					continue;
-				}
-				
-				// remove effect if can't be stolen
-				if (!effect.canBeStolen())
-				{
-					effects[i] = null;
-					continue;
-				}
-				
-				// if effect time is smaller than 5 seconds, will not be stolen, just to save CPU,
-				// avoid synchronization(?) problems and NPEs
-				if ((effect.getAbnormalTime() - effect.getTime()) < 5)
-				{
-					effects[i] = null;
 					continue;
 				}
 				
 				// Only Dances/Songs.
-				if (!effect.getSkill().isDance())
+				if (eff.getSkill().isDance())
 				{
-					continue;
+					_musicList.add(eff);
 				}
-				
-				if (!calcCancelSuccess(effect, cancelMagicLvl, (int) rate, skill))
+				else
 				{
-					continue;
-				}
-				
-				if (effect.getSkill().getId() != lastCanceledSkillId)
-				{
-					lastCanceledSkillId = effect.getSkill().getId();
-					count--;
-				}
-				
-				canceled.add(effect);
-				if (count == 0)
-				{
-					break;
+					_buffList.add(eff);
 				}
 			}
-			// Second Pass.
-			if (count > 0)
+			
+			// Reversing lists and adding to a new list
+			List<L2Effect> _effectList = new ArrayList<>();
+			Collections.reverse(_musicList);
+			Collections.reverse(_buffList);
+			_effectList.addAll(_musicList);
+			_effectList.addAll(_buffList);
+			
+			int negated = 0;
+			if (!_effectList.isEmpty())
 			{
-				lastCanceledSkillId = 0;
-				for (int i = effects.length; --i >= 0;)
+				for (L2Effect e : _effectList)
 				{
-					effect = effects[i];
-					if (effect == null)
+					if (negated < count)
 					{
-						continue;
-					}
-					
-					// All Except Dances/Songs.
-					if (effect.getSkill().isDance())
-					{
-						continue;
-					}
-					
-					if (!calcCancelSuccess(effect, cancelMagicLvl, (int) rate, skill))
-					{
-						continue;
-					}
-					
-					if (effect.getSkill().getId() != lastCanceledSkillId)
-					{
-						lastCanceledSkillId = effect.getSkill().getId();
-						count--;
-					}
-					
-					canceled.add(effect);
-					if (count == 0)
-					{
-						break;
+						if (calcCancelSuccess(e, cancelMagicLvl, (int) rate, skill))
+						{
+							negated++;
+							canceled.add(e);
+						}
 					}
 				}
 			}
 		}
+		
 		return canceled;
 	}
 	
@@ -2517,6 +2477,10 @@ public final class Formulas
 	{
 		// Lvl Bonus Modifier.
 		rate *= eff.getSkill().getMagicLevel() > 0 ? 1 + ((cancelMagicLvl - eff.getSkill().getMagicLevel()) / 100.) : 1;
+		
+		// TODO: this is custom
+		rate -= 8;
+		
 		return Rnd.get(100) < Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 	}
 	
