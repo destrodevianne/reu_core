@@ -93,7 +93,7 @@ public class SiegeManager
 		{
 			text = "You must be on castle ground to summon this";
 		}
-		else if (!castle.getSiege().getIsInProgress())
+		else if (!castle.getSiege().isInProgress())
 		{
 			text = "You can only summon this during a siege.";
 		}

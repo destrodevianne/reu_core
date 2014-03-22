@@ -252,7 +252,7 @@ public class EnterWorld extends L2GameClientPacket
 			
 			for (Siege siege : SiegeManager.getInstance().getSieges())
 			{
-				if (!siege.getIsInProgress())
+				if (!siege.isInProgress())
 				{
 					continue;
 				}
@@ -272,7 +272,7 @@ public class EnterWorld extends L2GameClientPacket
 			
 			for (FortSiege siege : FortSiegeManager.getInstance().getSieges())
 			{
-				if (!siege.getIsInProgress())
+				if (!siege.isInProgress())
 				{
 					continue;
 				}

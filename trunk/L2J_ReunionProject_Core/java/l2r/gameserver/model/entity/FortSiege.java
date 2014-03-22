@@ -77,7 +77,7 @@ public class FortSiege implements Siegable
 		@Override
 		public void run()
 		{
-			if (!getIsInProgress())
+			if (!isInProgress())
 			{
 				return;
 			}
@@ -108,7 +108,7 @@ public class FortSiege implements Siegable
 		@Override
 		public void run()
 		{
-			if (getIsInProgress())
+			if (isInProgress())
 			{
 				return;
 			}
@@ -191,7 +191,7 @@ public class FortSiege implements Siegable
 		@Override
 		public void run()
 		{
-			if (getIsInProgress())
+			if (isInProgress())
 			{
 				return;
 			}
@@ -212,7 +212,7 @@ public class FortSiege implements Siegable
 		@Override
 		public void run()
 		{
-			if (!getIsInProgress())
+			if (!isInProgress())
 			{
 				return;
 			}
@@ -256,7 +256,7 @@ public class FortSiege implements Siegable
 	@Override
 	public void endSiege()
 	{
-		if (getIsInProgress())
+		if (isInProgress())
 		{
 			_isInProgress = false; // Flag so that siege instance can be started
 			removeFlags(); // Removes all flags. Note: Remove flag before teleporting players
@@ -313,7 +313,7 @@ public class FortSiege implements Siegable
 	@Override
 	public void startSiege()
 	{
-		if (!getIsInProgress())
+		if (!isInProgress())
 		{
 			if (!fireFortSiegeEventListeners(EventStage.START))
 			{
@@ -479,7 +479,7 @@ public class FortSiege implements Siegable
 	 */
 	public boolean checkIfInZone(int x, int y, int z)
 	{
-		return (getIsInProgress() && (getFort().checkIfInZone(x, y, z))); // Fort zone during siege
+		return (isInProgress() && (getFort().checkIfInZone(x, y, z))); // Fort zone during siege
 	}
 	
 	/**
@@ -528,7 +528,7 @@ public class FortSiege implements Siegable
 			getAttackerClans().clear();
 			
 			// if siege is in progress, end siege
-			if (getIsInProgress())
+			if (isInProgress())
 			{
 				endSiege();
 			}
@@ -759,7 +759,7 @@ public class FortSiege implements Siegable
 					return 3; // Players clan is already registred to siege
 				}
 				
-				if ((fort.getOwnerClan() == player.getClan()) && (fort.getSiege().getIsInProgress() || (fort.getSiege()._siegeStartTask != null)))
+				if ((fort.getOwnerClan() == player.getClan()) && (fort.getSiege().isInProgress() || (fort.getSiege()._siegeStartTask != null)))
 				{
 					return 3; // Players clan is already registred to siege
 				}
@@ -813,7 +813,7 @@ public class FortSiege implements Siegable
 			loadSiegeClan();
 			if (getAttackerClans().isEmpty())
 			{
-				if (getIsInProgress())
+				if (isInProgress())
 				{
 					endSiege();
 				}
@@ -1216,7 +1216,7 @@ public class FortSiege implements Siegable
 		return _fort;
 	}
 	
-	public final boolean getIsInProgress()
+	public final boolean isInProgress()
 	{
 		return _isInProgress;
 	}

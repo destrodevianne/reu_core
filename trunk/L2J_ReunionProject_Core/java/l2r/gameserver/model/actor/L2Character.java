@@ -4051,15 +4051,23 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 */
 	public final void addStatFuncs(Func[] funcs)
 	{
-		
-		List<Stats> modifiedStats = new ArrayList<>();
-		
-		for (Func f : funcs)
+		if (!isPlayer() && getKnownList().getKnownPlayers().isEmpty())
 		{
-			modifiedStats.add(f.stat);
-			addStatFunc(f);
+			for (Func f : funcs)
+			{
+				addStatFunc(f);
+			}
 		}
-		broadcastModifiedStats(modifiedStats);
+		else
+		{
+			final List<Stats> modifiedStats = new ArrayList<>();
+			for (Func f : funcs)
+			{
+				modifiedStats.add(f.stat);
+				addStatFunc(f);
+			}
+			broadcastModifiedStats(modifiedStats);
+		}
 	}
 	
 	/**
@@ -4138,14 +4146,24 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 */
 	public final void removeStatFuncs(Func[] funcs)
 	{
-		List<Stats> modifiedStats = new ArrayList<>();
-		for (Func f : funcs)
+		if (!isPlayer() && getKnownList().getKnownPlayers().isEmpty())
 		{
-			modifiedStats.add(f.stat);
-			removeStatFunc(f);
+			for (Func f : funcs)
+			{
+				removeStatFunc(f);
+			}
 		}
-		
-		broadcastModifiedStats(modifiedStats);
+		else
+		{
+			final List<Stats> modifiedStats = new ArrayList<>();
+			for (Func f : funcs)
+			{
+				modifiedStats.add(f.stat);
+				removeStatFunc(f);
+			}
+			
+			broadcastModifiedStats(modifiedStats);
+		}
 	}
 	
 	/**

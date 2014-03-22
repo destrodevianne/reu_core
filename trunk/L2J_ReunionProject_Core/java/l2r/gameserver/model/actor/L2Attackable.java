@@ -1524,8 +1524,7 @@ public class L2Attackable extends L2Npc
 			ItemHolder item = null;
 			if (cat.isSweep())
 			{
-				// according to sh1ny, seeded mobs CAN be spoiled and swept.
-				if (isSpoil()/* && !isSeeded() */)
+				if (isSpoil())
 				{
 					List<ItemHolder> sweepList = new ArrayList<>();
 					for (L2DropData drop : cat.getAllDrops())

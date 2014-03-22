@@ -205,7 +205,7 @@ public class L2SiegeFlagInstance extends L2Npc
 		super.reduceCurrentHp(damage, attacker, skill);
 		if (canTalk())
 		{
-			if (((getCastle() != null) && getCastle().getSiege().getIsInProgress()) || ((getFort() != null) && getFort().getSiege().getIsInProgress()) || ((getConquerableHall() != null) && getConquerableHall().isInSiege()))
+			if (((getCastle() != null) && getCastle().getSiege().isInProgress()) || ((getFort() != null) && getFort().getSiege().isInProgress()) || ((getConquerableHall() != null) && getConquerableHall().isInSiege()))
 			{
 				if (_clan != null)
 				{
