@@ -16,34 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.network.serverpackets;
+package l2r.gameserver.model.conditions;
 
-import l2r.gameserver.model.actor.L2Summon;
+import java.util.Set;
+
+import l2r.gameserver.datatables.CategoryData;
+import l2r.gameserver.enums.CategoryType;
+import l2r.gameserver.model.stats.Env;
 
 /**
- * @author KenM
+ * Condition Category Type implementation.
+ * @author Adry_85
  */
-public class ExPartyPetWindowDelete extends L2GameServerPacket
+public class ConditionCategoryType extends Condition
 {
-	private final L2Summon _summon;
+	private final Set<CategoryType> _categoryTypes;
 	
-	public ExPartyPetWindowDelete(L2Summon summon)
+	public ConditionCategoryType(Set<CategoryType> categoryTypes)
 	{
-		_summon = summon;
+		_categoryTypes = categoryTypes;
 	}
 	
 	@Override
-	protected void writeImpl()
+	public boolean testImpl(Env env)
 	{
-		if (_summon.getOwner() == null)
+		final int id = env.getCharacter().isPlayer() ? env.getPlayer().getClassId().getId() : env.getCharacter().getId();
+		for (CategoryType type : _categoryTypes)
 		{
-			return;
+			if (CategoryData.getInstance().isInCategory(type, id))
+			{
+				return true;
+			}
 		}
-		
-		writeC(0xFE);
-		writeH(0x6A);
-		writeD(_summon.getObjectId());
-		writeD(_summon.getOwner().getObjectId());
-		writeS(_summon.getName());
+		return false;
 	}
 }
