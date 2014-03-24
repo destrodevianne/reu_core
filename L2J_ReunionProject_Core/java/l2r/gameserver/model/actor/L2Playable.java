@@ -174,7 +174,34 @@ public abstract class L2Playable extends L2Character
 				}
 				catch (Exception e)
 				{
-					_log.warn("Logger: notifyDeath failed (L2Playable 1) Report this to team. ");
+					if (qs != null)
+					{
+						_log.error("L2Playeable quest name is: " + qs.getQuest().getName());
+					}
+					else
+					{
+						_log.error("L2Playeable qs is NULL");
+					}
+					
+					if (killer == null)
+					{
+						_log.error("L2Playeable killer is NULL");
+					}
+					else
+					{
+						_log.error("L2Playeable killer is: " + killer.getName());
+					}
+					
+					if (this == null)
+					{
+						_log.error("L2Playeable is NULL");
+					}
+					else
+					{
+						_log.error("L2Playeable ID is: " + this.getName());
+					}
+					
+					_log.error("Logger: notifyDeath failed (L2Playable 1) Report this to team.");
 				}
 			}
 		}
@@ -190,7 +217,7 @@ public abstract class L2Playable extends L2Character
 				}
 				catch (Exception e)
 				{
-					_log.warn("Logger: notifyDeath failed (L2Playable 2) Report this to team. ");
+					_log.error("Logger: notifyDeath failed (L2Playable 2) Report this to team. ");
 				}
 			}
 		}

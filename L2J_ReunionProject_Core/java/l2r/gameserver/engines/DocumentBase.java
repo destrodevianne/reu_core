@@ -32,6 +32,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.enums.CategoryType;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.NpcRace;
 import l2r.gameserver.enums.PcRace;
@@ -39,6 +40,7 @@ import l2r.gameserver.model.ChanceCondition;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.base.PlayerState;
 import l2r.gameserver.model.conditions.Condition;
+import l2r.gameserver.model.conditions.ConditionCategoryType;
 import l2r.gameserver.model.conditions.ConditionChangeWeapon;
 import l2r.gameserver.model.conditions.ConditionForceBuff;
 import l2r.gameserver.model.conditions.ConditionGameChance;
@@ -930,6 +932,17 @@ public abstract class DocumentBase
 					array.add(Integer.decode(getValue(item, null)));
 				}
 				cond = joinAnd(cond, new ConditionPlayerInsideZoneId(array));
+			}
+			else if ("categorytype".equalsIgnoreCase(a.getNodeName()))
+			{
+				final String[] values = a.getNodeValue().split(",");
+				final Set<CategoryType> array = new HashSet<>(values.length);
+				for (String value : values)
+				{
+					array.add(CategoryType.valueOf(getValue(value, null)));
+				}
+				cond = joinAnd(cond, new ConditionCategoryType(array));
+				break;
 			}
 		}
 		

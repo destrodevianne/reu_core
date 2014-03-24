@@ -35,6 +35,11 @@ public final class ExPartyPetWindowAdd extends L2GameServerPacket
 	@Override
 	protected void writeImpl()
 	{
+		if (_summon.getOwner() == null)
+		{
+			return;
+		}
+		
 		writeC(0xFE);
 		writeH(0x18);
 		writeD(_summon.getObjectId());
