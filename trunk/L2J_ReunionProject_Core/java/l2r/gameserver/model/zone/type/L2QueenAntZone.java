@@ -14,6 +14,7 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import l2r.Config;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
@@ -34,7 +35,7 @@ public class L2QueenAntZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
-			if ((character.getLevel() > 48) && !character.isGM())
+			if (!character.isGM() && (Config.QUEEN_ANT_CHAR_ENTER_LEVEL_RESTRICTION > 0) && (character.getLevel() > Config.QUEEN_ANT_CHAR_ENTER_LEVEL_RESTRICTION))
 			{
 				character.teleToLocation(-14417, 123749, -3117);
 			}

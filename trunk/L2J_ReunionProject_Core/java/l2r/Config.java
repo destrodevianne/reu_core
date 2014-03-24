@@ -1070,6 +1070,7 @@ public final class Config
 	// --------------------------------------------------
 	public static int QUEEN_ANT_SPAWN_INTERVAL;
 	public static int QUEEN_ANT_SPAWN_RANDOM;
+	public static int QUEEN_ANT_CHAR_ENTER_LEVEL_RESTRICTION;
 	
 	// --------------------------------------------------
 	// Zaken
@@ -2595,6 +2596,7 @@ public final class Config
 			
 			QUEEN_ANT_SPAWN_INTERVAL = queen_load.getInt("IntervalOfQueenAntSpawn", 36);
 			QUEEN_ANT_SPAWN_RANDOM = queen_load.getInt("RandomOfQueenAntSpawn", 17);
+			QUEEN_ANT_CHAR_ENTER_LEVEL_RESTRICTION = queen_load.getInt("QueenAntCharEnterLevelRestriction", 0);
 			
 			// Load BELETH_CONFIG L2Properties file (if exists)
 			final PropertiesParser beleth_load = new PropertiesParser(BELETH_CONFIG);
