@@ -19,7 +19,6 @@
 package l2r.gameserver.network.serverpackets;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 
@@ -55,7 +54,7 @@ public class ExShowBaseAttributeCancelWindow extends L2GameServerPacket
 	{
 		switch (item.getItem().getCrystalType())
 		{
-			case L2Item.CRYSTAL_S:
+			case S:
 				if (item.getItem() instanceof L2Weapon)
 				{
 					_price = 50000;
@@ -65,7 +64,7 @@ public class ExShowBaseAttributeCancelWindow extends L2GameServerPacket
 					_price = 40000;
 				}
 				break;
-			case L2Item.CRYSTAL_S80:
+			case S80:
 				if (item.getItem() instanceof L2Weapon)
 				{
 					_price = 100000;
@@ -75,7 +74,7 @@ public class ExShowBaseAttributeCancelWindow extends L2GameServerPacket
 					_price = 80000;
 				}
 				break;
-			case L2Item.CRYSTAL_S84:
+			case S84:
 				if (item.getItem() instanceof L2Weapon)
 				{
 					_price = 200000;

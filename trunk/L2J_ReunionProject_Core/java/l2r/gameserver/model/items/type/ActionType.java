@@ -19,50 +19,35 @@
 package l2r.gameserver.model.items.type;
 
 /**
- * Description of Armor Type
+ * Action Type enumerated.
+ * @author nBd
  */
-
-public enum L2ArmorType implements L2ItemType
+public enum ActionType
 {
-	NONE("None"),
-	LIGHT("Light"),
-	HEAVY("Heavy"),
-	MAGIC("Magic"),
-	SIGIL("Sigil"),
-	
-	// L2J CUSTOM
-	SHIELD("Shield");
-	
-	final int _mask;
-	final String _name;
-	
-	/**
-	 * Constructor of the L2ArmorType.
-	 * @param name : String designating the name of the ArmorType
-	 */
-	L2ArmorType(String name)
-	{
-		_mask = 1 << (ordinal() + L2WeaponType.values().length);
-		_name = name;
-	}
-	
-	/**
-	 * Returns the ID of the ArmorType after applying a mask.
-	 * @return int : ID of the ArmorType after mask
-	 */
-	@Override
-	public int mask()
-	{
-		return _mask;
-	}
-	
-	/**
-	 * Returns the name of the ArmorType
-	 * @return String
-	 */
-	@Override
-	public String toString()
-	{
-		return _name;
-	}
+	CALC,
+	CALL_SKILL,
+	CAPSULE,
+	CREATE_MPCC,
+	DICE,
+	EQUIP,
+	FISHINGSHOT,
+	HARVEST,
+	HIDE_NAME,
+	KEEP_EXP,
+	NICK_COLOR,
+	NONE,
+	PEEL,
+	RECIPE,
+	SEED,
+	SHOW_ADVENTURER_GUIDE_BOOK,
+	SHOW_HTML,
+	SHOW_SSQ_STATUS,
+	SKILL_MAINTAIN,
+	SKILL_REDUCE,
+	SOULSHOT,
+	SPIRITSHOT,
+	START_QUEST,
+	SUMMON_SOULSHOT,
+	SUMMON_SPIRITSHOT,
+	XMAS_OPEN,
 }

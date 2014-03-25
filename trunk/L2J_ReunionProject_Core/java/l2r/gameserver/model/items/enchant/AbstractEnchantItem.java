@@ -22,8 +22,9 @@ import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
-import l2r.gameserver.model.items.type.L2ItemType;
+import l2r.gameserver.model.items.type.CrystalType;
+import l2r.gameserver.model.items.type.EtcItemType;
+import l2r.gameserver.model.items.type.ItemType;
 import l2r.gameserver.util.Util;
 
 import org.slf4j.Logger;
@@ -36,20 +37,20 @@ public abstract class AbstractEnchantItem
 {
 	protected static final Logger _log = LoggerFactory.getLogger(AbstractEnchantItem.class.getName());
 	
-	private static final L2ItemType[] ENCHANT_TYPES = new L2ItemType[]
+	private static final ItemType[] ENCHANT_TYPES = new ItemType[]
 	{
-		L2EtcItemType.ANCIENT_CRYSTAL_ENCHANT_AM,
-		L2EtcItemType.ANCIENT_CRYSTAL_ENCHANT_WP,
-		L2EtcItemType.BLESS_SCRL_ENCHANT_AM,
-		L2EtcItemType.BLESS_SCRL_ENCHANT_WP,
-		L2EtcItemType.SCRL_ENCHANT_AM,
-		L2EtcItemType.SCRL_ENCHANT_WP,
-		L2EtcItemType.SCRL_INC_ENCHANT_PROP_AM,
-		L2EtcItemType.SCRL_INC_ENCHANT_PROP_WP,
+		EtcItemType.ANCIENT_CRYSTAL_ENCHANT_AM,
+		EtcItemType.ANCIENT_CRYSTAL_ENCHANT_WP,
+		EtcItemType.BLESS_SCRL_ENCHANT_AM,
+		EtcItemType.BLESS_SCRL_ENCHANT_WP,
+		EtcItemType.SCRL_ENCHANT_AM,
+		EtcItemType.SCRL_ENCHANT_WP,
+		EtcItemType.SCRL_INC_ENCHANT_PROP_AM,
+		EtcItemType.SCRL_INC_ENCHANT_PROP_WP,
 	};
 	
 	private final int _id;
-	private final int _grade;
+	private final CrystalType _grade;
 	private final int _maxEnchantLevel;
 	private final double _bonusRate;
 	
@@ -64,7 +65,7 @@ public abstract class AbstractEnchantItem
 		{
 			throw new IllegalAccessError();
 		}
-		_grade = ItemTable._crystalTypes.get(set.getString("targetGrade", "none"));
+		_grade = set.getEnum("targetGrade", CrystalType.class, CrystalType.NONE);
 		_maxEnchantLevel = set.getInteger("maxEnchant", 65535);
 		_bonusRate = set.getDouble("bonusRate", 0);
 	}
@@ -96,7 +97,7 @@ public abstract class AbstractEnchantItem
 	/**
 	 * @return grade of the item/scroll.
 	 */
-	public final int getGrade()
+	public final CrystalType getGrade()
 	{
 		return _grade;
 	}

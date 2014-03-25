@@ -60,7 +60,7 @@ import l2r.gameserver.model.itemcontainer.PetInventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
+import l2r.gameserver.model.items.type.EtcItemType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.network.SystemMessageId;
@@ -608,7 +608,7 @@ public class L2PetInstance extends L2Summon
 		}
 		
 		// Herbs
-		if (target.getItemType() == L2EtcItemType.HERB)
+		if (target.getItemType() == EtcItemType.HERB)
 		{
 			IItemHandler handler = ItemHandler.getInstance().getHandler(target.getEtcItem());
 			if (handler == null)

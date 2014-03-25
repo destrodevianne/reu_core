@@ -27,6 +27,7 @@ import java.util.Map;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.items.type.CrystalType;
 import l2r.gameserver.model.skills.funcs.FuncTemplate;
 import l2r.gameserver.model.skills.funcs.LambdaConst;
 import l2r.gameserver.model.stats.Stats;
@@ -85,7 +86,7 @@ public class EnchantItemHPBonusData extends DocumentParser
 			for (Integer itemId : armorIds)
 			{
 				item = it.getTemplate(itemId);
-				if ((item != null) && (item.getCrystalType() != L2Item.CRYSTAL_NONE))
+				if ((item != null) && (item.getCrystalType() != CrystalType.NONE))
 				{
 					switch (item.getBodyPart())
 					{
@@ -111,7 +112,7 @@ public class EnchantItemHPBonusData extends DocumentParser
 			for (Integer itemId : shieldIds)
 			{
 				item = it.getTemplate(itemId);
-				if ((item != null) && (item.getCrystalType() != L2Item.CRYSTAL_NONE))
+				if ((item != null) && (item.getCrystalType() != CrystalType.NONE))
 				{
 					switch (item.getBodyPart())
 					{

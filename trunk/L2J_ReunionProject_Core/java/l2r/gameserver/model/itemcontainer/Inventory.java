@@ -40,8 +40,8 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.EtcItemType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
@@ -188,7 +188,7 @@ public abstract class Inventory extends ItemContainer
 				return;
 			}
 			
-			if (item.getItemType() == L2WeaponType.BOW)
+			if (item.getItemType() == WeaponType.BOW)
 			{
 				L2ItemInstance arrow = inventory.getPaperdollItem(PAPERDOLL_LHAND);
 				
@@ -197,7 +197,7 @@ public abstract class Inventory extends ItemContainer
 					inventory.setPaperdollItem(PAPERDOLL_LHAND, null);
 				}
 			}
-			else if (item.getItemType() == L2WeaponType.CROSSBOW)
+			else if (item.getItemType() == WeaponType.CROSSBOW)
 			{
 				L2ItemInstance bolts = inventory.getPaperdollItem(PAPERDOLL_LHAND);
 				
@@ -206,7 +206,7 @@ public abstract class Inventory extends ItemContainer
 					inventory.setPaperdollItem(PAPERDOLL_LHAND, null);
 				}
 			}
-			else if (item.getItemType() == L2WeaponType.FISHINGROD)
+			else if (item.getItemType() == WeaponType.FISHINGROD)
 			{
 				L2ItemInstance lure = inventory.getPaperdollItem(PAPERDOLL_LHAND);
 				
@@ -225,7 +225,7 @@ public abstract class Inventory extends ItemContainer
 				return;
 			}
 			
-			if (item.getItemType() == L2WeaponType.BOW)
+			if (item.getItemType() == WeaponType.BOW)
 			{
 				L2ItemInstance arrow = inventory.findArrowForBow(item.getItem());
 				
@@ -234,7 +234,7 @@ public abstract class Inventory extends ItemContainer
 					inventory.setPaperdollItem(PAPERDOLL_LHAND, arrow);
 				}
 			}
-			else if (item.getItemType() == L2WeaponType.CROSSBOW)
+			else if (item.getItemType() == WeaponType.CROSSBOW)
 			{
 				L2ItemInstance bolts = inventory.findBoltForCrossBow(item.getItem());
 				
@@ -1438,7 +1438,7 @@ public abstract class Inventory extends ItemContainer
 			case L2Item.SLOT_L_HAND:
 			{
 				L2ItemInstance rh = getPaperdollItem(PAPERDOLL_RHAND);
-				if ((rh != null) && (rh.getItem().getBodyPart() == L2Item.SLOT_LR_HAND) && !(((rh.getItemType() == L2WeaponType.BOW) && (item.getItemType() == L2EtcItemType.ARROW)) || ((rh.getItemType() == L2WeaponType.CROSSBOW) && (item.getItemType() == L2EtcItemType.BOLT)) || ((rh.getItemType() == L2WeaponType.FISHINGROD) && (item.getItemType() == L2EtcItemType.LURE))))
+				if ((rh != null) && (rh.getItem().getBodyPart() == L2Item.SLOT_LR_HAND) && !(((rh.getItemType() == WeaponType.BOW) && (item.getItemType() == EtcItemType.ARROW)) || ((rh.getItemType() == WeaponType.CROSSBOW) && (item.getItemType() == EtcItemType.BOLT)) || ((rh.getItemType() == WeaponType.FISHINGROD) && (item.getItemType() == EtcItemType.LURE))))
 				{
 					setPaperdollItem(PAPERDOLL_RHAND, null);
 				}
@@ -1626,7 +1626,7 @@ public abstract class Inventory extends ItemContainer
 		
 		for (L2ItemInstance item : getItems())
 		{
-			if (item.isEtcItem() && (item.getItem().getItemGradeSPlus() == bow.getItemGradeSPlus()) && (item.getEtcItem().getItemType() == L2EtcItemType.ARROW))
+			if (item.isEtcItem() && (item.getItem().getItemGradeSPlus() == bow.getItemGradeSPlus()) && (item.getEtcItem().getItemType() == EtcItemType.ARROW))
 			{
 				arrow = item;
 				break;
@@ -1648,7 +1648,7 @@ public abstract class Inventory extends ItemContainer
 		
 		for (L2ItemInstance item : getItems())
 		{
-			if (item.isEtcItem() && (item.getItem().getItemGradeSPlus() == crossbow.getItemGradeSPlus()) && (item.getEtcItem().getItemType() == L2EtcItemType.BOLT))
+			if (item.isEtcItem() && (item.getItem().getItemGradeSPlus() == crossbow.getItemGradeSPlus()) && (item.getEtcItem().getItemType() == EtcItemType.BOLT))
 			{
 				bolt = item;
 				break;

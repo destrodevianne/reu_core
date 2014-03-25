@@ -27,8 +27,8 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
-import l2r.gameserver.model.items.type.L2ItemType;
+import l2r.gameserver.model.items.type.EtcItemType;
+import l2r.gameserver.model.items.type.ItemType;
 import l2r.gameserver.network.Debug;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
@@ -49,10 +49,10 @@ public final class EnchantScroll extends AbstractEnchantItem
 		super(set);
 		_scrollGroupId = set.getInteger("scrollGroupId", 0);
 		
-		final L2ItemType type = getItem().getItemType();
-		_isWeapon = (type == L2EtcItemType.ANCIENT_CRYSTAL_ENCHANT_WP) || (type == L2EtcItemType.BLESS_SCRL_ENCHANT_WP) || (type == L2EtcItemType.SCRL_ENCHANT_WP);
-		_isBlessed = (type == L2EtcItemType.BLESS_SCRL_ENCHANT_AM) || (type == L2EtcItemType.BLESS_SCRL_ENCHANT_WP);
-		_isSafe = (type == L2EtcItemType.ANCIENT_CRYSTAL_ENCHANT_AM) || (type == L2EtcItemType.ANCIENT_CRYSTAL_ENCHANT_WP);
+		final ItemType type = getItem().getItemType();
+		_isWeapon = (type == EtcItemType.ANCIENT_CRYSTAL_ENCHANT_WP) || (type == EtcItemType.BLESS_SCRL_ENCHANT_WP) || (type == EtcItemType.SCRL_ENCHANT_WP);
+		_isBlessed = (type == EtcItemType.BLESS_SCRL_ENCHANT_AM) || (type == EtcItemType.BLESS_SCRL_ENCHANT_WP);
+		_isSafe = (type == EtcItemType.ANCIENT_CRYSTAL_ENCHANT_AM) || (type == EtcItemType.ANCIENT_CRYSTAL_ENCHANT_WP);
 	}
 	
 	@Override

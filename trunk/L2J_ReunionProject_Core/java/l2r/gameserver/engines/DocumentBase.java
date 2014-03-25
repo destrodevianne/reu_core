@@ -114,8 +114,8 @@ import l2r.gameserver.model.conditions.ConditionWithSkill;
 import l2r.gameserver.model.effects.AbnormalEffect;
 import l2r.gameserver.model.effects.EffectTemplate;
 import l2r.gameserver.model.items.L2Item;
-import l2r.gameserver.model.items.type.L2ArmorType;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.ArmorType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.funcs.FuncTemplate;
 import l2r.gameserver.model.skills.funcs.Lambda;
@@ -1072,7 +1072,7 @@ public abstract class DocumentBase
 				while (st.hasMoreTokens())
 				{
 					String item = st.nextToken().trim();
-					for (L2WeaponType wt : L2WeaponType.values())
+					for (WeaponType wt : WeaponType.values())
 					{
 						if (wt.toString().equals(item))
 						{
@@ -1080,7 +1080,7 @@ public abstract class DocumentBase
 							break;
 						}
 					}
-					for (L2ArmorType at : L2ArmorType.values())
+					for (ArmorType at : ArmorType.values())
 					{
 						if (at.toString().equals(item))
 						{
@@ -1147,54 +1147,62 @@ public abstract class DocumentBase
 		for (int i = 0; i < attrs.getLength(); i++)
 		{
 			Node a = attrs.item(i);
-			if ("kind".equalsIgnoreCase(a.getNodeName()))
+			switch (a.getNodeName().toLowerCase())
 			{
-				int mask = 0;
-				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
-				while (st.hasMoreTokens())
+				case "kind":
 				{
-					int old = mask;
-					String item = st.nextToken().trim();
-					if (ItemTable._weaponTypes.containsKey(item))
+					int mask = 0;
+					StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
+					while (st.hasMoreTokens())
 					{
-						mask |= ItemTable._weaponTypes.get(item).mask();
+						int old = mask;
+						String item = st.nextToken().trim();
+						if (ItemTable._weaponTypes.containsKey(item))
+						{
+							mask |= ItemTable._weaponTypes.get(item).mask();
+						}
+						
+						if (ItemTable._armorTypes.containsKey(item))
+						{
+							mask |= ItemTable._armorTypes.get(item).mask();
+						}
+						
+						if (old == mask)
+						{
+							_log.info("[parseUsingCondition=\"kind\"] Unknown item type name: " + item);
+						}
 					}
-					
-					if (ItemTable._armorTypes.containsKey(item))
-					{
-						mask |= ItemTable._armorTypes.get(item).mask();
-					}
-					
-					if (old == mask)
-					{
-						_log.info("[parseUsingCondition=\"kind\"] Unknown item type name: " + item);
-					}
+					cond = joinAnd(cond, new ConditionUsingItemType(mask));
+					break;
 				}
-				cond = joinAnd(cond, new ConditionUsingItemType(mask));
-			}
-			else if ("skill".equalsIgnoreCase(a.getNodeName()))
-			{
-				int id = Integer.parseInt(a.getNodeValue());
-				cond = joinAnd(cond, new ConditionUsingSkill(id));
-			}
-			else if ("slotitem".equalsIgnoreCase(a.getNodeName()))
-			{
-				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ";");
-				int id = Integer.parseInt(st.nextToken().trim());
-				int slot = Integer.parseInt(st.nextToken().trim());
-				int enchant = 0;
-				if (st.hasMoreTokens())
+				case "skill":
 				{
-					enchant = Integer.parseInt(st.nextToken().trim());
+					int id = Integer.parseInt(a.getNodeValue());
+					cond = joinAnd(cond, new ConditionUsingSkill(id));
+					break;
 				}
-				cond = joinAnd(cond, new ConditionSlotItemId(slot, id, enchant));
-			}
-			else if ("weaponChange".equalsIgnoreCase(a.getNodeName()))
-			{
-				boolean val = Boolean.parseBoolean(a.getNodeValue());
-				cond = joinAnd(cond, new ConditionChangeWeapon(val));
+				case "slotitem":
+				{
+					StringTokenizer st = new StringTokenizer(a.getNodeValue(), ";");
+					int id = Integer.parseInt(st.nextToken().trim());
+					int slot = Integer.parseInt(st.nextToken().trim());
+					int enchant = 0;
+					if (st.hasMoreTokens())
+					{
+						enchant = Integer.parseInt(st.nextToken().trim());
+					}
+					cond = joinAnd(cond, new ConditionSlotItemId(slot, id, enchant));
+					break;
+				}
+				case "weaponchange":
+				{
+					boolean val = Boolean.parseBoolean(a.getNodeValue());
+					cond = joinAnd(cond, new ConditionChangeWeapon(val));
+					break;
+				}
 			}
 		}
+		
 		if (cond == null)
 		{
 			_log.error("Unrecognized <using> condition in " + _file);

@@ -34,7 +34,7 @@ import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.conditions.ConditionGameChance;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.holders.SkillHolder;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Env;
@@ -47,7 +47,7 @@ import l2r.util.StringUtil;
  */
 public final class L2Weapon extends L2Item
 {
-	private final L2WeaponType _type;
+	private final WeaponType _type;
 	private final boolean _isMagicWeapon;
 	private final int _rndDam;
 	private final int _soulShotCount;
@@ -84,7 +84,7 @@ public final class L2Weapon extends L2Item
 	public L2Weapon(StatsSet set)
 	{
 		super(set);
-		_type = L2WeaponType.valueOf(set.getString("weapon_type", "none").toUpperCase());
+		_type = WeaponType.valueOf(set.getString("weapon_type", "none").toUpperCase());
 		_type1 = L2Item.TYPE1_WEAPON_RING_EARRING_NECKLACE;
 		_type2 = L2Item.TYPE2_WEAPON;
 		_isMagicWeapon = set.getBool("is_magic_weapon", false);
@@ -201,7 +201,7 @@ public final class L2Weapon extends L2Item
 	 * @return the type of Weapon
 	 */
 	@Override
-	public L2WeaponType getItemType()
+	public WeaponType getItemType()
 	{
 		return _type;
 	}

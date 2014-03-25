@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * @author mkizub <BR>
  *         Description of Weapon Type
  */
-public enum L2WeaponType implements L2ItemType
+public enum WeaponType implements ItemType
 {
 	SWORD("Sword"),
 	BLUNT("Blunt"),
@@ -49,7 +49,7 @@ public enum L2WeaponType implements L2ItemType
 	BIGBLUNT("Big Blunt"),
 	BIGSWORD("Big Sword");
 	
-	private static final Logger _log = LoggerFactory.getLogger(L2WeaponType.class);
+	private static final Logger _log = LoggerFactory.getLogger(WeaponType.class);
 	private final int _mask;
 	private final String _name;
 	
@@ -57,7 +57,7 @@ public enum L2WeaponType implements L2ItemType
 	 * Constructor of the L2WeaponType.
 	 * @param name : String designating the name of the WeaponType
 	 */
-	private L2WeaponType(String name)
+	private WeaponType(String name)
 	{
 		_mask = 1 << ordinal();
 		_name = name;
@@ -74,16 +74,15 @@ public enum L2WeaponType implements L2ItemType
 	}
 	
 	/**
-	 * Returns the name of the WeaponType
-	 * @return String
+	 * @return the name of the WeaponType
 	 */
 	@Override
-	public String toString()
+	public String getName()
 	{
 		return _name;
 	}
 	
-	public static L2WeaponType findByName(String name)
+	public static WeaponType findByName(String name)
 	{
 		if (name.equalsIgnoreCase("DUAL"))
 		{
@@ -93,14 +92,14 @@ public enum L2WeaponType implements L2ItemType
 		{
 			name = "Dual Fist";
 		}
-		for (L2WeaponType type : values())
+		for (WeaponType type : values())
 		{
 			if (type.toString().equalsIgnoreCase(name))
 			{
 				return type;
 			}
 		}
-		_log.warn(L2WeaponType.class.getSimpleName() + ": Requested unexistent enum member: " + name, new IllegalStateException());
+		_log.warn(WeaponType.class.getSimpleName() + ": Requested unexistent enum member: " + name, new IllegalStateException());
 		return FIST;
 	}
 }

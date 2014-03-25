@@ -21,7 +21,7 @@ package l2r.gameserver.model.conditions;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2ArmorType;
+import l2r.gameserver.model.items.type.ArmorType;
 import l2r.gameserver.model.stats.Env;
 
 /**
@@ -40,7 +40,7 @@ public final class ConditionUsingItemType extends Condition
 	public ConditionUsingItemType(int mask)
 	{
 		_mask = mask;
-		_armor = (_mask & (L2ArmorType.MAGIC.mask() | L2ArmorType.LIGHT.mask() | L2ArmorType.HEAVY.mask())) != 0;
+		_armor = (_mask & (ArmorType.MAGIC.mask() | ArmorType.LIGHT.mask() | ArmorType.HEAVY.mask())) != 0;
 	}
 	
 	@Override

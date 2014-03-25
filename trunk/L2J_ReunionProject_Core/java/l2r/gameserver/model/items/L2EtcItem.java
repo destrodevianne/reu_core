@@ -24,7 +24,7 @@ import java.util.List;
 import l2r.gameserver.model.L2ExtractableProduct;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.itemcontainer.Inventory;
-import l2r.gameserver.model.items.type.L2EtcItemType;
+import l2r.gameserver.model.items.type.EtcItemType;
 import l2r.util.StringUtil;
 
 /**
@@ -33,7 +33,7 @@ import l2r.util.StringUtil;
 public final class L2EtcItem extends L2Item
 {
 	private String _handler;
-	private L2EtcItemType _type;
+	private EtcItemType _type;
 	private final boolean _isBlessed;
 	private final List<L2ExtractableProduct> _extractableItems;
 	
@@ -44,24 +44,24 @@ public final class L2EtcItem extends L2Item
 	public L2EtcItem(StatsSet set)
 	{
 		super(set);
-		_type = L2EtcItemType.valueOf(set.getString("etcitem_type", "none").toUpperCase());
+		_type = EtcItemType.valueOf(set.getString("etcitem_type", "none").toUpperCase());
 		
 		// l2j custom - L2EtcItemType.SHOT
 		switch (getDefaultAction())
 		{
-			case soulshot:
-			case summon_soulshot:
-			case summon_spiritshot:
-			case spiritshot:
+			case SOULSHOT:
+			case SUMMON_SOULSHOT:
+			case SUMMON_SPIRITSHOT:
+			case SPIRITSHOT:
 			{
-				_type = L2EtcItemType.SHOT;
+				_type = EtcItemType.SHOT;
 				break;
 			}
 		}
 		
 		if (is_ex_immediate_effect())
 		{
-			_type = L2EtcItemType.HERB;
+			_type = EtcItemType.HERB;
 		}
 		
 		_type1 = L2Item.TYPE1_ITEM_QUESTITEM_ADENA;
@@ -128,7 +128,7 @@ public final class L2EtcItem extends L2Item
 	 * @return the type of Etc Item.
 	 */
 	@Override
-	public L2EtcItemType getItemType()
+	public EtcItemType getItemType()
 	{
 		return _type;
 	}
@@ -139,7 +139,7 @@ public final class L2EtcItem extends L2Item
 	@Override
 	public final boolean isConsumable()
 	{
-		return ((getItemType() == L2EtcItemType.SHOT) || (getItemType() == L2EtcItemType.POTION)); // || (type == L2EtcItemType.SCROLL));
+		return ((getItemType() == EtcItemType.SHOT) || (getItemType() == EtcItemType.POTION)); // || (type == L2EtcItemType.SCROLL));
 	}
 	
 	/**

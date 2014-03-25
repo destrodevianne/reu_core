@@ -27,7 +27,7 @@ import java.util.TreeMap;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
+import l2r.gameserver.model.items.type.EtcItemType;
 import l2r.gameserver.network.serverpackets.ExAutoSoulShot;
 import l2r.gameserver.network.serverpackets.ShortCutInit;
 import l2r.gameserver.network.serverpackets.ShortCutRegister;
@@ -153,7 +153,7 @@ public class ShortCuts
 		{
 			L2ItemInstance item = _owner.getInventory().getItemByObjectId(old.getId());
 			
-			if ((item != null) && (item.getItemType() == L2EtcItemType.SHOT))
+			if ((item != null) && (item.getItemType() == EtcItemType.SHOT))
 			{
 				if (_owner.removeAutoSoulShot(item.getId()))
 				{
@@ -188,7 +188,7 @@ public class ShortCuts
 		{
 			L2ItemInstance item = _owner.getInventory().getItemByObjectId(old.getId());
 			
-			if ((item != null) && (item.getItemType() == L2EtcItemType.SHOT))
+			if ((item != null) && (item.getItemType() == EtcItemType.SHOT))
 			{
 				if (_owner.removeAutoSoulShot(item.getId()))
 				{

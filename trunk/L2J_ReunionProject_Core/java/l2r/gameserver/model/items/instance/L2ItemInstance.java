@@ -64,8 +64,8 @@ import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
-import l2r.gameserver.model.items.type.L2EtcItemType;
-import l2r.gameserver.model.items.type.L2ItemType;
+import l2r.gameserver.model.items.type.EtcItemType;
+import l2r.gameserver.model.items.type.ItemType;
 import l2r.gameserver.model.options.EnchantOptions;
 import l2r.gameserver.model.options.Options;
 import l2r.gameserver.model.quest.Quest;
@@ -553,7 +553,7 @@ public final class L2ItemInstance extends L2Object
 	 */
 	public boolean isEquipable()
 	{
-		return !((_item.getBodyPart() == 0) || (_item.getItemType() == L2EtcItemType.ARROW) || (_item.getItemType() == L2EtcItemType.BOLT) || (_item.getItemType() == L2EtcItemType.LURE));
+		return !((_item.getBodyPart() == 0) || (_item.getItemType() == EtcItemType.ARROW) || (_item.getItemType() == EtcItemType.BOLT) || (_item.getItemType() == EtcItemType.LURE));
 	}
 	
 	/**
@@ -617,7 +617,7 @@ public final class L2ItemInstance extends L2Object
 	/**
 	 * @return the type of item.
 	 */
-	public L2ItemType getItemType()
+	public ItemType getItemType()
 	{
 		return _item.getItemType();
 	}
@@ -884,7 +884,7 @@ public final class L2ItemInstance extends L2Object
 			&& (player.getActiveEnchantSupportItemId() != getObjectId()) // Not momentarily used enchant support item
 			&& (player.getActiveEnchantAttrItemId() != getObjectId()) // Not momentarily used enchant attribute item
 			&& (allowAdena || (getId() != Inventory.ADENA_ID)) // Not Adena
-			&& ((player.getCurrentSkill() == null) || (player.getCurrentSkill().getSkill().getItemConsumeId() != getId())) && (!player.isCastingSimultaneouslyNow() || (player.getLastSimultaneousSkillCast() == null) || (player.getLastSimultaneousSkillCast().getItemConsumeId() != getId())) && (allowNonTradeable || (isTradeable() && (!((getItem().getItemType() == L2EtcItemType.PET_COLLAR) && player.havePetInvItems())))));
+			&& ((player.getCurrentSkill() == null) || (player.getCurrentSkill().getSkill().getItemConsumeId() != getId())) && (!player.isCastingSimultaneouslyNow() || (player.getLastSimultaneousSkillCast() == null) || (player.getLastSimultaneousSkillCast().getItemConsumeId() != getId())) && (allowNonTradeable || (isTradeable() && (!((getItem().getItemType() == EtcItemType.PET_COLLAR) && player.havePetInvItems())))));
 	}
 	
 	/**
@@ -2057,7 +2057,7 @@ public final class L2ItemInstance extends L2Object
 	
 	public boolean hasPassiveSkills()
 	{
-		return (getItemType() == L2EtcItemType.RUNE) && (getItemLocation() == ItemLocation.INVENTORY) && (getOwnerId() > 0) && getItem().hasSkills();
+		return (getItemType() == EtcItemType.RUNE) && (getItemLocation() == ItemLocation.INVENTORY) && (getOwnerId() > 0) && getItem().hasSkills();
 	}
 	
 	public void giveSkillsToOwner()

@@ -30,7 +30,7 @@ import l2r.gameserver.model.holders.AdditionalItemHolder;
 import l2r.gameserver.model.holders.AdditionalSkillHolder;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.itemcontainer.Inventory;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.serverpackets.ExBasicActionList;
@@ -42,7 +42,7 @@ public final class TransformTemplate
 {
 	private final double _collisionRadius;
 	private final double _collisionHeight;
-	private final L2WeaponType _baseAttackType;
+	private final WeaponType _baseAttackType;
 	private final int _baseAttackRange;
 	private final double _baseRandomDamage;
 	private List<SkillHolder> _skills;
@@ -59,7 +59,7 @@ public final class TransformTemplate
 	{
 		_collisionRadius = set.getDouble("radius", 0);
 		_collisionHeight = set.getDouble("height", 0);
-		_baseAttackType = L2WeaponType.findByName(set.getString("attackType", "FIST"));
+		_baseAttackType = WeaponType.findByName(set.getString("attackType", "FIST"));
 		_baseAttackRange = set.getInteger("range", 40);
 		_baseRandomDamage = set.getDouble("randomDamage", 0);
 		
@@ -160,7 +160,7 @@ public final class TransformTemplate
 		return _collisionHeight;
 	}
 	
-	public L2WeaponType getBaseAttackType()
+	public WeaponType getBaseAttackType()
 	{
 		return _baseAttackType;
 	}

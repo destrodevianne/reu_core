@@ -19,34 +19,48 @@
 package l2r.gameserver.model.items.type;
 
 /**
- * @author nBd
+ * Description of Armor Type
  */
-public enum L2ActionType
+
+public enum ArmorType implements ItemType
 {
-	calc,
-	call_skill,
-	capsule,
-	create_mpcc,
-	dice,
-	equip,
-	fishingshot,
-	harvest,
-	hide_name,
-	keep_exp,
-	nick_color,
-	none,
-	peel,
-	recipe,
-	seed,
-	show_adventurer_guide_book,
-	show_html,
-	show_ssq_status,
-	skill_maintain,
-	skill_reduce,
-	soulshot,
-	spiritshot,
-	start_quest,
-	summon_soulshot,
-	summon_spiritshot,
-	xmas_open,
+	NONE("None"),
+	LIGHT("Light"),
+	HEAVY("Heavy"),
+	MAGIC("Magic"),
+	SIGIL("Sigil"),
+	
+	// L2J CUSTOM
+	SHIELD("Shield");
+	
+	final int _mask;
+	final String _name;
+	
+	/**
+	 * Constructor of the ArmorType.
+	 * @param name : String designating the name of the ArmorType
+	 */
+	private ArmorType(String name)
+	{
+		_mask = 1 << (ordinal() + WeaponType.values().length);
+		_name = name;
+	}
+	
+	/**
+	 * @return the ID of the ArmorType after applying a mask.
+	 */
+	@Override
+	public int mask()
+	{
+		return _mask;
+	}
+	
+	/**
+	 * @return the name of the ArmorType
+	 */
+	@Override
+	public String getName()
+	{
+		return _name;
+	}
 }

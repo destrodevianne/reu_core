@@ -215,10 +215,10 @@ import l2r.gameserver.model.items.L2Henna;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2ActionType;
-import l2r.gameserver.model.items.type.L2ArmorType;
-import l2r.gameserver.model.items.type.L2EtcItemType;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.ActionType;
+import l2r.gameserver.model.items.type.ArmorType;
+import l2r.gameserver.model.items.type.EtcItemType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.model.multisell.PreparedListContainer;
 import l2r.gameserver.model.olympiad.OlympiadGameManager;
 import l2r.gameserver.model.olympiad.OlympiadGameTask;
@@ -2450,9 +2450,9 @@ public final class L2PcInstance extends L2Playable
 		
 		for (L2ItemInstance item : getInventory().getItems())
 		{
-			if ((item != null) && item.isEquipped() && ((item.getItemType() != L2EtcItemType.ARROW) && (item.getItemType() != L2EtcItemType.BOLT)))
+			if ((item != null) && item.isEquipped() && ((item.getItemType() != EtcItemType.ARROW) && (item.getItemType() != EtcItemType.BOLT)))
 			{
-				crystaltype = item.getItem().getCrystalType();
+				crystaltype = item.getItem().getCrystalType().getId();
 				if (crystaltype > expertiseLevel)
 				{
 					if (item.isWeapon() && (crystaltype > weaponPenalty))
@@ -3792,7 +3792,7 @@ public final class L2PcInstance extends L2Playable
 				return null;
 			}
 			// Sends message to client if requested
-			if (sendMessage && ((!isCastingNow() && (item.getItemType() == L2EtcItemType.HERB)) || (item.getItemType() != L2EtcItemType.HERB)))
+			if (sendMessage && ((!isCastingNow() && (item.getItemType() == EtcItemType.HERB)) || (item.getItemType() != EtcItemType.HERB)))
 			{
 				if (count > 1)
 				{
@@ -3828,7 +3828,7 @@ public final class L2PcInstance extends L2Playable
 				}
 			}
 			// Auto use herbs - autoloot
-			if (item.getItemType() == L2EtcItemType.HERB) // If item is herb dont add it to iv :]
+			if (item.getItemType() == EtcItemType.HERB) // If item is herb dont add it to iv :]
 			{
 				final IItemHandler handler = ItemHandler.getInstance().getHandler(item.getEtcItem());
 				if (handler == null)
@@ -4937,7 +4937,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void doAutoLoot(L2Attackable target, int itemId, long itemCount)
 	{
-		if (isInParty() && (ItemTable.getInstance().getTemplate(itemId).getItemType() != L2EtcItemType.HERB))
+		if (isInParty() && (ItemTable.getInstance().getTemplate(itemId).getItemType() != EtcItemType.HERB))
 		{
 			getParty().distributeItem(this, itemId, itemCount, false, target);
 		}
@@ -5076,7 +5076,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Auto use herbs - pick up
-		if (target.getItemType() == L2EtcItemType.HERB)
+		if (target.getItemType() == EtcItemType.HERB)
 		{
 			IItemHandler handler = ItemHandler.getInstance().getHandler(target.getEtcItem());
 			if (handler == null)
@@ -5101,7 +5101,7 @@ public final class L2PcInstance extends L2Playable
 		else
 		{
 			// if item is instance of L2ArmorType or L2WeaponType broadcast an "Attention" system message
-			if ((target.getItemType() instanceof L2ArmorType) || (target.getItemType() instanceof L2WeaponType))
+			if ((target.getItemType() instanceof ArmorType) || (target.getItemType() instanceof WeaponType))
 			{
 				if (target.getEnchantLevel() > 0)
 				{
@@ -5140,12 +5140,12 @@ public final class L2PcInstance extends L2Playable
 					final L2EtcItem etcItem = target.getEtcItem();
 					if (etcItem != null)
 					{
-						final L2EtcItemType itemType = etcItem.getItemType();
-						if ((weapon.getItemType() == L2WeaponType.BOW) && (itemType == L2EtcItemType.ARROW))
+						final EtcItemType itemType = etcItem.getItemType();
+						if ((weapon.getItemType() == WeaponType.BOW) && (itemType == EtcItemType.ARROW))
 						{
 							checkAndEquipArrows();
 						}
-						else if ((weapon.getItemType() == L2WeaponType.CROSSBOW) && (itemType == L2EtcItemType.BOLT))
+						else if ((weapon.getItemType() == WeaponType.CROSSBOW) && (itemType == EtcItemType.BOLT))
 						{
 							checkAndEquipBolts();
 						}
@@ -5534,14 +5534,14 @@ public final class L2PcInstance extends L2Playable
 		
 		if ((armor != null) && (legs != null))
 		{
-			if (((L2ArmorType) legs.getItemType() == L2ArmorType.HEAVY) && ((L2ArmorType) armor.getItemType() == L2ArmorType.HEAVY))
+			if (((ArmorType) legs.getItemType() == ArmorType.HEAVY) && ((ArmorType) armor.getItemType() == ArmorType.HEAVY))
 			{
 				return true;
 			}
 		}
 		if (armor != null)
 		{
-			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && ((L2ArmorType) armor.getItemType() == L2ArmorType.HEAVY)))
+			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && ((ArmorType) armor.getItemType() == ArmorType.HEAVY)))
 			{
 				return true;
 			}
@@ -5556,14 +5556,14 @@ public final class L2PcInstance extends L2Playable
 		
 		if ((armor != null) && (legs != null))
 		{
-			if (((L2ArmorType) legs.getItemType() == L2ArmorType.LIGHT) && ((L2ArmorType) armor.getItemType() == L2ArmorType.LIGHT))
+			if (((ArmorType) legs.getItemType() == ArmorType.LIGHT) && ((ArmorType) armor.getItemType() == ArmorType.LIGHT))
 			{
 				return true;
 			}
 		}
 		if (armor != null)
 		{
-			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && ((L2ArmorType) armor.getItemType() == L2ArmorType.LIGHT)))
+			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && ((ArmorType) armor.getItemType() == ArmorType.LIGHT)))
 			{
 				return true;
 			}
@@ -5578,14 +5578,14 @@ public final class L2PcInstance extends L2Playable
 		
 		if ((armor != null) && (legs != null))
 		{
-			if (((L2ArmorType) legs.getItemType() == L2ArmorType.MAGIC) && ((L2ArmorType) armor.getItemType() == L2ArmorType.MAGIC))
+			if (((ArmorType) legs.getItemType() == ArmorType.MAGIC) && ((ArmorType) armor.getItemType() == ArmorType.MAGIC))
 			{
 				return true;
 			}
 		}
 		if (armor != null)
 		{
-			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && ((L2ArmorType) armor.getItemType() == L2ArmorType.MAGIC)))
+			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && ((ArmorType) armor.getItemType() == ArmorType.MAGIC)))
 			{
 				return true;
 			}
@@ -7234,15 +7234,15 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if (weaponItem.getItemType() == L2WeaponType.DUAL)
+		if (weaponItem.getItemType() == WeaponType.DUAL)
 		{
 			return true;
 		}
-		else if (weaponItem.getItemType() == L2WeaponType.DUALFIST)
+		else if (weaponItem.getItemType() == WeaponType.DUALFIST)
 		{
 			return true;
 		}
-		else if (weaponItem.getItemType() == L2WeaponType.DUALDAGGER)
+		else if (weaponItem.getItemType() == WeaponType.DUALDAGGER)
 		{
 			return true;
 		}
@@ -10305,7 +10305,7 @@ public final class L2PcInstance extends L2Playable
 			{
 				if (magic)
 				{
-					if (item.getItem().getDefaultAction() == L2ActionType.spiritshot)
+					if (item.getItem().getDefaultAction() == ActionType.SPIRITSHOT)
 					{
 						handler = ItemHandler.getInstance().getHandler(item.getEtcItem());
 						if (handler != null)
@@ -10317,7 +10317,7 @@ public final class L2PcInstance extends L2Playable
 				
 				if (physical)
 				{
-					if (item.getItem().getDefaultAction() == L2ActionType.soulshot)
+					if (item.getItem().getDefaultAction() == ActionType.SOULSHOT)
 					{
 						handler = ItemHandler.getInstance().getHandler(item.getEtcItem());
 						if (handler != null)
@@ -10343,7 +10343,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		for (int itemId : _activeSoulShots)
 		{
-			if (ItemTable.getInstance().getTemplate(itemId).getCrystalType() == crystalType)
+			if (ItemTable.getInstance().getTemplate(itemId).getCrystalType().getId() == crystalType)
 			{
 				disableAutoShot(itemId);
 			}
