@@ -105,9 +105,7 @@ public final class L2NoblesseManagerInstance extends L2Npc
 		
 		if (command.startsWith("noblesse"))
 		{
-			
 			if (!Conditions.checkPlayerItemCount(player, ItemId, ItemAmount))
-			
 			{
 				return;
 			}
@@ -123,6 +121,7 @@ public final class L2NoblesseManagerInstance extends L2Npc
 				player.sendMessage("You are already noblesse.");
 				return;
 			}
+			
 			player.destroyItemByItemId("noblesse", ItemId, ItemAmount, player, true);
 			player.addItem("Tiara", 7694, 1, null, true);
 			player.setNoble(!player.isNoble());

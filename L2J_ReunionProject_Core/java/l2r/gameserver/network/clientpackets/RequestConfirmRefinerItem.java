@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.items.type.CrystalType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPutIntensiveResultForVariationMake;
 
@@ -69,7 +70,7 @@ public class RequestConfirmRefinerItem extends AbstractRefinePacket
 		}
 		
 		final int refinerItemId = refinerItem.getItem().getId();
-		final int grade = targetItem.getItem().getItemGrade();
+		final CrystalType grade = targetItem.getItem().getItemGrade();
 		final LifeStone ls = getLifeStone(refinerItemId);
 		final int gemStoneId = getGemStoneId(grade);
 		final int gemStoneCount = getGemStoneCount(grade, ls.getGrade());

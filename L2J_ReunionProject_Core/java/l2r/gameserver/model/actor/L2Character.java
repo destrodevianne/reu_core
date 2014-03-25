@@ -99,7 +99,7 @@ import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.model.options.OptionsSkillHolder;
 import l2r.gameserver.model.options.OptionsSkillType;
 import l2r.gameserver.model.quest.Quest;
@@ -859,7 +859,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			L2Weapon wpn = getActiveWeaponItem();
 			if (!wpn.isAttackWeapon() && !isGM())
 			{
-				if (wpn.getItemType() == L2WeaponType.FISHINGROD)
+				if (wpn.getItemType() == WeaponType.FISHINGROD)
 				{
 					sendPacket(SystemMessageId.CANNOT_ATTACK_WITH_FISHING_POLE);
 				}
@@ -927,7 +927,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		// BOW and CROSSBOW checks
 		if ((weaponItem != null) && !isTransformed())
 		{
-			if (weaponItem.getItemType() == L2WeaponType.BOW)
+			if (weaponItem.getItemType() == WeaponType.BOW)
 			{
 				// Check for arrows and MP
 				if (isPlayer())
@@ -989,7 +989,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					}
 				}
 			}
-			if (weaponItem.getItemType() == L2WeaponType.CROSSBOW)
+			if (weaponItem.getItemType() == WeaponType.CROSSBOW)
 			{
 				// Check for bolts
 				if (isPlayer())
@@ -1080,24 +1080,13 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// Verify if soulshots are charged.
-		boolean wasSSCharged = isChargedShot(ShotType.SOULSHOTS);
-		
+		final boolean wasSSCharged = isChargedShot(ShotType.SOULSHOTS);
 		// Get the Attack Speed of the L2Character (delay (in milliseconds) before next attack)
-		int timeAtk = calculateTimeBetweenAttacks(target, weaponItem);
-		
+		final int timeAtk = calculateTimeBetweenAttacks(target, weaponItem);
 		// the hit is calculated to happen halfway to the animation - might need further tuning e.g. in bow case
-		int timeToHit = timeAtk / 2;
-		_attackEndTime = GameTimeController.getInstance().getGameTicks();
-		_attackEndTime += (timeAtk / GameTimeController.MILLIS_IN_TICK);
-		_attackEndTime -= 1;
-		
-		int ssGrade = 0;
-		
-		if (weaponItem != null)
-		{
-			ssGrade = weaponItem.getItemGradeSPlus();
-		}
-		
+		final int timeToHit = timeAtk / 2;
+		_attackEndTime = (GameTimeController.getInstance().getGameTicks() + (timeAtk / GameTimeController.MILLIS_IN_TICK)) - 1;
+		final int ssGrade = (weaponItem != null) ? weaponItem.getItemGradeSPlus().getId() : 0;
 		// Create a Server->Client packet Attack
 		Attack attack = new Attack(this, target, wasSSCharged, ssGrade);
 		
@@ -1115,15 +1104,15 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			hitted = doAttackHitSimple(attack, target, timeToHit);
 		}
-		else if (weaponItem.getItemType() == L2WeaponType.BOW)
+		else if (weaponItem.getItemType() == WeaponType.BOW)
 		{
 			hitted = doAttackHitByBow(attack, target, timeAtk, reuse);
 		}
-		else if (weaponItem.getItemType() == L2WeaponType.CROSSBOW)
+		else if (weaponItem.getItemType() == WeaponType.CROSSBOW)
 		{
 			hitted = doAttackHitByCrossBow(attack, target, timeAtk, reuse);
 		}
-		else if (weaponItem.getItemType() == L2WeaponType.POLE)
+		else if (weaponItem.getItemType() == WeaponType.POLE)
 		{
 			hitted = doAttackHitByPole(attack, target, timeToHit);
 		}
@@ -5485,7 +5474,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			if (!miss && (damage > 0))
 			{
 				L2Weapon weapon = getActiveWeaponItem();
-				boolean isBow = ((weapon != null) && ((weapon.getItemType() == L2WeaponType.BOW) || (weapon.getItemType() == L2WeaponType.CROSSBOW)));
+				boolean isBow = ((weapon != null) && ((weapon.getItemType() == WeaponType.BOW) || (weapon.getItemType() == WeaponType.CROSSBOW)));
 				int reflectedDamage = 0;
 				
 				if (!isBow && !target.isInvul()) // Do not reflect if weapon is of type bow or target is invunlerable

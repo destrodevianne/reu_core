@@ -20,7 +20,6 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExPutItemResultForVariationCancel;
@@ -77,7 +76,7 @@ public final class RequestConfirmCancelItem extends L2GameClientPacket
 		int price = 0;
 		switch (item.getItem().getCrystalType())
 		{
-			case L2Item.CRYSTAL_C:
+			case C:
 				if (item.getCrystalCount() < 1720)
 				{
 					price = 95000;
@@ -91,7 +90,7 @@ public final class RequestConfirmCancelItem extends L2GameClientPacket
 					price = 210000;
 				}
 				break;
-			case L2Item.CRYSTAL_B:
+			case B:
 				if (item.getCrystalCount() < 1746)
 				{
 					price = 240000;
@@ -101,7 +100,7 @@ public final class RequestConfirmCancelItem extends L2GameClientPacket
 					price = 270000;
 				}
 				break;
-			case L2Item.CRYSTAL_A:
+			case A:
 				if (item.getCrystalCount() < 2160)
 				{
 					price = 330000;
@@ -115,11 +114,11 @@ public final class RequestConfirmCancelItem extends L2GameClientPacket
 					price = 420000;
 				}
 				break;
-			case L2Item.CRYSTAL_S:
+			case S:
 				price = 480000;
 				break;
-			case L2Item.CRYSTAL_S80:
-			case L2Item.CRYSTAL_S84:
+			case S80:
+			case S84:
 				price = 920000;
 				break;
 			// TODO: S84 TOP price 3.2M

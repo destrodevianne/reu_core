@@ -24,8 +24,8 @@ import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.PcInventory;
-import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.items.type.CrystalType;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -119,7 +119,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 			return;
 		}
 		
-		if (!itemToRemove.getItem().isCrystallizable() || (itemToRemove.getItem().getCrystalCount() <= 0) || (itemToRemove.getItem().getCrystalType() == L2Item.CRYSTAL_NONE))
+		if (!itemToRemove.getItem().isCrystallizable() || (itemToRemove.getItem().getCrystalCount() <= 0) || (itemToRemove.getItem().getCrystalType() == CrystalType.NONE))
 		{
 			_log.warn(activeChar.getName() + " (" + activeChar.getObjectId() + ") tried to crystallize " + itemToRemove.getItem().getId());
 			return;
@@ -136,7 +136,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 		
 		switch (itemToRemove.getItem().getItemGradeSPlus())
 		{
-			case L2Item.CRYSTAL_C:
+			case C:
 			{
 				if (skillLevel <= 1)
 				{
@@ -144,7 +144,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 				}
 				break;
 			}
-			case L2Item.CRYSTAL_B:
+			case B:
 			{
 				if (skillLevel <= 2)
 				{
@@ -152,7 +152,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 				}
 				break;
 			}
-			case L2Item.CRYSTAL_A:
+			case A:
 			{
 				if (skillLevel <= 3)
 				{
@@ -160,7 +160,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 				}
 				break;
 			}
-			case L2Item.CRYSTAL_S:
+			case S:
 			{
 				if (skillLevel <= 4)
 				{

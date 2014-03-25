@@ -22,7 +22,7 @@ import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2AirShipInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExMoveToLocationInAirShip;
 import l2r.gameserver.network.serverpackets.StopMoveInVehicle;
@@ -75,7 +75,7 @@ public class MoveToLocationInAirShip extends L2GameClientPacket
 			return;
 		}
 		
-		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == L2WeaponType.BOW))
+		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == WeaponType.BOW))
 		{
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;

@@ -21,8 +21,7 @@ package l2r.gameserver.model.items.type;
 /**
  * Description of EtcItem Type
  */
-
-public enum L2EtcItemType implements L2ItemType
+public enum EtcItemType implements ItemType
 {
 	NONE(1, "none"),
 	ARROW(2, "arrow"),
@@ -61,23 +60,22 @@ public enum L2EtcItemType implements L2ItemType
 	SHOT(33, "Shot"),
 	HERB(34, "Herb");
 	
-	final int _id;
-	final String _name;
+	private final int _id;
+	private final String _name;
 	
 	/**
-	 * Constructor of the L2EtcItemType.
+	 * Constructor of the EtcItemType.
 	 * @param id : int designating the ID of the EtcItemType
 	 * @param name : String designating the name of the EtcItemType
 	 */
-	L2EtcItemType(int id, String name)
+	private EtcItemType(int id, String name)
 	{
 		_id = id;
 		_name = name;
 	}
 	
 	/**
-	 * Returns the ID of the item after applying the mask.
-	 * @return int : ID of the item
+	 * @return the ID of the item after applying the mask.
 	 */
 	@Override
 	public int mask()
@@ -86,11 +84,19 @@ public enum L2EtcItemType implements L2ItemType
 	}
 	
 	/**
-	 * Returns the name of the EtcItemType
-	 * @return String
+	 * Gets the EtcItem type ID.
+	 * @return the EtcItem type ID
+	 */
+	public int getId()
+	{
+		return _id;
+	}
+	
+	/**
+	 * @return the name of the EtcItemType
 	 */
 	@Override
-	public String toString()
+	public String getName()
 	{
 		return _name;
 	}

@@ -26,7 +26,7 @@ import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.instancemanager.ItemsOnGroundManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
+import l2r.gameserver.model.items.type.EtcItemType;
 
 public class ItemsAutoDestroy
 {
@@ -84,7 +84,7 @@ public class ItemsAutoDestroy
 						}
 					}
 				}
-				else if (item.getItemType() == L2EtcItemType.HERB)
+				else if (item.getItemType() == EtcItemType.HERB)
 				{
 					if ((curtime - item.getDropTime()) > Config.HERB_AUTO_DESTROY_TIME)
 					{

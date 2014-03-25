@@ -22,11 +22,16 @@ import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.quest.Quest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author xban1x
  */
 public final class OnKillNotifyTask implements Runnable
 {
+	private static final Logger _log = LoggerFactory.getLogger(OnKillNotifyTask.class);
+	
 	private final L2Attackable _attackable;
 	private final Quest _quest;
 	private final L2PcInstance _killer;
@@ -45,7 +50,37 @@ public final class OnKillNotifyTask implements Runnable
 	{
 		if ((_quest != null) && (_attackable != null) && (_killer != null))
 		{
-			_quest.notifyKill(_attackable, _killer, _isSummon);
+			try
+			{
+				_quest.notifyKill(_attackable, _killer, _isSummon);
+			}
+			catch (Exception e)
+			{
+				if (_quest == null)
+				{
+					_log.error("Quest getName() is NULL");
+				}
+				else
+				{
+					_log.error("Quest getQuest() name is: " + _quest.getName());
+				}
+				
+				if (_attackable == null)
+				{
+					_log.error("Quest _attackable is NULL");
+				}
+				else
+				{
+					_log.error("Quest _attackable name is: " + _attackable.getName());
+				}
+				
+				if (_killer == null)
+				{
+					_log.error("Quest _killer is NULL");
+				}
+				
+				_log.error("", e);
+			}
 		}
 	}
 }

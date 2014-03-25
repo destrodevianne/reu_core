@@ -49,7 +49,7 @@ import l2r.gameserver.model.itemcontainer.PetInventory;
 import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2ActionType;
+import l2r.gameserver.model.items.type.ActionType;
 import l2r.gameserver.model.olympiad.OlympiadGameManager;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
@@ -1195,7 +1195,7 @@ public abstract class L2Summon extends L2Playable
 			{
 				if (magic)
 				{
-					if (item.getItem().getDefaultAction() == L2ActionType.summon_spiritshot)
+					if (item.getItem().getDefaultAction() == ActionType.SUMMON_SPIRITSHOT)
 					{
 						handler = ItemHandler.getInstance().getHandler(item.getEtcItem());
 						if (handler != null)
@@ -1207,7 +1207,7 @@ public abstract class L2Summon extends L2Playable
 				
 				if (physical)
 				{
-					if (item.getItem().getDefaultAction() == L2ActionType.summon_soulshot)
+					if (item.getItem().getDefaultAction() == ActionType.SUMMON_SOULSHOT)
 					{
 						handler = ItemHandler.getInstance().getHandler(item.getEtcItem());
 						if (handler != null)

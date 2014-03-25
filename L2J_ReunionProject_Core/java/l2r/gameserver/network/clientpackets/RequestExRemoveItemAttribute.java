@@ -20,7 +20,6 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -131,7 +130,7 @@ public class RequestExRemoveItemAttribute extends L2GameClientPacket
 	{
 		switch (item.getItem().getCrystalType())
 		{
-			case L2Item.CRYSTAL_S:
+			case S:
 				if (item.getItem() instanceof L2Weapon)
 				{
 					_price = 50000;
@@ -141,7 +140,7 @@ public class RequestExRemoveItemAttribute extends L2GameClientPacket
 					_price = 40000;
 				}
 				break;
-			case L2Item.CRYSTAL_S80:
+			case S80:
 				if (item.getItem() instanceof L2Weapon)
 				{
 					_price = 100000;
@@ -151,7 +150,7 @@ public class RequestExRemoveItemAttribute extends L2GameClientPacket
 					_price = 80000;
 				}
 				break;
-			case L2Item.CRYSTAL_S84:
+			case S84:
 				if (item.getItem() instanceof L2Weapon)
 				{
 					_price = 200000;

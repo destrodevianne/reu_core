@@ -34,8 +34,8 @@ import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
-import l2r.gameserver.model.items.type.L2ArmorType;
-import l2r.gameserver.model.items.type.L2WeaponType;
+import l2r.gameserver.model.items.type.ArmorType;
+import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ShopPreviewInfo;
@@ -195,11 +195,11 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			{
 				if (_activeChar.getRace().ordinal() == 5)
 				{
-					if (template.getItemType() == L2WeaponType.NONE)
+					if (template.getItemType() == WeaponType.NONE)
 					{
 						continue;
 					}
-					else if ((template.getItemType() == L2WeaponType.RAPIER) || (template.getItemType() == L2WeaponType.CROSSBOW) || (template.getItemType() == L2WeaponType.ANCIENTSWORD))
+					else if ((template.getItemType() == WeaponType.RAPIER) || (template.getItemType() == WeaponType.CROSSBOW) || (template.getItemType() == WeaponType.ANCIENTSWORD))
 					{
 						continue;
 					}
@@ -209,7 +209,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			{
 				if (_activeChar.getRace().ordinal() == 5)
 				{
-					if ((template.getItemType() == L2ArmorType.HEAVY) || (template.getItemType() == L2ArmorType.MAGIC))
+					if ((template.getItemType() == ArmorType.HEAVY) || (template.getItemType() == ArmorType.MAGIC))
 					{
 						continue;
 					}

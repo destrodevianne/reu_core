@@ -23,7 +23,7 @@ import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2EtcItemType;
+import l2r.gameserver.model.items.type.EtcItemType;
 
 public class PetInventory extends Inventory
 {
@@ -70,7 +70,7 @@ public class PetInventory extends Inventory
 	{
 		int slots = 0;
 		
-		if (!(item.isStackable() && (getItemByItemId(item.getId()) != null)) && (item.getItemType() != L2EtcItemType.HERB))
+		if (!(item.isStackable() && (getItemByItemId(item.getId()) != null)) && (item.getItemType() != EtcItemType.HERB))
 		{
 			slots++;
 		}

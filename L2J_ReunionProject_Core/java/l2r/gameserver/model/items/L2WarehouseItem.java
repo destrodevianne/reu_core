@@ -19,7 +19,8 @@
 package l2r.gameserver.model.items;
 
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.L2ItemType;
+import l2r.gameserver.model.items.type.CrystalType;
+import l2r.gameserver.model.items.type.ItemType;
 
 /**
  * This class contains L2ItemInstance<BR>
@@ -39,7 +40,7 @@ public class L2WarehouseItem
 	private final int _owner;
 	private final int _locationSlot;
 	private final int _enchant;
-	private final int _grade;
+	private final CrystalType _grade;
 	private boolean _isAugmented;
 	private int _augmentationId;
 	private final int _customType1;
@@ -154,7 +155,7 @@ public class L2WarehouseItem
 	/**
 	 * @return the second type.
 	 */
-	public final L2ItemType getItemType()
+	public final ItemType getItemType()
 	{
 		return _item.getItemType();
 	}
@@ -186,7 +187,7 @@ public class L2WarehouseItem
 	/**
 	 * @return the item grade
 	 */
-	public final int getItemGrade()
+	public final CrystalType getItemGrade()
 	{
 		return _grade;
 	}
