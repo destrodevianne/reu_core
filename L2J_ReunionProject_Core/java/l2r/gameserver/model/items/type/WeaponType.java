@@ -94,7 +94,7 @@ public enum WeaponType implements ItemType
 		}
 		for (WeaponType type : values())
 		{
-			if (type.toString().equalsIgnoreCase(name))
+			if (type.getName().equalsIgnoreCase(name))
 			{
 				return type;
 			}

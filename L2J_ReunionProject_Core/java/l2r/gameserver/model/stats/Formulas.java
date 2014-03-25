@@ -83,7 +83,7 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
-import gr.reunion.configsEngine.BalanceConfigs;
+import gr.reunion.configsEngine.FormulasConfigs;
 
 /**
  * Global calculations.
@@ -936,20 +936,20 @@ public final class Formulas
 		{
 			if (((L2PcInstance) attacker).getClassId().isMage())
 			{
-				damage = damage * BalanceConfigs.ALT_MAGES_PHYSICAL_DAMAGE_MULTI;
+				damage = damage * FormulasConfigs.ALT_MAGES_PHYSICAL_DAMAGE_MULTI;
 			}
 			else
 			{
-				damage = damage * BalanceConfigs.ALT_FIGHTERS_PHYSICAL_DAMAGE_MULTI;
+				damage = damage * FormulasConfigs.ALT_FIGHTERS_PHYSICAL_DAMAGE_MULTI;
 			}
 		}
 		else if (attacker.isSummon())
 		{
-			damage = damage * BalanceConfigs.ALT_PETS_PHYSICAL_DAMAGE_MULTI;
+			damage = damage * FormulasConfigs.ALT_PETS_PHYSICAL_DAMAGE_MULTI;
 		}
 		else if (attacker.isNpc())
 		{
-			damage = damage * BalanceConfigs.ALT_NPC_PHYSICAL_DAMAGE_MULTI;
+			damage = damage * FormulasConfigs.ALT_NPC_PHYSICAL_DAMAGE_MULTI;
 		}
 		
 		return damage;
@@ -1071,20 +1071,20 @@ public final class Formulas
 		{
 			if (((L2PcInstance) attacker).getClassId().isMage())
 			{
-				damage = damage * BalanceConfigs.ALT_MAGES_MAGICAL_DAMAGE_MULTI;
+				damage = damage * FormulasConfigs.ALT_MAGES_MAGICAL_DAMAGE_MULTI;
 			}
 			else
 			{
-				damage = damage * BalanceConfigs.ALT_FIGHTERS_MAGICAL_DAMAGE_MULTI;
+				damage = damage * FormulasConfigs.ALT_FIGHTERS_MAGICAL_DAMAGE_MULTI;
 			}
 		}
 		else if (attacker.isSummon())
 		{
-			damage = damage * BalanceConfigs.ALT_PETS_MAGICAL_DAMAGE_MULTI;
+			damage = damage * FormulasConfigs.ALT_PETS_MAGICAL_DAMAGE_MULTI;
 		}
 		else if (attacker.isNpc())
 		{
-			damage = damage * BalanceConfigs.ALT_NPC_MAGICAL_DAMAGE_MULTI;
+			damage = damage * FormulasConfigs.ALT_NPC_MAGICAL_DAMAGE_MULTI;
 		}
 		
 		return damage;
@@ -2476,10 +2476,14 @@ public final class Formulas
 	{
 		// Lvl Bonus Modifier.
 		rate *= eff.getSkill().getMagicLevel() > 0 ? 1 + ((cancelMagicLvl - eff.getSkill().getMagicLevel()) / 100.) : 1;
-		
-		// TODO: this is custom
-		rate -= 8;
-		
+		if ((FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE > 0) && (rate > FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE))
+		{
+			rate -= FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE;
+			if (rate < 1)
+			{
+				return false;
+			}
+		}
 		return Rnd.get(100) < Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 	}
 	
