@@ -30,6 +30,7 @@ import l2r.gameserver.model.stats.Calculator;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.MoveType;
 import l2r.gameserver.model.stats.Stats;
+import gr.reunion.configsEngine.FormulasConfigs;
 
 public class CharStat
 {
@@ -193,7 +194,7 @@ public class CharStat
 		
 		int criticalHit = (int) calcStat(Stats.CRITICAL_RATE, _activeChar.getTemplate().getBaseCritRate(), target, skill);
 		// Set a cap of Critical Hit at 500
-		return Math.min(criticalHit, Config.MAX_PCRIT_RATE);
+		return Math.min(criticalHit, FormulasConfigs.MAX_PCRIT_RATE);
 	}
 	
 	/**
@@ -220,9 +221,9 @@ public class CharStat
 		}
 		
 		int val = (int) Math.round(calcStat(Stats.EVASION_RATE, 0, target, null));
-		if ((val > Config.MAX_EVASION) && !_activeChar.canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		if ((val > FormulasConfigs.MAX_EVASION) && !_activeChar.canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
-			val = Config.MAX_EVASION;
+			val = FormulasConfigs.MAX_EVASION;
 		}
 		return val;
 	}
@@ -382,9 +383,9 @@ public class CharStat
 			bonusSpdAtk = Config.L2JMOD_CHAMPION_SPD_ATK;
 		}
 		double val = calcStat(Stats.MAGIC_ATTACK_SPEED, _activeChar.getTemplate().getBaseMAtkSpd() * bonusSpdAtk);
-		if ((val > Config.MAX_MATK_SPEED) && !_activeChar.canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		if ((val > FormulasConfigs.MAX_MATK_SPEED) && !_activeChar.canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
-			val = Config.MAX_MATK_SPEED;
+			val = FormulasConfigs.MAX_MATK_SPEED;
 		}
 		return (int) val;
 	}
@@ -403,7 +404,7 @@ public class CharStat
 		
 		double mrate = calcStat(Stats.MCRITICAL_RATE, 1, target, skill) * 10;
 		// Set a cap of Magical Critical Hit at 200
-		return (int) Math.min(mrate, Config.MAX_MCRIT_RATE);
+		return (int) Math.min(mrate, FormulasConfigs.MAX_MCRIT_RATE);
 	}
 	
 	/**

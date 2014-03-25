@@ -724,7 +724,6 @@ public final class L2ScriptEngineManager
 				{
 					_log.warn(e.getMessage(), e);
 				}
-				
 			}
 		}
 	}
@@ -835,5 +834,4 @@ public final class L2ScriptEngineManager
 			throw new IllegalArgumentException("Argument must be an file containing a list of scripts to be loaded");
 		}
 	}
-	
 }

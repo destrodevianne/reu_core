@@ -97,8 +97,7 @@ public class QuestManager extends ScriptManager<Quest>
 		_scripts.clear();
 		
 		L2ScriptEngineManager.getInstance().executeScriptList();
-		getInstance().report();
-		QuestManager.getInstance().report();
+		report();
 	}
 	
 	/**
@@ -215,9 +214,15 @@ public class QuestManager extends ScriptManager<Quest>
 	}
 	
 	@Override
-	public Iterable<Quest> getAllManagedScripts()
+	public Iterable<Quest> getAllManagedQuests()
 	{
 		return _quests.values();
+	}
+	
+	@Override
+	public Iterable<Quest> getAllManagedScripts()
+	{
+		return _scripts.values();
 	}
 	
 	@Override

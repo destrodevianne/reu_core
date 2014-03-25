@@ -24,6 +24,8 @@ package l2r.gameserver.scripting;
  */
 public abstract class ScriptManager<S extends ManagedScript>
 {
+	public abstract Iterable<S> getAllManagedQuests();
+	
 	public abstract Iterable<S> getAllManagedScripts();
 	
 	public boolean reload(S ms)

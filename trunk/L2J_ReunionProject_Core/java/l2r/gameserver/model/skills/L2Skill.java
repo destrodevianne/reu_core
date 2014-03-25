@@ -67,6 +67,7 @@ import l2r.util.Rnd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gr.reunion.configsEngine.FormulasConfigs;
 import gr.reunion.interf.ReunionEvents;
 
 public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
@@ -433,8 +434,8 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		_pvePower = set.getFloat("pvePower", (float) getPower());
 		_magicLevel = set.getInteger("magicLvl", 0);
 		_lvlBonusRate = set.getInteger("lvlBonusRate", 0);
-		_minChance = set.getInteger("minChance", Config.MIN_ABNORMAL_STATE_SUCCESS_RATE);
-		_maxChance = set.getInteger("maxChance", Config.MAX_ABNORMAL_STATE_SUCCESS_RATE);
+		_minChance = set.getInteger("minChance", FormulasConfigs.MIN_ABNORMAL_STATE_SUCCESS_RATE);
+		_maxChance = set.getInteger("maxChance", FormulasConfigs.MAX_ABNORMAL_STATE_SUCCESS_RATE);
 		_ignoreShield = set.getBool("ignoreShld", false);
 		_skillType = set.getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY);
 		_effectType = set.getEnum("effectType", L2SkillType.class, null);

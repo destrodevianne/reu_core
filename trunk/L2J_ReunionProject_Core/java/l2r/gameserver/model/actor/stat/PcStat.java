@@ -48,6 +48,7 @@ import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerLevelListener;
 import l2r.gameserver.util.Util;
 import gr.reunion.configsEngine.CustomServerConfigs;
+import gr.reunion.configsEngine.FormulasConfigs;
 
 public class PcStat extends PlayableStat
 {
@@ -635,9 +636,9 @@ public class PcStat extends PlayableStat
 		int val = super.getRunSpeed() + Config.RUN_SPD_BOOST;
 		
 		// Apply max run speed cap.
-		if ((val > Config.MAX_RUN_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		if ((val > FormulasConfigs.MAX_RUN_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
-			return Config.MAX_RUN_SPEED;
+			return FormulasConfigs.MAX_RUN_SPEED;
 		}
 		
 		// Check for mount penalties
@@ -664,9 +665,9 @@ public class PcStat extends PlayableStat
 		int val = super.getWalkSpeed() + Config.RUN_SPD_BOOST;
 		
 		// Apply max run speed cap.
-		if ((val > Config.MAX_RUN_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		if ((val > FormulasConfigs.MAX_RUN_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
-			return Config.MAX_RUN_SPEED;
+			return FormulasConfigs.MAX_RUN_SPEED;
 		}
 		
 		if (getActiveChar().isMounted())
@@ -691,9 +692,9 @@ public class PcStat extends PlayableStat
 	{
 		int val = super.getPAtkSpd();
 		
-		if ((val > Config.MAX_PATK_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		if ((val > FormulasConfigs.MAX_PATK_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
-			return Config.MAX_PATK_SPEED;
+			return FormulasConfigs.MAX_PATK_SPEED;
 		}
 		
 		return val;
@@ -704,9 +705,9 @@ public class PcStat extends PlayableStat
 	{
 		int val = super.getEvasionRate(target);
 		
-		if ((val > Config.MAX_EVASION) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		if ((val > FormulasConfigs.MAX_EVASION) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
-			return Config.MAX_EVASION;
+			return FormulasConfigs.MAX_EVASION;
 		}
 		
 		return val;
@@ -717,9 +718,9 @@ public class PcStat extends PlayableStat
 	{
 		int val = super.getMAtkSpd();
 		
-		if ((val > Config.MAX_MATK_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
+		if ((val > FormulasConfigs.MAX_MATK_SPEED) && !getActiveChar().canOverrideCond(PcCondOverride.MAX_STATS_VALUE))
 		{
-			return Config.MAX_MATK_SPEED;
+			return FormulasConfigs.MAX_MATK_SPEED;
 		}
 		
 		return val;
