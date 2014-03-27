@@ -75,8 +75,6 @@ public class QuestTimer
 					{
 						_log.error("Quest getPlayer() is NULL");
 					}
-					
-					_log.error("", e);
 				}
 			}
 			catch (Exception e)

@@ -72,14 +72,17 @@ public final class OnKillNotifyTask implements Runnable
 				else
 				{
 					_log.error("Quest _attackable name is: " + _attackable.getName());
+					_log.error("Quest _attackable Id is: " + _attackable.getId());
 				}
 				
 				if (_killer == null)
 				{
 					_log.error("Quest _killer is NULL");
 				}
-				
-				_log.error("", e);
+				else
+				{
+					_log.error("Quest killer is: " + _killer.getName());
+				}
 			}
 		}
 	}
