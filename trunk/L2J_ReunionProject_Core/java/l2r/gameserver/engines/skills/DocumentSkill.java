@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.List;
 
 import javolution.util.FastList;
+import l2r.Config;
 import l2r.gameserver.datatables.EnchantSkillGroupsData;
 import l2r.gameserver.engines.DocumentBase;
 import l2r.gameserver.model.StatsSet;
@@ -150,6 +151,12 @@ public class DocumentSkill extends DocumentBase
 		String skillName = attrs.getNamedItem("name").getNodeValue();
 		String levels = attrs.getNamedItem("levels").getNodeValue();
 		int lastLvl = Integer.parseInt(levels);
+		
+		if (Config.DEBUG)
+		{
+			_log.info("Parsing Skill with Id: " + String.valueOf(skillId));
+		}
+		
 		if (attrs.getNamedItem("enchantGroup1") != null)
 		{
 			enchantLevels1 = EnchantSkillGroupsData.getInstance().addNewRouteForSkill(skillId, lastLvl, 1, Integer.parseInt(attrs.getNamedItem("enchantGroup1").getNodeValue()));

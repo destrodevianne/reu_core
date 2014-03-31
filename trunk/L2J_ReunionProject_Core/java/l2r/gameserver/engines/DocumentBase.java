@@ -110,6 +110,7 @@ import l2r.gameserver.model.conditions.ConditionTargetUsesWeaponKind;
 import l2r.gameserver.model.conditions.ConditionTargetWeight;
 import l2r.gameserver.model.conditions.ConditionUsingItemType;
 import l2r.gameserver.model.conditions.ConditionUsingSkill;
+import l2r.gameserver.model.conditions.ConditionUsingSlotType;
 import l2r.gameserver.model.conditions.ConditionWithSkill;
 import l2r.gameserver.model.effects.AbnormalEffect;
 import l2r.gameserver.model.effects.EffectTemplate;
@@ -1074,7 +1075,7 @@ public abstract class DocumentBase
 					String item = st.nextToken().trim();
 					for (WeaponType wt : WeaponType.values())
 					{
-						if (wt.toString().equals(item))
+						if (wt.name().equals(item))
 						{
 							mask |= wt.mask();
 							break;
@@ -1082,7 +1083,7 @@ public abstract class DocumentBase
 					}
 					for (ArmorType at : ArmorType.values())
 					{
-						if (at.toString().equals(item))
+						if (at.name().equals(item))
 						{
 							mask |= at.mask();
 							break;
@@ -1157,14 +1158,20 @@ public abstract class DocumentBase
 					{
 						int old = mask;
 						String item = st.nextToken().trim();
-						if (ItemTable._weaponTypes.containsKey(item))
+						for (WeaponType wt : WeaponType.values())
 						{
-							mask |= ItemTable._weaponTypes.get(item).mask();
+							if (wt.name().equals(item))
+							{
+								mask |= wt.mask();
+							}
 						}
 						
-						if (ItemTable._armorTypes.containsKey(item))
+						for (ArmorType at : ArmorType.values())
 						{
-							mask |= ItemTable._armorTypes.get(item).mask();
+							if (at.name().equals(item))
+							{
+								mask |= at.mask();
+							}
 						}
 						
 						if (old == mask)
@@ -1173,6 +1180,27 @@ public abstract class DocumentBase
 						}
 					}
 					cond = joinAnd(cond, new ConditionUsingItemType(mask));
+					break;
+				}
+				case "slot":
+				{
+					int mask = 0;
+					StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
+					while (st.hasMoreTokens())
+					{
+						int old = mask;
+						String item = st.nextToken().trim();
+						if (ItemTable._slots.containsKey(item))
+						{
+							mask |= ItemTable._slots.get(item);
+						}
+						
+						if (old == mask)
+						{
+							_log.info("[parseUsingCondition=\"slot\"] Unknown item slot name: " + item);
+						}
+					}
+					cond = joinAnd(cond, new ConditionUsingSlotType(mask));
 					break;
 				}
 				case "skill":

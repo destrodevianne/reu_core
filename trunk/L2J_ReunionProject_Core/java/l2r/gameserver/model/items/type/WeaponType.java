@@ -18,49 +18,38 @@
  */
 package l2r.gameserver.model.items.type;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- * @author mkizub <BR>
- *         Description of Weapon Type
+ * Weapon Type enumerated.
+ * @author mkizub
  */
 public enum WeaponType implements ItemType
 {
-	SWORD("Sword"),
-	BLUNT("Blunt"),
-	DAGGER("Dagger"),
-	BOW("Bow"),
-	POLE("Pole"),
-	NONE("None"),
-	DUAL("Dual Sword"),
-	ETC("Etc"),
-	FIST("Fist"),
-	DUALFIST("Dual Fist"),
-	FISHINGROD("Rod"),
-	RAPIER("Rapier"),
-	ANCIENTSWORD("Ancient"),
-	CROSSBOW("Crossbow"),
-	FLAG("Flag"),
-	OWNTHING("Ownthing"),
-	DUALDAGGER("Dual Dagger"),
+	SWORD,
+	BLUNT,
+	DAGGER,
+	BOW,
+	POLE,
+	NONE,
+	DUAL,
+	ETC,
+	FIST,
+	DUALFIST,
+	FISHINGROD,
+	RAPIER,
+	ANCIENTSWORD,
+	CROSSBOW,
+	FLAG,
+	OWNTHING,
+	DUALDAGGER;
 	
-	// L2J CUSTOM, BACKWARD COMPATIBILITY
-	BIGBLUNT("Big Blunt"),
-	BIGSWORD("Big Sword");
-	
-	private static final Logger _log = LoggerFactory.getLogger(WeaponType.class);
 	private final int _mask;
-	private final String _name;
 	
 	/**
 	 * Constructor of the L2WeaponType.
-	 * @param name : String designating the name of the WeaponType
 	 */
-	private WeaponType(String name)
+	private WeaponType()
 	{
 		_mask = 1 << ordinal();
-		_name = name;
 	}
 	
 	/**
@@ -71,35 +60,5 @@ public enum WeaponType implements ItemType
 	public int mask()
 	{
 		return _mask;
-	}
-	
-	/**
-	 * @return the name of the WeaponType
-	 */
-	@Override
-	public String getName()
-	{
-		return _name;
-	}
-	
-	public static WeaponType findByName(String name)
-	{
-		if (name.equalsIgnoreCase("DUAL"))
-		{
-			name = "Dual Sword";
-		}
-		else if (name.equalsIgnoreCase("DUALFIST"))
-		{
-			name = "Dual Fist";
-		}
-		for (WeaponType type : values())
-		{
-			if (type.getName().equalsIgnoreCase(name))
-			{
-				return type;
-			}
-		}
-		_log.warn(WeaponType.class.getSimpleName() + ": Requested unexistent enum member: " + name, new IllegalStateException());
-		return FIST;
 	}
 }
