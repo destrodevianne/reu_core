@@ -1737,8 +1737,8 @@ public final class Formulas
 			final StatsSet set = new StatsSet();
 			set.set("baseMod", baseMod);
 			set.set("resMod", resMod);
-			set.set("mAtkMod", mAtkMod);
 			set.set("lvlBonusMod", lvlBonusMod);
+			set.set("elementMod", elementMod);
 			set.set("mAtkMod", mAtkMod);
 			set.set("rate", rate);
 			set.set("finalRate", finalRate);
@@ -1769,44 +1769,10 @@ public final class Formulas
 			return false;
 		}
 		
-		final double activateRate = skill.getPower();
-		if ((activateRate == -1) || (skill.getBasicProperty() == BaseStats.NONE))
-		{
-			return true;
-		}
-		
-		int magicLevel = skill.getMagicLevel();
-		if (magicLevel <= -1)
-		{
-			magicLevel = target.getLevel() + 3;
-		}
-		
-		int targetBaseStat = 0;
-		switch (skill.getBasicProperty())
-		{
-			case STR:
-				targetBaseStat = target.getSTR();
-				break;
-			case DEX:
-				targetBaseStat = target.getDEX();
-				break;
-			case CON:
-				targetBaseStat = target.getCON();
-				break;
-			case INT:
-				targetBaseStat = target.getINT();
-				break;
-			case MEN:
-				targetBaseStat = target.getMEN();
-				break;
-			case WIT:
-				targetBaseStat = target.getWIT();
-				break;
-		}
-		
 		// Calculate BaseRate.
-		final double baseMod = ((((((magicLevel - target.getLevel()) + 3) * skill.getLvlBonusRate()) + activateRate) + 30.0) - targetBaseStat);
-		double rate = baseMod;
+		double baseRate = skill.getPower();
+		double statMod = skill.getBasicProperty().calcBonus(target);
+		double rate = (baseRate / statMod);
 		
 		// Resists.
 		double vuln = calcSkillTraitVulnerability(0, target, skill);
@@ -1845,10 +1811,10 @@ public final class Formulas
 		if (attacker.isDebug())
 		{
 			final StatsSet set = new StatsSet();
-			set.set("baseMod", baseMod);
+			set.set("baseRate", baseRate);
 			set.set("resMod", resMod);
-			set.set("mAtkMod", mAtkMod);
 			set.set("lvlBonusMod", lvlBonusMod);
+			set.set("elementMod", elementMod);
 			set.set("mAtkMod", mAtkMod);
 			set.set("rate", rate);
 			set.set("finalRate", finalRate);
