@@ -16,38 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.items.type;
+package l2r.gameserver.model.conditions;
+
+import l2r.gameserver.model.stats.Env;
 
 /**
- * Armor Type enumerated.
+ * @author Nos
  */
-public enum ArmorType implements ItemType
+public class ConditionUsingSlotType extends Condition
 {
-	NONE,
-	LIGHT,
-	HEAVY,
-	MAGIC,
-	SIGIL,
+	private final int _mask;
 	
-	// L2J CUSTOM
-	SHIELD;
-	
-	final int _mask;
-	
-	/**
-	 * Constructor of the ArmorType.
-	 */
-	private ArmorType()
+	public ConditionUsingSlotType(int mask)
 	{
-		_mask = 1 << (ordinal() + WeaponType.values().length);
+		_mask = mask;
 	}
 	
-	/**
-	 * @return the ID of the ArmorType after applying a mask.
-	 */
 	@Override
-	public int mask()
+	public boolean testImpl(Env env)
 	{
-		return _mask;
+		if ((env.getCharacter() == null) || !env.getCharacter().isPlayer())
+		{
+			return false;
+		}
+		
+		return (env.getPlayer().getActiveWeaponItem().getBodyPart() & _mask) != 0;
 	}
+	
 }

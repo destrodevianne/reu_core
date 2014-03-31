@@ -43,8 +43,6 @@ import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.ArmorType;
-import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.scripting.scriptengine.events.ItemCreateEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.NewItemListener;
 import l2r.gameserver.util.GMAudit;
@@ -64,8 +62,6 @@ public class ItemTable
 	private static FastList<NewItemListener> newItemListeners = new FastList<NewItemListener>().shared();
 	
 	public static final Map<String, Integer> _slots = new FastMap<>();
-	public static final Map<String, WeaponType> _weaponTypes = new FastMap<>();
-	public static final Map<String, ArmorType> _armorTypes = new FastMap<>();
 	
 	private L2Item[] _allTemplates;
 	private final Map<Integer, L2EtcItem> _etcItems;
@@ -74,18 +70,6 @@ public class ItemTable
 	
 	static
 	{
-		// weapon types
-		for (WeaponType type : WeaponType.values())
-		{
-			_weaponTypes.put(type.getName(), type);
-		}
-		
-		// armor types
-		for (ArmorType type : ArmorType.values())
-		{
-			_armorTypes.put(type.getName(), type);
-		}
-		
 		_slots.put("shirt", L2Item.SLOT_UNDERWEAR);
 		_slots.put("lbracelet", L2Item.SLOT_L_BRACELET);
 		_slots.put("rbracelet", L2Item.SLOT_R_BRACELET);
@@ -122,7 +106,6 @@ public class ItemTable
 		_slots.put("alldress", L2Item.SLOT_ALLDRESS);
 		_slots.put("deco1", L2Item.SLOT_DECO);
 		_slots.put("waist", L2Item.SLOT_BELT);
-		
 	}
 	
 	/**

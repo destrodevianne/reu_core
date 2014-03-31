@@ -756,12 +756,6 @@ public final class Formulas
 				case SWORD:
 					stat = Stats.SWORD_WPN_VULN;
 					break;
-				case BIGSWORD:
-					stat = Stats.BIGSWORD_WPN_VULN;
-					break;
-				case BIGBLUNT:
-					stat = Stats.BIGBLUNT_WPN_VULN;
-					break;
 				case DUALDAGGER:
 					stat = Stats.DUALDAGGER_WPN_VULN;
 					break;

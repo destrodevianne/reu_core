@@ -18,22 +18,29 @@
  */
 package l2r.log.filter;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.items.type.EtcItemType;
+import l2r.gameserver.model.items.type.ItemType;
 
 /**
  * @author Advi
  */
 public class ItemFilter implements Filter
 {
-	// private String _excludeProcess;
-	// private String _excludeItemType;
-	
 	// This is an example how to exclude consuming of shots and arrows from logging
-	private final String _excludeProcess = "Consume";
-	private final String _excludeItemType = "Arrow, Shot, Herb";
+	private static final String EXCLUDE_PROCESS = "Consume";
+	private static final Set<ItemType> EXCLUDED_ITEM_TYPES = new HashSet<>();
+	
+	static
+	{
+		EXCLUDED_ITEM_TYPES.add(EtcItemType.ARROW);
+		EXCLUDED_ITEM_TYPES.add(EtcItemType.SHOT);
+	}
 	
 	@Override
 	public boolean isLoggable(LogRecord record)
@@ -42,24 +49,19 @@ public class ItemFilter implements Filter
 		{
 			return false;
 		}
-		if (_excludeProcess != null)
+		
+		String[] messageList = record.getMessage().split(":");
+		if ((messageList.length < 2) || !EXCLUDE_PROCESS.contains(messageList[1]))
 		{
-			// if (record.getMessage() == null) return true;
-			String[] messageList = record.getMessage().split(":");
-			if ((messageList.length < 2) || !_excludeProcess.contains(messageList[1]))
-			{
-				return true;
-			}
+			return true;
 		}
-		if (_excludeItemType != null)
+		
+		L2ItemInstance item = ((L2ItemInstance) record.getParameters()[0]);
+		if (!EXCLUDED_ITEM_TYPES.contains(item.getItemType()))
 		{
-			// if (record.getParameters() == null || record.getParameters().length == 0 || !(record.getParameters()[0] instanceof L2ItemInstance)) return true;
-			L2ItemInstance item = ((L2ItemInstance) record.getParameters()[0]);
-			if (!_excludeItemType.contains(item.getItemType().toString()))
-			{
-				return true;
-			}
+			return true;
 		}
-		return ((_excludeProcess == null) && (_excludeItemType == null));
+		
+		return false;
 	}
 }
