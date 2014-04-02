@@ -183,8 +183,7 @@ public class QuestManager extends ScriptManager<Quest>
 		if (old != null)
 		{
 			old.unload();
-			_log.info(getClass().getSimpleName() + ": Replaced: " + old.getName() + " with a new version!");
-			
+			_log.info(getClass().getSimpleName() + ": Replaced quest " + old.getName() + " (" + old.getId() + ") with a new version!");
 		}
 		if (Config.ALT_DEV_SHOW_QUESTS_LOAD_IN_LOGS)
 		{
@@ -257,7 +256,7 @@ public class QuestManager extends ScriptManager<Quest>
 		if (old != null)
 		{
 			old.unload();
-			_log.info(getClass().getSimpleName() + ": Replaced: " + old.getName() + " with a new version!");
+			_log.info(getClass().getSimpleName() + ": Replaced script " + old.getName() + " with a new version!");
 		}
 		
 		if (Config.ALT_DEV_SHOW_SCRIPTS_LOAD_IN_LOGS)

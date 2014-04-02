@@ -104,7 +104,6 @@ import l2r.gameserver.instancemanager.FourSepulchersManager;
 import l2r.gameserver.instancemanager.GlobalVariablesManager;
 import l2r.gameserver.instancemanager.GraciaSeedsManager;
 import l2r.gameserver.instancemanager.GrandBossManager;
-import l2r.gameserver.instancemanager.HellboundManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.ItemAuctionManager;
 import l2r.gameserver.instancemanager.ItemsOnGroundManager;
@@ -277,7 +276,6 @@ public class GameServer
 		FortManager.getInstance().loadInstances();
 		NpcBufferTable.getInstance();
 		SpawnTable.getInstance();
-		HellboundManager.getInstance();
 		RaidBossSpawnManager.getInstance();
 		DayNightSpawnManager.getInstance().trim().notifyChangeMode();
 		GrandBossManager.getInstance().initZones();
