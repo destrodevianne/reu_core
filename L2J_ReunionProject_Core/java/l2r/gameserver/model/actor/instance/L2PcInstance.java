@@ -4577,7 +4577,7 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	@Override
-	protected boolean checkDoCastConditions(L2Skill skill)
+	public boolean checkDoCastConditions(L2Skill skill)
 	{
 		if (!super.checkDoCastConditions(skill))
 		{
@@ -14890,6 +14890,12 @@ public final class L2PcInstance extends L2Playable
 		_clientHeading = val;
 	}
 	
+	@Override
+	public int getId()
+	{
+		return getClassId().getId();
+	}
+	
 	public boolean isPartyBanned()
 	{
 		return PunishmentManager.getInstance().hasPunishment(getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.PARTY_BAN);
@@ -15892,12 +15898,6 @@ public final class L2PcInstance extends L2Playable
 	public Collection<EventListener> getEventListeners()
 	{
 		return _eventListeners;
-	}
-	
-	@Override
-	public int getId()
-	{
-		return 0;
 	}
 	
 	@Override

@@ -50,6 +50,7 @@ import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGeodata;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGm;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGmChat;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGraciaSeeds;
+import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGrandBoss;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminHeal;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminHellbound;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminHtml;
@@ -137,6 +138,7 @@ public class AdminCommandHandler implements IHandler<IAdminCommandHandler, Strin
 		registerHandler(new AdminGm());
 		registerHandler(new AdminGmChat());
 		registerHandler(new AdminGraciaSeeds());
+		registerHandler(new AdminGrandBoss());
 		registerHandler(new AdminHeal());
 		registerHandler(new AdminHtml());
 		registerHandler(new AdminInstance());

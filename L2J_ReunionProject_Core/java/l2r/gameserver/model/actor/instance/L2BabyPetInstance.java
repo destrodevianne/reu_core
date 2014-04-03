@@ -24,7 +24,6 @@ import java.util.concurrent.Future;
 
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.CategoryData;
 import l2r.gameserver.datatables.PetDataTable;
 import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.enums.CategoryType;
@@ -263,7 +262,7 @@ public final class L2BabyPetInstance extends L2PetInstance
 					 * If the owner's HP is more than 80% for Baby Pets and 70% for Improved Baby pets, do nothing. If the owner's HP is very low, under 15% for Baby pets and under 30% for Improved Baby Pets, have 75% chances of using a strong heal. Otherwise, have 25% chances for weak heal.
 					 */
 					final double hpPercent = owner.getCurrentHp() / owner.getMaxHp();
-					final boolean isImprovedBaby = CategoryData.getInstance().isInCategory(CategoryType.BABY_PET_GROUP, getId());
+					final boolean isImprovedBaby = isInCategory(CategoryType.BABY_PET_GROUP);
 					if ((isImprovedBaby && (hpPercent < 0.3)) || (!isImprovedBaby && (hpPercent < 0.15)))
 					{
 						skill = _majorHeal.getSkill();

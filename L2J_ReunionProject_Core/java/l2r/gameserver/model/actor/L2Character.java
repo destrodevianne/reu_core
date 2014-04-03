@@ -39,9 +39,11 @@ import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2AttackableAI;
 import l2r.gameserver.ai.L2CharacterAI;
+import l2r.gameserver.datatables.CategoryData;
 import l2r.gameserver.datatables.DoorTable;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.enums.CategoryType;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
@@ -2104,7 +2106,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 * @param skill
 	 * @return True if casting is possible
 	 */
-	protected boolean checkDoCastConditions(L2Skill skill)
+	public boolean checkDoCastConditions(L2Skill skill)
 	{
 		if (CustomServerConfigs.CAN_USE_BLINK_RUSH_WHILE_ROOTED)
 		{
@@ -7766,6 +7768,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		getEvents().onDamageReceived(damage, attacker, skill, critical, damageOverTime);
 		attacker.getEvents().onDamageDealt(damage, this, skill, critical, damageOverTime);
+	}
+	
+	public final boolean isInCategory(CategoryType type)
+	{
+		return CategoryData.getInstance().isInCategory(type, getId());
 	}
 	
 	@Override
