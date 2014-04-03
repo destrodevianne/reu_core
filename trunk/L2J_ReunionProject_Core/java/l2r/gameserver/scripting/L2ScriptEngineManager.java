@@ -68,15 +68,18 @@ public final class L2ScriptEngineManager
 	private static final Logger _log = LoggerFactory.getLogger(L2ScriptEngineManager.class);
 	
 	public static final File SCRIPT_FOLDER = new File(Config.DATAPACK_ROOT.getAbsolutePath(), "data/scripts");
+	
+	// TODO: Create configs
 	private static final String[] SCRIPT_PKGS =
 	{
 		"ai",
 		"conquerablehalls",
 		"custom",
 		"events",
-		"hellbound",
 		"instances",
-		"quests",
+		"loaders",
+		"SagasScripts",
+		"TerritoryWarScripts",
 		"vehicles"
 	};
 	

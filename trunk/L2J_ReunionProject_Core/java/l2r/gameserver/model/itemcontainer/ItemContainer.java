@@ -30,7 +30,6 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.datatables.ItemTable;
 import l2r.gameserver.enums.ItemLocation;
-import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -469,6 +468,7 @@ public abstract class ItemContainer
 				item.updateDatabase();
 				refreshWeight();
 			}
+			item.deleteMe();
 		}
 		return item;
 	}
@@ -508,7 +508,7 @@ public abstract class ItemContainer
 		{
 			return null;
 		}
-		return this.destroyItem(process, item, count, actor, reference);
+		return destroyItem(process, item, count, actor, reference);
 	}
 	
 	/**
@@ -591,18 +591,19 @@ public abstract class ItemContainer
 	 */
 	public void deleteMe()
 	{
-		try
+		if (getOwner() != null)
 		{
-			updateDatabase();
+			for (L2ItemInstance item : _items)
+			{
+				if (item != null)
+				{
+					item.updateDatabase(true);
+					item.deleteMe();
+					L2World.getInstance().removeObject(item);
+				}
+			}
 		}
-		catch (Exception e)
-		{
-			_log.error("deletedMe()", e);
-		}
-		final List<L2Object> items = new ArrayList<L2Object>(_items);
 		_items.clear();
-		
-		L2World.getInstance().removeObjects(items);
 	}
 	
 	/**

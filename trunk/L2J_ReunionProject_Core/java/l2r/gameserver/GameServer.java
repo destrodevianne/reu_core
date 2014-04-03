@@ -322,23 +322,6 @@ public class GameServer
 		TransformData.getInstance();
 		BotReportTable.getInstance();
 		
-		// Custom settings section
-		printSection("Custom");
-		CustomServerMods.getInstance().checkCustomMods();
-		// System.out.println("Loading static images....");
-		// CustomServerMods.getInstance().loadStaticImages();
-		
-		// Antibot systems
-		printSection("Antibot Engine");
-		CustomServerMods.getInstance().checkAntibotMod();
-		
-		// Leader board load data
-		printSection("Leaderboards");
-		CustomServerMods.getInstance().checkLeaderboardsMod();
-		
-		printSection("Reunion Events");
-		ReunionEvents.start();
-		
 		printSection("Scripts");
 		QuestManager.getInstance();
 		BoatManager.getInstance();
@@ -395,6 +378,23 @@ public class GameServer
 		}
 		
 		PunishmentManager.getInstance();
+		
+		// Custom settings section
+		printSection("Custom");
+		CustomServerMods.getInstance().checkCustomMods();
+		// System.out.println("Loading static images....");
+		// CustomServerMods.getInstance().loadStaticImages();
+		
+		// Antibot systems
+		printSection("Antibot Engine");
+		CustomServerMods.getInstance().checkAntibotMod();
+		
+		// Leader board load data
+		printSection("Leaderboards");
+		CustomServerMods.getInstance().checkLeaderboardsMod();
+		
+		printSection("Reunion Events");
+		ReunionEvents.start();
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		
