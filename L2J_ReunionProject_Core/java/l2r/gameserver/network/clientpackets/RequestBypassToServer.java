@@ -229,24 +229,6 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			{
 				BoardsManager.getInstance().handleCommands(getClient(), _command);
 			}
-			else if (_command.startsWith("Quest "))
-			{
-				if (!activeChar.validateBypass(_command))
-				{
-					return;
-				}
-				
-				String p = _command.substring(6).trim();
-				int idx = p.indexOf(' ');
-				if (idx < 0)
-				{
-					activeChar.processQuestEvent(p, "");
-				}
-				else
-				{
-					activeChar.processQuestEvent(p.substring(0, idx), p.substring(idx).trim());
-				}
-			}
 			else if (_command.startsWith("_match"))
 			{
 				String params = _command.substring(_command.indexOf("?") + 1);
