@@ -28,7 +28,6 @@ import l2r.gameserver.datatables.AdminTable;
 import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SkillTreesData;
 import l2r.gameserver.enums.PcCondOverride;
-import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CHSiegeManager;
@@ -110,11 +109,6 @@ public class EnterWorld extends L2GameClientPacket
 	private static FastList<PlayerSpawnListener> listeners = new FastList<PlayerSpawnListener>().shared();
 	
 	private final int[][] tracert = new int[5][4];
-	
-	public TaskPriority getPriority()
-	{
-		return TaskPriority.PR_URGENT;
-	}
 	
 	@Override
 	protected void readImpl()

@@ -18,7 +18,6 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2AirShipInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -42,11 +41,6 @@ public class MoveToLocationInAirShip extends L2GameClientPacket
 	private int _originX;
 	private int _originY;
 	private int _originZ;
-	
-	public TaskPriority getPriority()
-	{
-		return TaskPriority.PR_HIGH;
-	}
 	
 	@Override
 	protected void readImpl()

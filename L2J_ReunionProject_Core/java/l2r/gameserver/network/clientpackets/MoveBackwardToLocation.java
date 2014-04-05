@@ -22,7 +22,6 @@ import java.nio.BufferUnderflowException;
 
 import l2r.Config;
 import l2r.gameserver.enums.CtrlIntention;
-import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -52,11 +51,6 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 	private int _curY;
 	@SuppressWarnings("unused")
 	private int _curZ;
-	
-	public TaskPriority getPriority()
-	{
-		return TaskPriority.PR_HIGH;
-	}
 	
 	@Override
 	protected void readImpl()
