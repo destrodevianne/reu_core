@@ -19,7 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.geoeditorcon.GeoEditorListener;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -33,15 +32,6 @@ import l2r.gameserver.network.serverpackets.ValidateLocation;
 public class ValidatePosition extends L2GameClientPacket
 {
 	private static final String _C__59_VALIDATEPOSITION = "[C] 59 ValidatePosition";
-	
-	/**
-	 * urgent messages, execute immediately
-	 * @return
-	 */
-	public TaskPriority getPriority()
-	{
-		return TaskPriority.PR_HIGH;
-	}
 	
 	private int _x;
 	private int _y;

@@ -19,7 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.enums.TaskPriority;
 import l2r.gameserver.instancemanager.BoatManager;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2BoatInstance;
@@ -41,11 +40,6 @@ public final class RequestMoveToLocationInVehicle extends L2GameClientPacket
 	private int _originX;
 	private int _originY;
 	private int _originZ;
-	
-	public TaskPriority getPriority()
-	{
-		return TaskPriority.PR_HIGH;
-	}
 	
 	@Override
 	protected void readImpl()
