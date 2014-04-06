@@ -43,9 +43,10 @@ public class L2ChaoticZone extends L2RespawnZone
 		
 		if (character.isPlayer())
 		{
-			((L2PcInstance) character).setPvpFlag(1);
-			((L2PcInstance) character).sendMessage("You entered the Chaotic Zone.");
-			((L2PcInstance) character).broadcastUserInfo();
+			L2PcInstance activeChar = character.getActingPlayer();
+			activeChar.setPvpFlag(1);
+			activeChar.sendMessage("You entered the Chaotic Zone.");
+			activeChar.broadcastUserInfo();
 		}
 	}
 	
@@ -60,13 +61,14 @@ public class L2ChaoticZone extends L2RespawnZone
 		
 		if (character.isPlayer())
 		{
-			((L2PcInstance) character).sendMessage("You left the Chaotic Zone.");
+			L2PcInstance activeChar = character.getActingPlayer();
+			activeChar.sendMessage("You left the Chaotic Zone.");
 			if (ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_SKILL)
 			{
-				((L2PcInstance) character).stopSkillEffects(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID);
+				activeChar.stopSkillEffects(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID);
 			}
-			((L2PcInstance) character).setPvpFlag(0);
-			((L2PcInstance) character).broadcastUserInfo();
+			activeChar.setPvpFlag(0);
+			activeChar.broadcastUserInfo();
 		}
 	}
 	
@@ -75,17 +77,18 @@ public class L2ChaoticZone extends L2RespawnZone
 	{
 		if (character.isPlayer() && ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_AUTO_REVIVE)
 		{
-			character.sendMessage("Get ready! You will be revived in " + ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY + " seconds!");
+			final L2PcInstance activeChar = character.getActingPlayer();
+			activeChar.sendMessage("Get ready! You will be revived in " + ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY + " seconds!");
 			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					if (character.isDead())
+					if (activeChar.isDead())
 					{
+						activeChar.doRevive();
 						int r = Rnd.get(ChaoticZoneConfigs.CHAOTIC_ZONE_AUTO_RES_LOCS_COUNT);
-						character.teleToLocation(ChaoticZoneConfigs.xCoords[r], ChaoticZoneConfigs.yCoords[r], ChaoticZoneConfigs.zCoords[r]);
-						character.doRevive();
+						activeChar.teleToLocation(ChaoticZoneConfigs.xCoords[r], ChaoticZoneConfigs.yCoords[r], ChaoticZoneConfigs.zCoords[r]);
 					}
 				}
 			}, ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY * 1000);
@@ -97,12 +100,13 @@ public class L2ChaoticZone extends L2RespawnZone
 	{
 		if (character.isPlayer())
 		{
-			SkillData.getInstance().getInfo(1323, 1).getEffects(character, character);
-			character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
-			character.setCurrentCp(character.getMaxCp());
+			L2PcInstance activeChar = character.getActingPlayer();
+			SkillData.getInstance().getInfo(1323, 1).getEffects(activeChar, activeChar);
+			activeChar.setCurrentHpMp(activeChar.getMaxHp(), activeChar.getMaxMp());
+			activeChar.setCurrentCp(activeChar.getMaxCp());
 			if (ChaoticZoneConfigs.ENABLE_CHAOTIC_ZONE_SKILL)
 			{
-				SkillData.getInstance().getInfo(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID, 1).getEffects(character, character);
+				SkillData.getInstance().getInfo(ChaoticZoneConfigs.CHAOTIC_ZONE_SKILL_ID, 1).getEffects(activeChar, activeChar);
 			}
 		}
 	}
