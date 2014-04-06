@@ -47,18 +47,20 @@ public class L2FlagZone extends L2ZoneType
 			
 			if (character.isPlayer())
 			{
-				SkillData.getInstance().getInfo(1323, 1).getEffects(character, character);
+				L2PcInstance activeChar = character.getActingPlayer();
+				
+				SkillData.getInstance().getInfo(1323, 1).getEffects(activeChar, activeChar);
 				
 				if (FlagZoneConfigs.AUTO_FLAG_ON_ENTER)
 				{
-					((L2PcInstance) character).setPvpFlag(1);
+					activeChar.setPvpFlag(1);
 				}
 				if (FlagZoneConfigs.ENABLE_ANTIFEED_PROTECTION)
 				{
-					((L2PcInstance) character).startAntifeedProtection(true, true);
+					activeChar.startAntifeedProtection(true, true);
 				}
 				
-				((L2PcInstance) character).broadcastUserInfo();
+				activeChar.broadcastUserInfo();
 			}
 		}
 	}
@@ -76,16 +78,17 @@ public class L2FlagZone extends L2ZoneType
 			
 			if (character.isPlayer())
 			{
+				L2PcInstance activeChar = character.getActingPlayer();
 				if (FlagZoneConfigs.AUTO_FLAG_ON_ENTER)
 				{
-					((L2PcInstance) character).setPvpFlag(0);
+					activeChar.setPvpFlag(0);
 				}
 				if (FlagZoneConfigs.ENABLE_ANTIFEED_PROTECTION)
 				{
-					((L2PcInstance) character).startAntifeedProtection(false, true);
+					activeChar.startAntifeedProtection(false, true);
 				}
 				
-				((L2PcInstance) character).broadcastUserInfo();
+				activeChar.broadcastUserInfo();
 			}
 		}
 	}
@@ -95,25 +98,26 @@ public class L2FlagZone extends L2ZoneType
 	{
 		if (character.isPlayer())
 		{
+			final L2PcInstance activeChar = character.getActingPlayer();
 			if (FlagZoneConfigs.SHOW_DIE_ANIMATION)
 			{
-				final MagicSkillUse msu = new MagicSkillUse(character, character, 23096, 1, 1, 1);
-				character.broadcastPacket(msu);
+				final MagicSkillUse msu = new MagicSkillUse(activeChar, activeChar, 23096, 1, 1, 1);
+				activeChar.broadcastPacket(msu);
 			}
 			
 			if (FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE)
 			{
-				character.sendMessage("Get ready! You will be revived in " + FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY + " seconds!");
+				activeChar.sendMessage("Get ready! You will be revived in " + FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY + " seconds!");
 				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						if (character.isDead())
+						if (activeChar.isDead())
 						{
+							activeChar.doRevive();
 							int r = Rnd.get(FlagZoneConfigs.FLAG_ZONE_AUTO_RES_LOCS_COUNT);
-							character.teleToLocation(FlagZoneConfigs.xCoords[r], FlagZoneConfigs.yCoords[r], FlagZoneConfigs.zCoords[r]);
-							character.doRevive();
+							activeChar.teleToLocation(FlagZoneConfigs.xCoords[r], FlagZoneConfigs.yCoords[r], FlagZoneConfigs.zCoords[r]);
 						}
 					}
 				}, FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY * 1000);
@@ -124,8 +128,12 @@ public class L2FlagZone extends L2ZoneType
 	@Override
 	public void onReviveInside(L2Character character)
 	{
-		SkillData.getInstance().getInfo(1323, 1).getEffects(character, character);
-		character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
-		character.setCurrentCp(character.getMaxCp());
+		if (character.isPlayer())
+		{
+			L2PcInstance activeChar = character.getActingPlayer();
+			SkillData.getInstance().getInfo(1323, 1).getEffects(activeChar, activeChar);
+			activeChar.setCurrentHpMp(activeChar.getMaxHp(), activeChar.getMaxMp());
+			activeChar.setCurrentCp(activeChar.getMaxCp());
+		}
 	}
 }
