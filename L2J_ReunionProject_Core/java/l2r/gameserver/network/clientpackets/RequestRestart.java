@@ -95,6 +95,14 @@ public final class RequestRestart extends L2GameClientPacket
 			return;
 		}
 		
+		// Flag Zone
+		if (player.isInsideZone(ZoneIdType.FLAG))
+		{
+			player.sendMessage("Cannot restart while inside flag zone.");
+			sendPacket(RestartResponse.valueOf(false));
+			return;
+		}
+		
 		// Antibot farm system
 		if (AntibotConfigs.ENABLE_ANTIBOT_FARM_SYSTEM && player.isFarmBot())
 		{
