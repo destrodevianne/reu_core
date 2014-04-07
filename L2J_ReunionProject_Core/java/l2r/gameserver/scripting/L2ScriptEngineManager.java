@@ -26,7 +26,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -702,28 +701,6 @@ public final class L2ScriptEngineManager
 					_log.warn(e.getMessage(), e);
 				}
 				catch (IllegalAccessException e)
-				{
-					_log.warn(e.getMessage(), e);
-				}
-				try
-				{
-					Constructor<?> c = cls.getConstructor(new Class[] {});
-					Quest q = (Quest) c.newInstance();
-					q.setAltMethodCall(true);
-				}
-				catch (NoSuchMethodException e)
-				{
-					// _log.warn(e.getMessage(), e);
-				}
-				catch (InvocationTargetException e)
-				{
-					_log.warn(e.getMessage(), e);
-				}
-				catch (IllegalAccessException e)
-				{
-					_log.warn(e.getMessage(), e);
-				}
-				catch (InstantiationException e)
 				{
 					_log.warn(e.getMessage(), e);
 				}

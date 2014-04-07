@@ -107,7 +107,6 @@ public class Quest extends ManagedScript implements IIdentifiable
 	/** Map containing lists of timers from the name of the timer. */
 	private final Map<String, List<QuestTimer>> _allEventTimers = new L2FastMap<>(true);
 	private final Set<Integer> _questInvolvedNpcs = new HashSet<>();
-	boolean altMethodCall = true;
 	private final ReentrantReadWriteLock _rwLock = new ReentrantReadWriteLock();
 	private final WriteLock _writeLock = _rwLock.writeLock();
 	private final ReadLock _readLock = _rwLock.readLock();
@@ -1358,11 +1357,6 @@ public class Quest extends ManagedScript implements IIdentifiable
 	public void onRouteFinished(L2Npc npc)
 	{
 		
-	}
-	
-	public void setAltMethodCall(boolean altMethodCall)
-	{
-		this.altMethodCall = altMethodCall;
 	}
 	
 	/**

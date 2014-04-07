@@ -37,66 +37,60 @@ public class L2FlagZone extends L2ZoneType
 	@Override
 	protected void onEnter(L2Character character)
 	{
-		if (FlagZoneConfigs.ENABLE_FLAG_ZONE)
+		if (FlagZoneConfigs.ENABLE_FLAG_ZONE && character.isPlayer())
 		{
-			character.setInsideZone(ZoneIdType.FLAG, true);
-			character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, true);
-			character.setInsideZone(ZoneIdType.NO_STORE, true);
-			character.setInsideZone(ZoneIdType.NO_BOOKMARK, true);
-			character.setInsideZone(ZoneIdType.NO_ITEM_DROP, true);
+			L2PcInstance activeChar = character.getActingPlayer();
+			activeChar.setInsideZone(ZoneIdType.FLAG, true);
+			activeChar.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, true);
+			activeChar.setInsideZone(ZoneIdType.NO_STORE, true);
+			activeChar.setInsideZone(ZoneIdType.NO_BOOKMARK, true);
+			activeChar.setInsideZone(ZoneIdType.NO_ITEM_DROP, true);
 			
-			if (character.isPlayer())
+			SkillData.getInstance().getInfo(1323, 1).getEffects(activeChar, activeChar);
+			
+			if (FlagZoneConfigs.AUTO_FLAG_ON_ENTER)
 			{
-				L2PcInstance activeChar = character.getActingPlayer();
-				
-				SkillData.getInstance().getInfo(1323, 1).getEffects(activeChar, activeChar);
-				
-				if (FlagZoneConfigs.AUTO_FLAG_ON_ENTER)
-				{
-					activeChar.setPvpFlag(1);
-				}
-				if (FlagZoneConfigs.ENABLE_ANTIFEED_PROTECTION)
-				{
-					activeChar.startAntifeedProtection(true, true);
-				}
-				
-				activeChar.broadcastUserInfo();
+				activeChar.setPvpFlag(1);
 			}
+			if (FlagZoneConfigs.ENABLE_ANTIFEED_PROTECTION)
+			{
+				activeChar.startAntifeedProtection(true, true);
+			}
+			
+			activeChar.broadcastUserInfo();
 		}
 	}
 	
 	@Override
 	protected void onExit(final L2Character character)
 	{
-		if (FlagZoneConfigs.ENABLE_FLAG_ZONE)
+		if (FlagZoneConfigs.ENABLE_FLAG_ZONE && character.isPlayer())
 		{
-			character.setInsideZone(ZoneIdType.FLAG, false);
-			character.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, false);
-			character.setInsideZone(ZoneIdType.NO_STORE, false);
-			character.setInsideZone(ZoneIdType.NO_BOOKMARK, false);
-			character.setInsideZone(ZoneIdType.NO_ITEM_DROP, false);
+			L2PcInstance activeChar = character.getActingPlayer();
+			activeChar.setInsideZone(ZoneIdType.FLAG, false);
+			activeChar.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, false);
+			activeChar.setInsideZone(ZoneIdType.NO_RESTART, false);
+			activeChar.setInsideZone(ZoneIdType.NO_STORE, false);
+			activeChar.setInsideZone(ZoneIdType.NO_BOOKMARK, false);
+			activeChar.setInsideZone(ZoneIdType.NO_ITEM_DROP, false);
 			
-			if (character.isPlayer())
+			if (FlagZoneConfigs.AUTO_FLAG_ON_ENTER)
 			{
-				L2PcInstance activeChar = character.getActingPlayer();
-				if (FlagZoneConfigs.AUTO_FLAG_ON_ENTER)
-				{
-					activeChar.setPvpFlag(0);
-				}
-				if (FlagZoneConfigs.ENABLE_ANTIFEED_PROTECTION)
-				{
-					activeChar.startAntifeedProtection(false, true);
-				}
-				
-				activeChar.broadcastUserInfo();
+				activeChar.setPvpFlag(0);
 			}
+			if (FlagZoneConfigs.ENABLE_ANTIFEED_PROTECTION)
+			{
+				activeChar.startAntifeedProtection(false, true);
+			}
+			
+			activeChar.broadcastUserInfo();
 		}
 	}
 	
 	@Override
 	public void onDieInside(final L2Character character)
 	{
-		if (character.isPlayer())
+		if (FlagZoneConfigs.ENABLE_FLAG_ZONE && FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE && character.isPlayer())
 		{
 			final L2PcInstance activeChar = character.getActingPlayer();
 			if (FlagZoneConfigs.SHOW_DIE_ANIMATION)
@@ -128,7 +122,7 @@ public class L2FlagZone extends L2ZoneType
 	@Override
 	public void onReviveInside(L2Character character)
 	{
-		if (character.isPlayer())
+		if (FlagZoneConfigs.ENABLE_FLAG_ZONE && character.isPlayer())
 		{
 			L2PcInstance activeChar = character.getActingPlayer();
 			SkillData.getInstance().getInfo(1323, 1).getEffects(activeChar, activeChar);
