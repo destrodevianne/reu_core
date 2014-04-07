@@ -42,7 +42,6 @@ public class L2FlagZone extends L2ZoneType
 			L2PcInstance activeChar = character.getActingPlayer();
 			activeChar.setInsideZone(ZoneIdType.FLAG, true);
 			activeChar.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, true);
-			activeChar.setInsideZone(ZoneIdType.NO_RESTART, true);
 			activeChar.setInsideZone(ZoneIdType.NO_STORE, true);
 			activeChar.setInsideZone(ZoneIdType.NO_BOOKMARK, true);
 			activeChar.setInsideZone(ZoneIdType.NO_ITEM_DROP, true);
@@ -70,7 +69,6 @@ public class L2FlagZone extends L2ZoneType
 			L2PcInstance activeChar = character.getActingPlayer();
 			activeChar.setInsideZone(ZoneIdType.FLAG, false);
 			activeChar.setInsideZone(ZoneIdType.NO_SUMMON_FRIEND, false);
-			activeChar.setInsideZone(ZoneIdType.NO_RESTART, false);
 			activeChar.setInsideZone(ZoneIdType.NO_STORE, false);
 			activeChar.setInsideZone(ZoneIdType.NO_BOOKMARK, false);
 			activeChar.setInsideZone(ZoneIdType.NO_ITEM_DROP, false);

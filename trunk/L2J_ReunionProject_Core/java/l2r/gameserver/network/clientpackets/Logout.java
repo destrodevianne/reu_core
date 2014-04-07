@@ -97,6 +97,14 @@ public final class Logout extends L2GameClientPacket
 			return;
 		}
 		
+		// Flag Zone
+		if (player.isInsideZone(ZoneIdType.FLAG))
+		{
+			player.sendMessage("You cannot logout while inside flag zone.");
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
 		// Antibot farm system
 		if (AntibotConfigs.ENABLE_ANTIBOT_FARM_SYSTEM && player.isFarmBot())
 		{
