@@ -49,7 +49,7 @@ public final class ClassListData extends DocumentParser
 	public void load()
 	{
 		_classData.clear();
-		parseDatapackFile("data/stats/chars/classList.xml");
+		parseDatapackFile("data/xml/stats/chars/classList.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _classData.size() + " Class data.");
 	}
 	

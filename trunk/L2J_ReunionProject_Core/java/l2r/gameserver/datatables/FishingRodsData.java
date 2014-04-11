@@ -48,7 +48,7 @@ public final class FishingRodsData extends DocumentParser
 	public void load()
 	{
 		_fishingRods.clear();
-		parseDatapackFile("data/stats/fishing/fishingRods.xml");
+		parseDatapackFile("data/xml/stats/fishing/fishingRods.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _fishingRods.size() + " Fishing Rods.");
 	}
 	

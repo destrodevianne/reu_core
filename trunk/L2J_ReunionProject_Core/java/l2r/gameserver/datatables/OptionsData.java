@@ -48,7 +48,7 @@ public class OptionsData extends DocumentParser
 	@Override
 	public synchronized void load()
 	{
-		parseDirectory("data/stats/options");
+		parseDirectory("data/xml/stats/options");
 		_log.info(getClass().getSimpleName() + ": Loaded: " + _data.size() + " Options.");
 	}
 	

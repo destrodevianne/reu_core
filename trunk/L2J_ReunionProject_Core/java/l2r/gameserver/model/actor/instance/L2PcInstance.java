@@ -156,6 +156,7 @@ import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.L2Vehicle;
 import l2r.gameserver.model.actor.appearance.PcAppearance;
 import l2r.gameserver.model.actor.events.PlayerEvents;
+import l2r.gameserver.model.actor.instance.PcInstance.PcAdmin;
 import l2r.gameserver.model.actor.knownlist.PcKnownList;
 import l2r.gameserver.model.actor.stat.PcStat;
 import l2r.gameserver.model.actor.stat.Rates;
@@ -16631,5 +16632,16 @@ public final class L2PcInstance extends L2Playable
 	{
 		final AccountVariables vars = getScript(AccountVariables.class);
 		return vars != null ? vars : addScript(new AccountVariables(getAccountName()));
+	}
+	
+	private PcAdmin _pcAdmin = null;
+	
+	public PcAdmin getPcAdmin()
+	{
+		if (_pcAdmin == null)
+		{
+			_pcAdmin = new PcAdmin(this);
+		}
+		return _pcAdmin;
 	}
 }

@@ -51,7 +51,7 @@ public final class StaticObjects extends DocumentParser
 	public void load()
 	{
 		_staticObjects.clear();
-		parseDatapackFile("data/staticObjects.xml");
+		parseDatapackFile("data/xml/staticObjects.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _staticObjects.size() + " StaticObject Templates.");
 	}
 	

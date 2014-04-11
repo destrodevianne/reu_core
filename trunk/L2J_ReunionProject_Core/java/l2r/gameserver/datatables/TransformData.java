@@ -51,7 +51,7 @@ public final class TransformData extends DocumentParser
 	public synchronized void load()
 	{
 		_transformData.clear();
-		parseDirectory("data/stats/transformations", false);
+		parseDirectory("data/xml/stats/transformations", false);
 		_log.info(getClass().getSimpleName() + ": Loaded: " + _transformData.size() + " transform templates.");
 	}
 	

@@ -384,8 +384,8 @@ public final class ZoneManager extends DocumentParser
 	{
 		_classZones.clear();
 		_spawnTerritories.clear();
-		parseDirectory("data/zones", false);
-		parseDirectory("data/zones/npcSpawnTerritories", false);
+		parseDirectory("data/xml/zones", false);
+		parseDirectory("data/xml/zones/npcSpawnTerritories", false);
 		_log.info(getClass().getSimpleName() + ": Loaded " + _classZones.size() + " zone classes and " + getSize() + " zones.");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _spawnTerritories.size() + " NPC spawn territoriers.");
 	}

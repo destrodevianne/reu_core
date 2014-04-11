@@ -427,7 +427,7 @@ public final class Instance
 	public void loadInstanceTemplate(String filename)
 	{
 		Document doc = null;
-		File xml = new File(Config.DATAPACK_ROOT, "data/instances/" + filename);
+		File xml = new File(Config.DATAPACK_ROOT, "data/xml/instances/" + filename);
 		
 		try
 		{

@@ -60,7 +60,7 @@ public class DoorTable extends DocumentParser
 		_doors.clear();
 		_groups.clear();
 		_regions.clear();
-		parseDatapackFile("data/doors.xml");
+		parseDatapackFile("data/xml/doors.xml");
 	}
 	
 	@Override

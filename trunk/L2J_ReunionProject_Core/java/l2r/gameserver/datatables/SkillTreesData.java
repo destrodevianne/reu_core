@@ -125,7 +125,7 @@ public final class SkillTreesData extends DocumentParser
 		_gameMasterAuraSkillTree.clear();
 		
 		// Load files.
-		parseDirectory(new File(Config.DATAPACK_ROOT, "data/skillTrees/"));
+		parseDirectory(new File(Config.DATAPACK_ROOT, "data/xml/skillTrees/"));
 		
 		// Generate check arrays.
 		generateCheckArrays();

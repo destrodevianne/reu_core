@@ -51,7 +51,7 @@ public class UIData extends DocumentParser
 	{
 		_storedKeys.clear();
 		_storedCategories.clear();
-		parseDatapackFile("data/ui/ui_en.xml");
+		parseDatapackFile("data/xml/ui/ui_en.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _storedKeys.size() + " keys " + _storedCategories.size() + " categories.");
 	}
 	
