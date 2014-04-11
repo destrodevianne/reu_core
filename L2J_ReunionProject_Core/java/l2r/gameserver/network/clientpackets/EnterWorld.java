@@ -87,6 +87,7 @@ import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerSpawnListener;
 import gr.reunion.antibotEngine.AntibotSystem;
+import gr.reunion.configsEngine.SecuritySystemConfigs;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.main.EnterWorldCustomHandler;
 import gr.reunion.main.PlayerValues;
@@ -176,6 +177,21 @@ public class EnterWorld extends L2GameClientPacket
 		// Apply special GM properties to the GM when entering
 		if (activeChar.isGM())
 		{
+			if (SecuritySystemConfigs.ENABLE_ADMIN_SECURITY_SYSTEM)
+			{
+				if (SecuritySystemConfigs.ADMIN_OBJECT_ID_LIST.contains(activeChar.getObjectId()))
+				{
+					activeChar.getPcAdmin().setIsSafeAdmin(true);
+					_log.info("Safe Admin: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") has been logged in.");
+				}
+				else
+				{
+					activeChar.getPcAdmin().punishUnSafeAdmin();
+					_log.warn("WARNING: Unsafe Admin: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") has been logged in.");
+					_log.warn("If you have enabled some punishment, He will be punished.");
+				}
+			}
+			
 			if (Config.GM_STARTUP_INVULNERABLE && AdminTable.getInstance().hasAccess("admin_invul", activeChar.getAccessLevel()))
 			{
 				activeChar.setIsInvul(true);

@@ -82,7 +82,7 @@ public class ProductItemData
 			factory1.setValidating(false);
 			factory1.setIgnoringComments(true);
 			
-			File file = new File(Config.DATAPACK_ROOT, "data/item-mall.xml");
+			File file = new File(Config.DATAPACK_ROOT, "data/xml/item-mall.xml");
 			if (!file.exists())
 			{
 				_log.warn(getClass().getSimpleName() + ": Couldn't find data/" + file.getName());

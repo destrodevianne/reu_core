@@ -237,7 +237,7 @@ public class AugmentationData
 				factory.setValidating(false);
 				factory.setIgnoringComments(true);
 				
-				File file = new File(Config.DATAPACK_ROOT + "/data/stats/augmentation/augmentation_skillmap.xml");
+				File file = new File(Config.DATAPACK_ROOT + "/data/xml/stats/augmentation/augmentation_skillmap.xml");
 				if (!file.exists())
 				{
 					_log.warn(getClass().getSimpleName() + ": ERROR The augmentation skillmap file is missing.");
@@ -324,7 +324,7 @@ public class AugmentationData
 			factory.setValidating(false);
 			factory.setIgnoringComments(true);
 			
-			File aFile = new File(Config.DATAPACK_ROOT + "/data/stats/augmentation/retailchances.xml");
+			File aFile = new File(Config.DATAPACK_ROOT + "/data/xml/stats/augmentation/retailchances.xml");
 			if (aFile.exists())
 			{
 				Document aDoc = null;
@@ -421,7 +421,7 @@ public class AugmentationData
 			factory3.setValidating(false);
 			factory3.setIgnoringComments(true);
 			
-			File aFile3 = new File(Config.DATAPACK_ROOT + "/data/stats/augmentation/retailchances_accessory.xml");
+			File aFile3 = new File(Config.DATAPACK_ROOT + "/data/xml/stats/augmentation/retailchances_accessory.xml");
 			if (aFile3.exists())
 			{
 				Document aDoc = null;

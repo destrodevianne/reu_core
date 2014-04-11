@@ -39,8 +39,8 @@ import org.w3c.dom.Node;
  */
 public final class InitialEquipmentData extends DocumentParser
 {
-	private static final String NORMAL = "data/stats/initialEquipment.xml";
-	private static final String EVENT = "data/stats/initialEquipmentEvent.xml";
+	private static final String NORMAL = "data/xml/stats/initialEquipment.xml";
+	private static final String EVENT = "data/xml/stats/initialEquipmentEvent.xml";
 	private final Map<ClassId, List<PcItemTemplate>> _initialEquipmentList = new HashMap<>();
 	
 	/**

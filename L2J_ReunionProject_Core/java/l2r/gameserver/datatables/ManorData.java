@@ -52,7 +52,7 @@ public class ManorData extends DocumentParser
 	public void load()
 	{
 		_seeds.clear();
-		parseDatapackFile("data/seeds.xml");
+		parseDatapackFile("data/xml/seeds.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded: " + _seeds.size() + " Seeds");
 	}
 	

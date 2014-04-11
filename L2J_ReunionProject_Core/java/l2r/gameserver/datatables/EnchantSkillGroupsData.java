@@ -63,7 +63,7 @@ public class EnchantSkillGroupsData extends DocumentParser
 	{
 		_enchantSkillGroups.clear();
 		_enchantSkillTrees.clear();
-		parseDatapackFile("data/enchantSkillGroups.xml");
+		parseDatapackFile("data/xml/enchantSkillGroups.xml");
 		int routes = 0;
 		for (L2EnchantSkillGroup group : _enchantSkillGroups.values())
 		{

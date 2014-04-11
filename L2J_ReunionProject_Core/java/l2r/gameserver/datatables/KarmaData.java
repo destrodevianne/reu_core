@@ -42,7 +42,7 @@ public class KarmaData extends DocumentParser
 	public synchronized void load()
 	{
 		_karmaTable.clear();
-		parseDatapackFile("data/stats/chars/pcKarmaIncrease.xml");
+		parseDatapackFile("data/xml/stats/chars/pcKarmaIncrease.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _karmaTable.size() + " karma modifiers.");
 	}
 	

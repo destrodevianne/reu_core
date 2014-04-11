@@ -74,7 +74,7 @@ public final class ItemAuctionManager
 			_log.error(getClass().getSimpleName() + ": Failed loading auctions.", e);
 		}
 		
-		final File file = new File(Config.DATAPACK_ROOT + "/data/ItemAuctions.xml");
+		final File file = new File(Config.DATAPACK_ROOT + "/data/xml/ItemAuctions.xml");
 		if (!file.exists())
 		{
 			_log.warn(getClass().getSimpleName() + ": Missing ItemAuctions.xml!");

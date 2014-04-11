@@ -47,7 +47,7 @@ public final class ArmorSetsData extends DocumentParser
 	public void load()
 	{
 		_armorSets.clear();
-		parseDirectory("data/stats/armorsets");
+		parseDirectory("data/xml/stats/armorsets");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _armorSets.size() + " Armor sets.");
 	}
 	

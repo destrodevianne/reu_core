@@ -58,30 +58,30 @@ public final class OnKillNotifyTask implements Runnable
 			{
 				if (_quest == null)
 				{
-					_log.error("Quest getName() is NULL");
+					_log.error("Quest[notifyKill] getName() is NULL");
 				}
 				else
 				{
-					_log.error("Quest getQuest() name is: " + _quest.getName());
+					_log.error("Quest[notifyKill] getQuest() name is: " + _quest.getName());
 				}
 				
 				if (_attackable == null)
 				{
-					_log.error("Quest _attackable is NULL");
+					_log.error("Quest[notifyKill] _attackable is NULL");
 				}
 				else
 				{
-					_log.error("Quest _attackable name is: " + _attackable.getName());
-					_log.error("Quest _attackable Id is: " + _attackable.getId());
+					_log.error("Quest[notifyKill] _attackable name is: " + _attackable.getName());
+					_log.error("Quest[notifyKill] _attackable Id is: " + _attackable.getId());
 				}
 				
 				if (_killer == null)
 				{
-					_log.error("Quest _killer is NULL");
+					_log.error("Quest[notifyKill] _killer is NULL");
 				}
 				else
 				{
-					_log.error("Quest killer is: " + _killer.getName());
+					_log.error("Quest[notifyKill] killer is: " + _killer.getName());
 				}
 			}
 		}

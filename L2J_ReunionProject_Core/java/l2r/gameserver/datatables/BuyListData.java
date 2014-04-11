@@ -52,10 +52,10 @@ public final class BuyListData extends DocumentParser
 	public synchronized void load()
 	{
 		_buyLists.clear();
-		parseDirectory("data/buylists", false);
+		parseDirectory("data/xml/buylists", false);
 		if (Config.CUSTOM_BUYLIST_LOAD)
 		{
-			parseDirectory("data/buylists/custom", false);
+			parseDirectory("data/xml/buylists/custom", false);
 		}
 		
 		_log.info(getClass().getSimpleName() + ": Loaded " + _buyLists.size() + " BuyLists.");

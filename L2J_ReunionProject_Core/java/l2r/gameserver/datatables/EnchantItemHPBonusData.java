@@ -131,7 +131,7 @@ public class EnchantItemHPBonusData extends DocumentParser
 	public void load()
 	{
 		_armorHPBonuses.clear();
-		parseDatapackFile("data/stats/enchantHPBonus.xml");
+		parseDatapackFile("data/xml/stats/enchantHPBonus.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _armorHPBonuses.size() + " Enchant HP Bonuses.");
 	}
 	

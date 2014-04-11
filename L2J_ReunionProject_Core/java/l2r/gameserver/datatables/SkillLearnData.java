@@ -44,7 +44,7 @@ public final class SkillLearnData extends DocumentParser
 	@Override
 	public synchronized void load()
 	{
-		parseDatapackFile("data/skillLearn.xml");
+		parseDatapackFile("data/xml/skillLearn.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _skillLearn.size() + " Skill Learn data.");
 	}
 	

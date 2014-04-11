@@ -51,15 +51,15 @@ public class DocumentEngine
 	
 	protected DocumentEngine()
 	{
-		hashFiles("data/stats/items", _itemFiles);
+		hashFiles("data/xml/stats/items", _itemFiles);
 		if (Config.CUSTOM_ITEMS_LOAD)
 		{
-			hashFiles("data/stats/items/custom", _itemFiles);
+			hashFiles("data/xml/stats/items/custom", _itemFiles);
 		}
-		hashFiles("data/stats/skills", _skillFiles);
+		hashFiles("data/xml/stats/skills", _skillFiles);
 		if (Config.CUSTOM_SKILLS_LOAD)
 		{
-			hashFiles("data/stats/skills/custom", _skillFiles);
+			hashFiles("data/xml/stats/skills/custom", _skillFiles);
 		}
 	}
 	

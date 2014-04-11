@@ -49,7 +49,7 @@ public final class ExperienceTable extends DocumentParser
 	public void load()
 	{
 		_expTable.clear();
-		parseDatapackFile("data/stats/experience.xml");
+		parseDatapackFile("data/xml/stats/experience.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _expTable.size() + " levels.");
 		_log.info(getClass().getSimpleName() + ": Max Player Level is: " + (MAX_LEVEL - 1));
 		_log.info(getClass().getSimpleName() + ": Max Pet Level is: " + (MAX_PET_LEVEL - 1));
