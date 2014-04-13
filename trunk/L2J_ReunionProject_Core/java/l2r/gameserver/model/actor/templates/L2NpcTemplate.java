@@ -119,6 +119,8 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	 */
 	private final Map<QuestEventType, List<Quest>> _questEvents = new FastMap<QuestEventType, List<Quest>>().shared();
 	
+	private StatsSet _parameters;
+	
 	public static boolean isAssignableTo(Class<?> sub, Class<?> clazz)
 	{
 		// If clazz represents an interface
@@ -945,5 +947,20 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 				_race = NpcRace.NONE;
 				break;
 		}
+	}
+	
+	public boolean hasParameters()
+	{
+		return _parameters != null;
+	}
+	
+	public StatsSet getParameters()
+	{
+		return _parameters;
+	}
+	
+	public void setParameters(StatsSet set)
+	{
+		_parameters = set;
 	}
 }
