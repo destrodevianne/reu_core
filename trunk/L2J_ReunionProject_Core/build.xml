@@ -81,7 +81,7 @@
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Built-Date" value="${build.tstamp}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.com/" />
+				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
 			</manifest>
 		</jar>
@@ -107,12 +107,12 @@
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Built-Date" value="${build.tstamp}" />
 				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.com/" />
+				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
 				<attribute name="Main-Class" value="l2r.tools.configurator.ConfigUserInterface" />
 			</manifest>
 		</jar>
-		<jar destfile="${build.dist.game}/l2reunion.jar" level="9">
+		<jar destfile="${build.dist.game}/reunion-core.jar" level="9">
 			<fileset dir="${build.bin}">
 				<exclude name="**/dbinstaller/**" />
 				<exclude name="**/loginserver/**" />
@@ -122,7 +122,7 @@
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Built-Date" value="${build.tstamp}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.com/" />
+				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
 			</manifest>
 		</jar>
@@ -148,7 +148,7 @@
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Built-Date" value="${build.tstamp}" />
 				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.com/" />
+				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
 				<attribute name="Main-Class" value="l2r.tools.configurator.ConfigUserInterface" />
 			</manifest>
@@ -166,7 +166,7 @@
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Built-Date" value="${build.tstamp}" />
 				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.com/" />
+				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
 				<attribute name="Main-Class" value="l2r.tools.dbinstaller.LauncherCS" />
 			</manifest>
@@ -184,7 +184,7 @@
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Built-Date" value="${build.tstamp}" />
 				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.com/" />
+				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
 				<attribute name="Main-Class" value="l2r.tools.dbinstaller.LauncherGS" />
 			</manifest>
@@ -202,7 +202,7 @@
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Built-Date" value="${build.tstamp}" />
 				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.com/" />
+				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
 				<attribute name="Main-Class" value="l2r.tools.dbinstaller.LauncherLS" />
 			</manifest>

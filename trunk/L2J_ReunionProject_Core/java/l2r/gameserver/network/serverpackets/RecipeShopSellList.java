@@ -19,7 +19,6 @@
 package l2r.gameserver.network.serverpackets;
 
 import l2r.gameserver.model.L2ManufactureItem;
-import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
 public class RecipeShopSellList extends L2GameServerPacket
@@ -35,23 +34,20 @@ public class RecipeShopSellList extends L2GameServerPacket
 	@Override
 	protected final void writeImpl()
 	{
-		L2ManufactureList createList = _manufacturer.getCreateList();
-		
-		if (createList != null)
+		writeC(0xDF);
+		writeD(_manufacturer.getObjectId());
+		writeD((int) _manufacturer.getCurrentMp());// Creator's MP
+		writeD(_manufacturer.getMaxMp());// Creator's MP
+		writeQ(_buyer.getAdena());// Buyer Adena
+		if (!_manufacturer.hasManufactureShop())
 		{
-			writeC(0xDF);
-			writeD(_manufacturer.getObjectId());
-			writeD((int) _manufacturer.getCurrentMp());// Creator's MP
-			writeD(_manufacturer.getMaxMp());// Creator's MP
-			writeQ(_buyer.getAdena());// Buyer Adena
-			
-			int count = createList.size();
-			writeD(count);
-			L2ManufactureItem temp;
-			
-			for (int i = 0; i < count; i++)
+			writeD(0x00);
+		}
+		else
+		{
+			writeD(_manufacturer.getManufactureItems().size());
+			for (L2ManufactureItem temp : _manufacturer.getManufactureItems().values())
 			{
-				temp = createList.getList().get(i);
 				writeD(temp.getRecipeId());
 				writeD(0x00); // unknown
 				writeQ(temp.getCost());

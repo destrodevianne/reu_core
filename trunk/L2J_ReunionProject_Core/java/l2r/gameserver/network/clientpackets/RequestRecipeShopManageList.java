@@ -19,7 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.enums.PrivateStoreType;
-import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.RecipeShopManageList;
@@ -61,10 +60,6 @@ public final class RequestRecipeShopManageList extends L2GameClientPacket
 			{
 				player.standUp();
 			}
-		}
-		if (player.getCreateList() == null)
-		{
-			player.setCreateList(new L2ManufactureList());
 		}
 		
 		player.sendPacket(new RecipeShopManageList(player, true));
