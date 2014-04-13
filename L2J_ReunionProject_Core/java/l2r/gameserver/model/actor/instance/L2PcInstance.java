@@ -27,9 +27,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -122,7 +124,6 @@ import l2r.gameserver.model.L2CommandChannel;
 import l2r.gameserver.model.L2ContactList;
 import l2r.gameserver.model.L2EnchantSkillLearn;
 import l2r.gameserver.model.L2ManufactureItem;
-import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2PetData;
@@ -662,7 +663,8 @@ public final class L2PcInstance extends L2Playable
 	
 	private TradeList _activeTradeList;
 	private ItemContainer _activeWarehouse;
-	private L2ManufactureList _createList;
+	private volatile Map<Integer, L2ManufactureItem> _manufactureItems;
+	private String _storeName = "";
 	private TradeList _sellList;
 	private TradeList _buyList;
 	
@@ -6694,21 +6696,46 @@ public final class L2PcInstance extends L2Playable
 		onTradeCancel(this);
 	}
 	
-	/**
-	 * @return the _createList object of the L2PcInstance.
-	 */
-	public L2ManufactureList getCreateList()
+	public boolean hasManufactureShop()
 	{
-		return _createList;
+		return (_manufactureItems != null) && !_manufactureItems.isEmpty();
 	}
 	
 	/**
-	 * Set the _createList object of the L2PcInstance.
-	 * @param x
+	 * Get the manufacture items map of this player.
+	 * @return the the manufacture items map
 	 */
-	public void setCreateList(L2ManufactureList x)
+	public Map<Integer, L2ManufactureItem> getManufactureItems()
 	{
-		_createList = x;
+		if (_manufactureItems == null)
+		{
+			synchronized (this)
+			{
+				if (_manufactureItems == null)
+				{
+					_manufactureItems = Collections.synchronizedMap(new LinkedHashMap<Integer, L2ManufactureItem>());
+				}
+			}
+		}
+		return _manufactureItems;
+	}
+	
+	/**
+	 * Get the store name, if any.
+	 * @return the store name
+	 */
+	public String getStoreName()
+	{
+		return _storeName;
+	}
+	
+	/**
+	 * Set the store name.
+	 * @param name the store name to set
+	 */
+	public void setStoreName(String name)
+	{
+		_storeName = name == null ? "" : name;
 	}
 	
 	/**
@@ -14704,9 +14731,6 @@ public final class L2PcInstance extends L2Playable
 		}
 	}
 	
-	/**
-	 * 
-	 */
 	private void notifyFriends()
 	{
 		FriendStatusPacket pkt = new FriendStatusPacket(getObjectId());
@@ -14721,7 +14745,8 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * @return the _silenceMode
+	 * Verify if this player is in silence mode.
+	 * @return the {@code true} if this player is in silence mode, {@code false} otherwise
 	 */
 	public boolean isSilenceMode()
 	{
@@ -14775,6 +14800,10 @@ public final class L2PcInstance extends L2Playable
 		sendPacket(new EtcStatusUpdate(this));
 	}
 	
+	/**
+	 * Add a player to the "excluded silence mode" list.
+	 * @param playerObjId the player's object Id
+	 */
 	public void addSilenceModeExcluded(int playerObjId)
 	{
 		if (_silenceModeExcluded == null)
@@ -14786,54 +14815,55 @@ public final class L2PcInstance extends L2Playable
 	
 	private void storeRecipeShopList()
 	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		if (hasManufactureShop())
 		{
-			PreparedStatement statement;
-			L2ManufactureList list = getCreateList();
-			
-			if ((list != null) && (list.size() > 0))
+			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 			{
-				int _position = 1;
-				statement = con.prepareStatement("DELETE FROM character_recipeshoplist WHERE charId=? ");
-				statement.setInt(1, getObjectId());
-				statement.execute();
-				statement.close();
-				
-				PreparedStatement statement2 = con.prepareStatement("INSERT INTO character_recipeshoplist (charId, Recipeid, Price, Pos) VALUES (?, ?, ?, ?)");
-				for (L2ManufactureItem item : list.getList())
+				try (PreparedStatement st = con.prepareStatement("DELETE FROM character_recipeshoplist WHERE charId=?"))
 				{
-					statement2.setInt(1, getObjectId());
-					statement2.setInt(2, item.getRecipeId());
-					statement2.setLong(3, item.getCost());
-					statement2.setInt(4, _position);
-					statement2.execute();
-					statement2.clearParameters();
-					_position++;
+					st.setInt(1, getObjectId());
+					st.execute();
 				}
-				statement2.close();
+				
+				try (PreparedStatement st = con.prepareStatement("INSERT INTO character_recipeshoplist (`charId`, `recipeId`, `price`, `index`) VALUES (?, ?, ?, ?)"))
+				{
+					int i = 1;
+					for (L2ManufactureItem item : _manufactureItems.values())
+					{
+						st.setInt(1, getObjectId());
+						st.setInt(2, item.getRecipeId());
+						st.setLong(3, item.getCost());
+						st.setInt(4, i++);
+						st.addBatch();
+					}
+					st.executeBatch();
+				}
 			}
-		}
-		catch (Exception e)
-		{
-			_log.error("Could not store recipe shop for playerID " + getObjectId() + ": ", e);
+			catch (Exception e)
+			{
+				_log.error("Could not store recipe shop for playerId " + getObjectId() + ": ", e);
+			}
 		}
 	}
 	
 	private void restoreRecipeShopList()
 	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		if (_manufactureItems != null)
 		{
-			PreparedStatement statement = con.prepareStatement("SELECT Recipeid,Price FROM character_recipeshoplist WHERE charId=? ORDER BY Pos ASC");
+			_manufactureItems.clear();
+		}
+		
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM character_recipeshoplist WHERE charId=? ORDER BY `index`"))
+		{
 			statement.setInt(1, getObjectId());
-			ResultSet rset = statement.executeQuery();
-			L2ManufactureList createList = new L2ManufactureList();
-			while (rset.next())
+			try (ResultSet rset = statement.executeQuery())
 			{
-				createList.add(new L2ManufactureItem(rset.getInt("Recipeid"), rset.getLong("Price")));
+				while (rset.next())
+				{
+					getManufactureItems().put(rset.getInt("recipeId"), new L2ManufactureItem(rset.getInt("recipeId"), rset.getLong("price")));
+				}
 			}
-			setCreateList(createList);
-			rset.close();
-			statement.close();
 		}
 		catch (Exception e)
 		{

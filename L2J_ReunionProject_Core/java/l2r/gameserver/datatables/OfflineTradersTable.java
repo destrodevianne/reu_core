@@ -29,7 +29,6 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.LoginServerThread;
 import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.L2ManufactureItem;
-import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.TradeItem;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -65,7 +64,6 @@ public class OfflineTradersTable
 			stm2.execute();
 			con.setAutoCommit(false); // avoid halfway done
 			
-			// TextBuilder items = TextBuilder.newInstance();
 			for (L2PcInstance pc : L2World.getInstance().getPlayers())
 			{
 				try
@@ -117,8 +115,8 @@ public class OfflineTradersTable
 								{
 									continue;
 								}
-								title = pc.getCreateList().getStoreName();
-								for (L2ManufactureItem i : pc.getCreateList().getList())
+								title = pc.getStoreName();
+								for (L2ManufactureItem i : pc.getManufactureItems().values())
 								{
 									stm_items.setInt(1, pc.getObjectId());
 									stm_items.setInt(2, i.getRecipeId());
@@ -226,13 +224,11 @@ public class OfflineTradersTable
 									player.getSellList().setPackaged(type == PrivateStoreType.PACKAGE_SELL);
 									break;
 								case MANUFACTURE:
-									L2ManufactureList createList = new L2ManufactureList();
 									while (items.next())
 									{
-										createList.add(new L2ManufactureItem(items.getInt(2), items.getLong(4)));
+										player.getManufactureItems().put(items.getInt(2), new L2ManufactureItem(items.getInt(2), items.getLong(4)));
 									}
-									player.setCreateList(createList);
-									player.getCreateList().setStoreName(rs.getString("title"));
+									player.setStoreName(rs.getString("title"));
 									break;
 							}
 						}
@@ -326,11 +322,12 @@ public class OfflineTradersTable
 								}
 								break;
 							case MANUFACTURE:
+								
 								if (firstCall)
 								{
-									title = trader.getCreateList().getStoreName();
+									title = trader.getStoreName();
 								}
-								for (L2ManufactureItem i : trader.getCreateList().getList())
+								for (L2ManufactureItem i : trader.getManufactureItems().values())
 								{
 									st1.setInt(1, trader.getObjectId());
 									st1.setInt(2, i.getRecipeId());

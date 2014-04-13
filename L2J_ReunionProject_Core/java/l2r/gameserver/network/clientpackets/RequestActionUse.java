@@ -33,7 +33,6 @@ import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MountType;
 import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.instancemanager.AirShipManager;
-import l2r.gameserver.model.L2ManufactureList;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Summon;
@@ -272,11 +271,6 @@ public final class RequestActionUse extends L2GameClientPacket
 					activeChar.standUp();
 				}
 				
-				if (activeChar.getCreateList() == null)
-				{
-					activeChar.setCreateList(new L2ManufactureList());
-				}
-				
 				sendPacket(new RecipeShopManageList(activeChar, true));
 				break;
 			case 38: // Mount/Dismount
@@ -334,11 +328,6 @@ public final class RequestActionUse extends L2GameClientPacket
 				if (activeChar.isSitting())
 				{
 					activeChar.standUp();
-				}
-				
-				if (activeChar.getCreateList() == null)
-				{
-					activeChar.setCreateList(new L2ManufactureList());
 				}
 				
 				sendPacket(new RecipeShopManageList(activeChar, false));
