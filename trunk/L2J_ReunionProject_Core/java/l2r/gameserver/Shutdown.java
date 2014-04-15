@@ -42,7 +42,6 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.gameserverpackets.ServerStatus;
 import l2r.gameserver.network.serverpackets.ServerClose;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-import l2r.gameserver.scripts.hellbound.HellboundEngine;
 import l2r.gameserver.util.Broadcast;
 
 import org.slf4j.Logger;
@@ -551,8 +550,6 @@ public class Shutdown extends Thread
 		_log.info("RaidBossSpawnManager: All raidboss info saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		GrandBossManager.getInstance().cleanUp();
 		_log.info("GrandBossManager: All Grand Boss info saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
-		HellboundEngine.getInstance().saveData();
-		_log.info("Hellbound Manager: Data saved(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		ItemAuctionManager.getInstance().shutdown();
 		_log.info("Item Auction Manager: All tasks stopped(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 		Olympiad.getInstance().saveOlympiadStatus();
