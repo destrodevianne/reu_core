@@ -75,6 +75,7 @@ public final class L2TrapInstance extends L2Npc
 		{
 			_skill = skill; // Last skill
 		}
+		// _skill = getTemplate().getParameters().getObject("trap_skill", SkillHolder.class);
 		_hasLifeTime = lifeTime >= 0;
 		_lifeTime = lifeTime != 0 ? lifeTime : 30000;
 		_remainingTime = _lifeTime;
@@ -87,6 +88,7 @@ public final class L2TrapInstance extends L2Npc
 	public L2TrapInstance(int objectId, L2NpcTemplate template, L2PcInstance owner, int lifeTime)
 	{
 		this(objectId, template, owner.getInstanceId(), lifeTime);
+		_owner = owner;
 	}
 	
 	@Override
@@ -442,11 +444,6 @@ public final class L2TrapInstance extends L2Npc
 	public void setRemainingTime(int time)
 	{
 		_remainingTime = time;
-	}
-	
-	public void setSkill(L2Skill _skill)
-	{
-		this._skill = _skill;
 	}
 	
 	public int getLifeTime()
