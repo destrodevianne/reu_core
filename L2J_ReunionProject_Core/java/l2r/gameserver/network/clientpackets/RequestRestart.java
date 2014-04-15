@@ -40,6 +40,8 @@ import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerDespawnListe
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import gr.reunion.configsEngine.AntibotConfigs;
 import gr.reunion.interf.ReunionEvents;
+import gr.reunion.protection.Protection;
+import gr.reunion.protection.network.ProtectionManager;
 
 /**
  * This class ...
@@ -172,6 +174,12 @@ public final class RequestRestart extends L2GameClientPacket
 		
 		// return the client to the authed status
 		client.setState(GameClientState.AUTHED);
+		
+		if (Protection.isProtectionOn())
+		{
+			ProtectionManager.scheduleSendPacketToClient(0L, player);
+		}
+		Protection.doDisconection(getClient());
 		
 		sendPacket(RestartResponse.valueOf(true));
 		

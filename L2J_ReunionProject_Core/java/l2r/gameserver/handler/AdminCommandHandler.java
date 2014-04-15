@@ -51,6 +51,7 @@ import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGm;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGmChat;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGraciaSeeds;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGrandBoss;
+import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminHWIDBan;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminHeal;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminHellbound;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminHtml;
@@ -141,6 +142,7 @@ public class AdminCommandHandler implements IHandler<IAdminCommandHandler, Strin
 		registerHandler(new AdminGrandBoss());
 		registerHandler(new AdminHeal());
 		registerHandler(new AdminHtml());
+		registerHandler(new AdminHWIDBan());
 		registerHandler(new AdminInstance());
 		registerHandler(new AdminInstanceZone());
 		registerHandler(new AdminInvul());

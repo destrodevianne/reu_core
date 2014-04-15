@@ -91,6 +91,8 @@ import gr.reunion.configsEngine.SecuritySystemConfigs;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.main.EnterWorldCustomHandler;
 import gr.reunion.main.PlayerValues;
+import gr.reunion.protection.Protection;
+import gr.reunion.protection.network.ProtectionManager;
 import gr.reunion.securityEngine.SecurityActions;
 import gr.reunion.securityEngine.SecurityType;
 
@@ -605,6 +607,10 @@ public class EnterWorld extends L2GameClientPacket
 			activeChar.doRevive();
 			activeChar.teleToLocation(TeleportWhereType.Town);
 			activeChar.sendMessage("You have been teleported to the nearest town due to you being in an Olympiad Stadium");
+		}
+		if (Protection.isProtectionOn())
+		{
+			ProtectionManager.SendSpecialSting(getClient());
 		}
 		/** End of Custom Section */
 		
