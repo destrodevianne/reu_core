@@ -23,8 +23,11 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import l2r.Config;
+import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.serverpackets.KeyPacket;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
+import gr.reunion.protection.ConfigProtection;
+import gr.reunion.protection.Protection;
 
 /**
  * This class ...
@@ -37,10 +40,34 @@ public final class ProtocolVersion extends L2GameClientPacket
 	
 	private int _version;
 	
+	// Protection
+	private String _hwidHdd = "";
+	private String _hwidMac = "";
+	private String _hwidCPU = "";
+	private byte[] _data;
+	
 	@Override
 	protected void readImpl()
 	{
+		L2GameClient client = getClient();
+		
 		_version = readD();
+		
+		if (_buf.remaining() > 260)
+		{
+			_data = new byte[260];
+			readB(_data);
+			if (Protection.isProtectionOn())
+			{
+				_hwidHdd = readS();
+				_hwidMac = readS();
+				_hwidCPU = readS();
+			}
+		}
+		else if (Protection.isProtectionOn())
+		{
+			client.close(new KeyPacket(getClient().enableCrypt(), 0));
+		}
 	}
 	
 	@Override
@@ -69,17 +96,59 @@ public final class ProtocolVersion extends L2GameClientPacket
 			getClient().setProtocolOk(false);
 			getClient().close(pk);
 		}
+		getClient().setRevision(_version);
+		if (Protection.isProtectionOn())
+		{
+			switch (ConfigProtection.GET_CLIENT_HWID)
+			{
+				case 1:
+					if (_hwidHdd == "")
+					{
+						_log.info("Status HWID HDD : NoPatch!!!");
+						getClient().close(new KeyPacket(getClient().enableCrypt(), 0));
+					}
+					else
+					{
+						getClient().setHWID(_hwidHdd);
+					}
+					break;
+				case 2:
+					if (_hwidMac == "")
+					{
+						_log.info("Status HWID MAC : NoPatch!!!");
+						getClient().close(new KeyPacket(getClient().enableCrypt(), 0));
+					}
+					else
+					{
+						getClient().setHWID(_hwidMac);
+					}
+					break;
+				case 3:
+					if (_hwidCPU == "")
+					{
+						_log.info("Status HWID : NoPatch!!!");
+						getClient().close(new KeyPacket(getClient().enableCrypt(), 0));
+					}
+					else
+					{
+						getClient().setHWID(_hwidCPU);
+					}
+					break;
+			}
+		}
 		else
 		{
-			if (Config.DEBUG)
-			{
-				_log.info("Client Protocol Revision is ok: " + _version);
-			}
-			
-			KeyPacket pk = new KeyPacket(getClient().enableCrypt(), 1);
-			getClient().sendPacket(pk);
-			getClient().setProtocolOk(true);
+			getClient().setHWID("NoGuard");
 		}
+		
+		if (Config.DEBUG)
+		{
+			_log.info("Client Protocol Revision is ok: " + _version);
+		}
+		
+		KeyPacket pk = new KeyPacket(getClient().enableCrypt(), 1);
+		getClient().sendPacket(pk);
+		getClient().setProtocolOk(true);
 	}
 	
 	@Override

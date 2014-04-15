@@ -23,6 +23,7 @@ import l2r.gameserver.LoginServerThread;
 import l2r.gameserver.LoginServerThread.SessionKey;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
+import gr.reunion.protection.Protection;
 
 /**
  * This class ...
@@ -42,6 +43,8 @@ public final class AuthLogin extends L2GameClientPacket
 	private int _loginKey1;
 	private int _loginKey2;
 	
+	private final byte[] _data = new byte[48];
+	
 	@Override
 	protected void readImpl()
 	{
@@ -55,6 +58,14 @@ public final class AuthLogin extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
+		if (Protection.isProtectionOn())
+		{
+			if (!Protection.doAuthLogin(getClient(), _data, _loginName))
+			{
+				return;
+			}
+		}
+		
 		final L2GameClient client = getClient();
 		if (_loginName.isEmpty() || !client.isProtocolOk())
 		{

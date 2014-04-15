@@ -41,6 +41,7 @@ import l2r.gameserver.network.serverpackets.SSQInfo;
 import l2r.gameserver.network.serverpackets.ServerClose;
 import l2r.gameserver.scripting.scriptengine.events.PlayerEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerListener;
+import gr.reunion.protection.Protection;
 
 /**
  * This class ...
@@ -154,6 +155,11 @@ public class CharacterSelect extends L2GameClientPacket
 					cha.setOnlineStatus(true, true);
 					
 					sendPacket(new SSQInfo());
+					
+					if (!Protection.checkPlayerWithHWID(client, cha.getObjectId(), cha.getName()))
+					{
+						return;
+					}
 					
 					client.setState(GameClientState.IN_GAME);
 					CharSelected cs = new CharSelected(cha, client.getSessionId().playOkID1);

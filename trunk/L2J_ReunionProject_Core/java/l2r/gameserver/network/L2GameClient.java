@@ -61,6 +61,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gr.reunion.interf.ReunionEvents;
+import gr.reunion.protection.Protection;
 import gr.reunion.securityEngine.SecurityActions;
 import gr.reunion.securityEngine.SecurityType;
 
@@ -156,6 +157,12 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	{
 		byte[] key = BlowFishKeygen.getRandomKey();
 		_crypt.setKey(key);
+		
+		if (Protection.isProtectionOn())
+		{
+			key = Protection.getKey(key);
+		}
+		
 		return key;
 	}
 	
@@ -692,6 +699,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		try
 		{
 			ThreadPoolManager.getInstance().executeGeneral(new DisconnectTask());
+			Protection.doDisconection(this);
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -1155,5 +1163,62 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	public void setAditionalClosePacket(L2GameServerPacket aditionalClosePacket)
 	{
 		_aditionalClosePacket = aditionalClosePacket;
+	}
+	
+	// Protection
+	private String _playerName = "";
+	private String _loginName = "";
+	private int _playerId = 0;
+	private String _hwid = "";
+	private int revision = 0;
+	
+	public final String getPlayerName()
+	{
+		return _playerName;
+	}
+	
+	public void setPlayerName(String name)
+	{
+		_playerName = name;
+	}
+	
+	public void setPlayerId(int plId)
+	{
+		_playerId = plId;
+	}
+	
+	public int getPlayerId()
+	{
+		return _playerId;
+	}
+	
+	public final String getHWID()
+	{
+		return _hwid;
+	}
+	
+	public void setHWID(String hwid)
+	{
+		_hwid = hwid;
+	}
+	
+	public void setRevision(int revision)
+	{
+		this.revision = revision;
+	}
+	
+	public int getRevision()
+	{
+		return this.revision;
+	}
+	
+	public final String getLoginName()
+	{
+		return _loginName;
+	}
+	
+	public void setLoginName(String name)
+	{
+		_loginName = name;
 	}
 }

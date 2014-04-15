@@ -348,6 +348,8 @@ import gr.reunion.leaderboards.ArenaLeaderboard;
 import gr.reunion.leaderboards.TvTLeaderboard;
 import gr.reunion.main.NamePrefix;
 import gr.reunion.premiumEngine.PremiumHandler;
+import gr.reunion.protection.Protection;
+import gr.reunion.protection.network.ProtectionManager;
 import gr.reunion.pvpColorEngine.ColorSystemHandler;
 import gr.reunion.pvpRewardEngine.pvpRewardHandler;
 import gr.reunion.spreeEngine.SpreeHandler;
@@ -1460,6 +1462,11 @@ public final class L2PcInstance extends L2Playable
 	{
 		try
 		{
+			if (Protection.isProtectionOn())
+			{
+				ProtectionManager.scheduleSendPacketToClient(0, this);
+			}
+			
 			closeNetConnection(closeClient);
 		}
 		catch (Exception e)
@@ -4541,6 +4548,11 @@ public final class L2PcInstance extends L2Playable
 		L2GameClient client = _client;
 		if (client != null)
 		{
+			if (Protection.isProtectionOn())
+			{
+				ProtectionManager.scheduleSendPacketToClient(0, this);
+			}
+			
 			if (client.isDetached())
 			{
 				client.cleanMe(true);
