@@ -176,32 +176,30 @@ public abstract class L2Playable extends L2Character
 				{
 					if (qs != null)
 					{
-						_log.error("L2Playeable quest name is: " + qs.getQuest().getName());
+						_log.error("L2Playeable[notifyDeath]1 quest name is: " + qs.getQuest().getName());
 					}
 					else
 					{
-						_log.error("L2Playeable qs is NULL");
+						_log.error("L2Playeable[notifyDeath]1 qs is NULL");
 					}
 					
 					if (killer == null)
 					{
-						_log.error("L2Playeable killer is NULL");
+						_log.error("L2Playeable[notifyDeath]1 killer is NULL");
 					}
 					else
 					{
-						_log.error("L2Playeable killer is: " + killer.getName());
+						_log.error("L2Playeable[notifyDeath]1 killer is: " + killer.getName());
 					}
 					
 					if (this == null)
 					{
-						_log.error("L2Playeable is NULL");
+						_log.error("L2Playeable[notifyDeath]1 is NULL");
 					}
 					else
 					{
-						_log.error("L2Playeable ID is: " + this.getName());
+						_log.error("L2Playeable[notifyDeath]1 ID is: " + this.getName());
 					}
-					
-					_log.error("Logger: notifyDeath failed (L2Playable 1) Report this to team.");
 				}
 			}
 		}
@@ -217,7 +215,23 @@ public abstract class L2Playable extends L2Character
 				}
 				catch (Exception e)
 				{
-					_log.error("Logger: notifyDeath failed (L2Playable 2) Report this to team. ");
+					if (killer == null)
+					{
+						_log.error("L2Playeable[notifyDeath]2 killer is NULL");
+					}
+					else
+					{
+						_log.error("L2Playeable[notifyDeath]2 killer is: " + killer.getName());
+					}
+					
+					if (this == null)
+					{
+						_log.error("L2Playeable[notifyDeath]2 is NULL");
+					}
+					else
+					{
+						_log.error("L2Playeable[notifyDeath]2 ID is: " + this.getName());
+					}
 				}
 			}
 		}

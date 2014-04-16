@@ -55,25 +55,25 @@ public class QuestTimer
 				{
 					if (getName() == null)
 					{
-						_log.error("Quest[notifyEvent] getName() is NULL");
+						_log.error("QuestTimer[notifyEvent] getName() is NULL");
 					}
 					else
 					{
-						_log.error("Quest[notifyEvent] getQuest() name is: " + getQuest().getName());
+						_log.error("QuestTimer[notifyEvent] getQuest() name is: " + getQuest().getName());
 					}
 					
 					if (getNpc() == null)
 					{
-						_log.error("Quest[notifyEvent] getNpc() is NULL");
+						_log.error("QuestTimer[notifyEvent] getNpc() is NULL");
 					}
 					else
 					{
-						_log.error("Quest[notifyEvent] getNpc() ID is: " + getNpc().getId());
+						_log.error("QuestTimer[notifyEvent] getNpc() ID is: " + getNpc().getId());
 					}
 					
 					if (getPlayer() == null)
 					{
-						_log.error("Quest[notifyEvent] getPlayer() is NULL");
+						_log.error("QuestTimer[notifyEvent] getPlayer() is NULL");
 					}
 				}
 			}
