@@ -30,7 +30,7 @@ public class ExBrExtraUserInfo extends L2GameServerPacket
 	public ExBrExtraUserInfo(L2PcInstance player)
 	{
 		_charObjId = player.getObjectId();
-		_invisible = player.getAppearance().getInvisible();
+		_invisible = player.isInvisible();
 	}
 	
 	@Override

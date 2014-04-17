@@ -19,8 +19,6 @@
 package l2r.gameserver.model.actor.appearance;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.network.serverpackets.DeleteObject;
-import l2r.gameserver.util.Broadcast;
 
 public class PcAppearance
 {
@@ -37,7 +35,6 @@ public class PcAppearance
 	private boolean _sex; // Female true(1)
 	
 	/** true if the player is invisible */
-	private boolean _invisible = false;
 	private boolean _ghostmode = false;
 	
 	/** The current visible name of this player, not necessarily the real one */
@@ -153,23 +150,6 @@ public class PcAppearance
 	public final void setSex(boolean isfemale)
 	{
 		_sex = isfemale;
-	}
-	
-	public void setInvisible()
-	{
-		_invisible = true;
-		Broadcast.toKnownPlayers(_owner, new DeleteObject(_owner));
-	}
-	
-	public void setVisible()
-	{
-		_invisible = false;
-		_owner.broadcastUserInfo();
-	}
-	
-	public boolean getInvisible()
-	{
-		return _invisible;
 	}
 	
 	public void setGhostMode(boolean b)

@@ -428,6 +428,24 @@ public class Quest extends ManagedScript implements IIdentifiable
 		}
 	}
 	
+	/**
+	 * @param npc
+	 * @param player
+	 * @return {@code true} if player can see this npc, {@code false} otherwise.
+	 */
+	public final boolean notifyOnCanSeeMe(L2Npc npc, L2PcInstance player)
+	{
+		try
+		{
+			return onCanSeeMe(npc, player);
+		}
+		catch (Exception e)
+		{
+			_log.warn("Exception on onCanSeeMe() in notifyOnCanSeeMe(): " + e.getMessage(), e);
+		}
+		return false;
+	}
+	
 	// These are methods to call within the core to call the quest events.
 	
 	/**
@@ -1342,6 +1360,16 @@ public class Quest extends ManagedScript implements IIdentifiable
 	}
 	
 	/**
+	 * @param npc
+	 * @param player
+	 * @return {@code true} if player can see this npc, {@code false} otherwise.
+	 */
+	public boolean onCanSeeMe(L2Npc npc, L2PcInstance player)
+	{
+		return false;
+	}
+	
+	/**
 	 * This function is called whenever a walker NPC (controlled by WalkingManager) arrive a walking node
 	 * @param npc registered NPC
 	 */
@@ -2210,6 +2238,24 @@ public class Quest extends ManagedScript implements IIdentifiable
 	public void addNpcHateId(Collection<Integer> npcIds)
 	{
 		addEventId(QuestEventType.ON_NPC_HATE, npcIds);
+	}
+	
+	/**
+	 * Registers onCanSeeMe trigger whenever an npc info must be sent to player.
+	 * @param npcIds
+	 */
+	public void addCanSeeMeId(int... npcIds)
+	{
+		addEventId(QuestEventType.ON_CAN_SEE_ME, npcIds);
+	}
+	
+	/**
+	 * Registers onCanSeeMe trigger whenever an npc info must be sent to player.
+	 * @param npcIds
+	 */
+	public void addCanSeeMeId(Collection<Integer> npcIds)
+	{
+		addEventId(QuestEventType.ON_CAN_SEE_ME, npcIds);
 	}
 	
 	/**

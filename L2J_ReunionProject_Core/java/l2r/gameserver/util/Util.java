@@ -619,9 +619,9 @@ public final class Util
 		final Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
 		for (L2Object obj : objs)
 		{
-			if ((obj != null) && ((obj.isPlayable() && playable) || obj.isPet()))
+			if ((obj != null) && (playable && (obj.isPlayable() || obj.isPet())))
 			{
-				if (obj.isPlayer() && !invisible && obj.getActingPlayer().getAppearance().getInvisible())
+				if (!invisible && obj.isInvisible())
 				{
 					continue;
 				}

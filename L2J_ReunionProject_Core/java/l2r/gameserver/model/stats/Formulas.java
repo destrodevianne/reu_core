@@ -83,6 +83,7 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
+import gr.reunion.balanceEngine.BalanceHandler;
 import gr.reunion.configsEngine.FormulasConfigs;
 
 /**
@@ -923,7 +924,7 @@ public final class Formulas
 		if (target.isPlayer() && (weapon != null) && (skill != null))
 		{
 			// Calculates damage on attacker
-			// damage = BalanceHandler.getInstance().calcPhysBalancedDamage(((L2PcInstance) target), weapon.getItemType(), damage);
+			damage = BalanceHandler.getInstance().calcPhysBalancedDamage(((L2PcInstance) target), weapon.getItemType(), damage);
 		}
 		
 		if (attacker.isPlayer())

@@ -554,6 +554,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 */
 	public void broadcastPacket(L2GameServerPacket mov)
 	{
+		mov.setInvisible(isInvisible());
 		Collection<L2PcInstance> plrs = getKnownList().getKnownPlayers().values();
 		for (L2PcInstance player : plrs)
 		{
@@ -574,6 +575,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 */
 	public void broadcastPacket(L2GameServerPacket mov, int radiusInKnownlist)
 	{
+		mov.setInvisible(isInvisible());
 		Collection<L2PcInstance> plrs = getKnownList().getKnownPlayers().values();
 		for (L2PcInstance player : plrs)
 		{
@@ -2982,7 +2984,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			Collection<L2PcInstance> plrs = getKnownList().getKnownPlayers().values();
 			for (L2PcInstance player : plrs)
 			{
-				if (player == null)
+				if ((player == null) || !isVisibleFor(player))
 				{
 					continue;
 				}
@@ -4300,7 +4302,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					Collection<L2PcInstance> plrs = getKnownList().getKnownPlayers().values();
 					for (L2PcInstance player : plrs)
 					{
-						if (player == null)
+						if ((player == null) || !isVisibleFor(player))
 						{
 							continue;
 						}
