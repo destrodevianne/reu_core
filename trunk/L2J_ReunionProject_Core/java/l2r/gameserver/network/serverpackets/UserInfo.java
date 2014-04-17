@@ -21,7 +21,6 @@ package l2r.gameserver.network.serverpackets;
 import l2r.Config;
 import l2r.gameserver.datatables.ExperienceTable;
 import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
@@ -244,7 +243,7 @@ public final class UserInfo extends L2GameServerPacket
 		writeD(_activeChar.isGM() ? 1 : 0); // builder level
 		
 		String title = _activeChar.getTitle();
-		if (_activeChar.getAppearance().getInvisible() && _activeChar.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS))
+		if (_activeChar.isInvisible())
 		{
 			title = "Invisible";
 		}
@@ -279,7 +278,7 @@ public final class UserInfo extends L2GameServerPacket
 		
 		writeC(_activeChar.isInPartyMatchRoom() ? 1 : 0);
 		
-		writeD(_activeChar.getAppearance().getInvisible() && _activeChar.isGM() ? _activeChar.getAbnormalEffect() | AbnormalEffect.STEALTH.getMask() : _activeChar.getAbnormalEffect());
+		writeD(_activeChar.isInvisible() ? _activeChar.getAbnormalEffect() | AbnormalEffect.STEALTH.getMask() : _activeChar.getAbnormalEffect());
 		writeC(_activeChar.isInsideZone(ZoneIdType.WATER) ? 1 : _activeChar.isFlyingMounted() ? 2 : 0);
 		
 		writeD(_activeChar.getClanPrivileges().getBitmask());

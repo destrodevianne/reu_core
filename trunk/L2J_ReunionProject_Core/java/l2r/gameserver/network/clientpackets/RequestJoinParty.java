@@ -19,7 +19,6 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.model.BlockList;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2World;
@@ -86,7 +85,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			return;
 		}
 		
-		if (!requestor.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS) && target.getAppearance().getInvisible())
+		if (!target.isVisibleFor(requestor))
 		{
 			requestor.sendPacket(SystemMessageId.TARGET_IS_INCORRECT);
 			return;

@@ -986,8 +986,7 @@ public class L2Attackable extends L2Npc
 			return 0;
 		}
 		
-		AggroInfo ai = getAggroList().get(target);
-		
+		final AggroInfo ai = getAggroList().get(target);
 		if (ai == null)
 		{
 			return 0;
@@ -996,7 +995,7 @@ public class L2Attackable extends L2Npc
 		if (ai.getAttacker() instanceof L2PcInstance)
 		{
 			L2PcInstance act = (L2PcInstance) ai.getAttacker();
-			if (act.getAppearance().getInvisible() || ai.getAttacker().isInvul() || act.isSpawnProtected())
+			if (act.isInvisible() || ai.getAttacker().isInvul() || act.isSpawnProtected())
 			{
 				// Remove Object Should Use This Method and Can be Blocked While Interacting
 				getAggroList().remove(target);
@@ -1004,7 +1003,7 @@ public class L2Attackable extends L2Npc
 			}
 		}
 		
-		if (!ai.getAttacker().isVisible())
+		if (!ai.getAttacker().isVisible() || ai.getAttacker().isInvisible())
 		{
 			getAggroList().remove(target);
 			return 0;

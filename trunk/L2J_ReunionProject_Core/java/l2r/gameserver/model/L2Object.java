@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javolution.util.FastMap;
 import l2r.gameserver.enums.InstanceType;
+import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.handler.ActionHandler;
@@ -43,6 +44,7 @@ import l2r.gameserver.model.interfaces.IPositionable;
 import l2r.gameserver.model.interfaces.IUniqueId;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
+import l2r.gameserver.network.serverpackets.DeleteObject;
 import l2r.gameserver.network.serverpackets.ExSendUIEvent;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.util.Util;
@@ -57,6 +59,7 @@ import l2r.gameserver.util.Util;
 public abstract class L2Object implements IIdentifiable, INamable, IUniqueId, IPositionable
 {
 	private boolean _isVisible;
+	private boolean _isInvisible;
 	private ObjectKnownList _knownList;
 	/** Name */
 	private String _name;
@@ -948,6 +951,70 @@ public abstract class L2Object implements IIdentifiable, INamable, IUniqueId, IP
 		{
 			sendPacket(new ExSendUIEvent(getActingPlayer(), hide, false, endTime - startTime, 0, instance.getTimerText()));
 		}
+	}
+	
+	/**
+	 * @return {@code true} if this object is invisible, {@code false} otherwise.
+	 */
+	public boolean isInvisible()
+	{
+		return _isInvisible;
+	}
+	
+	/**
+	 * Sets this object as invisible or not
+	 * @param invis
+	 */
+	public void setInvisible(boolean invis)
+	{
+		_isInvisible = invis;
+		if (invis)
+		{
+			final DeleteObject deletePacket = new DeleteObject(this);
+			for (L2Object obj : getKnownList().getKnownObjects().values())
+			{
+				if ((obj != null) && obj.isPlayer())
+				{
+					final L2PcInstance player = obj.getActingPlayer();
+					if (!isVisibleFor(player))
+					{
+						obj.sendPacket(deletePacket);
+					}
+				}
+			}
+		}
+		
+		// Broadcast information regarding the object to those which are suppose to see.
+		broadcastInfo();
+	}
+	
+	/**
+	 * @param player
+	 * @return {@code true} if player can see an invisible object if it's invisible, {@code false} otherwise.
+	 */
+	public boolean isVisibleFor(L2PcInstance player)
+	{
+		return !isInvisible() || player.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS);
+	}
+	
+	/**
+	 * Broadcasts describing info to known players.
+	 */
+	public void broadcastInfo()
+	{
+		for (L2Object obj : getKnownList().getKnownObjects().values())
+		{
+			if ((obj != null) && obj.isPlayer() && isVisibleFor(obj.getActingPlayer()))
+			{
+				sendInfo(obj.getActingPlayer());
+			}
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		return ((obj instanceof L2Object) && (((L2Object) obj).getObjectId() == getObjectId()));
 	}
 	
 	@Override
