@@ -6194,9 +6194,19 @@ public final class L2PcInstance extends L2Playable
 					}
 				}
 				
-				if ((getPvpKills() >= (ColorSystemConfigs.PVP_AMOUNT1)) && (ColorSystemConfigs.PVP_COLOR_SYSTEM_ENABLED))
+				// Color system
+				if (ColorSystemConfigs.ENABLE_COLOR_SYSTEM)
 				{
-					ColorSystemHandler.getInstance().updatePvPColor(this, getPvpKills());
+					
+					if (ColorSystemConfigs.ENABLE_NAME_COLOR)
+					{
+						ColorSystemHandler.getInstance().updateNameColor(this);
+					}
+					
+					if (ColorSystemConfigs.ENABLE_TITLE_COLOR)
+					{
+						ColorSystemHandler.getInstance().updateTitleColor(this);
+					}
 				}
 				
 				setPvpKills(getPvpKills() + 1);
@@ -6231,9 +6241,19 @@ public final class L2PcInstance extends L2Playable
 			setPkKills(getPkKills() + 1);
 		}
 		
-		if ((getPkKills() >= (ColorSystemConfigs.PK_AMOUNT1)) && (ColorSystemConfigs.PK_COLOR_SYSTEM_ENABLED))
+		// Color system
+		if (ColorSystemConfigs.ENABLE_COLOR_SYSTEM)
 		{
-			ColorSystemHandler.getInstance().updatePkColor(this, getPkKills());
+			
+			if (ColorSystemConfigs.ENABLE_NAME_COLOR)
+			{
+				ColorSystemHandler.getInstance().updateNameColor(this);
+			}
+			
+			if (ColorSystemConfigs.ENABLE_TITLE_COLOR)
+			{
+				ColorSystemHandler.getInstance().updateTitleColor(this);
+			}
 		}
 		
 		// Calculate new karma.
