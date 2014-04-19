@@ -309,6 +309,12 @@ public final class Say2 extends L2GameClientPacket
 	{
 		if (PremiumServiceConfigs.ALLOW_PREMIUM_CHAT)
 		{
+			if (player.isChatBanned() && Util.contains(Config.BAN_CHAT_CHANNELS, 0))
+			{
+				player.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED);
+				return;
+			}
+			
 			if (type == 0)
 			{
 				Broadcast.toAllOnlinePlayers(new CreatureSay(0, 15, "[PR]" + player.getName(), text.substring(1)));
