@@ -33,14 +33,13 @@ import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
-import l2r.gameserver.network.serverpackets.CreatureSay;
 import l2r.gameserver.scripting.scriptengine.events.ChatEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.talk.ChatFilterListener;
 import l2r.gameserver.scripting.scriptengine.listeners.talk.ChatListener;
-import l2r.gameserver.util.Broadcast;
 import l2r.gameserver.util.Util;
 import gr.reunion.configsEngine.PremiumServiceConfigs;
 import gr.reunion.interf.ReunionEvents;
+import gr.reunion.premiumEngine.PremiumHandler;
 
 /**
  * This class ...
@@ -228,7 +227,7 @@ public final class Say2 extends L2GameClientPacket
 		
 		if (activeChar.isPremium() && _text.startsWith(PremiumServiceConfigs.PREMIUM_CHAT_PREFIX))
 		{
-			checkPremiumChatFunction(activeChar, _text, _type);
+			PremiumHandler.checkPremiumChatFunction(activeChar, _text, _type);
 			return;
 		}
 		
@@ -303,24 +302,6 @@ public final class Say2 extends L2GameClientPacket
 		{
 			_log.info("No handler registered for ChatType: " + _type + " Player: " + getClient());
 		}
-	}
-	
-	private static void checkPremiumChatFunction(L2PcInstance player, String text, int type)
-	{
-		if (PremiumServiceConfigs.ALLOW_PREMIUM_CHAT)
-		{
-			if (player.isChatBanned() && Util.contains(Config.BAN_CHAT_CHANNELS, 0))
-			{
-				player.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED);
-				return;
-			}
-			
-			if (type == 0)
-			{
-				Broadcast.toAllOnlinePlayers(new CreatureSay(0, 15, "[PR]" + player.getName(), text.substring(1)));
-			}
-		}
-		return;
 	}
 	
 	private boolean checkBot(String text)
