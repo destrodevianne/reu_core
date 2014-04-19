@@ -833,6 +833,8 @@ public final class Config
 	public static float RATE_PARTY_XP;
 	public static float RATE_PARTY_SP;
 	public static float RATE_CONSUMABLE_COST;
+	public static boolean HELLBOUND_ALWAYS_MAX_LEVEL;
+	public static boolean HELLBOUND_ALWAYS_MAX_TRUST;
 	public static float RATE_HB_TRUST_INCREASE;
 	public static float RATE_HB_TRUST_DECREASE;
 	public static float RATE_EXTRACTABLE;
@@ -2165,6 +2167,8 @@ public final class Config
 			RATE_QUEST_REWARD_SCROLL = RatesSettings.getFloat("RateQuestRewardScroll", 1);
 			RATE_QUEST_REWARD_RECIPE = RatesSettings.getFloat("RateQuestRewardRecipe", 1);
 			RATE_QUEST_REWARD_MATERIAL = RatesSettings.getFloat("RateQuestRewardMaterial", 1);
+			HELLBOUND_ALWAYS_MAX_LEVEL = RatesSettings.getBoolean("HellboundAlwaysMaxLevel", false);
+			HELLBOUND_ALWAYS_MAX_TRUST = RatesSettings.getBoolean("HellboundAlwaysMaxTrust", false);
 			RATE_HB_TRUST_INCREASE = RatesSettings.getFloat("RateHellboundTrustIncrease", 1);
 			RATE_HB_TRUST_DECREASE = RatesSettings.getFloat("RateHellboundTrustDecrease", 1);
 			
