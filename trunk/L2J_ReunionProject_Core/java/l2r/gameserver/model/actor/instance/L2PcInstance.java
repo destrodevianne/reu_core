@@ -334,7 +334,6 @@ import l2r.util.L2FastList;
 import l2r.util.Rnd;
 import gr.reunion.achievementEngine.AchievementsHandler;
 import gr.reunion.configsEngine.AntibotConfigs;
-import gr.reunion.configsEngine.ColorSystemConfigs;
 import gr.reunion.configsEngine.CustomServerConfigs;
 import gr.reunion.configsEngine.FlagZoneConfigs;
 import gr.reunion.configsEngine.LeaderboardsConfigs;
@@ -6195,19 +6194,7 @@ public final class L2PcInstance extends L2Playable
 				}
 				
 				// Color system
-				if (ColorSystemConfigs.ENABLE_COLOR_SYSTEM)
-				{
-					
-					if (ColorSystemConfigs.ENABLE_NAME_COLOR)
-					{
-						ColorSystemHandler.getInstance().updateNameColor(this);
-					}
-					
-					if (ColorSystemConfigs.ENABLE_TITLE_COLOR)
-					{
-						ColorSystemHandler.getInstance().updateTitleColor(this);
-					}
-				}
+				ColorSystemHandler.getInstance().updateColor(this);
 				
 				setPvpKills(getPvpKills() + 1);
 				
@@ -6242,19 +6229,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Color system
-		if (ColorSystemConfigs.ENABLE_COLOR_SYSTEM)
-		{
-			
-			if (ColorSystemConfigs.ENABLE_NAME_COLOR)
-			{
-				ColorSystemHandler.getInstance().updateNameColor(this);
-			}
-			
-			if (ColorSystemConfigs.ENABLE_TITLE_COLOR)
-			{
-				ColorSystemHandler.getInstance().updateTitleColor(this);
-			}
-		}
+		ColorSystemHandler.getInstance().updateColor(this);
 		
 		// Calculate new karma.
 		setKarma(getKarma() + Formulas.calculateKarmaGain(getPkKills(), target.isSummon()));
