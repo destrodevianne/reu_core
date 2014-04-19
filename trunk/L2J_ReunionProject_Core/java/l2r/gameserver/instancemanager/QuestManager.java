@@ -212,16 +212,9 @@ public class QuestManager extends ScriptManager<Quest>
 		return false;
 	}
 	
-	@Override
-	public Iterable<Quest> getAllManagedQuests()
+	public Map<String, Quest> getQuests()
 	{
-		return _quests.values();
-	}
-	
-	@Override
-	public Iterable<Quest> getAllManagedScripts()
-	{
-		return _scripts.values();
+		return _quests;
 	}
 	
 	@Override
@@ -241,6 +234,7 @@ public class QuestManager extends ScriptManager<Quest>
 	 * Gets all the registered scripts.
 	 * @return all the scripts
 	 */
+	@Override
 	public Map<String, Quest> getScripts()
 	{
 		return _scripts;
