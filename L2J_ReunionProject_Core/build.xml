@@ -24,7 +24,6 @@
 	<property name="build" location="build" />
 	<property name="build.bin" location="${build}/bin" />
 	<property name="build.dist" location="${build}/dist" />
-	<property name="build.dist.doc" location="${build.dist}/doc" />
 	<property name="build.dist.game" location="${build.dist}/game" />
 	<property name="build.dist.login" location="${build.dist}/login" />
 	<property name="build.dist.tools" location="${build.dist}/tools" />
@@ -56,7 +55,6 @@
 		<sync todir="${build.dist}" includeemptydirs="true">
 			<fileset dir="dist" />
 		</sync>
-		<concat destfile="${build.dist.doc}/L2J_Server_CHANGELOG.txt">${l2j.changelog}</concat>
 		<concat destfile="${build.dist.game}/config/version/l2rcore-version.ini">version=${l2j.version}${line.separator}builddate=${build.tstamp}</concat>
 	</target>
 
