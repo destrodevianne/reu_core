@@ -6109,7 +6109,7 @@ public final class L2PcInstance extends L2Playable
 		
 		if (isInsideZone(ZoneIdType.FLAG) && targetPlayer.isInsideZone(ZoneIdType.FLAG) && FlagZoneConfigs.ENABLE_FLAG_ZONE)
 		{
-			FlagZoneHandler.validateRewardConditions(this);
+			FlagZoneHandler.validateRewardConditions(this, targetPlayer);
 		}
 		
 		// If in Arena, do nothing
