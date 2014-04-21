@@ -51,7 +51,7 @@ import gr.reunion.configsEngine.AioItemsConfigs;
 import gr.reunion.configsEngine.IndividualVoteSystemConfigs;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.javaBuffer.buffItem.AioItemBuffer;
-import gr.reunion.voteEngine.VoteHandler;
+import gr.reunion.voteEngine.old.VoteHandler;
 
 /**
  * This class ...

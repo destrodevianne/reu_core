@@ -86,6 +86,7 @@ import l2r.gameserver.network.serverpackets.ShortCutInit;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerSpawnListener;
+import l2r.gameserver.scripts.handlers.voicedcommandhandlers.CcpVCmd;
 import gr.reunion.antibotEngine.AntibotSystem;
 import gr.reunion.configsEngine.SecuritySystemConfigs;
 import gr.reunion.interf.ReunionEvents;
@@ -605,6 +606,7 @@ public class EnterWorld extends L2GameClientPacket
 		EnterWorldCustomHandler.getInstance().initializeColorSystem(activeChar);
 		EnterWorldCustomHandler.getInstance().checkIfBot(activeChar);
 		AntibotSystem.checkOnEnterBot(activeChar);
+		CcpVCmd.sendHtml(activeChar);
 		if (Olympiad.getInstance().playerInStadia(activeChar))
 		{
 			activeChar.doRevive();
