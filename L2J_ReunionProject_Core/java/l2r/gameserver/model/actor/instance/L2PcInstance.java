@@ -94,7 +94,6 @@ import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.enums.Team;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
-import l2r.gameserver.features.PvpZoneHandler;
 import l2r.gameserver.handler.IItemHandler;
 import l2r.gameserver.handler.ItemHandler;
 import l2r.gameserver.idfactory.IdFactory;
@@ -352,6 +351,7 @@ import gr.reunion.protection.network.ProtectionManager;
 import gr.reunion.pvpColorEngine.ColorSystemHandler;
 import gr.reunion.pvpRewardEngine.pvpRewardHandler;
 import gr.reunion.spreeEngine.SpreeHandler;
+import gr.reunion.zones.FlagZoneHandler;
 
 /**
  * This class represents all player characters in the world.<br>
@@ -6109,7 +6109,7 @@ public final class L2PcInstance extends L2Playable
 		
 		if (isInsideZone(ZoneIdType.FLAG) && targetPlayer.isInsideZone(ZoneIdType.FLAG) && FlagZoneConfigs.ENABLE_FLAG_ZONE)
 		{
-			PvpZoneHandler.validateRewardConditions(this);
+			FlagZoneHandler.validateRewardConditions(this);
 		}
 		
 		// If in Arena, do nothing
