@@ -26,7 +26,6 @@ import l2r.gameserver.model.skills.l2skills.L2SkillCreateItem;
 import l2r.gameserver.model.skills.l2skills.L2SkillDefault;
 import l2r.gameserver.model.skills.l2skills.L2SkillDrain;
 import l2r.gameserver.model.skills.l2skills.L2SkillLearnSkill;
-import l2r.gameserver.model.skills.l2skills.L2SkillSiegeFlag;
 import l2r.gameserver.model.skills.l2skills.L2SkillSignet;
 import l2r.gameserver.model.skills.l2skills.L2SkillSignetCasttime;
 import l2r.gameserver.model.skills.l2skills.L2SkillSummon;
@@ -82,7 +81,6 @@ public enum L2SkillType
 	ENCHANT_ATTRIBUTE,
 	SOULSHOT,
 	SPIRITSHOT,
-	SIEGEFLAG(L2SkillSiegeFlag.class),
 	TAKECASTLE,
 	TAKEFORT,
 	DELUXE_KEY_UNLOCK,
