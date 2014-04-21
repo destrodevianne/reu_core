@@ -1851,6 +1851,11 @@ public final class L2ItemInstance extends L2Object
 		return _time - System.currentTimeMillis();
 	}
 	
+	public void setLifeTime(long lifetime)
+	{
+		_time = lifetime;
+	}
+	
 	public void endOfLife()
 	{
 		L2PcInstance player = getActingPlayer();
