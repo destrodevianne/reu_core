@@ -56,6 +56,8 @@ import l2r.gameserver.model.conditions.ConditionPlayerAgathionId;
 import l2r.gameserver.model.conditions.ConditionPlayerCanRefuelAirship;
 import l2r.gameserver.model.conditions.ConditionPlayerCanSummon;
 import l2r.gameserver.model.conditions.ConditionPlayerCanSweep;
+import l2r.gameserver.model.conditions.ConditionPlayerCanTakeCastle;
+import l2r.gameserver.model.conditions.ConditionPlayerCanTakeFort;
 import l2r.gameserver.model.conditions.ConditionPlayerCanTransform;
 import l2r.gameserver.model.conditions.ConditionPlayerCanUntransform;
 import l2r.gameserver.model.conditions.ConditionPlayerCharges;
@@ -914,6 +916,14 @@ public abstract class DocumentBase
 			else if ("canSweep".equalsIgnoreCase(a.getNodeName()))
 			{
 				cond = joinAnd(cond, new ConditionPlayerCanSweep(Boolean.parseBoolean(a.getNodeValue())));
+			}
+			else if ("cantakecastle".equalsIgnoreCase(a.getNodeName()))
+			{
+				cond = joinAnd(cond, new ConditionPlayerCanTakeCastle(Boolean.parseBoolean(a.getNodeValue())));
+			}
+			else if ("cantakefort".equalsIgnoreCase(a.getNodeName()))
+			{
+				cond = joinAnd(cond, new ConditionPlayerCanTakeFort(Boolean.parseBoolean(a.getNodeValue())));
 			}
 			else if ("canTransform".equalsIgnoreCase(a.getNodeName()))
 			{
