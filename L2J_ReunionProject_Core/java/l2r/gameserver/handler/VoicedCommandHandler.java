@@ -46,8 +46,10 @@ import gr.reunion.configsEngine.AioItemsConfigs;
 import gr.reunion.configsEngine.AntibotConfigs;
 import gr.reunion.configsEngine.ChaoticZoneConfigs;
 import gr.reunion.configsEngine.CustomServerConfigs;
+import gr.reunion.configsEngine.GetRewardVoteSystemConfigs;
+import gr.reunion.configsEngine.IndividualVoteSystemConfigs;
 import gr.reunion.configsEngine.PremiumServiceConfigs;
-import gr.reunion.configsEngine.VoteSystemConfigs;
+import gr.reunion.voteEngine.RewardVote;
 
 /**
  * @author UnAfraid
@@ -87,9 +89,14 @@ public class VoicedCommandHandler implements IHandler<IVoicedCommandHandler, Str
 			registerHandler(new ItemBufferVCmd());
 		}
 		
-		if (VoteSystemConfigs.ENABLE_VOTE_SYSTEM)
+		if (IndividualVoteSystemConfigs.ENABLE_VOTE_SYSTEM)
 		{
 			registerHandler(new VotePanelVCmd());
+		}
+		
+		if (GetRewardVoteSystemConfigs.ENABLE_VOTE_SYSTEM)
+		{
+			registerHandler(new RewardVote());
 		}
 		
 		if (CustomServerConfigs.ALLOW_ONLINE_COMMAND)

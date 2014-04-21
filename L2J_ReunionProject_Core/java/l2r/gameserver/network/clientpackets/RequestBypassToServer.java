@@ -48,7 +48,7 @@ import l2r.gameserver.util.Util;
 import gr.reunion.aioItem.AioItemNpcs;
 import gr.reunion.configsEngine.AioBufferConfigs;
 import gr.reunion.configsEngine.AioItemsConfigs;
-import gr.reunion.configsEngine.VoteSystemConfigs;
+import gr.reunion.configsEngine.IndividualVoteSystemConfigs;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.javaBuffer.buffItem.AioItemBuffer;
 import gr.reunion.voteEngine.VoteHandler;
@@ -259,7 +259,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			}
 			else if (_command.startsWith("Vote"))
 			{
-				if (VoteSystemConfigs.ENABLE_VOTE_SYSTEM)
+				if (IndividualVoteSystemConfigs.ENABLE_VOTE_SYSTEM)
 				{
 					String sub = _command.substring(5);
 					VoteHandler.onBypassFeedback(activeChar, sub);
