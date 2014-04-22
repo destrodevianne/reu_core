@@ -82,7 +82,32 @@ public final class ExperienceTable extends DocumentParser
 	 */
 	public long getExpForLevel(int level)
 	{
-		return _expTable.get(level);
+		try
+		{
+			return _expTable.get(level);
+		}
+		catch (Exception e)
+		{
+			_log.error(getClass().getSimpleName() + " incoming level is: " + String.valueOf(level));
+			
+			if ((_expTable != null) && !_expTable.isEmpty())
+			{
+				if (_expTable.get(level) != null)
+				{
+					_log.error(getClass().getSimpleName() + " _expTable get(level) is: " + String.valueOf(_expTable.get(level)));
+				}
+				else
+				{
+					_log.error(getClass().getSimpleName() + " _expTable.get(level) is NULL");
+				}
+			}
+			else
+			{
+				_log.error(getClass().getSimpleName() + " _expTable is NULL");
+			}
+			
+			return 25314105600L;
+		}
 	}
 	
 	/**
