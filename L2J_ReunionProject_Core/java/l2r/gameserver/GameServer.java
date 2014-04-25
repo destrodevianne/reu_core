@@ -333,6 +333,9 @@ public class GameServer
 		FortManager.getInstance().activateInstances();
 		MerchantPriceConfigTable.getInstance().updateReferences();
 		
+		printSection("Reunion Events");
+		ReunionEvents.start();
+		
 		_log.info("Loading Python Scripts");
 		L2ScriptEngineManager.getInstance().executeScriptList();
 		
@@ -393,9 +396,6 @@ public class GameServer
 		// Leader board load data
 		printSection("Leaderboards");
 		CustomServerMods.getInstance().checkLeaderboardsMod();
-		
-		printSection("Reunion Events");
-		ReunionEvents.start();
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		
