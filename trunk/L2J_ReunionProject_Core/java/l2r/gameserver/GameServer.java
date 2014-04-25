@@ -323,6 +323,9 @@ public class GameServer
 		TransformData.getInstance();
 		BotReportTable.getInstance();
 		
+		printSection("Reunion Events");
+		ReunionEvents.start();
+		
 		printSection("Scripts");
 		QuestManager.getInstance();
 		BoatManager.getInstance();
@@ -332,9 +335,6 @@ public class GameServer
 		CastleManager.getInstance().activateInstances();
 		FortManager.getInstance().activateInstances();
 		MerchantPriceConfigTable.getInstance().updateReferences();
-		
-		printSection("Reunion Events");
-		ReunionEvents.start();
 		
 		_log.info("Loading Python Scripts");
 		L2ScriptEngineManager.getInstance().executeScriptList();
