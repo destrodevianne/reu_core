@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.instancemanager.ItemAuctionManager;
 import l2r.gameserver.model.L2World;

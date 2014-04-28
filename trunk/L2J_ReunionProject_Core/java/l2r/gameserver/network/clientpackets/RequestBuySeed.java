@@ -21,7 +21,7 @@ package l2r.gameserver.network.clientpackets;
 import static l2r.gameserver.model.actor.L2Npc.INTERACTION_DISTANCE;
 import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.CastleManorManager;
 import l2r.gameserver.model.L2Object;
@@ -131,7 +131,7 @@ public class RequestBuySeed extends L2GameClientPacket
 				return;
 			}
 			
-			L2Item template = ItemTable.getInstance().getTemplate(i.getSeedId());
+			L2Item template = ItemData.getInstance().getTemplate(i.getSeedId());
 			totalWeight += i.getCount() * template.getWeight();
 			if (!template.isStackable())
 			{

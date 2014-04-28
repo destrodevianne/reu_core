@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import l2r.Config;
-import l2r.gameserver.datatables.AdminTable;
-import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.datatables.sql.CharNameTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
@@ -203,7 +203,7 @@ public final class L2World
 	 */
 	public List<L2PcInstance> getAllGMs()
 	{
-		return AdminTable.getInstance().getAllGms(true);
+		return AdminData.getInstance().getAllGms(true);
 	}
 	
 	public Collection<L2PcInstance> getPlayers()

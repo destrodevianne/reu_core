@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.model.actor.stat;
 
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.PetDataTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
+import l2r.gameserver.datatables.xml.PetData;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.skills.L2Skill;
@@ -104,7 +104,7 @@ public class PetStat extends SummonStat
 	{
 		try
 		{
-			return PetDataTable.getInstance().getPetLevelData(getActiveChar().getId(), level).getPetMaxExp();
+			return PetData.getInstance().getPetLevelData(getActiveChar().getId(), level).getPetMaxExp();
 		}
 		catch (NullPointerException e)
 		{
@@ -135,7 +135,7 @@ public class PetStat extends SummonStat
 	@Override
 	public void setLevel(byte value)
 	{
-		getActiveChar().setPetData(PetDataTable.getInstance().getPetLevelData(getActiveChar().getTemplate().getId(), value));
+		getActiveChar().setPetData(PetData.getInstance().getPetLevelData(getActiveChar().getTemplate().getId(), value));
 		if (getActiveChar().getPetLevelData() == null)
 		{
 			throw new IllegalArgumentException("No pet data for npc: " + getActiveChar().getTemplate().getId() + " level: " + value);
@@ -217,6 +217,6 @@ public class PetStat extends SummonStat
 	@Override
 	public int getMaxLevel()
 	{
-		return ExperienceTable.getInstance().getMaxPetLevel();
+		return ExperienceData.getInstance().getMaxPetLevel();
 	}
 }

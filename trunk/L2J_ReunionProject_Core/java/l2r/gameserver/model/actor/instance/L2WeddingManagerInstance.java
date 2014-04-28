@@ -20,7 +20,7 @@ package l2r.gameserver.model.actor.instance;
 
 import l2r.Config;
 import l2r.gameserver.Announcements;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CoupleManager;
 import l2r.gameserver.model.L2World;

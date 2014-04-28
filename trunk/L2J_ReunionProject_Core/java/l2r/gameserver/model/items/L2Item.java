@@ -24,7 +24,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.L2Object;
@@ -182,7 +182,7 @@ public abstract class L2Item implements IIdentifiable
 		_duration = set.getInteger("duration", -1);
 		_time = set.getInteger("time", -1);
 		_autoDestroyTime = set.getInteger("auto_destroy_time", -1) * 1000;
-		_bodyPart = ItemTable._slots.get(set.getString("bodypart", "none"));
+		_bodyPart = ItemData._slots.get(set.getString("bodypart", "none"));
 		_referencePrice = set.getInteger("price", 0);
 		_crystalType = set.getEnum("crystal_type", CrystalType.class, CrystalType.NONE);
 		_crystalCount = set.getInteger("crystal_count", 0);

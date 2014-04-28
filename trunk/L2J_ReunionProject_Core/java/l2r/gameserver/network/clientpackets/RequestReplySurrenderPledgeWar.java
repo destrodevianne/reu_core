@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 
 public final class RequestReplySurrenderPledgeWar extends L2GameClientPacket

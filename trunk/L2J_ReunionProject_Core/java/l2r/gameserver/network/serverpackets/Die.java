@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -42,7 +42,7 @@ public class Die extends L2GameServerPacket
 	private final int _charObjId;
 	private boolean _canTeleport;
 	private boolean _sweepable;
-	private L2AccessLevel _access = AdminTable.getInstance().getAccessLevel(0);
+	private L2AccessLevel _access = AdminData.getInstance().getAccessLevel(0);
 	private L2Clan _clan;
 	private final L2Character _activeChar;
 	private boolean _isJailed;

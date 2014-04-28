@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.instancemanager.petition.PetitionManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -58,7 +58,7 @@ public final class RequestPetition extends L2GameClientPacket
 			return;
 		}
 		
-		if (!AdminTable.getInstance().isGmOnline(false))
+		if (!AdminData.getInstance().isGmOnline(false))
 		{
 			activeChar.sendPacket(SystemMessageId.NO_GM_PROVIDING_SERVICE_NOW);
 			return;

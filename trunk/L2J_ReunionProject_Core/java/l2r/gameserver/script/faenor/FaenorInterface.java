@@ -24,7 +24,7 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.datatables.EventDroplist;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.model.L2DropCategory;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

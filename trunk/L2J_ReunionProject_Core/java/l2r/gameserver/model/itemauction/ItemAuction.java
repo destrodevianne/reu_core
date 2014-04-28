@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.instancemanager.ItemAuctionManager;
 import l2r.gameserver.model.ItemInfo;
 import l2r.gameserver.model.L2World;
@@ -523,7 +523,7 @@ public final class ItemAuction
 		{
 			if (!player.reduceFAdena("ItemAuction", count, player, true))
 			{
-				player.sendMessage("You do not have enough " + ItemTable.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + " for this bid.");
+				player.sendMessage("You do not have enough " + ItemData.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + " for this bid.");
 				player.sendPacket(SystemMessageId.NOT_ENOUGH_ADENA_FOR_THIS_BID);
 				return false;
 			}

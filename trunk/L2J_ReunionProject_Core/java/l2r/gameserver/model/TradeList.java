@@ -25,7 +25,7 @@ import java.util.List;
 import javolution.util.FastList;
 import javolution.util.FastSet;
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.PcInventory;
@@ -285,7 +285,7 @@ public class TradeList
 			return null;
 		}
 		
-		L2Item item = ItemTable.getInstance().getTemplate(itemId);
+		L2Item item = ItemData.getInstance().getTemplate(itemId);
 		if (item == null)
 		{
 			_log.warn(_owner.getName() + ": Attempt to add invalid item to TradeList!");
@@ -568,7 +568,7 @@ public class TradeList
 			{
 				continue;
 			}
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getId());
+			L2Item template = ItemData.getInstance().getTemplate(item.getItem().getId());
 			if (template == null)
 			{
 				continue;
@@ -599,7 +599,7 @@ public class TradeList
 			{
 				continue;
 			}
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getId());
+			L2Item template = ItemData.getInstance().getTemplate(item.getItem().getId());
 			if (template == null)
 			{
 				continue;
@@ -764,7 +764,7 @@ public class TradeList
 				return 2;
 			}
 			
-			L2Item template = ItemTable.getInstance().getTemplate(item.getId());
+			L2Item template = ItemData.getInstance().getTemplate(item.getId());
 			if (template == null)
 			{
 				continue;
@@ -817,7 +817,7 @@ public class TradeList
 			final L2ItemInstance adenaItem = playerInventory.getFAdenaInstance();
 			if (!playerInventory.reduceFAdena("PrivateStore", totalPrice, player, _owner))
 			{
-				player.sendMessage("You do not have enough " + ItemTable.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + ".");
+				player.sendMessage("You do not have enough " + ItemData.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + ".");
 				return 1;
 			}
 			playerIU.addItem(adenaItem);

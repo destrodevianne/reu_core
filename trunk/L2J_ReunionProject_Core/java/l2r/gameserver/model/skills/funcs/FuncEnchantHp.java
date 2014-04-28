@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.skills.funcs;
 
-import l2r.gameserver.datatables.EnchantItemHPBonusData;
+import l2r.gameserver.datatables.xml.EnchantItemHPBonusData;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Stats;

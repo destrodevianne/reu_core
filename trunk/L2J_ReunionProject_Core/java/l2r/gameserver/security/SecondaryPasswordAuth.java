@@ -27,7 +27,7 @@ import java.sql.ResultSet;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.LoginServerThread;
-import l2r.gameserver.datatables.SecondaryAuthData;
+import l2r.gameserver.datatables.xml.SecondaryAuthData;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.serverpackets.Ex2ndPasswordAck;
 import l2r.gameserver.network.serverpackets.Ex2ndPasswordCheck;

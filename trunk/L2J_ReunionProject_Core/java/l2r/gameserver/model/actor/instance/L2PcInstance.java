@@ -63,23 +63,23 @@ import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.cache.WarehouseCacheManager;
 import l2r.gameserver.communitybbs.BB.Forum;
 import l2r.gameserver.communitybbs.Managers.ForumsBBSManager;
-import l2r.gameserver.datatables.AdminTable;
-import l2r.gameserver.datatables.CharNameTable;
-import l2r.gameserver.datatables.CharSummonTable;
-import l2r.gameserver.datatables.CharTemplateTable;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.ClassListData;
-import l2r.gameserver.datatables.EnchantSkillGroupsData;
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.FishData;
-import l2r.gameserver.datatables.HennaData;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.datatables.PetDataTable;
-import l2r.gameserver.datatables.RecipeData;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.SkillData.FrequentSkill;
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.sql.CharNameTable;
+import l2r.gameserver.datatables.sql.CharSummonTable;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.AdminData;
+import l2r.gameserver.datatables.xml.CharTemplateData;
+import l2r.gameserver.datatables.xml.ClassListData;
+import l2r.gameserver.datatables.xml.EnchantSkillGroupsData;
+import l2r.gameserver.datatables.xml.ExperienceData;
+import l2r.gameserver.datatables.xml.FishData;
+import l2r.gameserver.datatables.xml.HennaData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.PetData;
+import l2r.gameserver.datatables.xml.RecipeData;
+import l2r.gameserver.datatables.xml.SkillData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
+import l2r.gameserver.datatables.xml.SkillData.FrequentSkill;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
@@ -1347,7 +1347,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public final L2PcTemplate getBaseTemplate()
 	{
-		return CharTemplateTable.getInstance().getTemplate(_baseClass);
+		return CharTemplateData.getInstance().getTemplate(_baseClass);
 	}
 	
 	/**
@@ -1364,7 +1364,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void setTemplate(ClassId newclass)
 	{
-		super.setTemplate(CharTemplateTable.getInstance().getTemplate(newclass));
+		super.setTemplate(CharTemplateData.getInstance().getTemplate(newclass));
 	}
 	
 	@Override
@@ -2848,55 +2848,55 @@ public final class L2PcInstance extends L2Playable
 		if ((classId >= 0x00) && (classId <= 0x09))
 		{
 			// human fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(246);
+			L2Item temp = ItemData.getInstance().getTemplate(246);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x0a) && (classId <= 0x11))
 		{
 			// human mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(251);
+			L2Item temp = ItemData.getInstance().getTemplate(251);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x12) && (classId <= 0x18))
 		{
 			// elven fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(244);
+			L2Item temp = ItemData.getInstance().getTemplate(244);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x19) && (classId <= 0x1e))
 		{
 			// elven mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(249);
+			L2Item temp = ItemData.getInstance().getTemplate(249);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x1f) && (classId <= 0x25))
 		{
 			// dark elven fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(245);
+			L2Item temp = ItemData.getInstance().getTemplate(245);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x26) && (classId <= 0x2b))
 		{
 			// dark elven mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(250);
+			L2Item temp = ItemData.getInstance().getTemplate(250);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x2c) && (classId <= 0x30))
 		{
 			// orc fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(248);
+			L2Item temp = ItemData.getInstance().getTemplate(248);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x31) && (classId <= 0x34))
 		{
 			// orc mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(252);
+			L2Item temp = ItemData.getInstance().getTemplate(252);
 			weaponItem = (L2Weapon) temp;
 		}
 		else if ((classId >= 0x35) && (classId <= 0x39))
 		{
 			// dwarven fists
-			L2Item temp = ItemTable.getInstance().getTemplate(247);
+			L2Item temp = ItemData.getInstance().getTemplate(247);
 			weaponItem = (L2Weapon) temp;
 		}
 		
@@ -3060,7 +3060,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			return getTemplate().getRace();
 		}
-		return CharTemplateTable.getInstance().getTemplate(_baseClass).getRace();
+		return CharTemplateData.getInstance().getTemplate(_baseClass).getRace();
 	}
 	
 	public L2Radar getRadar()
@@ -3790,9 +3790,9 @@ public final class L2PcInstance extends L2Playable
 		if (count > 0)
 		{
 			L2ItemInstance item = null;
-			if (ItemTable.getInstance().getTemplate(itemId) != null)
+			if (ItemData.getInstance().getTemplate(itemId) != null)
 			{
-				item = ItemTable.getInstance().createDummyItem(itemId);
+				item = ItemData.getInstance().createDummyItem(itemId);
 			}
 			else
 			{
@@ -4950,7 +4950,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void doAutoLoot(L2Attackable target, int itemId, long itemCount)
 	{
-		if (isInParty() && (ItemTable.getInstance().getTemplate(itemId).getItemType() != EtcItemType.HERB))
+		if (isInParty() && (ItemData.getInstance().getTemplate(itemId).getItemType() != EtcItemType.HERB))
 		{
 			getParty().distributeItem(this, itemId, itemCount, false, target);
 		}
@@ -5100,7 +5100,7 @@ public final class L2PcInstance extends L2Playable
 			{
 				handler.useItem(this, target, false);
 			}
-			ItemTable.getInstance().destroyItem("Consume", target, this, null);
+			ItemData.getInstance().destroyItem("Consume", target, this, null);
 		}
 		// Cursed Weapons are not distributed
 		else if (CursedWeaponsManager.getInstance().isCursed(target.getId()))
@@ -5141,7 +5141,7 @@ public final class L2PcInstance extends L2Playable
 			else if ((target.getId() == Inventory.ADENA_ID) && (getInventory().getAdenaInstance() != null))
 			{
 				addAdena("Pickup", target.getCount(), null, true);
-				ItemTable.getInstance().destroyItem("Pickup", target, this, null);
+				ItemData.getInstance().destroyItem("Pickup", target, this, null);
 			}
 			else
 			{
@@ -6373,13 +6373,13 @@ public final class L2PcInstance extends L2Playable
 		
 		// Calculate the Experience loss
 		long lostExp = 0;
-		if (lvl < ExperienceTable.getInstance().getMaxLevel())
+		if (lvl < ExperienceData.getInstance().getMaxLevel())
 		{
 			lostExp = Math.round(((getStat().getExpForLevel(lvl + 1) - getStat().getExpForLevel(lvl)) * percentLost) / 100);
 		}
 		else
 		{
-			lostExp = Math.round(((getStat().getExpForLevel(ExperienceTable.getInstance().getMaxLevel()) - getStat().getExpForLevel(ExperienceTable.getInstance().getMaxLevel() - 1)) * percentLost) / 100);
+			lostExp = Math.round(((getStat().getExpForLevel(ExperienceData.getInstance().getMaxLevel()) - getStat().getExpForLevel(ExperienceData.getInstance().getMaxLevel() - 1)) * percentLost) / 100);
 		}
 		
 		if (ReunionEvents.isInEvent(this) || !getExpOn())
@@ -7374,7 +7374,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void setAccessLevel(int level)
 	{
-		_accessLevel = AdminTable.getInstance().getAccessLevel(level);
+		_accessLevel = AdminData.getInstance().getAccessLevel(level);
 		
 		getAppearance().setNameColor(_accessLevel.getNameColor());
 		getAppearance().setTitleColor(_accessLevel.getTitleColor());
@@ -7382,7 +7382,7 @@ public final class L2PcInstance extends L2Playable
 		
 		CharNameTable.getInstance().addName(this);
 		
-		if (!AdminTable.getInstance().hasAccessLevel(level))
+		if (!AdminData.getInstance().hasAccessLevel(level))
 		{
 			_log.warn("Tryed to set unregistered access level " + level + " for " + toString() + ". Setting access level without privileges!");
 		}
@@ -7405,7 +7405,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (Config.EVERYBODY_HAS_ADMIN_RIGHTS)
 		{
-			return AdminTable.getInstance().getMasterAccessLevel();
+			return AdminData.getInstance().getMasterAccessLevel();
 		}
 		else if (_accessLevel == null)
 		{
@@ -7596,7 +7596,7 @@ public final class L2PcInstance extends L2Playable
 				{
 					final int activeClassId = rset.getInt("classid");
 					final boolean female = rset.getInt("sex") != Sex.MALE.ordinal();
-					final L2PcTemplate template = CharTemplateTable.getInstance().getTemplate(activeClassId);
+					final L2PcTemplate template = CharTemplateData.getInstance().getTemplate(activeClassId);
 					PcAppearance app = new PcAppearance(rset.getByte("face"), rset.getByte("hairColor"), rset.getByte("hairStyle"), female);
 					
 					player = new L2PcInstance(objectId, template, rset.getString("account_name"), app);
@@ -10289,7 +10289,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		for (int itemId : _activeSoulShots)
 		{
-			if (ItemTable.getInstance().getTemplate(itemId).getCrystalType().getId() == crystalType)
+			if (ItemData.getInstance().getTemplate(itemId).getCrystalType().getId() == crystalType)
 			{
 				disableAutoShot(itemId);
 			}
@@ -11149,7 +11149,7 @@ public final class L2PcInstance extends L2Playable
 		
 		getInventory().reloadEquippedItems();
 		
-		final L2PcTemplate pcTemplate = CharTemplateTable.getInstance().getTemplate(classId);
+		final L2PcTemplate pcTemplate = CharTemplateData.getInstance().getTemplate(classId);
 		if (pcTemplate == null)
 		{
 			_log.error("Missing template for classId: " + classId);
@@ -12410,7 +12410,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			try
 			{
-				AdminTable.getInstance().deleteGm(this);
+				AdminData.getInstance().deleteGm(this);
 			}
 			catch (Exception e)
 			{
@@ -13929,7 +13929,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (_data == null)
 		{
-			_data = PetDataTable.getInstance().getPetData(npcId);
+			_data = PetData.getInstance().getPetData(npcId);
 		}
 		return _data;
 	}
@@ -13938,7 +13938,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (_leveldata == null)
 		{
-			_leveldata = PetDataTable.getInstance().getPetData(npcId).getPetLevelData(getMountLevel());
+			_leveldata = PetData.getInstance().getPetData(npcId).getPetLevelData(getMountLevel());
 		}
 		return _leveldata;
 	}
@@ -16358,7 +16358,7 @@ public final class L2PcInstance extends L2Playable
 			p = PlayerClass.values()[c.getId()];
 			if (p.isOfRace(race) && p.isOfLevel(ClassLevel.Fourth))
 			{
-				_antifeedTemplate = CharTemplateTable.getInstance().getTemplate(c);
+				_antifeedTemplate = CharTemplateData.getInstance().getTemplate(c);
 				break;
 			}
 		}

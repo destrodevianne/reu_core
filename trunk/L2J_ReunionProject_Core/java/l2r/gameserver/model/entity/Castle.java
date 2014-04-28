@@ -31,11 +31,11 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.CastleUpdater;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.ManorData;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.xml.DoorData;
+import l2r.gameserver.datatables.xml.ManorData;
+import l2r.gameserver.datatables.xml.SkillData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.MountType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.CastleManorManager;
@@ -789,7 +789,7 @@ public final class Castle extends AbstractResidence
 	// This method loads castle door data from database
 	private void loadDoor()
 	{
-		for (L2DoorInstance door : DoorTable.getInstance().getDoors())
+		for (L2DoorInstance door : DoorData.getInstance().getDoors())
 		{
 			if ((door.getCastle() != null) && (door.getCastle().getResidenceId() == getResidenceId()))
 			{
@@ -841,7 +841,7 @@ public final class Castle extends AbstractResidence
 	
 	public void setDoorUpgrade(int doorId, int ratio, boolean save)
 	{
-		final L2DoorInstance door = (getDoors().isEmpty()) ? DoorTable.getInstance().getDoor(doorId) : getDoor(doorId);
+		final L2DoorInstance door = (getDoors().isEmpty()) ? DoorData.getInstance().getDoor(doorId) : getDoor(doorId);
 		if (door == null)
 		{
 			return;

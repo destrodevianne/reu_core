@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.HennaData;
+import l2r.gameserver.datatables.xml.HennaData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Henna;
 import l2r.gameserver.network.serverpackets.HennaItemRemoveInfo;

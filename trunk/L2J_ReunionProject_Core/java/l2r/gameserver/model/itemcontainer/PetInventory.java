@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.itemcontainer;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.items.L2Item;
@@ -87,7 +87,7 @@ public class PetInventory extends Inventory
 	public boolean validateWeight(L2ItemInstance item, long count)
 	{
 		int weight = 0;
-		L2Item template = ItemTable.getInstance().getTemplate(item.getId());
+		L2Item template = ItemData.getInstance().getTemplate(item.getId());
 		if (template == null)
 		{
 			return false;

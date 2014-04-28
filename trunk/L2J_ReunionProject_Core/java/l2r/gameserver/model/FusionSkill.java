@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
 
 import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.skills.L2Skill;

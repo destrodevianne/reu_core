@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.primeshop;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.items.L2Item;
 
 /**
@@ -37,7 +37,7 @@ public class L2ProductItemComponent
 		_itemId = item_id;
 		_count = count;
 		
-		L2Item item = ItemTable.getInstance().getTemplate(item_id);
+		L2Item item = ItemData.getInstance().getTemplate(item_id);
 		if (item != null)
 		{
 			_weight = item.getWeight();

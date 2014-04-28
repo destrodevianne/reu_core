@@ -21,7 +21,7 @@ package l2r.gameserver.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.model.L2SkillLearn;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.holders.SkillHolder;

@@ -21,8 +21,8 @@ package l2r.gameserver.network.clientpackets;
 import static l2r.gameserver.model.actor.L2Npc.INTERACTION_DISTANCE;
 import static l2r.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.ManorData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.ManorData;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.CastleManorManager;
 import l2r.gameserver.model.CropProcure;
@@ -115,7 +115,7 @@ public class RequestProcureCropList extends L2GameClientPacket
 				continue;
 			}
 			
-			L2Item template = ItemTable.getInstance().getTemplate(i.getReward());
+			L2Item template = ItemData.getInstance().getTemplate(i.getReward());
 			weight += i.getCount() * template.getWeight();
 			
 			if (!template.isStackable())
@@ -150,7 +150,7 @@ public class RequestProcureCropList extends L2GameClientPacket
 			
 			long fee = i.getFee(castleId); // fee for selling to other manors
 			
-			long rewardPrice = ItemTable.getInstance().getTemplate(i.getReward()).getReferencePrice();
+			long rewardPrice = ItemData.getInstance().getTemplate(i.getReward()).getReferencePrice();
 			if (rewardPrice == 0)
 			{
 				continue;

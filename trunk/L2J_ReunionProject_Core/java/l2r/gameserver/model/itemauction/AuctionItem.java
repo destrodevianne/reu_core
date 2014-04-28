@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.itemauction;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.L2Augmentation;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.items.L2Item;
@@ -50,7 +50,7 @@ public final class AuctionItem
 	
 	public final boolean checkItemExists()
 	{
-		final L2Item item = ItemTable.getInstance().getTemplate(_itemId);
+		final L2Item item = ItemData.getInstance().getTemplate(_itemId);
 		if (item == null)
 		{
 			return false;
@@ -85,7 +85,7 @@ public final class AuctionItem
 	
 	public final L2ItemInstance createNewItemInstance()
 	{
-		final L2ItemInstance item = ItemTable.getInstance().createItem("ItemAuction", _itemId, _itemCount, null, null);
+		final L2ItemInstance item = ItemData.getInstance().createItem("ItemAuction", _itemId, _itemCount, null, null);
 		
 		item.setEnchantLevel(item.getDefaultEnchantLevel());
 		

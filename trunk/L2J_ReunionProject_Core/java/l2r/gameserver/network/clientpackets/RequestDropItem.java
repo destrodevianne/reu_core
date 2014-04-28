@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
@@ -226,7 +226,7 @@ public final class RequestDropItem extends L2GameClientPacket
 			{
 				_log.warn(msg);
 			}
-			AdminTable.getInstance().broadcastMessageToGMs(msg);
+			AdminData.getInstance().broadcastMessageToGMs(msg);
 		}
 	}
 	

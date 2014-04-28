@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model;
 
-import l2r.gameserver.datatables.RecipeData;
+import l2r.gameserver.datatables.xml.RecipeData;
 
 /**
  * This class ...

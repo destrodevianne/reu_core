@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.EnchantItemData;
+import l2r.gameserver.datatables.xml.EnchantItemData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.enchant.EnchantScroll;
 import l2r.gameserver.model.items.instance.L2ItemInstance;

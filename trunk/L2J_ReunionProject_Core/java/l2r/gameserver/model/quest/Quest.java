@@ -36,10 +36,10 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.DoorData;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.QuestSound;
 import l2r.gameserver.idfactory.IdFactory;
@@ -3263,7 +3263,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 			return;
 		}
 		
-		final L2ItemInstance _tmpItem = ItemTable.getInstance().createDummyItem(itemId);
+		final L2ItemInstance _tmpItem = ItemData.getInstance().createDummyItem(itemId);
 		if (_tmpItem == null)
 		{
 			return;
@@ -3848,7 +3848,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 		L2DoorInstance door = null;
 		if (instanceId <= 0)
 		{
-			door = DoorTable.getInstance().getDoor(doorId);
+			door = DoorData.getInstance().getDoor(doorId);
 		}
 		else
 		{

@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model;
 
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 
 /**
  * @author FBIagent
@@ -61,7 +61,7 @@ public class L2AdminCommandAccessRight
 	 */
 	public boolean hasAccess(L2AccessLevel characterAccessLevel)
 	{
-		L2AccessLevel accessLevel = AdminTable.getInstance().getAccessLevel(_accessLevel);
+		L2AccessLevel accessLevel = AdminData.getInstance().getAccessLevel(_accessLevel);
 		return ((accessLevel.getLevel() == characterAccessLevel.getLevel()) || characterAccessLevel.hasChildAccess(accessLevel));
 	}
 	

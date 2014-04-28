@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.scripting.scriptengine.listeners.clan;
 
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.scripting.scriptengine.events.ClanWarEvent;
 import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
 

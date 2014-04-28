@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.UIData;
+import l2r.gameserver.datatables.xml.UIData;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -21,7 +21,7 @@ package l2r.gameserver.model.holders;
 import java.util.HashMap;
 import java.util.Map;
 
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.interfaces.ISkillsHolder;
 import l2r.gameserver.model.skills.L2Skill;

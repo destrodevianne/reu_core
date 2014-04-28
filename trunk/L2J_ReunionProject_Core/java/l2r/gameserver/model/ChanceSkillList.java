@@ -19,7 +19,7 @@
 package l2r.gameserver.model;
 
 import javolution.util.FastMap;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.model.actor.L2Character;

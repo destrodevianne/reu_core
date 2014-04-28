@@ -20,7 +20,7 @@ package l2r.gameserver.scripting.scriptengine.listeners.player;
 
 import java.util.List;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.scripting.scriptengine.events.ItemCreateEvent;
 import l2r.gameserver.scripting.scriptengine.impl.L2JListener;
 
@@ -48,13 +48,13 @@ public abstract class NewItemListener extends L2JListener
 	@Override
 	public void register()
 	{
-		ItemTable.addNewItemListener(this);
+		ItemData.addNewItemListener(this);
 	}
 	
 	@Override
 	public void unregister()
 	{
-		ItemTable.removeNewItemListener(this);
+		ItemData.removeNewItemListener(this);
 	}
 	
 	public boolean containsItemId(int itemId)

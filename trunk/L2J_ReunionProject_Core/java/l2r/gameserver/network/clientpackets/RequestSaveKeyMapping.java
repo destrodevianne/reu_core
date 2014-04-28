@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import l2r.Config;
-import l2r.gameserver.datatables.UIData;
+import l2r.gameserver.datatables.xml.UIData;
 import l2r.gameserver.model.ActionKey;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.L2GameClient.GameClientState;

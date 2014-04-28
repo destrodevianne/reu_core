@@ -19,7 +19,7 @@
 package l2r.gameserver.model;
 
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -145,7 +145,7 @@ public class TerritoryWard
 		// Equip with the weapon
 		if (item == null)
 		{
-			_item = ItemTable.getInstance().createItem("Combat", _itemId, 1, null, null);
+			_item = ItemData.getInstance().createItem("Combat", _itemId, 1, null, null);
 		}
 		else
 		{

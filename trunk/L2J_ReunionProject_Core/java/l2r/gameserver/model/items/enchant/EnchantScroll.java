@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import l2r.Config;
-import l2r.gameserver.datatables.EnchantItemGroupsData;
+import l2r.gameserver.datatables.xml.EnchantItemGroupsData;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Item;

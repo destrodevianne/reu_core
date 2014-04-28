@@ -23,8 +23,8 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.datatables.EnchantItemData;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.EnchantItemData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Armor;

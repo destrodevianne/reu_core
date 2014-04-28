@@ -21,7 +21,7 @@ package l2r.gameserver.network.serverpackets;
 
 import java.util.Collection;
 
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.L2Skill;
 

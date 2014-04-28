@@ -22,15 +22,15 @@ import java.util.StringTokenizer;
 import javolution.text.TextBuilder;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.CharNameTable;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.ClassListData;
-import l2r.gameserver.datatables.HennaData;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.MultiSell;
-import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.TransformData;
+import l2r.gameserver.datatables.sql.CharNameTable;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.ClassListData;
+import l2r.gameserver.datatables.xml.HennaData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.MultiSell;
+import l2r.gameserver.datatables.xml.SkillData;
+import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.idfactory.IdFactory;
@@ -1455,7 +1455,7 @@ public final class L2AioNpcInstance extends L2Npc
 			}
 			else
 			{
-				player.sendMessage("Not enough " + ItemTable.getInstance().getTemplate(AioItemsConfigs.AIO_EXCHANGE_ID).getName() + ".");
+				player.sendMessage("Not enough " + ItemData.getInstance().getTemplate(AioItemsConfigs.AIO_EXCHANGE_ID).getName() + ".");
 			}
 			
 			sendPacket(player, "service/exchange.htm");

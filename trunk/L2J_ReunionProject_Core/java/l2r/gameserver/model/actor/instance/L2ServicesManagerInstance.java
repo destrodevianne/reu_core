@@ -21,9 +21,9 @@ import java.util.StringTokenizer;
 
 import javolution.text.TextBuilder;
 import l2r.Config;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.ClassListData;
-import l2r.gameserver.datatables.HennaData;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.xml.ClassListData;
+import l2r.gameserver.datatables.xml.HennaData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.instancemanager.CastleManager;

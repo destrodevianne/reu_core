@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.ArenaParticipantsHolder;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
@@ -159,7 +159,7 @@ public class L2BlockInstance extends L2MonsterInstance
 	
 	private void dropItem(int id, BlockCheckerEngine eng, L2PcInstance player)
 	{
-		L2ItemInstance drop = ItemTable.getInstance().createItem("Loot", id, 1, player, this);
+		L2ItemInstance drop = ItemData.getInstance().createItem("Loot", id, 1, player, this);
 		int x = getX() + Rnd.get(50);
 		int y = getY() + Rnd.get(50);
 		int z = getZ();

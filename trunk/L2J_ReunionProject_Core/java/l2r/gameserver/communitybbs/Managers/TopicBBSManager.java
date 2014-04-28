@@ -29,7 +29,7 @@ import javolution.util.FastMap;
 import l2r.gameserver.communitybbs.BB.Forum;
 import l2r.gameserver.communitybbs.BB.Post;
 import l2r.gameserver.communitybbs.BB.Topic;
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.ShowBoard;
 import l2r.util.StringUtil;

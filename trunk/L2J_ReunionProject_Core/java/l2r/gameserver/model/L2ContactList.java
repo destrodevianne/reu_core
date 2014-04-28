@@ -25,7 +25,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;

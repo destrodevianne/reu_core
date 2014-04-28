@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.BotReportTable;
+import l2r.gameserver.datatables.sql.BotReportTable;
 import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.model.BlockList;
 import l2r.gameserver.model.L2Object;

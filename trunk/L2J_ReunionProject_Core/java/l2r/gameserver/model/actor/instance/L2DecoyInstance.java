@@ -21,7 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import java.util.concurrent.Future;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Decoy;

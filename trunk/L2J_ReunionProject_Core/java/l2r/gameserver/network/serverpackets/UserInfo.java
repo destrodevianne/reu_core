@@ -19,8 +19,8 @@
 package l2r.gameserver.network.serverpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
@@ -104,7 +104,7 @@ public final class UserInfo extends L2GameServerPacket
 		
 		writeD(_activeChar.getLevel());
 		writeQ(_activeChar.getExp());
-		writeF((float) (_activeChar.getExp() - ExperienceTable.getInstance().getExpForLevel(_activeChar.getLevel())) / (ExperienceTable.getInstance().getExpForLevel(_activeChar.getLevel() + 1) - ExperienceTable.getInstance().getExpForLevel(_activeChar.getLevel()))); // High Five exp %
+		writeF((float) (_activeChar.getExp() - ExperienceData.getInstance().getExpForLevel(_activeChar.getLevel())) / (ExperienceData.getInstance().getExpForLevel(_activeChar.getLevel() + 1) - ExperienceData.getInstance().getExpForLevel(_activeChar.getLevel()))); // High Five exp %
 		writeD(_activeChar.getSTR());
 		writeD(_activeChar.getDEX());
 		writeD(_activeChar.getCON());

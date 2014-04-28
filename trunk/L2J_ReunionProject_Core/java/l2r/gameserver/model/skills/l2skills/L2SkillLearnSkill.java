@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.skills.l2skills;
 
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;

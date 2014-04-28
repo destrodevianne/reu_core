@@ -26,7 +26,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.L2World;

@@ -25,7 +25,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

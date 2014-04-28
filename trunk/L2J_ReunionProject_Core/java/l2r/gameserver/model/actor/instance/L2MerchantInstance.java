@@ -18,9 +18,9 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import l2r.gameserver.datatables.BuyListData;
-import l2r.gameserver.datatables.MerchantPriceConfigTable;
-import l2r.gameserver.datatables.MerchantPriceConfigTable.MerchantPriceConfig;
+import l2r.gameserver.datatables.xml.BuyListData;
+import l2r.gameserver.datatables.xml.MerchantPriceConfigData;
+import l2r.gameserver.datatables.xml.MerchantPriceConfigData.MerchantPriceConfig;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.buylist.L2BuyList;
@@ -50,7 +50,7 @@ public class L2MerchantInstance extends L2NpcInstance
 	public void onSpawn()
 	{
 		super.onSpawn();
-		_mpc = MerchantPriceConfigTable.getInstance().getMerchantPriceConfig(this);
+		_mpc = MerchantPriceConfigData.getInstance().getMerchantPriceConfig(this);
 	}
 	
 	@Override

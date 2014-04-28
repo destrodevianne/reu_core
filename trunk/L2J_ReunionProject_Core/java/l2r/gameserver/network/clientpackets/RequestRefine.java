@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.AugmentationData;
+import l2r.gameserver.datatables.xml.AugmentationData;
 import l2r.gameserver.model.L2Augmentation;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;

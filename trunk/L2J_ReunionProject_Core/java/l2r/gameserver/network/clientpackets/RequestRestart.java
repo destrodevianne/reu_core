@@ -132,6 +132,20 @@ public final class RequestRestart extends L2GameClientPacket
 			return;
 		}
 		
+		if (player.isInOlympiadMode())
+		{
+			player.sendMessage("You cannot restart while in Olympiad.");
+			player.sendPacket(RestartResponse.valueOf(false));
+			return;
+		}
+		
+		if (player.inObserverMode())
+		{
+			player.sendMessage("You cannot restart while in Olympiad.");
+			player.sendPacket(RestartResponse.valueOf(false));
+			return;
+		}
+		
 		// Prevent player from restarting if they are a festival participant
 		// and it is in progress, otherwise notify party members that the player
 		// is not longer a participant.

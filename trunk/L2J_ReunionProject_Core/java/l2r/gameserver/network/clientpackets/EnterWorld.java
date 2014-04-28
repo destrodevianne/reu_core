@@ -24,9 +24,9 @@ import l2r.gameserver.Announcements;
 import l2r.gameserver.LoginServerThread;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.datatables.AdminTable;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.xml.AdminData;
+import l2r.gameserver.datatables.xml.SkillData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
@@ -194,34 +194,34 @@ public class EnterWorld extends L2GameClientPacket
 				}
 			}
 			
-			if (Config.GM_STARTUP_INVULNERABLE && AdminTable.getInstance().hasAccess("admin_invul", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_INVULNERABLE && AdminData.getInstance().hasAccess("admin_invul", activeChar.getAccessLevel()))
 			{
 				activeChar.setIsInvul(true);
 			}
 			
-			if (Config.GM_STARTUP_INVISIBLE && AdminTable.getInstance().hasAccess("admin_invisible", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_INVISIBLE && AdminData.getInstance().hasAccess("admin_invisible", activeChar.getAccessLevel()))
 			{
 				activeChar.setInvisible(true);
 			}
 			
-			if (Config.GM_STARTUP_SILENCE && AdminTable.getInstance().hasAccess("admin_silence", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_SILENCE && AdminData.getInstance().hasAccess("admin_silence", activeChar.getAccessLevel()))
 			{
 				activeChar.setSilenceMode(true);
 			}
 			
-			if (Config.GM_STARTUP_DIET_MODE && AdminTable.getInstance().hasAccess("admin_diet", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_DIET_MODE && AdminData.getInstance().hasAccess("admin_diet", activeChar.getAccessLevel()))
 			{
 				activeChar.setDietMode(true);
 				activeChar.refreshOverloaded();
 			}
 			
-			if (Config.GM_STARTUP_AUTO_LIST && AdminTable.getInstance().hasAccess("admin_gmliston", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_AUTO_LIST && AdminData.getInstance().hasAccess("admin_gmliston", activeChar.getAccessLevel()))
 			{
-				AdminTable.getInstance().addGm(activeChar, false);
+				AdminData.getInstance().addGm(activeChar, false);
 			}
 			else
 			{
-				AdminTable.getInstance().addGm(activeChar, true);
+				AdminData.getInstance().addGm(activeChar, true);
 			}
 			
 			if (Config.GM_GIVE_SPECIAL_SKILLS)

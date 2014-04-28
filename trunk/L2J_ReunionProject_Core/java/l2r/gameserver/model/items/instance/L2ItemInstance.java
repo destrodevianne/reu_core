@@ -38,9 +38,9 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.datatables.EnchantItemOptionsData;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.OptionsData;
+import l2r.gameserver.datatables.xml.EnchantItemOptionsData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.OptionsData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.enums.ShotType;
@@ -190,7 +190,7 @@ public final class L2ItemInstance extends L2Object
 		super(objectId);
 		setInstanceType(InstanceType.L2ItemInstance);
 		_itemId = itemId;
-		_item = ItemTable.getInstance().getTemplate(itemId);
+		_item = ItemData.getInstance().getTemplate(itemId);
 		if ((_itemId == 0) || (_item == null))
 		{
 			throw new IllegalArgumentException();
@@ -1515,7 +1515,7 @@ public final class L2ItemInstance extends L2Object
 			_log.error("Could not restore an item owned by " + ownerId + " from DB:", e);
 			return null;
 		}
-		L2Item item = ItemTable.getInstance().getTemplate(item_id);
+		L2Item item = ItemData.getInstance().getTemplate(item_id);
 		if (item == null)
 		{
 			_log.error("Item item_id=" + item_id + " not known, object_id=" + objectId);

@@ -20,7 +20,7 @@ package l2r.gameserver.network.serverpackets;
 
 import java.util.Map;
 
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.instancemanager.ClanHallManager;
 import l2r.gameserver.model.entity.clanhall.AuctionableHall;
 

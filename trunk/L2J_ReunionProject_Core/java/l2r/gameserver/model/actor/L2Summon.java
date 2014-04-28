@@ -22,8 +22,8 @@ import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.ai.L2SummonAI;
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ShotType;
@@ -246,20 +246,20 @@ public abstract class L2Summon extends L2Playable
 	
 	public long getExpForThisLevel()
 	{
-		if (getLevel() >= ExperienceTable.getInstance().getMaxPetLevel())
+		if (getLevel() >= ExperienceData.getInstance().getMaxPetLevel())
 		{
 			return 0;
 		}
-		return ExperienceTable.getInstance().getExpForLevel(getLevel());
+		return ExperienceData.getInstance().getExpForLevel(getLevel());
 	}
 	
 	public long getExpForNextLevel()
 	{
-		if (getLevel() >= (ExperienceTable.getInstance().getMaxPetLevel() - 1))
+		if (getLevel() >= (ExperienceData.getInstance().getMaxPetLevel() - 1))
 		{
 			return 0;
 		}
-		return ExperienceTable.getInstance().getExpForLevel(getLevel() + 1);
+		return ExperienceData.getInstance().getExpForLevel(getLevel() + 1);
 	}
 	
 	@Override
@@ -477,7 +477,7 @@ public abstract class L2Summon extends L2Playable
 			{
 				for (int itemId : owner.getAutoSoulShot())
 				{
-					String handler = ((L2EtcItem) ItemTable.getInstance().getTemplate(itemId)).getHandlerName();
+					String handler = ((L2EtcItem) ItemData.getInstance().getTemplate(itemId)).getHandlerName();
 					if ((handler != null) && handler.contains("Beast"))
 					{
 						owner.disableAutoShot(itemId);

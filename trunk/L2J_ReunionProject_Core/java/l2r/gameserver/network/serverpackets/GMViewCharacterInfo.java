@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.datatables.ExperienceTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.itemcontainer.Inventory;
@@ -55,7 +55,7 @@ public class GMViewCharacterInfo extends L2GameServerPacket
 		writeD(_activeChar.getClassId().getId());
 		writeD(_activeChar.getLevel());
 		writeQ(_activeChar.getExp());
-		writeF((float) (_activeChar.getExp() - ExperienceTable.getInstance().getExpForLevel(_activeChar.getLevel())) / (ExperienceTable.getInstance().getExpForLevel(_activeChar.getLevel() + 1) - ExperienceTable.getInstance().getExpForLevel(_activeChar.getLevel()))); // High Five exp %
+		writeF((float) (_activeChar.getExp() - ExperienceData.getInstance().getExpForLevel(_activeChar.getLevel())) / (ExperienceData.getInstance().getExpForLevel(_activeChar.getLevel() + 1) - ExperienceData.getInstance().getExpForLevel(_activeChar.getLevel()))); // High Five exp %
 		writeD(_activeChar.getSTR());
 		writeD(_activeChar.getDEX());
 		writeD(_activeChar.getCON());

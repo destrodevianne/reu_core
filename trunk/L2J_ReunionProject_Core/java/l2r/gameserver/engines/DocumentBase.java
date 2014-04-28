@@ -31,7 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import javolution.util.FastMap;
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.CategoryType;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.NpcRace;
@@ -1310,9 +1310,9 @@ public abstract class DocumentBase
 					{
 						int old = mask;
 						String item = st.nextToken().trim();
-						if (ItemTable._slots.containsKey(item))
+						if (ItemData._slots.containsKey(item))
 						{
-							mask |= ItemTable._slots.get(item);
+							mask |= ItemData._slots.get(item);
 						}
 						
 						if (old == mask)

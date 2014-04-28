@@ -28,12 +28,12 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.CharSummonTable;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.PetDataTable;
-import l2r.gameserver.datatables.SkillData;
 import l2r.gameserver.datatables.SummonEffectsTable;
 import l2r.gameserver.datatables.SummonEffectsTable.SummonEffect;
+import l2r.gameserver.datatables.sql.CharSummonTable;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.PetData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.ItemLocation;
@@ -103,7 +103,7 @@ public class L2PetInstance extends L2Summon
 	{
 		if (_leveldata == null)
 		{
-			_leveldata = PetDataTable.getInstance().getPetLevelData(getTemplate().getId(), getStat().getLevel());
+			_leveldata = PetData.getInstance().getPetLevelData(getTemplate().getId(), getStat().getLevel());
 		}
 		
 		return _leveldata;
@@ -113,7 +113,7 @@ public class L2PetInstance extends L2Summon
 	{
 		if (_data == null)
 		{
-			_data = PetDataTable.getInstance().getPetData(getTemplate().getId());
+			_data = PetData.getInstance().getPetData(getTemplate().getId());
 		}
 		
 		return _data;
@@ -259,7 +259,7 @@ public class L2PetInstance extends L2Summon
 		{
 			return null; // owner has a pet listed in world
 		}
-		final L2PetData data = PetDataTable.getInstance().getPetData(template.getId());
+		final L2PetData data = PetData.getInstance().getPetData(template.getId());
 		
 		L2PetInstance pet = restore(control, template, owner);
 		// add the pet instance to world
@@ -304,13 +304,13 @@ public class L2PetInstance extends L2Summon
 		
 		_controlObjectId = control.getObjectId();
 		
-		getStat().setLevel((byte) Math.max(level, PetDataTable.getInstance().getPetMinLevel(template.getId())));
+		getStat().setLevel((byte) Math.max(level, PetData.getInstance().getPetMinLevel(template.getId())));
 		
 		_inventory = new PetInventory(this);
 		_inventory.restore();
 		
 		int npcId = template.getId();
-		_mountable = PetDataTable.isMountable(npcId);
+		_mountable = PetData.isMountable(npcId);
 		getPetData();
 		getPetLevelData();
 	}
@@ -620,7 +620,7 @@ public class L2PetInstance extends L2Summon
 				handler.useItem(this, target, false);
 			}
 			
-			ItemTable.getInstance().destroyItem("Consume", target, getOwner(), null);
+			ItemData.getInstance().destroyItem("Consume", target, getOwner(), null);
 			broadcastStatusUpdate();
 		}
 		else
@@ -922,7 +922,7 @@ public class L2PetInstance extends L2Summon
 				pet.setName(rset.getString("name"));
 				
 				long exp = rset.getLong("exp");
-				L2PetLevelData info = PetDataTable.getInstance().getPetLevelData(pet.getId(), pet.getLevel());
+				L2PetLevelData info = PetData.getInstance().getPetLevelData(pet.getId(), pet.getLevel());
 				// DS: update experience based by level
 				// Avoiding pet delevels due to exp per level values changed.
 				if ((info != null) && (exp < info.getPetMaxExp()))

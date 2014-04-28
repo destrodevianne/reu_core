@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.xml.SkillData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2SkillLearn;
 import l2r.gameserver.model.actor.L2Npc;

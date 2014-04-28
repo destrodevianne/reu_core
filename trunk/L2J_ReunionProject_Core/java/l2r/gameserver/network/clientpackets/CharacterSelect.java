@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.CharNameTable;
-import l2r.gameserver.datatables.SecondaryAuthData;
+import l2r.gameserver.datatables.sql.CharNameTable;
+import l2r.gameserver.datatables.xml.SecondaryAuthData;
 import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.model.CharSelectInfoPackage;

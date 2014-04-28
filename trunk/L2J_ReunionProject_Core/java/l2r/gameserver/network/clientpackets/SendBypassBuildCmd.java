@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -72,7 +72,7 @@ public final class SendBypassBuildCmd extends L2GameClientPacket
 			return;
 		}
 		
-		if (!AdminTable.getInstance().hasAccess(command, activeChar.getAccessLevel()))
+		if (!AdminData.getInstance().hasAccess(command, activeChar.getAccessLevel()))
 		{
 			activeChar.sendMessage("You don't have the access right to use this command!");
 			_log.warn("Character " + activeChar.getName() + " tryed to use admin command " + command + ", but have no access to it!");

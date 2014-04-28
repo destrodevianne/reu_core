@@ -21,7 +21,7 @@ package l2r.gameserver.model.holders;
 import java.util.List;
 
 import javolution.util.FastList;
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 

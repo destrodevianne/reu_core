@@ -25,9 +25,9 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import l2r.Config;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.ClassListData;
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.xml.ClassListData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.enums.ZoneIdType;

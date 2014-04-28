@@ -19,8 +19,8 @@
 package l2r.gameserver.model.actor.stat;
 
 import l2r.Config;
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.PetDataTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
+import l2r.gameserver.datatables.xml.PetData;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.L2Playable;
@@ -63,7 +63,7 @@ public class PlayableStat extends CharStat
 		if (getActiveChar() instanceof L2PetInstance)
 		{
 			// get minimum level from L2NpcTemplate
-			minimumLevel = (byte) PetDataTable.getInstance().getPetMinLevel(((L2PetInstance) getActiveChar()).getTemplate().getId());
+			minimumLevel = (byte) PetData.getInstance().getPetMinLevel(((L2PetInstance) getActiveChar()).getTemplate().getId());
 		}
 		
 		byte level = minimumLevel; // minimum level
@@ -98,7 +98,7 @@ public class PlayableStat extends CharStat
 		if (getActiveChar() instanceof L2PetInstance)
 		{
 			// get minimum level from L2NpcTemplate
-			minimumLevel = (byte) PetDataTable.getInstance().getPetMinLevel(((L2PetInstance) getActiveChar()).getTemplate().getId());
+			minimumLevel = (byte) PetData.getInstance().getPetMinLevel(((L2PetInstance) getActiveChar()).getTemplate().getId());
 		}
 		byte level = minimumLevel;
 		
@@ -256,6 +256,6 @@ public class PlayableStat extends CharStat
 	
 	public int getMaxLevel()
 	{
-		return ExperienceTable.getInstance().getMaxLevel();
+		return ExperienceData.getInstance().getMaxLevel();
 	}
 }

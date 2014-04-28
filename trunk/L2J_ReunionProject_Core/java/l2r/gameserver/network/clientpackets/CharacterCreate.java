@@ -28,10 +28,10 @@ import java.util.regex.PatternSyntaxException;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.CharNameTable;
-import l2r.gameserver.datatables.CharTemplateTable;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.sql.CharNameTable;
+import l2r.gameserver.datatables.xml.CharTemplateData;
+import l2r.gameserver.datatables.xml.SkillData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2ShortCut;
 import l2r.gameserver.model.L2SkillLearn;
@@ -188,7 +188,7 @@ public final class CharacterCreate extends L2GameClientPacket
 				return;
 			}
 			
-			template = CharTemplateTable.getInstance().getTemplate(_classId);
+			template = CharTemplateData.getInstance().getTemplate(_classId);
 			if ((template == null) || (ClassId.getClassId(_classId).level() > 0))
 			{
 				if (Config.DEBUG)

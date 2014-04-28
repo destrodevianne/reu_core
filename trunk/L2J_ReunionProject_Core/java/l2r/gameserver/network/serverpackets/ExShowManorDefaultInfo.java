@@ -20,7 +20,7 @@ package l2r.gameserver.network.serverpackets;
 
 import java.util.List;
 
-import l2r.gameserver.datatables.ManorData;
+import l2r.gameserver.datatables.xml.ManorData;
 
 /**
  * @author l3x
