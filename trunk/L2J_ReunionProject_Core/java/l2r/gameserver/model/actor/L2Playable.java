@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.model.actor;
 
+import l2r.Config;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.InstanceManager;
@@ -174,25 +175,28 @@ public abstract class L2Playable extends L2Character
 				}
 				catch (Exception e)
 				{
-					if (qs != null)
+					if (Config.DEBUG_SCRIPT_NOTIFIES)
 					{
-						_log.error("L2Playeable[notifyDeath]1 quest name is: " + qs.getQuest().getName());
+						if (qs != null)
+						{
+							_log.error("L2Playeable[notifyDeath]1 quest name is: " + qs.getQuest().getName());
+						}
+						else
+						{
+							_log.error("L2Playeable[notifyDeath]1 qs is NULL");
+						}
+						
+						if (killer == null)
+						{
+							_log.error("L2Playeable[notifyDeath]1 killer is NULL");
+						}
+						else
+						{
+							_log.error("L2Playeable[notifyDeath]1 killer is: " + killer.getName());
+						}
+						
+						_log.error("L2Playeable[notifyDeath]1 ID is: " + this.getName());
 					}
-					else
-					{
-						_log.error("L2Playeable[notifyDeath]1 qs is NULL");
-					}
-					
-					if (killer == null)
-					{
-						_log.error("L2Playeable[notifyDeath]1 killer is NULL");
-					}
-					else
-					{
-						_log.error("L2Playeable[notifyDeath]1 killer is: " + killer.getName());
-					}
-					
-					_log.error("L2Playeable[notifyDeath]1 ID is: " + this.getName());
 				}
 			}
 		}
@@ -208,16 +212,19 @@ public abstract class L2Playable extends L2Character
 				}
 				catch (Exception e)
 				{
-					if (killer == null)
+					if (Config.DEBUG_SCRIPT_NOTIFIES)
 					{
-						_log.error("L2Playeable[notifyDeath]2 killer is NULL");
+						if (killer == null)
+						{
+							_log.error("L2Playeable[notifyDeath]2 killer is NULL");
+						}
+						else
+						{
+							_log.error("L2Playeable[notifyDeath]2 killer is: " + killer.getName());
+						}
+						
+						_log.error("L2Playeable[notifyDeath]2 ID is: " + this.getName());
 					}
-					else
-					{
-						_log.error("L2Playeable[notifyDeath]2 killer is: " + killer.getName());
-					}
-					
-					_log.error("L2Playeable[notifyDeath]2 ID is: " + this.getId());
 				}
 			}
 		}

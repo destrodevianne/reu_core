@@ -20,6 +20,7 @@ package l2r.gameserver.model.quest;
 
 import java.util.concurrent.ScheduledFuture;
 
+import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -53,27 +54,30 @@ public class QuestTimer
 				}
 				catch (Exception e)
 				{
-					if (getName() == null)
+					if (Config.DEBUG_SCRIPT_NOTIFIES)
 					{
-						_log.error("QuestTimer[notifyEvent] getName() is NULL");
-					}
-					else
-					{
-						_log.error("QuestTimer[notifyEvent] getQuest() name is: " + getQuest().getName());
-					}
-					
-					if (getNpc() == null)
-					{
-						_log.error("QuestTimer[notifyEvent] getNpc() is NULL");
-					}
-					else
-					{
-						_log.error("QuestTimer[notifyEvent] getNpc() ID is: " + getNpc().getId());
-					}
-					
-					if (getPlayer() == null)
-					{
-						_log.error("QuestTimer[notifyEvent] getPlayer() is NULL");
+						if (getName() == null)
+						{
+							_log.error("QuestTimer[notifyEvent] getName() is NULL");
+						}
+						else
+						{
+							_log.error("QuestTimer[notifyEvent] getQuest() name is: " + getQuest().getName());
+						}
+						
+						if (getNpc() == null)
+						{
+							_log.error("QuestTimer[notifyEvent] getNpc() is NULL");
+						}
+						else
+						{
+							_log.error("QuestTimer[notifyEvent] getNpc() ID is: " + getNpc().getId());
+						}
+						
+						if (getPlayer() == null)
+						{
+							_log.error("QuestTimer[notifyEvent] getPlayer() is NULL");
+						}
 					}
 				}
 			}
