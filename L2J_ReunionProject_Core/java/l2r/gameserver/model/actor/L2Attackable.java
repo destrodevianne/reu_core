@@ -714,20 +714,22 @@ public class L2Attackable extends L2Npc
 							}
 							catch (Exception e)
 							{
-								if (skill == null)
+								if (Config.DEBUG_SCRIPT_NOTIFIES)
 								{
-									_log.warn("Logger: Skill is NULL (L2Attackable) Report this to team.");
-									_log.warn("Logger: MobId is: " + this.getId() + " (L2Attackable) Report this to team.");
+									if (skill == null)
+									{
+										_log.error("L2Attackable[notifyAttack] Skill is NULL.");
+										_log.error("L2Attackable[notifyAttack] MobId is: " + this.getId());
+									}
+									
+									if (damage == 0)
+									{
+										_log.error("L2Attackable[notifyAttack] Damage is 0");
+									}
+									
+									_log.error("L2Attackable[notifyAttack] Attacker is: " + String.valueOf(player.getName()));
+									e.printStackTrace();
 								}
-								
-								if (damage == 0)
-								{
-									_log.warn("Logger: Damage is 0 (L2Attackable) Report this to team.");
-								}
-								
-								_log.warn("Logger: Attacker is: " + String.valueOf(player.getName()) + " (L2Attackable) Report this to team.");
-								_log.warn("Logger: notifyAttack failed (L2Attackable) Report this to team.");
-								e.printStackTrace();
 							}
 						}
 					}
