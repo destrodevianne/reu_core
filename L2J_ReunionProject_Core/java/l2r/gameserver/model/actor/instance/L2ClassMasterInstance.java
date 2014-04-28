@@ -20,8 +20,8 @@ package l2r.gameserver.model.actor.instance;
 
 import l2r.Config;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.datatables.ClassListData;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ClassListData;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.ClassId;
@@ -484,7 +484,7 @@ public final class L2ClassMasterInstance extends L2MerchantInstance
 		for (int _itemId : Config.CLASS_MASTER_SETTINGS.getRequireItems(level).keySet())
 		{
 			int _count = Config.CLASS_MASTER_SETTINGS.getRequireItems(level).get(_itemId);
-			sb.append("<tr><td><font color=\"LEVEL\">" + _count + "</font></td><td>" + ItemTable.getInstance().getTemplate(_itemId).getName() + "</td></tr>");
+			sb.append("<tr><td><font color=\"LEVEL\">" + _count + "</font></td><td>" + ItemData.getInstance().getTemplate(_itemId).getName() + "</td></tr>");
 		}
 		return sb.toString();
 	}

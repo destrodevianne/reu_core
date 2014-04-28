@@ -24,8 +24,8 @@ import java.util.concurrent.Future;
 
 import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.PetDataTable;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.PetData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.CategoryType;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
@@ -74,10 +74,10 @@ public final class L2BabyPetInstance extends L2PetInstance
 		
 		L2Skill skill;
 		double healPower = 0;
-		for (L2PetSkillLearn psl : PetDataTable.getInstance().getPetData(getId()).getAvailableSkills())
+		for (L2PetSkillLearn psl : PetData.getInstance().getPetData(getId()).getAvailableSkills())
 		{
 			int id = psl.getSkillId();
-			int lvl = PetDataTable.getInstance().getPetData(getId()).getAvailableLevel(id, getLevel());
+			int lvl = PetData.getInstance().getPetData(getId()).getAvailableLevel(id, getLevel());
 			if (lvl == 0)
 			{
 				continue;

@@ -23,8 +23,8 @@ import java.util.StringTokenizer;
 
 import l2r.Config;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.TeleportLocationTable;
+import l2r.gameserver.datatables.sql.TeleportLocationTable;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.ClanPrivilege;

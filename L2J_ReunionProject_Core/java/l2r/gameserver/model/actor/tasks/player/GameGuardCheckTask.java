@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.actor.tasks.player;
 
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.serverpackets.LeaveWorld;
@@ -49,7 +49,7 @@ public class GameGuardCheckTask implements Runnable
 			L2GameClient client = _player.getClient();
 			if ((client != null) && !client.isAuthedGG() && _player.isOnline())
 			{
-				AdminTable.getInstance().broadcastMessageToGMs("Client " + client + " failed to reply GameGuard query and is being kicked!");
+				AdminData.getInstance().broadcastMessageToGMs("Client " + client + " failed to reply GameGuard query and is being kicked!");
 				_log.info("Client " + client + " failed to reply GameGuard query and is being kicked!");
 				
 				client.close(LeaveWorld.STATIC_PACKET);

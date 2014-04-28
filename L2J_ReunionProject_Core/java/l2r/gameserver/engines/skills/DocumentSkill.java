@@ -23,7 +23,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.EnchantSkillGroupsData;
+import l2r.gameserver.datatables.xml.EnchantSkillGroupsData;
 import l2r.gameserver.engines.DocumentBase;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.conditions.Condition;

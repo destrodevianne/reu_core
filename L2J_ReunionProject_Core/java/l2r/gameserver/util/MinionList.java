@@ -26,7 +26,7 @@ import javolution.util.FastList;
 import javolution.util.FastSet;
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.L2MinionData;
 import l2r.gameserver.model.actor.L2Character;

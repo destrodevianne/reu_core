@@ -20,7 +20,7 @@ package l2r.gameserver.instancemanager;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.DoorTable;
+import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.scripts.ai.group_template.EnergySeeds;
@@ -128,7 +128,7 @@ public class SoIManager
 		ServerVariables.set("SoI_opened", (System.currentTimeMillis() + time) / 1000L);
 		_log.info("Seed of Infinity Manager: Opening the seed for " + Util.formatTime((int) time / 1000));
 		spawnOpenedSeed();
-		DoorTable.getInstance().getDoor(14240102).openMe();
+		DoorData.getInstance().getDoor(14240102).openMe();
 		
 		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 		{
@@ -146,7 +146,7 @@ public class SoIManager
 		_log.info("Seed of Infinity Manager: Closing the seed.");
 		ServerVariables.unset("SoI_opened");
 		EnergySeeds.SoiSeedStop();
-		DoorTable.getInstance().getDoor(14240102).closeMe();
+		DoorData.getInstance().getDoor(14240102).closeMe();
 		for (L2PcInstance ch : ZoneManager.getInstance().getZoneById(60010).getPlayersInside())
 		{
 			if (ch != null)

@@ -22,10 +22,10 @@ import java.io.PrintStream;
 import java.util.Arrays;
 
 import l2r.Config;
-import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.NpcTable;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.DoorData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.ZoneManager;
@@ -312,7 +312,7 @@ public final class SystemMessage extends L2GameServerPacket
 	
 	public final SystemMessage addItemName(final int id)
 	{
-		L2Item item = ItemTable.getInstance().getTemplate(id);
+		L2Item item = ItemData.getInstance().getTemplate(id);
 		if (item.getDisplayId() != id)
 		{
 			return addString(item.getName());
@@ -438,7 +438,7 @@ public final class SystemMessage extends L2GameServerPacket
 				
 				case TYPE_ITEM_NAME:
 				{
-					final L2Item item = ItemTable.getInstance().getTemplate(param.getIntValue());
+					final L2Item item = ItemData.getInstance().getTemplate(param.getIntValue());
 					params[i] = item == null ? "Unknown" : item.getName();
 					break;
 				}
@@ -484,7 +484,7 @@ public final class SystemMessage extends L2GameServerPacket
 				
 				case TYPE_DOOR_NAME:
 				{
-					final L2DoorInstance door = DoorTable.getInstance().getDoor(param.getIntValue());
+					final L2DoorInstance door = DoorData.getInstance().getDoor(param.getIntValue());
 					params[i] = door == null ? "Unknown" : door.getName();
 					break;
 				}

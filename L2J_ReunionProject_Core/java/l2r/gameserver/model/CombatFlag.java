@@ -19,7 +19,7 @@
 package l2r.gameserver.model;
 
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -50,7 +50,7 @@ public class CombatFlag
 	public synchronized void spawnMe()
 	{
 		// Init the dropped L2ItemInstance and add it in the world as a visible object at the position where mob was last
-		_itemInstance = ItemTable.getInstance().createItem("Combat", _itemId, 1, null, null);
+		_itemInstance = ItemData.getInstance().createItem("Combat", _itemId, 1, null, null);
 		_itemInstance.dropMe(null, _location.getX(), _location.getY(), _location.getZ());
 	}
 	

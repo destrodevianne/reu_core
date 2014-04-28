@@ -21,7 +21,7 @@ package l2r.gameserver.model.olympiad;
 import java.util.List;
 
 import l2r.Config;
-import l2r.gameserver.datatables.SkillTreesData;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.AntiFeedManager;

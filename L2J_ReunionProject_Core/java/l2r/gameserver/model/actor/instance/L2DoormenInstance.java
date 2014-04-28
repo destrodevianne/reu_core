@@ -20,8 +20,8 @@ package l2r.gameserver.model.actor.instance;
 
 import java.util.StringTokenizer;
 
-import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.TeleportLocationTable;
+import l2r.gameserver.datatables.sql.TeleportLocationTable;
+import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2TeleportLocation;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
@@ -120,7 +120,7 @@ public class L2DoormenInstance extends L2NpcInstance
 		
 		while (st.hasMoreTokens())
 		{
-			DoorTable.getInstance().getDoor(Integer.parseInt(st.nextToken())).openMe();
+			DoorData.getInstance().getDoor(Integer.parseInt(st.nextToken())).openMe();
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class L2DoormenInstance extends L2NpcInstance
 		
 		while (st.hasMoreTokens())
 		{
-			DoorTable.getInstance().getDoor(Integer.parseInt(st.nextToken())).closeMe();
+			DoorData.getInstance().getDoor(Integer.parseInt(st.nextToken())).closeMe();
 		}
 	}
 	

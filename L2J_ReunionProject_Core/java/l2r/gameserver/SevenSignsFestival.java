@@ -32,11 +32,11 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.CharNameTable;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.datatables.sql.CharNameTable;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.enums.TeleportWhereType;
@@ -860,7 +860,7 @@ public class SevenSignsFestival implements SpawnListener
 	 */
 	public static final int getMaxLevelForFestival(int festivalId)
 	{
-		int maxLevel = (ExperienceTable.getInstance().getMaxLevel() - 1);
+		int maxLevel = (ExperienceData.getInstance().getMaxLevel() - 1);
 		
 		switch (festivalId)
 		{

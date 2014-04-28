@@ -20,8 +20,8 @@ package l2r.gameserver.model.actor.stat;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.PetDataTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
+import l2r.gameserver.datatables.xml.PetData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.BonusExpManager;
@@ -332,7 +332,7 @@ public class PcStat extends PlayableStat
 	@Override
 	public final boolean addLevel(byte value)
 	{
-		if ((getLevel() + value) > (ExperienceTable.getInstance().getMaxLevel() - 1))
+		if ((getLevel() + value) > (ExperienceData.getInstance().getMaxLevel() - 1))
 		{
 			return false;
 		}
@@ -432,7 +432,7 @@ public class PcStat extends PlayableStat
 	@Override
 	public final long getExpForLevel(int level)
 	{
-		return ExperienceTable.getInstance().getExpForLevel(level);
+		return ExperienceData.getInstance().getExpForLevel(level);
 	}
 	
 	@Override
@@ -502,9 +502,9 @@ public class PcStat extends PlayableStat
 	@Override
 	public final void setLevel(byte value)
 	{
-		if (value > (ExperienceTable.getInstance().getMaxLevel() - 1))
+		if (value > (ExperienceData.getInstance().getMaxLevel() - 1))
 		{
-			value = (byte) (ExperienceTable.getInstance().getMaxLevel() - 1);
+			value = (byte) (ExperienceData.getInstance().getMaxLevel() - 1);
 		}
 		
 		if (getActiveChar().isSubClassActive())
@@ -621,7 +621,7 @@ public class PcStat extends PlayableStat
 		}
 		else if (player.isMounted())
 		{
-			final L2PetLevelData data = PetDataTable.getInstance().getPetLevelData(player.getMountNpcId(), player.getMountLevel());
+			final L2PetLevelData data = PetData.getInstance().getPetLevelData(player.getMountNpcId(), player.getMountLevel());
 			if (data != null)
 			{
 				return data.getSpeedOnRide(type);

@@ -24,10 +24,10 @@ import l2r.Config;
 import l2r.gameserver.ai.L2SummonAI;
 import l2r.gameserver.ai.NextAction;
 import l2r.gameserver.ai.NextAction.NextActionCallback;
-import l2r.gameserver.datatables.BotReportTable;
-import l2r.gameserver.datatables.PetDataTable;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.SummonSkillsTable;
+import l2r.gameserver.datatables.sql.BotReportTable;
+import l2r.gameserver.datatables.sql.SummonSkillsTable;
+import l2r.gameserver.datatables.xml.PetData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MountType;
@@ -853,7 +853,7 @@ public final class RequestActionUse extends L2GameClientPacket
 				sendPacket(SystemMessageId.PET_TOO_HIGH_TO_CONTROL);
 				return;
 			}
-			lvl = PetDataTable.getInstance().getPetData(summon.getId()).getAvailableLevel(skillId, summon.getLevel());
+			lvl = PetData.getInstance().getPetData(summon.getId()).getAvailableLevel(skillId, summon.getLevel());
 		}
 		else
 		{

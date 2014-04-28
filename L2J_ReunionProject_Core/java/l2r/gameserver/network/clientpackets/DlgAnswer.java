@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -90,7 +90,7 @@ public final class DlgAnswer extends L2GameClientPacket
 				}
 				String command = cmd.split(" ")[0];
 				IAdminCommandHandler ach = AdminCommandHandler.getInstance().getHandler(command);
-				if (AdminTable.getInstance().hasAccess(command, activeChar.getAccessLevel()))
+				if (AdminData.getInstance().hasAccess(command, activeChar.getAccessLevel()))
 				{
 					if (Config.GMAUDIT)
 					{

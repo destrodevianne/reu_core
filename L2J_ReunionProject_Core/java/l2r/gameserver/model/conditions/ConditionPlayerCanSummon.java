@@ -19,7 +19,7 @@
 package l2r.gameserver.model.conditions;
 
 import l2r.Config;
-import l2r.gameserver.datatables.CharSummonTable;
+import l2r.gameserver.datatables.sql.CharSummonTable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.network.SystemMessageId;

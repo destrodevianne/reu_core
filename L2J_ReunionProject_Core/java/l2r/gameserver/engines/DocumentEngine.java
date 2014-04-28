@@ -24,7 +24,7 @@ import java.util.Map;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.engines.items.DocumentItem;
 import l2r.gameserver.engines.skills.DocumentSkill;
 import l2r.gameserver.model.items.L2Item;

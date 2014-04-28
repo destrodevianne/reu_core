@@ -23,7 +23,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import l2r.Config;
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -84,7 +84,7 @@ public final class IllegalPlayerActionTask implements Runnable
 		//@formatter:on
 		_log.log(record);
 		
-		AdminTable.getInstance().broadcastMessageToGMs(_message);
+		AdminData.getInstance().broadcastMessageToGMs(_message);
 		if (!_actor.isGM())
 		{
 			switch (_punishment)

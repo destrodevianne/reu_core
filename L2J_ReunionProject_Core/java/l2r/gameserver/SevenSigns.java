@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.AutoSpawnHandler;

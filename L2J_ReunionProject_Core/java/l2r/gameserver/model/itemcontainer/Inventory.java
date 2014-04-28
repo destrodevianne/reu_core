@@ -27,8 +27,8 @@ import java.util.List;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.ArmorSetsData;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ArmorSetsData;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.PrivateStoreType;
@@ -871,7 +871,7 @@ public abstract class Inventory extends ItemContainer
 				item.setLastChange(L2ItemInstance.MODIFIED);
 				item.updateDatabase();
 				
-				item = ItemTable.getInstance().createItem(process, item.getId(), count, actor, reference);
+				item = ItemData.getInstance().createItem(process, item.getId(), count, actor, reference);
 				item.updateDatabase();
 				refreshWeight();
 				return item;

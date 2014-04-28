@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javolution.util.FastMap;
-import l2r.gameserver.datatables.HerbDropTable;
+import l2r.gameserver.datatables.sql.HerbDropTable;
 import l2r.gameserver.enums.NpcRace;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.L2DropCategory;

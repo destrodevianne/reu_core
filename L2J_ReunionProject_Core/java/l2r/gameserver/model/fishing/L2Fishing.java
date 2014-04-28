@@ -21,8 +21,8 @@ package l2r.gameserver.model.fishing;
 import java.util.concurrent.Future;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.FishingMonstersData;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.FishingMonstersData;
 import l2r.gameserver.model.L2Spawn;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

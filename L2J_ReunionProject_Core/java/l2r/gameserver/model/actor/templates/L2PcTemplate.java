@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.InitialEquipmentData;
+import l2r.gameserver.datatables.xml.ExperienceData;
+import l2r.gameserver.datatables.xml.InitialEquipmentData;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.StatsSet;
@@ -61,12 +61,12 @@ public class L2PcTemplate extends L2CharTemplate
 		super(set);
 		_classId = ClassId.getClassId(set.getInteger("classId"));
 		
-		_baseHp = new float[ExperienceTable.getInstance().getMaxLevel()];
-		_baseMp = new float[ExperienceTable.getInstance().getMaxLevel()];
-		_baseCp = new float[ExperienceTable.getInstance().getMaxLevel()];
-		_baseHpReg = new double[ExperienceTable.getInstance().getMaxLevel()];
-		_baseMpReg = new double[ExperienceTable.getInstance().getMaxLevel()];
-		_baseCpReg = new double[ExperienceTable.getInstance().getMaxLevel()];
+		_baseHp = new float[ExperienceData.getInstance().getMaxLevel()];
+		_baseMp = new float[ExperienceData.getInstance().getMaxLevel()];
+		_baseCp = new float[ExperienceData.getInstance().getMaxLevel()];
+		_baseHpReg = new double[ExperienceData.getInstance().getMaxLevel()];
+		_baseMpReg = new double[ExperienceData.getInstance().getMaxLevel()];
+		_baseCpReg = new double[ExperienceData.getInstance().getMaxLevel()];
 		
 		_baseSlotDef = new HashMap<>(12);
 		_baseSlotDef.put(Inventory.PAPERDOLL_CHEST, set.getInteger("basePDefchest", 0));

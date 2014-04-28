@@ -21,7 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import l2r.gameserver.SevenSigns;
-import l2r.gameserver.datatables.TeleportLocationTable;
+import l2r.gameserver.datatables.sql.TeleportLocationTable;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.L2TeleportLocation;
 import l2r.gameserver.model.actor.L2Npc;

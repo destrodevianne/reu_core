@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.model.L2World;
 
 /**

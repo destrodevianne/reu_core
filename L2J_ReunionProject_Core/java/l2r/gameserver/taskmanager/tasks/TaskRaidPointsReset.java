@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 import l2r.Config;
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.instancemanager.RaidBossPointsManager;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.taskmanager.Task;

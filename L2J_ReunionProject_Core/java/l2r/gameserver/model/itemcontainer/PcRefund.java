@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.itemcontainer;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -64,7 +64,7 @@ public class PcRefund extends ItemContainer
 				L2ItemInstance removedItem = _items.remove(0);
 				if (removedItem != null)
 				{
-					ItemTable.getInstance().destroyItem("ClearRefund", removedItem, getOwner(), null);
+					ItemData.getInstance().destroyItem("ClearRefund", removedItem, getOwner(), null);
 					removedItem.updateDatabase(true);
 				}
 			}
@@ -89,7 +89,7 @@ public class PcRefund extends ItemContainer
 			{
 				if (item != null)
 				{
-					ItemTable.getInstance().destroyItem("ClearRefund", item, getOwner(), null);
+					ItemData.getInstance().destroyItem("ClearRefund", item, getOwner(), null);
 					item.updateDatabase(true);
 				}
 			}

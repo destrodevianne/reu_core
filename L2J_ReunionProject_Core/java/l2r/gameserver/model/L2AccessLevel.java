@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model;
 
-import l2r.gameserver.datatables.AdminTable;
+import l2r.gameserver.datatables.xml.AdminData;
 
 /**
  * @author FBIagent<br>
@@ -222,7 +222,7 @@ public class L2AccessLevel
 				return false;
 			}
 			
-			_childsAccessLevel = AdminTable.getInstance().getAccessLevel(_child);
+			_childsAccessLevel = AdminData.getInstance().getAccessLevel(_child);
 		}
 		return ((_childsAccessLevel.getLevel() == accessLevel.getLevel()) || _childsAccessLevel.hasChildAccess(accessLevel));
 	}

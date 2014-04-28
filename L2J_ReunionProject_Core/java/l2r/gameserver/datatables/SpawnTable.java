@@ -31,6 +31,8 @@ import javolution.util.FastMap;
 import javolution.util.FastSet;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.NpcPersonalAIData;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.instancemanager.DayNightSpawnManager;
 import l2r.gameserver.instancemanager.ZoneManager;

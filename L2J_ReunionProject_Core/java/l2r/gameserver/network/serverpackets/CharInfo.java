@@ -19,7 +19,7 @@
 package l2r.gameserver.network.serverpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;

@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import l2r.Config;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.SevenSignsFestival;
-import l2r.gameserver.datatables.HitConditionBonus;
-import l2r.gameserver.datatables.KarmaData;
+import l2r.gameserver.datatables.xml.HitConditionBonusData;
+import l2r.gameserver.datatables.xml.KarmaData;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
@@ -1349,7 +1349,7 @@ public final class Formulas
 		int chance = (80 + (2 * (attacker.getAccuracy() - target.getEvasionRate(attacker)))) * 10;
 		
 		// Get additional bonus from the conditions when you are attacking
-		chance *= HitConditionBonus.getInstance().getConditionBonus(attacker, target);
+		chance *= HitConditionBonusData.getInstance().getConditionBonus(attacker, target);
 		
 		chance = Math.max(chance, 200);
 		chance = Math.min(chance, 980);

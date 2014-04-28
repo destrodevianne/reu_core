@@ -20,9 +20,9 @@ package l2r.gameserver;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.BotReportTable;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.OfflineTradersTable;
+import l2r.gameserver.datatables.sql.BotReportTable;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.sql.OfflineTradersTable;
 import l2r.gameserver.instancemanager.CHSiegeManager;
 import l2r.gameserver.instancemanager.CastleManorManager;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;

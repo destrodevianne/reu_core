@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.datatables.RecipeData;
+import l2r.gameserver.datatables.xml.RecipeData;
 import l2r.gameserver.model.L2RecipeList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 

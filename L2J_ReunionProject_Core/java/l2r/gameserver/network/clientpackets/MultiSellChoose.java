@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.MultiSell;
+import l2r.gameserver.datatables.xml.MultiSell;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.L2Augmentation;
 import l2r.gameserver.model.actor.L2Npc;

@@ -30,8 +30,8 @@ import l2r.gameserver.SevenSigns;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.NpcPersonalAIData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.NpcPersonalAIData;
 import l2r.gameserver.enums.AIType;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
@@ -1022,7 +1022,7 @@ public class L2Npc extends L2Character
 		}
 		
 		// Get the weapon item equiped in the right hand of the L2NpcInstance
-		L2Item item = ItemTable.getInstance().getTemplate(getTemplate().getRightHand());
+		L2Item item = ItemData.getInstance().getTemplate(getTemplate().getRightHand());
 		
 		if (!(item instanceof L2Weapon))
 		{
@@ -1057,7 +1057,7 @@ public class L2Npc extends L2Character
 		}
 		
 		// Get the weapon item equiped in the right hand of the L2NpcInstance
-		L2Item item = ItemTable.getInstance().getTemplate(getTemplate().getLeftHand());
+		L2Item item = ItemData.getInstance().getTemplate(getTemplate().getLeftHand());
 		
 		if (!(item instanceof L2Weapon))
 		{
@@ -2103,13 +2103,13 @@ public class L2Npc extends L2Character
 			final int newY = (getY() + Rnd.get((RANDOM_ITEM_DROP_LIMIT * 2) + 1)) - RANDOM_ITEM_DROP_LIMIT;
 			final int newZ = getZ() + 20;
 			
-			if (ItemTable.getInstance().getTemplate(itemId) == null)
+			if (ItemData.getInstance().getTemplate(itemId) == null)
 			{
 				_log.error("Item doesn't exist so cannot be dropped. Item ID: " + itemId + " Quest: " + getName());
 				return null;
 			}
 			
-			item = ItemTable.getInstance().createItem("Loot", itemId, itemCount, player, this);
+			item = ItemData.getInstance().createItem("Loot", itemId, itemCount, player, this);
 			if (item == null)
 			{
 				return null;

@@ -28,7 +28,7 @@ import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.DuelManager;
 import l2r.gameserver.instancemanager.PcCafePointsManager;
@@ -618,7 +618,7 @@ public class L2Party extends AbstractPlayerGroup
 		if (itemId == Inventory.ADENA_ID)
 		{
 			distributeAdena(player, item.getCount(), player);
-			ItemTable.getInstance().destroyItem("Party", item, player, null);
+			ItemData.getInstance().destroyItem("Party", item, player, null);
 			return;
 		}
 		

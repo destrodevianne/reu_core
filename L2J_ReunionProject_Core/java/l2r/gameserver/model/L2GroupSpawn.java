@@ -21,7 +21,7 @@ package l2r.gameserver.model;
 import java.lang.reflect.Constructor;
 
 import l2r.Config;
-import l2r.gameserver.datatables.TerritoryTable;
+import l2r.gameserver.datatables.sql.TerritoryTable;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;

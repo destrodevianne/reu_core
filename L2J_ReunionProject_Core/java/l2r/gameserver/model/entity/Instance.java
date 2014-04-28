@@ -33,8 +33,8 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.InstanceManager;
@@ -544,7 +544,7 @@ public final class Instance
 					{
 						doorId = Integer.parseInt(d.getAttributes().getNamedItem("doorId").getNodeValue());
 						StatsSet set = new StatsSet();
-						set.add(DoorTable.getInstance().getDoorTemplate(doorId));
+						set.add(DoorData.getInstance().getDoorTemplate(doorId));
 						for (Node bean = d.getFirstChild(); bean != null; bean = bean.getNextSibling())
 						{
 							if ("set".equalsIgnoreCase(bean.getNodeName()))

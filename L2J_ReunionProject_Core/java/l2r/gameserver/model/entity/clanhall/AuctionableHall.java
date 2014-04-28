@@ -23,7 +23,7 @@ import java.sql.PreparedStatement;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.instancemanager.AuctionManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
 import l2r.gameserver.model.L2Clan;

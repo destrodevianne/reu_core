@@ -24,8 +24,8 @@ import java.util.List;
 
 import javolution.util.FastMap;
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.RecipeData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.RecipeData;
 import l2r.gameserver.enums.StatType;
 import l2r.gameserver.model.L2ManufactureItem;
 import l2r.gameserver.model.L2RecipeInstance;
@@ -682,7 +682,7 @@ public class RecipeController
 			int rareProdId = _recipeList.getRareItemId();
 			int itemId = _recipeList.getItemId();
 			int itemCount = _recipeList.getCount();
-			L2Item template = ItemTable.getInstance().getTemplate(itemId);
+			L2Item template = ItemData.getInstance().getTemplate(itemId);
 			
 			// check that the current recipe has a rare production or not
 			if ((rareProdId != -1) && ((rareProdId == itemId) || Config.CRAFT_MASTERWORK))

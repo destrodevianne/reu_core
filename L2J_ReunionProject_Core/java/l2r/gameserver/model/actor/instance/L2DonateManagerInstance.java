@@ -4,11 +4,11 @@ import java.util.StringTokenizer;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.CharNameTable;
-import l2r.gameserver.datatables.ClanTable;
-import l2r.gameserver.datatables.MultiSell;
-import l2r.gameserver.datatables.SkillData;
-import l2r.gameserver.datatables.TransformData;
+import l2r.gameserver.datatables.sql.CharNameTable;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.xml.MultiSell;
+import l2r.gameserver.datatables.xml.SkillData;
+import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.actor.FakePc;

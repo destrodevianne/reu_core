@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.multisell;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
@@ -47,7 +47,7 @@ public class Ingredient
 		_maintainIngredient = maintainIngredient;
 		if (_itemId > 0)
 		{
-			_template = ItemTable.getInstance().getTemplate(_itemId);
+			_template = ItemData.getInstance().getTemplate(_itemId);
 		}
 	}
 	

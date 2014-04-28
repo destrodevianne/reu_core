@@ -34,9 +34,9 @@ import l2r.gameserver.ai.L2FortSiegeGuardAI;
 import l2r.gameserver.ai.L2SiegeGuardAI;
 import l2r.gameserver.datatables.EventDroplist;
 import l2r.gameserver.datatables.EventDroplist.DateDrop;
-import l2r.gameserver.datatables.HerbDropTable;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.ManorData;
+import l2r.gameserver.datatables.sql.HerbDropTable;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.ManorData;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
@@ -1280,7 +1280,7 @@ public class L2Attackable extends L2Npc
 				itemCount *= Config.L2JMOD_CHAMPION_ADENAS_REWARDS;
 			}
 			
-			if (!Config.MULTIPLE_ITEM_DROP && !ItemTable.getInstance().getTemplate(drop.getId()).isStackable() && (itemCount > 1))
+			if (!Config.MULTIPLE_ITEM_DROP && !ItemData.getInstance().getTemplate(drop.getId()).isStackable() && (itemCount > 1))
 			{
 				itemCount = 1;
 			}
@@ -1755,7 +1755,7 @@ public class L2Attackable extends L2Npc
 		{
 			for (ItemHolder item : _sweepItems)
 			{
-				lootItems.add(ItemTable.getInstance().createDummyItem(item.getId()).getItem());
+				lootItems.add(ItemData.getInstance().createDummyItem(item.getId()).getItem());
 			}
 		}
 		return lootItems;

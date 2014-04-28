@@ -20,7 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import static l2r.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 import l2r.Config;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.enums.PrivateStoreType;
 import l2r.gameserver.enums.ZoneIdType;
@@ -185,7 +185,7 @@ public final class RequestPostAttachment extends L2GameClientPacket
 		{
 			if ((adena > 0) && !activeChar.reduceFAdena("PayMail", adena, null, true))
 			{
-				activeChar.sendMessage("You cannot receive because you don't have enough " + ItemTable.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + ".");
+				activeChar.sendMessage("You cannot receive because you don't have enough " + ItemData.getInstance().getTemplate(CustomServerConfigs.ALTERNATE_PAYMENT_ID).getName() + ".");
 				return;
 			}
 		}
@@ -277,7 +277,7 @@ public final class RequestPostAttachment extends L2GameClientPacket
 			{
 				if (CustomServerConfigs.ALTERNATE_PAYMODE_MAILS)
 				{
-					L2ItemInstance paidFAdena = ItemTable.getInstance().createItem("PayMail", CustomServerConfigs.ALTERNATE_PAYMENT_ID, adena, activeChar, null);
+					L2ItemInstance paidFAdena = ItemData.getInstance().createItem("PayMail", CustomServerConfigs.ALTERNATE_PAYMENT_ID, adena, activeChar, null);
 					paidFAdena.setOwnerId(msg.getSenderId());
 					paidFAdena.setItemLocation(ItemLocation.INVENTORY);
 					paidFAdena.updateDatabase(true);
@@ -285,7 +285,7 @@ public final class RequestPostAttachment extends L2GameClientPacket
 				}
 				else
 				{
-					L2ItemInstance paidAdena = ItemTable.getInstance().createItem("PayMail", ADENA_ID, adena, activeChar, null);
+					L2ItemInstance paidAdena = ItemData.getInstance().createItem("PayMail", ADENA_ID, adena, activeChar, null);
 					paidAdena.setOwnerId(msg.getSenderId());
 					paidAdena.setItemLocation(ItemLocation.INVENTORY);
 					paidAdena.updateDatabase(true);

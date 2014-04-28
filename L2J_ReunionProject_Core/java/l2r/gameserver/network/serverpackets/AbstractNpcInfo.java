@@ -21,8 +21,8 @@ package l2r.gameserver.network.serverpackets;
 import java.text.DecimalFormat;
 
 import l2r.Config;
-import l2r.gameserver.datatables.CharTemplateTable;
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
+import l2r.gameserver.datatables.xml.CharTemplateData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.TownManager;
@@ -236,7 +236,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 				writeF(_npc.getAttackSpeedMultiplier()); // _activeChar.getAttackSpeedMultiplier()
 				
 				// TODO: add handling of mount collision
-				L2PcTemplate pctmpl = CharTemplateTable.getInstance().getTemplate(fpc.clazz);
+				L2PcTemplate pctmpl = CharTemplateData.getInstance().getTemplate(fpc.clazz);
 				writeF(fpc.sex == 0 ? pctmpl.getfCollisionRadius() : pctmpl._fCollisionRadiusFemale);
 				writeF(fpc.sex == 0 ? pctmpl.getfCollisionHeight() : pctmpl._fCollisionHeightFemale);
 				

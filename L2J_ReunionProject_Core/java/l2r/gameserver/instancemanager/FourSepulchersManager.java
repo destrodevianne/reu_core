@@ -34,9 +34,9 @@ import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.NpcTable;
 import l2r.gameserver.datatables.SpawnTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.instancemanager.tasks.FourSepulchersChangeAttackTimeTask;
 import l2r.gameserver.instancemanager.tasks.FourSepulchersChangeCoolDownTimeTask;
 import l2r.gameserver.instancemanager.tasks.FourSepulchersChangeEntryTimeTask;
@@ -1501,7 +1501,7 @@ public final class FourSepulchersManager
 		{
 			try
 			{
-				L2DoorInstance door = DoorTable.getInstance().getDoor(doorId);
+				L2DoorInstance door = DoorData.getInstance().getDoor(doorId);
 				if (door != null)
 				{
 					door.closeMe();

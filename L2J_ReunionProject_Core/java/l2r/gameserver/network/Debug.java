@@ -20,7 +20,7 @@ package l2r.gameserver.network;
 
 import java.util.Map.Entry;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
@@ -101,7 +101,7 @@ public class Debug
 	
 	private static String getBodyPart(int bodyPart)
 	{
-		for (Entry<String, Integer> entry : ItemTable._slots.entrySet())
+		for (Entry<String, Integer> entry : ItemData._slots.entrySet())
 		{
 			if ((entry.getValue() & bodyPart) == bodyPart)
 			{

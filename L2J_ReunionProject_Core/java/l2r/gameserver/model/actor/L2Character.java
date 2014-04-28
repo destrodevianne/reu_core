@@ -39,10 +39,10 @@ import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2AttackableAI;
 import l2r.gameserver.ai.L2CharacterAI;
-import l2r.gameserver.datatables.CategoryData;
-import l2r.gameserver.datatables.DoorTable;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.SkillData;
+import l2r.gameserver.datatables.xml.CategoryData;
+import l2r.gameserver.datatables.xml.DoorData;
+import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.CategoryType;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
@@ -2029,7 +2029,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			}
 			
 			// reduce talisman mana on skill use
-			if ((skill.getReferenceItemId() > 0) && (ItemTable.getInstance().getTemplate(skill.getReferenceItemId()).getBodyPart() == L2Item.SLOT_DECO))
+			if ((skill.getReferenceItemId() > 0) && (ItemData.getInstance().getTemplate(skill.getReferenceItemId()).getBodyPart() == L2Item.SLOT_DECO))
 			{
 				for (L2ItemInstance item : getInventory().getItemsByItemId(skill.getReferenceItemId()))
 				{
@@ -5028,7 +5028,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 						z = m.geoPath.get(m.onGeodataPathIndex).getZ();
 						
 						// check for doors in the route
-						if (DoorTable.getInstance().checkIfDoorsBetween(curX, curY, curZ, x, y, z, getInstanceId(), false))
+						if (DoorData.getInstance().checkIfDoorsBetween(curX, curY, curZ, x, y, z, getInstanceId(), false))
 						{
 							m.geoPath = null;
 							getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
@@ -5036,7 +5036,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 						}
 						for (int i = 0; i < (m.geoPath.size() - 1); i++)
 						{
-							if (DoorTable.getInstance().checkIfDoorsBetween(m.geoPath.get(i), m.geoPath.get(i + 1), getInstanceId()))
+							if (DoorData.getInstance().checkIfDoorsBetween(m.geoPath.get(i), m.geoPath.get(i + 1), getInstanceId()))
 							{
 								m.geoPath = null;
 								getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);

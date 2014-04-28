@@ -19,7 +19,7 @@
 package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
-import l2r.gameserver.datatables.CrestTable;
+import l2r.gameserver.datatables.sql.CrestTable;
 import l2r.gameserver.model.L2Crest;
 import l2r.gameserver.network.serverpackets.PledgeCrest;
 

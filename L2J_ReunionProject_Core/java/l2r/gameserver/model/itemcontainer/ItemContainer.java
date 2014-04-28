@@ -28,7 +28,7 @@ import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.GameTimeController;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Character;
@@ -221,7 +221,7 @@ public abstract class ItemContainer
 			olditem.setLastChange(L2ItemInstance.MODIFIED);
 			
 			// And destroys the item
-			ItemTable.getInstance().destroyItem(process, item, actor, reference);
+			ItemData.getInstance().destroyItem(process, item, actor, reference);
 			item.updateDatabase();
 			item = olditem;
 			
@@ -296,14 +296,14 @@ public abstract class ItemContainer
 		{
 			for (int i = 0; i < count; i++)
 			{
-				L2Item template = ItemTable.getInstance().getTemplate(itemId);
+				L2Item template = ItemData.getInstance().getTemplate(itemId);
 				if (template == null)
 				{
 					_log.warn((actor != null ? "[" + actor.getName() + "] " : "") + "Invalid ItemId requested: ", itemId);
 					return null;
 				}
 				
-				item = ItemTable.getInstance().createItem(process, itemId, template.isStackable() ? count : 1, actor, reference);
+				item = ItemData.getInstance().createItem(process, itemId, template.isStackable() ? count : 1, actor, reference);
 				item.setOwnerId(getOwnerId());
 				item.setItemLocation(getBaseLocation());
 				item.setLastChange(L2ItemInstance.ADDED);
@@ -380,7 +380,7 @@ public abstract class ItemContainer
 				// Otherwise destroy old item
 				{
 					removeItem(sourceitem);
-					ItemTable.getInstance().destroyItem(process, sourceitem, actor, reference);
+					ItemData.getInstance().destroyItem(process, sourceitem, actor, reference);
 				}
 				
 				if (targetitem != null) // If possible, only update counts
@@ -463,7 +463,7 @@ public abstract class ItemContainer
 					return null;
 				}
 				
-				ItemTable.getInstance().destroyItem(process, item, actor, reference);
+				ItemData.getInstance().destroyItem(process, item, actor, reference);
 				
 				item.updateDatabase();
 				refreshWeight();
@@ -685,7 +685,7 @@ public abstract class ItemContainer
 	 */
 	public boolean validateCapacityByItemId(int itemId, long count)
 	{
-		final L2Item template = ItemTable.getInstance().getTemplate(itemId);
+		final L2Item template = ItemData.getInstance().getTemplate(itemId);
 		return (template == null) || (template.isStackable() ? validateCapacity(1) : validateCapacity(count));
 	}
 	
@@ -696,7 +696,7 @@ public abstract class ItemContainer
 	 */
 	public boolean validateWeightByItemId(int itemId, long count)
 	{
-		final L2Item template = ItemTable.getInstance().getTemplate(itemId);
+		final L2Item template = ItemData.getInstance().getTemplate(itemId);
 		return (template == null) || validateWeight(template.getWeight() * count);
 	}
 }

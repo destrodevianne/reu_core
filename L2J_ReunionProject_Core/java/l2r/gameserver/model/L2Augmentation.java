@@ -18,7 +18,7 @@ package l2r.gameserver.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import l2r.gameserver.datatables.OptionsData;
+import l2r.gameserver.datatables.xml.OptionsData;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.options.Options;
 

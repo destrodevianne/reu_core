@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import java.util.concurrent.ScheduledFuture;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.CharNameTable;
+import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.MailManager;
 import l2r.gameserver.model.itemcontainer.Mail;

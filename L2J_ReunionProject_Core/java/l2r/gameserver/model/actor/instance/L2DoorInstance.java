@@ -26,7 +26,7 @@ import javolution.util.FastList;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.ai.L2DoorAI;
-import l2r.gameserver.datatables.DoorTable;
+import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.ClanHallManager;
@@ -102,7 +102,7 @@ public class L2DoorInstance extends L2Character
 		
 		if (getGroupName() != null)
 		{
-			DoorTable.addDoorGroup(getGroupName(), getId());
+			DoorData.addDoorGroup(getGroupName(), getId());
 		}
 		
 		if (isOpenableByTime())
@@ -551,7 +551,7 @@ public class L2DoorInstance extends L2Character
 	
 	private void manageGroupOpen(boolean open, String groupName)
 	{
-		Set<Integer> set = DoorTable.getDoorsByGroup(groupName);
+		Set<Integer> set = DoorData.getDoorsByGroup(groupName);
 		L2DoorInstance first = null;
 		for (Integer id : set)
 		{
@@ -748,7 +748,7 @@ public class L2DoorInstance extends L2Character
 	{
 		if (getInstanceId() == 0)
 		{
-			return DoorTable.getInstance().getDoor(doorId);
+			return DoorData.getInstance().getDoor(doorId);
 		}
 		
 		Instance inst = InstanceManager.getInstance().getInstance(getInstanceId());

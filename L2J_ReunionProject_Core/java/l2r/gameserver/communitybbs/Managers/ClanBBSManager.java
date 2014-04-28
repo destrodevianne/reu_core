@@ -20,7 +20,7 @@ package l2r.gameserver.communitybbs.Managers;
 
 import java.util.StringTokenizer;
 
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.SystemMessageId;

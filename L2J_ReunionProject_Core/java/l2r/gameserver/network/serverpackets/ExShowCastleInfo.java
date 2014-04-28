@@ -20,7 +20,7 @@ package l2r.gameserver.network.serverpackets;
 
 import java.util.List;
 
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.model.entity.Castle;
 

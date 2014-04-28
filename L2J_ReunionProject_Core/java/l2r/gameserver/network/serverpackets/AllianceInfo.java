@@ -20,7 +20,7 @@ package l2r.gameserver.network.serverpackets;
 
 import java.util.Collection;
 
-import l2r.gameserver.datatables.ClanTable;
+import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.model.ClanInfo;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.network.clientpackets.RequestAllyInfo;

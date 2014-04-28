@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.Announcements;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.StatsSet;

@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.model.items.enchant;
 
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -91,7 +91,7 @@ public abstract class AbstractEnchantItem
 	 */
 	public final L2Item getItem()
 	{
-		return ItemTable.getInstance().getTemplate(_id);
+		return ItemData.getInstance().getTemplate(_id);
 	}
 	
 	/**

@@ -26,7 +26,7 @@ import java.util.List;
 import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.gameserver.datatables.ItemTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.enums.ItemLocation;
 import l2r.gameserver.model.TradeItem;
 import l2r.gameserver.model.TradeList;
@@ -956,7 +956,7 @@ public class PcInventory extends Inventory
 		{
 			slots++;
 		}
-		return validateCapacity(slots, ItemTable.getInstance().getTemplate(itemId).isQuestItem());
+		return validateCapacity(slots, ItemData.getInstance().getTemplate(itemId).isQuestItem());
 	}
 	
 	@Override
@@ -1027,7 +1027,7 @@ public class PcInventory extends Inventory
 		// temp fix, some id must be sended
 		setInventoryBlock(new int[]
 		{
-			(ItemTable.getInstance().getArraySize() + 2)
+			(ItemData.getInstance().getArraySize() + 2)
 		}, 1);
 	}
 	

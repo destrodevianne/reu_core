@@ -18,8 +18,8 @@
  */
 package l2r.gameserver.model.skills.l2skills;
 
-import l2r.gameserver.datatables.ExperienceTable;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.ExperienceData;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.StatsSet;
@@ -107,14 +107,14 @@ public class L2SkillSummon extends L2Skill
 		summon.setSharedElementals(_inheritElementals);
 		summon.setSharedElementalsValue(_elementalSharePercent);
 		
-		if (summon.getLevel() >= ExperienceTable.getInstance().getMaxPetLevel())
+		if (summon.getLevel() >= ExperienceData.getInstance().getMaxPetLevel())
 		{
-			summon.getStat().setExp(ExperienceTable.getInstance().getExpForLevel(ExperienceTable.getInstance().getMaxPetLevel() - 1));
-			_log.warn("Summon (" + summon.getName() + ") NpcID: " + summon.getId() + " has a level above " + ExperienceTable.getInstance().getMaxPetLevel() + ". Please rectify.");
+			summon.getStat().setExp(ExperienceData.getInstance().getExpForLevel(ExperienceData.getInstance().getMaxPetLevel() - 1));
+			_log.warn("Summon (" + summon.getName() + ") NpcID: " + summon.getId() + " has a level above " + ExperienceData.getInstance().getMaxPetLevel() + ". Please rectify.");
 		}
 		else
 		{
-			summon.getStat().setExp(ExperienceTable.getInstance().getExpForLevel(summon.getLevel() % ExperienceTable.getInstance().getMaxPetLevel()));
+			summon.getStat().setExp(ExperienceData.getInstance().getExpForLevel(summon.getLevel() % ExperienceData.getInstance().getMaxPetLevel()));
 		}
 		
 		summon.setCurrentHp(summon.getMaxHp());

@@ -31,8 +31,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.EventDroplist;
-import l2r.gameserver.datatables.ItemTable;
-import l2r.gameserver.datatables.NpcTable;
+import l2r.gameserver.datatables.sql.NpcTable;
+import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.quest.Quest;
@@ -167,7 +167,7 @@ public class LongTimeEvent extends Quest
 										finalChance = Integer.parseInt(chance.substring(0, chance.length() - 1)) * 10000;
 									}
 									
-									if (ItemTable.getInstance().getTemplate(itemId) == null)
+									if (ItemData.getInstance().getTemplate(itemId) == null)
 									{
 										_log.warn(getScriptName() + " event: " + itemId + " is wrong item id, item was not added in droplist");
 										continue;

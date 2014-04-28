@@ -2,7 +2,7 @@ package l2r.gameserver.network.serverpackets;
 
 import java.util.Collection;
 
-import l2r.gameserver.datatables.ProductItemData;
+import l2r.gameserver.datatables.xml.ProductItemData;
 import l2r.gameserver.model.primeshop.L2ProductItem;
 
 /**
