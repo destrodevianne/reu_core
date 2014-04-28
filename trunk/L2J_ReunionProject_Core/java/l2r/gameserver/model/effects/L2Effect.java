@@ -410,9 +410,14 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	}
 	
 	/**
-	 * @return effect type
+	 * Get this effect's type.<br>
+	 * TODO: Remove.
+	 * @return the effect type
 	 */
-	public abstract L2EffectType getEffectType();
+	public L2EffectType getEffectType()
+	{
+		return L2EffectType.NONE;
+	}
 	
 	/**
 	 * Notify started.
