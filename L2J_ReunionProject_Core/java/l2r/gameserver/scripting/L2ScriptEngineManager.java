@@ -75,6 +75,7 @@ public final class L2ScriptEngineManager
 		"conquerablehalls",
 		"custom",
 		"events",
+		"features",
 		"instances",
 		"loaders",
 		"SagasScripts",
