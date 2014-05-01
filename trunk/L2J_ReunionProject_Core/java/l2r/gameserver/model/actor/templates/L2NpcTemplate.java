@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javolution.util.FastMap;
-import l2r.gameserver.datatables.sql.HerbDropTable;
+import l2r.gameserver.datatables.xml.HerbDropData;
 import l2r.gameserver.enums.NpcRace;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.L2DropCategory;
@@ -188,7 +188,7 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 		_enchantEffect = set.getInteger("enchant");
 		_race = null;
 		final int herbGroup = set.getInteger("dropHerbGroup");
-		if ((herbGroup > 0) && (HerbDropTable.getInstance().getHerbDroplist(herbGroup) == null))
+		if ((herbGroup > 0) && (HerbDropData.getInstance().getHerbDroplist(herbGroup) == null))
 		{
 			_log.warn("Missing Herb Drop Group for npcId: " + getId());
 			_dropHerbGroup = 0;

@@ -34,7 +34,7 @@ import l2r.gameserver.ai.L2FortSiegeGuardAI;
 import l2r.gameserver.ai.L2SiegeGuardAI;
 import l2r.gameserver.datatables.EventDroplist;
 import l2r.gameserver.datatables.EventDroplist.DateDrop;
-import l2r.gameserver.datatables.sql.HerbDropTable;
+import l2r.gameserver.datatables.xml.HerbDropData;
 import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.datatables.xml.ManorData;
 import l2r.gameserver.enums.CtrlEvent;
@@ -1619,7 +1619,7 @@ public class L2Attackable extends L2Npc
 		// Instant Item Drop :>
 		if (getTemplate().getDropHerbGroup() > 0)
 		{
-			for (L2DropCategory cat : HerbDropTable.getInstance().getHerbDroplist(getTemplate().getDropHerbGroup()))
+			for (L2DropCategory cat : HerbDropData.getInstance().getHerbDroplist(getTemplate().getDropHerbGroup()))
 			{
 				ItemHolder item = calculateCategorizedHerbItem(player, cat);
 				if (item != null)
