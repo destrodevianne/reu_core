@@ -40,7 +40,6 @@ import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.datatables.sql.CharSummonTable;
 import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.datatables.sql.CrestTable;
-import l2r.gameserver.datatables.sql.HerbDropTable;
 import l2r.gameserver.datatables.sql.NpcBufferTable;
 import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.datatables.sql.OfflineTradersTable;
@@ -64,6 +63,7 @@ import l2r.gameserver.datatables.xml.FishData;
 import l2r.gameserver.datatables.xml.FishingMonstersData;
 import l2r.gameserver.datatables.xml.FishingRodsData;
 import l2r.gameserver.datatables.xml.HennaData;
+import l2r.gameserver.datatables.xml.HerbDropData;
 import l2r.gameserver.datatables.xml.HitConditionBonusData;
 import l2r.gameserver.datatables.xml.InitialEquipmentData;
 import l2r.gameserver.datatables.xml.ItemData;
@@ -265,7 +265,7 @@ public class GameServer
 		AuctionManager.getInstance();
 		
 		printSection("NPCs");
-		HerbDropTable.getInstance();
+		HerbDropData.getInstance();
 		SkillLearnData.getInstance();
 		NpcTable.getInstance();
 		WalkingManager.getInstance();
