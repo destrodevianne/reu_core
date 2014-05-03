@@ -320,7 +320,7 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 			
 			if (!EventType.isMultipleRegistrationAllowed() && !quests.isEmpty())
 			{
-				_log.warn("Quest event not allowed in multiple quests.  Skipped addition of Event Type \"" + EventType + "\" for NPC \"" + _name + "\" and quest \"" + q.getName() + "\".");
+				_log.warn("Quest event not allowed in multiple quests.  Skipped addition of Event Type " + EventType + " for NPC NAME " + _name + " NPC ID " + _npcId + " and quest " + q.getName() + ".");
 			}
 			else
 			{
