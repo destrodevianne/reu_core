@@ -20,6 +20,7 @@ package l2r.gameserver.model.actor.instance;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.InstanceType;
@@ -59,6 +60,8 @@ public final class L2TrapInstance extends L2Npc
 	private final List<Integer> _playersWhoDetectedMe = new ArrayList<>();
 	private L2Skill _skill;
 	private int _remainingTime;
+	// Tasks
+	private ScheduledFuture<?> _trapTask = null;
 	
 	public L2TrapInstance(int objectId, L2NpcTemplate template, int instanceId, int lifeTime)
 	{
@@ -81,7 +84,7 @@ public final class L2TrapInstance extends L2Npc
 		_remainingTime = _lifeTime;
 		if (_skill != null)
 		{
-			ThreadPoolManager.getInstance().scheduleGeneral(new TrapTask(this), TICK);
+			_trapTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new TrapTask(this), TICK, TICK);
 		}
 	}
 	
@@ -166,6 +169,11 @@ public final class L2TrapInstance extends L2Npc
 	public boolean checkTarget(L2Character target)
 	{
 		if (!L2Skill.checkForAreaOffensiveSkills(this, target, _skill, _isInArena))
+		{
+			return false;
+		}
+		
+		if (!target.isInsideRadius(this, _skill.getEffectRange(), false, false))
 		{
 			return false;
 		}
@@ -386,6 +394,12 @@ public final class L2TrapInstance extends L2Npc
 	 */
 	public void triggerTrap(L2Character target)
 	{
+		if (_trapTask != null)
+		{
+			_trapTask.cancel(true);
+			_trapTask = null;
+		}
+		
 		_isTriggered = true;
 		broadcastPacket(new TrapInfo(this, null));
 		setTarget(target);
@@ -403,6 +417,12 @@ public final class L2TrapInstance extends L2Npc
 	
 	public void unSummon()
 	{
+		if (_trapTask != null)
+		{
+			_trapTask.cancel(true);
+			_trapTask = null;
+		}
+		
 		if (_owner != null)
 		{
 			_owner.setTrap(null);
