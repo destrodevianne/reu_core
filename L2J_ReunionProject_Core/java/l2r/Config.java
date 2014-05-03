@@ -602,6 +602,8 @@ public final class Config
 	public static int ALT_OLY_ENCHANT_LIMIT;
 	public static int ALT_OLY_WAIT_TIME;
 	public static boolean ENABLE_OLY_ANTIFEED;
+	public static boolean ENABLE_REUNION_PERIOD;
+	public static int[] ALT_OLY_END_DATE;
 	public static String OLYMPIAD_PERIOD;
 	public static boolean ENABLE_OLYMPIAD;
 	public static int[] ALT_OLY_END_HOUR = new int[3];
@@ -2099,7 +2101,7 @@ public final class Config
 			RAID_MIN_RESPAWN_MULTIPLIER = NPC.getFloat("RaidMinRespawnMultiplier", 1.0f);
 			RAID_MAX_RESPAWN_MULTIPLIER = NPC.getFloat("RaidMaxRespawnMultiplier", 1.0f);
 			RAID_MINION_RESPAWN_TIMER = NPC.getInt("RaidMinionRespawnTime", 300000);
-			final String[] propertySplit = NPC.getString("CustomMinionsRespawnTime", "").split(";");
+			String[] propertySplit = NPC.getString("CustomMinionsRespawnTime", "").split(";");
 			MINIONS_RESPAWN_TIME = new HashMap<>(propertySplit.length);
 			for (String prop : propertySplit)
 			{
@@ -2499,6 +2501,13 @@ public final class Config
 			
 			// More olympiad settings
 			ENABLE_OLY_ANTIFEED = Olympiad.getBoolean("EnableOlyAntifeed", false);
+			ENABLE_REUNION_PERIOD = Olympiad.getBoolean("EnableReunionPeriod", false);
+			propertySplit = Olympiad.getString("AltOlyEndDate", "1").split(",");
+			ALT_OLY_END_DATE = new int[propertySplit.length];
+			for (int i = 0; i < propertySplit.length; i++)
+			{
+				ALT_OLY_END_DATE[i] = Integer.parseInt(propertySplit[i]);
+			}
 			OLYMPIAD_PERIOD = Olympiad.getString("CustomOlyPeriod", "MONTH");
 			ENABLE_OLYMPIAD = Olympiad.getBoolean("EnableOlympiad", true);
 			String[] times = Olympiad.getString("AltOlyEndHour", "12:00:00").split(":");
