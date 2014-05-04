@@ -815,7 +815,6 @@ public final class Config
 	public static int INVENTORY_MAXIMUM_PET;
 	public static double PET_HP_REGEN_MULTIPLIER;
 	public static double PET_MP_REGEN_MULTIPLIER;
-	public static List<Integer> NON_TALKING_NPCS;
 	
 	// --------------------------------------------------
 	// PvP Settings
@@ -2131,22 +2130,6 @@ public final class Config
 			INVENTORY_MAXIMUM_PET = NPC.getInt("MaximumSlotsForPet", 12);
 			PET_HP_REGEN_MULTIPLIER = NPC.getDouble("PetHpRegenMultiplier", 100) / 100;
 			PET_MP_REGEN_MULTIPLIER = NPC.getDouble("PetMpRegenMultiplier", 100) / 100;
-			split = NPC.getString("NonTalkingNpcs", "18684,18685,18686,18687,18688,18689,18690,19691,18692,31202,31203,31204,31205,31206,31207,31208,31209,31266,31557,31593,31606,31671,31672,31673,31674,31758,31955,32026,32030,32031,32032,32306,32619,32620,32621").split(",");
-			NON_TALKING_NPCS = new ArrayList<>(split.length);
-			for (String npcId : split)
-			{
-				try
-				{
-					NON_TALKING_NPCS.add(Integer.parseInt(npcId));
-				}
-				catch (NumberFormatException nfe)
-				{
-					if (!npcId.isEmpty())
-					{
-						_log.warn("Could not parse " + npcId + " id for NonTalkingNpcs. Please check that all values are digits and coma separated.");
-					}
-				}
-			}
 			
 			// Load Rates L2Properties file (if exists)
 			final PropertiesParser RatesSettings = new PropertiesParser(RATES_CONFIG_FILE);
