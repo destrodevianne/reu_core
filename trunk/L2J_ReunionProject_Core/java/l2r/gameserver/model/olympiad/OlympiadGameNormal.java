@@ -634,7 +634,10 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 				winside = 1;
 				
 				// Save Fight Result
-				saveResults(_playerOne, _playerTwo, 1, _startTime, _fightTime, getType());
+				if (_startTime != 0) // TODO: Check why this can happen
+				{
+					saveResults(_playerOne, _playerTwo, 1, _startTime, _fightTime, getType());
+				}
 				rewardParticipant(_playerOne.getPlayer(), getReward());
 			}
 			else if ((_playerOne.getPlayer() == null) || !_playerOne.getPlayer().isOnline() || ((playerOneHp == 0) && (playerTwoHp != 0)) || ((_damageP2 > _damageP1) && (playerOneHp != 0) && (playerTwoHp != 0)))
@@ -656,13 +659,19 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 				winside = 2;
 				
 				// Save Fight Result
-				saveResults(_playerOne, _playerTwo, 2, _startTime, _fightTime, getType());
+				if (_startTime != 0) // TODO: Check why this can happen
+				{
+					saveResults(_playerOne, _playerTwo, 2, _startTime, _fightTime, getType());
+				}
 				rewardParticipant(_playerTwo.getPlayer(), getReward());
 			}
 			else
 			{
 				// Save Fight Result
-				saveResults(_playerOne, _playerTwo, 0, _startTime, _fightTime, getType());
+				if (_startTime != 0) // TODO: Check why this can happen
+				{
+					saveResults(_playerOne, _playerTwo, 0, _startTime, _fightTime, getType());
+				}
 				
 				sm = SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_ENDED_IN_A_TIE);
 				stadium.broadcastPacket(sm);
