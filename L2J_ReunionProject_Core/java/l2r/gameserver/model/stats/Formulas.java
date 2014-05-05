@@ -623,14 +623,14 @@ public final class Formulas
 		// SSBoost > 0 have different calculation
 		if (skill.getSSBoost() > 0)
 		{
-			damage += (((70. * graciaPhysSkillBonus * (attacker.getPAtk(target) + power)) / defence) * (attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill)) * (target.calcStat(Stats.CRIT_VULN, 1, target, skill)) * ssboost * proximityBonus * element * pvpBonus) + (((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1 * 70) / defence) * graciaPhysSkillBonus);
+			damage += (((70. * graciaPhysSkillBonus * (attacker.getPAtk(target) + power)) / defence) * (attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill)) * (target.calcStat(Stats.DEFENCE_CRITICAL_DAMAGE, 1, target, skill)) * ssboost * proximityBonus * element * pvpBonus) + (((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1 * 70) / defence) * graciaPhysSkillBonus);
 		}
 		else
 		{
-			damage += (((70. * graciaPhysSkillBonus * (power + (attacker.getPAtk(target) * ssboost))) / defence) * (attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill)) * (target.calcStat(Stats.CRIT_VULN, 1, target, skill)) * proximityBonus * element * pvpBonus) + (((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1 * 70) / defence) * graciaPhysSkillBonus);
+			damage += (((70. * graciaPhysSkillBonus * (power + (attacker.getPAtk(target) * ssboost))) / defence) * (attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill)) * (target.calcStat(Stats.DEFENCE_CRITICAL_DAMAGE, 1, target, skill)) * proximityBonus * element * pvpBonus) + (((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1 * 70) / defence) * graciaPhysSkillBonus);
 		}
 		
-		damage += target.calcStat(Stats.CRIT_ADD_VULN, 0, target, skill) * 6.1;
+		damage += target.calcStat(Stats.DEFENCE_CRITICAL_DAMAGE_ADD, 0, target, skill) * 6.1;
 		// get the vulnerability for the instance due to skills (buffs, passives, toggles, etc)
 		damage = target.calcStat(Stats.DAGGER_WPN_VULN, damage, target, null);
 		// Random weapon damage
@@ -778,10 +778,10 @@ public final class Formulas
 		if (crit)
 		{
 			// Finally retail like formula
-			damage = 2 * attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill) * target.calcStat(Stats.CRIT_VULN, 1, target, null) * ((70 * damage) / defence);
+			damage = 2 * attacker.calcStat(Stats.CRITICAL_DAMAGE, 1, target, skill) * target.calcStat(Stats.DEFENCE_CRITICAL_DAMAGE, 1, target, null) * ((70 * damage) / defence);
 			// Crit dmg add is almost useless in normal hits...
 			damage += ((attacker.calcStat(Stats.CRITICAL_DAMAGE_ADD, 0, target, skill) * 70) / defence);
-			damage += target.calcStat(Stats.CRIT_ADD_VULN, 0, target, skill);
+			damage += target.calcStat(Stats.DEFENCE_CRITICAL_DAMAGE_ADD, 0, target, skill);
 		}
 		else
 		{
@@ -1041,8 +1041,6 @@ public final class Formulas
 			damage *= attacker.calcStat(stat, 1, null, null);
 		}
 		
-		// CT2.3 general magic vuln
-		damage *= target.calcStat(Stats.MAGIC_DAMAGE_VULN, 1, null, null);
 		damage *= calcAttributeBonus(attacker, target, skill);
 		
 		if (target.isAttackable())
@@ -1151,8 +1149,6 @@ public final class Formulas
 			damage *= 3;
 		}
 		
-		// CT2.3 general magic vuln
-		damage *= target.calcStat(Stats.MAGIC_DAMAGE_VULN, 1, null, null);
 		damage *= calcAttributeBonus(owner, target, skill);
 		
 		if (target.isAttackable())
@@ -1184,18 +1180,8 @@ public final class Formulas
 	 */
 	public static final boolean calcCrit(double rate, boolean skill, L2Character target)
 	{
-		// support for critical damage evade
-		if (rate > Rnd.get(1000))
-		{
-			if ((target == null) || skill)
-			{
-				return true; // no effect
-			}
-			
-			// little weird, but remember what CRIT_DAMAGE_EVASION > 1 increase chances to _evade_ crit hits
-			return Rnd.get((int) target.getStat().calcStat(Stats.CRIT_DAMAGE_EVASION, 100, null, null)) < 100;
-		}
-		return false;
+		double finalRate = target.getStat().calcStat(Stats.DEFENCE_CRITICAL_RATE, rate, null, null) + target.getStat().calcStat(Stats.DEFENCE_CRITICAL_RATE_ADD, 0, null, null);
+		return finalRate > Rnd.get(1000);
 	}
 	
 	public static final boolean calcLethalHit(L2Character activeChar, L2Character target, L2Skill skill)
@@ -1920,8 +1906,7 @@ public final class Formulas
 		}
 		// general magic resist
 		final double resModifier = target.calcStat(Stats.MAGIC_SUCCESS_RES, 1, null, skill);
-		final double failureModifier = attacker.calcStat(Stats.MAGIC_FAILURE_RATE, 1, target, skill);
-		int rate = 100 - Math.round((float) (lvlModifier * targetModifier * resModifier * failureModifier));
+		int rate = 100 - Math.round((float) (lvlModifier * targetModifier * resModifier));
 		
 		if (attacker.isDebug())
 		{
@@ -1929,7 +1914,6 @@ public final class Formulas
 			set.set("lvlDifference", lvlDifference);
 			set.set("lvlModifier", lvlModifier);
 			set.set("resModifier", resModifier);
-			set.set("failureModifier", failureModifier);
 			set.set("targetModifier", targetModifier);
 			set.set("rate", rate);
 			Debug.sendSkillDebug(attacker, target, skill, set);

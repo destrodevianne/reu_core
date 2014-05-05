@@ -75,7 +75,10 @@ public enum Stats
 	// ATTACK & DEFENCE RATES
 	EVASION_RATE("rEvas"),
 	P_SKILL_EVASION("pSkillEvas"),
-	CRIT_DAMAGE_EVASION("critDamEvas"),
+	DEFENCE_CRITICAL_RATE("defCritRate"),
+	DEFENCE_CRITICAL_RATE_ADD("defCritRateAdd"),
+	DEFENCE_CRITICAL_DAMAGE("defCritDamage"),
+	DEFENCE_CRITICAL_DAMAGE_ADD("defCritDamageAdd"), // Resistance to critical damage in value (Example: +100 will be 100 more critical damage, NOT 100% more).
 	SHIELD_RATE("rShld"),
 	CRITICAL_RATE("rCrit"),
 	BLOW_RATE("blowRate"),
@@ -85,7 +88,6 @@ public enum Stats
 	BONUS_EXP("bonusExp"),
 	BONUS_SP("bonusSp"),
 	ATTACK_CANCEL("cancel"),
-	MAGIC_FAILURE_RATE("magicFailureRate"),
 	
 	// ACCURACY & RANGE
 	ACCURACY_COMBAT("accCombat"),
@@ -127,9 +129,6 @@ public enum Stats
 	DERANGEMENT_VULN("derangementVuln"),
 	DEBUFF_VULN("debuffVuln"),
 	BUFF_VULN("buffVuln"),
-	CRIT_VULN("critVuln"), // Resistance to critical damage in percent.
-	CRIT_ADD_VULN("critAddVuln"), // Resistance to critical damage in value (Example: +100 will be 100 more critical damage, NOT 100% more).
-	MAGIC_DAMAGE_VULN("magicDamVul"),
 	VALAKAS_VULN("valakasVuln"),
 	
 	// RESISTANCES
@@ -159,7 +158,6 @@ public enum Stats
 	PARALYZE_PROF("paralyzeProf"),
 	ROOT_PROF("rootProf"),
 	SLEEP_PROF("sleepProf"),
-	PROF("movementProf"),
 	CANCEL_PROF("cancelProf"),
 	DERANGEMENT_PROF("derangementProf"),
 	DEBUFF_PROF("debuffProf"),
