@@ -33,14 +33,10 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.Server;
 import l2r.loginserver.GameServerTable;
-import l2r.tools.i18n.LanguageControl;
 import l2r.util.Util;
 
 /**
@@ -59,7 +55,6 @@ public abstract class BaseGameServerRegister
 	public static void main(String[] args)
 	{
 		Locale locale = null;
-		boolean gui = true;
 		boolean interactive = true;
 		boolean force = false;
 		boolean fallback = false;
@@ -82,13 +77,7 @@ public abstract class BaseGameServerRegister
 		{
 			arg = args[i];
 			
-			// --cmd : no gui
-			if (arg.equals("-c") || arg.equals("--cmd"))
-			{
-				gui = false;
-			}
-			// --force : Forces GameServer register operations to overwrite a server if necessary
-			else if (arg.equals("-f") || arg.equals("--force"))
+			if (arg.equals("-f") || arg.equals("--force"))
 			{
 				force = true;
 			}
@@ -101,7 +90,6 @@ public abstract class BaseGameServerRegister
 			// Fails if <id> already in use, unless -force is used (overwrites)
 			else if (arg.equals("-r") || arg.equals("--register"))
 			{
-				gui = false;
 				interactive = false;
 				int id = Integer.parseInt(args[++i]);
 				String dir = args[++i];
@@ -111,7 +99,6 @@ public abstract class BaseGameServerRegister
 			// --unregister <id> : Removes GameServer denoted by <id>
 			else if (arg.equals("-u") || arg.equals("--unregister"))
 			{
-				gui = false;
 				interactive = false;
 				String gsId = args[++i];
 				if (gsId.equalsIgnoreCase("all"))
@@ -168,7 +155,6 @@ public abstract class BaseGameServerRegister
 			// --help : Prints usage/arguments/credits
 			else if (arg.equals("-h") || arg.equals("--help"))
 			{
-				gui = false;
 				interactive = false;
 				
 				BaseGameServerRegister.printHelp(bundle);
@@ -177,24 +163,17 @@ public abstract class BaseGameServerRegister
 		
 		try
 		{
-			if (gui)
+			if (interactive)
 			{
-				BaseGameServerRegister.startGUI(bundle);
+				BaseGameServerRegister.startCMD(bundle);
 			}
 			else
 			{
-				if (interactive)
+				// if there is a task, do it, else the app has already finished
+				if (task != null)
 				{
-					BaseGameServerRegister.startCMD(bundle);
-				}
-				else
-				{
-					// if there is a task, do it, else the app has already finished
-					if (task != null)
-					{
-						task.setBundle(bundle);
-						task.run();
-					}
+					task.setBundle(bundle);
+					task.run();
 				}
 			}
 		}
@@ -241,33 +220,6 @@ public abstract class BaseGameServerRegister
 		{
 			System.out.println(str);
 		}
-	}
-	
-	/**
-	 * Start the GUI.
-	 * @param bundle the bundle.
-	 */
-	private static void startGUI(final ResourceBundle bundle)
-	{
-		try
-		{
-			// avoid that ugly Metal LaF
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e)
-		{
-			// couldn't care less
-		}
-		
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				GUserInterface gui = new GUserInterface(bundle);
-				gui.getFrame().setVisible(true);
-			}
-		});
 	}
 	
 	/**

@@ -73,7 +73,6 @@
 	<target name="jar" depends="compile" description="Create the jar files.">
 		<jar destfile="${build.dist.login}/l2jlogin.jar" level="9">
 			<fileset dir="${build.bin}">
-				<exclude name="**/dbinstaller/**" />
 				<exclude name="**/gameserver/**" />
 			</fileset>
 			<manifest>
@@ -81,38 +80,10 @@
 				<attribute name="Built-Date" value="${build.tstamp}" />
 				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
-			</manifest>
-		</jar>
-		<jar destfile="${build.dist.login}/L2J_Configurator.jar" level="9">
-			<fileset dir="${build.bin}">
-				<include name="**/configurator/**" />
-				<include name="**/i18n/**" />
-				<include name="**/images/**" />
-				<exclude name="**/accountmanager/**" />
-				<exclude name="**/dbinstaller/**" />
-				<exclude name="**/gameserver/**" />
-				<exclude name="**/gsregistering/**" />
-				<exclude name="**/log/**" />
-				<exclude name="**/loginserver/**" />
-				<exclude name="**/ngl/**" />
-				<exclude name="**/status/**" />
-				<exclude name="**/util/**" />
-				<exclude name="**/Config/**" />
-				<exclude name="**/L2DatabaseFactory/**" />
-				<exclude name="**/Server/**" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Built-Date" value="${build.tstamp}" />
-				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
-				<attribute name="Implementation-Version" value="${l2j.version}" />
-				<attribute name="Main-Class" value="l2r.tools.configurator.ConfigUserInterface" />
 			</manifest>
 		</jar>
 		<jar destfile="${build.dist.game}/reunion-core.jar" level="9">
 			<fileset dir="${build.bin}">
-				<exclude name="**/dbinstaller/**" />
 				<exclude name="**/loginserver/**" />
 				<exclude name="**/accountmanager/**" />
 				<exclude name="**/gsregistering/**" />
@@ -122,87 +93,6 @@
 				<attribute name="Built-Date" value="${build.tstamp}" />
 				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
 				<attribute name="Implementation-Version" value="${l2j.version}" />
-			</manifest>
-		</jar>
-		<jar destfile="${build.dist.game}/L2J_Configurator.jar" level="9">
-			<fileset dir="${build.bin}">
-				<include name="**/configurator/**" />
-				<include name="**/i18n/**" />
-				<include name="**/images/**" />
-				<exclude name="**/accountmanager/**" />
-				<exclude name="**/dbinstaller/**" />
-				<exclude name="**/gameserver/**" />
-				<exclude name="**/gsregistering/**" />
-				<exclude name="**/log/**" />
-				<exclude name="**/loginserver/**" />
-				<exclude name="**/ngl/**" />
-				<exclude name="**/status/**" />
-				<exclude name="**/util/**" />
-				<exclude name="**/Config/**" />
-				<exclude name="**/L2DatabaseFactory/**" />
-				<exclude name="**/Server/**" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Built-Date" value="${build.tstamp}" />
-				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
-				<attribute name="Implementation-Version" value="${l2j.version}" />
-				<attribute name="Main-Class" value="l2r.tools.configurator.ConfigUserInterface" />
-			</manifest>
-		</jar>
-		<jar destfile="${build.dist.tools}/dbinst_cs.jar" level="9">
-			<fileset dir="${build.bin}">
-				<include name="**/dbinstaller/**" />
-				<include name="**/images/**" />
-				<include name="**/util/**" />
-				<include name="**/SQLFilter**" />
-				<exclude name="**/LauncherGS*" />
-				<exclude name="**/LauncherLS*" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Built-Date" value="${build.tstamp}" />
-				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
-				<attribute name="Implementation-Version" value="${l2j.version}" />
-				<attribute name="Main-Class" value="l2r.tools.dbinstaller.LauncherCS" />
-			</manifest>
-		</jar>
-		<jar destfile="${build.dist.tools}/dbinst_gs.jar" level="9">
-			<fileset dir="${build.bin}">
-				<include name="**/dbinstaller/**" />
-				<include name="**/images/**" />
-				<include name="**/util/**" />
-				<include name="**/SQLFilter**" />
-				<exclude name="**/LauncherCS*" />
-				<exclude name="**/LauncherLS*" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Built-Date" value="${build.tstamp}" />
-				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
-				<attribute name="Implementation-Version" value="${l2j.version}" />
-				<attribute name="Main-Class" value="l2r.tools.dbinstaller.LauncherGS" />
-			</manifest>
-		</jar>
-		<jar destfile="${build.dist.tools}/dbinst_ls.jar" level="9">
-			<fileset dir="${build.bin}">
-				<include name="**/dbinstaller/**" />
-				<include name="**/images/**" />
-				<include name="**/util/**" />
-				<include name="**/SQLFilter**" />
-				<exclude name="**/LauncherCS*" />
-				<exclude name="**/LauncherGS*" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Built-Date" value="${build.tstamp}" />
-				<attribute name="Class-Path" value="${manifest.libs}" />
-				<attribute name="Implementation-URL" value="http://www.l2reunion.eu/" />
-				<attribute name="Implementation-Version" value="${l2j.version}" />
-				<attribute name="Main-Class" value="l2r.tools.dbinstaller.LauncherLS" />
 			</manifest>
 		</jar>
 	</target>
