@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.tools.i18n;
+package l2r.tools.gsregistering;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
