@@ -101,6 +101,8 @@ public final class Config
 	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini";
 	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
 	public static final String ITEM_MALL_CONFIG_FILE = "./config/main/ItemMall.ini";
+	public static final String DEBUG_CONFIG_FILE = "./config/main/Debug.ini";
+	public static final String GEODATA_CONFIG_FILE = "./config/main/Geodata.ini";
 	// Bosses
 	public static final String ANTHARAS_CONFIG = "./config/bosses/Antharas.ini";
 	public static final String VALAKAS_CONFIG = "./config/bosses/Valakas.ini";
@@ -463,16 +465,6 @@ public final class Config
 	public static boolean SKILL_CHECK_ENABLE;
 	public static boolean SKILL_CHECK_REMOVE;
 	public static boolean SKILL_CHECK_GM;
-	public static boolean DEBUG;
-	public static boolean DEBUG_SCRIPT_NOTIFIES;
-	public static boolean PACKET_HANDLER_DEBUG;
-	public static boolean DEVELOPER;
-	public static boolean ACCEPT_GEOEDITOR_CONN;
-	public static boolean ALT_DEV_NO_HANDLERS;
-	public static boolean ALT_DEV_NO_QUESTS;
-	public static boolean ALT_DEV_NO_SPAWNS;
-	public static boolean ALT_DEV_SHOW_QUESTS_LOAD_IN_LOGS;
-	public static boolean ALT_DEV_SHOW_SCRIPTS_LOAD_IN_LOGS;
 	public static int THREAD_P_EFFECTS;
 	public static int THREAD_P_GENERAL;
 	public static int GENERAL_PACKET_THREAD_CORE_SIZE;
@@ -516,24 +508,10 @@ public final class Config
 	public static int MAX_NPC_ANIMATION;
 	public static int MIN_MONSTER_ANIMATION;
 	public static int MAX_MONSTER_ANIMATION;
-	public static int COORD_SYNCHRONIZE;
-	public static boolean ENABLE_FALLING_DAMAGE;
 	public static boolean GRIDS_ALWAYS_ON;
 	public static int GRID_NEIGHBOR_TURNON_TIME;
 	public static int GRID_NEIGHBOR_TURNOFF_TIME;
-	public static int GEODATA;
-	public static String GEODATA_DRIVER;
-	public static File PATHNODE_DIR;
-	public static boolean GEODATA_CELLFINDING;
-	public static String PATHFIND_BUFFERS;
-	public static float LOW_WEIGHT;
-	public static float MEDIUM_WEIGHT;
-	public static float HIGH_WEIGHT;
-	public static boolean ADVANCED_DIAGONAL_STRATEGY;
-	public static float DIAGONAL_WEIGHT;
-	public static int MAX_POSTFILTER_PASSES;
-	public static boolean DEBUG_PATH;
-	public static boolean FORCE_GEODATA;
+	
 	public static boolean MOVE_BASED_KNOWNLIST;
 	public static long KNOWNLIST_UPDATE_INTERVAL;
 	public static int PEACE_ZONE_MODE;
@@ -977,6 +955,42 @@ public final class Config
 	// ItemMall Settings
 	// --------------------------------------------------
 	public static int GAME_POINT_ITEM_ID;
+	
+	// --------------------------------------------------
+	// Debug Settings
+	// --------------------------------------------------
+	public static boolean DEBUG;
+	public static boolean DEBUG_SKILL_PARSING;
+	public static boolean DEBUG_SKILL_DURATION;
+	public static boolean DEBUG_MULTIPLE_REGISTRATIONS_OF_NPCS;
+	public static boolean DEBUG_SCRIPT_NOTIFIES;
+	public static boolean PACKET_HANDLER_DEBUG;
+	public static boolean DEVELOPER;
+	public static boolean ACCEPT_GEOEDITOR_CONN;
+	public static boolean ALT_DEV_NO_HANDLERS;
+	public static boolean ALT_DEV_NO_QUESTS;
+	public static boolean ALT_DEV_NO_SPAWNS;
+	public static boolean ALT_DEV_SHOW_QUESTS_LOAD_IN_LOGS;
+	public static boolean ALT_DEV_SHOW_SCRIPTS_LOAD_IN_LOGS;
+	
+	// --------------------------------------------------
+	// Geodata Settings
+	// --------------------------------------------------
+	public static int GEODATA;
+	public static String GEODATA_DRIVER;
+	public static File PATHNODE_DIR;
+	public static boolean GEODATA_CELLFINDING;
+	public static String PATHFIND_BUFFERS;
+	public static float LOW_WEIGHT;
+	public static float MEDIUM_WEIGHT;
+	public static float HIGH_WEIGHT;
+	public static boolean ADVANCED_DIAGONAL_STRATEGY;
+	public static float DIAGONAL_WEIGHT;
+	public static int MAX_POSTFILTER_PASSES;
+	public static boolean DEBUG_PATH;
+	public static boolean FORCE_GEODATA;
+	public static int COORD_SYNCHRONIZE;
+	public static boolean ENABLE_FALLING_DAMAGE;
 	
 	public static enum IdFactoryType
 	{
@@ -1822,16 +1836,6 @@ public final class Config
 			SKILL_CHECK_ENABLE = General.getBoolean("SkillCheckEnable", false);
 			SKILL_CHECK_REMOVE = General.getBoolean("SkillCheckRemove", false);
 			SKILL_CHECK_GM = General.getBoolean("SkillCheckGM", true);
-			DEBUG = General.getBoolean("Debug", false);
-			DEBUG_SCRIPT_NOTIFIES = General.getBoolean("DebugScriptsNotifies", false);
-			PACKET_HANDLER_DEBUG = General.getBoolean("PacketHandlerDebug", false);
-			DEVELOPER = General.getBoolean("Developer", false);
-			ACCEPT_GEOEDITOR_CONN = General.getBoolean("AcceptGeoeditorConn", false);
-			ALT_DEV_NO_HANDLERS = General.getBoolean("AltDevNoHandlers", false);
-			ALT_DEV_NO_QUESTS = General.getBoolean("AltDevNoQuests", false);
-			ALT_DEV_NO_SPAWNS = General.getBoolean("AltDevNoSpawns", false);
-			ALT_DEV_SHOW_QUESTS_LOAD_IN_LOGS = General.getBoolean("AltDevShowQuestsLoadInLogs", false);
-			ALT_DEV_SHOW_SCRIPTS_LOAD_IN_LOGS = General.getBoolean("AltDevShowScriptsLoadInLogs", false);
 			THREAD_P_EFFECTS = General.getInt("ThreadPoolSizeEffects", 10);
 			THREAD_P_GENERAL = General.getInt("ThreadPoolSizeGeneral", 13);
 			IO_PACKET_THREAD_CORE_SIZE = General.getInt("UrgentPacketThreadCoreSize", 2);
@@ -1893,31 +1897,6 @@ public final class Config
 			GRIDS_ALWAYS_ON = General.getBoolean("GridsAlwaysOn", false);
 			GRID_NEIGHBOR_TURNON_TIME = General.getInt("GridNeighborTurnOnTime", 1);
 			GRID_NEIGHBOR_TURNOFF_TIME = General.getInt("GridNeighborTurnOffTime", 90);
-			GEODATA = General.getInt("GeoData", 0);
-			GEODATA_DRIVER = General.getString("GeoDataDriver", "l2r.gameserver.geoengine.NullDriver");
-			try
-			{
-				PATHNODE_DIR = new File(General.getString("PathnodeDirectory", "data/pathnode").replaceAll("\\\\", "/")).getCanonicalFile();
-			}
-			catch (IOException e)
-			{
-				_log.warn("Error setting pathnode directory!", e);
-				PATHNODE_DIR = new File("data/pathnode");
-			}
-			GEODATA_CELLFINDING = General.getBoolean("CellPathFinding", false);
-			PATHFIND_BUFFERS = General.getString("PathFindBuffers", "100x6;128x6;192x6;256x4;320x4;384x4;500x2");
-			LOW_WEIGHT = General.getFloat("LowWeight", 0.5f);
-			MEDIUM_WEIGHT = General.getFloat("MediumWeight", 2);
-			HIGH_WEIGHT = General.getFloat("HighWeight", 3);
-			ADVANCED_DIAGONAL_STRATEGY = General.getBoolean("AdvancedDiagonalStrategy", true);
-			DIAGONAL_WEIGHT = General.getFloat("DiagonalWeight", 0.707f);
-			MAX_POSTFILTER_PASSES = General.getInt("MaxPostfilterPasses", 3);
-			DEBUG_PATH = General.getBoolean("DebugPath", false);
-			FORCE_GEODATA = General.getBoolean("ForceGeodata", true);
-			COORD_SYNCHRONIZE = General.getInt("CoordSynchronize", -1);
-			
-			String str = General.getString("EnableFallingDamage", "auto");
-			ENABLE_FALLING_DAMAGE = "auto".equalsIgnoreCase(str) ? GEODATA > 0 : Boolean.parseBoolean(str);
 			
 			PEACE_ZONE_MODE = General.getInt("PeaceZoneMode", 0);
 			DEFAULT_GLOBAL_CHAT = General.getString("GlobalChat", "ON");
@@ -2498,6 +2477,51 @@ public final class Config
 			{
 				ALT_OLY_END_HOUR[i] = Integer.parseInt(times[i]);
 			}
+			
+			// Load Debug L2Properties file (if exists)
+			final PropertiesParser Debug = new PropertiesParser(DEBUG_CONFIG_FILE);
+			
+			DEBUG = Debug.getBoolean("Debug", false);
+			DEBUG_SKILL_PARSING = Debug.getBoolean("DebugSkillParsing", false);
+			DEBUG_SKILL_DURATION = Debug.getBoolean("DebugSkillDuration", false);
+			DEBUG_MULTIPLE_REGISTRATIONS_OF_NPCS = Debug.getBoolean("DebugMultipleRegistrationsOfNpcs", false);
+			DEBUG_SCRIPT_NOTIFIES = Debug.getBoolean("DebugScriptsNotifies", false);
+			PACKET_HANDLER_DEBUG = Debug.getBoolean("PacketHandlerDebug", false);
+			DEVELOPER = Debug.getBoolean("Developer", false);
+			ACCEPT_GEOEDITOR_CONN = Debug.getBoolean("AcceptGeoeditorConn", false);
+			ALT_DEV_NO_HANDLERS = Debug.getBoolean("AltDevNoHandlers", false);
+			ALT_DEV_NO_QUESTS = Debug.getBoolean("AltDevNoQuests", false);
+			ALT_DEV_NO_SPAWNS = Debug.getBoolean("AltDevNoSpawns", false);
+			ALT_DEV_SHOW_QUESTS_LOAD_IN_LOGS = Debug.getBoolean("AltDevShowQuestsLoadInLogs", false);
+			ALT_DEV_SHOW_SCRIPTS_LOAD_IN_LOGS = Debug.getBoolean("AltDevShowScriptsLoadInLogs", false);
+			
+			// Load General L2Properties file (if exists)
+			final PropertiesParser Geodata = new PropertiesParser(GEODATA_CONFIG_FILE);
+			
+			GEODATA = Geodata.getInt("GeoData", 0);
+			GEODATA_DRIVER = Geodata.getString("GeoDataDriver", "l2r.gameserver.geoengine.NullDriver");
+			try
+			{
+				PATHNODE_DIR = new File(Geodata.getString("PathnodeDirectory", "data/pathnode").replaceAll("\\\\", "/")).getCanonicalFile();
+			}
+			catch (IOException e)
+			{
+				_log.warn("Error setting pathnode directory!", e);
+				PATHNODE_DIR = new File("data/pathnode");
+			}
+			GEODATA_CELLFINDING = Geodata.getBoolean("CellPathFinding", false);
+			PATHFIND_BUFFERS = Geodata.getString("PathFindBuffers", "100x6;128x6;192x6;256x4;320x4;384x4;500x2");
+			LOW_WEIGHT = Geodata.getFloat("LowWeight", 0.5f);
+			MEDIUM_WEIGHT = Geodata.getFloat("MediumWeight", 2);
+			HIGH_WEIGHT = Geodata.getFloat("HighWeight", 3);
+			ADVANCED_DIAGONAL_STRATEGY = Geodata.getBoolean("AdvancedDiagonalStrategy", true);
+			DIAGONAL_WEIGHT = Geodata.getFloat("DiagonalWeight", 0.707f);
+			MAX_POSTFILTER_PASSES = Geodata.getInt("MaxPostfilterPasses", 3);
+			DEBUG_PATH = Geodata.getBoolean("DebugPath", false);
+			FORCE_GEODATA = Geodata.getBoolean("ForceGeodata", true);
+			COORD_SYNCHRONIZE = Geodata.getInt("CoordSynchronize", -1);
+			String str = Geodata.getString("EnableFallingDamage", "auto");
+			ENABLE_FALLING_DAMAGE = "auto".equalsIgnoreCase(str) ? GEODATA > 0 : Boolean.parseBoolean(str);
 			
 			final File hexIdFile = new File(HEXID_FILE);
 			if (hexIdFile.exists())

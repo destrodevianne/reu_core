@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javolution.util.FastMap;
+import l2r.Config;
 import l2r.gameserver.datatables.xml.HerbDropData;
 import l2r.gameserver.enums.NpcRace;
 import l2r.gameserver.enums.QuestEventType;
@@ -320,7 +321,10 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 			
 			if (!EventType.isMultipleRegistrationAllowed() && !quests.isEmpty())
 			{
-				_log.warn("Quest event not allowed in multiple quests.  Skipped addition of Event Type " + EventType + " for NPC NAME " + _name + " NPC ID " + _npcId + " and quest " + q.getName() + ".");
+				if (Config.DEBUG_MULTIPLE_REGISTRATIONS_OF_NPCS)
+				{
+					_log.warn("Quest event not allowed in multiple quests.  Skipped addition of Event Type " + EventType + " for NPC NAME " + _name + " NPC ID " + _npcId + " and quest " + q.getName() + ".");
+				}
 			}
 			else
 			{

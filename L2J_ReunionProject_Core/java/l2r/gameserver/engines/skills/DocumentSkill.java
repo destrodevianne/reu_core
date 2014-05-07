@@ -152,7 +152,7 @@ public class DocumentSkill extends DocumentBase
 		String levels = attrs.getNamedItem("levels").getNodeValue();
 		int lastLvl = Integer.parseInt(levels);
 		
-		if (Config.DEBUG)
+		if (Config.DEBUG_SKILL_PARSING)
 		{
 			_log.info("Parsing Skill with Id: " + String.valueOf(skillId));
 		}
