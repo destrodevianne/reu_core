@@ -40,6 +40,7 @@ public enum L2SkillType
 	PDAM,
 	MDAM,
 	MANADAM,
+	CHAIN_HEAL,
 	CPDAMPERCENT,
 	DOT,
 	MDOT,
