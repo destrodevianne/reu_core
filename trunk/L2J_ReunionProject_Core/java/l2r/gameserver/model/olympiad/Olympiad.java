@@ -751,6 +751,11 @@ public class Olympiad
 		return _currentCycle;
 	}
 	
+	public int getPeriod()
+	{
+		return _period;
+	}
+	
 	public boolean playerInStadia(L2PcInstance player)
 	{
 		return (ZoneManager.getInstance().getOlympiadStadium(player) != null);
