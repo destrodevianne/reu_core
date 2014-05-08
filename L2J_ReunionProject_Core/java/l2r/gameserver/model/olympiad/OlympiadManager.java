@@ -578,6 +578,11 @@ public class OlympiadManager
 		}
 	}
 	
+	public int getCountOpponents()
+	{
+		return _nonClassBasedRegisters.size() + _classBasedRegisters.size() + _teamsBasedRegisters.size();
+	}
+	
 	private static class SingletonHolder
 	{
 		protected static final OlympiadManager _instance = new OlympiadManager();
