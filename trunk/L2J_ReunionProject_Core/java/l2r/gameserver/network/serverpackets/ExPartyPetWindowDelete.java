@@ -35,11 +35,6 @@ public class ExPartyPetWindowDelete extends L2GameServerPacket
 	@Override
 	protected void writeImpl()
 	{
-		if (_summon.getOwner() == null)
-		{
-			return;
-		}
-		
 		writeC(0xFE);
 		writeH(0x6A);
 		writeD(_summon.getObjectId());
