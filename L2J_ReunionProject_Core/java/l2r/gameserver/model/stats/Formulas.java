@@ -1200,14 +1200,18 @@ public final class Formulas
 			if (Rnd.get(100) < activeChar.calcStat(Stats.LETHAL_RATE, lethalStrikeRate, target, null))
 			{
 				// for Players CP and HP is set to 1.
-				if (target.isPlayer())
+				if (target.isPlayer() && FormulasConfigs.ALLOW_LETHAL_STRIKES_ON_PLAYERS)
 				{
 					target.setCurrentCp(1);
 					target.setCurrentHp(1);
 					target.sendPacket(SystemMessageId.LETHAL_STRIKE);
 				}
 				// for Monsters HP is set to 1.
-				else if (target.isMonster() || target.isSummon())
+				else if (target.isMonster() && FormulasConfigs.ALLOW_LETHAL_STRIKES_ON_MOBS)
+				{
+					target.setCurrentHp(1);
+				}
+				else if (target.isSummon() && FormulasConfigs.ALLOW_LETHAL_STRIKES_ON_SUMMONS)
 				{
 					target.setCurrentHp(1);
 				}
@@ -1217,14 +1221,18 @@ public final class Formulas
 			else if (Rnd.get(100) < activeChar.calcStat(Stats.LETHAL_RATE, halfKillRate, target, null))
 			{
 				// for Players CP is set to 1.
-				if (target.isPlayer())
+				if (target.isPlayer() && FormulasConfigs.ALLOW_HALF_KILL_ON_PLAYERS)
 				{
 					target.setCurrentCp(1);
 					target.sendPacket(SystemMessageId.HALF_KILL);
 					target.sendPacket(SystemMessageId.CP_DISAPPEARS_WHEN_HIT_WITH_A_HALF_KILL_SKILL);
 				}
 				// for Monsters HP is set to 50%.
-				else if (target.isMonster() || target.isSummon())
+				else if (target.isMonster() && FormulasConfigs.ALLOW_HALF_KILL_ON_MOBS)
+				{
+					target.setCurrentHp(target.getCurrentHp() * 0.5);
+				}
+				else if (target.isSummon() && FormulasConfigs.ALLOW_HALF_KILL_ON_SUMMONS)
 				{
 					target.setCurrentHp(target.getCurrentHp() * 0.5);
 				}
