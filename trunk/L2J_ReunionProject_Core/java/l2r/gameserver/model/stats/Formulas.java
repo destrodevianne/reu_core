@@ -2319,7 +2319,8 @@ public final class Formulas
 			set.set("rate", rate);
 			Debug.sendSkillDebug(activeChar, target, skill, set);
 		}
-		return Rnd.get(100) < rate;
+		
+		return (skill.getDmgDirectlyToHP() && !activeChar.isBehindTarget() ? false : Rnd.get(100) < rate);
 	}
 	
 	public static List<L2Effect> calcCancelStealEffects(L2Character activeChar, L2Character target, L2Skill skill, double power)
