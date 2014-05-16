@@ -223,7 +223,7 @@ public final class UseItem extends L2GameClientPacket
 		if (item.isEquipable())
 		{
 			// over enchanted item precaution
-			if (!activeChar.isGM() && (item.getEnchantLevel() > Config.MAX_ENCHANT_LEVEL) && (item.getEnchantLevel() != 0))
+			if (!activeChar.isGM() && (item.getEnchantLevel() > Config.MAX_ENCHANT_LEVEL) && (Config.MAX_ENCHANT_LEVEL > 0))
 			{
 				activeChar.sendMessage("You will be kicked for using overenchanted item!");
 				Util.handleIllegalPlayerAction(activeChar, "Player " + activeChar.getName() + " has overenchanted item.", Config.DEFAULT_PUNISH);
