@@ -518,7 +518,7 @@ public class EnterWorld extends L2GameClientPacket
 			{
 				if (i.isEquipable())
 				{
-					if (i.getEnchantLevel() > Config.MAX_ENCHANT_LEVEL)
+					if ((i.getEnchantLevel() > Config.MAX_ENCHANT_LEVEL) && (Config.MAX_ENCHANT_LEVEL > 0))
 					{
 						// Delete over enchanted item(s)
 						activeChar.getInventory().destroyItem(null, i, activeChar, null);
