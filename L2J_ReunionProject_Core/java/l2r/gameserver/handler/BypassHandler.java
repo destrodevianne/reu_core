@@ -30,7 +30,6 @@ import l2r.gameserver.scripts.handlers.bypasshandlers.ClanWarehouse;
 import l2r.gameserver.scripts.handlers.bypasshandlers.ElcardiaBuff;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Festival;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Freight;
-import l2r.gameserver.scripts.handlers.bypasshandlers.Henna;
 import l2r.gameserver.scripts.handlers.bypasshandlers.ItemAuctionLink;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Link;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Loto;
@@ -75,7 +74,6 @@ public class BypassHandler implements IHandler<IBypassHandler, String>
 		registerHandler(new ElcardiaBuff());
 		registerHandler(new Festival());
 		registerHandler(new Freight());
-		registerHandler(new Henna());
 		registerHandler(new ItemAuctionLink());
 		registerHandler(new Link());
 		registerHandler(new Loto());
