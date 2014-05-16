@@ -103,7 +103,6 @@ public enum InstanceType
 	L2OlympiadManagerInstance(L2Npc),
 	L2PetManagerInstance(L2MerchantInstance),
 	L2RaceManagerInstance(L2Npc),
-	L2SymbolMakerInstance(L2Npc),
 	L2TeleporterInstance(L2Npc),
 	L2TrainerInstance(L2NpcInstance),
 	L2VillageMasterInstance(L2NpcInstance),
