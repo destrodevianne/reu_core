@@ -1645,13 +1645,25 @@ public final class Formulas
 			return false;
 		}
 		
-		if (skill.isDebuff() && (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, attacker, skill) > 0))
+		if (skill.isDebuff())
 		{
-			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_YOUR_S2);
-			sm.addCharName(target);
-			sm.addSkillName(skill);
-			attacker.sendPacket(sm);
-			return false;
+			if (skill.getPower() == -1)
+			{
+				if (attacker.isDebug())
+				{
+					attacker.sendDebugMessage(skill.getName() + " ignoring resists");
+				}
+				return true;
+			}
+			
+			if (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, attacker, skill) > 0)
+			{
+				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_YOUR_S2);
+				sm.addCharName(target);
+				sm.addSkillName(skill);
+				attacker.sendPacket(sm);
+				return false;
+			}
 		}
 		
 		final double activateRate = effect.effectPower;
@@ -1755,13 +1767,25 @@ public final class Formulas
 			return false;
 		}
 		
-		if (skill.isDebuff() && (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, attacker, skill) > 0))
+		if (skill.isDebuff())
 		{
-			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_YOUR_S2);
-			sm.addCharName(target);
-			sm.addSkillName(skill);
-			attacker.sendPacket(sm);
-			return false;
+			if (skill.getPower() == -1)
+			{
+				if (attacker.isDebug())
+				{
+					attacker.sendDebugMessage(skill.getName() + " ignoring resists");
+				}
+				return true;
+			}
+			
+			if (target.calcStat(Stats.DEBUFF_IMMUNITY, 0, attacker, skill) > 0)
+			{
+				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_YOUR_S2);
+				sm.addCharName(target);
+				sm.addSkillName(skill);
+				attacker.sendPacket(sm);
+				return false;
+			}
 		}
 		
 		// Calculate BaseRate.
