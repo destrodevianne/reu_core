@@ -1049,7 +1049,8 @@ public final class L2CubicInstance implements IIdentifiable
 		public void run()
 		{
 			stopAction();
-			_owner.getCubics().remove(this);
+			cancelDisappear();
+			_owner.getCubics().remove(getId());
 			_owner.broadcastUserInfo();
 		}
 	}
