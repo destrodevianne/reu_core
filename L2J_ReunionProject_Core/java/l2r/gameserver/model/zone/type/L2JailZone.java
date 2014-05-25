@@ -34,7 +34,7 @@ import l2r.gameserver.network.SystemMessageId;
  */
 public class L2JailZone extends L2ZoneType
 {
-	private static final Location JAIL_IN_LOC = new Location(-114356, -249645, -2984);
+	protected static final Location JAIL_IN_LOC = new Location(-114356, -249645, -2984);
 	private static final Location JAIL_OUT_LOC = new Location(17836, 170178, -3507);
 	
 	public L2JailZone(int id)
@@ -62,7 +62,7 @@ public class L2JailZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onExit(L2Character character)
+	protected void onExit(final L2Character character)
 	{
 		if (character.isPlayer())
 		{
@@ -79,8 +79,18 @@ public class L2JailZone extends L2ZoneType
 			if (player.isJailed())
 			{
 				// when a player wants to exit jail even if he is still jailed, teleport him back to jail
-				ThreadPoolManager.getInstance().scheduleGeneral(new TeleportTask(player, JAIL_IN_LOC), 2000);
-				character.sendMessage("You cannot cheat your way out of here. You must wait until your jail time is over.");
+				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						if (!character.isInsideZone(ZoneIdType.JAIL))
+						{
+							ThreadPoolManager.getInstance().scheduleGeneral(new TeleportTask(player, JAIL_IN_LOC), 2000);
+							character.sendMessage("You cannot cheat your way out of here. You must wait until your jail time is over.");
+						}
+					}
+				}, 4000);
 			}
 			if (Config.JAIL_DISABLE_TRANSACTION)
 			{

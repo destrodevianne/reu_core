@@ -29,7 +29,7 @@ import l2r.util.StringUtil;
 
 public class ConsoleLogFormatter extends Formatter
 {
-	private final SimpleDateFormat dateFmt = new SimpleDateFormat("dd MMM H:mm:ss");
+	private final SimpleDateFormat dateFmt = new SimpleDateFormat("dd/MM HH:mm:ss");
 	
 	@Override
 	public String format(LogRecord record)
