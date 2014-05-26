@@ -71,7 +71,6 @@ public final class L2TrapInstance extends L2Npc
 		setName(template.getName());
 		setIsInvul(false);
 		
-		_owner = null;
 		_isTriggered = false;
 		// TODO: Manage this properly when NPC templates are complete and in XML.
 		for (L2Skill skill : template.getSkills().values())
@@ -173,7 +172,7 @@ public final class L2TrapInstance extends L2Npc
 			return false;
 		}
 		
-		if (!target.isInsideRadius(this, _skill.getEffectRange(), false, false))
+		if (!target.isInsideRadius(this, _skill.getEffectRange(), false, false) && !target.isInsideRadius(this, _skill.getAffectRange(), false, false))
 		{
 			return false;
 		}
@@ -219,11 +218,6 @@ public final class L2TrapInstance extends L2Npc
 	@Override
 	public void deleteMe()
 	{
-		if (_owner != null)
-		{
-			_owner.setTrap(null);
-			_owner = null;
-		}
 		super.deleteMe();
 	}
 	
@@ -421,12 +415,6 @@ public final class L2TrapInstance extends L2Npc
 		{
 			_trapTask.cancel(true);
 			_trapTask = null;
-		}
-		
-		if (_owner != null)
-		{
-			_owner.setTrap(null);
-			_owner = null;
 		}
 		
 		if (isVisible() && !isDead())

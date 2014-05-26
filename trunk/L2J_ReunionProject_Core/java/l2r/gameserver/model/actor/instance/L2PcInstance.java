@@ -78,8 +78,8 @@ import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.datatables.xml.PetData;
 import l2r.gameserver.datatables.xml.RecipeData;
 import l2r.gameserver.datatables.xml.SkillData;
-import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.datatables.xml.SkillData.FrequentSkill;
+import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
@@ -182,6 +182,7 @@ import l2r.gameserver.model.actor.tasks.player.TeleportWatchdogTask;
 import l2r.gameserver.model.actor.tasks.player.VitalityTask;
 import l2r.gameserver.model.actor.tasks.player.WarnUserTakeBreakTask;
 import l2r.gameserver.model.actor.tasks.player.WaterTask;
+import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.actor.transform.Transform;
 import l2r.gameserver.model.base.ClassId;
@@ -712,7 +713,7 @@ public final class L2PcInstance extends L2Playable
 	/** The L2Decoy of the L2PcInstance */
 	private L2Decoy _decoy = null;
 	/** The L2Trap of the L2PcInstance */
-	private L2TrapInstance _trap = null;
+	private final FastMap<Integer, L2TrapInstance> _traps = new FastMap<>();
 	/** The L2Agathion of the L2PcInstance */
 	private int _agathionId = 0;
 	// apparently, a L2PcInstance CAN have both a summon AND a tamed beast at the same time!!
@@ -6471,14 +6472,6 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * @return the L2Trap of the L2PcInstance or null.
-	 */
-	public L2TrapInstance getTrap()
-	{
-		return _trap;
-	}
-	
-	/**
 	 * Set the L2Summon of the L2PcInstance.
 	 * @param summon
 	 */
@@ -6497,12 +6490,47 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * Set the L2Trap of this L2PcInstance
-	 * @param trap
+	 * Add the L2Trap of this L2PcInstance
+	 * @param id
+	 * @param npcTemplate
+	 * @param despawnTime
 	 */
-	public void setTrap(L2TrapInstance trap)
+	public void addTrap(int id, L2NpcTemplate npcTemplate, int despawnTime)
 	{
-		_trap = trap;
+		_traps.put(id, new L2TrapInstance(id, npcTemplate, this, despawnTime));
+	}
+	
+	/**
+	 * Get the player's traps.
+	 * @return the traps
+	 */
+	public Map<Integer, L2TrapInstance> getTraps()
+	{
+		return _traps;
+	}
+	
+	public int getTrapsCount()
+	{
+		return _traps == null ? 0 : _traps.size();
+	}
+	
+	// TODO: we must delete first trap but we will delete one random for now
+	public void destroyFirstTrap()
+	{
+		final int removedTrapId = (int) getTraps().keySet().toArray()[Rnd.get(getTrapsCount())];
+		final L2TrapInstance removedTrap = getTrapById(removedTrapId);
+		removedTrap.unSummon();
+		getTraps().remove(removedTrap.getId());
+	}
+	
+	/**
+	 * Get the player trap by trap ID, if any.
+	 * @param trapId the cubic ID
+	 * @return the trap with the given trap ID, {@code null} otherwise
+	 */
+	public L2TrapInstance getTrapById(int trapId)
+	{
+		return _traps.get(trapId);
 	}
 	
 	/**
