@@ -775,7 +775,7 @@ public class L2Attackable extends L2Npc
 		// traps does not cause aggro
 		// making this hack because not possible to determine if damage made by trap
 		// so just check for triggered trap here
-		if ((targetPlayer == null) || (targetPlayer.getTraps() == null))
+		if ((targetPlayer == null) || (targetPlayer.getTraps().isEmpty()))
 		{
 			ai.addHate(aggro);
 		}
