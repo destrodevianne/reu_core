@@ -94,6 +94,7 @@ public final class Attack extends L2GameClientPacket
 		
 		if (target == null)
 		{
+			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
