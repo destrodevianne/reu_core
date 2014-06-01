@@ -109,6 +109,7 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 		
 		if (activeChar.isDebug())
 		{
+			_log.info("Debugging: " + activeChar.getName());
 			_log.info("Skill:" + skill.getName() + " level:" + skill.getLevel() + " passive:" + skill.isPassive());
 			_log.info("Range:" + skill.getCastRange() + " targettype:" + skill.getTargetType() + " power:" + skill.getPower());
 			_log.info("Reusedelay:" + skill.getReuseDelay() + " hittime:" + skill.getHitTime());
