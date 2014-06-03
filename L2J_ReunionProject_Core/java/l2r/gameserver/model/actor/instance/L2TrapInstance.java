@@ -211,6 +211,8 @@ public final class L2TrapInstance extends L2Npc
 			{
 				return false;
 			}
+			
+			getOwner().updatePvPStatus();
 		}
 		return true;
 	}
