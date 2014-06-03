@@ -332,7 +332,7 @@ public class MapRegionManager extends DocumentParser
 					castle = CastleManager.getInstance().getCastle(player);
 					fort = FortManager.getInstance().getFort(player);
 					clanhall = ClanHallManager.getInstance().getNearbyAbstractHall(activeChar.getX(), activeChar.getY(), 10000);
-					L2SiegeFlagInstance tw_flag = TerritoryWarManager.getInstance().getFlagForClan(player.getClan());
+					L2SiegeFlagInstance tw_flag = TerritoryWarManager.getInstance().getHQForClan(player.getClan());
 					if (tw_flag != null)
 					{
 						return new Location(tw_flag.getX(), tw_flag.getY(), tw_flag.getZ());
