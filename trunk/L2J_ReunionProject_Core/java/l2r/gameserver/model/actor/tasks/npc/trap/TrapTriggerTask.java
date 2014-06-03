@@ -39,7 +39,6 @@ public class TrapTriggerTask implements Runnable
 	{
 		try
 		{
-			_trap.getOwner().updatePvPStatus();
 			_trap.doCast(_trap.getSkill());
 			ThreadPoolManager.getInstance().scheduleGeneral(new TrapUnsummonTask(_trap), _trap.getSkill().getHitTime() + 300);
 		}

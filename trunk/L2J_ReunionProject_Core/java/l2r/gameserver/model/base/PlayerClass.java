@@ -291,11 +291,11 @@ public enum PlayerClass
 				{
 					if (player.getAppearance().getSex())
 					{
-						subclasses.removeAll(EnumSet.of(femaleSoulbreaker));
+						subclasses.removeAll(EnumSet.of(maleSoulbreaker));
 					}
 					else
 					{
-						subclasses.removeAll(EnumSet.of(maleSoulbreaker));
+						subclasses.removeAll(EnumSet.of(femaleSoulbreaker));
 					}
 				}
 				if (!player.getSubClasses().containsKey(2) || (player.getSubClasses().get(2).getLevel() < 75))
