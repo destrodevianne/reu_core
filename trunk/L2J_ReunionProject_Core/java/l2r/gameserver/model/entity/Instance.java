@@ -25,10 +25,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.gameserver.Announcements;
@@ -51,14 +53,10 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2DoorTemplate;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.instancezone.InstanceWorld;
-import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.CreatureSay;
-import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-import l2r.util.L2FastList;
-import l2r.util.L2FastMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,9 +77,9 @@ public final class Instance
 	private int _ejectTime = Config.EJECT_DEAD_PLAYER_TIME;
 	/** Allow random walk for NPCs, global parameter. */
 	private boolean _allowRandomWalk = true;
-	private final L2FastList<Integer> _players = new L2FastList<>(true);
-	private final List<L2Npc> _npcs = new L2FastList<>(true);
-	private final Map<Integer, L2DoorInstance> _doors = new L2FastMap<>(true);
+	private final List<Integer> _players = new FastList<Integer>().shared();
+	private final List<L2Npc> _npcs = new FastList<L2Npc>().shared();
+	private final Map<Integer, L2DoorInstance> _doors = new ConcurrentHashMap<>();
 	private final Map<String, List<L2Spawn>> _manualSpawn = new HashMap<>();
 	private Location _spawnLoc = null;
 	private boolean _allowSummon = true;
@@ -356,7 +354,22 @@ public final class Instance
 	
 	public void removePlayers()
 	{
-		_players.executeForEach(new EjectProcedure());
+		for (Integer objectId : _players)
+		{
+			final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
+			if ((player != null) && (player.getInstanceId() == getId()))
+			{
+				player.setInstanceId(0);
+				if (getSpawnLoc() != null)
+				{
+					player.teleToLocation(getSpawnLoc(), true);
+				}
+				else
+				{
+					player.teleToLocation(TeleportWhereType.Town);
+				}
+			}
+		}
 		_players.clear();
 	}
 	
@@ -750,7 +763,14 @@ public final class Instance
 		}
 		if (cs != null)
 		{
-			_players.executeForEach(new BroadcastPacket(cs));
+			for (Integer objectId : _players)
+			{
+				final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
+				if ((player != null) && (player.getInstanceId() == getId()))
+				{
+					player.sendPacket(cs);
+				}
+			}
 		}
 		cancelTimer();
 		if (remaining >= 10000)
@@ -792,7 +812,21 @@ public final class Instance
 	{
 		if ((player != null))
 		{
-			_ejectDeadTasks.put(player.getObjectId(), ThreadPoolManager.getInstance().scheduleGeneral(new EjectPlayer(player), _ejectTime));
+			_ejectDeadTasks.put(player.getObjectId(), ThreadPoolManager.getInstance().scheduleGeneral(() ->
+			{
+				if (player.isDead() && (player.getInstanceId() == getId()))
+				{
+					player.setInstanceId(0);
+					if (getSpawnLoc() != null)
+					{
+						player.teleToLocation(getSpawnLoc(), true);
+					}
+					else
+					{
+						player.teleToLocation(TeleportWhereType.Town);
+					}
+				}
+			}, _ejectTime));
 		}
 	}
 	
@@ -831,76 +865,6 @@ public final class Instance
 		public void run()
 		{
 			InstanceManager.getInstance().destroyInstance(getId());
-		}
-	}
-	
-	protected class EjectPlayer implements Runnable
-	{
-		private final L2PcInstance _player;
-		
-		public EjectPlayer(L2PcInstance player)
-		{
-			_player = player;
-		}
-		
-		@Override
-		public void run()
-		{
-			if ((_player != null) && _player.isDead() && (_player.getInstanceId() == getId()))
-			{
-				_player.setInstanceId(0);
-				if (getSpawnLoc() != null)
-				{
-					_player.teleToLocation(getSpawnLoc(), true);
-				}
-				else
-				{
-					_player.teleToLocation(TeleportWhereType.Town);
-				}
-			}
-		}
-	}
-	
-	public final class EjectProcedure implements IProcedure<Integer, Boolean>
-	{
-		@Override
-		public Boolean execute(Integer objectId)
-		{
-			final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
-			if ((player != null) && (player.getInstanceId() == getId()))
-			{
-				player.setInstanceId(0);
-				if (getSpawnLoc() != null)
-				{
-					player.teleToLocation(getSpawnLoc(), true);
-				}
-				else
-				{
-					player.teleToLocation(TeleportWhereType.Town);
-				}
-			}
-			return true;
-		}
-	}
-	
-	public final class BroadcastPacket implements IProcedure<Integer, Boolean>
-	{
-		private final L2GameServerPacket _packet;
-		
-		public BroadcastPacket(L2GameServerPacket packet)
-		{
-			_packet = packet;
-		}
-		
-		@Override
-		public Boolean execute(Integer objectId)
-		{
-			final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
-			if ((player != null) && (player.getInstanceId() == getId()))
-			{
-				player.sendPacket(_packet);
-			}
-			return true;
 		}
 	}
 }

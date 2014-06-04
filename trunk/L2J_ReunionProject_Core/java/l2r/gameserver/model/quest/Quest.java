@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
@@ -64,7 +65,6 @@ import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.interfaces.IPositionable;
-import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.PcInventory;
 import l2r.gameserver.model.items.L2Item;
@@ -90,7 +90,6 @@ import l2r.gameserver.scripting.ManagedScript;
 import l2r.gameserver.scripting.ScriptManager;
 import l2r.gameserver.util.MinionList;
 import l2r.gameserver.util.Util;
-import l2r.util.L2FastMap;
 import l2r.util.Rnd;
 
 import org.slf4j.Logger;
@@ -105,7 +104,7 @@ public class Quest extends ManagedScript implements IIdentifiable
 	public static final Logger _log = LoggerFactory.getLogger(Quest.class);
 	
 	/** Map containing lists of timers from the name of the timer. */
-	private final Map<String, List<QuestTimer>> _allEventTimers = new L2FastMap<>(true);
+	private final Map<String, List<QuestTimer>> _allEventTimers = new ConcurrentHashMap<>();
 	private final Set<Integer> _questInvolvedNpcs = new HashSet<>();
 	private final ReentrantReadWriteLock _rwLock = new ReentrantReadWriteLock();
 	private final WriteLock _writeLock = _rwLock.writeLock();
@@ -293,30 +292,19 @@ public class Quest extends ManagedScript implements IIdentifiable
 	 */
 	public void startQuestTimer(String name, long time, L2Npc npc, L2PcInstance player, boolean repeating)
 	{
-		List<QuestTimer> timers = _allEventTimers.get(name);
-		// Add quest timer if timer doesn't already exist
-		if (timers == null)
+		final List<QuestTimer> timers = _allEventTimers.computeIfAbsent(name, k -> new ArrayList<>());
+		// if there exists a timer with this name, allow the timer only if the [npc, player] set is unique
+		// nulls act as wildcards
+		if (getQuestTimer(name, npc, player) == null)
 		{
-			timers = new ArrayList<>();
-			timers.add(new QuestTimer(this, name, time, npc, player, repeating));
-			_allEventTimers.put(name, timers);
-		}
-		// a timer with this name exists, but may not be for the same set of npc and player
-		else
-		{
-			// if there exists a timer with this name, allow the timer only if the [npc, player] set is unique
-			// nulls act as wildcards
-			if (getQuestTimer(name, npc, player) == null)
+			_writeLock.lock();
+			try
 			{
-				_writeLock.lock();
-				try
-				{
-					timers.add(new QuestTimer(this, name, time, npc, player, repeating));
-				}
-				finally
-				{
-					_writeLock.unlock();
-				}
+				timers.add(new QuestTimer(this, name, time, npc, player, repeating));
+			}
+			finally
+			{
+				_writeLock.unlock();
 			}
 		}
 	}
@@ -3761,26 +3749,18 @@ public class Quest extends ManagedScript implements IIdentifiable
 		{
 			if (includeCommandChannel && player.getParty().isInCommandChannel())
 			{
-				player.getParty().getCommandChannel().forEachMember(new IProcedure<L2PcInstance, Boolean>()
+				player.getParty().getCommandChannel().forEachMember(member ->
 				{
-					@Override
-					public Boolean execute(L2PcInstance member)
-					{
-						actionForEachPlayer(member, npc, isSummon);
-						return true;
-					}
+					actionForEachPlayer(member, npc, isSummon);
+					return true;
 				});
 			}
 			else if (includeParty)
 			{
-				player.getParty().forEachMember(new IProcedure<L2PcInstance, Boolean>()
+				player.getParty().forEachMember(member ->
 				{
-					@Override
-					public Boolean execute(L2PcInstance member)
-					{
-						actionForEachPlayer(member, npc, isSummon);
-						return true;
-					}
+					actionForEachPlayer(member, npc, isSummon);
+					return true;
 				});
 			}
 		}

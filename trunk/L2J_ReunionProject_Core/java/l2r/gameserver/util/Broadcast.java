@@ -23,7 +23,6 @@ import java.util.Collection;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.CharInfo;
 import l2r.gameserver.network.serverpackets.CreatureSay;
@@ -181,11 +180,17 @@ public final class Broadcast
 	 * <B><U> Concept</U> :</B><BR>
 	 * In order to inform other players of state modification on the L2Character, server just need to go through _allPlayers to send Server->Client Packet<BR>
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T SEND Server->Client packet to this L2Character (to do this use method toSelfAndKnownPlayers)</B></FONT><BR>
-	 * @param mov
+	 * @param packet
 	 */
-	public static void toAllOnlinePlayers(L2GameServerPacket mov)
+	public static void toAllOnlinePlayers(L2GameServerPacket packet)
 	{
-		L2World.getInstance().forEachPlayer(new ForEachPlayerBroadcast(mov));
+		for (L2PcInstance player : L2World.getInstance().getPlayers())
+		{
+			if (player.isOnline())
+			{
+				player.sendPacket(packet);
+			}
+		}
 	}
 	
 	public static void announceToOnlinePlayers(String text, boolean isCritical)
@@ -204,50 +209,14 @@ public final class Broadcast
 		toAllOnlinePlayers(cs);
 	}
 	
-	public static void toPlayersInInstance(L2GameServerPacket mov, int instanceId)
+	public static void toPlayersInInstance(L2GameServerPacket packet, int instanceId)
 	{
-		L2World.getInstance().forEachPlayer(new ForEachPlayerInInstanceBroadcast(mov, instanceId));
-	}
-	
-	private static final class ForEachPlayerBroadcast implements IProcedure<L2PcInstance, Boolean>
-	{
-		L2GameServerPacket _packet;
-		
-		protected ForEachPlayerBroadcast(L2GameServerPacket packet)
+		for (L2PcInstance player : L2World.getInstance().getPlayers())
 		{
-			_packet = packet;
-		}
-		
-		@Override
-		public final Boolean execute(final L2PcInstance onlinePlayer)
-		{
-			if ((onlinePlayer != null) && onlinePlayer.isOnline())
+			if (player.isOnline() && (player.getInstanceId() == instanceId))
 			{
-				onlinePlayer.sendPacket(_packet);
+				player.sendPacket(packet);
 			}
-			return true;
-		}
-	}
-	
-	private static final class ForEachPlayerInInstanceBroadcast implements IProcedure<L2PcInstance, Boolean>
-	{
-		private final L2GameServerPacket _packet;
-		private final int _instanceId;
-		
-		protected ForEachPlayerInInstanceBroadcast(L2GameServerPacket packet, int instanceId)
-		{
-			_packet = packet;
-			_instanceId = instanceId;
-		}
-		
-		@Override
-		public final Boolean execute(final L2PcInstance onlinePlayer)
-		{
-			if ((onlinePlayer != null) && onlinePlayer.isOnline() && (onlinePlayer.getInstanceId() == _instanceId))
-			{
-				onlinePlayer.sendPacket(_packet);
-			}
-			return true;
 		}
 	}
 }

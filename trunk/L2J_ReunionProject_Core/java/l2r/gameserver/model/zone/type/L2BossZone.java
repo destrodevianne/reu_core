@@ -18,8 +18,10 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import java.util.List;
 import java.util.Map;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.gameserver.GameServer;
 import l2r.gameserver.enums.PcCondOverride;
@@ -34,7 +36,6 @@ import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.AbstractZoneSettings;
 import l2r.gameserver.model.zone.L2ZoneType;
-import l2r.util.L2FastList;
 
 /**
  * @author DaRkRaGe
@@ -55,32 +56,29 @@ public class L2BossZone extends L2ZoneType
 		// track the times that players got disconnected. Players are allowed
 		// to log back into the zone as long as their log-out was within _timeInvade time...
 		// <player objectId, expiration time in milliseconds>
-		private final FastMap<Integer, Long> _playerAllowedReEntryTimes;
+		private final Map<Integer, Long> _playerAllowedReEntryTimes = new FastMap<>();
 		
 		// track the players admitted to the zone who should be allowed back in
 		// after reboot/server downtime (outside of their control), within 30 of server restart
-		private final L2FastList<Integer> _playersAllowed;
+		private final List<Integer> _playersAllowed = new FastList<>();
 		
-		private final L2FastList<L2Character> _raidList;
+		private final List<L2Character> _raidList = new FastList<>();
 		
 		public Settings()
 		{
-			_playerAllowedReEntryTimes = new FastMap<>();
-			_playersAllowed = new L2FastList<>();
-			_raidList = new L2FastList<>();
 		}
 		
-		public FastMap<Integer, Long> getPlayerAllowedReEntryTimes()
+		public Map<Integer, Long> getPlayerAllowedReEntryTimes()
 		{
 			return _playerAllowedReEntryTimes;
 		}
 		
-		public L2FastList<Integer> getPlayersAllowed()
+		public List<Integer> getPlayersAllowed()
 		{
 			return _playersAllowed;
 		}
 		
-		public L2FastList<L2Character> getRaidList()
+		public List<L2Character> getRaidList()
 		{
 			return _raidList;
 		}
@@ -315,7 +313,7 @@ public class L2BossZone extends L2ZoneType
 		return _timeInvade;
 	}
 	
-	public void setAllowedPlayers(L2FastList<Integer> players)
+	public void setAllowedPlayers(List<Integer> players)
 	{
 		if (players != null)
 		{
@@ -324,7 +322,7 @@ public class L2BossZone extends L2ZoneType
 		}
 	}
 	
-	public L2FastList<Integer> getAllowedPlayers()
+	public List<Integer> getAllowedPlayers()
 	{
 		return getSettings().getPlayersAllowed();
 	}

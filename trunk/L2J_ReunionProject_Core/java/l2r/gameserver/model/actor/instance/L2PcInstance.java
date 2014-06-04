@@ -330,7 +330,6 @@ import l2r.gameserver.util.Broadcast;
 import l2r.gameserver.util.FloodProtectors;
 import l2r.gameserver.util.Util;
 import l2r.util.EnumIntBitmask;
-import l2r.util.L2FastList;
 import l2r.util.Rnd;
 import gr.reunion.achievementEngine.AchievementsHandler;
 import gr.reunion.configsEngine.AntibotConfigs;
@@ -859,8 +858,8 @@ public final class L2PcInstance extends L2Playable
 	private ScheduledFuture<?> _taskWater;
 	
 	/** Bypass validations */
-	private final List<String> _validBypass = new L2FastList<>(true);
-	private final List<String> _validBypass2 = new L2FastList<>(true);
+	private final List<String> _validBypass = new FastList<String>().shared();
+	private final List<String> _validBypass2 = new FastList<String>().shared();
 	
 	private Forum _forumMail;
 	private Forum _forumMemo;

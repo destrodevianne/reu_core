@@ -55,7 +55,6 @@ import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.zone.type.L2FortZone;
 import l2r.gameserver.model.zone.type.L2SiegeZone;
@@ -839,7 +838,7 @@ public final class Fort extends AbstractResidence
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_IS_VICTORIOUS_IN_THE_FORTRESS_BATTLE_OF_S2);
 				sm.addString(clan.getName());
 				sm.addCastleId(getResidenceId());
-				L2World.getInstance().forEachPlayer(new ForEachPlayerSendMessage(sm));
+				L2World.getInstance().getPlayers().forEach(p -> p.sendPacket(sm));
 				clan.broadcastToOnlineMembers(new PledgeShowInfoUpdate(clan));
 				clan.broadcastToOnlineMembers(new PlaySound(1, "Siege_Victory", 0, 0, 0, 0, 0));
 				if (_FortUpdater[0] != null)
@@ -1330,23 +1329,6 @@ public final class Fort extends AbstractResidence
 		{
 			// problem with initializing spawn, go to next one
 			_log.warn("Fort " + getResidenceId() + " initSpecialEnvoys: Spawn could not be initialized: " + e.getMessage(), e);
-		}
-	}
-	
-	private final class ForEachPlayerSendMessage implements IProcedure<L2PcInstance, Boolean>
-	{
-		SystemMessage _sm;
-		
-		protected ForEachPlayerSendMessage(SystemMessage sm)
-		{
-			_sm = sm;
-		}
-		
-		@Override
-		public final Boolean execute(final L2PcInstance character)
-		{
-			character.sendPacket(_sm);
-			return true;
 		}
 	}
 	

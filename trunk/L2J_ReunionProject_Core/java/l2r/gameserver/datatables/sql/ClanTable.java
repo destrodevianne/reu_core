@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
@@ -58,7 +59,6 @@ import l2r.gameserver.scripting.scriptengine.events.ClanWarEvent;
 import l2r.gameserver.scripting.scriptengine.listeners.clan.ClanWarListener;
 import l2r.gameserver.util.Util;
 import l2r.util.EnumIntBitmask;
-import l2r.util.L2FastList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public class ClanTable
 {
 	private static final Logger _log = LoggerFactory.getLogger(ClanTable.class);
 	
-	private static List<ClanWarListener> clanWarListeners = new L2FastList<>(true);
+	private static List<ClanWarListener> clanWarListeners = new FastList<ClanWarListener>().shared();
 	
 	private final Map<Integer, L2Clan> _clans = new HashMap<>();
 	
@@ -352,19 +352,15 @@ public class ClanTable
 	
 	public void scheduleRemoveClan(final int clanId)
 	{
-		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		ThreadPoolManager.getInstance().scheduleGeneral(() ->
 		{
-			@Override
-			public void run()
+			if (getClan(clanId) == null)
 			{
-				if (getClan(clanId) == null)
-				{
-					return;
-				}
-				if (getClan(clanId).getDissolvingExpiryTime() != 0)
-				{
-					destroyClan(clanId);
-				}
+				return;
+			}
+			if (getClan(clanId).getDissolvingExpiryTime() != 0)
+			{
+				destroyClan(clanId);
 			}
 		}, Math.max(getClan(clanId).getDissolvingExpiryTime() - System.currentTimeMillis(), 300000));
 	}

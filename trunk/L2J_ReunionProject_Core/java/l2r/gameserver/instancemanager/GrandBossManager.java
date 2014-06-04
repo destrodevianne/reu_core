@@ -23,11 +23,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.Announcements;
@@ -39,7 +42,6 @@ import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.zone.type.L2BossZone;
-import l2r.util.L2FastList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +67,7 @@ public class GrandBossManager
 	
 	private final Map<Integer, Integer> _bossStatus = new HashMap<>();
 	
-	private final L2FastList<L2BossZone> _zones = new L2FastList<>();
+	private final List<L2BossZone> _zones = new FastList<>();
 	
 	protected GrandBossManager()
 	{
@@ -121,7 +123,7 @@ public class GrandBossManager
 	 */
 	public void initZones()
 	{
-		FastMap<Integer, L2FastList<Integer>> zones = new FastMap<>();
+		Map<Integer, List<Integer>> zones = new HashMap<>();
 		
 		if (_zones == null)
 		{
@@ -135,7 +137,7 @@ public class GrandBossManager
 			{
 				continue;
 			}
-			zones.put(zone.getId(), new L2FastList<Integer>());
+			zones.put(zone.getId(), new ArrayList<>());
 		}
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
@@ -316,7 +318,7 @@ public class GrandBossManager
 						continue;
 					}
 					Integer id = zone.getId();
-					L2FastList<Integer> list = zone.getAllowedPlayers();
+					List<Integer> list = zone.getAllowedPlayers();
 					if ((list == null) || list.isEmpty())
 					{
 						continue;
@@ -435,7 +437,7 @@ public class GrandBossManager
 		_zones.clear();
 	}
 	
-	public L2FastList<L2BossZone> getZones()
+	public List<L2BossZone> getZones()
 	{
 		return _zones;
 	}

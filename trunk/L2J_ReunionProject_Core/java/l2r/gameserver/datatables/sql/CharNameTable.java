@@ -23,14 +23,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.util.L2FastMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +42,8 @@ public class CharNameTable
 {
 	private static Logger _log = LoggerFactory.getLogger(CharNameTable.class);
 	
-	private final Map<Integer, String> _chars = new L2FastMap<>();
-	private final Map<Integer, Integer> _accessLevels = new L2FastMap<>();
+	private final Map<Integer, String> _chars = new ConcurrentHashMap<>();
+	private final Map<Integer, Integer> _accessLevels = new ConcurrentHashMap<>();
 	
 	protected CharNameTable()
 	{
@@ -52,11 +51,6 @@ public class CharNameTable
 		{
 			loadAll();
 		}
-	}
-	
-	public static CharNameTable getInstance()
-	{
-		return SingletonHolder._instance;
 	}
 	
 	public final void addName(L2PcInstance player)
@@ -92,15 +86,11 @@ public class CharNameTable
 			return -1;
 		}
 		
-		Iterator<Entry<Integer, String>> it = _chars.entrySet().iterator();
-		
-		Map.Entry<Integer, String> pair;
-		while (it.hasNext())
+		for (Entry<Integer, String> entry : _chars.entrySet())
 		{
-			pair = it.next();
-			if (pair.getValue().equalsIgnoreCase(name))
+			if (entry.getValue().equalsIgnoreCase(name))
 			{
-				return pair.getKey();
+				return entry.getKey();
 			}
 		}
 		
@@ -158,30 +148,24 @@ public class CharNameTable
 			return null;
 		}
 		
-		int accessLevel = 0;
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT char_name,accesslevel FROM characters WHERE charId=?"))
 		{
 			ps.setInt(1, id);
 			try (ResultSet rset = ps.executeQuery())
 			{
-				while (rset.next())
+				if (rset.next())
 				{
 					name = rset.getString(1);
-					accessLevel = rset.getInt(2);
+					_chars.put(id, name);
+					_accessLevels.put(id, rset.getInt(2));
+					return name;
 				}
 			}
 		}
 		catch (SQLException e)
 		{
 			_log.warn(getClass().getSimpleName() + ": Could not check existing char id: " + e.getMessage(), e);
-		}
-		
-		if ((name != null) && !name.isEmpty())
-		{
-			_chars.put(id, name);
-			_accessLevels.put(id, accessLevel);
-			return name;
 		}
 		
 		return null; // not found
@@ -216,9 +200,8 @@ public class CharNameTable
 		return result;
 	}
 	
-	public int accountCharNumber(String account)
+	public int getAccountCharacterCount(String account)
 	{
-		int number = 0;
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT COUNT(char_name) FROM characters WHERE account_name=?"))
 		{
@@ -227,33 +210,28 @@ public class CharNameTable
 			{
 				while (rset.next())
 				{
-					number = rset.getInt(1);
+					return rset.getInt(1);
 				}
 			}
 		}
 		catch (SQLException e)
 		{
-			_log.warn(getClass().getSimpleName() + ": Could not check existing char number: " + e.getMessage(), e);
+			_log.warn(getClass().getSimpleName() + ": Could not check existing char count: " + e.getMessage(), e);
 		}
-		return number;
+		return 0;
 	}
 	
 	private void loadAll()
 	{
-		String name;
-		int id = -1;
-		int accessLevel = 0;
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			Statement s = con.createStatement();
-			ResultSet rs = s.executeQuery("SELECT charId,char_name,accesslevel FROM characters"))
+			ResultSet rs = s.executeQuery("SELECT charId, char_name, accesslevel FROM characters"))
 		{
 			while (rs.next())
 			{
-				id = rs.getInt(1);
-				name = rs.getString(2);
-				accessLevel = rs.getInt(3);
-				_chars.put(id, name);
-				_accessLevels.put(id, accessLevel);
+				final int id = rs.getInt(1);
+				_chars.put(id, rs.getString(2));
+				_accessLevels.put(id, rs.getInt(3));
 			}
 		}
 		catch (SQLException e)
@@ -261,6 +239,11 @@ public class CharNameTable
 			_log.warn(getClass().getSimpleName() + ": Could not load char name: " + e.getMessage(), e);
 		}
 		_log.info(getClass().getSimpleName() + ": Loaded " + _chars.size() + " char names.");
+	}
+	
+	public static CharNameTable getInstance()
+	{
+		return SingletonHolder._instance;
 	}
 	
 	private static class SingletonHolder

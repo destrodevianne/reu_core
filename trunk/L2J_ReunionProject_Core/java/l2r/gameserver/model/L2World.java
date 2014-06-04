@@ -33,7 +33,6 @@ import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.instance.L2Players;
-import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.util.StringUtil;
 
 import org.slf4j.Logger;
@@ -221,18 +220,6 @@ public final class L2World
 		final L2PcInstance[] players = _allPlayers.values().toArray(new L2PcInstance[_allPlayers.values().size()]);
 		Arrays.sort(players, comparator);
 		return players;
-	}
-	
-	public boolean forEachPlayer(IProcedure<L2PcInstance, Boolean> procedure)
-	{
-		for (L2PcInstance player : _allPlayers.values())
-		{
-			if (!procedure.execute(player))
-			{
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	/**

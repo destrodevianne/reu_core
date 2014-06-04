@@ -300,6 +300,6 @@ public class ProductItemData
 	
 	public List<L2ProductItem> getRecentListByOID(int objId)
 	{
-		return recentList.get(objId) == null ? new ArrayList<L2ProductItem>() : recentList.get(objId);
+		return recentList.get(objId) == null ? new ArrayList<>() : recentList.get(objId);
 	}
 }

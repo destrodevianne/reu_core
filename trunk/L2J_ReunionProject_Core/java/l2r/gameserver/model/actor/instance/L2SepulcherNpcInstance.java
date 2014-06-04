@@ -31,7 +31,6 @@ import l2r.gameserver.instancemanager.FourSepulchersManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.network.NpcStringId;
@@ -437,31 +436,13 @@ public class L2SepulcherNpcInstance extends L2Npc
 			return;// wrong usage
 		}
 		
-		L2World.getInstance().forEachPlayer(new SayInShout(this, new CreatureSay(0, Say2.NPC_SHOUT, getName(), msg)));
-	}
-	
-	private final class SayInShout implements IProcedure<L2PcInstance, Boolean>
-	{
-		L2SepulcherNpcInstance _npc;
-		CreatureSay _sm;
-		
-		protected SayInShout(L2SepulcherNpcInstance npc, CreatureSay sm)
+		final CreatureSay creatureSay = new CreatureSay(0, Say2.NPC_SHOUT, getName(), msg);
+		for (L2PcInstance player : L2World.getInstance().getPlayers())
 		{
-			_npc = npc;
-			_sm = sm;
-		}
-		
-		@Override
-		public final Boolean execute(final L2PcInstance player)
-		{
-			if (player != null)
+			if (Util.checkIfInRange(15000, player, this, true))
 			{
-				if (Util.checkIfInRange(15000, player, _npc, true))
-				{
-					player.sendPacket(_sm);
-				}
+				player.sendPacket(creatureSay);
 			}
-			return true;
 		}
 	}
 	

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javolution.util.FastList;
 import l2r.gameserver.model.L2Object;
@@ -30,7 +31,6 @@ import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.util.Util;
-import l2r.util.L2FastMap;
 
 public class CharKnownList extends ObjectKnownList
 {
@@ -243,7 +243,7 @@ public class CharKnownList extends ObjectKnownList
 	{
 		if (_knownPlayers == null)
 		{
-			_knownPlayers = new L2FastMap<>(true);
+			_knownPlayers = new ConcurrentHashMap<>();
 		}
 		return _knownPlayers;
 	}
@@ -252,7 +252,7 @@ public class CharKnownList extends ObjectKnownList
 	{
 		if (_knownRelations == null)
 		{
-			_knownRelations = new L2FastMap<>(true);
+			_knownRelations = new ConcurrentHashMap<>();
 		}
 		return _knownRelations;
 	}
@@ -261,7 +261,7 @@ public class CharKnownList extends ObjectKnownList
 	{
 		if (_knownSummons == null)
 		{
-			_knownSummons = new L2FastMap<>(true);
+			_knownSummons = new ConcurrentHashMap<>();
 		}
 		return _knownSummons;
 	}
