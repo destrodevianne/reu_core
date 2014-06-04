@@ -31,8 +31,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
+import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.taskmanager.tasks.SoIStageUpdater;
@@ -50,8 +52,6 @@ import l2r.gameserver.taskmanager.tasks.TaskRestart;
 import l2r.gameserver.taskmanager.tasks.TaskScript;
 import l2r.gameserver.taskmanager.tasks.TaskSevenSignsUpdate;
 import l2r.gameserver.taskmanager.tasks.TaskShutdown;
-import l2r.util.L2FastList;
-import l2r.util.L2FastMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +63,8 @@ public final class TaskManager
 {
 	protected static final Logger _log = LoggerFactory.getLogger(TaskManager.class);
 	
-	private final Map<Integer, Task> _tasks = new L2FastMap<>(true);
-	protected final List<ExecutedTask> _currentTasks = new L2FastList<>(true);
+	private final Map<Integer, Task> _tasks = new ConcurrentHashMap<>();
+	protected final List<ExecutedTask> _currentTasks = new FastList<ExecutedTask>().shared();
 	
 	protected static final String[] SQL_STATEMENTS =
 	{
@@ -208,11 +208,11 @@ public final class TaskManager
 	public void registerTask(Task task)
 	{
 		int key = task.getName().hashCode();
-		if (!_tasks.containsKey(key))
+		_tasks.computeIfAbsent(key, k ->
 		{
-			_tasks.put(key, task);
 			task.initializate();
-		}
+			return task;
+		});
 	}
 	
 	private void startAllTasks()

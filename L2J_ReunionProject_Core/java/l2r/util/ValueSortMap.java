@@ -98,8 +98,7 @@ public class ValueSortMap
 	 */
 	@SuppressWarnings(
 	{
-		"rawtypes",
-		"null"
+		"rawtypes"
 	})
 	private static LinkedHashMap sortMapByValue(Map inMap, Comparator comparator, Boolean ascendingOrder)
 	{

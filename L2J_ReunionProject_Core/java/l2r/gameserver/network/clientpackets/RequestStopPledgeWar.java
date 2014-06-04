@@ -22,9 +22,7 @@ import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
-import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.interfaces.IProcedure;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
@@ -111,28 +109,14 @@ public final class RequestStopPledgeWar extends L2GameClientPacket
 		}
 		
 		ClanTable.getInstance().deleteclanswars(playerClan.getId(), clan.getId());
-		L2World.getInstance().forEachPlayer(new ForEachPlayerBroadcastUserInfo(clan, player));
-	}
-	
-	private final class ForEachPlayerBroadcastUserInfo implements IProcedure<L2PcInstance, Boolean>
-	{
-		private final L2PcInstance _player;
-		private final L2Clan _cln;
-		
-		protected ForEachPlayerBroadcastUserInfo(L2Clan clan, L2PcInstance player)
+		for (L2PcInstance member : playerClan.getOnlineMembers(0))
 		{
-			_cln = clan;
-			_player = player;
+			member.broadcastUserInfo();
 		}
 		
-		@Override
-		public final Boolean execute(final L2PcInstance cha)
+		for (L2PcInstance member : clan.getOnlineMembers(0))
 		{
-			if ((cha.getClan() == _player.getClan()) || (cha.getClan() == _cln))
-			{
-				cha.broadcastUserInfo();
-			}
-			return true;
+			member.broadcastUserInfo();
 		}
 	}
 	

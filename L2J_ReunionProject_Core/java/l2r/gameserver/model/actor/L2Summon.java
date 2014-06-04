@@ -19,7 +19,6 @@
 package l2r.gameserver.model.actor;
 
 import l2r.Config;
-import l2r.gameserver.GameTimeController;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.ai.L2SummonAI;
 import l2r.gameserver.datatables.xml.ExperienceData;
@@ -936,12 +935,6 @@ public abstract class L2Summon extends L2Playable
 		return false;
 	}
 	
-	@Override
-	public final boolean isAttackingNow()
-	{
-		return isInCombat();
-	}
-	
 	public int getWeapon()
 	{
 		return 0;
@@ -1061,7 +1054,7 @@ public abstract class L2Summon extends L2Playable
 		
 		if (isAttackingDisabled())
 		{
-			if (getAttackEndTime() <= GameTimeController.getInstance().getGameTicks())
+			if (!isAttackingNow())
 			{
 				return false;
 			}

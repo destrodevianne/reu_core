@@ -121,19 +121,14 @@ public class MultiSell
 		// Pass through this only when multipliers are different from 1
 		if ((productMultiplier != 1) || (ingredientMultiplier != 1))
 		{
-			for (Entry entry : list.getEntries())
+			list.getEntries().forEach(entry ->
 			{
-				for (Ingredient product : entry.getProducts())
-				{
-					// Math.max used here to avoid dropping count to 0
-					product.setItemCount((long) Math.max(product.getItemCount() * productMultiplier, 1));
-				}
-				for (Ingredient ingredient : entry.getIngredients())
-				{
-					// Math.max used here to avoid dropping count to 0
-					ingredient.setItemCount((long) Math.max(ingredient.getItemCount() * ingredientMultiplier, 1));
-				}
-			}
+				// Math.max used here to avoid dropping count to 0
+				entry.getProducts().forEach(product -> product.setItemCount((long) Math.max(product.getItemCount() * productMultiplier, 1)));
+				
+				// Math.max used here to avoid dropping count to 0
+				entry.getIngredients().forEach(ingredient -> ingredient.setItemCount((long) Math.max(ingredient.getItemCount() * ingredientMultiplier, 1)));
+			});
 		}
 		int index = 0;
 		do

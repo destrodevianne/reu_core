@@ -23,12 +23,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.Scanner;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.Server;
-import l2r.util.Base64;
 
 /**
  * This class SQL Account Manager
@@ -198,7 +198,7 @@ public class SQLAccountManager
 			newPassword = md.digest(newPassword);
 			
 			ps.setString(1, account);
-			ps.setString(2, Base64.encodeBytes(newPassword));
+			ps.setString(2, Base64.getEncoder().encodeToString(newPassword));
 			ps.setString(3, level);
 			if (ps.executeUpdate() > 0)
 			{

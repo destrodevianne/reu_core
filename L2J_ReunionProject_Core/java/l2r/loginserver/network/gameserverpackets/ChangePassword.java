@@ -22,13 +22,13 @@ import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Base64;
 import java.util.Collection;
 
 import l2r.L2DatabaseFactory;
 import l2r.loginserver.GameServerTable;
 import l2r.loginserver.GameServerTable.GameServerInfo;
 import l2r.loginserver.GameServerThread;
-import l2r.util.Base64;
 import l2r.util.network.BaseRecievePacket;
 
 import org.slf4j.Logger;
@@ -78,7 +78,7 @@ public class ChangePassword extends BaseRecievePacket
 				
 				byte[] raw = curpass.getBytes("UTF-8");
 				raw = md.digest(raw);
-				String curpassEnc = Base64.encodeBytes(raw);
+				String curpassEnc = Base64.getEncoder().encodeToString(raw);
 				String pass = null;
 				int passUpdated = 0;
 				
@@ -105,12 +105,12 @@ public class ChangePassword extends BaseRecievePacket
 					try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 						PreparedStatement ps = con.prepareStatement("UPDATE accounts SET password=? WHERE login=?"))
 					{
-						ps.setString(1, Base64.encodeBytes(password));
+						ps.setString(1, Base64.getEncoder().encodeToString(password));
 						ps.setString(2, accountName);
 						passUpdated = ps.executeUpdate();
 					}
 					
-					_log.info("The password for account " + accountName + " has been changed from " + curpassEnc + " to " + Base64.encodeBytes(password));
+					_log.info("The password for account " + accountName + " has been changed from " + curpassEnc + " to " + Base64.getEncoder().encodeToString(password));
 					if (passUpdated > 0)
 					{
 						gst.ChangePasswordResponse((byte) 1, characterName, "You have successfully changed your password!");

@@ -19,18 +19,18 @@
 package l2r.gameserver.cache;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.util.L2FastMap;
 
 /**
  * @author -Nemesiss-
  */
 public class WarehouseCacheManager
 {
-	protected final Map<L2PcInstance, Long> _cachedWh = new L2FastMap<>(true);
+	protected final Map<L2PcInstance, Long> _cachedWh = new ConcurrentHashMap<>();
 	protected final long _cacheTime = Config.WAREHOUSE_CACHE_TIME * 60000L;
 	
 	protected WarehouseCacheManager()

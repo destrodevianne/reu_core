@@ -30,6 +30,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,6 @@ import l2r.loginserver.GameServerTable.GameServerInfo;
 import l2r.loginserver.network.L2LoginClient;
 import l2r.loginserver.network.gameserverpackets.ServerStatus;
 import l2r.loginserver.network.serverpackets.LoginFail.LoginFailReason;
-import l2r.util.Base64;
 import l2r.util.Rnd;
 import l2r.util.crypt.ScrambledKeyPair;
 import l2r.util.lib.Log;
@@ -507,7 +507,7 @@ public class LoginController
 				{
 					if (rset.next())
 					{
-						expected = Base64.decode(rset.getString("password"));
+						expected = Base64.getDecoder().decode(rset.getString("password"));
 						access = rset.getInt("accessLevel");
 						lastServer = rset.getInt("lastServer");
 						if (lastServer <= 0)
@@ -560,7 +560,7 @@ public class LoginController
 							PreparedStatement ps = con.prepareStatement(AUTOCREATE_ACCOUNTS_INSERT))
 						{
 							ps.setString(1, user);
-							ps.setString(2, Base64.encodeBytes(hash));
+							ps.setString(2, Base64.getEncoder().encodeToString(hash));
 							ps.setLong(3, System.currentTimeMillis());
 							ps.setInt(4, 0);
 							ps.setString(5, address.getHostAddress());

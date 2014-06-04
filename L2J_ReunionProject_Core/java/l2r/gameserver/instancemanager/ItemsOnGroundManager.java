@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import javolution.util.FastList;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ItemsAutoDestroy;
@@ -32,7 +33,6 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.type.EtcItemType;
-import l2r.util.L2FastList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class ItemsOnGroundManager implements Runnable
 {
 	private static final Logger _log = LoggerFactory.getLogger(ItemsOnGroundManager.class);
 	
-	protected List<L2ItemInstance> _items = new L2FastList<>(true);
+	private final List<L2ItemInstance> _items = new FastList<L2ItemInstance>().shared();
 	
 	protected ItemsOnGroundManager()
 	{
