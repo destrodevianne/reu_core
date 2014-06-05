@@ -2644,6 +2644,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					_status.setCurrentMp(getMaxMp() * Config.RESPAWN_RESTORE_MP);
 				}
 			}
+			
+			// GodFather Temp Fix to avoid debuffs after revive
+			stopAllDebuffAfterRevive();
 			// Start broadcast status
 			broadcastPacket(new Revive(this));
 			if (getWorldRegion() != null)
@@ -3461,6 +3464,12 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public void stopAllEffectsExceptThoseThatLastThroughDeath()
 	{
 		_effects.stopAllEffectsExceptThoseThatLastThroughDeath();
+	}
+	
+	// GodFather Temp Fix to avoid debuffs after revive
+	public void stopAllDebuffAfterRevive()
+	{
+		_effects.stopAllDebuffAfterRevive();
 	}
 	
 	/**
