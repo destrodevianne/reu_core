@@ -1499,4 +1499,23 @@ public class CharEffectList
 			_log.warn(String.valueOf(e));
 		}
 	}
+	
+	// GodFather Temp Fix to avoid debuffs after revive
+	/**
+	 * Exit all debuff effects after revive
+	 */
+	public final void stopAllDebuffAfterRevive()
+	{
+		// Get all active skills effects from this list
+		L2Effect[] effects = getAllEffects();
+		
+		for (L2Effect e : effects)
+		{
+			// Get active skills effects of the selected type
+			if ((e != null) && (e.getSkill().isOffensive() || e.getSkill().isDebuff()))
+			{
+				e.exit();
+			}
+		}
+	}
 }
