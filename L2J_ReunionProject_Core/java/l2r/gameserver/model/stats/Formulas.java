@@ -2313,6 +2313,39 @@ public final class Formulas
 		return reflect;
 	}
 	
+	public static void calcDamageReflected(L2Character activeChar, L2Character target, L2Skill skill, double damage)
+	{
+		boolean reflect = true;
+		if ((skill.getCastRange() == -1) || (skill.getCastRange() > MELEE_ATTACK_RANGE))
+		{
+			reflect = false;
+		}
+		
+		if (reflect)
+		{
+			final double vengeanceChance = target.getStat().calcStat(Stats.VENGEANCE_SKILL_PHYSICAL_DAMAGE, 0, target, skill);
+			if (vengeanceChance > Rnd.get(100))
+			{
+				if (target.isPlayer())
+				{
+					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.COUNTERED_C1_ATTACK);
+					sm.addCharName(activeChar);
+					target.sendPacket(sm);
+				}
+				if (activeChar.isPlayer())
+				{
+					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_PERFORMING_COUNTERATTACK);
+					sm.addCharName(target);
+					activeChar.sendPacket(sm);
+				}
+				
+				// TODO: Is this retail like?
+				double vegdamage = (damage / 100) * vengeanceChance;
+				activeChar.reduceCurrentHp(vegdamage, target, skill);
+			}
+		}
+	}
+	
 	/**
 	 * Calculate damage caused by falling
 	 * @param cha
