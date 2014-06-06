@@ -25,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import l2r.Config;
-import l2r.util.lib.Log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GMAudit
 {
-	private static final Logger _log = LoggerFactory.getLogger(Log.class);
+	private static final Logger _log = LoggerFactory.getLogger(GMAudit.class);
 	
 	static
 	{

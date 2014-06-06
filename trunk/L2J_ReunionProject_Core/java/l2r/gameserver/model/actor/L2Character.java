@@ -2645,8 +2645,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				}
 			}
 			
-			// GodFather Temp Fix to avoid debuffs after revive
-			stopAllDebuffAfterRevive();
+			// FIXME: GodFather Temp Fix to avoid debuffs after revive
+			// stopAllDebuffAfterRevive();
+			
 			// Start broadcast status
 			broadcastPacket(new Revive(this));
 			if (getWorldRegion() != null)
