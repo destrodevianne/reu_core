@@ -451,9 +451,14 @@ public abstract class L2Effect implements IChanceSkillTrigger
 		}
 	}
 	
+	/**
+	 * Called on each tick.<br>
+	 * If the abnormal time is lesser than zero it will last forever.
+	 * @return if {@code true} this effect will continue forever, if {@code false} it will stop after abnormal time has passed
+	 */
 	public boolean onActionTime()
 	{
-		return getAbnormalTime() < 0;
+		return false;
 	}
 	
 	public final void scheduleEffect()
