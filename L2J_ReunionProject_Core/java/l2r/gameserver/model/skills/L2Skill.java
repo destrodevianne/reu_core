@@ -782,7 +782,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	 */
 	public final int getHpConsume()
 	{
-		return _hpConsume;
+		return _hpConsume + 1;
 	}
 	
 	/**
