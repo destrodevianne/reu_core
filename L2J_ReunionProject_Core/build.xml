@@ -63,7 +63,7 @@
 	</target>
 
 	<target name="jar" depends="compile" description="Create the jar files.">
-		<jar destfile="${build.dist.login}/l2jlogin.jar" level="9">
+		<jar destfile="${build.dist.login}/reunion-login.jar" level="9">
 			<fileset dir="${build.bin}">
 				<exclude name="**/gameserver/**" />
 			</fileset>

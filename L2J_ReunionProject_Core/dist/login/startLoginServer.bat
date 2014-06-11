@@ -5,7 +5,7 @@ color 0B
 echo Starting L2J Login Server.
 echo.
 
-java -server -Dfile.encoding=UTF-8 -Xmx256m -cp config/xml;./../libs/*;l2jlogin.jar l2r.loginserver.L2LoginServer
+java -server -Dfile.encoding=UTF-8 -Xmx256m -cp config/xml;./../libs/*;reunion-login.jar l2r.loginserver.L2LoginServer
 
 if ERRORLEVEL 2 goto restart
 if ERRORLEVEL 1 goto error
