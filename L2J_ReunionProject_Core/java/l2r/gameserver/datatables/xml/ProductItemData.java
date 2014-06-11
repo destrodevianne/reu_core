@@ -107,13 +107,13 @@ public class ProductItemData
 							Node priceNode = d1.getAttributes().getNamedItem("price");
 							int price = priceNode != null ? Integer.parseInt(priceNode.getNodeValue()) : 0;
 							
-							Node isEventNode = d1.getAttributes().getNamedItem("IsEvent");
+							Node isEventNode = d1.getAttributes().getNamedItem("is_event");
 							Boolean isEvent = (isEventNode != null) && Boolean.parseBoolean(isEventNode.getNodeValue());
 							
-							Node isBestNode = d1.getAttributes().getNamedItem("IsBest");
+							Node isBestNode = d1.getAttributes().getNamedItem("is_best");
 							Boolean isBest = (isBestNode != null) && Boolean.parseBoolean(isBestNode.getNodeValue());
 							
-							Node isNewNode = d1.getAttributes().getNamedItem("IsNew");
+							Node isNewNode = d1.getAttributes().getNamedItem("is_new");
 							Boolean isNew = (isNewNode != null) && Boolean.parseBoolean(isNewNode.getNodeValue());
 							
 							int tabId = getProductTabId(isEvent, isBest, isNew);
@@ -130,7 +130,7 @@ public class ProductItemData
 							{
 								if ("component".equalsIgnoreCase(t1.getNodeName()))
 								{
-									int item_id = Integer.parseInt(t1.getAttributes().getNamedItem("itemId").getNodeValue());
+									int item_id = Integer.parseInt(t1.getAttributes().getNamedItem("item_id").getNodeValue());
 									int count = Integer.parseInt(t1.getAttributes().getNamedItem("count").getNodeValue());
 									L2ProductItemComponent component = new L2ProductItemComponent(item_id, count);
 									components.add(component);
