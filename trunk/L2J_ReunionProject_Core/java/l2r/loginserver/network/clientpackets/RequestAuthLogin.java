@@ -18,10 +18,7 @@
  */
 package l2r.loginserver.network.clientpackets;
 
-import java.net.InetAddress;
 import java.security.GeneralSecurityException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.crypto.Cipher;
 
@@ -29,7 +26,6 @@ import l2r.Config;
 import l2r.loginserver.GameServerTable.GameServerInfo;
 import l2r.loginserver.LoginController;
 import l2r.loginserver.LoginController.AuthLoginResult;
-import l2r.loginserver.model.data.AccountInfo;
 import l2r.loginserver.network.L2LoginClient;
 import l2r.loginserver.network.L2LoginClient.LoginClientState;
 import l2r.loginserver.network.serverpackets.AccountKicked;
@@ -37,6 +33,9 @@ import l2r.loginserver.network.serverpackets.AccountKicked.AccountKickedReason;
 import l2r.loginserver.network.serverpackets.LoginFail.LoginFailReason;
 import l2r.loginserver.network.serverpackets.LoginOk;
 import l2r.loginserver.network.serverpackets.ServerList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <pre>
@@ -48,7 +47,7 @@ import l2r.loginserver.network.serverpackets.ServerList;
  */
 public class RequestAuthLogin extends L2LoginClientPacket
 {
-	private static Logger _log = Logger.getLogger(RequestAuthLogin.class.getName());
+	private static Logger _log = LoggerFactory.getLogger(RequestAuthLogin.class);
 	
 	private final byte[] _raw = new byte[128];
 	
@@ -101,7 +100,7 @@ public class RequestAuthLogin extends L2LoginClientPacket
 		}
 		catch (GeneralSecurityException e)
 		{
-			_log.log(Level.INFO, "", e);
+			_log.info("", e);
 			return;
 		}
 		
@@ -116,29 +115,19 @@ public class RequestAuthLogin extends L2LoginClientPacket
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "", e);
+			_log.warn(String.valueOf(e));
 			return;
 		}
-		
-		InetAddress clientAddr = getClient().getConnection().getInetAddress();
 		
 		final LoginController lc = LoginController.getInstance();
-		AccountInfo info = lc.retriveAccountInfo(clientAddr, _user, _password);
-		if (info == null)
-		{
-			// user or pass wrong
-			client.close(LoginFailReason.REASON_USER_OR_PASS_WRONG);
-			return;
-		}
-		
-		AuthLoginResult result = lc.tryCheckinAccount(client, clientAddr, info);
+		AuthLoginResult result = lc.tryAuthLogin(_user, _password, client);
 		switch (result)
 		{
 			case AUTH_SUCCESS:
-				client.setAccount(info.getLogin());
+				client.setAccount(_user);
 				client.setState(LoginClientState.AUTHED_LOGIN);
-				client.setSessionKey(lc.assignSessionKeyToClient(info.getLogin(), client));
-				lc.getCharactersOnAccount(info.getLogin());
+				client.setSessionKey(lc.assignSessionKeyToClient(_user, client));
+				lc.getCharactersOnAccount(_user);
 				if (Config.SHOW_LICENCE)
 				{
 					client.sendPacket(new LoginOk(getClient().getSessionKey()));
@@ -153,28 +142,28 @@ public class RequestAuthLogin extends L2LoginClientPacket
 				break;
 			case ACCOUNT_BANNED:
 				client.close(new AccountKicked(AccountKickedReason.REASON_PERMANENTLY_BANNED));
-				return;
+				break;
 			case ALREADY_ON_LS:
 				L2LoginClient oldClient;
-				if ((oldClient = lc.getAuthedClient(info.getLogin())) != null)
+				if ((oldClient = lc.getAuthedClient(_user)) != null)
 				{
 					// kick the other client
 					oldClient.close(LoginFailReason.REASON_ACCOUNT_IN_USE);
-					lc.removeAuthedLoginClient(info.getLogin());
+					lc.removeAuthedLoginClient(_user);
 				}
 				// kick also current client
 				client.close(LoginFailReason.REASON_ACCOUNT_IN_USE);
 				break;
 			case ALREADY_ON_GS:
 				GameServerInfo gsi;
-				if ((gsi = lc.getAccountOnGameServer(info.getLogin())) != null)
+				if ((gsi = lc.getAccountOnGameServer(_user)) != null)
 				{
 					client.close(LoginFailReason.REASON_ACCOUNT_IN_USE);
 					
 					// kick from there
 					if (gsi.isAuthed())
 					{
-						gsi.getGameServerThread().kickPlayer(info.getLogin());
+						gsi.getGameServerThread().kickPlayer(_user);
 					}
 				}
 				break;
