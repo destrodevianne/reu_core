@@ -71,7 +71,7 @@ public class QuestTimer
 						}
 						else
 						{
-							_log.error("QuestTimer[notifyEvent] getNpc() ID is: " + getNpc().getId());
+							_log.error("QuestTimer[notifyEvent] getNpc() ID is: " + String.valueOf(getNpc().getId()));
 						}
 						
 						if (getPlayer() == null)

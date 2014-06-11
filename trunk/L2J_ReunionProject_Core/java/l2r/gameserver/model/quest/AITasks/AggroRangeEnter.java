@@ -18,9 +18,13 @@
  */
 package l2r.gameserver.model.quest.AITasks;
 
+import l2r.Config;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.quest.Quest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Aggro Range Enter AI task.
@@ -28,6 +32,8 @@ import l2r.gameserver.model.quest.Quest;
  */
 public final class AggroRangeEnter implements Runnable
 {
+	private final Logger _log = LoggerFactory.getLogger(AggroRangeEnter.class);
+	
 	private final Quest _quest;
 	private final L2Npc _npc;
 	private final L2PcInstance _pc;
@@ -47,7 +53,42 @@ public final class AggroRangeEnter implements Runnable
 		String res = null;
 		try
 		{
-			res = _quest.onAggroRangeEnter(_npc, _pc, _isSummon);
+			try
+			{
+				res = _quest.onAggroRangeEnter(_npc, _pc, _isSummon);
+			}
+			catch (Exception e)
+			{
+				if (Config.DEBUG_SCRIPT_NOTIFIES)
+				{
+					if (_quest != null)
+					{
+						_log.error("AggroRangeEnter[onAggroRangeEnter] quest name is: " + _quest.getName());
+					}
+					else
+					{
+						_log.error("AggroRangeEnter[onAggroRangeEnter] quest is: NULL");
+					}
+					
+					if (_pc != null)
+					{
+						_log.error("AggroRangeEnter[onAggroRangeEnter] Player name is: " + _pc.getName());
+					}
+					else
+					{
+						_log.error("AggroRangeEnter[onAggroRangeEnter] Player is: NULL");
+					}
+					
+					if (_npc != null)
+					{
+						_log.error("AggroRangeEnter[onAggroRangeEnter] NpcId is: " + String.valueOf(_npc.getId()));
+					}
+					else
+					{
+						_log.error("AggroRangeEnter[onAggroRangeEnter] NPC is: NULL");
+					}
+				}
+			}
 		}
 		catch (Exception e)
 		{

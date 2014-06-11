@@ -720,7 +720,7 @@ public class L2Attackable extends L2Npc
 									if (skill == null)
 									{
 										_log.error("L2Attackable[notifyAttack] Skill is NULL.");
-										_log.error("L2Attackable[notifyAttack] MobId is: " + this.getId());
+										_log.error("L2Attackable[notifyAttack] MobId is: " + String.valueOf(this.getId()));
 									}
 									
 									if (damage == 0)
@@ -728,7 +728,7 @@ public class L2Attackable extends L2Npc
 										_log.error("L2Attackable[notifyAttack] Damage is 0");
 									}
 									
-									_log.error("L2Attackable[notifyAttack] Attacker is: " + String.valueOf(player.getName()));
+									_log.error("L2Attackable[notifyAttack] Attacker is: " + player.getName());
 									e.printStackTrace();
 								}
 							}
