@@ -250,8 +250,15 @@ public final class FourSepulchersManager
 	{
 		for (int i = 31921; i < 31925; i++)
 		{
-			int[] Location = _startHallSpawns.get(i);
-			GrandBossManager.getInstance().getZone(Location[0], Location[1], Location[2]).oustAllPlayers();
+			try
+			{
+				int[] Location = _startHallSpawns.get(i);
+				GrandBossManager.getInstance().getZone(Location[0], Location[1], Location[2]).oustAllPlayers();
+			}
+			catch (Exception e)
+			{
+				_log.warn("FourSepulchersManager: Couldn't oust some players from zone");
+			}
 		}
 		
 		deleteAllMobs();
