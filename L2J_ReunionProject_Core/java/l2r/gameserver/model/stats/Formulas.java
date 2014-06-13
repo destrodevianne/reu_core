@@ -2399,6 +2399,9 @@ public final class Formulas
 		double resMod = 1 + ((vuln + prof) / 100);
 		double rate = power / resMod;
 		
+		final L2Effect[] effects = target.getAllEffects();
+		List<L2Effect> canceled = new ArrayList<>(count);
+		
 		if (activeChar.isDebug())
 		{
 			final StatsSet set = new StatsSet();
@@ -2409,69 +2412,65 @@ public final class Formulas
 			Debug.sendSkillDebug(activeChar, target, skill, set);
 		}
 		
-		// Cancel for Abnormals.
-		final L2Effect[] effects = target.getAllEffects();
-		List<L2Effect> canceled = new ArrayList<>(count);
-		if (skill.getNegateAbnormals() != null)
+		if (calcStealChance(activeChar, target))
 		{
-			for (L2Effect eff : effects)
+			int finalCount = Rnd.get(1, count);
+			// Cancel for Abnormals.
+			if (skill.getNegateAbnormals() != null)
 			{
-				if (eff == null)
+				for (L2Effect eff : effects)
 				{
-					continue;
-				}
-				
-				for (String negateAbnormalType : skill.getNegateAbnormals().keySet())
-				{
-					if (negateAbnormalType.equalsIgnoreCase(eff.getAbnormalType()) && (skill.getNegateAbnormals().get(negateAbnormalType) >= eff.getAbnormalLvl()))
+					if (eff == null)
 					{
-						if (calcCancelSuccess(eff, cancelMagicLvl, (int) rate, skill))
+						continue;
+					}
+					
+					for (String negateAbnormalType : skill.getNegateAbnormals().keySet())
+					{
+						if (negateAbnormalType.equalsIgnoreCase(eff.getAbnormalType()) && (skill.getNegateAbnormals().get(negateAbnormalType) >= eff.getAbnormalLvl()))
 						{
 							eff.exit();
 						}
 					}
 				}
 			}
-		}
-		else
-		{
-			List<L2Effect> _musicList = new ArrayList<>();
-			List<L2Effect> _buffList = new ArrayList<>();
-			
-			for (L2Effect eff : effects)
+			else
 			{
-				// Just in case of NPE and remove effect if can't be stolen
-				if ((eff == null) || !eff.canBeStolen())
+				List<L2Effect> _musicList = new ArrayList<>();
+				List<L2Effect> _buffList = new ArrayList<>();
+				
+				for (L2Effect eff : effects)
 				{
-					continue;
+					// Just in case of NPE and remove effect if can't be stolen
+					if ((eff == null) || !eff.canBeStolen())
+					{
+						continue;
+					}
+					
+					// Only Dances/Songs.
+					if (eff.getSkill().isDance())
+					{
+						_musicList.add(eff);
+					}
+					else
+					{
+						_buffList.add(eff);
+					}
 				}
 				
-				// Only Dances/Songs.
-				if (eff.getSkill().isDance())
+				// Reversing lists and adding to a new list
+				List<L2Effect> _effectList = new ArrayList<>();
+				Collections.reverse(_musicList);
+				Collections.reverse(_buffList);
+				_effectList.addAll(_musicList);
+				_effectList.addAll(_buffList);
+				
+				int negated = 0;
+				if (!_effectList.isEmpty())
 				{
-					_musicList.add(eff);
-				}
-				else
-				{
-					_buffList.add(eff);
-				}
-			}
-			
-			// Reversing lists and adding to a new list
-			List<L2Effect> _effectList = new ArrayList<>();
-			Collections.reverse(_musicList);
-			Collections.reverse(_buffList);
-			_effectList.addAll(_musicList);
-			_effectList.addAll(_buffList);
-			
-			int negated = 0;
-			if (!_effectList.isEmpty())
-			{
-				for (L2Effect e : _effectList)
-				{
-					if (negated < count)
+					for (L2Effect e : _effectList)
 					{
-						if (calcCancelSuccess(e, cancelMagicLvl, (int) rate, skill))
+						if (negated < finalCount)
 						{
 							negated++;
 							canceled.add(e);
@@ -2482,21 +2481,6 @@ public final class Formulas
 		}
 		
 		return canceled;
-	}
-	
-	public static boolean calcCancelSuccess(L2Effect eff, int cancelMagicLvl, int rate, L2Skill skill)
-	{
-		// Lvl Bonus Modifier.
-		rate *= eff.getSkill().getMagicLevel() > 0 ? 1 + ((cancelMagicLvl - eff.getSkill().getMagicLevel()) / 100.) : 1;
-		if ((FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE > 0) && (rate > FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE))
-		{
-			rate -= FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE;
-			if (rate < 1)
-			{
-				return false;
-			}
-		}
-		return Rnd.get(100) < Math.min(Math.max(rate, skill.getMinChance()), skill.getMaxChance());
 	}
 	
 	/**
@@ -2539,5 +2523,23 @@ public final class Formulas
 		}
 		
 		return result;
+	}
+	
+	private static boolean calcStealChance(L2Character effected, L2Character effector)
+	{
+		double cancel_res_multiplier = effected.calcStat(Stats.CANCEL_VULN, 1, null, null);
+		int dml = effector.getLevel() - effected.getLevel(); // to check: magicLevel or player level? Since it's magic skill setting player level as default
+		double prelimChance = (dml + 50) * (1 - (cancel_res_multiplier * .01)); // 50 is random reasonable constant which gives ~50% chance of steal success while else is equal
+		
+		if ((FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE > 0) && (prelimChance > FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE))
+		{
+			prelimChance -= FormulasConfigs.DECREASE_CANCEL_SUCCESS_RATE;
+			if (prelimChance < 1)
+			{
+				return false;
+			}
+		}
+		
+		return Rnd.chance(prelimChance);
 	}
 }
