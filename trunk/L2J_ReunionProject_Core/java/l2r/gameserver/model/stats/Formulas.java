@@ -2394,6 +2394,7 @@ public final class Formulas
 		// Resists.
 		int cancelMagicLvl = skill.getMagicLevel();
 		int count = skill.getMaxNegatedEffects();
+		int finalCount = Rnd.get(1, count);
 		final double vuln = target.calcStat(Stats.CANCEL_VULN, 0, target, null);
 		final double prof = activeChar.calcStat(Stats.CANCEL_PROF, 0, target, null);
 		double resMod = 1 + ((vuln + prof) / 100);
@@ -2414,7 +2415,6 @@ public final class Formulas
 		
 		if (calcStealChance(activeChar, target))
 		{
-			int finalCount = Rnd.get(1, count);
 			// Cancel for Abnormals.
 			if (skill.getNegateAbnormals() != null)
 			{
