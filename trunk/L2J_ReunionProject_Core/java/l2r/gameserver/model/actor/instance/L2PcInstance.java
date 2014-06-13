@@ -16120,8 +16120,13 @@ public final class L2PcInstance extends L2Playable
 	
 	public void pauseAdventTask()
 	{
+		pauseAdventTask(false);
+	}
+	
+	public void pauseAdventTask(boolean paused)
+	{
 		stopAdventBonusTask();
-		sendPacket(new ExNevitAdventTimeChange(getAdventTime(), false));
+		sendPacket(new ExNevitAdventTimeChange(getAdventTime(), paused));
 	}
 	
 	public void stopAdventBlessingTask()

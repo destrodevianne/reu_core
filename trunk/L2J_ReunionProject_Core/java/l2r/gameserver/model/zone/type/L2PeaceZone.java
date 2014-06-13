@@ -62,7 +62,7 @@ public class L2PeaceZone extends L2ZoneType
 			if (character.isPlayer())
 			{
 				L2PcInstance player = character.getActingPlayer();
-				player.pauseAdventTask();
+				player.pauseAdventTask(true);
 			}
 		}
 		
