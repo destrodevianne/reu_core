@@ -9587,13 +9587,16 @@ public final class L2PcInstance extends L2Playable
 				if (TerritoryWarManager.getInstance().isTWInProgress())
 				{
 					sendPacket(SystemMessageId.YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY);
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return false;
 				}
-				else
+				
+				if (!forceUse)
 				{
 					sendPacket(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS);
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return false;
 				}
-				sendPacket(ActionFailed.STATIC_PACKET);
-				return false;
 			}
 			
 			// Check if the target is attackable
