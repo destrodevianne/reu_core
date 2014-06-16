@@ -726,16 +726,13 @@ public abstract class L2Summon extends L2Playable
 				if (TerritoryWarManager.getInstance().isTWInProgress())
 				{
 					sendPacket(SystemMessageId.YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY);
-					sendPacket(ActionFailed.STATIC_PACKET);
-					return false;
 				}
-				
-				if (!forceUse)
+				else
 				{
 					sendPacket(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS);
-					sendPacket(ActionFailed.STATIC_PACKET);
-					return false;
 				}
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return false;
 			}
 			
 			// Check if the target is attackable
@@ -1090,16 +1087,13 @@ public abstract class L2Summon extends L2Playable
 			if (TerritoryWarManager.getInstance().isTWInProgress())
 			{
 				sendPacket(SystemMessageId.YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY);
-				sendPacket(ActionFailed.STATIC_PACKET);
-				return false;
 			}
-			
-			if (!ctrlPressed)
+			else
 			{
 				sendPacket(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS);
-				sendPacket(ActionFailed.STATIC_PACKET);
-				return false;
 			}
+			sendPacket(ActionFailed.STATIC_PACKET);
+			return false;
 		}
 		
 		if (!getOwner().getAccessLevel().allowPeaceAttack() && getOwner().isInsidePeaceZone(this, target))

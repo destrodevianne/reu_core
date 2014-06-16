@@ -58,7 +58,6 @@ import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.MapRegionManager;
-import l2r.gameserver.instancemanager.SiegeManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.instancemanager.TownManager;
 import l2r.gameserver.model.ChanceSkillList;
@@ -93,7 +92,6 @@ import l2r.gameserver.model.effects.EffectFlag;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.entity.Instance;
-import l2r.gameserver.model.entity.Siege;
 import l2r.gameserver.model.holders.InvulSkillHolder;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.interfaces.IChanceSkillTrigger;
@@ -892,20 +890,13 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				if (TerritoryWarManager.getInstance().isTWInProgress())
 				{
 					sendPacket(SystemMessageId.YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY);
-					sendPacket(ActionFailed.STATIC_PACKET);
-					return;
 				}
-				
-				final Siege siege = SiegeManager.getInstance().getSiege(getX(), getY(), getZ());
-				if (siege != null)
+				else
 				{
-					if ((siege.checkIsDefender(getActingPlayer().getClan()) && siege.checkIsDefender(target.getActingPlayer().getClan())) || (siege.checkIsAttacker(getActingPlayer().getClan()) && siege.checkIsAttacker(target.getActingPlayer().getClan()) && (siege.getCastle().getOwnerId() > 0)))
-					{
-						sendPacket(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS);
-						sendPacket(ActionFailed.STATIC_PACKET);
-						return;
-					}
+					sendPacket(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS);
 				}
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return;
 			}
 			
 			// Checking if target has moved to peace zone
