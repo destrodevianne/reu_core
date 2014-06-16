@@ -18,86 +18,76 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.model.actor.L2Character;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import l2r.gameserver.model.Location;
+import l2r.gameserver.model.actor.L2Character;
+import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.interfaces.IPositionable;
+
+/**
+ * MagicSkillUse server packet implementation.
+ * @author UnAfraid, Nos
+ */
 public final class MagicSkillUse extends L2GameServerPacket
 {
-	private final int _targetId, _tx, _ty, _tz;
 	private final int _skillId;
 	private final int _skillLevel;
 	private final int _hitTime;
 	private final int _reuseDelay;
-	private final int _charObjId, _x, _y, _z;
-	
-	// private int _flags;
+	private final L2Character _activeChar;
+	private final L2Character _target;
+	private final List<Integer> _unknown = Collections.emptyList();
+	private final List<Location> _groundLocations;
 	
 	public MagicSkillUse(L2Character cha, L2Character target, int skillId, int skillLevel, int hitTime, int reuseDelay)
 	{
-		_charObjId = cha.getObjectId();
-		_targetId = target.getObjectId();
+		_activeChar = cha;
+		_target = target;
 		_skillId = skillId;
 		_skillLevel = skillLevel;
 		_hitTime = hitTime;
 		_reuseDelay = reuseDelay;
-		_x = cha.getX();
-		_y = cha.getY();
-		_z = cha.getZ();
-		_tx = target.getX();
-		_ty = target.getY();
-		_tz = target.getZ();
-		// _flags |= 0x20;
-	}
-	
-	public MagicSkillUse(int x, int y, int z, L2Character owner, int skillId, int skillLevel, int hitTime, int reuseDelay)
-	{
-		_charObjId = owner.getObjectId();
-		_targetId = owner.getObjectId();
-		_skillId = skillId;
-		_skillLevel = skillLevel;
-		_hitTime = hitTime;
-		_reuseDelay = reuseDelay;
-		_x = x;
-		_y = y;
-		_z = z;
-		_tx = x;
-		_ty = y;
-		_tz = z;
-		// _flags |= 0x20;
+		Location skillWorldPos = null;
+		if (cha.isPlayer())
+		{
+			final L2PcInstance player = cha.getActingPlayer();
+			if (player.getCurrentSkillWorldPosition() != null)
+			{
+				skillWorldPos = player.getCurrentSkillWorldPosition();
+			}
+		}
+		_groundLocations = skillWorldPos != null ? Arrays.asList(skillWorldPos) : Collections.<Location> emptyList();
 	}
 	
 	public MagicSkillUse(L2Character cha, int skillId, int skillLevel, int hitTime, int reuseDelay)
 	{
-		_charObjId = cha.getObjectId();
-		_targetId = cha.getTargetId();
-		_skillId = skillId;
-		_skillLevel = skillLevel;
-		_hitTime = hitTime;
-		_reuseDelay = reuseDelay;
-		_x = cha.getX();
-		_y = cha.getY();
-		_z = cha.getZ();
-		_tx = cha.getX();
-		_ty = cha.getY();
-		_tz = cha.getZ();
-		// _flags |= 0x20;
+		this(cha, cha, skillId, skillLevel, hitTime, reuseDelay);
 	}
 	
 	@Override
 	protected final void writeImpl()
 	{
 		writeC(0x48);
-		writeD(_charObjId);
-		writeD(_targetId);
+		writeD(_activeChar.getObjectId());
+		writeD(_target.getObjectId());
 		writeD(_skillId);
 		writeD(_skillLevel);
 		writeD(_hitTime);
 		writeD(_reuseDelay);
-		writeD(_x);
-		writeD(_y);
-		writeD(_z);
-		writeD(0x00); // unknown
-		writeD(_tx);
-		writeD(_ty);
-		writeD(_tz);
+		writeLoc(_activeChar);
+		writeH(_unknown.size()); // TODO: Implement me!
+		for (int unknown : _unknown)
+		{
+			writeH(unknown);
+		}
+		writeH(_groundLocations.size());
+		for (IPositionable target : _groundLocations)
+		{
+			writeLoc(target);
+		}
+		writeLoc(_target);
 	}
 }
