@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.model.Location;
+import l2r.gameserver.model.interfaces.IPositionable;
 import l2r.gameserver.network.L2GameClient;
 
 import org.mmocore.network.SendablePacket;
@@ -56,7 +56,7 @@ public abstract class L2GameServerPacket extends SendablePacket<L2GameClient>
 	 * Writes 3 D (int32) with current location x, y, z
 	 * @param loc
 	 */
-	protected void writeLoc(Location loc)
+	protected void writeLoc(IPositionable loc)
 	{
 		writeD(loc.getX());
 		writeD(loc.getY());
