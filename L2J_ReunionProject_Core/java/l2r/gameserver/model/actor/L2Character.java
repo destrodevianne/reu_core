@@ -2527,6 +2527,8 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			stopAllEffectsExceptThoseThatLastThroughDeath();
 		}
 		
+		stopEffects(L2EffectType.STUN);
+		
 		if (isPlayer() && (getActingPlayer().getAgathionId() != 0))
 		{
 			getActingPlayer().setAgathionId(0);
