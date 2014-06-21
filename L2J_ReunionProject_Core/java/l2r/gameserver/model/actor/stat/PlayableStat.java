@@ -47,15 +47,20 @@ public class PlayableStat extends CharStat
 			return true;
 		}
 		
+		// TODO: This should be here?
+		if (!getActiveChar().getEvents().onExperienceReceived(value))
+		{
+			return false;
+		}
+		
 		if ((getExp() + value) >= getExpForLevel(getMaxLevel()))
 		{
 			value = getExpForLevel(getMaxLevel()) - 1 - getExp();
 		}
 		
-		if (!getActiveChar().getEvents().onExperienceReceived(value))
-		{
-			return false;
-		}
+		/**
+		 * if (!getActiveChar().getEvents().onExperienceReceived(value)) { return false; }
+		 */
 		
 		setExp(getExp() + value);
 		
