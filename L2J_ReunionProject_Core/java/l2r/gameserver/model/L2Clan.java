@@ -1404,7 +1404,7 @@ public class L2Clan implements IIdentifiable, INamable
 			}
 			catch (Exception e)
 			{
-				_log.warn("Error could not store clan skills: " + e.getMessage(), e);
+				// _log.warn("Error could not store clan skills: " + e.getMessage(), e);
 			}
 			
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.CLAN_SKILL_S1_ADDED);

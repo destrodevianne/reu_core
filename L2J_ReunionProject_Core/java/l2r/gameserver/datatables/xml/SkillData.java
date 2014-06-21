@@ -123,7 +123,10 @@ public class SkillData
 			return _skills.get(getSkillHashCode(skillId, maxLvl));
 		}
 		
-		_log.warn(getClass().getSimpleName() + ": No skill info found for skill id " + skillId + " and skill level " + level + ".");
+		if (Config.DEBUG)
+		{
+			_log.warn(getClass().getSimpleName() + ": No skill info found for skill id " + skillId + " and skill level " + level + ".");
+		}
 		return null;
 	}
 	
