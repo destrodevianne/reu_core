@@ -264,7 +264,6 @@ import l2r.gameserver.network.serverpackets.ExPrivateStoreSetWholeMsg;
 import l2r.gameserver.network.serverpackets.ExSetCompassZoneCode;
 import l2r.gameserver.network.serverpackets.ExShowScreenMessage2;
 import l2r.gameserver.network.serverpackets.ExShowScreenMessage2.ScreenMessageAlign;
-import l2r.gameserver.network.serverpackets.ExSpawnEmitter;
 import l2r.gameserver.network.serverpackets.ExStartScenePlayer;
 import l2r.gameserver.network.serverpackets.ExStorageMaxCount;
 import l2r.gameserver.network.serverpackets.ExUseSharedGroupItem;
@@ -13305,27 +13304,6 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * Absorbs a Soul from a Npc.
-	 * @param skill
-	 * @param npc
-	 */
-	public void absorbSoul(L2Skill skill, L2Npc npc)
-	{
-		if (_souls >= skill.getNumSouls())
-		{
-			sendPacket(SystemMessageId.SOUL_CANNOT_BE_ABSORBED_ANYMORE);
-			return;
-		}
-		
-		increaseSouls(1);
-		
-		if (npc != null)
-		{
-			broadcastPacket(new ExSpawnEmitter(this, npc), 500);
-		}
-	}
-	
-	/**
 	 * Increase Souls
 	 * @param count
 	 */
@@ -13546,14 +13524,6 @@ public final class L2PcInstance extends L2Playable
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAD_CRITICAL_HIT);
 			sm.addPcName(this);
 			sendPacket(sm);
-			if ((target instanceof L2Npc) && (getSkillLevel(467) > 0))
-			{
-				L2Skill skill = SkillData.getInstance().getInfo(467, getSkillLevel(467));
-				if (Rnd.get(100) < skill.getCritChance())
-				{
-					absorbSoul(skill, ((L2Npc) target));
-				}
-			}
 		}
 		if (mcrit)
 		{
