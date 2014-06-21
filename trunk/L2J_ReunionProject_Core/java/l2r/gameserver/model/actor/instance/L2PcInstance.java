@@ -7508,10 +7508,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void setOnlineStatus(boolean isOnline, boolean updateInDb)
 	{
-		if (_isOnline != isOnline)
-		{
-			_isOnline = isOnline;
-		}
+		_isOnline = isOnline;
 		
 		// Update the characters table of the database with online status and lastAccess (called when login and logout)
 		if (updateInDb)
@@ -8609,7 +8606,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		catch (Exception e)
 		{
-			_log.warn("Error could not store char skills: " + e.getMessage(), e);
+			// _log.warn("Error could not store char skills: " + e.getMessage(), e);
 		}
 	}
 	
@@ -12191,7 +12188,6 @@ public final class L2PcInstance extends L2Playable
 		
 		try
 		{
-			_isOnline = false;
 			abortAttack();
 			abortCast();
 			stopMove(null);
