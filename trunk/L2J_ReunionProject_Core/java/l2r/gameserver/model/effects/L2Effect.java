@@ -497,7 +497,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 							return; // false causes effect to finish right away
 						}
 					}
-					else if ((_count > 0) && ((getAbnormalTime() - getTime()) >= 0))
+					else if (_count > 0)
 					{
 						// do not finish it yet, in case reactivated
 						return;
