@@ -2527,7 +2527,8 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			stopAllEffectsExceptThoseThatLastThroughDeath();
 		}
 		
-		stopEffects(L2EffectType.STUN);
+		// FIXME: We need this?
+		stopStunning(true);
 		
 		if (isPlayer() && (getActingPlayer().getAgathionId() != 0))
 		{
@@ -2614,6 +2615,10 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			return;
 		}
+		
+		// FIXME: We need this?
+		stopStunning(true);
+		
 		if (!isTeleporting())
 		{
 			setIsPendingRevive(false);
