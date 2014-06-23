@@ -2528,7 +2528,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// FIXME: We need this?
-		stopStunning(true);
+		stopAbnormalEffect(AbnormalEffect.STUN);
 		
 		if (isPlayer() && (getActingPlayer().getAgathionId() != 0))
 		{
@@ -2617,7 +2617,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// FIXME: We need this?
-		stopStunning(true);
+		stopAbnormalEffect(AbnormalEffect.STUN);
 		
 		if (!isTeleporting())
 		{
