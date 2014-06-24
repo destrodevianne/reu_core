@@ -2527,9 +2527,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			stopAllEffectsExceptThoseThatLastThroughDeath();
 		}
 		
-		// FIXME: We need this?
-		stopAbnormalEffect(AbnormalEffect.STUN);
-		
 		if (isPlayer() && (getActingPlayer().getAgathionId() != 0))
 		{
 			getActingPlayer().setAgathionId(0);
@@ -2615,9 +2612,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			return;
 		}
-		
-		// FIXME: We need this?
-		stopAbnormalEffect(AbnormalEffect.STUN);
 		
 		if (!isTeleporting())
 		{
@@ -3411,7 +3405,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		}
-		updateAbnormalEffect();
 	}
 	
 	public final void startParalyze()
