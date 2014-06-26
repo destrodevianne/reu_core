@@ -469,6 +469,12 @@ public abstract class L2Effect implements IChanceSkillTrigger
 			{
 				_state = EffectState.ACTING;
 				
+				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
+				{
+					_state = EffectState.FINISHING;
+					return;
+				}
+				
 				if (_skill.isOffensive() && _icon && getEffected().isPlayer())
 				{
 					SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT);
@@ -486,6 +492,12 @@ public abstract class L2Effect implements IChanceSkillTrigger
 			}
 			case ACTING:
 			{
+				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
+				{
+					_state = EffectState.FINISHING;
+					return;
+				}
+				
 				if (_count > 0)
 				{
 					_count--;
