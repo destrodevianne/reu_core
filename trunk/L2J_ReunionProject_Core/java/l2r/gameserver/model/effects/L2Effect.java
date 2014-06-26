@@ -531,6 +531,11 @@ public abstract class L2Effect implements IChanceSkillTrigger
 					}
 				}
 				
+				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
+				{
+					onExit();
+				}
+				
 				if (_skill.getAfterEffectId() > 0)
 				{
 					L2Skill skill = SkillData.getInstance().getInfo(_skill.getAfterEffectId(), _skill.getAfterEffectLvl());
