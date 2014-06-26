@@ -376,6 +376,12 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	public final void exit(boolean preventUpdate)
 	{
 		preventExitUpdate = preventUpdate;
+		
+		if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
+		{
+			setInUse(true);
+		}
+		
 		_state = EffectState.FINISHING;
 		scheduleEffect();
 	}
@@ -471,7 +477,9 @@ public abstract class L2Effect implements IChanceSkillTrigger
 				
 				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
 				{
+					setInUse(true);
 					_state = EffectState.FINISHING;
+					scheduleEffect();
 					return;
 				}
 				
@@ -494,7 +502,9 @@ public abstract class L2Effect implements IChanceSkillTrigger
 			{
 				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
 				{
+					setInUse(true);
 					_state = EffectState.FINISHING;
+					scheduleEffect();
 					return;
 				}
 				
@@ -526,11 +536,18 @@ public abstract class L2Effect implements IChanceSkillTrigger
 					smsg3.addSkillName(_skill);
 					getEffected().sendPacket(smsg3);
 				}
+				
+				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
+				{
+					setInUse(true);
+				}
+				
 				// if task is null - stopEffectTask does not remove effect
 				if ((_currentFuture == null) && (getEffected() != null))
 				{
 					getEffected().removeEffect(this);
 				}
+				
 				// Stop the task of the L2Effect, remove it and update client magic icon
 				stopEffectTask();
 				
