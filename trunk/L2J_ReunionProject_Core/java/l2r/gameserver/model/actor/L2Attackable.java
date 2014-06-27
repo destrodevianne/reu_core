@@ -58,7 +58,6 @@ import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2ServitorInstance;
-import l2r.gameserver.model.actor.instance.L2TrapInstance;
 import l2r.gameserver.model.actor.knownlist.AttackableKnownList;
 import l2r.gameserver.model.actor.stat.Rates;
 import l2r.gameserver.model.actor.status.AttackableStatus;
@@ -775,20 +774,9 @@ public class L2Attackable extends L2Npc
 		// traps does not cause aggro
 		// making this hack because not possible to determine if damage made by trap
 		// so just check for triggered trap here
-		if ((targetPlayer == null) || (targetPlayer.getTraps().isEmpty()))
+		if ((targetPlayer == null) || (targetPlayer.getTrap() == null) || !targetPlayer.getTrap().isTriggered())
 		{
 			ai.addHate(aggro);
-		}
-		
-		if (targetPlayer != null)
-		{
-			for (L2TrapInstance trap : targetPlayer.getTraps().values())
-			{
-				if ((trap != null) && !trap.isTriggered())
-				{
-					ai.addHate(aggro);
-				}
-			}
 		}
 		
 		if ((targetPlayer != null) && (aggro == 0))

@@ -475,14 +475,6 @@ public abstract class L2Effect implements IChanceSkillTrigger
 			{
 				_state = EffectState.ACTING;
 				
-				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
-				{
-					setInUse(true);
-					_state = EffectState.FINISHING;
-					scheduleEffect();
-					return;
-				}
-				
 				if (_skill.isOffensive() && _icon && getEffected().isPlayer())
 				{
 					SystemMessage smsg = SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT);
@@ -500,14 +492,6 @@ public abstract class L2Effect implements IChanceSkillTrigger
 			}
 			case ACTING:
 			{
-				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
-				{
-					setInUse(true);
-					_state = EffectState.FINISHING;
-					scheduleEffect();
-					return;
-				}
-				
 				if (_count > 0)
 				{
 					_count--;
@@ -537,11 +521,6 @@ public abstract class L2Effect implements IChanceSkillTrigger
 					getEffected().sendPacket(smsg3);
 				}
 				
-				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
-				{
-					setInUse(true);
-				}
-				
 				// if task is null - stopEffectTask does not remove effect
 				if ((_currentFuture == null) && (getEffected() != null))
 				{
@@ -558,11 +537,6 @@ public abstract class L2Effect implements IChanceSkillTrigger
 					{
 						onExit();
 					}
-				}
-				
-				if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
-				{
-					onExit();
 				}
 				
 				if (_skill.getAfterEffectId() > 0)
