@@ -708,7 +708,7 @@ public class CharEffectList
 		// array modified, then rebuild on next request
 		_rebuildCache = true;
 		
-		if (effect.getSkill().isDebuff())
+		if (effect.getSkill().isDebuff() || effect.getSkill().isOffensive())
 		{
 			if (_debuffs == null)
 			{
@@ -851,7 +851,7 @@ public class CharEffectList
 		// array modified, then rebuild on next request
 		_rebuildCache = true;
 		
-		if (newSkill.isDebuff())
+		if (newSkill.isDebuff() || newSkill.isOffensive())
 		{
 			if (_debuffs == null)
 			{
