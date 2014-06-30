@@ -108,7 +108,6 @@ public enum L2SkillType
 	CHARGEDAM(L2SkillChargeDmg.class),
 	RECALL(L2SkillTeleport.class),
 	TELEPORT(L2SkillTeleport.class),
-	SUMMON_FRIEND,
 	TRANSFORMDISPEL,
 	DETECT_TRAP,
 	REMOVE_TRAP,

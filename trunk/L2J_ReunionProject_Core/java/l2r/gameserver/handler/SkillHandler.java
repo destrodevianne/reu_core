@@ -40,7 +40,6 @@ import l2r.gameserver.scripts.handlers.skillhandlers.Pdam;
 import l2r.gameserver.scripts.handlers.skillhandlers.Resurrect;
 import l2r.gameserver.scripts.handlers.skillhandlers.ShiftTarget;
 import l2r.gameserver.scripts.handlers.skillhandlers.Sow;
-import l2r.gameserver.scripts.handlers.skillhandlers.SummonFriend;
 import l2r.gameserver.scripts.handlers.skillhandlers.TransformDispel;
 import l2r.gameserver.scripts.handlers.skillhandlers.Trap;
 import l2r.gameserver.scripts.handlers.skillhandlers.Unlock;
@@ -74,7 +73,6 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		registerHandler(new Resurrect());
 		registerHandler(new ShiftTarget());
 		registerHandler(new Sow());
-		registerHandler(new SummonFriend());
 		registerHandler(new TransformDispel());
 		registerHandler(new Trap());
 		registerHandler(new Unlock());
