@@ -4029,7 +4029,7 @@ public final class Config
 			}
 			catch (IOException e)
 			{
-				_log.info("Network Config: Failed to connect to api.externalip.net please check your internet connection using 127.0.0.1!");
+				_log.info("Network Config: Failed to connect to ip1.dynupdate.no-ip.com please check your internet connection using 127.0.0.1!");
 				externalIp = "127.0.0.1";
 			}
 			
