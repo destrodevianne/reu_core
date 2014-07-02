@@ -91,7 +91,8 @@ public final class ServerList extends L2LoginServerPacket
 			}
 			catch (UnknownHostException e)
 			{
-				_log.warn(getClass().getSimpleName() + ": " + e.getMessage());
+				_log.warn(getClass().getSimpleName() + ": Could not load client ip");
+				e.printStackTrace();
 				_ip = new byte[4];
 				_ip[0] = 127;
 				_ip[1] = 0;
