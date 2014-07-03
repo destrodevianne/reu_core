@@ -135,7 +135,6 @@ public class CharSummonTable
 		{
 			_log.error(getClass().getSimpleName() + ": Failed to store summon [SummonId: " + summon.getId() + "] from Char [CharId: " + summon.getOwner().getObjectId() + "] data", e);
 		}
-		
 	}
 	
 	public void restoreServitor(L2PcInstance activeChar)
@@ -239,6 +238,12 @@ public class CharSummonTable
 	public void restorePet(L2PcInstance activeChar)
 	{
 		L2ItemInstance item = activeChar.getInventory().getItemByObjectId(_pets.get(activeChar.getObjectId()));
+		
+		if (item == null)
+		{
+			return;
+		}
+		
 		final L2PetData petData = PetData.getInstance().getPetDataByItemId(item.getId());
 		L2NpcTemplate npcTemplate = NpcTable.getInstance().getTemplate(petData.getNpcId());
 		
