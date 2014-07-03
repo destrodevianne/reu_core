@@ -380,7 +380,8 @@ public class L2ServitorInstance extends L2Summon
 						{
 							continue;
 						}
-						
+						L2Skill skill = effect.getSkill();
+						// Do not save heals.
 						switch (effect.getEffectType())
 						{
 							case HEAL_OVER_TIME:
@@ -390,7 +391,17 @@ public class L2ServitorInstance extends L2Summon
 								continue;
 						}
 						
-						L2Skill skill = effect.getSkill();
+						if (skill.isToggle())
+						{
+							continue;
+						}
+						
+						// Dances and songs are not kept in retail.
+						if (skill.isDance() && !Config.ALT_STORE_DANCES)
+						{
+							continue;
+						}
+						
 						if (storedSkills.contains(skill.getReuseHashCode()))
 						{
 							continue;
@@ -398,7 +409,7 @@ public class L2ServitorInstance extends L2Summon
 						
 						storedSkills.add(skill.getReuseHashCode());
 						
-						if (effect.getInUse() && !skill.isToggle())
+						if (effect.getInUse())
 						{
 							ps2.setInt(1, getOwner().getObjectId());
 							ps2.setInt(2, getOwner().getClassIndex());
