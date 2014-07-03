@@ -90,7 +90,7 @@ public class CharEffectList
 	public final L2Effect[] getAllEffects()
 	{
 		// If no effect is active, return EMPTY_EFFECTS
-		if (((_buffs == null) || _buffs.isEmpty()) && ((_debuffs == null) || _debuffs.isEmpty()))
+		if (isEmpty())
 		{
 			return EMPTY_EFFECTS;
 		}
@@ -109,11 +109,11 @@ public class CharEffectList
 			FastList<L2Effect> temp = FastList.newInstance();
 			
 			// Add all buffs and all debuffs
-			if ((_buffs != null) && !_buffs.isEmpty())
+			if (hasBuffs())
 			{
 				temp.addAll(_buffs);
 			}
-			if ((_debuffs != null) && !_debuffs.isEmpty())
+			if (hasDebuffs())
 			{
 				temp.addAll(_debuffs);
 			}
@@ -134,7 +134,7 @@ public class CharEffectList
 	{
 		L2Effect effectNotInUse = null;
 		
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -154,7 +154,7 @@ public class CharEffectList
 				}
 			}
 		}
-		if ((effectNotInUse == null) && (_debuffs != null) && !_debuffs.isEmpty())
+		if ((effectNotInUse == null) && hasDebuffs())
 		{
 			for (L2Effect e : _debuffs)
 			{
@@ -188,7 +188,7 @@ public class CharEffectList
 		
 		if (skill.isDebuff())
 		{
-			if ((_debuffs != null) && !_debuffs.isEmpty())
+			if (hasDebuffs())
 			{
 				for (L2Effect e : _debuffs)
 				{
@@ -211,7 +211,7 @@ public class CharEffectList
 		}
 		else
 		{
-			if ((_buffs != null) && !_buffs.isEmpty())
+			if (hasBuffs())
 			{
 				for (L2Effect e : _buffs)
 				{
@@ -244,7 +244,7 @@ public class CharEffectList
 	{
 		L2Effect effectNotInUse = null;
 		
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -449,7 +449,7 @@ public class CharEffectList
 	 */
 	public void stopAllToggles()
 	{
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -467,7 +467,7 @@ public class CharEffectList
 	 */
 	public final void stopEffects(L2EffectType type)
 	{
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -479,7 +479,7 @@ public class CharEffectList
 			}
 		}
 		
-		if ((_debuffs != null) && !_debuffs.isEmpty())
+		if (hasDebuffs())
 		{
 			for (L2Effect e : _debuffs)
 			{
@@ -498,7 +498,7 @@ public class CharEffectList
 	 */
 	public final void stopSkillEffects(int skillId)
 	{
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -508,7 +508,7 @@ public class CharEffectList
 				}
 			}
 		}
-		if ((_debuffs != null) && !_debuffs.isEmpty())
+		if (hasDebuffs())
 		{
 			for (L2Effect e : _debuffs)
 			{
@@ -527,7 +527,7 @@ public class CharEffectList
 	 */
 	public final void stopSkillEffects(L2SkillType skillType, int negateLvl)
 	{
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -537,7 +537,7 @@ public class CharEffectList
 				}
 			}
 		}
-		if ((_debuffs != null) && !_debuffs.isEmpty())
+		if (hasDebuffs())
 		{
 			for (L2Effect e : _debuffs)
 			{
@@ -556,7 +556,7 @@ public class CharEffectList
 	{
 		if (_hasBuffsRemovedOnAnyAction)
 		{
-			if ((_buffs != null) && !_buffs.isEmpty())
+			if (hasBuffs())
 			{
 				for (L2Effect e : _buffs)
 				{
@@ -573,7 +573,7 @@ public class CharEffectList
 	{
 		if (_hasBuffsRemovedOnDamage)
 		{
-			if ((_buffs != null) && !_buffs.isEmpty())
+			if (hasBuffs())
 			{
 				for (L2Effect e : _buffs)
 				{
@@ -586,7 +586,7 @@ public class CharEffectList
 		}
 		if (_hasDebuffsRemovedOnDamage)
 		{
-			if ((_debuffs != null) && !_debuffs.isEmpty())
+			if (hasDebuffs())
 			{
 				for (L2Effect e : _debuffs)
 				{
@@ -1206,7 +1206,7 @@ public class CharEffectList
 		boolean foundRemovedOnAction = false;
 		boolean foundRemovedOnDamage = false;
 		
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -1270,7 +1270,7 @@ public class CharEffectList
 		_hasBuffsRemovedOnDamage = foundRemovedOnDamage;
 		foundRemovedOnDamage = false;
 		
-		if ((_debuffs != null) && !_debuffs.isEmpty())
+		if (hasDebuffs())
 		{
 			for (L2Effect e : _debuffs)
 			{
@@ -1372,7 +1372,7 @@ public class CharEffectList
 		boolean foundRemovedOnAction = false;
 		boolean foundRemovedOnDamage = false;
 		
-		if ((_buffs != null) && !_buffs.isEmpty())
+		if (hasBuffs())
 		{
 			for (L2Effect e : _buffs)
 			{
@@ -1395,7 +1395,7 @@ public class CharEffectList
 		_hasBuffsRemovedOnDamage = foundRemovedOnDamage;
 		foundRemovedOnDamage = false;
 		
-		if ((_debuffs != null) && !_debuffs.isEmpty())
+		if (hasDebuffs())
 		{
 			for (L2Effect e : _debuffs)
 			{
@@ -1420,11 +1420,11 @@ public class CharEffectList
 	 */
 	private L2Effect listsContains(L2Effect effect)
 	{
-		if ((_buffs != null) && !_buffs.isEmpty() && _buffs.contains(effect))
+		if (hasBuffs() && _buffs.contains(effect))
 		{
 			return effect;
 		}
-		if ((_debuffs != null) && !_debuffs.isEmpty() && _debuffs.contains(effect))
+		if (hasDebuffs() && _debuffs.contains(effect))
 		{
 			return effect;
 		}
@@ -1464,6 +1464,33 @@ public class CharEffectList
 		}
 		
 		_effectFlags = flags;
+	}
+	
+	/**
+	 * Verify if this effect list is empty.
+	 * @return {@code true} if both {@link #_buffs} and {@link #_debuffs} are either {@code null} or empty
+	 */
+	public boolean isEmpty()
+	{
+		return ((_buffs == null) || _buffs.isEmpty()) && ((_debuffs == null) || _debuffs.isEmpty());
+	}
+	
+	/**
+	 * Verify if this effect list has buffs effects.
+	 * @return {@code true} if {@link #_buffs} is not {@code null} and is not empty
+	 */
+	public boolean hasBuffs()
+	{
+		return (_buffs != null) && !_buffs.isEmpty();
+	}
+	
+	/**
+	 * Verify if this effect list has debuffs effects.
+	 * @return {@code true} if {@link #_debuffs} is not {@code null} and is not empty
+	 */
+	public boolean hasDebuffs()
+	{
+		return (_debuffs != null) && !_debuffs.isEmpty();
 	}
 	
 	/**
