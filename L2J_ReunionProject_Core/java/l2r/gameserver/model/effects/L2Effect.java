@@ -376,12 +376,6 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	public final void exit(boolean preventUpdate)
 	{
 		preventExitUpdate = preventUpdate;
-		
-		if (!getInUse() && ((getAbnormalTime() - getTime()) < 0) && (getEffectType() == L2EffectType.STUN))
-		{
-			setInUse(true);
-		}
-		
 		_state = EffectState.FINISHING;
 		scheduleEffect();
 	}

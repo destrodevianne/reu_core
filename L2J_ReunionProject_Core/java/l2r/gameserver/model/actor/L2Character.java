@@ -3408,6 +3408,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		}
+		updateAbnormalEffect();
 	}
 	
 	public final void startParalyze()
