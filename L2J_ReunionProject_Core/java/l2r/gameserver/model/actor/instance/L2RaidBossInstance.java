@@ -148,14 +148,7 @@ public class L2RaidBossInstance extends L2MonsterInstance
 			getMinionList().spawnMinions();
 		}
 		
-		_maintenanceTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				checkAndReturnToSpawn();
-			}
-		}, 60000, getMaintenanceInterval() + Rnd.get(5000));
+		_maintenanceTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(() -> checkAndReturnToSpawn(), 60000, getMaintenanceInterval() + Rnd.get(5000));
 	}
 	
 	protected void checkAndReturnToSpawn()
@@ -175,13 +168,15 @@ public class L2RaidBossInstance extends L2MonsterInstance
 		final int spawnY = spawn.getY();
 		final int spawnZ = spawn.getZ();
 		
-		if (!isInCombat() && !isMovementDisabled())
+		// TODO: This check is not needed. We will teleport rb to his spawn loc! if there is one...
+		// if (!isInCombat() && !isMovementDisabled())
+		// {
+		// if (!isInsideRadius(spawnX, spawnY, spawnZ, Math.max(Config.MAX_DRIFT_RANGE, 200), true, false))
+		if (!isInsideRadius(spawnX, spawnY, spawnZ, Math.max(Config.MAX_DRIFT_RANGE, 900), true, false))
 		{
-			if (!isInsideRadius(spawnX, spawnY, spawnZ, Math.max(Config.MAX_DRIFT_RANGE, 200), true, false))
-			{
-				teleToLocation(spawnX, spawnY, spawnZ, false);
-			}
+			teleToLocation(spawnX, spawnY, spawnZ, false);
 		}
+		// }
 	}
 	
 	public void setRaidStatus(RaidBossStatus status)
