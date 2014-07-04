@@ -332,7 +332,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 		return _lambda.calc(env);
 	}
 	
-	private final void startEffectTask()
+	private final synchronized void startEffectTask()
 	{
 		if (_abnormalTime > 0)
 		{
@@ -388,7 +388,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	 * <li>Stop and remove L2Effect from L2Character and update client magic icon</li>
 	 * </ul>
 	 */
-	public final void stopEffectTask()
+	public final synchronized void stopEffectTask()
 	{
 		if (_currentFuture != null)
 		{
