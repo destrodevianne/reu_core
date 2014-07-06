@@ -276,23 +276,11 @@ public class CharSummonTable
 			pet.store();
 		}
 		
+		item.setEnchantLevel(pet.getLevel());
 		activeChar.setPet(pet);
-		
 		pet.spawnMe(activeChar.getX() + 50, activeChar.getY() + 100, activeChar.getZ());
 		pet.startFeed();
-		item.setEnchantLevel(pet.getLevel());
-		
-		if (pet.getCurrentFed() <= 0)
-		{
-			pet.unSummon(activeChar);
-		}
-		else
-		{
-			pet.startFeed();
-		}
-		
 		pet.setFollowStatus(true);
-		
 		pet.getOwner().sendPacket(new PetItemList(pet.getInventory().getItems()));
 		pet.broadcastStatusUpdate();
 	}
