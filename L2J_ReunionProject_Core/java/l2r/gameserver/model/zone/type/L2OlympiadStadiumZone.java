@@ -18,12 +18,16 @@
  */
 package l2r.gameserver.model.zone.type;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.TeleportWhereType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.ZoneManager;
+import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
@@ -44,6 +48,7 @@ import l2r.gameserver.network.serverpackets.SystemMessage;
  */
 public class L2OlympiadStadiumZone extends L2ZoneRespawn
 {
+	private List<Location> _spectatorLocations;
 	
 	public L2OlympiadStadiumZone(int id)
 	{
@@ -293,5 +298,27 @@ public class L2OlympiadStadiumZone extends L2ZoneRespawn
 				_player = null;
 			}
 		}
+	}
+	
+	@Override
+	public void parseLoc(int x, int y, int z, String type)
+	{
+		if ((type != null) && type.equals("spectatorSpawn"))
+		{
+			if (_spectatorLocations == null)
+			{
+				_spectatorLocations = new ArrayList<>();
+			}
+			_spectatorLocations.add(new Location(x, y, z));
+		}
+		else
+		{
+			super.parseLoc(x, y, z, type);
+		}
+	}
+	
+	public List<Location> getSpectatorSpawns()
+	{
+		return _spectatorLocations;
 	}
 }
