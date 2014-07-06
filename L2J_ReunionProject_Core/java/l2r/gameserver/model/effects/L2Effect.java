@@ -332,21 +332,19 @@ public abstract class L2Effect implements IChanceSkillTrigger
 		return _lambda.calc(env);
 	}
 	
-	private final synchronized void startEffectTask()
+	private final void startEffectTask()
 	{
-		if (_abnormalTime > 0)
+		stopEffectTask();
+		final int initialDelay = Math.max((_abnormalTime - _periodFirstTime) * 1000, 5);
+		if (_count > 1)
 		{
-			stopEffectTask();
-			final int initialDelay = Math.max((_abnormalTime - _periodFirstTime) * 1000, 5);
-			if (_count > 1)
-			{
-				_currentFuture = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new EffectTask(), initialDelay, _abnormalTime * 1000);
-			}
-			else
-			{
-				_currentFuture = ThreadPoolManager.getInstance().scheduleEffect(new EffectTask(), initialDelay);
-			}
+			_currentFuture = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new EffectTask(), initialDelay, _abnormalTime * 1000);
 		}
+		else
+		{
+			_currentFuture = ThreadPoolManager.getInstance().scheduleEffect(new EffectTask(), initialDelay);
+		}
+		
 		if (_state == EffectState.ACTING)
 		{
 			if (isSelfEffectType())
@@ -388,14 +386,13 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	 * <li>Stop and remove L2Effect from L2Character and update client magic icon</li>
 	 * </ul>
 	 */
-	public final synchronized void stopEffectTask()
+	public final void stopEffectTask()
 	{
 		if (_currentFuture != null)
 		{
 			// Cancel the task
 			_currentFuture.cancel(false);
 			// ThreadPoolManager.getInstance().removeEffect(_currentTask);
-			
 			_currentFuture = null;
 			
 			if (isSelfEffectType() && (getEffector() != null))
@@ -458,7 +455,7 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	 */
 	public boolean onActionTime()
 	{
-		return false;
+		return getAbnormalTime() < 0;
 	}
 	
 	public final void scheduleEffect()
