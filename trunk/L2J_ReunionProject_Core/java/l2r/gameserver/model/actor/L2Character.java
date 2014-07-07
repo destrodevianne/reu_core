@@ -19,6 +19,7 @@
 package l2r.gameserver.model.actor;
 
 import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ACTIVE;
+import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ATTACK;
 import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_FOLLOW;
 
 import java.util.ArrayList;
@@ -6932,13 +6933,44 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				{
 					if ((spMob != null) && spMob.isNpc())
 					{
-						L2Npc npcMob = (L2Npc) spMob;
-						
+						final L2Npc npcMob = (L2Npc) spMob;
 						if ((npcMob.isInsideRadius(player, 1000, true, true)) && (npcMob.getTemplate().getEventQuests(QuestEventType.ON_SKILL_SEE) != null))
 						{
 							for (Quest quest : npcMob.getTemplate().getEventQuests(QuestEventType.ON_SKILL_SEE))
 							{
 								quest.notifySkillSee(npcMob, player, skill, targets, isSummon());
+							}
+						}
+						
+						// On Skill See logic
+						if (npcMob.isAttackable())
+						{
+							final L2Attackable attackable = (L2Attackable) npcMob;
+							
+							int skillEffectPoint = skill.getAggroPoints();
+							
+							if (player.hasSummon())
+							{
+								if ((targets.length == 1) && Util.contains(targets, player.getSummon()))
+								{
+									skillEffectPoint = 0;
+								}
+								
+								if (skillEffectPoint > 0)
+								{
+									if (attackable.hasAI() && (attackable.getAI().getIntention() == AI_INTENTION_ATTACK))
+									{
+										L2Object npcTarget = attackable.getTarget();
+										for (L2Object skillTarget : targets)
+										{
+											if ((npcTarget == skillTarget) || (npcMob == skillTarget))
+											{
+												L2Character originalCaster = isSummon() ? getSummon() : player;
+												attackable.addDamageHate(originalCaster, 0, (skillEffectPoint * 150) / (attackable.getLevel() + 7));
+											}
+										}
+									}
+								}
 							}
 						}
 					}

@@ -34,6 +34,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.datatables.sql.TerritoryTable;
 import l2r.gameserver.enums.AIType;
+import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.ZoneIdType;
@@ -806,10 +807,24 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 						if (npc.isInsideRadius(called, factionRange, true, false) && called.hasAI())
 						{
 							if ((Math.abs(originalAttackTarget.getZ() - called.getZ()) < 600) && npc.getAttackByList().contains(originalAttackTarget) && ((called.getAI()._intention == CtrlIntention.AI_INTENTION_IDLE) || (called.getAI()._intention == CtrlIntention.AI_INTENTION_ACTIVE)) && (called.getInstanceId() == npc.getInstanceId()))
-							// && GeoData.getInstance().canSeeTarget(called, npc))
 							{
 								if (originalAttackTarget.isPlayable())
 								{
+									if (originalAttackTarget.isInParty() && originalAttackTarget.getParty().isInDimensionalRift())
+									{
+										byte riftType = originalAttackTarget.getParty().getDimensionalRift().getType();
+										byte riftRoom = originalAttackTarget.getParty().getDimensionalRift().getCurrentRoom();
+										
+										if ((npc instanceof L2RiftInvaderInstance) && !DimensionalRiftManager.getInstance().getRoom(riftType, riftRoom).checkIfInZone(npc.getX(), npc.getY(), npc.getZ()))
+										{
+											continue;
+										}
+									}
+									
+									// By default, when a faction member calls for help, attack the caller's attacker.
+									// Notify the AI with EVT_AGGRESSION
+									npc.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, originalAttackTarget, 1);
+									
 									List<Quest> quests = called.getTemplate().getEventQuests(QuestEventType.ON_FACTION_CALL);
 									if ((quests != null) && !quests.isEmpty())
 									{
