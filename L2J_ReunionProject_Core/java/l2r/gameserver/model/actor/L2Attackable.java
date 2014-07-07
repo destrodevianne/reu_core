@@ -310,7 +310,7 @@ public class L2Attackable extends L2Npc
 		}
 		
 		// If this L2Attackable is a L2MonsterInstance and it has spawned minions, call its minions to battle
-		if (this instanceof L2MonsterInstance)
+		if (isMonster())
 		{
 			L2MonsterInstance master = (L2MonsterInstance) this;
 			
@@ -396,6 +396,22 @@ public class L2Attackable extends L2Npc
 		catch (Exception e)
 		{
 			_log.error(String.valueOf(e));
+		}
+		
+		// Notify to minions if there are.
+		if (isMonster())
+		{
+			final L2MonsterInstance mob = (L2MonsterInstance) this;
+			if ((mob.getLeader() != null) && mob.getLeader().hasMinions())
+			{
+				final int respawnTime = Config.MINIONS_RESPAWN_TIME.containsKey(getId()) ? Config.MINIONS_RESPAWN_TIME.get(getId()) * 1000 : -1;
+				mob.getLeader().getMinionList().onMinionDie(mob, respawnTime);
+			}
+			
+			if (mob.hasMinions())
+			{
+				mob.getMinionList().onMasterDie(false);
+			}
 		}
 		return true;
 	}
@@ -702,7 +718,10 @@ public class L2Attackable extends L2Npc
 					WalkingManager.getInstance().stopMoving(this, false, true);
 				}
 				
-				L2PcInstance player = attacker.getActingPlayer();
+				getAI().notifyEvent(CtrlEvent.EVT_ATTACKED, attacker);
+				addDamageHate(attacker, damage, (damage * 100) / (getLevel() + 7));
+				
+				final L2PcInstance player = attacker.getActingPlayer();
 				if (player != null)
 				{
 					if (getTemplate().getEventQuests(QuestEventType.ON_ATTACK) != null)
@@ -734,12 +753,6 @@ public class L2Attackable extends L2Npc
 							}
 						}
 					}
-				}
-				// for now hard code damage hate caused by an L2Attackable
-				else
-				{
-					getAI().notifyEvent(CtrlEvent.EVT_ATTACKED, attacker);
-					addDamageHate(attacker, damage, (damage * 100) / (getLevel() + 7));
 				}
 			}
 			catch (Exception e)
@@ -793,6 +806,14 @@ public class L2Attackable extends L2Npc
 		
 		if ((targetPlayer != null) && (aggro == 0))
 		{
+			addDamageHate(attacker, 0, 1);
+			
+			// Set the intention to the L2Attackable to AI_INTENTION_ACTIVE
+			if (getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE)
+			{
+				getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
+			}
+			
 			if (getTemplate().getEventQuests(QuestEventType.ON_AGGRO_RANGE_ENTER) != null)
 			{
 				for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_AGGRO_RANGE_ENTER))
