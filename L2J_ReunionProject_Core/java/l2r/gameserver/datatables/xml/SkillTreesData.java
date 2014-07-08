@@ -512,6 +512,11 @@ public final class SkillTreesData extends DocumentParser
 		
 		for (L2SkillLearn skill : skills.values())
 		{
+			if (((skill.getSkillId() == L2Skill.SKILL_DIVINE_INSPIRATION) && !Config.AUTO_LEARN_DIVINE_INSPIRATION && !player.isGM()))
+			{
+				continue;
+			}
+			
 			if (((includeAutoGet && skill.isAutoGet()) || skill.isLearnedByNpc() || (includeByFs && skill.isLearnedByFS())) && (player.getLevel() >= skill.getGetLevel()))
 			{
 				final L2Skill oldSkill = holder.getKnownSkill(skill.getSkillId());
@@ -534,20 +539,13 @@ public final class SkillTreesData extends DocumentParser
 	public Collection<L2Skill> getAllAvailableSkills(L2PcInstance player, ClassId classId, boolean includeByFs, boolean includeAutoGet)
 	{
 		// Get available skills
-		int unLearnable = 0;
 		PlayerSkillHolder holder = new PlayerSkillHolder(player);
 		List<L2SkillLearn> learnable = getAvailableSkills(player, classId, includeByFs, includeAutoGet, holder);
-		while (learnable.size() > unLearnable)
+		while (learnable.size() > 0)
 		{
 			for (L2SkillLearn s : learnable)
 			{
 				L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
-				if ((sk == null) || ((sk.getId() == L2Skill.SKILL_DIVINE_INSPIRATION) && !Config.AUTO_LEARN_DIVINE_INSPIRATION && !player.isGM()))
-				{
-					unLearnable++;
-					continue;
-				}
-				
 				holder.addSkill(sk);
 			}
 			
@@ -622,7 +620,7 @@ public final class SkillTreesData extends DocumentParser
 				final L2Skill oldSkill = player.getSkills().get(skill.getSkillId());
 				if (oldSkill != null)
 				{
-					if (oldSkill.getLevel() == (skill.getSkillLevel() - 1))
+					if (oldSkill.getLevel() < (skill.getSkillLevel()))
 					{
 						result.add(skill);
 					}
@@ -746,6 +744,58 @@ public final class SkillTreesData extends DocumentParser
 				else if (skill.getSkillLevel() == 1)
 				{
 					result.add(skill);
+				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Gets the available pledge skills.
+	 * @param clan the pledge skill learning clan
+	 * @param includeSquad if squad skill will be added too
+	 * @return all the available Pledge skills for a given {@code clan}
+	 */
+	public HashMap<Integer, L2SkillLearn> getMaxPledgeSkills(L2Clan clan, boolean includeSquad)
+	{
+		final HashMap<Integer, L2SkillLearn> result = new HashMap<>();
+		
+		for (L2SkillLearn skill : _pledgeSkillTree.values())
+		{
+			if (!skill.isResidencialSkill() && (clan.getLevel() >= skill.getGetLevel()))
+			{
+				final L2Skill oldSkill = clan.getSkills().get(skill.getSkillId());
+				if (oldSkill != null)
+				{
+					if (oldSkill.getLevel() < (skill.getSkillLevel()))
+					{
+						result.put(skill.getSkillId(), skill);
+					}
+				}
+				else
+				{
+					result.put(skill.getSkillId(), skill);
+				}
+			}
+		}
+		if (includeSquad)
+		{
+			for (L2SkillLearn skill : _subPledgeSkillTree.values())
+			{
+				if ((clan.getLevel() >= skill.getGetLevel()))
+				{
+					final L2Skill oldSkill = clan.getSkills().get(skill.getSkillId());
+					if (oldSkill != null)
+					{
+						if (oldSkill.getLevel() < (skill.getSkillLevel()))
+						{
+							result.put(skill.getSkillId(), skill);
+						}
+					}
+					else
+					{
+						result.put(skill.getSkillId(), skill);
+					}
 				}
 			}
 		}
