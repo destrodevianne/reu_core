@@ -1540,7 +1540,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 				}
 			}
 			// display fail message only for effects with icons
-			else if (et.icon && (effector instanceof L2PcInstance))
+			else if (et.icon && effector.isPlayer())
 			{
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_YOUR_S2);
 				sm.addCharName(effected);

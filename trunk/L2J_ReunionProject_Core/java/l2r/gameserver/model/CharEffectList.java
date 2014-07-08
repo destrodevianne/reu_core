@@ -710,7 +710,7 @@ public class CharEffectList
 		
 		if (effect.getSkill().isDebuff())
 		{
-			if (_debuffs == null)
+			if (!hasDebuffs())
 			{
 				return;
 			}
@@ -718,7 +718,7 @@ public class CharEffectList
 		}
 		else
 		{
-			if (_buffs == null)
+			if (!hasBuffs())
 			{
 				return;
 			}
