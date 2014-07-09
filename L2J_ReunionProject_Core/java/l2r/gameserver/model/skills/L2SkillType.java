@@ -41,7 +41,6 @@ public enum L2SkillType
 	MDAM,
 	MANADAM,
 	CHAIN_HEAL,
-	CPDAMPERCENT,
 	DOT,
 	MDOT,
 	DRAIN(L2SkillDrain.class),

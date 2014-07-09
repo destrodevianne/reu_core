@@ -2291,7 +2291,6 @@ public final class Formulas
 			case FATAL:
 			case DEATHLINK:
 			case MANADAM:
-			case CPDAMPERCENT:
 				final Stats stat = skill.isMagic() ? Stats.VENGEANCE_SKILL_MAGIC_DAMAGE : Stats.VENGEANCE_SKILL_PHYSICAL_DAMAGE;
 				final double venganceChance = target.getStat().calcStat(stat, 0, target, skill);
 				if (venganceChance > Rnd.get(100))

@@ -25,7 +25,6 @@ import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.scripts.handlers.skillhandlers.Blow;
 import l2r.gameserver.scripts.handlers.skillhandlers.ChainHeal;
 import l2r.gameserver.scripts.handlers.skillhandlers.Continuous;
-import l2r.gameserver.scripts.handlers.skillhandlers.CpDamPercent;
 import l2r.gameserver.scripts.handlers.skillhandlers.Detection;
 import l2r.gameserver.scripts.handlers.skillhandlers.Disablers;
 import l2r.gameserver.scripts.handlers.skillhandlers.Dummy;
@@ -58,7 +57,6 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		registerHandler(new Blow());
 		registerHandler(new ChainHeal());
 		registerHandler(new Continuous());
-		registerHandler(new CpDamPercent());
 		registerHandler(new Detection());
 		registerHandler(new Disablers());
 		registerHandler(new Dummy());

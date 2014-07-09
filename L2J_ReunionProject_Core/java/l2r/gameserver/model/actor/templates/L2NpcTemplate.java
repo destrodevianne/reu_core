@@ -435,7 +435,6 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 					case FATAL:
 					case DEATHLINK:
 					case MANADAM:
-					case CPDAMPERCENT:
 						addAtkSkill(skill);
 						addUniversalSkill(skill);
 						addRangeSkill(skill);
