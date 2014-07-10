@@ -335,7 +335,8 @@ public abstract class L2Effect implements IChanceSkillTrigger
 	private final void startEffectTask()
 	{
 		stopEffectTask();
-		final int initialDelay = Math.max((_abnormalTime - _periodFirstTime) * 1000, 5);
+		
+		int initialDelay = Math.max((_abnormalTime - _periodFirstTime) * 1000, 1000);
 		if (_count > 1)
 		{
 			_currentFuture = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new EffectTask(), initialDelay, _abnormalTime * 1000);
