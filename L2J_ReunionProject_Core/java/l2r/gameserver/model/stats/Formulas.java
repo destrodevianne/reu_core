@@ -2031,20 +2031,18 @@ public final class Formulas
 			return false;
 		}
 		
-		double val = actor.getStat().calcStat(Stats.SKILL_MASTERY, 0, null, null);
-		
+		double val = 0.0;
 		if (actor.isPlayer())
 		{
 			if (actor.getActingPlayer().isMageClass())
 			{
-				val *= BaseStats.INT.calcBonus(actor);
+				val = actor.getStat().calcStat(Stats.SKILL_MASTERY, BaseStats.INT.calcBonus(actor), null, null);
 			}
 			else
 			{
-				val *= BaseStats.STR.calcBonus(actor);
+				val = actor.getStat().calcStat(Stats.SKILL_MASTERY, BaseStats.STR.calcBonus(actor), null, null);
 			}
 		}
-		
 		return Rnd.get(100) < val;
 	}
 	

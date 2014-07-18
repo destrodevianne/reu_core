@@ -961,6 +961,7 @@ public final class Config
 	public static boolean DEBUG;
 	public static boolean DEBUG_SKILL_PARSING;
 	public static boolean DEBUG_SKILL_DURATION;
+	public static boolean DEBUG_QUEST_LOST_VARIABLES;
 	public static boolean DEBUG_MULTIPLE_REGISTRATIONS_OF_NPCS;
 	public static boolean DEBUG_SCRIPT_NOTIFIES;
 	public static boolean PACKET_HANDLER_DEBUG;
@@ -2420,7 +2421,7 @@ public final class Config
 			ALT_OLY_CPERIOD = Olympiad.getLong("AltOlyCPeriod", 21600000);
 			ALT_OLY_BATTLE = Olympiad.getLong("AltOlyBattle", 300000);
 			ALT_OLY_WPERIOD = Olympiad.getLong("AltOlyWPeriod", 604800000);
-			ALT_OLY_VPERIOD = Olympiad.getLong("AltOlyVPeriod", 86400000);
+			ALT_OLY_VPERIOD = Olympiad.getLong("AltOlyVPeriod", 43200000);
 			ALT_OLY_START_POINTS = Olympiad.getInt("AltOlyStartPoints", 10);
 			ALT_OLY_WEEKLY_POINTS = Olympiad.getInt("AltOlyWeeklyPoints", 10);
 			ALT_OLY_CLASSED = Olympiad.getInt("AltOlyClassedParticipants", 11);
@@ -2481,6 +2482,7 @@ public final class Config
 			DEBUG = Debug.getBoolean("Debug", false);
 			DEBUG_SKILL_PARSING = Debug.getBoolean("DebugSkillParsing", false);
 			DEBUG_SKILL_DURATION = Debug.getBoolean("DebugSkillDuration", false);
+			DEBUG_QUEST_LOST_VARIABLES = Debug.getBoolean("DebugQuestLostVariables", false);
 			DEBUG_MULTIPLE_REGISTRATIONS_OF_NPCS = Debug.getBoolean("DebugMultipleRegistrationsOfNpcs", false);
 			DEBUG_SCRIPT_NOTIFIES = Debug.getBoolean("DebugScriptsNotifies", false);
 			PACKET_HANDLER_DEBUG = Debug.getBoolean("PacketHandlerDebug", false);

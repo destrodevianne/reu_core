@@ -6804,12 +6804,12 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 						
 						if (_chanceSkills != null)
 						{
-							_chanceSkills.onSkillHit(target, skill, false);
+							_chanceSkills.onSkillHit(target, skill, false, 0);
 						}
 						
 						if (target.getChanceSkills() != null)
 						{
-							target.getChanceSkills().onSkillHit(this, skill, true);
+							target.getChanceSkills().onSkillHit(this, skill, true, 0);
 						}
 						
 						if (_triggerSkills != null)
@@ -6940,33 +6940,33 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 							{
 								quest.notifySkillSee(npcMob, player, skill, targets, isSummon());
 							}
-						}
-						
-						// On Skill See logic
-						if (npcMob.isAttackable())
-						{
-							final L2Attackable attackable = (L2Attackable) npcMob;
 							
-							int skillEffectPoint = skill.getAggroPoints();
-							
-							if (player.hasSummon())
+							// On Skill See logic
+							if (npcMob.isAttackable())
 							{
-								if ((targets.length == 1) && Util.contains(targets, player.getSummon()))
-								{
-									skillEffectPoint = 0;
-								}
+								final L2Attackable attackable = (L2Attackable) npcMob;
 								
-								if (skillEffectPoint > 0)
+								int skillEffectPoint = skill.getAggroPoints();
+								
+								if (player.hasSummon())
 								{
-									if (attackable.hasAI() && (attackable.getAI().getIntention() == AI_INTENTION_ATTACK))
+									if ((targets.length == 1) && Util.contains(targets, player.getSummon()))
 									{
-										L2Object npcTarget = attackable.getTarget();
-										for (L2Object skillTarget : targets)
+										skillEffectPoint = 0;
+									}
+									
+									if (skillEffectPoint > 0)
+									{
+										if (attackable.hasAI() && (attackable.getAI().getIntention() == AI_INTENTION_ATTACK))
 										{
-											if ((npcTarget == skillTarget) || (npcMob == skillTarget))
+											L2Object npcTarget = attackable.getTarget();
+											for (L2Object skillTarget : targets)
 											{
-												L2Character originalCaster = isSummon() ? getSummon() : player;
-												attackable.addDamageHate(originalCaster, 0, (skillEffectPoint * 150) / (attackable.getLevel() + 7));
+												if ((npcTarget == skillTarget) || (npcMob == skillTarget))
+												{
+													L2Character originalCaster = isSummon() ? getSummon() : player;
+													attackable.addDamageHate(originalCaster, 0, (skillEffectPoint * 150) / (attackable.getLevel() + 7));
+												}
 											}
 										}
 									}

@@ -823,7 +823,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 									
 									// By default, when a faction member calls for help, attack the caller's attacker.
 									// Notify the AI with EVT_AGGRESSION
-									npc.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, originalAttackTarget, 1);
+									called.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, originalAttackTarget, 1);
 									
 									List<Quest> quests = called.getTemplate().getEventQuests(QuestEventType.ON_FACTION_CALL);
 									if ((quests != null) && !quests.isEmpty())

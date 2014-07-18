@@ -362,6 +362,7 @@ public final class L2PcInstance extends L2Playable
 	private static final String RESTORE_SKILLS_FOR_CHAR = "SELECT skill_id,skill_level FROM character_skills WHERE charId=? AND class_index=?";
 	private static final String ADD_NEW_SKILL = "INSERT INTO character_skills (charId,skill_id,skill_level,class_index) VALUES (?,?,?,?)";
 	private static final String UPDATE_CHARACTER_SKILL_LEVEL = "UPDATE character_skills SET skill_level=? WHERE skill_id=? AND charId=? AND class_index=?";
+	private static final String ADD_NEW_SKILLS = "REPLACE INTO character_skills (charId,skill_id,skill_level,class_index) VALUES (?,?,?,?)";
 	private static final String DELETE_SKILL_FROM_CHAR = "DELETE FROM character_skills WHERE skill_id=? AND charId=? AND class_index=?";
 	private static final String DELETE_CHAR_SKILLS = "DELETE FROM character_skills WHERE charId=? AND class_index=?";
 	
@@ -400,6 +401,11 @@ public final class L2PcInstance extends L2Playable
 	
 	// Character Shortcut SQL String Definitions:
 	private static final String DELETE_CHAR_SHORTCUTS = "DELETE FROM character_shortcuts WHERE charId=? AND class_index=?";
+	
+	// Character Recipe List Save
+	private static final String DELETE_CHAR_RECIPE_SHOP = "DELETE FROM character_recipeshoplist WHERE charId=?";
+	private static final String INSERT_CHAR_RECIPE_SHOP = "REPLACE INTO character_recipeshoplist (`charId`, `recipeId`, `price`, `index`) VALUES (?, ?, ?, ?)";
+	private static final String RESTORE_CHAR_RECIPE_SHOP = "SELECT * FROM character_recipeshoplist WHERE charId=? ORDER BY `index`";
 	
 	// Character Transformation SQL String Definitions:
 	private static final String SELECT_CHAR_TRANSFORM = "SELECT transform_id FROM characters WHERE charId=?";
@@ -2979,6 +2985,7 @@ public final class L2PcInstance extends L2Playable
 		int skillCounter = 0;
 		// Get available skills
 		Collection<L2Skill> skills = SkillTreesData.getInstance().getAllAvailableSkills(this, getClassId(), includedByFs, includeAutoGet);
+		List<L2Skill> skillsForStore = new ArrayList<>();
 		for (L2Skill sk : skills)
 		{
 			if (getKnownSkill(sk.getId()) == sk)
@@ -3002,9 +3009,10 @@ public final class L2PcInstance extends L2Playable
 					sk.getEffects(this, this);
 				}
 			}
-			
-			addSkill(sk, true);
+			addSkill(sk, false);
+			skillsForStore.add(sk);
 		}
+		storeSkills(skillsForStore, -1);
 		
 		if (Config.AUTO_LEARN_SKILLS && (skillCounter > 0))
 		{
@@ -8567,13 +8575,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	private void storeSkill(L2Skill newSkill, L2Skill oldSkill, int newClassIndex)
 	{
-		int classIndex = _classIndex;
-		
-		if (newClassIndex > -1)
-		{
-			classIndex = newClassIndex;
-		}
-		
+		final int classIndex = (newClassIndex > -1) ? newClassIndex : _classIndex;
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			if ((oldSkill != null) && (newSkill != null))
@@ -8604,6 +8606,41 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 		catch (Exception e)
+		{
+			// _log.warn("Error could not store char skills: " + e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Adds or updates player's skills in the database.
+	 * @param newSkills the list of skills to store
+	 * @param newClassIndex if newClassIndex > -1, the skills will be stored for that class index, not the current one
+	 */
+	private void storeSkills(List<L2Skill> newSkills, int newClassIndex)
+	{
+		if (newSkills.isEmpty())
+		{
+			return;
+		}
+		
+		final int classIndex = (newClassIndex > -1) ? newClassIndex : _classIndex;
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement ps = con.prepareStatement(ADD_NEW_SKILLS))
+		{
+			con.setAutoCommit(false);
+			for (final L2Skill addSkill : newSkills)
+			{
+				
+				ps.setInt(1, getObjectId());
+				ps.setInt(2, addSkill.getId());
+				ps.setInt(3, addSkill.getLevel());
+				ps.setInt(4, classIndex);
+				ps.addBatch();
+			}
+			ps.executeBatch();
+			con.commit();
+		}
+		catch (SQLException e)
 		{
 			// _log.warn("Error could not store char skills: " + e.getMessage(), e);
 		}
@@ -14732,24 +14769,26 @@ public final class L2PcInstance extends L2Playable
 		{
 			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 			{
-				try (PreparedStatement st = con.prepareStatement("DELETE FROM character_recipeshoplist WHERE charId=?"))
+				try (PreparedStatement st = con.prepareStatement(DELETE_CHAR_RECIPE_SHOP))
 				{
 					st.setInt(1, getObjectId());
 					st.execute();
 				}
 				
-				try (PreparedStatement st = con.prepareStatement("INSERT INTO character_recipeshoplist (`charId`, `recipeId`, `price`, `index`) VALUES (?, ?, ?, ?)"))
+				try (PreparedStatement st = con.prepareStatement(INSERT_CHAR_RECIPE_SHOP))
 				{
-					int i = 1;
+					AtomicInteger slot = new AtomicInteger(1);
+					con.setAutoCommit(false);
 					for (L2ManufactureItem item : _manufactureItems.values())
 					{
 						st.setInt(1, getObjectId());
 						st.setInt(2, item.getRecipeId());
 						st.setLong(3, item.getCost());
-						st.setInt(4, i++);
+						st.setInt(4, slot.getAndIncrement());
 						st.addBatch();
 					}
 					st.executeBatch();
+					con.commit();
 				}
 			}
 			catch (Exception e)
@@ -14767,7 +14806,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement("SELECT * FROM character_recipeshoplist WHERE charId=? ORDER BY `index`"))
+			PreparedStatement statement = con.prepareStatement(RESTORE_CHAR_RECIPE_SHOP))
 		{
 			statement.setInt(1, getObjectId());
 			try (ResultSet rset = statement.executeQuery())
@@ -16088,13 +16127,8 @@ public final class L2PcInstance extends L2Playable
 	
 	public void pauseAdventTask()
 	{
-		pauseAdventTask(false);
-	}
-	
-	public void pauseAdventTask(boolean paused)
-	{
 		stopAdventBonusTask();
-		sendPacket(new ExNevitAdventTimeChange(getAdventTime(), paused));
+		sendPacket(new ExNevitAdventTimeChange(getAdventTime(), false));
 	}
 	
 	public void stopAdventBlessingTask()
