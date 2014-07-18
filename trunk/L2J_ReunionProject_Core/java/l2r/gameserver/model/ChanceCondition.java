@@ -150,7 +150,7 @@ public final class ChanceCondition
 		return skillIds;
 	}
 	
-	public boolean trigger(int event, int damage, byte element, boolean playable, L2Skill skill)
+	public boolean trigger(int event, double damage, byte element, boolean playable, L2Skill skill)
 	{
 		if (_pvpOnly && !playable)
 		{

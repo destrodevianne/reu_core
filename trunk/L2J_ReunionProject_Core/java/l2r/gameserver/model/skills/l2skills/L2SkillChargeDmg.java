@@ -160,6 +160,17 @@ public class L2SkillChargeDmg extends L2Skill
 				
 				target.reduceCurrentHp(finalDamage, caster, this);
 				
+				// Maybe launch chance skills on us
+				if (caster.getChanceSkills() != null)
+				{
+					caster.getChanceSkills().onSkillHit(target, this, false, finalDamage);
+				}
+				// Maybe launch chance skills on target
+				if (target.getChanceSkills() != null)
+				{
+					target.getChanceSkills().onSkillHit(caster, this, true, finalDamage);
+				}
+				
 				// vengeance reflected damage
 				if ((reflect & Formulas.SKILL_REFLECT_VENGEANCE) != 0)
 				{

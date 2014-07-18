@@ -172,6 +172,17 @@ public class L2SkillDrain extends L2Skill
 				}
 				
 				target.reduceCurrentHp(damage, activeChar, this);
+				
+				// Maybe launch chance skills on us
+				if (activeChar.getChanceSkills() != null)
+				{
+					activeChar.getChanceSkills().onSkillHit(target, this, false, damage);
+				}
+				// Maybe launch chance skills on target
+				if (target.getChanceSkills() != null)
+				{
+					target.getChanceSkills().onSkillHit(activeChar, this, true, damage);
+				}
 			}
 			
 			// Check to see if we should do the decay right after the cast

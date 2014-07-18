@@ -1503,7 +1503,11 @@ public class Quest extends ManagedScript implements IIdentifiable
 						QuestState qs = player.getQuestState(questId);
 						if (qs == null)
 						{
-							_log.info("Lost variable " + var + " in quest " + questId + " for player " + player.getName());
+							if (Config.DEBUG_QUEST_LOST_VARIABLES)
+							{
+								_log.info("Lost variable " + var + " in quest " + questId + " for player " + player.getName());
+							}
+							
 							if (Config.AUTODELETE_INVALID_QUEST_DATA)
 							{
 								invalidQuestDataVar.setInt(1, player.getObjectId());

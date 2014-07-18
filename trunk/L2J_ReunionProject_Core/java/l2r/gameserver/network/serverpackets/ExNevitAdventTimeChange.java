@@ -19,36 +19,25 @@
 package l2r.gameserver.network.serverpackets;
 
 /**
- * @author mochitto
+ * @author godfather
  */
 public class ExNevitAdventTimeChange extends L2GameServerPacket
 {
-	private final boolean _paused;
+	private final int _active;
 	private final int _time;
 	
-	public ExNevitAdventTimeChange(int time)
-	{
-		_time = time > 240000 ? 240000 : time;
-		_paused = _time < 1;
-	}
-	
 	// Add NevitAdvent by pmq Start
-	public ExNevitAdventTimeChange(int time, boolean paused)
+	public ExNevitAdventTimeChange(int time, boolean active)
 	{
-		_time = time;
-		_paused = paused;
+		_time = time > 14400 ? 14400 : time;
+		_active = active ? 1 : 0;
 	}
-	
-	// Add NevitAdvent by pmq End
 	
 	@Override
 	protected void writeImpl()
 	{
-		writeC(0xFE);
 		writeH(0xE1);
-		// state 0 - pause 1 - started
-		writeC(_paused ? 0x01 : 0x00);
-		// left time in ms max is 16000 its 4m and state is automatically changed to quit
+		writeC(_active);
 		writeD(_time);
 	}
 }
