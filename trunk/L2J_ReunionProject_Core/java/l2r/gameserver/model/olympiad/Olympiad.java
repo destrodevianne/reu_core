@@ -1096,7 +1096,7 @@ public class Olympiad
 		}
 		
 		final int rank = _noblesRank.get(objId);
-		int points = (player.isHero() ? Config.ALT_OLY_HERO_POINTS : 0);
+		int points = (player.isHero() || Hero.getInstance().isInactiveHero(objId) ? Config.ALT_OLY_HERO_POINTS : 0);
 		switch (rank)
 		{
 			case 1:
