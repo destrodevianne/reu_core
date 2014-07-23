@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import javolution.util.FastList;
 import l2r.Config;
-import l2r.gameserver.datatables.xml.MultiSell;
+import l2r.gameserver.datatables.xml.MultisellData;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.L2Augmentation;
 import l2r.gameserver.model.actor.L2Npc;
@@ -215,7 +215,7 @@ public class MultiSellChoose extends L2GameClientPacket
 					}
 					if (e.getId() < 0)
 					{
-						if (!MultiSell.checkSpecialIngredient(e.getId(), e.getItemCount() * _amount, player))
+						if (!MultisellData.hasSpecialIngredient(e.getId(), e.getItemCount() * _amount, player))
 						{
 							return;
 						}
@@ -246,7 +246,7 @@ public class MultiSellChoose extends L2GameClientPacket
 					{
 						if (e.getId() < 0)
 						{
-							if (!MultiSell.getSpecialIngredient(e.getId(), e.getItemCount() * _amount, player))
+							if (!MultisellData.takeSpecialIngredient(e.getId(), e.getItemCount() * _amount, player))
 							{
 								return;
 							}
@@ -264,7 +264,7 @@ public class MultiSellChoose extends L2GameClientPacket
 							// if (itemToTake.isEquipped())
 							// {
 							// this is a cheat, transaction will be aborted and if any items already taken will not be returned back to inventory!
-							// _log.error("Character: " + player.getName() + " is trying to cheat in multisell, exchanging equipped item, merchatnt id:" + merchant.getId());
+							// _log.error("Character: " + player.getName() + " is trying to cheat in multisell, exchanging equipped item, merchatnt id:" + merchant.getNpcId());
 							// player.setMultiSell(null);
 							// return;
 							// }
@@ -386,7 +386,7 @@ public class MultiSellChoose extends L2GameClientPacket
 					{
 						if (e.getId() < 0)
 						{
-							MultiSell.addSpecialProduct(e.getId(), e.getItemCount() * _amount, player);
+							MultisellData.giveSpecialProduct(e.getId(), e.getItemCount() * _amount, player);
 						}
 						else
 						{

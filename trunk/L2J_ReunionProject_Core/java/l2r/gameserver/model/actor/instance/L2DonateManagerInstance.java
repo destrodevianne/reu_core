@@ -6,7 +6,7 @@ import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.datatables.sql.ClanTable;
-import l2r.gameserver.datatables.xml.MultiSell;
+import l2r.gameserver.datatables.xml.MultisellData;
 import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.enums.InstanceType;
@@ -287,7 +287,7 @@ public class L2DonateManagerInstance extends L2Npc
 				if (DonateManagerConfigs.MULTISELL_LIST.contains(multi))
 				{
 					player.setIsUsingAioMultisell(true);
-					MultiSell.getInstance().separateAndSend(multi, player, null, false);
+					MultisellData.getInstance().separateAndSend(multi, player, null, false);
 				}
 				else
 				{

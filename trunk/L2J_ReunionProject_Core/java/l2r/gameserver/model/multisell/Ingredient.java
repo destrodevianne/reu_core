@@ -19,6 +19,7 @@
 package l2r.gameserver.model.multisell;
 
 import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
@@ -30,12 +31,17 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 public class Ingredient
 {
 	private int _itemId;
-	private int _EnchantmentLevel;
+	private final int _EnchantmentLevel;
 	private long _itemCount;
 	private boolean _isTaxIngredient;
 	private boolean _maintainIngredient;
 	private L2Item _template = null;
 	private ItemInfo _itemInfo = null;
+	
+	public Ingredient(StatsSet set)
+	{
+		this(set.getInteger("id"), set.getLong("count"), set.getInteger("enchantmentLevel", 0), set.getBool("isTaxIngredient", false), set.getBool("maintainIngredient", false));
+	}
 	
 	// public Ingredient(int itemId, long itemCount, boolean isTaxIngredient, boolean maintainIngredient)
 	public Ingredient(int itemId, long itemCount, int EnchantmentLevel, boolean isTaxIngredient, boolean maintainIngredient)

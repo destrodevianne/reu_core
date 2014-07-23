@@ -28,7 +28,7 @@ import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.datatables.xml.ClassListData;
 import l2r.gameserver.datatables.xml.HennaData;
 import l2r.gameserver.datatables.xml.ItemData;
-import l2r.gameserver.datatables.xml.MultiSell;
+import l2r.gameserver.datatables.xml.MultisellData;
 import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.enums.InstanceType;
@@ -1271,7 +1271,7 @@ public final class L2AioNpcInstance extends L2Npc
 			{
 				int multi = Integer.valueOf(subCommand[1]);
 				player.setIsUsingAioMultisell(true);
-				MultiSell.getInstance().separateAndSend(multi, player, null, false);
+				MultisellData.getInstance().separateAndSend(multi, player, null, false);
 			}
 			catch (Exception e)
 			{
