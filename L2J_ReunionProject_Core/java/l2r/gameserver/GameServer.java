@@ -70,7 +70,7 @@ import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.datatables.xml.KarmaData;
 import l2r.gameserver.datatables.xml.ManorData;
 import l2r.gameserver.datatables.xml.MerchantPriceConfigData;
-import l2r.gameserver.datatables.xml.MultiSell;
+import l2r.gameserver.datatables.xml.MultisellData;
 import l2r.gameserver.datatables.xml.OptionsData;
 import l2r.gameserver.datatables.xml.PetData;
 import l2r.gameserver.datatables.xml.ProductItemData;
@@ -237,7 +237,7 @@ public class GameServer
 		EnchantItemHPBonusData.getInstance();
 		MerchantPriceConfigData.getInstance().loadInstances();
 		BuyListData.getInstance();
-		MultiSell.getInstance();
+		MultisellData.getInstance();
 		RecipeData.getInstance();
 		ArmorSetsData.getInstance();
 		FishData.getInstance();

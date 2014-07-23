@@ -18,16 +18,13 @@
  */
 package l2r.gameserver.datatables.xml;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import javolution.util.FastList;
 import l2r.Config;
+import l2r.gameserver.engines.DocumentParser;
+import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.multisell.Entry;
@@ -40,18 +37,15 @@ import l2r.gameserver.network.serverpackets.ExPCCafePointInfo;
 import l2r.gameserver.network.serverpackets.MultiSellList;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
-import l2r.util.file.filter.XMLFilter;
+import l2r.gameserver.util.Util;
+import l2r.util.file.filter.NumericNameFilter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class MultiSell
+public class MultisellData extends DocumentParser
 {
-	private static final Logger _log = LoggerFactory.getLogger(MultiSell.class);
-	
 	public static final int PAGE_SIZE = 40;
 	
 	public static final int PC_BANG_POINTS = -100;
@@ -60,15 +54,145 @@ public class MultiSell
 	
 	private final Map<Integer, ListContainer> _entries = new HashMap<>();
 	
-	protected MultiSell()
+	protected MultisellData()
 	{
+		setCurrentFileFilter(new NumericNameFilter());
 		load();
 	}
 	
-	public final void reload()
+	@Override
+	public final void load()
 	{
 		_entries.clear();
-		load();
+		parseDatapackDirectory("data/multisell", false);
+		if (Config.CUSTOM_MULTISELL_LOAD)
+		{
+			parseDatapackDirectory("data/multisell/custom", false);
+		}
+		
+		verify();
+		_log.info(getClass().getSimpleName() + ": Loaded " + _entries.size() + " multisell lists.");
+	}
+	
+	@Override
+	protected final void parseDocument()
+	{
+		try
+		{
+			int id = Integer.parseInt(getCurrentFile().getName().replaceAll(".xml", ""));
+			int entryId = 1;
+			Node att;
+			final ListContainer list = new ListContainer(id);
+			
+			for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+			{
+				if ("list".equalsIgnoreCase(n.getNodeName()))
+				{
+					att = n.getAttributes().getNamedItem("applyTaxes");
+					list.setApplyTaxes((att != null) && Boolean.parseBoolean(att.getNodeValue()));
+					
+					att = n.getAttributes().getNamedItem("useRate");
+					if (att != null)
+					{
+						try
+						{
+							
+							list.setUseRate(Double.valueOf(att.getNodeValue()));
+							if (list.getUseRate() <= 1e-6)
+							{
+								throw new NumberFormatException("The value cannot be 0"); // threat 0 as invalid value
+							}
+						}
+						catch (NumberFormatException e)
+						{
+							
+							try
+							{
+								list.setUseRate(Config.class.getField(att.getNodeValue()).getDouble(Config.class));
+							}
+							catch (Exception e1)
+							{
+								_log.warn(e1.getMessage() + getCurrentDocument().getLocalName());
+								list.setUseRate(1.0);
+							}
+							
+						}
+						catch (DOMException e)
+						{
+							_log.warn(e.getMessage() + getCurrentDocument().getLocalName());
+						}
+					}
+					
+					att = n.getAttributes().getNamedItem("maintainEnchantment");
+					list.setMaintainEnchantment((att != null) && Boolean.parseBoolean(att.getNodeValue()));
+					
+					for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+					{
+						if ("item".equalsIgnoreCase(d.getNodeName()))
+						{
+							Entry e = parseEntry(d, entryId++, list);
+							list.getEntries().add(e);
+						}
+						else if ("npcs".equalsIgnoreCase(d.getNodeName()))
+						{
+							for (Node b = d.getFirstChild(); b != null; b = b.getNextSibling())
+							{
+								if ("npc".equalsIgnoreCase(b.getNodeName()))
+								{
+									if (Util.isDigit(b.getTextContent()))
+									{
+										list.allowNpc(Integer.parseInt(b.getTextContent()));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			_entries.put(id, list);
+		}
+		catch (Exception e)
+		{
+			_log.error(getClass().getSimpleName() + ": Error in file " + getCurrentFile(), e);
+		}
+	}
+	
+	private final Entry parseEntry(Node n, int entryId, ListContainer list)
+	{
+		Node first = n.getFirstChild();
+		final Entry entry = new Entry(entryId);
+		
+		NamedNodeMap attrs;
+		Node att;
+		StatsSet set;
+		
+		for (n = first; n != null; n = n.getNextSibling())
+		{
+			if ("ingredient".equalsIgnoreCase(n.getNodeName()))
+			{
+				attrs = n.getAttributes();
+				set = new StatsSet();
+				for (int i = 0; i < attrs.getLength(); i++)
+				{
+					att = attrs.item(i);
+					set.set(att.getNodeName(), att.getNodeValue());
+				}
+				entry.addIngredient(new Ingredient(set));
+			}
+			else if ("production".equalsIgnoreCase(n.getNodeName()))
+			{
+				attrs = n.getAttributes();
+				set = new StatsSet();
+				for (int i = 0; i < attrs.getLength(); i++)
+				{
+					att = attrs.item(i);
+					set.set(att.getNodeName(), att.getNodeValue());
+				}
+				entry.addProduct(new Ingredient(set));
+			}
+		}
+		
+		return entry;
 	}
 	
 	/**
@@ -116,6 +240,12 @@ public class MultiSell
 			return;
 		}
 		
+		if (((npc != null) && !template.isNpcAllowed(npc.getId())) || ((npc == null) && template.isNpcOnly()))
+		{
+			_log.warn(getClass().getSimpleName() + ": player " + player + " attempted to open multisell " + listId + " from npc " + npc + " which is not allowed!");
+			return;
+		}
+		
 		final PreparedListContainer list = new PreparedListContainer(template, inventoryOnly, player, npc);
 		
 		// Pass through this only when multipliers are different from 1
@@ -147,7 +277,7 @@ public class MultiSell
 		separateAndSend(listId, player, npc, inventoryOnly, 1, 1);
 	}
 	
-	public static final boolean checkSpecialIngredient(int id, long amount, L2PcInstance player)
+	public static final boolean hasSpecialIngredient(int id, long amount, L2PcInstance player)
 	{
 		switch (id)
 		{
@@ -186,7 +316,7 @@ public class MultiSell
 		return false;
 	}
 	
-	public static final boolean getSpecialIngredient(int id, long amount, L2PcInstance player)
+	public static final boolean takeSpecialIngredient(int id, long amount, L2PcInstance player)
 	{
 		switch (id)
 		{
@@ -213,7 +343,7 @@ public class MultiSell
 		return false;
 	}
 	
-	public static final void addSpecialProduct(int id, long amount, L2PcInstance player)
+	public static final void giveSpecialProduct(int id, long amount, L2PcInstance player)
 	{
 		switch (id)
 		{
@@ -225,204 +355,6 @@ public class MultiSell
 				player.sendPacket(new UserInfo(player));
 				player.sendPacket(new ExBrExtraUserInfo(player));
 				break;
-		}
-	}
-	
-	private final void load()
-	{
-		Document doc = null;
-		int id = 0;
-		List<File> files = new FastList<>();
-		hashFiles("data/multisell", files);
-		if (Config.CUSTOM_MULTISELL_LOAD)
-		{
-			hashFiles("data/multisell/custom", files);
-		}
-		
-		for (File f : files)
-		{
-			try
-			{
-				id = Integer.parseInt(f.getName().replaceAll(".xml", ""));
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				factory.setValidating(false);
-				factory.setIgnoringComments(true);
-				doc = factory.newDocumentBuilder().parse(f);
-			}
-			catch (Exception e)
-			{
-				_log.error(getClass().getSimpleName() + ": Error loading file " + f, e);
-				continue;
-			}
-			
-			try
-			{
-				ListContainer list = parseDocument(doc);
-				list.setListId(id);
-				_entries.put(id, list);
-			}
-			catch (Exception e)
-			{
-				_log.error(getClass().getSimpleName() + ": Error in file " + f, e);
-			}
-		}
-		verify();
-		_log.info(getClass().getSimpleName() + ": Loaded " + _entries.size() + " lists.");
-	}
-	
-	private final ListContainer parseDocument(Document doc)
-	{
-		int entryId = 1;
-		Node attribute;
-		ListContainer list = new ListContainer();
-		
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				attribute = n.getAttributes().getNamedItem("applyTaxes");
-				if (attribute == null)
-				{
-					list.setApplyTaxes(false);
-				}
-				else
-				{
-					list.setApplyTaxes(Boolean.parseBoolean(attribute.getNodeValue()));
-				}
-				
-				attribute = n.getAttributes().getNamedItem("useRate");
-				if (attribute != null)
-				{
-					try
-					{
-						
-						list.setUseRate(Double.valueOf(attribute.getNodeValue()));
-						if (list.getUseRate() <= 1e-6)
-						{
-							throw new NumberFormatException("The value cannot be 0"); // threat 0 as invalid value
-						}
-					}
-					catch (NumberFormatException e)
-					{
-						
-						try
-						{
-							list.setUseRate(Config.class.getField(attribute.getNodeValue()).getDouble(Config.class));
-						}
-						catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException | DOMException e1)
-						{
-							_log.warn(e.getMessage() + doc.getLocalName());
-							list.setUseRate(1.0);
-						}
-						
-					}
-					catch (DOMException e)
-					{
-						_log.warn(e.getMessage() + doc.getLocalName());
-					}
-				}
-				
-				attribute = n.getAttributes().getNamedItem("maintainEnchantment");
-				if (attribute == null)
-				{
-					list.setMaintainEnchantment(false);
-				}
-				else
-				{
-					list.setMaintainEnchantment(Boolean.parseBoolean(attribute.getNodeValue()));
-				}
-				
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("item".equalsIgnoreCase(d.getNodeName()))
-					{
-						Entry e = parseEntry(d, entryId++, list);
-						list.getEntries().add(e);
-					}
-				}
-			}
-			else if ("item".equalsIgnoreCase(n.getNodeName()))
-			{
-				Entry e = parseEntry(n, entryId++, list);
-				list.getEntries().add(e);
-			}
-		}
-		
-		return list;
-	}
-	
-	private final Entry parseEntry(Node n, int entryId, ListContainer list)
-	{
-		Node attribute;
-		Node first = n.getFirstChild();
-		final Entry entry = new Entry(entryId);
-		
-		for (n = first; n != null; n = n.getNextSibling())
-		{
-			if ("ingredient".equalsIgnoreCase(n.getNodeName()))
-			{
-				int enchantmentLevel = 0;
-				if (n.getAttributes().getNamedItem("enchantmentLevel") != null)
-				{
-					enchantmentLevel = Integer.parseInt(n.getAttributes().getNamedItem("enchantmentLevel").getNodeValue());
-				}
-				int id = Integer.parseInt(n.getAttributes().getNamedItem("id").getNodeValue());
-				long count = Long.parseLong(n.getAttributes().getNamedItem("count").getNodeValue());
-				boolean isTaxIngredient, mantainIngredient;
-				
-				attribute = n.getAttributes().getNamedItem("isTaxIngredient");
-				if (attribute != null)
-				{
-					isTaxIngredient = Boolean.parseBoolean(attribute.getNodeValue());
-				}
-				else
-				{
-					isTaxIngredient = false;
-				}
-				
-				attribute = n.getAttributes().getNamedItem("maintainIngredient");
-				if (attribute != null)
-				{
-					mantainIngredient = Boolean.parseBoolean(attribute.getNodeValue());
-				}
-				else
-				{
-					mantainIngredient = false;
-				}
-				
-				entry.addIngredient(new Ingredient(id, count, enchantmentLevel, isTaxIngredient, mantainIngredient));
-			}
-			else if ("production".equalsIgnoreCase(n.getNodeName()))
-			{
-				int enchantmentLevel = 0;
-				if (n.getAttributes().getNamedItem("enchantmentLevel") != null)
-				{
-					enchantmentLevel = Integer.parseInt(n.getAttributes().getNamedItem("enchantmentLevel").getNodeValue());
-				}
-				
-				int id = Integer.parseInt(n.getAttributes().getNamedItem("id").getNodeValue());
-				long count = (long) (Long.parseLong(n.getAttributes().getNamedItem("count").getNodeValue()) * list.getUseRate());
-				
-				entry.addProduct(new Ingredient(id, count, enchantmentLevel, false, false));
-			}
-		}
-		
-		return entry;
-	}
-	
-	private final void hashFiles(String dirname, List<File> hash)
-	{
-		File dir = new File(Config.DATAPACK_ROOT, dirname);
-		if (!dir.exists())
-		{
-			_log.warn(getClass().getSimpleName() + ": Dir " + dir.getAbsolutePath() + " not exists");
-			return;
-		}
-		
-		File[] files = dir.listFiles(new XMLFilter());
-		for (File f : files)
-		{
-			hash.add(f);
 		}
 	}
 	
@@ -463,22 +395,17 @@ public class MultiSell
 			case FAME:
 				return true;
 			default:
-				if (ing.getTemplate() != null)
-				{
-					return true;
-				}
+				return ing.getTemplate() != null;
 		}
-		
-		return false;
 	}
 	
-	public static MultiSell getInstance()
+	public static MultisellData getInstance()
 	{
 		return SingletonHolder._instance;
 	}
 	
 	private static class SingletonHolder
 	{
-		protected static final MultiSell _instance = new MultiSell();
+		protected static final MultisellData _instance = new MultisellData();
 	}
 }
