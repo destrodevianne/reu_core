@@ -3409,6 +3409,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		}
+		setTempStunned(true);
 		updateAbnormalEffect();
 	}
 	
@@ -3690,6 +3691,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		{
 			getAI().notifyEvent(CtrlEvent.EVT_THINK);
 		}
+		setTempStunned(false);
 		updateAbnormalEffect();
 	}
 	
@@ -7911,5 +7913,19 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public boolean isPremium()
 	{
 		return _premiumService;
+	}
+	
+	// Just to avoid multiple stun effects
+	// TODO: temp fix
+	private boolean _isTempStunned = false;
+	
+	public boolean isTempStunned()
+	{
+		return _isTempStunned;
+	}
+	
+	public void setTempStunned(boolean stunned)
+	{
+		_isTempStunned = stunned;
 	}
 }
