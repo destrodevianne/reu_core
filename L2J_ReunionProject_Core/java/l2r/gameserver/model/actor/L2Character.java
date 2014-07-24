@@ -3259,21 +3259,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		_effects.queueEffect(effect, true);
 	}
 	
-	// Add NevitAdvent by pmq Start
-	public final void startSpecialEffect(AbnormalEffect mask)
-	{
-		_SpecialEffects |= mask.getMask();
-		updateAbnormalEffect();
-	}
-	
-	public final void stopSpecialEffect(AbnormalEffect mask)
-	{
-		_SpecialEffects &= ~mask.getMask();
-		updateAbnormalEffect();
-	}
-	
-	// Add NevitAdvent by pmq End
-	
 	/**
 	 * Active abnormal effects flags in the binary mask and send Server->Client UserInfo/CharInfo packet.
 	 * @param mask

@@ -16197,7 +16197,7 @@ public final class L2PcInstance extends L2Playable
 				if (!isAdventBlessingActive())
 				{
 					// Abnormal
-					startSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING);
+					startSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING.getMask());
 					// Start 3 min Advent Blessing
 					_adventBlessingTask = ThreadPoolManager.getInstance().scheduleGeneral(new AdventBlessingEndTask(this), 180000);
 					// Display Sysmsg
