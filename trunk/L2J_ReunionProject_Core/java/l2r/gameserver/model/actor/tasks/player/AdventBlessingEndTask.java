@@ -42,7 +42,7 @@ public class AdventBlessingEndTask implements Runnable
 	{
 		if (_player != null)
 		{
-			_player.stopSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING);
+			_player.stopSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING.getMask());
 			_player.sendPacket(new ExNevitAdventEffect(0));
 			_player.sendPacket(new ExNevitAdventPointInfoPacket(_player));
 			_player.sendPacket(SystemMessageId.NEVITS_ADVENT_BLESSING_HAS_ENDED);
