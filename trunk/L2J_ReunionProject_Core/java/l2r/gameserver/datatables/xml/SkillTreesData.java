@@ -512,11 +512,6 @@ public final class SkillTreesData extends DocumentParser
 		
 		for (L2SkillLearn skill : skills.values())
 		{
-			if (((skill.getSkillId() == L2Skill.SKILL_DIVINE_INSPIRATION) && !Config.AUTO_LEARN_DIVINE_INSPIRATION && !player.isGM()))
-			{
-				continue;
-			}
-			
 			if (((includeAutoGet && skill.isAutoGet()) || skill.isLearnedByNpc() || (includeByFs && skill.isLearnedByFS())) && (player.getLevel() >= skill.getGetLevel()))
 			{
 				final L2Skill oldSkill = holder.getKnownSkill(skill.getSkillId());
@@ -539,13 +534,19 @@ public final class SkillTreesData extends DocumentParser
 	public Collection<L2Skill> getAllAvailableSkills(L2PcInstance player, ClassId classId, boolean includeByFs, boolean includeAutoGet)
 	{
 		// Get available skills
+		int unLearnable = 0;
 		PlayerSkillHolder holder = new PlayerSkillHolder(player);
 		List<L2SkillLearn> learnable = getAvailableSkills(player, classId, includeByFs, includeAutoGet, holder);
-		while (learnable.size() > 0)
+		while (learnable.size() > unLearnable)
 		{
 			for (L2SkillLearn s : learnable)
 			{
 				L2Skill sk = SkillData.getInstance().getInfo(s.getSkillId(), s.getSkillLevel());
+				if ((sk == null) || ((sk.getId() == L2Skill.SKILL_DIVINE_INSPIRATION) && !Config.AUTO_LEARN_DIVINE_INSPIRATION && !player.isGM()))
+				{
+					unLearnable++;
+					continue;
+				}
 				holder.addSkill(sk);
 			}
 			
