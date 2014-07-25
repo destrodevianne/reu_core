@@ -37,6 +37,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -79,7 +81,7 @@ import org.slf4j.LoggerFactory;
 public class LoginServerThread extends Thread
 {
 	protected static final Logger _log = LoggerFactory.getLogger(LoginServerThread.class);
-	protected static final Logger _logAccounting = LoggerFactory.getLogger("accounting");
+	protected static final java.util.logging.Logger _logAccounting = java.util.logging.Logger.getLogger("accounting");
 	
 	/** @see l2r.loginserver.L2LoginServer#PROTOCOL_REV */
 	private static final int REVISION = 0x0106;
@@ -552,10 +554,14 @@ public class LoginServerThread extends Thread
 		L2GameClient client = _accountsInGameServer.get(account);
 		if (client != null)
 		{
-			// FIXME:LOGGER
-			/**
-			 * LogRecord record = new LogRecord(Level.WARNING, "Kicked by login"); record.setParameters(new Object[] { client }); _logAccounting.log(record);
-			 */
+			
+			LogRecord record = new LogRecord(Level.WARNING, "Kicked by login");
+			record.setParameters(new Object[]
+			{
+				client
+			});
+			_logAccounting.log(record);
+			
 			client.setAditionalClosePacket(SystemMessage.getSystemMessage(SystemMessageId.ANOTHER_LOGIN_WITH_ACCOUNT));
 			client.closeNow();
 		}
