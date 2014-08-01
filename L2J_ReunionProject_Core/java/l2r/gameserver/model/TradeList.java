@@ -257,7 +257,7 @@ public class TradeList
 		{
 			if (checkitem.getObjectId() == objectId)
 			{
-				_log.warn(_owner.getName() + ": Attempt to add an item that is already present!");
+				// _log.warn(_owner.getName() + ": Attempt to add an item that is already present!");
 				return null;
 			}
 		}
