@@ -3205,6 +3205,23 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	
 	protected CharEffectList _effects = new CharEffectList(this);
 	
+	public boolean isAffectedBySkill(int skillId)
+	{
+		final L2Effect[] effects = getAllEffects();
+		if ((effects != null) && (effects.length != 0))
+		{
+			for (L2Effect e : effects)
+			{
+				if (e.getSkill().getId() == skillId)
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public final CharEffectList getEffectList()
 	{
 		return _effects;
@@ -7901,7 +7918,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	}
 	
 	// Just to avoid multiple stun effects
-	// TODO: temp fix
 	private boolean _isTempStunned = false;
 	
 	public boolean isTempStunned()
