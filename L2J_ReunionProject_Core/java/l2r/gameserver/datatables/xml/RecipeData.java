@@ -53,7 +53,7 @@ public class RecipeData extends DocumentParser
 	public void load()
 	{
 		_recipes.clear();
-		parseDatapackFile("data/xml/recipes.xml");
+		parseDatapackFile("data/xml/other/recipes.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _recipes.size() + " recipes.");
 	}
 	
@@ -68,8 +68,7 @@ public class RecipeData extends DocumentParser
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{
-				recipesFile:
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+				recipesFile: for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
 				{
 					if ("item".equalsIgnoreCase(d.getNodeName()))
 					{

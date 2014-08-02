@@ -225,7 +225,7 @@ public class WalkingManager extends DocumentParser
 	@Override
 	public final void load()
 	{
-		parseDatapackFile("data/xml/Routes.xml");
+		parseDatapackFile("data/xml/other/Routes.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _routes.size() + " walking routes.");
 	}
 	
@@ -427,14 +427,7 @@ public class WalkingManager extends DocumentParser
 					npc.sendDebugMessage("Starting to move at route " + routeName);
 					npc.setIsRunning(node.getRunning());
 					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(node.getMoveX(), node.getMoveY(), node.getMoveZ(), 0));
-					walk._walkCheckTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							startMoving(npc, routeName);
-						}
-					}, 60000, 60000); // start walk check task, for resuming walk after fight
+					walk._walkCheckTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(() -> startMoving(npc, routeName), 60000, 60000); // start walk check task, for resuming walk after fight
 					
 					npc.getKnownList().startTrackingTask();
 					
@@ -443,14 +436,7 @@ public class WalkingManager extends DocumentParser
 				else
 				{
 					npc.sendDebugMessage("Trying to start move at route " + routeName + ", but cannot now, scheduled");
-					ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							startMoving(npc, routeName);
-						}
-					}, 60000);
+					ThreadPoolManager.getInstance().scheduleGeneral(() -> startMoving(npc, routeName), 60000);
 				}
 			}
 			else

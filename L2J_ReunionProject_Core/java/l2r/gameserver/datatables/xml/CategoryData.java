@@ -49,7 +49,7 @@ public final class CategoryData extends DocumentParser
 	@Override
 	public void load()
 	{
-		parseDatapackFile("data/xml/categoryData.xml");
+		parseDatapackFile("data/xml/other/categoryData.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _categories.size() + " Categories.");
 	}
 	

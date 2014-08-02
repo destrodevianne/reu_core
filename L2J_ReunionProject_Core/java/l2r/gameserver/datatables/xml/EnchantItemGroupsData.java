@@ -50,7 +50,7 @@ public final class EnchantItemGroupsData extends DocumentParser
 	{
 		_itemGroups.clear();
 		_scrollGroups.clear();
-		parseDatapackFile("data/xml/enchantItemGroups.xml");
+		parseDatapackFile("data/xml/other/enchantItemGroups.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded: " + _itemGroups.size() + " item group templates.");
 		_log.info(getClass().getSimpleName() + ": Loaded: " + _scrollGroups.size() + " scroll group templates.");
 	}

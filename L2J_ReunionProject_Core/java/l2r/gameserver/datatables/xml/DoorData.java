@@ -60,7 +60,7 @@ public class DoorData extends DocumentParser
 		_doors.clear();
 		_groups.clear();
 		_regions.clear();
-		parseDatapackFile("data/xml/doors.xml");
+		parseDatapackFile("data/xml/other/doors.xml");
 	}
 	
 	@Override
