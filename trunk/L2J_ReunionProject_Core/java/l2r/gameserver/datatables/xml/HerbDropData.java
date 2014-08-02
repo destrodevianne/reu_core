@@ -52,7 +52,7 @@ public class HerbDropData extends DocumentParser
 	public synchronized void load()
 	{
 		_herbGroups.clear();
-		parseDatapackFile("data/xml/herbsDroplist.xml");
+		parseDatapackFile("data/xml/other/herbsDroplist.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _herbGroups.size() + " herb groups.");
 	}
 	

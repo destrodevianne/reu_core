@@ -50,10 +50,10 @@ public class BonusExpManager
 			factory.setValidating(false);
 			factory.setIgnoringComments(true);
 			
-			File file = new File(Config.DATAPACK_ROOT + "/data/xml/BonusExpItems.xml");
+			File file = new File(Config.DATAPACK_ROOT + "/data/xml/other/BonusExpItems.xml");
 			if (!file.exists())
 			{
-				_log.info("[" + getClass().getSimpleName() + "]Missing" + Config.DATAPACK_ROOT + "/data/BonusExpItems.xml Thescriptwontworkwithoutit!");
+				_log.info(getClass().getSimpleName() + ": Missing data/xml/other/BonusExpItems.xml");
 				return;
 			}
 			
