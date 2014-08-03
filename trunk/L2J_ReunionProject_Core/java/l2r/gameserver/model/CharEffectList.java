@@ -708,7 +708,7 @@ public class CharEffectList
 		// array modified, then rebuild on next request
 		_rebuildCache = true;
 		
-		if (effect.getSkill().isDebuff())
+		if (effect.getSkill().isDebuff() || effect.getSkill().isOffensive())
 		{
 			if (!hasDebuffs())
 			{
@@ -851,7 +851,7 @@ public class CharEffectList
 		// array modified, then rebuild on next request
 		_rebuildCache = true;
 		
-		if (newSkill.isDebuff())
+		if (newSkill.isDebuff() || newSkill.isOffensive())
 		{
 			if (_debuffs == null)
 			{
@@ -1079,7 +1079,7 @@ public class CharEffectList
 				// any more (has been replaced). but then check e.g. npc hold and raid petrification.
 				if (Config.EFFECT_CANCELING && !newEffect.getSkill().isStatic() && (stackQueue.size() > 1))
 				{
-					if (newSkill.isDebuff())
+					if (newSkill.isDebuff() || newSkill.isOffensive())
 					{
 						_debuffs.remove(stackQueue.remove(1));
 					}
