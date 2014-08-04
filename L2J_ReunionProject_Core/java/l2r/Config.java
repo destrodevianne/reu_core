@@ -79,7 +79,7 @@ public final class Config
 	public static final String FEATURE_CONFIG_FILE = "./config/main/Feature.ini";
 	public static final String FORTSIEGE_CONFIGURATION_FILE = "./config/main/FortSiege.ini";
 	public static final String GENERAL_CONFIG_FILE = "./config/main/General.ini";
-	public static final String HEXID_FILE = "./config/hexid.txt";
+	public static final String HEXID_FILE = "./config/network/hexid.txt";
 	public static final String ID_CONFIG_FILE = "./config/main/IdFactory.ini";
 	public static final String SERVER_VERSION_FILE = "./config/version/l2rcore-version.ini";
 	public static final String DATAPACK_VERSION_FILE = "./config/version/l2rdp-version.ini";

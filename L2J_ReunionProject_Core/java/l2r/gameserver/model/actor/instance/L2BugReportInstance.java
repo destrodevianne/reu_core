@@ -121,7 +121,7 @@ public class L2BugReportInstance extends L2Npc
 					return;
 				}
 				
-				String fname = "data/BugReports/" + player.getName() + ".txt";
+				String fname = "data/reunion/BugReports/" + player.getName() + ".txt";
 				File file = new File(fname);
 				boolean exist = file.createNewFile();
 				

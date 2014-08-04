@@ -62,9 +62,9 @@ public class AdminData extends DocumentParser
 	{
 		_accessLevels.clear();
 		_adminCommandAccessRights.clear();
-		parseDatapackFile("config/accessLevels.xml");
+		parseDatapackFile("config/xml/accessLevels.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded: " + _accessLevels.size() + " Access Levels");
-		parseDatapackFile("config/adminCommands.xml");
+		parseDatapackFile("config/xml/adminCommands.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded: " + _adminCommandAccessRights.size() + " Access Commands");
 	}
 	
