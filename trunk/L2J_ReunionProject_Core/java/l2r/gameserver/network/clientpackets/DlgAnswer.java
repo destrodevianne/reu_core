@@ -23,6 +23,7 @@ import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.holders.DoorRequestHolder;
 import l2r.gameserver.model.holders.SummonRequestHolder;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.util.GMAudit;
@@ -107,11 +108,19 @@ public final class DlgAnswer extends L2GameClientPacket
 		}
 		else if (_messageId == SystemMessageId.WOULD_YOU_LIKE_TO_OPEN_THE_GATE.getId())
 		{
-			activeChar.gatesAnswer(_answer, 1);
+			final DoorRequestHolder holder = activeChar.removeScript(DoorRequestHolder.class);
+			if ((holder != null) && (holder.getDoor() == activeChar.getTarget()) && (_answer == 1))
+			{
+				holder.getDoor().openMe();
+			}
 		}
 		else if (_messageId == SystemMessageId.WOULD_YOU_LIKE_TO_CLOSE_THE_GATE.getId())
 		{
-			activeChar.gatesAnswer(_answer, 0);
+			final DoorRequestHolder holder = activeChar.removeScript(DoorRequestHolder.class);
+			if ((holder != null) && (holder.getDoor() == activeChar.getTarget()) && (_answer == 1))
+			{
+				holder.getDoor().closeMe();
+			}
 		}
 	}
 	

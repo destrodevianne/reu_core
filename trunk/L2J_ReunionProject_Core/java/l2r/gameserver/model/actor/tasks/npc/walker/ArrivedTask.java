@@ -16,55 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.items.type;
+package l2r.gameserver.model.actor.tasks.npc.walker;
+
+import l2r.gameserver.instancemanager.WalkingManager;
+import l2r.gameserver.model.actor.L2Npc;
+import l2r.gameserver.model.holders.WalkInfoHolder;
 
 /**
- * EtcItem Type enumerated.
+ * Walker arrive task.
+ * @author GKR
  */
-public enum EtcItemType implements ItemType
+public class ArrivedTask implements Runnable
 {
-	NONE,
-	ARROW,
-	POTION,
-	SCRL_ENCHANT_WP,
-	SCRL_ENCHANT_AM,
-	SCROLL,
-	RECIPE,
-	MATERIAL,
-	PET_COLLAR,
-	CASTLE_GUARD,
-	LOTTO,
-	RACE_TICKET,
-	DYE,
-	SEED,
-	CROP,
-	MATURECROP,
-	HARVEST,
-	SEED2,
-	TICKET_OF_LORD,
-	LURE,
-	BLESS_SCRL_ENCHANT_WP,
-	BLESS_SCRL_ENCHANT_AM,
-	COUPON,
-	ELIXIR,
-	SCRL_ENCHANT_ATTR,
-	BOLT,
-	SCRL_INC_ENCHANT_PROP_WP,
-	SCRL_INC_ENCHANT_PROP_AM,
-	ANCIENT_CRYSTAL_ENCHANT_WP,
-	ANCIENT_CRYSTAL_ENCHANT_AM,
-	RUNE_SELECT,
-	RUNE,
+	private final WalkInfoHolder _walk;
+	private final L2Npc _npc;
 	
-	// L2J CUSTOM, BACKWARD COMPATIBILITY
-	SHOT;
-	
-	/**
-	 * @return the ID of the item after applying the mask.
-	 */
-	@Override
-	public int mask()
+	public ArrivedTask(L2Npc npc, WalkInfoHolder walk)
 	{
-		return 0;
+		_npc = npc;
+		_walk = walk;
+	}
+	
+	@Override
+	public void run()
+	{
+		_walk.setBlocked(false);
+		WalkingManager.getInstance().startMoving(_npc, _walk.getRoute().getName());
 	}
 }

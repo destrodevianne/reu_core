@@ -175,7 +175,6 @@ import l2r.gameserver.model.actor.tasks.player.RecoGiveTask;
 import l2r.gameserver.model.actor.tasks.player.RentPetTask;
 import l2r.gameserver.model.actor.tasks.player.ResetChargesTask;
 import l2r.gameserver.model.actor.tasks.player.ResetSoulsTask;
-import l2r.gameserver.model.actor.tasks.player.ShortBuffTask;
 import l2r.gameserver.model.actor.tasks.player.SitDownTask;
 import l2r.gameserver.model.actor.tasks.player.StandUpTask;
 import l2r.gameserver.model.actor.tasks.player.TeleportWatchdogTask;
@@ -204,6 +203,7 @@ import l2r.gameserver.model.fishing.L2Fish;
 import l2r.gameserver.model.fishing.L2Fishing;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.holders.PlayerEventHolder;
+import l2r.gameserver.model.holders.SkillUseHolder;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.ItemContainer;
 import l2r.gameserver.model.itemcontainer.PcFreight;
@@ -299,7 +299,6 @@ import l2r.gameserver.network.serverpackets.RelationChanged;
 import l2r.gameserver.network.serverpackets.Ride;
 import l2r.gameserver.network.serverpackets.ServerClose;
 import l2r.gameserver.network.serverpackets.SetupGauge;
-import l2r.gameserver.network.serverpackets.ShortBuffStatusUpdate;
 import l2r.gameserver.network.serverpackets.ShortCutInit;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SkillList;
@@ -798,6 +797,8 @@ public final class L2PcInstance extends L2Playable
 	// Used for protection after teleport
 	private long _protectEndTime = 0;
 	
+	private L2ItemInstance _lure = null;
+	
 	public boolean isSpawnProtected()
 	{
 		return _protectEndTime > GameTimeController.getInstance().getGameTicks();
@@ -870,11 +871,11 @@ public final class L2PcInstance extends L2Playable
 	private Forum _forumMemo;
 	
 	/** Current skill in use. Note that L2Character has _lastSkillCast, but this has the button presses */
-	private SkillDat _currentSkill;
-	private SkillDat _currentPetSkill;
+	private SkillUseHolder _currentSkill;
+	private SkillUseHolder _currentPetSkill;
 	
 	/** Skills queued because a skill is already in progress */
-	private SkillDat _queuedSkill;
+	private SkillUseHolder _queuedSkill;
 	
 	private int _cursedWeaponEquippedId = 0;
 	private boolean _combatFlagEquippedId = false;
@@ -959,9 +960,6 @@ public final class L2PcInstance extends L2Playable
 	// Character UI
 	private UIKeysSettings _uiKeySettings;
 	
-	/** ShortBuff clearing Task */
-	ScheduledFuture<?> _shortBuffTask = null;
-	
 	// L2JMOD Wedding
 	private boolean _married = false;
 	private int _partnerId = 0;
@@ -970,84 +968,6 @@ public final class L2PcInstance extends L2Playable
 	private int _engageid = 0;
 	private boolean _marryrequest = false;
 	private boolean _marryaccepted = false;
-	
-	/** Skill casting information (used to queue when several skills are cast in a short time) **/
-	public static class SkillDat
-	{
-		private final L2Skill _skill;
-		private final boolean _ctrlPressed;
-		private final boolean _shiftPressed;
-		
-		protected SkillDat(L2Skill skill, boolean ctrlPressed, boolean shiftPressed)
-		{
-			_skill = skill;
-			_ctrlPressed = ctrlPressed;
-			_shiftPressed = shiftPressed;
-		}
-		
-		public boolean isCtrlPressed()
-		{
-			return _ctrlPressed;
-		}
-		
-		public boolean isShiftPressed()
-		{
-			return _shiftPressed;
-		}
-		
-		public L2Skill getSkill()
-		{
-			return _skill;
-		}
-		
-		public int getSkillId()
-		{
-			return (getSkill() != null) ? getSkill().getId() : -1;
-		}
-	}
-	
-	// summon friend
-	private final SummonRequest _summonRequest = new SummonRequest();
-	
-	protected static class SummonRequest
-	{
-		private L2PcInstance _target = null;
-		private L2Skill _skill = null;
-		
-		public void setTarget(L2PcInstance destination, L2Skill skill)
-		{
-			_target = destination;
-			_skill = skill;
-		}
-		
-		public L2PcInstance getTarget()
-		{
-			return _target;
-		}
-		
-		public L2Skill getSkill()
-		{
-			return _skill;
-		}
-	}
-	
-	// open/close gates
-	private final GatesRequest _gatesRequest = new GatesRequest();
-	
-	protected static class GatesRequest
-	{
-		private L2DoorInstance _target = null;
-		
-		public void setTarget(L2DoorInstance door)
-		{
-			_target = door;
-		}
-		
-		public L2DoorInstance getDoor()
-		{
-			return _target;
-		}
-	}
 	
 	// Save responder name for log it
 	private String _lastPetitionGmName = null;
@@ -3807,7 +3727,7 @@ public final class L2PcInstance extends L2Playable
 				return null;
 			}
 			// Sends message to client if requested
-			if (sendMessage && ((!isCastingNow() && (item.getItemType() == EtcItemType.HERB)) || (item.getItemType() != EtcItemType.HERB)))
+			if (sendMessage && ((!isCastingNow() && item.getItem().hasExImmediateEffect()) || !item.getItem().hasExImmediateEffect()))
 			{
 				if (count > 1)
 				{
@@ -3842,8 +3762,8 @@ public final class L2PcInstance extends L2Playable
 					}
 				}
 			}
-			// Auto use herbs - autoloot
-			if (item.getItemType() == EtcItemType.HERB) // If item is herb dont add it to iv :]
+			// Auto-use herbs.
+			if (item.getItem().hasExImmediateEffect())
 			{
 				final IItemHandler handler = ItemHandler.getInstance().getHandler(item.getEtcItem());
 				if (handler == null)
@@ -4957,7 +4877,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void doAutoLoot(L2Attackable target, int itemId, long itemCount)
 	{
-		if (isInParty() && (ItemData.getInstance().getTemplate(itemId).getItemType() != EtcItemType.HERB))
+		if (isInParty() && !ItemData.getInstance().getTemplate(itemId).hasExImmediateEffect())
 		{
 			getParty().distributeItem(this, itemId, itemCount, false, target);
 		}
@@ -5096,7 +5016,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Auto use herbs - pick up
-		if (target.getItemType() == EtcItemType.HERB)
+		if (target.getItem().hasExImmediateEffect())
 		{
 			IItemHandler handler = ItemHandler.getInstance().getHandler(target.getEtcItem());
 			if (handler == null)
@@ -9320,7 +9240,7 @@ public final class L2PcInstance extends L2Playable
 		// If a skill is currently being used, queue this one if this is not the same
 		if (isCastingNow())
 		{
-			SkillDat currentSkill = getCurrentSkill();
+			SkillUseHolder currentSkill = getCurrentSkill();
 			// Check if new skill different from current skill in progress
 			if ((currentSkill != null) && (skill.getId() == currentSkill.getSkillId()))
 			{
@@ -10002,8 +9922,8 @@ public final class L2PcInstance extends L2Playable
 		
 		if ((targetPlayer != null) && (targetPlayer != this) && !(isInDuel() && (targetPlayer.getDuelId() == getDuelId())) && !isInsideZone(ZoneIdType.PVP) && !targetPlayer.isInsideZone(ZoneIdType.PVP))
 		{
-			SkillDat skilldat = getCurrentSkill();
-			SkillDat skilldatpet = getCurrentPetSkill();
+			SkillUseHolder skilldat = getCurrentSkill();
+			SkillUseHolder skilldatpet = getCurrentPetSkill();
 			if (((skilldat != null) && !skilldat.isCtrlPressed() && skill.isOffensive() && !srcIsSummon) || ((skilldatpet != null) && !skilldatpet.isCtrlPressed() && skill.isOffensive() && srcIsSummon))
 			{
 				if ((getClan() != null) && (targetPlayer.getClan() != null))
@@ -13167,13 +13087,10 @@ public final class L2PcInstance extends L2Playable
 		return _mountObjectID;
 	}
 	
-	private L2ItemInstance _lure = null;
-	private int _shortBuffTaskSkillId = 0;
-	
 	/**
 	 * @return the current skill in use or return null.
 	 */
-	public SkillDat getCurrentSkill()
+	public SkillUseHolder getCurrentSkill()
 	{
 		return _currentSkill;
 	}
@@ -13191,13 +13108,13 @@ public final class L2PcInstance extends L2Playable
 			_currentSkill = null;
 			return;
 		}
-		_currentSkill = new SkillDat(currentSkill, ctrlPressed, shiftPressed);
+		_currentSkill = new SkillUseHolder(currentSkill, ctrlPressed, shiftPressed);
 	}
 	
 	/**
 	 * @return the current pet skill in use or return null.
 	 */
-	public SkillDat getCurrentPetSkill()
+	public SkillUseHolder getCurrentPetSkill()
 	{
 		return _currentPetSkill;
 	}
@@ -13215,10 +13132,10 @@ public final class L2PcInstance extends L2Playable
 			_currentPetSkill = null;
 			return;
 		}
-		_currentPetSkill = new SkillDat(currentSkill, ctrlPressed, shiftPressed);
+		_currentPetSkill = new SkillUseHolder(currentSkill, ctrlPressed, shiftPressed);
 	}
 	
-	public SkillDat getQueuedSkill()
+	public SkillUseHolder getQueuedSkill()
 	{
 		return _queuedSkill;
 	}
@@ -13236,7 +13153,7 @@ public final class L2PcInstance extends L2Playable
 			_queuedSkill = null;
 			return;
 		}
-		_queuedSkill = new SkillDat(queuedSkill, ctrlPressed, shiftPressed);
+		_queuedSkill = new SkillUseHolder(queuedSkill, ctrlPressed, shiftPressed);
 	}
 	
 	/**
@@ -13350,7 +13267,6 @@ public final class L2PcInstance extends L2Playable
 	public void increaseSouls(int count)
 	{
 		_souls += count;
-		// TODO: Fix double message if skill have a self effect.
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_SOUL_HAS_INCREASED_BY_S1_SO_IT_IS_NOW_AT_S2);
 		sm.addInt(count);
 		sm.addInt(_souls);
@@ -13420,34 +13336,6 @@ public final class L2PcInstance extends L2Playable
 			_soulTask.cancel(false);
 			_soulTask = null;
 		}
-	}
-	
-	/**
-	 * @param magicId
-	 * @param level
-	 * @param time
-	 */
-	public void shortBuffStatusUpdate(int magicId, int level, int time)
-	{
-		if (_shortBuffTask != null)
-		{
-			_shortBuffTask.cancel(false);
-			_shortBuffTask = null;
-		}
-		_shortBuffTask = ThreadPoolManager.getInstance().scheduleGeneral(new ShortBuffTask(this), time * 1000);
-		setShortBuffTaskSkillId(magicId);
-		
-		sendPacket(new ShortBuffStatusUpdate(magicId, level, time));
-	}
-	
-	public int getShortBuffTaskSkillId()
-	{
-		return _shortBuffTaskSkillId;
-	}
-	
-	public void setShortBuffTaskSkillId(int id)
-	{
-		_shortBuffTaskSkillId = id;
 	}
 	
 	public int getDeathPenaltyBuffLevel()
@@ -13634,229 +13522,6 @@ public final class L2PcInstance extends L2Playable
 	public void updateVitalityPoints(float points, boolean useRates, boolean quiet)
 	{
 		getStat().updateVitalityPoints(points, useRates, quiet);
-	}
-	
-	/**
-	 * Function for skill summon friend or Gate Chant. Request Teleport
-	 * @param requester
-	 * @param skill
-	 * @return
-	 */
-	public boolean teleportRequest(L2PcInstance requester, L2Skill skill)
-	{
-		if ((_summonRequest.getTarget() != null) && (requester != null))
-		{
-			return false;
-		}
-		_summonRequest.setTarget(requester, skill);
-		return true;
-	}
-	
-	/**
-	 * Action teleport
-	 * @param answer
-	 * @param requesterId
-	 */
-	public void teleportAnswer(int answer, int requesterId)
-	{
-		if (_summonRequest.getTarget() == null)
-		{
-			return;
-		}
-		if ((answer == 1) && (_summonRequest.getTarget().getObjectId() == requesterId))
-		{
-			teleToTarget(this, _summonRequest.getTarget(), _summonRequest.getSkill());
-		}
-		_summonRequest.setTarget(null, null);
-	}
-	
-	public static void teleToTarget(L2PcInstance targetChar, L2PcInstance summonerChar, L2Skill summonSkill)
-	{
-		if ((targetChar == null) || (summonerChar == null) || (summonSkill == null))
-		{
-			return;
-		}
-		
-		if (!checkSummonerStatus(summonerChar))
-		{
-			return;
-		}
-		if (!checkSummonTargetStatus(targetChar, summonerChar))
-		{
-			return;
-		}
-		
-		int itemConsumeId = summonSkill.getTargetConsumeId();
-		int itemConsumeCount = summonSkill.getTargetConsume();
-		if ((itemConsumeId != 0) && (itemConsumeCount != 0))
-		{
-			if (targetChar.getInventory().getInventoryItemCount(itemConsumeId, 0) < itemConsumeCount)
-			{
-				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_REQUIRED_FOR_SUMMONING);
-				sm.addItemName(summonSkill.getTargetConsumeId());
-				targetChar.sendPacket(sm);
-				return;
-			}
-			targetChar.getInventory().destroyItemByItemId("Consume", itemConsumeId, itemConsumeCount, summonerChar, targetChar);
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_DISAPPEARED);
-			sm.addItemName(summonSkill.getTargetConsumeId());
-			targetChar.sendPacket(sm);
-		}
-		targetChar.teleToLocation(summonerChar.getX(), summonerChar.getY(), summonerChar.getZ(), true);
-	}
-	
-	public static boolean checkSummonerStatus(L2PcInstance summonerChar)
-	{
-		if (summonerChar == null)
-		{
-			return false;
-		}
-		
-		if (summonerChar.isInOlympiadMode())
-		{
-			summonerChar.sendPacket(SystemMessageId.THIS_ITEM_IS_NOT_AVAILABLE_FOR_THE_OLYMPIAD_EVENT);
-			return false;
-		}
-		
-		if (summonerChar.inObserverMode())
-		{
-			return false;
-		}
-		
-		if (summonerChar.isInsideZone(ZoneIdType.NO_SUMMON_FRIEND) || summonerChar.isFlyingMounted())
-		{
-			summonerChar.sendPacket(SystemMessageId.YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING);
-			return false;
-		}
-		return true;
-	}
-	
-	public static boolean checkSummonTargetStatus(L2Object target, L2PcInstance summonerChar)
-	{
-		if ((target == null) || !(target instanceof L2PcInstance))
-		{
-			return false;
-		}
-		
-		L2PcInstance targetChar = (L2PcInstance) target;
-		
-		if (targetChar.isAlikeDead())
-		{
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_DEAD_AT_THE_MOMENT_AND_CANNOT_BE_SUMMONED);
-			sm.addPcName(targetChar);
-			summonerChar.sendPacket(sm);
-			return false;
-		}
-		
-		if (targetChar.isInStoreMode())
-		{
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_CURRENTLY_TRADING_OR_OPERATING_PRIVATE_STORE_AND_CANNOT_BE_SUMMONED);
-			sm.addPcName(targetChar);
-			summonerChar.sendPacket(sm);
-			return false;
-		}
-		
-		if (targetChar.isRooted() || targetChar.isInCombat())
-		{
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_ENGAGED_IN_COMBAT_AND_CANNOT_BE_SUMMONED);
-			sm.addPcName(targetChar);
-			summonerChar.sendPacket(sm);
-			return false;
-		}
-		
-		if (targetChar.isInOlympiadMode())
-		{
-			summonerChar.sendPacket(SystemMessageId.YOU_CANNOT_SUMMON_PLAYERS_WHO_ARE_IN_OLYMPIAD);
-			return false;
-		}
-		
-		if (targetChar.isFestivalParticipant() || targetChar.isFlyingMounted())
-		{
-			summonerChar.sendPacket(SystemMessageId.YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING);
-			return false;
-		}
-		
-		if (targetChar.inObserverMode())
-		{
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_STATE_FORBIDS_SUMMONING);
-			sm.addCharName(targetChar);
-			summonerChar.sendPacket(sm);
-			return false;
-		}
-		
-		if (targetChar.isCombatFlagEquipped())
-		{
-			summonerChar.sendPacket(SystemMessageId.YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING);
-			return false;
-		}
-		
-		if (targetChar.isInsideZone(ZoneIdType.NO_SUMMON_FRIEND))
-		{
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IN_SUMMON_BLOCKING_AREA);
-			sm.addString(targetChar.getName());
-			summonerChar.sendPacket(sm);
-			return false;
-		}
-		
-		if (summonerChar.getInstanceId() > 0)
-		{
-			Instance summonerInstance = InstanceManager.getInstance().getInstance(summonerChar.getInstanceId());
-			if (!Config.ALLOW_SUMMON_TO_INSTANCE || !summonerInstance.isSummonAllowed())
-			{
-				summonerChar.sendPacket(SystemMessageId.YOU_MAY_NOT_SUMMON_FROM_YOUR_CURRENT_LOCATION);
-				return false;
-			}
-		}
-		
-		// on retail character can enter 7s dungeon with summon friend,
-		// but will be teleported away by mobs
-		// because currently this is not working in L2J we do not allowing summoning
-		if (summonerChar.isIn7sDungeon())
-		{
-			int targetCabal = SevenSigns.getInstance().getPlayerCabal(targetChar.getObjectId());
-			if (SevenSigns.getInstance().isSealValidationPeriod())
-			{
-				if (targetCabal != SevenSigns.getInstance().getCabalHighestScore())
-				{
-					summonerChar.sendPacket(SystemMessageId.YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING);
-					return false;
-				}
-			}
-			else
-			{
-				if (targetCabal == SevenSigns.CABAL_NULL)
-				{
-					summonerChar.sendPacket(SystemMessageId.YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING);
-					return false;
-				}
-			}
-		}
-		
-		return true;
-	}
-	
-	public void gatesRequest(L2DoorInstance door)
-	{
-		_gatesRequest.setTarget(door);
-	}
-	
-	public void gatesAnswer(int answer, int type)
-	{
-		if (_gatesRequest.getDoor() == null)
-		{
-			return;
-		}
-		
-		if ((answer == 1) && (getTarget() == _gatesRequest.getDoor()) && (type == 1))
-		{
-			_gatesRequest.getDoor().openMe();
-		}
-		else if ((answer == 1) && (getTarget() == _gatesRequest.getDoor()) && (type == 0))
-		{
-			_gatesRequest.getDoor().closeMe();
-		}
-		
-		_gatesRequest.setTarget(null);
 	}
 	
 	public void checkItemRestriction()

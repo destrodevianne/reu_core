@@ -16,31 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.actor.tasks.player;
+package l2r.gameserver.model.holders;
 
-import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.network.serverpackets.ShortBuffStatusUpdate;
+import l2r.gameserver.model.actor.instance.L2DoorInstance;
 
 /**
- * Task dedicated to update player's short buffs window.
  * @author UnAfraid
  */
-public class ShortBuffTask implements Runnable
+public class DoorRequestHolder
 {
-	private final L2PcInstance _player;
+	private final L2DoorInstance _target;
 	
-	public ShortBuffTask(L2PcInstance player)
+	public DoorRequestHolder(L2DoorInstance door)
 	{
-		_player = player;
+		_target = door;
 	}
 	
-	@Override
-	public void run()
+	public L2DoorInstance getDoor()
 	{
-		if (_player != null)
-		{
-			_player.sendPacket(new ShortBuffStatusUpdate(0, 0, 0));
-			_player.setShortBuffTaskSkillId(0);
-		}
+		return _target;
 	}
 }
