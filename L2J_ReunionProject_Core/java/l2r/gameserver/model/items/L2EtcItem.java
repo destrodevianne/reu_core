@@ -59,11 +59,6 @@ public final class L2EtcItem extends L2Item
 			}
 		}
 		
-		if (is_ex_immediate_effect())
-		{
-			_type = EtcItemType.HERB;
-		}
-		
 		_type1 = L2Item.TYPE1_ITEM_QUESTITEM_ADENA;
 		_type2 = L2Item.TYPE2_OTHER; // default is other
 		

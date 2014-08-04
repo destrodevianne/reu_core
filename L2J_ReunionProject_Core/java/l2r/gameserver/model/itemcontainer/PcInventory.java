@@ -33,7 +33,6 @@ import l2r.gameserver.model.TradeList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.EtcItemType;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.ItemList;
@@ -936,7 +935,7 @@ public class PcInventory extends Inventory
 	public boolean validateCapacity(L2ItemInstance item)
 	{
 		int slots = 0;
-		if (!item.isStackable() || (getInventoryItemCount(item.getId(), -1) <= 0) || (item.getItemType() != EtcItemType.HERB))
+		if (!item.isStackable() || (getInventoryItemCount(item.getId(), -1) <= 0) || !item.getItem().hasExImmediateEffect())
 		{
 			slots++;
 		}

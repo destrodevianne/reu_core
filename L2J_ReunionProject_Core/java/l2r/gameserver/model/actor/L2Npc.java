@@ -73,7 +73,6 @@ import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.items.type.EtcItemType;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
@@ -2126,7 +2125,7 @@ public class L2Npc extends L2Character
 			// Add drop to auto destroy item task.
 			if (!Config.LIST_PROTECTED_ITEMS.contains(itemId))
 			{
-				if (((Config.AUTODESTROY_ITEM_AFTER > 0) && (item.getItemType() != EtcItemType.HERB)) || ((Config.HERB_AUTO_DESTROY_TIME > 0) && (item.getItemType() == EtcItemType.HERB)))
+				if (((Config.AUTODESTROY_ITEM_AFTER > 0) && !item.getItem().hasExImmediateEffect()) || ((Config.HERB_AUTO_DESTROY_TIME > 0) && item.getItem().hasExImmediateEffect()))
 				{
 					ItemsAutoDestroy.getInstance().addItem(item);
 				}

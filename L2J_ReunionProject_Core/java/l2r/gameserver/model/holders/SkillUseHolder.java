@@ -16,55 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.items.type;
+package l2r.gameserver.model.holders;
+
+import l2r.gameserver.model.skills.L2Skill;
 
 /**
- * EtcItem Type enumerated.
+ * @author UnAfraid
  */
-public enum EtcItemType implements ItemType
+public class SkillUseHolder extends SkillHolder
 {
-	NONE,
-	ARROW,
-	POTION,
-	SCRL_ENCHANT_WP,
-	SCRL_ENCHANT_AM,
-	SCROLL,
-	RECIPE,
-	MATERIAL,
-	PET_COLLAR,
-	CASTLE_GUARD,
-	LOTTO,
-	RACE_TICKET,
-	DYE,
-	SEED,
-	CROP,
-	MATURECROP,
-	HARVEST,
-	SEED2,
-	TICKET_OF_LORD,
-	LURE,
-	BLESS_SCRL_ENCHANT_WP,
-	BLESS_SCRL_ENCHANT_AM,
-	COUPON,
-	ELIXIR,
-	SCRL_ENCHANT_ATTR,
-	BOLT,
-	SCRL_INC_ENCHANT_PROP_WP,
-	SCRL_INC_ENCHANT_PROP_AM,
-	ANCIENT_CRYSTAL_ENCHANT_WP,
-	ANCIENT_CRYSTAL_ENCHANT_AM,
-	RUNE_SELECT,
-	RUNE,
+	private final boolean _ctrlPressed;
+	private final boolean _shiftPressed;
 	
-	// L2J CUSTOM, BACKWARD COMPATIBILITY
-	SHOT;
-	
-	/**
-	 * @return the ID of the item after applying the mask.
-	 */
-	@Override
-	public int mask()
+	public SkillUseHolder(L2Skill skill, boolean ctrlPressed, boolean shiftPressed)
 	{
-		return 0;
+		super(skill);
+		_ctrlPressed = ctrlPressed;
+		_shiftPressed = shiftPressed;
+	}
+	
+	public boolean isCtrlPressed()
+	{
+		return _ctrlPressed;
+	}
+	
+	public boolean isShiftPressed()
+	{
+		return _shiftPressed;
 	}
 }

@@ -144,6 +144,7 @@ public abstract class L2Item implements IIdentifiable
 	private final boolean _common;
 	private final boolean _heroItem;
 	private final boolean _pvpItem;
+	private final boolean _immediate_effect;
 	private final boolean _ex_immediate_effect;
 	private final int _defaultEnchantLevel;
 	private final ActionType _defaultAction;
@@ -200,7 +201,7 @@ public abstract class L2Item implements IIdentifiable
 		_is_oly_restricted = set.getBool("is_oly_restricted", false);
 		_for_npc = set.getBool("for_npc", false);
 		
-		// _immediate_effect - herb
+		_immediate_effect = set.getBool("immediate_effect", false);
 		_ex_immediate_effect = set.getBool("ex_immediate_effect", false);
 		
 		// used for custom type select
@@ -681,6 +682,11 @@ public abstract class L2Item implements IIdentifiable
 		return (getItemType() == EtcItemType.ELIXIR);
 	}
 	
+	public boolean isScroll()
+	{
+		return (getItemType() == EtcItemType.SCROLL);
+	}
+	
 	/**
 	 * Returns array of Func objects containing the list of functions used by the item
 	 * @param item : L2ItemInstance pointing out the item
@@ -988,11 +994,22 @@ public abstract class L2Item implements IIdentifiable
 	}
 	
 	/**
-	 * @return the _ex_immediate_effect
+	 * Verifies if the item has effects immediately.<br>
+	 * <i>Used for herbs mostly.</i>
+	 * @return {@code true} if the item applies effects immediately, {@code false} otherwise
 	 */
-	public boolean is_ex_immediate_effect()
+	public boolean hasExImmediateEffect()
 	{
 		return _ex_immediate_effect;
+	}
+	
+	/**
+	 * Verifies if the item has effects immediately.
+	 * @return {@code true} if the item applies effects immediately, {@code false} otherwise
+	 */
+	public boolean hasImmediateEffect()
+	{
+		return _immediate_effect;
 	}
 	
 	/**
