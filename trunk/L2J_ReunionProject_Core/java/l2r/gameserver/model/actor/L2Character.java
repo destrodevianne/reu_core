@@ -4640,7 +4640,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		double distFraction = Double.MAX_VALUE;
 		if (delta > 1)
 		{
-			final double distPassed = (getStat().getMoveSpeed() * (gameTicks - m._moveTimestamp)) / GameTimeController.TICKS_PER_SECOND;
+			final double distPassed = (getMoveSpeed() * (gameTicks - m._moveTimestamp)) / GameTimeController.TICKS_PER_SECOND;
 			distFraction = distPassed / delta;
 		}
 		
@@ -4830,7 +4830,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public void moveToLocation(int x, int y, int z, int offset)
 	{
 		// Get the Move Speed of the L2Charcater
-		float speed = getStat().getMoveSpeed();
+		double speed = getMoveSpeed();
 		if ((speed <= 0) || isMovementDisabled())
 		{
 			return;
@@ -5123,7 +5123,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		}
 		
 		// Get the Move Speed of the L2Charcater
-		float speed = getStat().getMoveSpeed();
+		double speed = getMoveSpeed();
 		if ((speed <= 0) || isMovementDisabled())
 		{
 			// Cancel the move action
@@ -6904,6 +6904,16 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 						}
 						else
 						{
+							boolean flagAttacker = true; // This must be always true
+							switch (skill.getId())
+							{
+								case 42: // Sweeper
+								case 444: // Sweeper Festival
+									// Make that false to avoid flag attacker when use sweep skills
+									flagAttacker = false;
+									break;
+							}
+							
 							if (target.isPlayer())
 							{
 								// Casting non offensive skill on player with pvp flag set or with karma
@@ -6922,7 +6932,10 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 									case UNLOCK_SPECIAL:
 										break;
 									default:
-										player.updatePvPStatus();
+										if (flagAttacker)
+										{
+											player.updatePvPStatus();
+										}
 								}
 							}
 						}
@@ -7196,16 +7209,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		return getStat().getAttackSpeedMultiplier();
 	}
 	
-	public int getCON()
-	{
-		return getStat().getCON();
-	}
-	
-	public int getDEX()
-	{
-		return getStat().getDEX();
-	}
-	
 	public final double getCriticalDmg(L2Character target, double init)
 	{
 		return getStat().getCriticalDmg(target, init);
@@ -7219,11 +7222,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public int getEvasionRate(L2Character target)
 	{
 		return getStat().getEvasionRate(target);
-	}
-	
-	public int getINT()
-	{
-		return getStat().getINT();
 	}
 	
 	public final int getMagicalAttackRange(L2Skill skill)
@@ -7281,94 +7279,14 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		return getStat().getMDef(target, skill);
 	}
 	
-	public int getMEN()
-	{
-		return getStat().getMEN();
-	}
-	
 	public double getMReuseRate(L2Skill skill)
 	{
 		return getStat().getMReuseRate(skill);
 	}
 	
-	public float getMovementSpeedMultiplier()
-	{
-		return getStat().getMovementSpeedMultiplier();
-	}
-	
 	public int getPAtk(L2Character target)
 	{
 		return getStat().getPAtk(target);
-	}
-	
-	public double getPAtkAnimals(L2Character target)
-	{
-		return getStat().getPAtkAnimals(target);
-	}
-	
-	public double getPAtkDragons(L2Character target)
-	{
-		return getStat().getPAtkDragons(target);
-	}
-	
-	public double getPAtkInsects(L2Character target)
-	{
-		return getStat().getPAtkInsects(target);
-	}
-	
-	public double getPAtkMonsters(L2Character target)
-	{
-		return getStat().getPAtkMonsters(target);
-	}
-	
-	public double getPAtkPlants(L2Character target)
-	{
-		return getStat().getPAtkPlants(target);
-	}
-	
-	public double getPAtkGiants(L2Character target)
-	{
-		return getStat().getPAtkGiants(target);
-	}
-	
-	public double getPAtkMagicCreatures(L2Character target)
-	{
-		return getStat().getPAtkMagicCreatures(target);
-	}
-	
-	public double getPDefAnimals(L2Character target)
-	{
-		return getStat().getPDefAnimals(target);
-	}
-	
-	public double getPDefDragons(L2Character target)
-	{
-		return getStat().getPDefDragons(target);
-	}
-	
-	public double getPDefInsects(L2Character target)
-	{
-		return getStat().getPDefInsects(target);
-	}
-	
-	public double getPDefMonsters(L2Character target)
-	{
-		return getStat().getPDefMonsters(target);
-	}
-	
-	public double getPDefPlants(L2Character target)
-	{
-		return getStat().getPDefPlants(target);
-	}
-	
-	public double getPDefGiants(L2Character target)
-	{
-		return getStat().getPDefGiants(target);
-	}
-	
-	public double getPDefMagicCreatures(L2Character target)
-	{
-		return getStat().getPDefMagicCreatures(target);
 	}
 	
 	public int getPAtkSpd()
@@ -7386,14 +7304,34 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		return getStat().getPhysicalAttackRange();
 	}
 	
-	public int getRunSpeed()
+	public double getMovementSpeedMultiplier()
+	{
+		return getStat().getMovementSpeedMultiplier();
+	}
+	
+	public double getRunSpeed()
 	{
 		return getStat().getRunSpeed();
 	}
 	
-	public int getSwimRunSpeed()
+	public double getWalkSpeed()
+	{
+		return getStat().getWalkSpeed();
+	}
+	
+	public final double getSwimRunSpeed()
 	{
 		return getStat().getSwimRunSpeed();
+	}
+	
+	public final double getSwimWalkSpeed()
+	{
+		return getStat().getSwimWalkSpeed();
+	}
+	
+	public double getMoveSpeed()
+	{
+		return getStat().getMoveSpeed();
 	}
 	
 	public final int getShldDef()
@@ -7406,19 +7344,29 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		return getStat().getSTR();
 	}
 	
-	public final int getWalkSpeed()
+	public int getDEX()
 	{
-		return getStat().getWalkSpeed();
+		return getStat().getDEX();
 	}
 	
-	public final int getSwimWalkSpeed()
+	public int getCON()
 	{
-		return getStat().getSwimWalkSpeed();
+		return getStat().getCON();
+	}
+	
+	public int getINT()
+	{
+		return getStat().getINT();
 	}
 	
 	public int getWIT()
 	{
 		return getStat().getWIT();
+	}
+	
+	public int getMEN()
+	{
+		return getStat().getMEN();
 	}
 	
 	// Status - NEED TO REMOVE ONCE L2CHARTATUS IS COMPLETE
@@ -7878,6 +7826,76 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			}
 		}
 		return _invulAgainst;
+	}
+	
+	public double getPAtkAnimals(L2Character target)
+	{
+		return getStat().getPAtkAnimals(target);
+	}
+	
+	public double getPAtkDragons(L2Character target)
+	{
+		return getStat().getPAtkDragons(target);
+	}
+	
+	public double getPAtkInsects(L2Character target)
+	{
+		return getStat().getPAtkInsects(target);
+	}
+	
+	public double getPAtkMonsters(L2Character target)
+	{
+		return getStat().getPAtkMonsters(target);
+	}
+	
+	public double getPAtkPlants(L2Character target)
+	{
+		return getStat().getPAtkPlants(target);
+	}
+	
+	public double getPAtkGiants(L2Character target)
+	{
+		return getStat().getPAtkGiants(target);
+	}
+	
+	public double getPAtkMagicCreatures(L2Character target)
+	{
+		return getStat().getPAtkMagicCreatures(target);
+	}
+	
+	public double getPDefAnimals(L2Character target)
+	{
+		return getStat().getPDefAnimals(target);
+	}
+	
+	public double getPDefDragons(L2Character target)
+	{
+		return getStat().getPDefDragons(target);
+	}
+	
+	public double getPDefInsects(L2Character target)
+	{
+		return getStat().getPDefInsects(target);
+	}
+	
+	public double getPDefMonsters(L2Character target)
+	{
+		return getStat().getPDefMonsters(target);
+	}
+	
+	public double getPDefPlants(L2Character target)
+	{
+		return getStat().getPDefPlants(target);
+	}
+	
+	public double getPDefGiants(L2Character target)
+	{
+		return getStat().getPDefGiants(target);
+	}
+	
+	public double getPDefMagicCreatures(L2Character target)
+	{
+		return getStat().getPDefMagicCreatures(target);
 	}
 	
 	public int getMinShopDistanceNPC()

@@ -690,32 +690,9 @@ public final class Formulas
 				return 1.;
 		}
 		
-		if (ss)
-		{
-			damage *= 2;
-		}
-		
-		if (skill != null)
-		{
-			double skillpower = skill.getPower(attacker, target, isPvP, isPvE);
-			float ssboost = skill.getSSBoost();
-			if (ssboost <= 0)
-			{
-				damage += skillpower;
-			}
-			else if (ssboost > 0)
-			{
-				if (ss)
-				{
-					skillpower *= ssboost;
-					damage += skillpower;
-				}
-				else
-				{
-					damage += skillpower;
-				}
-			}
-		}
+		// Add soulshot boost.
+		int ssBoost = ss ? 2 : 1;
+		damage = (skill != null) ? ((damage * ssBoost) + skill.getPower(attacker, target, isPvP, isPvE)) : (damage * ssBoost);
 		
 		// Defense modifier depending of the attacker weapon
 		L2Weapon weapon = attacker.getActiveWeaponItem();

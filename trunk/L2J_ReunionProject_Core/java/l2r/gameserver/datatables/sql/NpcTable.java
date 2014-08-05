@@ -151,8 +151,8 @@ public class NpcTable
 		npcDat.set("rhand", NpcData.getInt("rhand"));
 		npcDat.set("lhand", NpcData.getInt("lhand"));
 		npcDat.set("enchant", NpcData.getInt("enchant"));
-		npcDat.set("baseWalkSpd", NpcData.getInt("walkspd"));
-		npcDat.set("baseRunSpd", NpcData.getInt("runspd"));
+		npcDat.set("baseWalkSpd", NpcData.getDouble("walkspd"));
+		npcDat.set("baseRunSpd", NpcData.getDouble("runspd"));
 		
 		// constants, until we have stats in DB
 		npcDat.safeSet("baseSTR", NpcData.getInt("str"), 0, BaseStats.MAX_STAT_VALUE, "Loading npc template id: " + NpcData.getInt("idTemplate"));

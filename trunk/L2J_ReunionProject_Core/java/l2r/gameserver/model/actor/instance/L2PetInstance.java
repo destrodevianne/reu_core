@@ -1474,4 +1474,32 @@ public class L2PetInstance extends L2Summon
 	{
 		return true;
 	}
+	
+	@Override
+	public final double getRunSpeed()
+	{
+		return super.getRunSpeed() * (isUncontrollable() ? 0.5d : 1.0d);
+	}
+	
+	@Override
+	public final double getWalkSpeed()
+	{
+		return super.getWalkSpeed() * (isUncontrollable() ? 0.5d : 1.0d);
+	}
+	
+	@Override
+	public final double getMovementSpeedMultiplier()
+	{
+		return super.getMovementSpeedMultiplier() * (isUncontrollable() ? 0.5d : 1.0d);
+	}
+	
+	@Override
+	public final double getMoveSpeed()
+	{
+		if (isInsideZone(ZoneIdType.WATER))
+		{
+			return isRunning() ? getSwimRunSpeed() : getSwimWalkSpeed();
+		}
+		return isRunning() ? getRunSpeed() : getWalkSpeed();
+	}
 }

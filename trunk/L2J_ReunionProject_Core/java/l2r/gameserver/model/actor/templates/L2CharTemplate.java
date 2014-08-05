@@ -102,7 +102,7 @@ public class L2CharTemplate
 	private final double _fCollisionRadius;
 	private final double _fCollisionHeight;
 	
-	private final float[] _moveType = new float[MoveType.values().length];
+	private final double[] _moveType = new double[MoveType.values().length];
 	
 	public L2CharTemplate(StatsSet set)
 	{
@@ -174,10 +174,12 @@ public class L2CharTemplate
 		
 		// speed.
 		Arrays.fill(_moveType, 1);
-		setBaseMoveSpeed(MoveType.RUN, set.getInteger("baseRunSpd", 1));
-		setBaseMoveSpeed(MoveType.WALK, set.getInteger("baseWalkSpd", 1));
-		setBaseMoveSpeed(MoveType.FAST_SWIM, set.getInteger("baseSwimRunSpd", 1));
-		setBaseMoveSpeed(MoveType.SLOW_SWIM, set.getInteger("baseSwimWalkSpd", 1));
+		setBaseMoveSpeed(MoveType.RUN, set.getDouble("baseRunSpd", 120));
+		setBaseMoveSpeed(MoveType.WALK, set.getDouble("baseWalkSpd", 50));
+		setBaseMoveSpeed(MoveType.FAST_SWIM, set.getDouble("baseSwimRunSpd", getBaseMoveSpeed(MoveType.RUN)));
+		setBaseMoveSpeed(MoveType.SLOW_SWIM, set.getDouble("baseSwimWalkSpd", getBaseMoveSpeed(MoveType.WALK)));
+		setBaseMoveSpeed(MoveType.FAST_FLY, set.getDouble("baseFlyRunSpd", getBaseMoveSpeed(MoveType.RUN)));
+		setBaseMoveSpeed(MoveType.SLOW_FLY, set.getDouble("baseFlyWalkSpd", getBaseMoveSpeed(MoveType.WALK)));
 	}
 	
 	/**
@@ -460,12 +462,12 @@ public class L2CharTemplate
 		return _baseMCritRate;
 	}
 	
-	public void setBaseMoveSpeed(MoveType type, float val)
+	public void setBaseMoveSpeed(MoveType type, double val)
 	{
 		_moveType[type.ordinal()] = val;
 	}
 	
-	public float getBaseMoveSpeed(MoveType mt)
+	public double getBaseMoveSpeed(MoveType mt)
 	{
 		return _moveType[mt.ordinal()];
 	}
