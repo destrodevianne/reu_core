@@ -39,6 +39,7 @@ import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Siege;
+import l2r.gameserver.model.interfaces.ILocational;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.util.PropertiesParser;
 
@@ -269,6 +270,11 @@ public class SiegeManager
 	public final int getFlagMaxCount()
 	{
 		return _flagMaxCount;
+	}
+	
+	public final Siege getSiege(ILocational loc)
+	{
+		return getSiege(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
 	public final Siege getSiege(L2Object activeObject)
