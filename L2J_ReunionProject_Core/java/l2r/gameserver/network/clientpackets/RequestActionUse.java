@@ -167,12 +167,24 @@ public final class RequestActionUse extends L2GameClientPacket
 				activeChar.tryOpenPrivateSellStore(false);
 				break;
 			case 15: // Change Movement Mode (Pets)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, true))
 				{
 					((L2SummonAI) summon.getAI()).notifyFollowStatusChange();
 				}
 				break;
 			case 16: // Attack (Pets)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, true))
 				{
 					if (summon.canAttack(_ctrlPressed))
@@ -182,12 +194,24 @@ public final class RequestActionUse extends L2GameClientPacket
 				}
 				break;
 			case 17: // Stop (Pets)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, true))
 				{
 					summon.cancelAction();
 				}
 				break;
 			case 19: // Unsummon Pet
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (summon.isDead())
 				{
 					sendPacket(SystemMessageId.DEAD_PET_CANNOT_BE_RETURNED);
@@ -221,12 +245,24 @@ public final class RequestActionUse extends L2GameClientPacket
 				summon.unSummon(activeChar);
 				break;
 			case 21: // Change Movement Mode (Servitors)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, false))
 				{
 					((L2SummonAI) summon.getAI()).notifyFollowStatusChange();
 				}
 				break;
 			case 22: // Attack (Servitors)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, false))
 				{
 					if (summon.canAttack(_ctrlPressed))
@@ -236,6 +272,12 @@ public final class RequestActionUse extends L2GameClientPacket
 				}
 				break;
 			case 23: // Stop (Servitors)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, false))
 				{
 					summon.cancelAction();
@@ -269,12 +311,24 @@ public final class RequestActionUse extends L2GameClientPacket
 				sendPacket(new RecipeShopManageList(activeChar, true));
 				break;
 			case 38: // Mount/Dismount
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				activeChar.mountPlayer(summon);
 				break;
 			case 39: // Soulless - Parasite Burst
 				useSkill(4138, false);
 				break;
 			case 41: // Wild Hog Cannon - Attack
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, false))
 				{
 					if ((target != null) && (target.isDoor() || (target instanceof L2SiegeFlagInstance)))
@@ -328,6 +382,12 @@ public final class RequestActionUse extends L2GameClientPacket
 				sendPacket(new RecipeShopManageList(activeChar, false));
 				break;
 			case 52: // Unsummon Servitor
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, false))
 				{
 					if (summon.isAttackingNow() || summon.isInCombat())
@@ -339,6 +399,12 @@ public final class RequestActionUse extends L2GameClientPacket
 				}
 				break;
 			case 53: // Move to target (Servitors)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, false))
 				{
 					if ((target != null) && (summon != target) && !summon.isMovementDisabled())
@@ -349,6 +415,12 @@ public final class RequestActionUse extends L2GameClientPacket
 				}
 				break;
 			case 54: // Move to target (Pets)
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, true))
 				{
 					if ((target != null) && (summon != target) && !summon.isMovementDisabled())
@@ -420,6 +492,12 @@ public final class RequestActionUse extends L2GameClientPacket
 				}
 				break;
 			case 1001: // Sin Eater - Ultimate Bombastic Buster
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (validateSummon(summon, true) && (summon.getId() == SIN_EATER_ID))
 				{
 					summon.broadcastPacket(new NpcSay(summon.getObjectId(), Say2.NPC_ALL, summon.getId(), NPC_STRINGS[Rnd.get(NPC_STRINGS.length)]));
@@ -636,6 +714,12 @@ public final class RequestActionUse extends L2GameClientPacket
 				useSkill(6044, false);
 				break;
 			case 1084: // Switch State
+				if (summon == null)
+				{
+					sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				
 				if (summon instanceof L2BabyPetInstance)
 				{
 					useSkill(6054, true);
