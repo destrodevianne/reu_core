@@ -260,7 +260,7 @@ public class PlayableStat extends CharStat
 			}
 			return super.getWalkSpeed() * zone.getMoveBonus();
 		}
-		return super.getRunSpeed();
+		return super.getWalkSpeed();
 	}
 	
 	@Override
