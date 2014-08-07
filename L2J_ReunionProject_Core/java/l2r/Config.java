@@ -84,7 +84,7 @@ public final class Config
 	public static final String SERVER_VERSION_FILE = "./config/version/l2rcore-version.ini";
 	public static final String DATAPACK_VERSION_FILE = "./config/version/l2rdp-version.ini";
 	public static final String L2JMOD_CONFIG_FILE = "./config/main/L2JMods.ini";
-	public static final String LOGIN_CONFIGURATION_FILE = "./config/LoginServer.ini";
+	public static final String LOGIN_CONFIGURATION_FILE = "./config/network/LoginServer.ini";
 	public static final String NPC_CONFIG_FILE = "./config/main/NPC.ini";
 	public static final String PVP_CONFIG_FILE = "./config/main/PVP.ini";
 	public static final String RATES_CONFIG_FILE = "./config/main/Rates.ini";
