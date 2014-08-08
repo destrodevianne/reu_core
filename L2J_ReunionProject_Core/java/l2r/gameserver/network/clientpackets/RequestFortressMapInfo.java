@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.model.entity.Fort;
+import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ExShowFortressMapInfo;
 
 /**
@@ -40,6 +41,19 @@ public class RequestFortressMapInfo extends L2GameClientPacket
 	protected void runImpl()
 	{
 		Fort fort = FortManager.getInstance().getFortById(_fortressId);
+		
+		if (fort == null)
+		{
+			_log.warn("Fort is not found with id (" + _fortressId + ") in all forts with size of (" + FortManager.getInstance().getForts().size() + ") called by player (" + getActiveChar() + ")");
+			
+			if (getActiveChar() == null)
+			{
+				return;
+			}
+			
+			sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
 		sendPacket(new ExShowFortressMapInfo(fort));
 	}
 	
