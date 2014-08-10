@@ -2569,8 +2569,8 @@ public final class Config
 			// Load FREYA_EASY_CONFIG L2Properties file (if exists)
 			final PropertiesParser freyaeasy_load = new PropertiesParser(FREYA_EASY_CONFIG);
 			
-			MIN_PLAYER_LEVEL_TO_EASY = freyaeasy_load.getInt("MinLevel", 78);
-			MIN_PLAYERS_TO_EASY = freyaeasy_load.getInt("MinPlayers", 18);
+			MIN_PLAYER_LEVEL_TO_EASY = freyaeasy_load.getInt("MinLevel", 82);
+			MIN_PLAYERS_TO_EASY = freyaeasy_load.getInt("MinPlayers", 10);
 			MAX_PLAYERS_TO_EASY = freyaeasy_load.getInt("MaxPlayers", 27);
 			
 			// Load FREYA_HARDCORE_CONFIG L2Properties file (if exists)
