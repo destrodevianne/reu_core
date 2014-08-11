@@ -209,7 +209,7 @@ public abstract class AbstractOlympiadGame
 			player.setIsInOlympiadMode(true);
 			player.setIsOlympiadStart(false);
 			player.setOlympiadSide(par.getSide());
-			player.olyBuff = 5;
+			player.setOlympiadBuffCount(Config.ALT_OLY_MAX_BUFFS);
 			loc.setInstanceId(OlympiadGameManager.getInstance().getOlympiadTask(id).getZone().getInstanceId());
 			if (Config.ENABLE_OLY_ANTIFEED)
 			{
