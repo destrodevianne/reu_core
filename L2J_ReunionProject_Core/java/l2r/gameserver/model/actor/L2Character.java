@@ -5591,8 +5591,8 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					if (reflectedDamage > 0)
 					{
 						// TODO Test vGodFather fix: this will fix wrong skills triggers from reflect damage
-						_chanceSkills.onHit(target, reflectedDamage, false, false); // test fix
-						// _chanceSkills.onHit(target, reflectedDamage, true, false); // original
+						// _chanceSkills.onHit(target, reflectedDamage, false, false); // test fix
+						_chanceSkills.onHit(target, reflectedDamage, true, false); // original
 					}
 				}
 				
