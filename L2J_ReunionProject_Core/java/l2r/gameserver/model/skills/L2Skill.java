@@ -124,7 +124,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	private final int _targetConsume;
 	private final int _targetConsumeId;
 	
-	private final int _itemConsume;
+	private final int _itemConsumeCount;
 	private final int _itemConsumeId;
 	
 	private final int _castRange;
@@ -273,7 +273,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		_cpConsume = set.getInteger("cpConsume", 0);
 		_targetConsume = set.getInteger("targetConsumeCount", 0);
 		_targetConsumeId = set.getInteger("targetConsumeId", 0);
-		_itemConsume = set.getInteger("itemConsumeCount", 0);
+		_itemConsumeCount = set.getInteger("itemConsumeCount", 0);
 		_itemConsumeId = set.getInteger("itemConsumeId", 0);
 		_afterEffectId = set.getInteger("afterEffectId", 0);
 		_afterEffectLvl = set.getInteger("afterEffectLvl", 1);
@@ -850,11 +850,11 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	}
 	
 	/**
-	 * @return Returns the itemConsume.
+	 * @return Returns the how much items will be consumed.
 	 */
-	public final int getItemConsume()
+	public int getItemConsumeCount()
 	{
-		return _itemConsume;
+		return _itemConsumeCount;
 	}
 	
 	/**
