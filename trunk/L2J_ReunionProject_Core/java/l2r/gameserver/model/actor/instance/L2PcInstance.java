@@ -15762,29 +15762,8 @@ public final class L2PcInstance extends L2Playable
 		_tries = tries;
 	}
 	
-	public boolean isInSameClan(L2PcInstance target)
-	{
-		return (((getClan() != null) && (target != null) && (target.getClan() != null)) && (getClanId() == target.getClanId()));
-	}
-	
-	public boolean isInTwoSidedWar(L2PcInstance target)
-	{
-		final L2Clan aClan = getClan();
-		final L2Clan tClan = target.getClan();
-		if ((aClan != null) && (tClan != null))
-		{
-			if (aClan.isAtWarWith(tClan.getId()) && tClan.isAtWarWith(aClan.getId()))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public final boolean isFriend(L2PcInstance target)
 	{
-		final L2Clan aClan = getClan();
-		final L2Clan tClan = target.getClan();
 		final boolean isInsideSiegeZone = isInsideZone(ZoneIdType.SIEGE);
 		
 		if (isInDuel() && target.isInDuel())
@@ -15803,12 +15782,9 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 		
-		if ((aClan != null) && (tClan != null))
+		if (isInTwoSidedWar(target))
 		{
-			if (aClan.isAtWarWith(tClan.getId()) && tClan.isAtWarWith(aClan.getId()))
-			{
-				return false;
-			}
+			return false;
 		}
 		
 		// You can debuff anyone except party members while in an arena...
@@ -15841,6 +15817,11 @@ public final class L2PcInstance extends L2Playable
 		return true;
 	}
 	
+	public boolean isInSameClan(L2PcInstance target)
+	{
+		return (((getClan() != null) && (target != null) && (target.getClan() != null)) && (getClanId() == target.getClanId()));
+	}
+	
 	public final boolean isInSameAlly(final L2PcInstance target)
 	{
 		return (((getAllyId() != 0) && (target != null) && (target.getAllyId() != 0)) && (getAllyId() == target.getAllyId()));
@@ -15859,6 +15840,20 @@ public final class L2PcInstance extends L2Playable
 	public boolean isInSameClanWar(L2PcInstance target)
 	{
 		return (((getClan() != null) && (target != null) && (target.getClan() != null)) && (getClan().isAtWarWith(target.getClan()) || target.getClan().isAtWarWith(getClan())));
+	}
+	
+	public boolean isInTwoSidedWar(L2PcInstance target)
+	{
+		final L2Clan aClan = getClan();
+		final L2Clan tClan = target.getClan();
+		if ((aClan != null) && (tClan != null))
+		{
+			if (aClan.isAtWarWith(tClan.getId()) && tClan.isAtWarWith(aClan.getId()))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// ============================================== //
