@@ -15781,6 +15781,66 @@ public final class L2PcInstance extends L2Playable
 		return false;
 	}
 	
+	public final boolean isFriend(L2PcInstance target)
+	{
+		final L2Clan aClan = getClan();
+		final L2Clan tClan = target.getClan();
+		final boolean isInsideSiegeZone = isInsideZone(ZoneIdType.SIEGE);
+		
+		if (isInDuel() && target.isInDuel())
+		{
+			if ((getDuelId() != 0) && (getDuelId() == target.getDuelId()))
+			{
+				return false;
+			}
+		}
+		
+		if (isInOlympiadMode() && target.isInOlympiadMode())
+		{
+			if (((getOlympiadGameId() + 1) != 0) && (getOlympiadGameId() == target.getOlympiadGameId()))
+			{
+				return false;
+			}
+		}
+		
+		if ((aClan != null) && (tClan != null))
+		{
+			if (aClan.isAtWarWith(tClan.getId()) && tClan.isAtWarWith(aClan.getId()))
+			{
+				return false;
+			}
+		}
+		
+		// You can debuff anyone except party members while in an arena...
+		if (isInsideZone(ZoneIdType.PVP) && target.isInsideZone(ZoneIdType.PVP) && !isInSameParty(target) && !isInSameChannel(target))
+		{
+			return false;
+		}
+		
+		if (isInsideSiegeZone && isInSiege() && (getSiegeState() != 0) && (target.getSiegeState() != 0))
+		{
+			final Siege siege = SiegeManager.getInstance().getSiege(getX(), getY(), getZ());
+			if (siege != null)
+			{
+				if ((siege.checkIsDefender(getClan()) && siege.checkIsDefender(target.getClan())) || (siege.checkIsAttacker(getClan()) && siege.checkIsAttacker(target.getClan())))
+				{
+					return true;
+				}
+				return false;
+			}
+		}
+		
+		if ((target.getPvpFlag() > 0) || (target.getKarma() > 0))
+		{
+			if (!isInSameParty(target) && !isInSameChannel(target) && !isInSameClan(target) && !isInSameAlly(target))
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public final boolean isInSameAlly(final L2PcInstance target)
 	{
 		return (((getAllyId() != 0) && (target != null) && (target.getAllyId() != 0)) && (getAllyId() == target.getAllyId()));

@@ -27,8 +27,8 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.xml.SkillData;
-import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.datatables.xml.SkillData.FrequentSkill;
+import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.model.actor.L2Attackable;
@@ -364,14 +364,7 @@ public class CursedWeapon
 		{
 			_player.stopTransformation(true);
 			
-			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					TransformData.getInstance().transformPlayer(transformationId, _player);
-				}
-			}, 500);
+			ThreadPoolManager.getInstance().scheduleGeneral(() -> TransformData.getInstance().transformPlayer(transformationId, _player), 500);
 		}
 		else
 		{

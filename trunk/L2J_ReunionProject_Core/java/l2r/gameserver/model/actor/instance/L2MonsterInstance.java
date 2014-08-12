@@ -152,15 +152,11 @@ public class L2MonsterInstance extends L2Attackable
 		
 		if (_maintenanceTask == null)
 		{
-			_maintenanceTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+			_maintenanceTask = ThreadPoolManager.getInstance().scheduleGeneral(() ->
 			{
-				@Override
-				public void run()
+				if (_enableMinions)
 				{
-					if (_enableMinions)
-					{
-						getMinionList().spawnMinions();
-					}
+					getMinionList().spawnMinions();
 				}
 			}, getMaintenanceInterval() + Rnd.get(1000));
 		}
@@ -307,18 +303,14 @@ public class L2MonsterInstance extends L2Attackable
 		final int spawnX = spawn.getX();
 		final int spawnY = spawn.getY();
 		final int spawnZ = spawn.getZ();
-		_returnToSpawnTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		_returnToSpawnTask = ThreadPoolManager.getInstance().scheduleGeneral(() ->
 		{
-			@Override
-			public void run()
+			if ((!L2MonsterInstance.this.isInCombat()) && (!L2MonsterInstance.this.isAlikeDead()) && (!L2MonsterInstance.this.isDead()))
 			{
-				if ((!L2MonsterInstance.this.isInCombat()) && (!L2MonsterInstance.this.isAlikeDead()) && (!L2MonsterInstance.this.isDead()))
-				{
-					clearAggroList();
-					moveToLocation(spawnX, spawnY, spawnZ, 0);
-				}
-				setIsMoveToSpawn(false);
+				clearAggroList();
+				moveToLocation(spawnX, spawnY, spawnZ, 0);
 			}
+			setIsMoveToSpawn(false);
 		}, 15000);
 	}
 	
