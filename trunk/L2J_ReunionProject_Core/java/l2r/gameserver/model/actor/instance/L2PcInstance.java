@@ -9674,6 +9674,16 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 		
+		if (!skill.isOffensive() && !forceUse && target.isPlayer())
+		{
+			if (!isFriend(target.getActingPlayer()))
+			{
+				sendPacket(SystemMessageId.TARGET_IS_INCORRECT);
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return false;
+			}
+		}
+		
 		// Check if this is a Pvp skill and target isn't a non-flagged/non-karma player
 		switch (sklTargetType)
 		{
