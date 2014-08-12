@@ -776,6 +776,13 @@ public class L2Attackable extends L2Npc
 		}
 		
 		L2PcInstance targetPlayer = attacker.getActingPlayer();
+		
+		// Trying to get trap owner if there is
+		if ((targetPlayer == null) && attacker.isTrap())
+		{
+			targetPlayer = ((L2TrapInstance) attacker).getOwner();
+		}
+		
 		// Get the AggroInfo of the attacker L2Character from the _aggroList of the L2Attackable
 		AggroInfo ai = getAggroList().get(attacker);
 		
