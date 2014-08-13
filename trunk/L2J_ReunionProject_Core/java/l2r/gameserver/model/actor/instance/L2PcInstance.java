@@ -15743,6 +15743,11 @@ public final class L2PcInstance extends L2Playable
 	
 	public final boolean isFriend(L2PcInstance target)
 	{
+		if (target == this)
+		{
+			return true;
+		}
+		
 		final boolean isInsideSiegeZone = isInsideZone(ZoneIdType.SIEGE);
 		
 		if (isInDuel() && target.isInDuel())
