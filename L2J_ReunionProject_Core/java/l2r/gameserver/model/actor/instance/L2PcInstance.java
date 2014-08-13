@@ -120,7 +120,6 @@ import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2AccessLevel;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2ClanMember;
-import l2r.gameserver.model.L2CommandChannel;
 import l2r.gameserver.model.L2ContactList;
 import l2r.gameserver.model.L2EnchantSkillLearn;
 import l2r.gameserver.model.L2ManufactureItem;
@@ -9799,7 +9798,7 @@ public final class L2PcInstance extends L2Playable
 				return false;
 			}
 			
-			final boolean isCtrlPressed = (getCurrentSkill() != null) && getCurrentSkill().isCtrlPressed();
+			// final boolean isCtrlPressed = (getCurrentSkill() != null) && getCurrentSkill().isCtrlPressed();
 			final boolean isInsideSiegeZone = isInsideZone(ZoneIdType.SIEGE);
 			if (targetPlayer != null)
 			{
@@ -9823,7 +9822,7 @@ public final class L2PcInstance extends L2Playable
 						return false;
 					}
 					
-					// TODO: temp fix!
+					// vGodfather fix
 					if (((getOlympiadGameId() + 1) != 0) && (getOlympiadGameId() == targetPlayer.getOlympiadGameId()))
 					{
 						return true;
@@ -9841,19 +9840,9 @@ public final class L2PcInstance extends L2Playable
 				}
 				
 				// On retail, you can't debuff party members at all unless you're in duel.
-				if (isInParty() && targetPlayer.isInParty() && (getParty().getLeader() == targetPlayer.getParty().getLeader()))
+				if (isInSameParty(targetPlayer) || isInSameChannel(targetPlayer))
 				{
 					return false;
-				}
-				
-				final L2Party activeCharParty = getParty();
-				if (activeCharParty != null)
-				{
-					final L2CommandChannel chan = activeCharParty.getCommandChannel();
-					if ((chan != null) && chan.containsPlayer(targetPlayer))
-					{
-						return false;
-					}
 				}
 				
 				// During Fortress/Castle Sieges, they can't debuff eachothers if they are in the same side.
@@ -9903,31 +9892,11 @@ public final class L2PcInstance extends L2Playable
 					return false;
 				}
 				
-				if ((targetPlayer.getPvpFlag() > 0) || (targetPlayer.getKarma() > 0))
-				{
-					if (!isCtrlPressed)
-					{
-						switch (skill.getTargetType())
-						{
-							case AREA:
-							case AURA:
-							case BEHIND_AREA:
-							case BEHIND_AURA:
-							case FRONT_AREA:
-							case FRONT_AURA:
-							{
-								if ((getPvpFlag() > 0) || (getKarma() > 0))
-								{
-									return true;
-								}
-								return false;
-							}
-							default:
-								return true;
-						}
-					}
-					return true;
-				}
+				// vGodFather fix
+				/**
+				 * if ((targetPlayer.getPvpFlag() > 0) || (targetPlayer.getKarma() > 0)) { if (!isCtrlPressed) { switch (skill.getTargetType()) { case AREA: case AURA: case BEHIND_AREA: case BEHIND_AURA: case FRONT_AREA: case FRONT_AURA: { if ((getPvpFlag() > 0) || (getKarma() > 0)) { return true; }
+				 * return false; } default: return true; } } return true; }
+				 */
 			}
 		}
 		

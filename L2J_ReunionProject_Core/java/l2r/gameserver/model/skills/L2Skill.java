@@ -1334,19 +1334,10 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 					return false;
 				}
 				
-				if (player.isInParty() && targetPlayer.isInParty())
+				// Same party or command channel
+				if (player.isInSameParty(targetPlayer) || player.isInSameChannel(targetPlayer))
 				{
-					// Same party
-					if (player.getParty().getLeaderObjectId() == targetPlayer.getParty().getLeaderObjectId())
-					{
-						return false;
-					}
-					
-					// Same command channel
-					if (player.getParty().isInCommandChannel() && (player.getParty().getCommandChannel() == targetPlayer.getParty().getCommandChannel()))
-					{
-						return false;
-					}
+					return false;
 				}
 				
 				if (!sourceInArena && !(targetPlayer.isInsideZone(ZoneIdType.PVP) && !targetPlayer.isInsideZone(ZoneIdType.SIEGE)))
