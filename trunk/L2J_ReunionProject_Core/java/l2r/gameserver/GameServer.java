@@ -116,6 +116,7 @@ import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.RaidBossPointsManager;
 import l2r.gameserver.instancemanager.RaidBossSpawnManager;
 import l2r.gameserver.instancemanager.SiegeManager;
+import l2r.gameserver.instancemanager.SoIManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.instancemanager.ZoneManager;
@@ -330,7 +331,10 @@ public class GameServer
 		QuestManager.getInstance();
 		BoatManager.getInstance();
 		AirShipManager.getInstance();
+		
+		printSection("Gracia Seeds");
 		GraciaSeedsManager.getInstance();
+		SoIManager.getInstance();
 		
 		CastleManager.getInstance().activateInstances();
 		FortManager.getInstance().activateInstances();

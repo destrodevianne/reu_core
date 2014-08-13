@@ -45,6 +45,7 @@ public final class GraciaSeedsManager
 	
 	protected GraciaSeedsManager()
 	{
+		_log.info("Seed of Destruction Manager: Loaded. Current stage is: " + getSoDState());
 		_SoDLastStateChangeDate = Calendar.getInstance();
 		loadData();
 		handleSodStages();
