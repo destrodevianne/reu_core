@@ -311,12 +311,6 @@ public final class RequestActionUse extends L2GameClientPacket
 				sendPacket(new RecipeShopManageList(activeChar, true));
 				break;
 			case 38: // Mount/Dismount
-				if (summon == null)
-				{
-					sendPacket(ActionFailed.STATIC_PACKET);
-					return;
-				}
-				
 				activeChar.mountPlayer(summon);
 				break;
 			case 39: // Soulless - Parasite Burst
