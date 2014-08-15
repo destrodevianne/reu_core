@@ -38,7 +38,6 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.ItemLocation;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.Location;
@@ -51,10 +50,11 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.effects.L2EffectType;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcMoveFinished;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.type.WeaponType;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.network.SystemMessageId;
@@ -749,13 +749,7 @@ public class L2CharacterAI extends AbstractAI
 			WalkingManager.getInstance().onArrived(npc); // Walking Manager support
 			
 			// Notify quest
-			if (npc.getTemplate().getEventQuests(QuestEventType.ON_MOVE_FINISHED) != null)
-			{
-				for (Quest quest : npc.getTemplate().getEventQuests(QuestEventType.ON_MOVE_FINISHED))
-				{
-					quest.notifyMoveFinished(npc);
-				}
-			}
+			EventDispatcher.getInstance().notifyEventAsync(new OnNpcMoveFinished(npc), npc);
 		}
 		
 		// If the Intention was AI_INTENTION_MOVE_TO, set the Intention to AI_INTENTION_ACTIVE

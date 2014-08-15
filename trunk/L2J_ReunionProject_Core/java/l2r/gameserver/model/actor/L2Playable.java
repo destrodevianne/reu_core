@@ -22,7 +22,6 @@ import l2r.Config;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.InstanceManager;
-import l2r.gameserver.model.actor.events.PlayableEvents;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.knownlist.PlayableKnownList;
 import l2r.gameserver.model.actor.stat.PlayableStat;
@@ -31,6 +30,9 @@ import l2r.gameserver.model.actor.templates.L2CharTemplate;
 import l2r.gameserver.model.effects.EffectFlag;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.entity.Instance;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.OnCreatureKill;
+import l2r.gameserver.model.events.returns.TerminateReturn;
 import l2r.gameserver.model.quest.QuestState;
 import l2r.gameserver.model.skills.L2Skill;
 
@@ -101,7 +103,8 @@ public abstract class L2Playable extends L2Character
 	@Override
 	public boolean doDie(L2Character killer)
 	{
-		if (!getEvents().onDeath(killer))
+		final TerminateReturn returnBack = EventDispatcher.getInstance().notifyEvent(new OnCreatureKill(killer, this), this, TerminateReturn.class);
+		if ((returnBack != null) && returnBack.terminate())
 		{
 			return false;
 		}
@@ -386,18 +389,6 @@ public abstract class L2Playable extends L2Character
 	public L2PcInstance getTransferingDamageTo()
 	{
 		return transferDmgTo;
-	}
-	
-	@Override
-	public void initCharEvents()
-	{
-		setCharEvents(new PlayableEvents(this));
-	}
-	
-	@Override
-	public PlayableEvents getEvents()
-	{
-		return (PlayableEvents) super.getEvents();
 	}
 	
 	public abstract int getKarma();

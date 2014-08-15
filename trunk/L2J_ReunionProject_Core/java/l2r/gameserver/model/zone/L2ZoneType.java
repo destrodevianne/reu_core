@@ -20,18 +20,19 @@ package l2r.gameserver.model.zone;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.quest.Quest;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.ListenersContainer;
+import l2r.gameserver.model.events.impl.character.OnCreatureZoneEnter;
+import l2r.gameserver.model.events.impl.character.OnCreatureZoneExit;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ import org.slf4j.LoggerFactory;
  * Abstract base class for any zone type handles basic operations.
  * @author durgus
  */
-public abstract class L2ZoneType
+public abstract class L2ZoneType extends ListenersContainer
 {
 	protected static final Logger _log = LoggerFactory.getLogger(L2ZoneType.class);
 	
@@ -59,7 +60,6 @@ public abstract class L2ZoneType
 	private int[] _race;
 	private int[] _class;
 	private char _classType;
-	private Map<QuestEventType, List<Quest>> _questEvents;
 	private InstanceType _target = InstanceType.L2Character; // default all chars
 	private boolean _allowStore;
 	private boolean _enabled;
@@ -424,37 +424,18 @@ public abstract class L2ZoneType
 		// If the object is inside the zone...
 		if (isInsideZone(character))
 		{
-			// Was the character not yet inside this zone?
-			if (!_characterList.containsKey(character.getObjectId()))
-			{
-				List<Quest> quests = getQuestByEvent(QuestEventType.ON_ENTER_ZONE);
-				if (quests != null)
-				{
-					for (Quest quest : quests)
-					{
-						quest.notifyEnterZone(character, this);
-					}
-				}
-				_characterList.put(character.getObjectId(), character);
-				onEnter(character);
-			}
+			// Notify to scripts.
+			EventDispatcher.getInstance().notifyEventAsync(new OnCreatureZoneEnter(character, this), this);
+			
+			// Register player.
+			_characterList.put(character.getObjectId(), character);
+			
+			// Notify Zone implementation.
+			onEnter(character);
 		}
 		else
 		{
-			// Was the character inside this zone?
-			if (_characterList.containsKey(character.getObjectId()))
-			{
-				List<Quest> quests = getQuestByEvent(QuestEventType.ON_EXIT_ZONE);
-				if (quests != null)
-				{
-					for (Quest quest : quests)
-					{
-						quest.notifyExitZone(character, this);
-					}
-				}
-				_characterList.remove(character.getObjectId());
-				onExit(character);
-			}
+			removeCharacter(character);
 		}
 	}
 	
@@ -466,15 +447,13 @@ public abstract class L2ZoneType
 	{
 		if (_characterList.containsKey(character.getObjectId()))
 		{
-			List<Quest> quests = getQuestByEvent(QuestEventType.ON_EXIT_ZONE);
-			if (quests != null)
-			{
-				for (Quest quest : quests)
-				{
-					quest.notifyExitZone(character, this);
-				}
-			}
+			// Notify to scripts.
+			EventDispatcher.getInstance().notifyEventAsync(new OnCreatureZoneExit(character, this), this);
+			
+			// Unregister player.
 			_characterList.remove(character.getObjectId());
+			
+			// Notify Zone implementation.
 			onExit(character);
 		}
 	}
@@ -533,33 +512,6 @@ public abstract class L2ZoneType
 		}
 		
 		return players;
-	}
-	
-	public void addQuestEvent(QuestEventType EventType, Quest q)
-	{
-		if (_questEvents == null)
-		{
-			_questEvents = new HashMap<>();
-		}
-		List<Quest> questByEvents = _questEvents.get(EventType);
-		if (questByEvents == null)
-		{
-			questByEvents = new ArrayList<>();
-		}
-		if (!questByEvents.contains(q))
-		{
-			questByEvents.add(q);
-		}
-		_questEvents.put(EventType, questByEvents);
-	}
-	
-	public List<Quest> getQuestByEvent(QuestEventType EventType)
-	{
-		if (_questEvents == null)
-		{
-			return null;
-		}
-		return _questEvents.get(EventType);
 	}
 	
 	/**

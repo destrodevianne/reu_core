@@ -34,7 +34,6 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.datatables.xml.SiegeScheduleData;
-import l2r.gameserver.enums.EventStage;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.SiegeClanType;
 import l2r.gameserver.enums.TeleportWhereType;
@@ -53,14 +52,16 @@ import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2ControlTowerInstance;
 import l2r.gameserver.model.actor.instance.L2FlameTowerInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.sieges.castle.OnCastleSiegeFinish;
+import l2r.gameserver.model.events.impl.sieges.castle.OnCastleSiegeOwnerChange;
+import l2r.gameserver.model.events.impl.sieges.castle.OnCastleSiegeStart;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExBrExtraUserInfo;
 import l2r.gameserver.network.serverpackets.RelationChanged;
 import l2r.gameserver.network.serverpackets.SiegeInfo;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
-import l2r.gameserver.scripting.scriptengine.events.SiegeEvent;
-import l2r.gameserver.scripting.scriptengine.listeners.events.SiegeListener;
 import l2r.gameserver.util.Broadcast;
 
 import org.slf4j.Logger;
@@ -69,8 +70,6 @@ import org.slf4j.LoggerFactory;
 public class Siege implements Siegable
 {
 	protected static final Logger _log = LoggerFactory.getLogger(Siege.class);
-	
-	private static final List<SiegeListener> siegeListeners = new FastList<SiegeListener>().shared();
 	
 	// typeId's
 	public static final byte OWNER = -1;
@@ -342,7 +341,9 @@ public class Siege implements Siegable
 			getCastle().getZone().setIsActive(false);
 			getCastle().getZone().updateZoneStatusForCharactersInside();
 			getCastle().getZone().setSiegeInstance(null);
-			fireSiegeListeners(EventStage.END);
+			
+			// Notify to scripts.
+			EventDispatcher.getInstance().notifyEventAsync(new OnCastleSiegeFinish(this), getCastle());
 		}
 	}
 	
@@ -470,7 +471,9 @@ public class Siege implements Siegable
 				spawnControlTower();
 				spawnFlameTower();
 				updatePlayerSiegeStateFlags(false);
-				fireSiegeListeners(EventStage.CONTROL_CHANGE);
+				
+				// Notify to scripts.
+				EventDispatcher.getInstance().notifyEventAsync(new OnCastleSiegeOwnerChange(this), getCastle());
 			}
 		}
 	}
@@ -484,10 +487,6 @@ public class Siege implements Siegable
 	{
 		if (!isInProgress())
 		{
-			if (!fireSiegeListeners(EventStage.START))
-			{
-				return;
-			}
 			_firstOwnerClanId = getCastle().getOwnerId();
 			
 			if (getAttackerClans().isEmpty())
@@ -534,6 +533,9 @@ public class Siege implements Siegable
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.SIEGE_OF_S1_HAS_STARTED);
 			sm.addCastleId(getCastle().getResidenceId());
 			Announcements.getInstance().announceToAll(sm);
+			
+			// Notify to scripts.
+			EventDispatcher.getInstance().notifyEventAsync(new OnCastleSiegeStart(this), getCastle());
 		}
 	}
 	
@@ -1805,74 +1807,5 @@ public class Siege implements Siegable
 	@Override
 	public void updateSiege()
 	{
-	}
-	
-	// Listeners
-	/**
-	 * Fires the appropriate SiegeListener<br>
-	 * If it returns false on EventStage.start, the siege is cancelled
-	 * @param stage
-	 * @return
-	 */
-	private boolean fireSiegeListeners(EventStage stage)
-	{
-		if (!siegeListeners.isEmpty())
-		{
-			SiegeEvent event = new SiegeEvent();
-			event.setSiege(this);
-			event.setStage(stage);
-			switch (stage)
-			{
-				case START:
-				{
-					for (SiegeListener listener : siegeListeners)
-					{
-						if (!listener.onStart(event))
-						{
-							return false;
-						}
-					}
-					break;
-				}
-				case END:
-				{
-					for (SiegeListener listener : siegeListeners)
-					{
-						listener.onEnd(event);
-					}
-					break;
-				}
-				case CONTROL_CHANGE:
-				{
-					for (SiegeListener listener : siegeListeners)
-					{
-						listener.onControlChange(event);
-					}
-					break;
-				}
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Adds a siege listener
-	 * @param listener
-	 */
-	public static void addSiegeListener(SiegeListener listener)
-	{
-		if (!siegeListeners.contains(listener))
-		{
-			siegeListeners.add(listener);
-		}
-	}
-	
-	/**
-	 * Removes a siege listener
-	 * @param listener
-	 */
-	public static void removeSiegeListener(SiegeListener listener)
-	{
-		siegeListeners.remove(listener);
 	}
 }

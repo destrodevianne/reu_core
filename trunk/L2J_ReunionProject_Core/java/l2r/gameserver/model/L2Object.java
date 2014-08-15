@@ -37,6 +37,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.knownlist.ObjectKnownList;
 import l2r.gameserver.model.actor.poly.ObjectPoly;
 import l2r.gameserver.model.entity.Instance;
+import l2r.gameserver.model.events.ListenersContainer;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.interfaces.ILocational;
 import l2r.gameserver.model.interfaces.INamable;
@@ -56,7 +57,7 @@ import l2r.gameserver.util.Util;
  * <BR>
  * <li>L2Character</li> <li>L2ItemInstance</li>
  */
-public abstract class L2Object implements IIdentifiable, INamable, IUniqueId, IPositionable
+public abstract class L2Object extends ListenersContainer implements IIdentifiable, INamable, IUniqueId, IPositionable
 {
 	private boolean _isVisible;
 	private boolean _isInvisible;

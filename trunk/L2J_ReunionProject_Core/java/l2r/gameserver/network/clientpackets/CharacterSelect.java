@@ -18,12 +18,10 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.datatables.xml.SecondaryAuthData;
@@ -31,6 +29,8 @@ import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.instancemanager.PunishmentManager;
 import l2r.gameserver.model.CharSelectInfoPackage;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.player.OnPlayerSelect;
 import l2r.gameserver.model.punishment.PunishmentAffect;
 import l2r.gameserver.model.punishment.PunishmentType;
 import l2r.gameserver.network.L2GameClient;
@@ -39,8 +39,6 @@ import l2r.gameserver.network.serverpackets.CharSelected;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.SSQInfo;
 import l2r.gameserver.network.serverpackets.ServerClose;
-import l2r.gameserver.scripting.scriptengine.events.PlayerEvent;
-import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerListener;
 import gr.reunion.protection.Protection;
 
 /**
@@ -51,7 +49,6 @@ public class CharacterSelect extends L2GameClientPacket
 {
 	private static final String _C__12_CHARACTERSELECT = "[C] 12 CharacterSelect";
 	protected static final Logger _logAccounting = Logger.getLogger("accounting");
-	private static final List<PlayerListener> _listeners = new FastList<PlayerListener>().shared();
 	
 	// cd
 	private int _charSlot;
@@ -135,18 +132,14 @@ public class CharacterSelect extends L2GameClientPacket
 						_log.info("selected slot:" + _charSlot);
 					}
 					
-					PlayerEvent event = new PlayerEvent();
-					event.setClient(client);
-					event.setObjectId(client.getCharSelection(_charSlot).getObjectId());
-					event.setName(client.getCharSelection(_charSlot).getName());
-					firePlayerListener(event);
-					
 					// load up character from disk
 					final L2PcInstance cha = client.loadCharFromDisk(_charSlot);
 					if (cha == null)
 					{
 						return; // handled in L2GameClient
 					}
+					
+					EventDispatcher.getInstance().notifyEvent(new OnPlayerSelect(cha, cha.getObjectId(), cha.getName(), getClient()));
 					
 					CharNameTable.getInstance().addName(cha);
 					
@@ -178,27 +171,6 @@ public class CharacterSelect extends L2GameClientPacket
 			});
 			_logAccounting.log(record);
 		}
-	}
-	
-	private void firePlayerListener(PlayerEvent event)
-	{
-		for (PlayerListener listener : _listeners)
-		{
-			listener.onCharSelect(event);
-		}
-	}
-	
-	public static void addPlayerListener(PlayerListener listener)
-	{
-		if (!_listeners.contains(listener))
-		{
-			_listeners.add(listener);
-		}
-	}
-	
-	public static void removePlayerListener(PlayerListener listener)
-	{
-		_listeners.remove(listener);
 	}
 	
 	@Override

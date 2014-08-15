@@ -24,17 +24,18 @@ import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.enums.QuestSound;
 import l2r.gameserver.enums.QuestType;
-import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.events.AbstractScript;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.network.serverpackets.ExShowQuestMark;
@@ -45,10 +46,6 @@ import l2r.gameserver.network.serverpackets.TutorialEnableClientEvent;
 import l2r.gameserver.network.serverpackets.TutorialShowHtml;
 import l2r.gameserver.network.serverpackets.TutorialShowQuestionMark;
 import l2r.gameserver.util.Util;
-import l2r.util.Rnd;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Quest state class.
@@ -56,7 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class QuestState
 {
-	protected static final Logger _log = LoggerFactory.getLogger(QuestState.class);
+	protected static final Logger _log = Logger.getLogger(QuestState.class.getName());
 	
 	/** The name of the quest of this QuestState */
 	private final String _questName;
@@ -273,7 +270,7 @@ public final class QuestState
 			}
 			catch (Exception e)
 			{
-				_log.warn(_player.getName() + ", " + getQuestName() + " cond [" + val + "] is not an integer.  Value stored, but no packet was sent: " + e.getMessage(), e);
+				_log.log(Level.WARNING, _player.getName() + ", " + getQuestName() + " cond [" + val + "] is not an integer.  Value stored, but no packet was sent: " + e.getMessage(), e);
 			}
 		}
 		
@@ -415,7 +412,7 @@ public final class QuestState
 		}
 		catch (Exception e)
 		{
-			_log.warn("Could not insert player's global quest variable: " + e.getMessage(), e);
+			_log.log(Level.WARNING, "Could not insert player's global quest variable: " + e.getMessage(), e);
 		}
 	}
 	
@@ -447,7 +444,7 @@ public final class QuestState
 		}
 		catch (Exception e)
 		{
-			_log.warn("Could not load player's global quest variable: " + e.getMessage(), e);
+			_log.log(Level.WARNING, "Could not load player's global quest variable: " + e.getMessage(), e);
 		}
 		return result;
 	}
@@ -467,7 +464,7 @@ public final class QuestState
 		}
 		catch (Exception e)
 		{
-			_log.warn("could not delete player's global quest variable; charId = " + _player.getObjectId() + ", variable name = " + var + ". Exception: " + e.getMessage(), e);
+			_log.log(Level.WARNING, "could not delete player's global quest variable; charId = " + _player.getObjectId() + ", variable name = " + var + ". Exception: " + e.getMessage(), e);
 		}
 	}
 	
@@ -509,7 +506,7 @@ public final class QuestState
 		}
 		catch (NumberFormatException nfe)
 		{
-			_log.info("Quest " + getQuestName() + ", method getInt(" + var + "), tried to parse a non-integer value (" + variable + "). Char Id: " + _player.getObjectId(), nfe);
+			_log.log(Level.INFO, "Quest " + getQuestName() + ", method getInt(" + var + "), tried to parse a non-integer value (" + variable + "). Char Id: " + _player.getObjectId(), nfe);
 		}
 		
 		return varint;
@@ -585,7 +582,7 @@ public final class QuestState
 		
 		if (playQuestMiddle)
 		{
-			Quest.playSound(_player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
+			AbstractScript.playSound(_player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 		}
 		return this;
 	}
@@ -636,7 +633,7 @@ public final class QuestState
 	 */
 	public long getQuestItemsCount(int itemId)
 	{
-		return Quest.getQuestItemsCount(_player, itemId);
+		return AbstractScript.getQuestItemsCount(_player, itemId);
 	}
 	
 	/**
@@ -645,7 +642,7 @@ public final class QuestState
 	 */
 	public boolean hasQuestItems(int itemId)
 	{
-		return Quest.hasQuestItems(_player, itemId);
+		return AbstractScript.hasQuestItems(_player, itemId);
 	}
 	
 	/**
@@ -654,7 +651,7 @@ public final class QuestState
 	 */
 	public boolean hasQuestItems(int... itemIds)
 	{
-		return Quest.hasQuestItems(_player, itemIds);
+		return AbstractScript.hasQuestItems(_player, itemIds);
 	}
 	
 	/**
@@ -664,7 +661,7 @@ public final class QuestState
 	 */
 	public int getEnchantLevel(int itemId)
 	{
-		return Quest.getEnchantLevel(_player, itemId);
+		return AbstractScript.getEnchantLevel(_player, itemId);
 	}
 	
 	/**
@@ -683,7 +680,7 @@ public final class QuestState
 	 */
 	public void rewardItems(ItemHolder item)
 	{
-		Quest.rewardItems(_player, item);
+		AbstractScript.rewardItems(_player, item);
 	}
 	
 	/**
@@ -693,7 +690,7 @@ public final class QuestState
 	 */
 	public void rewardItems(int itemId, long count)
 	{
-		Quest.rewardItems(_player, itemId, count);
+		AbstractScript.rewardItems(_player, itemId, count);
 	}
 	
 	/**
@@ -703,37 +700,37 @@ public final class QuestState
 	 */
 	public void giveItems(int itemId, long count)
 	{
-		Quest.giveItems(_player, itemId, count, 0);
+		AbstractScript.giveItems(_player, itemId, count, 0);
 	}
 	
 	public void giveItems(ItemHolder holder)
 	{
-		Quest.giveItems(_player, holder.getId(), holder.getCount(), 0);
+		AbstractScript.giveItems(_player, holder.getId(), holder.getCount(), 0);
 	}
 	
 	public void giveItems(int itemId, long count, int enchantlevel)
 	{
-		Quest.giveItems(_player, itemId, count, enchantlevel);
+		AbstractScript.giveItems(_player, itemId, count, enchantlevel);
 	}
 	
 	public void giveItems(int itemId, long count, byte attributeId, int attributeLevel)
 	{
-		Quest.giveItems(_player, itemId, count, attributeId, attributeLevel);
+		AbstractScript.giveItems(_player, itemId, count, attributeId, attributeLevel);
 	}
 	
 	public boolean giveItemRandomly(int itemId, long amount, long limit, double dropChance, boolean playSound)
 	{
-		return Quest.giveItemRandomly(_player, null, itemId, amount, amount, limit, dropChance, playSound);
+		return AbstractScript.giveItemRandomly(_player, null, itemId, amount, amount, limit, dropChance, playSound);
 	}
 	
 	public boolean giveItemRandomly(L2Npc npc, int itemId, long amount, long limit, double dropChance, boolean playSound)
 	{
-		return Quest.giveItemRandomly(_player, npc, itemId, amount, amount, limit, dropChance, playSound);
+		return AbstractScript.giveItemRandomly(_player, npc, itemId, amount, amount, limit, dropChance, playSound);
 	}
 	
 	public boolean giveItemRandomly(L2Npc npc, int itemId, long minAmount, long maxAmount, long limit, double dropChance, boolean playSound)
 	{
-		return Quest.giveItemRandomly(_player, npc, itemId, minAmount, maxAmount, limit, dropChance, playSound);
+		return AbstractScript.giveItemRandomly(_player, npc, itemId, minAmount, maxAmount, limit, dropChance, playSound);
 	}
 	
 	// TODO: More radar functions need to be added when the radar class is complete.
@@ -767,7 +764,7 @@ public final class QuestState
 	 */
 	public void takeItems(int itemId, long count)
 	{
-		Quest.takeItems(_player, itemId, count);
+		AbstractScript.takeItems(_player, itemId, count);
 	}
 	
 	/**
@@ -776,7 +773,7 @@ public final class QuestState
 	 */
 	public void playSound(String sound)
 	{
-		Quest.playSound(_player, sound);
+		AbstractScript.playSound(_player, sound);
 	}
 	
 	/**
@@ -785,7 +782,7 @@ public final class QuestState
 	 */
 	public void playSound(QuestSound sound)
 	{
-		Quest.playSound(_player, sound);
+		AbstractScript.playSound(_player, sound);
 	}
 	
 	/**
@@ -795,13 +792,7 @@ public final class QuestState
 	 */
 	public void addExpAndSp(int exp, int sp)
 	{
-		Quest.addExpAndSp(_player, exp, sp);
-		PcCafePointsManager.getInstance().givePcCafePoint(_player, (long) (exp * Config.RATE_QUEST_REWARD_XP));
-	}
-	
-	public int getRandom(int max)
-	{
-		return Rnd.get(max);
+		AbstractScript.addExpAndSp(_player, exp, sp);
 	}
 	
 	/**
@@ -810,7 +801,7 @@ public final class QuestState
 	 */
 	public int getItemEquipped(int loc)
 	{
-		return Quest.getItemEquipped(_player, loc);
+		return AbstractScript.getItemEquipped(_player, loc);
 	}
 	
 	/**
@@ -1018,16 +1009,33 @@ public final class QuestState
 	 */
 	public L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, int despawnDelay, boolean isSummonSpawn)
 	{
-		return Quest.addSpawn(npcId, x, y, z, heading, randomOffset, despawnDelay, isSummonSpawn);
+		return AbstractScript.addSpawn(npcId, x, y, z, heading, randomOffset, despawnDelay, isSummonSpawn);
 	}
 	
 	/**
-	 * @param fileName the name of the file you want to show. Must be in the same folder (or subfolder) as script
-	 * @return a String containing the contents of the specified HTML file
+	 * Send an HTML file to the specified player.
+	 * @param filename the name of the HTML file to show
+	 * @return the contents of the HTML file that was sent to the player
+	 * @see #showHtmlFile(String, L2Npc)
+	 * @see Quest#showHtmlFile(L2PcInstance, String)
+	 * @see Quest#showHtmlFile(L2PcInstance, String, L2Npc)
 	 */
-	public String showHtmlFile(String fileName)
+	public String showHtmlFile(String filename)
 	{
-		return getQuest().showHtmlFile(_player, fileName);
+		return showHtmlFile(filename, null);
+	}
+	
+	/**
+	 * Send an HTML file to the specified player.
+	 * @param filename the name of the HTML file to show
+	 * @param npc the NPC that is showing the HTML file
+	 * @return the contents of the HTML file that was sent to the player
+	 * @see Quest#showHtmlFile(L2PcInstance, String)
+	 * @see Quest#showHtmlFile(L2PcInstance, String, L2Npc)
+	 */
+	public String showHtmlFile(String filename, L2Npc npc)
+	{
+		return getQuest().showHtmlFile(_player, filename, npc);
 	}
 	
 	/**
@@ -1171,7 +1179,7 @@ public final class QuestState
 		String text = HtmCache.getInstance().getHtm(_player.getHtmlPrefix(), "data/scripts/quests/255_Tutorial/" + html);
 		if (text == null)
 		{
-			_log.warn("missing html page data/scripts/quests/255_Tutorial/" + html);
+			_log.warning("missing html page data/scripts/quests/255_Tutorial/" + html);
 			text = "<html><body>File data/scripts/quests/255_Tutorial/" + html + " not found or file is empty.</body></html>";
 		}
 		_player.sendPacket(new TutorialShowHtml(text));

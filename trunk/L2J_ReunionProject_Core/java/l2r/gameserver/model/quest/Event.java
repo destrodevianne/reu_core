@@ -19,13 +19,12 @@
 package l2r.gameserver.model.quest;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.scripting.scriptengine.impl.L2Script;
 
 /**
  * Abstract event class.
  * @author JIV
  */
-public abstract class Event extends L2Script
+public abstract class Event extends Quest
 {
 	public Event(String name, String descr)
 	{

@@ -19,14 +19,12 @@
 package l2r.gameserver.model.actor.knownlist;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.actor.L2Attackable;
@@ -34,7 +32,8 @@ import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2FestivalGuideInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.quest.Quest;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcCreatureSee;
 
 public class NpcKnownList extends CharKnownList
 {
@@ -56,14 +55,9 @@ public class NpcKnownList extends CharKnownList
 		if (getActiveObject().isNpc() && (object instanceof L2Character))
 		{
 			final L2Npc npc = (L2Npc) getActiveObject();
-			final List<Quest> quests = npc.getTemplate().getEventQuests(QuestEventType.ON_SEE_CREATURE);
-			if (quests != null)
-			{
-				for (Quest quest : quests)
-				{
-					quest.notifySeeCreature(npc, (L2Character) object, object.isSummon());
-				}
-			}
+			
+			// Notify to scripts
+			EventDispatcher.getInstance().notifyEventAsync(new OnNpcCreatureSee(npc, (L2Character) object, object.isSummon()), npc);
 		}
 		return true;
 	}

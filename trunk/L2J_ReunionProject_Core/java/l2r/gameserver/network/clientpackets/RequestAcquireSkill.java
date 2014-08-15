@@ -24,7 +24,6 @@ import l2r.Config;
 import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.ClanPrivilege;
 import l2r.gameserver.model.L2Clan;
@@ -35,6 +34,8 @@ import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2VillageMasterInstance;
 import l2r.gameserver.model.base.AcquireSkillType;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.player.OnPlayerSkillLearn;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -541,14 +542,9 @@ public final class RequestAcquireSkill extends L2GameClientPacket
 		{
 			player.sendPacket(new ExStorageMaxCount(player));
 		}
+		
 		// Notify scripts of the skill learn.
-		if (trainer.getTemplate().getEventQuests().containsKey(QuestEventType.ON_SKILL_LEARN))
-		{
-			for (Quest quest : trainer.getTemplate().getEventQuests(QuestEventType.ON_SKILL_LEARN))
-			{
-				quest.notifyAcquireSkill(trainer, player, skill, _skillType);
-			}
-		}
+		EventDispatcher.getInstance().notifyEventAsync(new OnPlayerSkillLearn(trainer, player, skill, _skillType), trainer);
 	}
 	
 	/**

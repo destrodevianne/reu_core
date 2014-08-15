@@ -24,7 +24,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.xml.FishingMonstersData;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.quest.Quest;
+import l2r.gameserver.model.events.AbstractScript;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExFishingHpRegen;
 import l2r.gameserver.network.serverpackets.ExFishingStartCombat;
@@ -155,7 +155,7 @@ public class L2Fishing implements Runnable
 				if (Rnd.get(100) <= fishingMonster.getProbability())
 				{
 					_fisher.sendPacket(SystemMessageId.YOU_CAUGHT_SOMETHING_SMELLY_THROW_IT_BACK);
-					final L2Npc monster = Quest.addSpawn(fishingMonster.getFishingMonsterId(), _fisher);
+					final L2Npc monster = AbstractScript.addSpawn(fishingMonster.getFishingMonsterId(), _fisher);
 					monster.setTarget(_fisher);
 				}
 				else

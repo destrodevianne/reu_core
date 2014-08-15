@@ -26,6 +26,9 @@ import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.playable.OnPlayableExpChanged;
+import l2r.gameserver.model.events.returns.TerminateReturn;
 import l2r.gameserver.model.zone.type.L2SwampZone;
 
 import org.slf4j.Logger;
@@ -47,8 +50,8 @@ public class PlayableStat extends CharStat
 			return true;
 		}
 		
-		// TODO: This should be here?
-		if (!getActiveChar().getEvents().onExperienceReceived(value))
+		final TerminateReturn term = EventDispatcher.getInstance().notifyEvent(new OnPlayableExpChanged(getActiveChar(), getExp(), getExp() + value), getActiveChar(), TerminateReturn.class);
+		if ((term != null) && term.terminate())
 		{
 			return false;
 		}

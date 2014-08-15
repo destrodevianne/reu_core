@@ -28,7 +28,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
@@ -40,13 +39,13 @@ import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.item.OnItemCreate;
 import l2r.gameserver.model.items.L2Armor;
 import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.scripting.scriptengine.events.ItemCreateEvent;
-import l2r.gameserver.scripting.scriptengine.listeners.player.NewItemListener;
 import l2r.gameserver.util.GMAudit;
 
 import org.slf4j.Logger;
@@ -59,8 +58,6 @@ public class ItemData
 {
 	private static Logger _log = LoggerFactory.getLogger(ItemData.class);
 	private static java.util.logging.Logger _logItems = java.util.logging.Logger.getLogger("item");
-	
-	private static FastList<NewItemListener> newItemListeners = new FastList<NewItemListener>().shared();
 	
 	public static final Map<String, Integer> _slots = new FastMap<>();
 	
@@ -213,11 +210,6 @@ public class ItemData
 	 */
 	public L2ItemInstance createItem(String process, int itemId, long count, L2PcInstance actor, Object reference)
 	{
-		if (!fireNewItemListeners(process, itemId, count, actor, reference))
-		{
-			return null;
-		}
-		
 		// Create and Init the L2ItemInstance corresponding to the Item Identifier
 		L2ItemInstance item = new L2ItemInstance(IdFactory.getInstance().getNextId(), itemId);
 		
@@ -295,6 +287,8 @@ public class ItemData
 			}
 		}
 		
+		// Notify to scripts
+		EventDispatcher.getInstance().notifyEventAsync(new OnItemCreate(process, item, actor, reference), item.getItem());
 		return item;
 	}
 	
@@ -444,61 +438,5 @@ public class ItemData
 	private static class SingletonHolder
 	{
 		protected static final ItemData _instance = new ItemData();
-	}
-	
-	// Listeners
-	
-	/**
-	 * Fires all the new item listeners, if any
-	 * @param process
-	 * @param itemId
-	 * @param count
-	 * @param actor
-	 * @param reference
-	 * @return
-	 */
-	private boolean fireNewItemListeners(String process, int itemId, long count, L2PcInstance actor, Object reference)
-	{
-		if (!newItemListeners.isEmpty() && (actor != null))
-		{
-			ItemCreateEvent event = new ItemCreateEvent();
-			event.setItemId(itemId);
-			event.setPlayer(actor);
-			event.setCount(count);
-			event.setProcess(process);
-			event.setReference(reference);
-			for (NewItemListener listener : newItemListeners)
-			{
-				if (listener.containsItemId(itemId))
-				{
-					if (!listener.onCreate(event))
-					{
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Adds a new item listener
-	 * @param listener
-	 */
-	public static void addNewItemListener(NewItemListener listener)
-	{
-		if (!newItemListeners.contains(listener))
-		{
-			newItemListeners.add(listener);
-		}
-	}
-	
-	/**
-	 * Removes a new item listener
-	 * @param listener
-	 */
-	public static void removeNewItemListener(NewItemListener listener)
-	{
-		newItemListeners.remove(listener);
 	}
 }

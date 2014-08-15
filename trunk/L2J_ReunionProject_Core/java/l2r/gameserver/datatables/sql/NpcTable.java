@@ -33,7 +33,6 @@ import l2r.L2DatabaseFactory;
 import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.datatables.xml.SkillLearnData;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.Elementals;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2MinionData;
@@ -41,7 +40,6 @@ import l2r.gameserver.model.L2NpcAIData;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.base.ClassId;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.BaseStats;
 
@@ -191,17 +189,8 @@ public class NpcTable
 	 */
 	public void reloadNpc(int id)
 	{
-		Map<QuestEventType, List<Quest>> quests = null;
 		try
 		{
-			// save a copy of the old data
-			L2NpcTemplate old = getTemplate(id);
-			
-			if (old != null)
-			{
-				quests = old.getEventQuests();
-			}
-			
 			loadNpcs(id);
 			loadNpcsSkills(id);
 			loadNpcsDrop(id);
@@ -209,14 +198,6 @@ public class NpcTable
 			loadMinions(id);
 			loadNpcsAI(id);
 			loadNpcsElement(id);
-			
-			// restore additional data from saved copy
-			L2NpcTemplate created = getTemplate(id);
-			
-			if ((old != null) && (created != null))
-			{
-				created.getEventQuests().putAll(quests);
-			}
 		}
 		catch (Exception e)
 		{

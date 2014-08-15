@@ -126,6 +126,7 @@ import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.PartyMatchRoomList;
 import l2r.gameserver.model.PartyMatchWaitingList;
 import l2r.gameserver.model.entity.Hero;
+import l2r.gameserver.model.events.EventDispatcher;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.L2GamePacketHandler;
@@ -194,6 +195,7 @@ public class GameServer
 		}
 		
 		ThreadPoolManager.getInstance();
+		EventDispatcher.getInstance();
 		
 		new File("log/game").mkdirs();
 		

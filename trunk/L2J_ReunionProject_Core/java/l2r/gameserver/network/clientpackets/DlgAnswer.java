@@ -23,6 +23,9 @@ import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.handler.AdminCommandHandler;
 import l2r.gameserver.handler.IAdminCommandHandler;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.player.OnPlayerDlgAnswer;
+import l2r.gameserver.model.events.returns.TerminateReturn;
 import l2r.gameserver.model.holders.DoorRequestHolder;
 import l2r.gameserver.model.holders.SummonRequestHolder;
 import l2r.gameserver.network.SystemMessageId;
@@ -60,7 +63,8 @@ public final class DlgAnswer extends L2GameClientPacket
 			_log.info(getType() + ": Answer accepted. Message ID " + _messageId + ", answer " + _answer + ", Requester ID " + _requesterId);
 		}
 		
-		if (!activeChar.getEvents().onDlgAnswer(_messageId, _answer, _requesterId))
+		final TerminateReturn term = EventDispatcher.getInstance().notifyEvent(new OnPlayerDlgAnswer(activeChar, _messageId, _answer, _requesterId), activeChar, TerminateReturn.class);
+		if ((term != null) && term.terminate())
 		{
 			return;
 		}

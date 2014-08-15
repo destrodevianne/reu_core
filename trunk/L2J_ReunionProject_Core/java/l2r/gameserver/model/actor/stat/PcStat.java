@@ -18,7 +18,6 @@
  */
 package l2r.gameserver.model.actor.stat;
 
-import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.datatables.xml.ExperienceData;
 import l2r.gameserver.datatables.xml.PetData;
@@ -32,6 +31,8 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.actor.transform.TransformTemplate;
 import l2r.gameserver.model.entity.RecoBonus;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.player.OnPlayerLevelChanged;
 import l2r.gameserver.model.quest.QuestState;
 import l2r.gameserver.model.stats.Formulas;
 import l2r.gameserver.model.stats.MoveType;
@@ -45,7 +46,6 @@ import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
-import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerLevelListener;
 import l2r.gameserver.util.Util;
 import gr.reunion.configsEngine.CustomServerConfigs;
 import gr.reunion.configsEngine.FormulasConfigs;
@@ -69,9 +69,6 @@ public class PcStat extends PlayableStat
 	};
 	public static final int MAX_VITALITY_POINTS = VITALITY_LEVELS[4];
 	public static final int MIN_VITALITY_POINTS = 1;
-	
-	public FastList<PlayerLevelListener> levelListeners = new FastList<PlayerLevelListener>().shared();
-	public static FastList<PlayerLevelListener> globalLevelListeners = new FastList<PlayerLevelListener>().shared();
 	
 	public PcStat(L2PcInstance activeChar)
 	{
@@ -337,10 +334,8 @@ public class PcStat extends PlayableStat
 			return false;
 		}
 		
-		if (!getActiveChar().getEvents().onLevelChange(value))
-		{
-			return false;
-		}
+		// Notify to scripts
+		EventDispatcher.getInstance().notifyEventAsync(new OnPlayerLevelChanged(getActiveChar(), getLevel(), getLevel() + value), getActiveChar());
 		
 		boolean levelIncreased = super.addLevel(value);
 		if (levelIncreased)

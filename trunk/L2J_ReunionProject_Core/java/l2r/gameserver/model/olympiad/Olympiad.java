@@ -46,6 +46,7 @@ import l2r.gameserver.instancemanager.ZoneManager;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Hero;
+import l2r.gameserver.model.events.ListenersContainer;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
@@ -55,7 +56,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author godson
  */
-public class Olympiad
+public class Olympiad extends ListenersContainer
 {
 	protected static final Logger _log = LoggerFactory.getLogger(Olympiad.class);
 	protected static final java.util.logging.Logger _logResults = java.util.logging.Logger.getLogger("olympiad");

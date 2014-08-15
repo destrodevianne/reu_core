@@ -40,7 +40,6 @@ import l2r.gameserver.datatables.xml.ManorData;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
 import l2r.gameserver.instancemanager.PcCafePointsManager;
 import l2r.gameserver.instancemanager.WalkingManager;
@@ -53,7 +52,6 @@ import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.Location;
-import l2r.gameserver.model.actor.events.AttackableEvents;
 import l2r.gameserver.model.actor.instance.L2GrandBossInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -63,13 +61,15 @@ import l2r.gameserver.model.actor.knownlist.AttackableKnownList;
 import l2r.gameserver.model.actor.stat.Rates;
 import l2r.gameserver.model.actor.status.AttackableStatus;
 import l2r.gameserver.model.actor.tasks.attackable.CommandChannelTimer;
-import l2r.gameserver.model.actor.tasks.attackable.OnKillNotifyTask;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableAggroRangeEnter;
+import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableAttack;
+import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableKill;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.SystemMessageId;
@@ -160,18 +160,6 @@ public class L2Attackable extends L2Npc
 	public void initCharStatus()
 	{
 		setStatus(new AttackableStatus(this));
-	}
-	
-	@Override
-	public void initCharEvents()
-	{
-		setCharEvents(new AttackableEvents(this));
-	}
-	
-	@Override
-	public AttackableEvents getEvents()
-	{
-		return (AttackableEvents) super.getEvents();
 	}
 	
 	@Override
@@ -367,35 +355,18 @@ public class L2Attackable extends L2Npc
 			return false;
 		}
 		
-		// Notify the Quest Engine of the L2Attackable death if necessary
-		try
+		if ((killer != null) && killer.isPlayable())
 		{
-			L2PcInstance player = null;
-			
-			if (killer != null)
-			{
-				player = killer.getActingPlayer();
-			}
-			
-			if (player != null)
-			{
-				if (ReunionEvents.isInEvent(player))
-				{
-					ReunionEvents.onKill(player, this);
-				}
-				
-				if (getTemplate().getEventQuests(QuestEventType.ON_KILL) != null)
-				{
-					for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_KILL))
-					{
-						ThreadPoolManager.getInstance().scheduleEffect(new OnKillNotifyTask(this, quest, player, (killer != null) && killer.isSummon()), _onKillDelay);
-					}
-				}
-			}
+			// Delayed notification
+			EventDispatcher.getInstance().notifyEventAsyncDelayed(new OnAttackableKill(killer.getActingPlayer(), this, killer.isSummon()), this, _onKillDelay);
 		}
-		catch (Exception e)
+		
+		if ((killer != null) && killer.isPlayer())
 		{
-			_log.error(String.valueOf(e));
+			if (ReunionEvents.isInEvent(((L2PcInstance) killer)))
+			{
+				ReunionEvents.onKill(((L2PcInstance) killer), this);
+			}
 		}
 		
 		// Notify to minions if there are.
@@ -724,35 +695,7 @@ public class L2Attackable extends L2Npc
 				final L2PcInstance player = attacker.getActingPlayer();
 				if (player != null)
 				{
-					if (getTemplate().getEventQuests(QuestEventType.ON_ATTACK) != null)
-					{
-						for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_ATTACK))
-						{
-							try
-							{
-								quest.notifyAttack(this, player, damage, attacker.isSummon(), skill);
-							}
-							catch (Exception e)
-							{
-								if (Config.DEBUG_SCRIPT_NOTIFIES)
-								{
-									if (skill == null)
-									{
-										_log.error("L2Attackable[notifyAttack] Skill is NULL.");
-										_log.error("L2Attackable[notifyAttack] MobId is: " + String.valueOf(this.getId()));
-									}
-									
-									if (damage == 0)
-									{
-										_log.error("L2Attackable[notifyAttack] Damage is 0");
-									}
-									
-									_log.error("L2Attackable[notifyAttack] Attacker is: " + player.getName());
-									e.printStackTrace();
-								}
-							}
-						}
-					}
+					EventDispatcher.getInstance().notifyEventAsync(new OnAttackableAttack(player, this, damage, skill, attacker.isSummon()), this);
 				}
 			}
 			catch (Exception e)
@@ -821,13 +764,8 @@ public class L2Attackable extends L2Npc
 				getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 			}
 			
-			if (getTemplate().getEventQuests(QuestEventType.ON_AGGRO_RANGE_ENTER) != null)
-			{
-				for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_AGGRO_RANGE_ENTER))
-				{
-					quest.notifyAggroRangeEnter(this, targetPlayer, attacker.isSummon());
-				}
-			}
+			// Notify to scripts
+			EventDispatcher.getInstance().notifyEventAsync(new OnAttackableAggroRangeEnter(this, targetPlayer, attacker.isSummon()), this);
 		}
 		else if ((targetPlayer == null) && (aggro == 0))
 		{
@@ -2220,6 +2158,11 @@ public class L2Attackable extends L2Npc
 	public final void setOnKillDelay(int delay)
 	{
 		_onKillDelay = delay;
+	}
+	
+	public final int getOnKillDelay()
+	{
+		return _onKillDelay;
 	}
 	
 	/**

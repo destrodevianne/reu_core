@@ -36,7 +36,6 @@ import l2r.gameserver.datatables.sql.TerritoryTable;
 import l2r.gameserver.enums.AIType;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.CtrlIntention;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.instancemanager.DimensionalRiftManager;
 import l2r.gameserver.model.L2Object;
@@ -59,7 +58,10 @@ import l2r.gameserver.model.actor.instance.L2RiftInvaderInstance;
 import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.effects.L2EffectType;
-import l2r.gameserver.model.quest.Quest;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableFactionCall;
+import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableHate;
+import l2r.gameserver.model.events.returns.TerminateReturn;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.util.Util;
@@ -485,31 +487,18 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 					}
 				}
 				
-				if (obj.isPlayable())
+				// For each L2Character check if the target is autoattackable
+				if (autoAttackCondition(target)) // check aggression
 				{
-					final List<Quest> quests = getActiveChar().getTemplate().getEventQuests(QuestEventType.ON_NPC_HATE);
-					if (quests != null)
+					if (target.isPlayable())
 					{
-						boolean breaking = false;
-						for (Quest q : quests)
-						{
-							if (!q.onNpcHate(getActiveChar(), (L2Playable) obj))
-							{
-								breaking = true;
-							}
-						}
-						if (breaking)
+						final TerminateReturn term = EventDispatcher.getInstance().notifyEvent(new OnAttackableHate(getActiveChar(), target.getActingPlayer(), target.isSummon()), getActiveChar(), TerminateReturn.class);
+						if ((term != null) && term.terminate())
 						{
 							continue;
 						}
 					}
-				}
-				
-				// TODO: The AI Script ought to handle aggro behaviors in onSee. Once implemented, aggro behaviors ought
-				// to be removed from here. (Fulminus)
-				// For each L2Character check if the target is autoattackable
-				if (autoAttackCondition(target)) // check aggression
-				{
+					
 					// Get the hate level of the L2Attackable against this L2Character target contained in _aggroList
 					int hating = npc.getHating(target);
 					
@@ -824,17 +813,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 									// By default, when a faction member calls for help, attack the caller's attacker.
 									// Notify the AI with EVT_AGGRESSION
 									called.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, originalAttackTarget, 1);
-									
-									List<Quest> quests = called.getTemplate().getEventQuests(QuestEventType.ON_FACTION_CALL);
-									if ((quests != null) && !quests.isEmpty())
-									{
-										L2PcInstance player = originalAttackTarget.getActingPlayer();
-										boolean isSummon = originalAttackTarget.isSummon();
-										for (Quest quest : quests)
-										{
-											quest.notifyFactionCall(called, getActiveChar(), player, isSummon);
-										}
-									}
+									EventDispatcher.getInstance().notifyEventAsync(new OnAttackableFactionCall(called, getActiveChar(), originalAttackTarget.getActingPlayer(), originalAttackTarget.isSummon()), called);
 								}
 								else if ((called instanceof L2Attackable) && (getAttackTarget() != null) && (called.getAI()._intention != CtrlIntention.AI_INTENTION_ATTACK))
 								{

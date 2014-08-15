@@ -18,12 +18,10 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.SevenSignsFestival;
 import l2r.gameserver.enums.PrivateStoreType;
@@ -36,7 +34,6 @@ import l2r.gameserver.network.L2GameClient.GameClientState;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.CharSelectionInfo;
 import l2r.gameserver.network.serverpackets.RestartResponse;
-import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerDespawnListener;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import gr.reunion.configsEngine.AntibotConfigs;
 import gr.reunion.interf.ReunionEvents;
@@ -51,7 +48,6 @@ public final class RequestRestart extends L2GameClientPacket
 {
 	private static final String _C__57_REQUESTRESTART = "[C] 57 RequestRestart";
 	protected static final Logger _logAccounting = Logger.getLogger("accounting");
-	private static List<PlayerDespawnListener> despawnListeners = new FastList<>();
 	
 	@Override
 	protected void readImpl()
@@ -207,27 +203,5 @@ public final class RequestRestart extends L2GameClientPacket
 	public String getType()
 	{
 		return _C__57_REQUESTRESTART;
-	}
-	
-	// Listeners
-	/**
-	 * Adds a despawn listener which will get triggered when a player despawns
-	 * @param listener
-	 */
-	public static void addDespawnListener(PlayerDespawnListener listener)
-	{
-		if (!despawnListeners.contains(listener))
-		{
-			despawnListeners.add(listener);
-		}
-	}
-	
-	/**
-	 * Removes a despawn listener
-	 * @param listener
-	 */
-	public static void removeDespawnListener(PlayerDespawnListener listener)
-	{
-		despawnListeners.remove(listener);
 	}
 }

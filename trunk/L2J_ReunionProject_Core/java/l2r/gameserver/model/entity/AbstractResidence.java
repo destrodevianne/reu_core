@@ -24,6 +24,7 @@ import java.util.List;
 import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.model.L2SkillLearn;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.events.ListenersContainer;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.interfaces.INamable;
 import l2r.gameserver.model.zone.type.L2ResidenceZone;
@@ -31,7 +32,7 @@ import l2r.gameserver.model.zone.type.L2ResidenceZone;
 /**
  * @author xban1x
  */
-public abstract class AbstractResidence implements INamable
+public abstract class AbstractResidence extends ListenersContainer implements INamable
 {
 	private final int _residenceId;
 	private String _name;

@@ -18,15 +18,13 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.List;
-
-import javolution.util.FastList;
 import l2r.Config;
+import l2r.gameserver.model.CharSelectInfoPackage;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.player.OnPlayerDelete;
 import l2r.gameserver.network.serverpackets.CharDeleteFail;
 import l2r.gameserver.network.serverpackets.CharDeleteSuccess;
 import l2r.gameserver.network.serverpackets.CharSelectionInfo;
-import l2r.gameserver.scripting.scriptengine.events.PlayerEvent;
-import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerListener;
 
 /**
  * This class ...
@@ -35,7 +33,6 @@ import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerListener;
 public final class CharacterDelete extends L2GameClientPacket
 {
 	private static final String _C__0C_CHARACTERDELETE = "[C] 0D CharacterDelete";
-	private static final List<PlayerListener> _listeners = new FastList<PlayerListener>().shared();
 	
 	// cd
 	private int _charSlot;
@@ -71,11 +68,8 @@ public final class CharacterDelete extends L2GameClientPacket
 					break;
 				case 0: // Success!
 					sendPacket(new CharDeleteSuccess());
-					PlayerEvent event = new PlayerEvent();
-					event.setClient(getClient());
-					event.setObjectId(getClient().getCharSelection(_charSlot).getObjectId());
-					event.setName(getClient().getCharSelection(_charSlot).getName());
-					firePlayerListener(event);
+					final CharSelectInfoPackage charInfo = getClient().getCharSelection(_charSlot);
+					EventDispatcher.getInstance().notifyEvent(new OnPlayerDelete(charInfo.getObjectId(), charInfo.getName(), getClient()));
 					break;
 				case 1:
 					sendPacket(new CharDeleteFail(CharDeleteFail.REASON_YOU_MAY_NOT_DELETE_CLAN_MEMBER));
@@ -93,27 +87,6 @@ public final class CharacterDelete extends L2GameClientPacket
 		CharSelectionInfo cl = new CharSelectionInfo(getClient().getAccountName(), getClient().getSessionId().playOkID1, 0);
 		sendPacket(cl);
 		getClient().setCharSelection(cl.getCharInfo());
-	}
-	
-	private void firePlayerListener(PlayerEvent event)
-	{
-		for (PlayerListener listener : _listeners)
-		{
-			listener.onCharDelete(event);
-		}
-	}
-	
-	public static void addPlayerListener(PlayerListener listener)
-	{
-		if (!_listeners.contains(listener))
-		{
-			_listeners.add(listener);
-		}
-	}
-	
-	public static void removePlayerListener(PlayerListener listener)
-	{
-		_listeners.remove(listener);
 	}
 	
 	@Override

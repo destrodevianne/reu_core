@@ -27,14 +27,12 @@ import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.AntiFeedManager;
 import l2r.gameserver.instancemanager.CastleManager;
 import l2r.gameserver.instancemanager.FortManager;
-import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import l2r.gameserver.network.SystemMessageId;
@@ -99,14 +97,6 @@ public abstract class AbstractOlympiadGame
 		sm.addString(par.getName());
 		sm.addInt(points);
 		broadcastPacket(sm);
-		
-		for (Quest quest : QuestManager.getInstance().getQuests().values())
-		{
-			if ((quest != null) && quest.isOlympiadUse())
-			{
-				quest.notifyOlympiadWin(par.getPlayer(), getType());
-			}
-		}
 	}
 	
 	protected final void removePointsFromParticipant(Participant par, int points)
@@ -116,14 +106,6 @@ public abstract class AbstractOlympiadGame
 		sm.addString(par.getName());
 		sm.addInt(points);
 		broadcastPacket(sm);
-		
-		for (Quest quest : QuestManager.getInstance().getQuests().values())
-		{
-			if ((quest != null) && quest.isOlympiadUse())
-			{
-				quest.notifyOlympiadLose(par.getPlayer(), getType());
-			}
-		}
 	}
 	
 	/**

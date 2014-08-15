@@ -19,16 +19,12 @@
 package l2r.gameserver.model.actor.templates;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javolution.util.FastMap;
-import l2r.Config;
 import l2r.gameserver.datatables.xml.HerbDropData;
 import l2r.gameserver.enums.NpcRace;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.L2DropCategory;
 import l2r.gameserver.model.L2DropData;
 import l2r.gameserver.model.L2MinionData;
@@ -37,7 +33,6 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.interfaces.IIdentifiable;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 
 import org.slf4j.Logger;
@@ -114,11 +109,6 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	private final List<ClassId> _teachInfo = new ArrayList<>();
 	
 	private final Map<Integer, L2Skill> _skills = new FastMap<Integer, L2Skill>().shared();
-	
-	/**
-	 * Contains a list of quests for each event type (questStart, questAttack, questKill, etc).
-	 */
-	private final Map<QuestEventType, List<Quest>> _questEvents = new FastMap<QuestEventType, List<Quest>>().shared();
 	
 	private StatsSet _parameters;
 	
@@ -305,56 +295,6 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	public void addParalyzeSkill(L2Skill skill)
 	{
 		_paralyzeSkills.add(skill);
-	}
-	
-	public void addQuestEvent(QuestEventType EventType, Quest q)
-	{
-		if (!_questEvents.containsKey(EventType))
-		{
-			List<Quest> quests = new ArrayList<>();
-			quests.add(q);
-			_questEvents.put(EventType, quests);
-		}
-		else
-		{
-			List<Quest> quests = _questEvents.get(EventType);
-			
-			if (!EventType.isMultipleRegistrationAllowed() && !quests.isEmpty())
-			{
-				if (Config.DEBUG_MULTIPLE_REGISTRATIONS_OF_NPCS)
-				{
-					_log.warn("Quest event not allowed in multiple quests.  Skipped addition of Event Type " + EventType + " for NPC NAME " + _name + " NPC ID " + _npcId + " and quest " + q.getName() + ".");
-				}
-			}
-			else
-			{
-				quests.add(q);
-			}
-		}
-	}
-	
-	public void removeQuest(Quest q)
-	{
-		for (Entry<QuestEventType, List<Quest>> entry : _questEvents.entrySet())
-		{
-			if (entry.getValue().contains(q))
-			{
-				Iterator<Quest> it = entry.getValue().iterator();
-				while (it.hasNext())
-				{
-					Quest q1 = it.next();
-					if (q1 == q)
-					{
-						it.remove();
-					}
-				}
-				
-				if (entry.getValue().isEmpty())
-				{
-					_questEvents.remove(entry.getKey());
-				}
-			}
-		}
 	}
 	
 	public void addRaidData(L2MinionData minion)
@@ -610,16 +550,6 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	public int getEnchantEffect()
 	{
 		return _enchantEffect;
-	}
-	
-	public Map<QuestEventType, List<Quest>> getEventQuests()
-	{
-		return _questEvents;
-	}
-	
-	public List<Quest> getEventQuests(QuestEventType EventType)
-	{
-		return _questEvents.get(EventType);
 	}
 	
 	/**
