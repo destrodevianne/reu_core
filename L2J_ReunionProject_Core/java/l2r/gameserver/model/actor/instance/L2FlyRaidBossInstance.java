@@ -28,12 +28,6 @@ public final class L2FlyRaidBossInstance extends L2RaidBossInstance
 	{
 		super(objectId, template);
 		setInstanceType(InstanceType.L2FlyRaidBossInstance);
-	}
-	
-	@Override
-	public void onSpawn()
-	{
 		setIsFlying(true);
-		super.onSpawn();
 	}
 }

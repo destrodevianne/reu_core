@@ -28,12 +28,6 @@ public final class L2FlyMonsterInstance extends L2MonsterInstance
 	{
 		super(objectId, template);
 		setInstanceType(InstanceType.L2FlyMonsterInstance);
-	}
-	
-	@Override
-	public void onSpawn()
-	{
 		setIsFlying(true);
-		super.onSpawn();
 	}
 }
