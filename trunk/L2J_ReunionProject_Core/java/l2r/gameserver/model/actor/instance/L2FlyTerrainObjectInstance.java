@@ -30,13 +30,7 @@ public final class L2FlyTerrainObjectInstance extends L2Npc
 	{
 		super(objectId, template);
 		setInstanceType(InstanceType.L2FlyTerrainObjectInstance);
-	}
-	
-	@Override
-	public void onSpawn()
-	{
 		setIsFlying(true);
-		super.onSpawn();
 	}
 	
 	@Override
