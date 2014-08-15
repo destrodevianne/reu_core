@@ -20,12 +20,12 @@ package l2r.gameserver.model.holders;
 
 import java.util.concurrent.ScheduledFuture;
 
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.WalkingManager;
 import l2r.gameserver.model.L2NpcWalkerNode;
 import l2r.gameserver.model.L2WalkRoute;
 import l2r.gameserver.model.actor.L2Npc;
-import l2r.gameserver.model.quest.Quest;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcMoveRouteFinished;
 import l2r.util.Rnd;
 
 /**
@@ -98,13 +98,8 @@ public class WalkInfoHolder
 			if (_currentNode == getRoute().getNodesCount()) // Last node arrived
 			{
 				// Notify quest
-				if (npc.getTemplate().getEventQuests(QuestEventType.ON_ROUTE_FINISHED) != null)
-				{
-					for (Quest quest : npc.getTemplate().getEventQuests(QuestEventType.ON_ROUTE_FINISHED))
-					{
-						quest.notifyRouteFinished(npc);
-					}
-				}
+				EventDispatcher.getInstance().notifyEventAsync(new OnNpcMoveRouteFinished(npc), npc);
+				
 				npc.sendDebugMessage("Route: " + getRoute().getName() + ", last node arrived");
 				
 				if (!getRoute().repeatWalk())

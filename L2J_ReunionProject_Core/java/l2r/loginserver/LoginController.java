@@ -51,10 +51,6 @@ import l2r.util.crypt.ScrambledKeyPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * This class ...
- * @version $Revision: 1.7.4.3 $ $Date: 2005/03/27 15:30:09 $
- */
 public class LoginController
 {
 	protected static final Logger _log = LoggerFactory.getLogger(LoginController.class);
@@ -237,7 +233,7 @@ public class LoginController
 	/**
 	 * Adds the address to the ban list of the login server, with the given duration.
 	 * @param address The Address to be banned.
-	 * @param expiration Timestamp in miliseconds when this ban expires
+	 * @param expiration Timestamp in milliseconds when this ban expires
 	 * @throws UnknownHostException if the address is invalid.
 	 */
 	public void addBanForAddress(String address, long expiration) throws UnknownHostException
@@ -252,7 +248,7 @@ public class LoginController
 	/**
 	 * Adds the address to the ban list of the login server, with the given duration.
 	 * @param address The Address to be banned.
-	 * @param duration is miliseconds
+	 * @param duration is milliseconds
 	 */
 	public void addBanForAddress(InetAddress address, long duration)
 	{

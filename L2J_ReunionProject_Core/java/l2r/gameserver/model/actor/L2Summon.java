@@ -36,7 +36,6 @@ import l2r.gameserver.model.AggroInfo;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.L2WorldRegion;
-import l2r.gameserver.model.actor.events.SummonEvents;
 import l2r.gameserver.model.actor.instance.L2NpcInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2SiegeSummonInstance;
@@ -45,6 +44,8 @@ import l2r.gameserver.model.actor.stat.SummonStat;
 import l2r.gameserver.model.actor.status.SummonStatus;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.effects.L2EffectType;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.player.OnPlayerSummonSpawn;
 import l2r.gameserver.model.itemcontainer.PetInventory;
 import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Weapon;
@@ -148,6 +149,9 @@ public abstract class L2Summon extends L2Playable
 		setShowSummonAnimation(false); // addVisibleObject created the info packets with summon animation
 		// if someone comes into range now, the animation shouldn't show any more
 		_restoreSummon = false;
+		
+		// Notify to scripts
+		EventDispatcher.getInstance().notifyEventAsync(new OnPlayerSummonSpawn(this), this);
 	}
 	
 	@Override
@@ -184,18 +188,6 @@ public abstract class L2Summon extends L2Playable
 	public void initCharStatus()
 	{
 		setStatus(new SummonStatus(this));
-	}
-	
-	@Override
-	public void initCharEvents()
-	{
-		setCharEvents(new SummonEvents(this));
-	}
-	
-	@Override
-	public SummonEvents getEvents()
-	{
-		return (SummonEvents) super.getEvents();
 	}
 	
 	@Override

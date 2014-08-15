@@ -18,7 +18,6 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.LoginServerThread;
@@ -40,7 +39,6 @@ import l2r.gameserver.instancemanager.FortManager;
 import l2r.gameserver.instancemanager.FortSiegeManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.MailManager;
-import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.instancemanager.SiegeManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
 import l2r.gameserver.instancemanager.petition.PetitionManager;
@@ -85,7 +83,6 @@ import l2r.gameserver.network.serverpackets.QuestList;
 import l2r.gameserver.network.serverpackets.ShortCutInit;
 import l2r.gameserver.network.serverpackets.SkillCoolTime;
 import l2r.gameserver.network.serverpackets.SystemMessage;
-import l2r.gameserver.scripting.scriptengine.listeners.player.PlayerSpawnListener;
 import gr.reunion.antibotEngine.AntibotSystem;
 import gr.reunion.configsEngine.SecuritySystemConfigs;
 import gr.reunion.interf.ReunionEvents;
@@ -108,8 +105,6 @@ import gr.reunion.securityEngine.SecurityType;
 public class EnterWorld extends L2GameClientPacket
 {
 	private static final String _C__11_ENTERWORLD = "[C] 11 EnterWorld";
-	
-	private static FastList<PlayerSpawnListener> listeners = new FastList<PlayerSpawnListener>().shared();
 	
 	private final int[][] tracert = new int[5][4];
 	
@@ -407,23 +402,6 @@ public class EnterWorld extends L2GameClientPacket
 		if (!Config.DISABLE_TUTORIAL)
 		{
 			loadTutorial(activeChar);
-		}
-		
-		// Notify quests.
-		for (Quest quest : QuestManager.getInstance().getQuests().values())
-		{
-			if ((quest != null) && quest.getOnEnterWorld())
-			{
-				quest.notifyEnterWorld(activeChar);
-			}
-		}
-		// Notify scripts.
-		for (Quest quest : QuestManager.getInstance().getScripts().values())
-		{
-			if ((quest != null) && quest.getOnEnterWorld())
-			{
-				quest.notifyEnterWorld(activeChar);
-			}
 		}
 		
 		activeChar.sendPacket(new QuestList());
@@ -764,27 +742,5 @@ public class EnterWorld extends L2GameClientPacket
 	protected boolean triggersOnActionRequest()
 	{
 		return false;
-	}
-	
-	// Player spawn listeners
-	/**
-	 * Adds a spawn listener
-	 * @param listener
-	 */
-	public static void addSpawnListener(PlayerSpawnListener listener)
-	{
-		if (!listeners.contains(listener))
-		{
-			listeners.add(listener);
-		}
-	}
-	
-	/**
-	 * Removes a spawn listener
-	 * @param listener
-	 */
-	public static void removeSpawnListener(PlayerSpawnListener listener)
-	{
-		listeners.remove(listener);
 	}
 }

@@ -467,10 +467,12 @@ public final class Config
 	public static boolean SKILL_CHECK_GM;
 	public static int THREAD_P_EFFECTS;
 	public static int THREAD_P_GENERAL;
+	public static int THREAD_E_EVENTS;
 	public static int GENERAL_PACKET_THREAD_CORE_SIZE;
 	public static int IO_PACKET_THREAD_CORE_SIZE;
 	public static int GENERAL_THREAD_CORE_SIZE;
 	public static int AI_MAX_THREAD;
+	public static int EVENT_MAX_THREAD;
 	public static int CLIENT_PACKET_QUEUE_SIZE;
 	public static int CLIENT_PACKET_QUEUE_MAX_BURST_SIZE;
 	public static int CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND;
@@ -1837,10 +1839,12 @@ public final class Config
 			SKILL_CHECK_GM = General.getBoolean("SkillCheckGM", true);
 			THREAD_P_EFFECTS = General.getInt("ThreadPoolSizeEffects", 10);
 			THREAD_P_GENERAL = General.getInt("ThreadPoolSizeGeneral", 13);
+			THREAD_E_EVENTS = General.getInt("ThreadPoolSizeEvents", 2);
 			IO_PACKET_THREAD_CORE_SIZE = General.getInt("UrgentPacketThreadCoreSize", 2);
 			GENERAL_PACKET_THREAD_CORE_SIZE = General.getInt("GeneralPacketThreadCoreSize", 4);
 			GENERAL_THREAD_CORE_SIZE = General.getInt("GeneralThreadCoreSize", 4);
 			AI_MAX_THREAD = General.getInt("AiMaxThread", 6);
+			EVENT_MAX_THREAD = General.getInt("EventsMaxThread", 5);
 			CLIENT_PACKET_QUEUE_SIZE = General.getInt("ClientPacketQueueSize", 0);
 			if (CLIENT_PACKET_QUEUE_SIZE == 0)
 			{

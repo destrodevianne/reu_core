@@ -108,8 +108,6 @@ public enum L2SkillType
 	RECALL(L2SkillTeleport.class),
 	TELEPORT(L2SkillTeleport.class),
 	TRANSFORMDISPEL,
-	DETECT_TRAP,
-	REMOVE_TRAP,
 	SHIFT_TARGET,
 	
 	// Skill is done within the core.

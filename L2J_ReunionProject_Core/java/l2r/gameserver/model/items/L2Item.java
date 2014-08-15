@@ -35,6 +35,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.effects.EffectTemplate;
 import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.events.ListenersContainer;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
@@ -65,7 +66,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * @version $Revision: 1.7.2.2.2.5 $ $Date: 2005/04/06 18:25:18 $
  */
-public abstract class L2Item implements IIdentifiable
+public abstract class L2Item extends ListenersContainer implements IIdentifiable
 {
 	protected static final Logger _log = LoggerFactory.getLogger(L2Item.class);
 	

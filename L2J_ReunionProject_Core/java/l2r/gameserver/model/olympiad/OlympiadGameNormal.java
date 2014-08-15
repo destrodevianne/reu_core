@@ -32,6 +32,8 @@ import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
 import l2r.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ExOlympiadMatchResult;
@@ -484,6 +486,9 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 						});
 						_logResults.log(record);
 					}
+					
+					// Notify to scripts
+					EventDispatcher.getInstance().notifyEventAsync(new OnOlympiadMatchResult(_playerOne, _playerTwo, getType()), Olympiad.getInstance());
 				}
 				else if (_pOneCrash && !_pTwoCrash)
 				{
@@ -519,6 +524,9 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 						});
 						_logResults.log(record);
 					}
+					
+					// Notify to scripts
+					EventDispatcher.getInstance().notifyEventAsync(new OnOlympiadMatchResult(_playerTwo, _playerOne, getType()), Olympiad.getInstance());
 				}
 				else if (_pOneCrash && _pTwoCrash)
 				{
@@ -568,6 +576,10 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 					result = new ExOlympiadMatchResult(tie, winside, list2, list1);
 				}
 				stadium.broadcastPacket(result);
+				
+				// Notify to scripts
+				EventDispatcher.getInstance().notifyEventAsync(new OnOlympiadMatchResult(null, _playerOne, getType()), Olympiad.getInstance());
+				EventDispatcher.getInstance().notifyEventAsync(new OnOlympiadMatchResult(null, _playerTwo, getType()), Olympiad.getInstance());
 				return;
 			}
 			catch (Exception e)
@@ -639,6 +651,9 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 					saveResults(_playerOne, _playerTwo, 1, _startTime, _fightTime, getType());
 				}
 				rewardParticipant(_playerOne.getPlayer(), getReward());
+				
+				// Notify to scripts
+				EventDispatcher.getInstance().notifyEventAsync(new OnOlympiadMatchResult(_playerOne, _playerTwo, getType()), Olympiad.getInstance());
 			}
 			else if ((_playerOne.getPlayer() == null) || !_playerOne.getPlayer().isOnline() || ((playerOneHp == 0) && (playerTwoHp != 0)) || ((_damageP2 > _damageP1) && (playerOneHp != 0) && (playerTwoHp != 0)))
 			{
@@ -664,6 +679,9 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame
 					saveResults(_playerOne, _playerTwo, 2, _startTime, _fightTime, getType());
 				}
 				rewardParticipant(_playerTwo.getPlayer(), getReward());
+				
+				// Notify to scripts
+				EventDispatcher.getInstance().notifyEventAsync(new OnOlympiadMatchResult(_playerTwo, _playerOne, getType()), Olympiad.getInstance());
 			}
 			else
 			{

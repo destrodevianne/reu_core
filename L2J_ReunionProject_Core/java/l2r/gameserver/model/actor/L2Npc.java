@@ -36,7 +36,6 @@ import l2r.gameserver.enums.AIType;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.enums.PrivateStoreType;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.enums.ShotType;
 import l2r.gameserver.enums.Team;
 import l2r.gameserver.handler.BypassHandler;
@@ -69,12 +68,18 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.clanhall.SiegableHall;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.EventType;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcCanBeSeen;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcEventReceived;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcSkillFinished;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcSpawn;
+import l2r.gameserver.model.events.returns.TerminateReturn;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.olympiad.Olympiad;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.targets.L2TargetType;
 import l2r.gameserver.model.variables.NpcVariables;
@@ -1498,13 +1503,7 @@ public class L2Npc extends L2Character
 		_soulshotamount = getTemplate().getAIDataStatic().getSoulShot();
 		_spiritshotamount = getTemplate().getAIDataStatic().getSpiritShot();
 		
-		if (getTemplate().getEventQuests(QuestEventType.ON_SPAWN) != null)
-		{
-			for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_SPAWN))
-			{
-				quest.notifySpawn(this);
-			}
-		}
+		EventDispatcher.getInstance().notifyEventAsync(new OnNpcSpawn(this, isTeleporting()), this);
 		
 		if (!isTeleporting())
 		{
@@ -1780,24 +1779,9 @@ public class L2Npc extends L2Character
 	@Override
 	protected final void notifyQuestEventSkillFinished(L2Skill skill, L2Object target)
 	{
-		try
+		if ((target != null) && target.isPlayable())
 		{
-			if (getTemplate().getEventQuests(QuestEventType.ON_SPELL_FINISHED) != null)
-			{
-				L2PcInstance player = null;
-				if (target != null)
-				{
-					player = target.getActingPlayer();
-				}
-				for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_SPELL_FINISHED))
-				{
-					quest.notifySpellFinished(this, player, skill);
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			_log.error("", e);
+			EventDispatcher.getInstance().notifyEventAsync(new OnNpcSkillFinished(this, target.getActingPlayer(), skill), this);
 		}
 	}
 	
@@ -2057,12 +2041,9 @@ public class L2Npc extends L2Character
 	{
 		for (L2Object obj : L2World.getInstance().getVisibleObjects(this, radius))
 		{
-			if (obj.isNpc() && (((L2Npc) obj).getTemplate().getEventQuests(QuestEventType.ON_EVENT_RECEIVED) != null))
+			if (obj.isNpc() && obj.hasListener(EventType.ON_NPC_EVENT_RECEIVED))
 			{
-				for (Quest quest : ((L2Npc) obj).getTemplate().getEventQuests(QuestEventType.ON_EVENT_RECEIVED))
-				{
-					quest.notifyEventReceived(eventName, this, (L2Npc) obj, reference);
-				}
+				EventDispatcher.getInstance().notifyEventAsync(new OnNpcEventReceived(eventName, this, (L2Npc) obj, reference), obj);
 			}
 		}
 	}
@@ -2155,11 +2136,12 @@ public class L2Npc extends L2Character
 	@Override
 	public boolean isVisibleFor(L2PcInstance player)
 	{
-		if (getTemplate().getEventQuests(QuestEventType.ON_CAN_SEE_ME) != null)
+		if (hasListener(EventType.ON_NPC_CAN_BE_SEEN))
 		{
-			for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_CAN_SEE_ME))
+			final TerminateReturn term = EventDispatcher.getInstance().notifyEvent(new OnNpcCanBeSeen(this, player), this, TerminateReturn.class);
+			if (term != null)
 			{
-				return quest.notifyOnCanSeeMe(this, player);
+				return term.terminate();
 			}
 		}
 		return super.isVisibleFor(player);

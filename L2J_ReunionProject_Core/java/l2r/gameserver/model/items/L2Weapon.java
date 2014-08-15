@@ -18,14 +18,12 @@
  */
 package l2r.gameserver.model.items;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javolution.util.FastList;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.handler.ISkillHandler;
 import l2r.gameserver.handler.SkillHandler;
-import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
@@ -33,9 +31,10 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.conditions.ConditionGameChance;
 import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcSkillSee;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.items.type.WeaponType;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Formulas;
@@ -468,22 +467,16 @@ public final class L2Weapon extends L2Item
 		// notify quests of a skill use
 		if (caster instanceof L2PcInstance)
 		{
-			// Mobs in range 1000 see spell
-			Collection<L2Object> objs = caster.getKnownList().getKnownObjects().values();
-			for (L2Object spMob : objs)
-			{
-				if (spMob instanceof L2Npc)
-				{
-					L2Npc npcMob = (L2Npc) spMob;
-					if (npcMob.getTemplate().getEventQuests(QuestEventType.ON_SKILL_SEE) != null)
-					{
-						for (Quest quest : npcMob.getTemplate().getEventQuests(QuestEventType.ON_SKILL_SEE))
+			//@formatter:off
+					caster.getKnownList().getKnownObjects().values().stream()
+						.filter(Objects::nonNull)
+						.filter(npc -> npc.isNpc())
+						.filter(npc -> Util.checkIfInRange(1000, npc, caster, false))
+						.forEach(npc -> 
 						{
-							quest.notifySkillSee(npcMob, caster.getActingPlayer(), onMagicSkill, targets, false);
-						}
-					}
-				}
-			}
+							EventDispatcher.getInstance().notifyEventAsync(new OnNpcSkillSee((L2Npc) npc, caster.getActingPlayer(), onMagicSkill, targets, false), npc);
+						});
+					//@formatter:on
 		}
 		return _emptyEffectSet;
 	}

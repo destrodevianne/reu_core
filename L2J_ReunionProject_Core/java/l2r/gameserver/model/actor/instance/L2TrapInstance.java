@@ -24,7 +24,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.enums.QuestEventType;
+import l2r.gameserver.enums.TrapAction;
 import l2r.gameserver.enums.ZoneIdType;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
@@ -33,11 +33,11 @@ import l2r.gameserver.model.actor.knownlist.TrapKnownList;
 import l2r.gameserver.model.actor.tasks.npc.trap.TrapTask;
 import l2r.gameserver.model.actor.tasks.npc.trap.TrapTriggerTask;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.trap.OnTrapAction;
 import l2r.gameserver.model.items.L2Weapon;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.olympiad.OlympiadGameManager;
-import l2r.gameserver.model.quest.Quest;
-import l2r.gameserver.model.quest.Quest.TrapAction;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.AbstractNpcInfo.TrapInfo;
@@ -366,13 +366,9 @@ public final class L2TrapInstance extends L2Npc
 		
 		_playersWhoDetectedMe.add(detector.getObjectId());
 		
-		if (getTemplate().getEventQuests(QuestEventType.ON_TRAP_ACTION) != null)
-		{
-			for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_TRAP_ACTION))
-			{
-				quest.notifyTrapAction(this, detector, TrapAction.TRAP_DETECTED);
-			}
-		}
+		// Notify to scripts
+		EventDispatcher.getInstance().notifyEventAsync(new OnTrapAction(this, detector, TrapAction.TRAP_DETECTED), this);
+		
 		if (detector.isPlayable())
 		{
 			sendInfo(detector.getActingPlayer());
@@ -400,13 +396,8 @@ public final class L2TrapInstance extends L2Npc
 		broadcastPacket(new TrapInfo(this, null));
 		setTarget(target);
 		
-		if (getTemplate().getEventQuests(QuestEventType.ON_TRAP_ACTION) != null)
-		{
-			for (Quest quest : getTemplate().getEventQuests(QuestEventType.ON_TRAP_ACTION))
-			{
-				quest.notifyTrapAction(this, target, TrapAction.TRAP_TRIGGERED);
-			}
-		}
+		// Notify to scripts
+		EventDispatcher.getInstance().notifyEventAsync(new OnTrapAction(this, target, TrapAction.TRAP_TRIGGERED), this);
 		
 		ThreadPoolManager.getInstance().scheduleGeneral(new TrapTriggerTask(this), 300);
 	}

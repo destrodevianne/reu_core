@@ -18,10 +18,8 @@
  */
 package l2r.gameserver.network.clientpackets;
 
-import java.util.List;
 import java.util.StringTokenizer;
 
-import javolution.util.FastList;
 import l2r.Config;
 import l2r.gameserver.communitybbs.BoardsManager;
 import l2r.gameserver.datatables.xml.AdminData;
@@ -36,13 +34,13 @@ import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Hero;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.player.OnPlayerBypass;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.ConfirmDlg;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
-import l2r.gameserver.scripting.scriptengine.events.RequestBypassToServerEvent;
-import l2r.gameserver.scripting.scriptengine.listeners.talk.RequestBypassToServerListener;
 import l2r.gameserver.util.GMAudit;
 import l2r.gameserver.util.Util;
 import gr.reunion.aioItem.AioItemNpcs;
@@ -60,7 +58,6 @@ import gr.reunion.voteEngine.old.VoteHandler;
 public final class RequestBypassToServer extends L2GameClientPacket
 {
 	private static final String _C__23_REQUESTBYPASSTOSERVER = "[C] 23 RequestBypassToServer";
-	private static final List<RequestBypassToServerListener> _listeners = new FastList<RequestBypassToServerListener>().shared();
 	
 	// S
 	private String _command;
@@ -322,7 +319,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			}
 		}
 		
-		fireBypassListeners();
+		EventDispatcher.getInstance().notifyEventAsync(new OnPlayerBypass(activeChar, _command), activeChar);
 	}
 	
 	/**
@@ -340,43 +337,6 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			L2Npc temp = (L2Npc) obj;
 			temp.setTarget(activeChar);
 			temp.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(activeChar.getX(), activeChar.getY(), activeChar.getZ(), 0));
-		}
-	}
-	
-	/**
-	 * Fires the event when packet arrived.
-	 */
-	private void fireBypassListeners()
-	{
-		RequestBypassToServerEvent event = new RequestBypassToServerEvent();
-		event.setActiveChar(getActiveChar());
-		event.setCommand(_command);
-		
-		for (RequestBypassToServerListener listener : _listeners)
-		{
-			listener.onRequestBypassToServer(event);
-		}
-	}
-	
-	/**
-	 * @param listener
-	 */
-	public static void addBypassListener(RequestBypassToServerListener listener)
-	{
-		if (!_listeners.contains(listener))
-		{
-			_listeners.add(listener);
-		}
-	}
-	
-	/**
-	 * @param listener
-	 */
-	public static void removeBypassListener(RequestBypassToServerListener listener)
-	{
-		if (_listeners.contains(listener))
-		{
-			_listeners.remove(listener);
 		}
 	}
 	

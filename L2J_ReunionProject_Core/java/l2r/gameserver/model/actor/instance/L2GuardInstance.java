@@ -18,20 +18,19 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import java.util.List;
-
 import l2r.Config;
 import l2r.gameserver.ai.L2AttackableAI;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.L2WorldRegion;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.knownlist.GuardKnownList;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.quest.Quest;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.EventType;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.SocialAction;
 import l2r.util.Rnd;
@@ -197,17 +196,14 @@ public class L2GuardInstance extends L2Attackable
 					player.setLastFolkNPC(this);
 					
 					// Open a chat window on client with the text of the L2GuardInstance
-					List<Quest> qlsa = getTemplate().getEventQuests(QuestEventType.QUEST_START);
-					List<Quest> qlst = getTemplate().getEventQuests(QuestEventType.ON_FIRST_TALK);
-					
-					if ((qlsa != null) && !qlsa.isEmpty())
+					if (hasListener(EventType.ON_NPC_QUEST_START))
 					{
 						player.setLastQuestNpcObject(getObjectId());
 					}
 					
-					if ((qlst != null) && (qlst.size() == 1))
+					if (hasListener(EventType.ON_NPC_FIRST_TALK))
 					{
-						qlst.get(0).notifyFirstTalk(this, player);
+						EventDispatcher.getInstance().notifyEventAsync(new OnNpcFirstTalk(this, player), this);
 					}
 					else
 					{

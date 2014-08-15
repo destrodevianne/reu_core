@@ -18,7 +18,6 @@
  */
 package l2r.gameserver.model.actor.instance;
 
-import java.util.List;
 import java.util.concurrent.Future;
 
 import l2r.Config;
@@ -26,13 +25,14 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.InstanceType;
-import l2r.gameserver.enums.QuestEventType;
 import l2r.gameserver.instancemanager.FourSepulchersManager;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.EventType;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.network.NpcStringId;
 import l2r.gameserver.network.clientpackets.Say2;
 import l2r.gameserver.network.serverpackets.ActionFailed;
@@ -236,17 +236,14 @@ public class L2SepulcherNpcInstance extends L2Npc
 			
 			default:
 			{
-				List<Quest> qlsa = getTemplate().getEventQuests(QuestEventType.QUEST_START);
-				List<Quest> qlst = getTemplate().getEventQuests(QuestEventType.ON_FIRST_TALK);
-				
-				if ((qlsa != null) && !qlsa.isEmpty())
+				if (hasListener(EventType.ON_NPC_QUEST_START))
 				{
 					player.setLastQuestNpcObject(getObjectId());
 				}
 				
-				if ((qlst != null) && (qlst.size() == 1))
+				if (hasListener(EventType.ON_NPC_FIRST_TALK))
 				{
-					qlst.get(0).notifyFirstTalk(this, player);
+					EventDispatcher.getInstance().notifyEventAsync(new OnNpcFirstTalk(this, player), this);
 				}
 				else
 				{

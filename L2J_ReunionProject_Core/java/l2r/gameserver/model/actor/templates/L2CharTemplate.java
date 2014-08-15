@@ -23,13 +23,14 @@ import java.util.Collections;
 import java.util.Map;
 
 import l2r.gameserver.model.StatsSet;
+import l2r.gameserver.model.events.ListenersContainer;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.stats.MoveType;
 
 /**
  * @author Zoey76
  */
-public class L2CharTemplate
+public class L2CharTemplate extends ListenersContainer
 {
 	// BaseStats
 	private final int _baseSTR;
