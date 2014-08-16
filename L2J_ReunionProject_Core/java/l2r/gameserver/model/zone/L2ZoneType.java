@@ -33,6 +33,7 @@ import l2r.gameserver.model.events.EventDispatcher;
 import l2r.gameserver.model.events.ListenersContainer;
 import l2r.gameserver.model.events.impl.character.OnCreatureZoneEnter;
 import l2r.gameserver.model.events.impl.character.OnCreatureZoneExit;
+import l2r.gameserver.model.interfaces.ILocational;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 
 import org.slf4j.Logger;
@@ -360,6 +361,16 @@ public abstract class L2ZoneType extends ListenersContainer
 	
 	/**
 	 * Checks if the given coordinates are within the zone, ignores instanceId check
+	 * @param loc
+	 * @return
+	 */
+	public boolean isInsideZone(ILocational loc)
+	{
+		return _zone.isInsideZone(loc.getX(), loc.getY(), loc.getZ());
+	}
+	
+	/**
+	 * Checks if the given coordinates are within the zone, ignores instanceId check
 	 * @param x
 	 * @param y
 	 * @param z
@@ -424,14 +435,18 @@ public abstract class L2ZoneType extends ListenersContainer
 		// If the object is inside the zone...
 		if (isInsideZone(character))
 		{
-			// Notify to scripts.
-			EventDispatcher.getInstance().notifyEventAsync(new OnCreatureZoneEnter(character, this), this);
-			
-			// Register player.
-			_characterList.put(character.getObjectId(), character);
-			
-			// Notify Zone implementation.
-			onEnter(character);
+			// Was the character not yet inside this zone?
+			if (!_characterList.containsKey(character.getObjectId()))
+			{
+				// Notify to scripts.
+				EventDispatcher.getInstance().notifyEventAsync(new OnCreatureZoneEnter(character, this), this);
+				
+				// Register player.
+				_characterList.put(character.getObjectId(), character);
+				
+				// Notify Zone implementation.
+				onEnter(character);
+			}
 		}
 		else
 		{
@@ -445,6 +460,7 @@ public abstract class L2ZoneType extends ListenersContainer
 	 */
 	public void removeCharacter(L2Character character)
 	{
+		// Was the character inside this zone?
 		if (_characterList.containsKey(character.getObjectId()))
 		{
 			// Notify to scripts.
@@ -486,9 +502,21 @@ public abstract class L2ZoneType extends ListenersContainer
 	
 	protected abstract void onExit(L2Character character);
 	
-	public abstract void onDieInside(L2Character character);
+	public void onDieInside(L2Character character)
+	{
+	}
 	
-	public abstract void onReviveInside(L2Character character);
+	public void onReviveInside(L2Character character)
+	{
+	}
+	
+	public void onPlayerLoginInside(L2PcInstance player)
+	{
+	}
+	
+	public void onPlayerLogoutInside(L2PcInstance player)
+	{
+	}
 	
 	public Map<Integer, L2Character> getCharacters()
 	{
