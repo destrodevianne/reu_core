@@ -967,30 +967,24 @@ public class Hero
 	 */
 	public boolean isInactiveHero(int objectId)
 	{
-		if ((_heroes == null) || _heroes.isEmpty())
-		{
-			return false;
-		}
-		if (_heroes.containsKey(objectId) && (_heroes.get(objectId).getInteger(ACTIVE) == 0))
-		{
-			return true;
-		}
-		return false;
+		return _heroes.containsKey(objectId) && (_heroes.get(objectId).getInteger(ACTIVE) == 0);
 	}
 	
 	/**
-	 * @param player becomes hero
+	 * Activates the hero status for the given player.
+	 * @param player the player to become hero
 	 */
 	public void activateHero(L2PcInstance player)
 	{
-		final StatsSet hero = _heroes.get(player.getObjectId());
+		final StatsSet hero = new StatsSet();
 		hero.set(ACTIVE, 1);
+		_heroes.put(player.getObjectId(), hero);
 		
 		L2Clan clan = player.getClan();
 		if ((clan != null) && (clan.getLevel() >= 5))
 		{
 			clan.addReputationScore(Config.HERO_POINTS, true);
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_C1_BECAME_HERO_AND_GAINED_S2_REPUTATION_POINTS);
+			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_C1_BECAME_HERO_AND_GAINED_S2_REPUTATION_POINTS);
 			sm.addString(CharNameTable.getInstance().getNameById(player.getObjectId()));
 			sm.addInt(Config.HERO_POINTS);
 			clan.broadcastToOnlineMembers(sm);
