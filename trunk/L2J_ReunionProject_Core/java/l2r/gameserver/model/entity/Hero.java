@@ -638,48 +638,42 @@ public class Hero
 	{
 		updateHeroes(true);
 		
-		if (!_heroes.isEmpty())
+		for (Integer objectId : _heroes.keySet())
 		{
-			for (StatsSet hero : _heroes.values())
+			final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
+			
+			if (player == null)
 			{
-				String name = hero.getString(Olympiad.CHAR_NAME);
-				
-				L2PcInstance player = L2World.getInstance().getPlayer(name);
-				
-				if (player == null)
+				continue;
+			}
+			
+			player.setHero(false);
+			
+			for (int i = 0; i < Inventory.PAPERDOLL_TOTALSLOTS; i++)
+			{
+				L2ItemInstance equippedItem = player.getInventory().getPaperdollItem(i);
+				if ((equippedItem != null) && equippedItem.isHeroItem())
 				{
-					continue;
-				}
-				try
-				{
-					player.setHero(false);
-					
-					for (int i = 0; i < Inventory.PAPERDOLL_TOTALSLOTS; i++)
-					{
-						L2ItemInstance equippedItem = player.getInventory().getPaperdollItem(i);
-						if ((equippedItem != null) && equippedItem.isHeroItem())
-						{
-							player.getInventory().unEquipItemInSlot(i);
-						}
-					}
-					
-					for (L2ItemInstance item : player.getInventory().getAvailableItems(false, false, false))
-					{
-						if ((item != null) && item.isHeroItem())
-						{
-							player.destroyItem("Hero", item, null, true);
-							InventoryUpdate iu = new InventoryUpdate();
-							iu.addRemovedItem(item);
-							player.sendPacket(iu);
-						}
-					}
-					
-					player.broadcastUserInfo();
-				}
-				catch (NullPointerException e)
-				{
+					player.getInventory().unEquipItemInSlot(i);
 				}
 			}
+			
+			final InventoryUpdate iu = new InventoryUpdate();
+			for (L2ItemInstance item : player.getInventory().getAvailableItems(false, false, false))
+			{
+				if ((item != null) && item.isHeroItem())
+				{
+					player.destroyItem("Hero", item, null, true);
+					iu.addRemovedItem(item);
+				}
+			}
+			
+			if (!iu.getItems().isEmpty())
+			{
+				player.sendPacket(iu);
+			}
+			
+			player.broadcastUserInfo();
 		}
 		
 		if (newHeroes.isEmpty())
@@ -976,9 +970,7 @@ public class Hero
 	 */
 	public void activateHero(L2PcInstance player)
 	{
-		final StatsSet hero = new StatsSet();
-		hero.set(ACTIVE, 1);
-		_heroes.put(player.getObjectId(), hero);
+		_heroes.get(player.getObjectId()).set(ACTIVE, 1);
 		
 		L2Clan clan = player.getClan();
 		if ((clan != null) && (clan.getLevel() >= 5))

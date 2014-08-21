@@ -23,7 +23,7 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.scripts.ai.group_template.EnergySeeds;
+import l2r.gameserver.scripts.gracia.AI.EnergySeeds;
 import l2r.gameserver.util.Util;
 import l2r.util.Rnd;
 
@@ -130,14 +130,10 @@ public class SoIManager
 		spawnOpenedSeed();
 		DoorData.getInstance().getDoor(14240102).openMe();
 		
-		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		ThreadPoolManager.getInstance().scheduleGeneral(() ->
 		{
-			@Override
-			public void run()
-			{
-				closeSeed();
-				setCurrentStage(4);
-			}
+			closeSeed();
+			setCurrentStage(4);
 		}, time);
 	}
 	
