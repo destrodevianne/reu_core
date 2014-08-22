@@ -442,6 +442,8 @@ public abstract class L2Summon extends L2Playable
 				}
 			}
 			
+			abortAttack();
+			abortCast();
 			store();
 			storeEffect(true);
 			if (owner != null)
