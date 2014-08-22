@@ -713,7 +713,7 @@ public class L2Attackable extends L2Npc
 	 */
 	public void addDamageHate(L2Character attacker, int damage, int aggro)
 	{
-		if (attacker == null)
+		if ((attacker == null))
 		{
 			return;
 		}
@@ -726,37 +726,43 @@ public class L2Attackable extends L2Npc
 			targetPlayer = ((L2TrapInstance) attacker).getOwner();
 		}
 		
+		AggroInfo ai = null;
 		// Get the AggroInfo of the attacker L2Character from the _aggroList of the L2Attackable
-		AggroInfo ai = getAggroList().get(attacker);
+		if (attacker.isTrap())
+		{
+			ai = getAggroList().get(targetPlayer);
+		}
+		else
+		{
+			ai = getAggroList().get(attacker);
+		}
 		
 		if (ai == null)
 		{
-			ai = new AggroInfo(attacker);
-			getAggroList().put(attacker, ai);
-		}
-		ai.addDamage(damage);
-		// traps does not cause aggro
-		// making this hack because not possible to determine if damage made by trap
-		// so just check for triggered trap here
-		if ((targetPlayer == null) || targetPlayer.getTraps().isEmpty() || (targetPlayer.getTraps() == null))
-		{
-			ai.addHate(aggro);
-		}
-		
-		if (targetPlayer != null)
-		{
-			for (L2TrapInstance trap : targetPlayer.getTraps().values())
+			if (attacker.isTrap())
 			{
-				if (!trap.isTriggered())
-				{
-					ai.addHate(aggro);
-				}
+				ai = new AggroInfo(targetPlayer);
+				getAggroList().put(targetPlayer, ai);
+			}
+			else
+			{
+				ai = new AggroInfo(attacker);
+				getAggroList().put(attacker, ai);
 			}
 		}
+		ai.addDamage(damage);
+		ai.addHate(aggro);
 		
 		if ((targetPlayer != null) && (aggro == 0))
 		{
-			addDamageHate(attacker, 0, 1);
+			if (attacker.isTrap())
+			{
+				addDamageHate(targetPlayer, 0, 1);
+			}
+			else
+			{
+				addDamageHate(attacker, 0, 1);
+			}
 			
 			// Set the intention to the L2Attackable to AI_INTENTION_ACTIVE
 			if (getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE)
