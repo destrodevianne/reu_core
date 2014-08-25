@@ -1964,7 +1964,7 @@ public class L2Npc extends L2Character
 	 */
 	public int getScriptValue()
 	{
-		return getVariables().getInteger("SCRIPT_VAL");
+		return getVariables().getInt("SCRIPT_VAL");
 	}
 	
 	/**
@@ -1983,7 +1983,7 @@ public class L2Npc extends L2Character
 	 */
 	public boolean isScriptValue(int val)
 	{
-		return getVariables().getInteger("SCRIPT_VAL") == val;
+		return getVariables().getInt("SCRIPT_VAL") == val;
 	}
 	
 	/**

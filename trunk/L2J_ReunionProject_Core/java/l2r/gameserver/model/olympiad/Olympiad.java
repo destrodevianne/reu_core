@@ -708,7 +708,7 @@ public class Olympiad extends ListenersContainer
 		int currentPoints;
 		for (StatsSet nobleInfo : _nobles.values())
 		{
-			currentPoints = nobleInfo.getInteger(POINTS);
+			currentPoints = nobleInfo.getInt(POINTS);
 			currentPoints += WEEKLY_POINTS;
 			nobleInfo.set(POINTS, currentPoints);
 		}
@@ -770,17 +770,17 @@ public class Olympiad extends ListenersContainer
 				}
 				
 				int charId = entry.getKey();
-				int classId = nobleInfo.getInteger(CLASS_ID);
-				int points = nobleInfo.getInteger(POINTS);
-				int compDone = nobleInfo.getInteger(COMP_DONE);
-				int compWon = nobleInfo.getInteger(COMP_WON);
-				int compLost = nobleInfo.getInteger(COMP_LOST);
-				int compDrawn = nobleInfo.getInteger(COMP_DRAWN);
-				int compDoneWeek = nobleInfo.getInteger(COMP_DONE_WEEK);
-				int compDoneWeekClassed = nobleInfo.getInteger(COMP_DONE_WEEK_CLASSED);
-				int compDoneWeekNonClassed = nobleInfo.getInteger(COMP_DONE_WEEK_NON_CLASSED);
-				int compDoneWeekTeam = nobleInfo.getInteger(COMP_DONE_WEEK_TEAM);
-				boolean toSave = nobleInfo.getBool("to_save");
+				int classId = nobleInfo.getInt(CLASS_ID);
+				int points = nobleInfo.getInt(POINTS);
+				int compDone = nobleInfo.getInt(COMP_DONE);
+				int compWon = nobleInfo.getInt(COMP_WON);
+				int compLost = nobleInfo.getInt(COMP_LOST);
+				int compDrawn = nobleInfo.getInt(COMP_DRAWN);
+				int compDoneWeek = nobleInfo.getInt(COMP_DONE_WEEK);
+				int compDoneWeekClassed = nobleInfo.getInt(COMP_DONE_WEEK_CLASSED);
+				int compDoneWeekNonClassed = nobleInfo.getInt(COMP_DONE_WEEK_NON_CLASSED);
+				int compDoneWeekTeam = nobleInfo.getInt(COMP_DONE_WEEK_TEAM);
+				boolean toSave = nobleInfo.getBoolean("to_save");
 				
 				try (PreparedStatement statement = con.prepareStatement(toSave ? OLYMPIAD_SAVE_NOBLES : OLYMPIAD_UPDATE_NOBLES))
 				{
@@ -905,10 +905,10 @@ public class Olympiad extends ListenersContainer
 				}
 				
 				int charId = entry.getKey();
-				int classId = nobleInfo.getInteger(CLASS_ID);
+				int classId = nobleInfo.getInt(CLASS_ID);
 				String charName = nobleInfo.getString(CHAR_NAME);
-				int points = nobleInfo.getInteger(POINTS);
-				int compDone = nobleInfo.getInteger(COMP_DONE);
+				int points = nobleInfo.getInt(POINTS);
+				int compDone = nobleInfo.getInt(COMP_DONE);
 				
 				record = new LogRecord(Level.INFO, charName);
 				record.setParameters(new Object[]
@@ -945,7 +945,7 @@ public class Olympiad extends ListenersContainer
 					
 					if ((element == 132) || (element == 133)) // Male & Female Soulhounds rank as one hero class
 					{
-						hero = _nobles.get(hero.getInteger(CHAR_ID));
+						hero = _nobles.get(hero.getInt(CHAR_ID));
 						hero.set(CHAR_ID, rset.getInt(CHAR_ID));
 						soulHounds.add(hero);
 					}
@@ -954,8 +954,8 @@ public class Olympiad extends ListenersContainer
 						record = new LogRecord(Level.INFO, "Hero " + hero.getString(CHAR_NAME));
 						record.setParameters(new Object[]
 						{
-							hero.getInteger(CHAR_ID),
-							hero.getInteger(CLASS_ID)
+							hero.getInt(CHAR_ID),
+							hero.getInt(CLASS_ID)
 						});
 						_logResults.log(record);
 						_heroesToBe.add(hero);
@@ -974,15 +974,15 @@ public class Olympiad extends ListenersContainer
 				{
 					hero = new StatsSet();
 					StatsSet winner = soulHounds.get(0);
-					hero.set(CLASS_ID, winner.getInteger(CLASS_ID));
-					hero.set(CHAR_ID, winner.getInteger(CHAR_ID));
+					hero.set(CLASS_ID, winner.getInt(CLASS_ID));
+					hero.set(CHAR_ID, winner.getInt(CHAR_ID));
 					hero.set(CHAR_NAME, winner.getString(CHAR_NAME));
 					
 					record = new LogRecord(Level.INFO, "Hero " + hero.getString(CHAR_NAME));
 					record.setParameters(new Object[]
 					{
-						hero.getInteger(CHAR_ID),
-						hero.getInteger(CLASS_ID)
+						hero.getInt(CHAR_ID),
+						hero.getInt(CLASS_ID)
 					});
 					_logResults.log(record);
 					_heroesToBe.add(hero);
@@ -994,12 +994,12 @@ public class Olympiad extends ListenersContainer
 					StatsSet winner;
 					StatsSet hero1 = soulHounds.get(0);
 					StatsSet hero2 = soulHounds.get(1);
-					int hero1Points = hero1.getInteger(POINTS);
-					int hero2Points = hero2.getInteger(POINTS);
-					int hero1Comps = hero1.getInteger(COMP_DONE);
-					int hero2Comps = hero2.getInteger(COMP_DONE);
-					int hero1Wins = hero1.getInteger(COMP_WON);
-					int hero2Wins = hero2.getInteger(COMP_WON);
+					int hero1Points = hero1.getInt(POINTS);
+					int hero2Points = hero2.getInt(POINTS);
+					int hero1Comps = hero1.getInt(COMP_DONE);
+					int hero2Comps = hero2.getInt(COMP_DONE);
+					int hero1Wins = hero1.getInt(COMP_WON);
+					int hero2Wins = hero2.getInt(COMP_WON);
 					
 					if (hero1Points > hero2Points)
 					{
@@ -1032,15 +1032,15 @@ public class Olympiad extends ListenersContainer
 						}
 					}
 					
-					hero.set(CLASS_ID, winner.getInteger(CLASS_ID));
-					hero.set(CHAR_ID, winner.getInteger(CHAR_ID));
+					hero.set(CLASS_ID, winner.getInt(CLASS_ID));
+					hero.set(CHAR_ID, winner.getInt(CHAR_ID));
 					hero.set(CHAR_NAME, winner.getString(CHAR_NAME));
 					
 					record = new LogRecord(Level.INFO, "Hero " + hero.getString(CHAR_NAME));
 					record.setParameters(new Object[]
 					{
-						hero.getInteger(CHAR_ID),
-						hero.getInteger(CLASS_ID)
+						hero.getInt(CHAR_ID),
+						hero.getInt(CLASS_ID)
 					});
 					_logResults.log(record);
 					_heroesToBe.add(hero);
@@ -1091,7 +1091,7 @@ public class Olympiad extends ListenersContainer
 		}
 		
 		final StatsSet noble = _nobles.get(objId);
-		if ((noble == null) || (noble.getInteger(POINTS) == 0))
+		if ((noble == null) || (noble.getInt(POINTS) == 0))
 		{
 			return 0;
 		}
@@ -1130,7 +1130,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(POINTS);
+		return _nobles.get(objId).getInt(POINTS);
 	}
 	
 	public int getLastNobleOlympiadPoints(int objId)
@@ -1161,7 +1161,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(COMP_DONE);
+		return _nobles.get(objId).getInt(COMP_DONE);
 	}
 	
 	public int getCompetitionWon(int objId)
@@ -1170,7 +1170,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(COMP_WON);
+		return _nobles.get(objId).getInt(COMP_WON);
 	}
 	
 	public int getCompetitionLost(int objId)
@@ -1179,7 +1179,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(COMP_LOST);
+		return _nobles.get(objId).getInt(COMP_LOST);
 	}
 	
 	/**
@@ -1193,7 +1193,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(COMP_DONE_WEEK);
+		return _nobles.get(objId).getInt(COMP_DONE_WEEK);
 	}
 	
 	/**
@@ -1207,7 +1207,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(COMP_DONE_WEEK_CLASSED);
+		return _nobles.get(objId).getInt(COMP_DONE_WEEK_CLASSED);
 	}
 	
 	/**
@@ -1221,7 +1221,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(COMP_DONE_WEEK_NON_CLASSED);
+		return _nobles.get(objId).getInt(COMP_DONE_WEEK_NON_CLASSED);
 	}
 	
 	/**
@@ -1235,7 +1235,7 @@ public class Olympiad extends ListenersContainer
 		{
 			return 0;
 		}
-		return _nobles.get(objId).getInteger(COMP_DONE_WEEK_TEAM);
+		return _nobles.get(objId).getInt(COMP_DONE_WEEK_TEAM);
 	}
 	
 	/**

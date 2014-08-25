@@ -303,17 +303,17 @@ public final class SpawnTable extends DocumentParser
 		int ret = 0;
 		try
 		{
-			spawnDat = new L2Spawn(NpcTable.getInstance().getTemplate(spawnInfo.getInteger("npcTemplateid")));
-			spawnDat.setAmount(spawnInfo.getInteger("count", 1));
-			spawnDat.setX(spawnInfo.getInteger("x", 0));
-			spawnDat.setY(spawnInfo.getInteger("y", 0));
-			spawnDat.setZ(spawnInfo.getInteger("z", 0));
-			spawnDat.setHeading(spawnInfo.getInteger("heading", -1));
-			spawnDat.setRespawnDelay(spawnInfo.getInteger("respawnDelay", 0), spawnInfo.getInteger("respawnRandom", 0));
-			spawnDat.setLocationId(spawnInfo.getInteger("locId", 0));
+			spawnDat = new L2Spawn(NpcTable.getInstance().getTemplate(spawnInfo.getInt("npcTemplateid")));
+			spawnDat.setAmount(spawnInfo.getInt("count", 1));
+			spawnDat.setX(spawnInfo.getInt("x", 0));
+			spawnDat.setY(spawnInfo.getInt("y", 0));
+			spawnDat.setZ(spawnInfo.getInt("z", 0));
+			spawnDat.setHeading(spawnInfo.getInt("heading", -1));
+			spawnDat.setRespawnDelay(spawnInfo.getInt("respawnDelay", 0), spawnInfo.getInt("respawnRandom", 0));
+			spawnDat.setLocationId(spawnInfo.getInt("locId", 0));
 			String territoryName = spawnInfo.getString("territoryName", "");
 			String spawnName = spawnInfo.getString("spawnName", "");
-			spawnDat.setCustom(spawnInfo.getBool("isCustomSpawn", false));
+			spawnDat.setCustom(spawnInfo.getBoolean("isCustomSpawn", false));
 			if (!spawnName.isEmpty())
 			{
 				spawnDat.setName(spawnName);
@@ -324,7 +324,7 @@ public final class SpawnTable extends DocumentParser
 			}
 			// Register AI Data for this spawn
 			NpcPersonalAIData.getInstance().storeData(spawnDat, AIData);
-			switch (spawnInfo.getInteger("periodOfDay", 0))
+			switch (spawnInfo.getInt("periodOfDay", 0))
 			{
 				case 0: // default
 					ret += spawnDat.init();

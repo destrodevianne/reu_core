@@ -56,7 +56,7 @@ public abstract class AbstractEnchantItem
 	
 	public AbstractEnchantItem(StatsSet set)
 	{
-		_id = set.getInteger("id");
+		_id = set.getInt("id");
 		if (getItem() == null)
 		{
 			throw new NullPointerException();
@@ -66,7 +66,7 @@ public abstract class AbstractEnchantItem
 			throw new IllegalAccessError();
 		}
 		_grade = set.getEnum("targetGrade", CrystalType.class, CrystalType.NONE);
-		_maxEnchantLevel = set.getInteger("maxEnchant", 65535);
+		_maxEnchantLevel = set.getInt("maxEnchant", 65535);
 		_bonusRate = set.getDouble("bonusRate", 0);
 	}
 	

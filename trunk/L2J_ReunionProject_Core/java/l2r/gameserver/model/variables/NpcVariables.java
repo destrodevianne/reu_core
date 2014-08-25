@@ -28,9 +28,9 @@ public class NpcVariables extends AbstractVariables
 	}
 	
 	@Override
-	public int getInteger(String key)
+	public int getInt(String key)
 	{
-		return super.getInteger(key, 0);
+		return super.getInt(key, 0);
 	}
 	
 	@Override

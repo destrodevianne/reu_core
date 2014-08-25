@@ -40,7 +40,7 @@ public class Ingredient
 	
 	public Ingredient(StatsSet set)
 	{
-		this(set.getInteger("id"), set.getLong("count"), set.getInteger("enchantmentLevel", 0), set.getBool("isTaxIngredient", false), set.getBool("maintainIngredient", false));
+		this(set.getInt("id"), set.getLong("count"), set.getInt("enchantmentLevel", 0), set.getBoolean("isTaxIngredient", false), set.getBoolean("maintainIngredient", false));
 	}
 	
 	// public Ingredient(int itemId, long itemCount, boolean isTaxIngredient, boolean maintainIngredient)
