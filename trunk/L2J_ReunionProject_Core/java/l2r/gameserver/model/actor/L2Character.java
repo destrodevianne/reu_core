@@ -92,6 +92,7 @@ import l2r.gameserver.model.effects.EffectFlag;
 import l2r.gameserver.model.effects.L2Effect;
 import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.entity.Instance;
+import l2r.gameserver.model.events.Containers;
 import l2r.gameserver.model.events.EventDispatcher;
 import l2r.gameserver.model.events.EventType;
 import l2r.gameserver.model.events.impl.character.OnCreatureAttack;
@@ -150,6 +151,7 @@ import l2r.gameserver.pathfinding.AbstractNodeLoc;
 import l2r.gameserver.pathfinding.PathFinding;
 import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.gameserver.util.Util;
+import l2r.util.EmptyQueue;
 import l2r.util.Rnd;
 
 import org.slf4j.Logger;
@@ -7781,18 +7783,30 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		final Queue<AbstractEventListener> objectListenres = super.getListeners(type);
 		final Queue<AbstractEventListener> templateListeners = getTemplate().getListeners(type);
-		if (objectListenres.isEmpty())
+		final Queue<AbstractEventListener> globalListeners = isNpc() && !isMonster() ? Containers.Npcs().getListeners(type) : isMonster() ? Containers.Monsters().getListeners(type) : isPlayer() ? Containers.Players().getListeners(type) : EmptyQueue.emptyQueue();
+		
+		// Attempt to do not create collection
+		if (objectListenres.isEmpty() && templateListeners.isEmpty() && globalListeners.isEmpty())
 		{
-			return templateListeners;
+			return EmptyQueue.emptyQueue();
 		}
-		else if (templateListeners.isEmpty())
+		else if (!objectListenres.isEmpty() && templateListeners.isEmpty() && globalListeners.isEmpty())
 		{
 			return objectListenres;
 		}
+		else if (!templateListeners.isEmpty() && objectListenres.isEmpty() && globalListeners.isEmpty())
+		{
+			return templateListeners;
+		}
+		else if (!globalListeners.isEmpty() && objectListenres.isEmpty() && templateListeners.isEmpty())
+		{
+			return globalListeners;
+		}
 		
-		final Queue<AbstractEventListener> both = new LinkedBlockingDeque<>(objectListenres.size() + templateListeners.size());
+		final Queue<AbstractEventListener> both = new LinkedBlockingDeque<>(objectListenres.size() + templateListeners.size() + globalListeners.size());
 		both.addAll(objectListenres);
 		both.addAll(templateListeners);
+		both.addAll(globalListeners);
 		return both;
 	}
 	
