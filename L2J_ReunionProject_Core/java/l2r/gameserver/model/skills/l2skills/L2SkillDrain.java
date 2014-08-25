@@ -50,7 +50,7 @@ public class L2SkillDrain extends L2Skill
 		super(set);
 		
 		_absorbPart = set.getFloat("absorbPart", 0.f);
-		_absorbAbs = set.getInteger("absorbAbs", 0);
+		_absorbAbs = set.getInt("absorbAbs", 0);
 	}
 	
 	@Override

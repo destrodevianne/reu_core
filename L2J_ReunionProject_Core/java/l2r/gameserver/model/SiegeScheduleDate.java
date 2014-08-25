@@ -31,9 +31,9 @@ public class SiegeScheduleDate
 	
 	public SiegeScheduleDate(StatsSet set)
 	{
-		_day = set.getInteger("day", Calendar.SUNDAY);
-		_hour = set.getInteger("hour", 16);
-		_maxConcurrent = set.getInteger("maxConcurrent", 5);
+		_day = set.getInt("day", Calendar.SUNDAY);
+		_hour = set.getInt("hour", 16);
+		_maxConcurrent = set.getInt("maxConcurrent", 5);
 	}
 	
 	public int getDay()

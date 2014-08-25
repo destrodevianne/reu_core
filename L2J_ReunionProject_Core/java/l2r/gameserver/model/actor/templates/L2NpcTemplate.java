@@ -162,23 +162,23 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	public L2NpcTemplate(StatsSet set)
 	{
 		super(set);
-		_npcId = set.getInteger("npcId");
-		_idTemplate = set.getInteger("idTemplate");
+		_npcId = set.getInt("npcId");
+		_idTemplate = set.getInt("idTemplate");
 		_type = set.getString("type");
 		_name = set.getString("name");
-		_serverSideName = set.getBool("serverSideName");
+		_serverSideName = set.getBoolean("serverSideName");
 		_title = set.getString("title");
 		_isQuestMonster = getTitle().equalsIgnoreCase("Quest Monster");
-		_serverSideTitle = set.getBool("serverSideTitle");
+		_serverSideTitle = set.getBoolean("serverSideTitle");
 		_sex = set.getString("sex");
 		_level = set.getByte("level");
-		_rewardExp = set.getInteger("rewardExp");
-		_rewardSp = set.getInteger("rewardSp");
-		_rHand = set.getInteger("rhand");
-		_lHand = set.getInteger("lhand");
-		_enchantEffect = set.getInteger("enchant");
+		_rewardExp = set.getInt("rewardExp");
+		_rewardSp = set.getInt("rewardSp");
+		_rHand = set.getInt("rhand");
+		_lHand = set.getInt("lhand");
+		_enchantEffect = set.getInt("enchant");
 		_race = null;
-		final int herbGroup = set.getInteger("dropHerbGroup");
+		final int herbGroup = set.getInt("dropHerbGroup");
 		if ((herbGroup > 0) && (HerbDropData.getInstance().getHerbDroplist(herbGroup) == null))
 		{
 			_log.warn("Missing Herb Drop Group for npcId: " + getId());

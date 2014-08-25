@@ -584,8 +584,8 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					for (int i = _teamOneSize; --i >= 0;)
 					{
 						par = _teamOne[i];
-						points = par.getStats().getInteger(POINTS) / getDivider();
-						int val = Math.min(par.getStats().getInteger(POINTS) / 3, Config.ALT_OLY_MAX_POINTS);
+						points = par.getStats().getInt(POINTS) / getDivider();
+						int val = Math.min(par.getStats().getInt(POINTS) / 3, Config.ALT_OLY_MAX_POINTS);
 						removePointsFromParticipant(par, val);
 						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, points - val, -val));
 					}
@@ -596,8 +596,8 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					for (int i = _teamTwoSize; --i >= 0;)
 					{
 						par = _teamTwo[i];
-						points = par.getStats().getInteger(POINTS) / getDivider();
-						int val = Math.min(par.getStats().getInteger(POINTS) / 3, Config.ALT_OLY_MAX_POINTS);
+						points = par.getStats().getInt(POINTS) / getDivider();
+						int val = Math.min(par.getStats().getInt(POINTS) / 3, Config.ALT_OLY_MAX_POINTS);
 						removePointsFromParticipant(par, val);
 						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, points - val, -val));
 					}
@@ -636,7 +636,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 		int totalPointsTeamTwo = 0;
 		for (int i = 0; i < _teamOneSize; i++)
 		{
-			points = _teamOne[i].getStats().getInteger(POINTS) / getDivider();
+			points = _teamOne[i].getStats().getInt(POINTS) / getDivider();
 			if (points <= 0)
 			{
 				points = 1;
@@ -653,7 +653,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 		
 		for (int i = _teamTwoSize; --i >= 0;)
 		{
-			points = _teamTwo[i].getStats().getInteger(POINTS) / getDivider();
+			points = _teamTwo[i].getStats().getInt(POINTS) / getDivider();
 			if (points <= 0)
 			{
 				points = 1;
@@ -731,7 +731,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 						par.updateStat(COMP_LOST, 1);
 						points = pointsTeamTwo[i];
 						removePointsFromParticipant(par, points);
-						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInteger(POINTS) - points, -points));
+						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInt(POINTS) - points, -points));
 					}
 					
 					points = min / MAX_TEAM_SIZE;
@@ -740,7 +740,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 						par = _teamOne[i];
 						par.updateStat(COMP_WON, 1);
 						addPointsToParticipant(par, points);
-						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInteger(POINTS) + points, points));
+						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInt(POINTS) + points, points));
 					}
 					
 					for (int i = 0; i < _teamOneSize; i++)
@@ -762,7 +762,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 						par.updateStat(COMP_LOST, 1);
 						points = pointsTeamOne[i];
 						removePointsFromParticipant(par, points);
-						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInteger(POINTS) - points, -points));
+						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInt(POINTS) - points, -points));
 					}
 					
 					points = min / MAX_TEAM_SIZE;
@@ -771,7 +771,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 						par = _teamTwo[i];
 						par.updateStat(COMP_WON, 1);
 						addPointsToParticipant(par, points);
-						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInteger(POINTS) + points, points));
+						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInt(POINTS) + points, points));
 					}
 					
 					winside = 2;
@@ -790,7 +790,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 						par = _teamOne[i];
 						par.updateStat(COMP_LOST, 1);
 						removePointsFromParticipant(par, pointsTeamOne[i]);
-						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInteger(POINTS) - pointsTeamOne[i], -pointsTeamOne[i]));
+						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInt(POINTS) - pointsTeamOne[i], -pointsTeamOne[i]));
 					}
 					
 					for (int i = _teamTwoSize; --i >= 0;)
@@ -798,7 +798,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 						par = _teamTwo[i];
 						par.updateStat(COMP_LOST, 1);
 						removePointsFromParticipant(par, pointsTeamTwo[i]);
-						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInteger(POINTS) - pointsTeamOne[i], -pointsTeamOne[i]));
+						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInt(POINTS) - pointsTeamOne[i], -pointsTeamOne[i]));
 					}
 					
 					tie = true;
@@ -883,7 +883,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					par.updateStat(COMP_LOST, 1);
 					points = pointsTeamTwo[i];
 					removePointsFromParticipant(par, points);
-					list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInteger(POINTS) - points, -points));
+					list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInt(POINTS) - points, -points));
 				}
 				
 				points = min / MAX_TEAM_SIZE;
@@ -892,7 +892,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					par = _teamOne[i];
 					par.updateStat(COMP_WON, 1);
 					addPointsToParticipant(par, points);
-					list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInteger(POINTS) + points, points));
+					list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInt(POINTS) + points, points));
 				}
 				
 				winside = 1;
@@ -914,7 +914,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					par.updateStat(COMP_LOST, 1);
 					points = pointsTeamOne[i];
 					removePointsFromParticipant(par, points);
-					list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInteger(POINTS) - points, -points));
+					list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInt(POINTS) - points, -points));
 				}
 				
 				points = min / MAX_TEAM_SIZE;
@@ -923,7 +923,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					par = _teamTwo[i];
 					par.updateStat(COMP_WON, 1);
 					addPointsToParticipant(par, points);
-					list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInteger(POINTS) + points, points));
+					list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInt(POINTS) + points, points));
 				}
 				
 				winside = 2;
@@ -941,18 +941,18 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 				{
 					par = _teamOne[i];
 					par.updateStat(COMP_DRAWN, 1);
-					points = Math.min(par.getStats().getInteger(POINTS) / getDivider(), Config.ALT_OLY_MAX_POINTS);
+					points = Math.min(par.getStats().getInt(POINTS) / getDivider(), Config.ALT_OLY_MAX_POINTS);
 					removePointsFromParticipant(par, points);
-					list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInteger(POINTS) - points, -points));
+					list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInt(POINTS) - points, -points));
 				}
 				
 				for (int i = 0; i < _teamTwoSize; i++)
 				{
 					par = _teamTwo[i];
 					par.updateStat(COMP_DRAWN, 1);
-					points = Math.min(par.getStats().getInteger(POINTS) / getDivider(), Config.ALT_OLY_MAX_POINTS);
+					points = Math.min(par.getStats().getInt(POINTS) / getDivider(), Config.ALT_OLY_MAX_POINTS);
 					removePointsFromParticipant(par, points);
-					list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInteger(POINTS) - points, -points));
+					list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInt(POINTS) - points, -points));
 				}
 				tie = true;
 			}

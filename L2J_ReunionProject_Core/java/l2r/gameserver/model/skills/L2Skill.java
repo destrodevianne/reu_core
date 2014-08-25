@@ -256,34 +256,34 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	
 	protected L2Skill(StatsSet set)
 	{
-		_id = set.getInteger("skill_id");
-		_level = set.getInteger("level");
-		_refId = set.getInteger("referenceId", 0);
-		_displayId = set.getInteger("displayId", _id);
-		_displayLevel = set.getInteger("displayLevel", _level);
+		_id = set.getInt("skill_id");
+		_level = set.getInt("level");
+		_refId = set.getInt("referenceId", 0);
+		_displayId = set.getInt("displayId", _id);
+		_displayLevel = set.getInt("displayLevel", _level);
 		_name = set.getString("name", "");
 		_operateType = set.getEnum("operateType", L2SkillOpType.class);
-		_magic = set.getInteger("isMagic", 0);
+		_magic = set.getInt("isMagic", 0);
 		_traitType = set.getEnum("trait", L2TraitType.class, L2TraitType.NONE);
-		_staticReuse = set.getBool("staticReuse", false);
-		_staticDamage = set.getBool("staticDamage", false);
-		_mpConsume = set.getInteger("mpConsume", 0);
-		_mpInitialConsume = set.getInteger("mpInitialConsume", 0);
-		_hpConsume = set.getInteger("hpConsume", 0);
-		_cpConsume = set.getInteger("cpConsume", 0);
-		_targetConsume = set.getInteger("targetConsumeCount", 0);
-		_targetConsumeId = set.getInteger("targetConsumeId", 0);
-		_itemConsumeCount = set.getInteger("itemConsumeCount", 0);
-		_itemConsumeId = set.getInteger("itemConsumeId", 0);
-		_afterEffectId = set.getInteger("afterEffectId", 0);
-		_afterEffectLvl = set.getInteger("afterEffectLvl", 1);
+		_staticReuse = set.getBoolean("staticReuse", false);
+		_staticDamage = set.getBoolean("staticDamage", false);
+		_mpConsume = set.getInt("mpConsume", 0);
+		_mpInitialConsume = set.getInt("mpInitialConsume", 0);
+		_hpConsume = set.getInt("hpConsume", 0);
+		_cpConsume = set.getInt("cpConsume", 0);
+		_targetConsume = set.getInt("targetConsumeCount", 0);
+		_targetConsumeId = set.getInt("targetConsumeId", 0);
+		_itemConsumeCount = set.getInt("itemConsumeCount", 0);
+		_itemConsumeId = set.getInt("itemConsumeId", 0);
+		_afterEffectId = set.getInt("afterEffectId", 0);
+		_afterEffectLvl = set.getInt("afterEffectLvl", 1);
 		
-		_castRange = set.getInteger("castRange", -1);
-		_effectRange = set.getInteger("effectRange", -1);
+		_castRange = set.getInt("castRange", -1);
+		_effectRange = set.getInt("effectRange", -1);
 		
-		_abnormalLvl = set.getInteger("abnormalLvl", -1);
-		_effectAbnormalLvl = set.getInteger("effectAbnormalLvl", -1); // support for a separate effect abnormal lvl, e.g. poison inside a different skill
-		_negateLvl = set.getInteger("negateLvl", -1);
+		_abnormalLvl = set.getInt("abnormalLvl", -1);
+		_effectAbnormalLvl = set.getInt("effectAbnormalLvl", -1); // support for a separate effect abnormal lvl, e.g. poison inside a different skill
+		_negateLvl = set.getInt("negateLvl", -1);
 		
 		_attribute = set.getString("attribute", "");
 		String str = set.getString("negateStats", "");
@@ -361,13 +361,13 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		{
 			_negateId = new int[0];
 		}
-		_maxNegatedEffects = set.getInteger("maxNegated", 0);
+		_maxNegatedEffects = set.getInt("maxNegated", 0);
 		
-		_stayAfterDeath = set.getBool("stayAfterDeath", false);
-		_stayOnSubclassChange = set.getBool("stayOnSubclassChange", true);
+		_stayAfterDeath = set.getBoolean("stayAfterDeath", false);
+		_stayOnSubclassChange = set.getBoolean("stayOnSubclassChange", true);
 		
-		_killByDOT = set.getBool("killByDOT", false);
-		_hitTime = set.getInteger("hitTime", 0);
+		_killByDOT = set.getBoolean("killByDOT", false);
+		_hitTime = set.getInt("hitTime", 0);
 		String hitTimings = set.getString("hitTimings", null);
 		if (hitTimings != null)
 		{
@@ -390,25 +390,25 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 			_hitTimings = new int[0];
 		}
 		
-		_coolTime = set.getInteger("coolTime", 0);
-		_isDebuff = set.getBool("isDebuff", false);
-		_feed = set.getInteger("feed", 0);
+		_coolTime = set.getInt("coolTime", 0);
+		_isDebuff = set.getBoolean("isDebuff", false);
+		_feed = set.getInt("feed", 0);
 		_reuseHashCode = SkillData.getSkillHashCode(_id, _level);
 		
 		if (Config.ENABLE_MODIFY_SKILL_REUSE && Config.SKILL_REUSE_LIST.containsKey(_id))
 		{
 			if (Config.DEBUG)
 			{
-				_log.info("*** Skill " + _name + " (" + _level + ") changed reuse from " + set.getInteger("reuseDelay", 0) + " to " + Config.SKILL_REUSE_LIST.get(_id) + " seconds.");
+				_log.info("*** Skill " + _name + " (" + _level + ") changed reuse from " + set.getInt("reuseDelay", 0) + " to " + Config.SKILL_REUSE_LIST.get(_id) + " seconds.");
 			}
 			_reuseDelay = Config.SKILL_REUSE_LIST.get(_id);
 		}
 		else
 		{
-			_reuseDelay = set.getInteger("reuseDelay", 0);
+			_reuseDelay = set.getInt("reuseDelay", 0);
 		}
 		
-		_affectRange = set.getInteger("affectRange", 0);
+		_affectRange = set.getInt("affectRange", 0);
 		
 		final String affectLimit = set.getString("affectLimit", null);
 		if (affectLimit != null)
@@ -429,73 +429,73 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		_power = set.getFloat("power", 0.f);
 		_pvpPower = set.getFloat("pvpPower", (float) getPower());
 		_pvePower = set.getFloat("pvePower", (float) getPower());
-		_magicLevel = set.getInteger("magicLvl", 0);
-		_lvlBonusRate = set.getInteger("lvlBonusRate", 0);
-		_minChance = set.getInteger("minChance", FormulasConfigs.MIN_ABNORMAL_STATE_SUCCESS_RATE);
-		_maxChance = set.getInteger("maxChance", FormulasConfigs.MAX_ABNORMAL_STATE_SUCCESS_RATE);
-		_ignoreShield = set.getBool("ignoreShld", false);
+		_magicLevel = set.getInt("magicLvl", 0);
+		_lvlBonusRate = set.getInt("lvlBonusRate", 0);
+		_minChance = set.getInt("minChance", FormulasConfigs.MIN_ABNORMAL_STATE_SUCCESS_RATE);
+		_maxChance = set.getInt("maxChance", FormulasConfigs.MAX_ABNORMAL_STATE_SUCCESS_RATE);
+		_ignoreShield = set.getBoolean("ignoreShld", false);
 		_skillType = set.getEnum("skillType", L2SkillType.class, L2SkillType.DUMMY);
 		_effectType = set.getEnum("effectType", L2SkillType.class, null);
-		_effectId = set.getInteger("effectId", 0);
-		_effectLvl = set.getInteger("effectLevel", 0);
+		_effectId = set.getInt("effectId", 0);
+		_effectLvl = set.getInt("effectLevel", 0);
 		
-		_nextActionIsAttack = set.getBool("nextActionAttack", false);
+		_nextActionIsAttack = set.getBoolean("nextActionAttack", false);
 		
-		_removedOnAnyActionExceptMove = set.getBool("removedOnAnyActionExceptMove", false);
-		_removedOnDamage = set.getBool("removedOnDamage", _skillType == L2SkillType.SLEEP);
+		_removedOnAnyActionExceptMove = set.getBoolean("removedOnAnyActionExceptMove", false);
+		_removedOnDamage = set.getBoolean("removedOnDamage", _skillType == L2SkillType.SLEEP);
 		
 		_element = set.getByte("element", (byte) -1);
-		_elementPower = set.getInteger("elementPower", 0);
+		_elementPower = set.getInt("elementPower", 0);
 		
 		_basicProperty = set.getEnum("basicProperty", BaseStats.class, BaseStats.NONE);
 		
-		_condition = set.getInteger("condition", 0);
-		_conditionValue = set.getInteger("conditionValue", 0);
-		_overhit = set.getBool("overHit", false);
-		_isSuicideAttack = set.getBool("isSuicideAttack", false);
+		_condition = set.getInt("condition", 0);
+		_conditionValue = set.getInt("conditionValue", 0);
+		_overhit = set.getBoolean("overHit", false);
+		_isSuicideAttack = set.getBoolean("isSuicideAttack", false);
 		
-		_minPledgeClass = set.getInteger("minPledgeClass", 0);
-		_isOffensive = set.getBool("offensive", false);
-		_chargeConsume = set.getInteger("chargeConsume", 0);
-		_triggeredId = set.getInteger("triggeredId", 0);
-		_triggeredLevel = set.getInteger("triggeredLevel", 1);
+		_minPledgeClass = set.getInt("minPledgeClass", 0);
+		_isOffensive = set.getBoolean("offensive", false);
+		_chargeConsume = set.getInt("chargeConsume", 0);
+		_triggeredId = set.getInt("triggeredId", 0);
+		_triggeredLevel = set.getInt("triggeredLevel", 1);
 		_chanceType = set.getString("chanceType", "");
 		if (!_chanceType.isEmpty())
 		{
 			_chanceCondition = ChanceCondition.parse(set);
 		}
 		
-		_soulMaxConsume = set.getInteger("soulMaxConsumeCount", 0);
-		_blowChance = set.getInteger("blowChance", 0);
-		_critChance = set.getInteger("critChance", 0);
+		_soulMaxConsume = set.getInt("soulMaxConsumeCount", 0);
+		_blowChance = set.getInt("blowChance", 0);
+		_critChance = set.getInt("critChance", 0);
 		
-		_transformId = set.getInteger("transformId", 0);
-		_transformDuration = set.getInteger("transformDuration", 0);
+		_transformId = set.getInt("transformId", 0);
+		_transformDuration = set.getInt("transformDuration", 0);
 		
 		_isHeroSkill = SkillTreesData.getInstance().isHeroSkill(_id, _level);
 		_isGMSkill = SkillTreesData.getInstance().isGMSkill(_id, _level);
 		_isSevenSigns = (_id > 4360) && (_id < 4367);
 		_isClanSkill = SkillTreesData.getInstance().isClanSkill(_id, _level);
 		
-		_baseCritRate = set.getInteger("baseCritRate", ((_skillType == L2SkillType.PDAM) || (_skillType == L2SkillType.BLOW)) ? 0 : -1);
-		_halfKillRate = set.getInteger("halfKillRate", 0);
-		_lethalStrikeRate = set.getInteger("lethalStrikeRate", 0);
+		_baseCritRate = set.getInt("baseCritRate", ((_skillType == L2SkillType.PDAM) || (_skillType == L2SkillType.BLOW)) ? 0 : -1);
+		_halfKillRate = set.getInt("halfKillRate", 0);
+		_lethalStrikeRate = set.getInt("lethalStrikeRate", 0);
 		
-		_directHpDmg = set.getBool("dmgDirectlyToHp", false);
-		_isTriggeredSkill = set.getBool("isTriggeredSkill", false);
+		_directHpDmg = set.getBoolean("dmgDirectlyToHp", false);
+		_isTriggeredSkill = set.getBoolean("isTriggeredSkill", false);
 		_sSBoost = set.getFloat("SSBoost", 0.f);
-		_aggroPoints = set.getInteger("aggroPoints", 0);
+		_aggroPoints = set.getInt("aggroPoints", 0);
 		
 		_flyType = set.getEnum("flyType", FlyType.class, null);
-		_flyRadius = set.getInteger("flyRadius", 0);
+		_flyRadius = set.getInt("flyRadius", 0);
 		_flyCourse = set.getFloat("flyCourse", 0);
-		_canBeReflected = set.getBool("canBeReflected", true);
+		_canBeReflected = set.getBoolean("canBeReflected", true);
 		
-		_canBeDispeled = set.getBool("canBeDispeled", true);
+		_canBeDispeled = set.getBoolean("canBeDispeled", true);
 		
-		_excludedFromCheck = set.getBool("excludedFromCheck", false);
-		_dependOnTargetBuff = set.getBool("dependOnTargetBuff", false);
-		_simultaneousCast = set.getBool("simultaneousCast", false);
+		_excludedFromCheck = set.getBoolean("excludedFromCheck", false);
+		_dependOnTargetBuff = set.getBoolean("dependOnTargetBuff", false);
+		_simultaneousCast = set.getBoolean("simultaneousCast", false);
 		
 		String capsuled_items = set.getString("capsuled_items_skill", null);
 		if (capsuled_items != null)
@@ -507,7 +507,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 			
 			_extractableItems = parseExtractableSkill(_id, _level, capsuled_items);
 		}
-		_npcId = set.getInteger("npcId", 0);
+		_npcId = set.getInt("npcId", 0);
 	}
 	
 	public abstract void useSkill(L2Character caster, L2Object[] targets);
@@ -1038,9 +1038,9 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 		return _magic == 1;
 	}
 	
-	public final boolean useFishShot()
+	public boolean useFishShot()
 	{
-		return ((getSkillType() == L2SkillType.PUMPING) || (getSkillType() == L2SkillType.REELING));
+		return hasEffectType(L2EffectType.FISHING);
 	}
 	
 	public int getMinPledgeClass()

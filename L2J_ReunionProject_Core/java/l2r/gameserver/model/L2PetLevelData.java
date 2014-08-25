@@ -50,7 +50,7 @@ public class L2PetLevelData
 	
 	public L2PetLevelData(StatsSet set)
 	{
-		_ownerExpTaken = set.getInteger("get_exp_type");
+		_ownerExpTaken = set.getInt("get_exp_type");
 		_petMaxExp = set.getLong("exp");
 		_petMaxHP = set.getFloat("org_hp");
 		_petMaxMP = set.getFloat("org_mp");
@@ -58,9 +58,9 @@ public class L2PetLevelData
 		_petPDef = set.getFloat("org_pdefend");
 		_petMAtk = set.getFloat("org_mattack");
 		_petMDef = set.getFloat("org_mdefend");
-		_petMaxFeed = set.getInteger("max_meal");
-		_petFeedBattle = set.getInteger("consume_meal_in_battle");
-		_petFeedNormal = set.getInteger("consume_meal_in_normal");
+		_petMaxFeed = set.getInt("max_meal");
+		_petFeedBattle = set.getInt("consume_meal_in_battle");
+		_petFeedNormal = set.getInt("consume_meal_in_normal");
 		_petRegenHP = set.getFloat("org_hp_regen");
 		_petRegenMP = set.getFloat("org_mp_regen");
 		_petSoulShot = set.getShort("soulshot_count");

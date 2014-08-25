@@ -84,24 +84,24 @@ public class ServerVariables
 		}
 	}
 	
-	public static boolean getBool(String name)
+	public static boolean getBoolean(String name)
 	{
-		return getVars().getBool(name);
+		return getVars().getBoolean(name);
 	}
 	
-	public static boolean getBool(String name, boolean defult)
+	public static boolean getBoolean(String name, boolean defult)
 	{
-		return getVars().getBool(name, defult);
+		return getVars().getBoolean(name, defult);
 	}
 	
 	public static int getInt(String name)
 	{
-		return getVars().getInteger(name);
+		return getVars().getInt(name);
 	}
 	
 	public static int getInt(String name, int defult)
 	{
-		return getVars().getInteger(name, defult);
+		return getVars().getInt(name, defult);
 	}
 	
 	public static long getLong(String name)

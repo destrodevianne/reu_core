@@ -256,7 +256,7 @@ public class NpcTable
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			int updated = 0;
-			final int npcId = npc.getInteger("npcId");
+			final int npcId = npc.getInt("npcId");
 			if (Config.CUSTOM_NPC_TABLE)
 			{
 				updated = performUpdate(npcSb, "custom_npc", "id", npcId, con);
