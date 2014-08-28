@@ -198,7 +198,7 @@ public abstract class L2Playable extends L2Character
 							_log.error("L2Playeable[notifyDeath]1 killer is: " + killer.getName());
 						}
 						
-						_log.error("L2Playeable[notifyDeath]1 ID is: " + this.getName());
+						_log.error("L2Playeable[notifyDeath]1 ID is: " + this.getId());
 					}
 				}
 			}
@@ -226,7 +226,7 @@ public abstract class L2Playable extends L2Character
 							_log.error("L2Playeable[notifyDeath]2 killer is: " + killer.getName());
 						}
 						
-						_log.error("L2Playeable[notifyDeath]2 ID is: " + this.getName());
+						_log.error("L2Playeable[notifyDeath]2 ID is: " + this.getId());
 					}
 				}
 			}
