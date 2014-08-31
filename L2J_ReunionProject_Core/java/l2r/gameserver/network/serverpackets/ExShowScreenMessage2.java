@@ -14,8 +14,6 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import java.util.ArrayList;
-
 public class ExShowScreenMessage2 extends L2GameServerPacket
 {
 	public static enum ScreenMessageAlign
@@ -30,77 +28,66 @@ public class ExShowScreenMessage2 extends L2GameServerPacket
 		BOTTOM_RIGHT
 	}
 	
-	private final boolean _hide;
-	private final int _sysMessageId;
-	private final int _time;
+	private final int _type, _sysMessageId;
+	private final boolean _big_font, _effect;
 	private final ScreenMessageAlign _text_align;
-	private final boolean _big_font;
-	private final boolean _effect;
-	private int _clientMessageId;
-	private final ArrayList<String> _text = new ArrayList<>();
-	
-	public ExShowScreenMessage2(String text, int time, ScreenMessageAlign text_align, boolean big_font, boolean type, int messageId, boolean showEffect)
-	{
-		_hide = type;
-		_sysMessageId = messageId;
-		_text.add(text);
-		_time = time;
-		_text_align = text_align;
-		_big_font = big_font;
-		_effect = showEffect;
-	}
-	
-	public ExShowScreenMessage2(int clientMsgId, int time, ScreenMessageAlign text_align, boolean big_font, boolean type, int messageId, boolean showEffect)
-	{
-		_hide = type;
-		_sysMessageId = messageId;
-		_time = time;
-		_text_align = text_align;
-		_big_font = big_font;
-		_effect = showEffect;
-		_clientMessageId = clientMsgId;
-	}
+	private final int _time;
+	private final String _text;
+	private final int _npcString;
+	private final boolean _fade;
 	
 	public ExShowScreenMessage2(String text, int time, ScreenMessageAlign text_align, boolean big_font)
 	{
-		_hide = false;
+		_type = 1;
 		_sysMessageId = -1;
-		_text.add(text);
+		_fade = false;
+		_text = text;
 		_time = time;
 		_text_align = text_align;
 		_big_font = big_font;
 		_effect = false;
+		_npcString = -1;
 	}
 	
-	public ExShowScreenMessage2 add(String text)
+	public ExShowScreenMessage2(String text, int time, ScreenMessageAlign text_align)
 	{
-		_text.add(text);
-		return this;
+		this(text, time, text_align, true);
+	}
+	
+	public ExShowScreenMessage2(String text, int time)
+	{
+		this(text, time, ScreenMessageAlign.MIDDLE_CENTER);
+	}
+	
+	public ExShowScreenMessage2(String text, int time, ScreenMessageAlign text_align, boolean big_font, int type, int messageId, boolean showEffect)
+	{
+		_type = type;
+		_sysMessageId = messageId;
+		_fade = false;
+		_text = text;
+		_time = time;
+		_text_align = text_align;
+		_big_font = big_font;
+		_effect = showEffect;
+		_npcString = -1;
 	}
 	
 	@Override
 	protected final void writeImpl()
 	{
-		writeC(0xfe);
+		writeC(0xFE);
 		writeH(0x39);
-		writeD(_hide ? 0x00 : 0x01);
-		if (_hide)
-		{
-			return;
-		}
-		writeD(_sysMessageId);
-		writeD(_text_align.ordinal() + 1);
-		writeD(0x00);
-		writeD(_big_font ? 0x00 : 0x01);
-		writeD(0x00);
-		writeD(0x00);
-		writeD(_effect ? 1 : 0);
-		writeD(_time);
-		writeD(0x00);
-		writeD(_clientMessageId);
-		for (String text : _text)
-		{
-			writeS(text);
-		}
+		writeD(_type); // 0 - system messages, 1 - your defined text
+		writeD(_sysMessageId); // system message id (_type must be 0 otherwise no effect)
+		writeD(_text_align.ordinal() + 1); // placement of the text
+		writeD(0x00); // ?
+		writeD(_big_font ? 0 : 1); // text size
+		writeD(0x00); // ?
+		writeD(0x00); // ?
+		writeD(_effect == true ? 1 : 0); // upper effect (0 - disabled, 1 enabled) - _position must be 2 (center) otherwise no effect
+		writeD(_time); // the message is displayed in milliseconds
+		writeD(_fade ? 0x01 : 0x00);
+		writeD(_npcString);
+		writeS(_text); // text messages
 	}
 }
