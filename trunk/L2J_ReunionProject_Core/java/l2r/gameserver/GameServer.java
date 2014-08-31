@@ -32,6 +32,7 @@ import java.util.logging.LogManager;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.Server;
+import l2r.UPnPService;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.EventDroplist;
 import l2r.gameserver.datatables.SpawnTable;
@@ -472,16 +473,20 @@ public class GameServer
 		try
 		{
 			_selectorThread.openServerSocket(bindAddress, Config.PORT_GAME);
+			_selectorThread.start();
+			_log.info(getClass().getSimpleName() + ": is now listening on: " + Config.GAMESERVER_HOSTNAME + ":" + Config.PORT_GAME);
 		}
 		catch (IOException e)
 		{
 			_log.error(getClass().getSimpleName() + ": FATAL: Failed to open server socket. Reason: " + e.getMessage(), e);
 			System.exit(1);
 		}
-		_selectorThread.start();
+		
 		_log.info("Maximum Numbers of Connected players: " + Config.MAXIMUM_ONLINE_USERS);
-		long serverLoadEnd = System.currentTimeMillis();
-		_log.info("Server loaded in " + ((serverLoadEnd - serverLoadStart) / 1000) + " seconds.");
+		_log.info("Server loaded in " + ((System.currentTimeMillis() - serverLoadStart) / 1000) + " seconds.");
+		
+		printSection("UPnP");
+		UPnPService.getInstance();
 		
 		AutoAnnounceTaskManager.getInstance();
 		

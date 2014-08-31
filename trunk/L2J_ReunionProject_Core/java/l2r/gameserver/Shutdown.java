@@ -20,6 +20,7 @@ package l2r.gameserver;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
+import l2r.UPnPService;
 import l2r.gameserver.datatables.sql.BotReportTable;
 import l2r.gameserver.datatables.sql.ClanTable;
 import l2r.gameserver.datatables.sql.OfflineTradersTable;
@@ -196,6 +197,17 @@ public class Shutdown extends Thread
 		{
 			TimeCounter tc = new TimeCounter();
 			TimeCounter tc1 = new TimeCounter();
+			
+			try
+			{
+				UPnPService.getInstance().removeAllPorts();
+				_log.info("UPnP Service: All ports mappings deleted (" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
+			}
+			catch (Throwable t)
+			{
+				_log.warn("Error while removing UPnP port mappings: ", t);
+			}
+			
 			try
 			{
 				if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)

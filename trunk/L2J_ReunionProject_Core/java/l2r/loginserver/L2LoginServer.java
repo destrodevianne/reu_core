@@ -32,6 +32,7 @@ import java.util.logging.LogManager;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.Server;
+import l2r.UPnPService;
 import l2r.loginserver.mail.MailSystem;
 import l2r.loginserver.network.L2LoginClient;
 import l2r.loginserver.network.L2LoginPacketHandler;
@@ -176,15 +177,16 @@ public final class L2LoginServer
 		try
 		{
 			_selectorThread.openServerSocket(bindAddress, Config.PORT_LOGIN);
+			_selectorThread.start();
+			_log.info(getClass().getSimpleName() + ": is now listening on: " + Config.LOGIN_BIND_ADDRESS + ":" + Config.PORT_LOGIN);
 		}
 		catch (IOException e)
 		{
 			_log.error("FATAL: Failed to open server socket. Reason: " + e.getMessage(), e);
 			System.exit(1);
 		}
-		_selectorThread.start();
 		
-		_log.info("Login Server ready on " + (bindAddress == null ? "*" : bindAddress.getHostAddress()) + ":" + Config.PORT_LOGIN);
+		UPnPService.getInstance();
 	}
 	
 	public Status getStatusServer()
