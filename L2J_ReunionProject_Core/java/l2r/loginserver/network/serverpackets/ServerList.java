@@ -27,7 +27,7 @@ import java.util.Map;
 import l2r.loginserver.GameServerTable;
 import l2r.loginserver.GameServerTable.GameServerInfo;
 import l2r.loginserver.network.L2LoginClient;
-import l2r.loginserver.network.gameserverpackets.ServerStatus;
+import l2r.loginserver.network.gameservercon.gameserverpackets.ServerStatus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

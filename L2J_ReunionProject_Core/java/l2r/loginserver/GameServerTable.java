@@ -41,7 +41,7 @@ import javolution.xml.stream.XMLStreamConstants;
 import javolution.xml.stream.XMLStreamReaderImpl;
 import l2r.Config;
 import l2r.L2DatabaseFactory;
-import l2r.loginserver.network.gameserverpackets.ServerStatus;
+import l2r.loginserver.network.gameservercon.gameserverpackets.ServerStatus;
 import l2r.util.IPSubnet;
 import l2r.util.Rnd;
 
