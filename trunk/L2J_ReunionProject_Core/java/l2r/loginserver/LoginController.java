@@ -42,7 +42,7 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.loginserver.GameServerTable.GameServerInfo;
 import l2r.loginserver.network.L2LoginClient;
-import l2r.loginserver.network.gameserverpackets.ServerStatus;
+import l2r.loginserver.network.gameservercon.gameserverpackets.ServerStatus;
 import l2r.loginserver.network.serverpackets.LoginFail.LoginFailReason;
 import l2r.util.Log;
 import l2r.util.Rnd;

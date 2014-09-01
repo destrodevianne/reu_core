@@ -39,7 +39,7 @@ import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.network.L2GameClient;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.gameserverpackets.ServerStatus;
+import l2r.gameserver.network.loginservercon.gameserverpackets.ServerStatus;
 import l2r.gameserver.network.serverpackets.ServerClose;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.util.Broadcast;
