@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.logging.LogManager;
@@ -48,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class L2LoginServer
 {
-	private final Logger _log = LoggerFactory.getLogger(L2LoginServer.class);
+	private static final Logger _log = LoggerFactory.getLogger(L2LoginServer.class);
 	
 	public static final int PROTOCOL_REV = 0x0106;
 	private static L2LoginServer _instance;
@@ -93,6 +94,9 @@ public final class L2LoginServer
 		// Load Config
 		Config.load();
 		
+		// Check binding address
+		checkFreePorts();
+		
 		L2DatabaseFactory.getInstance();
 		
 		try
@@ -115,11 +119,11 @@ public final class L2LoginServer
 		}
 		
 		InetAddress bindAddress = null;
-		if (!Config.LOGIN_BIND_ADDRESS.equals("*"))
+		if (!Config.LOGINSERVER_HOSTNAME.equals("*"))
 		{
 			try
 			{
-				bindAddress = InetAddress.getByName(Config.LOGIN_BIND_ADDRESS);
+				bindAddress = InetAddress.getByName(Config.LOGINSERVER_HOSTNAME);
 			}
 			catch (UnknownHostException e)
 			{
@@ -178,7 +182,7 @@ public final class L2LoginServer
 		{
 			_selectorThread.openServerSocket(bindAddress, Config.PORT_LOGIN);
 			_selectorThread.start();
-			_log.info(getClass().getSimpleName() + ": is now listening on: " + Config.LOGIN_BIND_ADDRESS + ":" + Config.PORT_LOGIN);
+			_log.info(getClass().getSimpleName() + ": is now listening on: " + Config.LOGINSERVER_HOSTNAME + ":" + Config.PORT_LOGIN);
 		}
 		catch (IOException e)
 		{
@@ -300,5 +304,39 @@ public final class L2LoginServer
 	public void shutdown(boolean restart)
 	{
 		Runtime.getRuntime().exit(restart ? 2 : 0);
+	}
+	
+	private static void checkFreePorts()
+	{
+		boolean binded = false;
+		while (!binded)
+		{
+			try
+			{
+				ServerSocket ss;
+				if (Config.LOGINSERVER_HOSTNAME.equalsIgnoreCase("*"))
+				{
+					ss = new ServerSocket(Config.PORT_LOGIN);
+				}
+				else
+				{
+					ss = new ServerSocket(Config.PORT_LOGIN, 50, InetAddress.getByName(Config.LOGINSERVER_HOSTNAME));
+				}
+				ss.close();
+				binded = true;
+			}
+			catch (Exception e)
+			{
+				_log.warn("Port " + Config.PORT_LOGIN + " is already binded. Please free it and restart server.");
+				binded = false;
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e2)
+				{
+				}
+			}
+		}
 	}
 }

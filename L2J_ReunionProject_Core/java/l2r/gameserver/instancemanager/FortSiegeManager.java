@@ -37,7 +37,6 @@ import l2r.gameserver.model.CombatFlag;
 import l2r.gameserver.model.FortSiegeSpawn;
 import l2r.gameserver.model.L2Clan;
 import l2r.gameserver.model.L2Object;
-import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.FortSiege;
@@ -79,46 +78,6 @@ public class FortSiegeManager
 	{
 		character.addSkill(SkillData.FrequentSkill.SEAL_OF_RULER.getSkill(), false);
 		character.addSkill(SkillData.FrequentSkill.BUILD_HEADQUARTERS.getSkill(), false);
-	}
-	
-	/**
-	 * @param activeChar The L2Character of the character can summon
-	 * @param isCheckOnly
-	 * @return true if character summon
-	 */
-	public final boolean checkIfOkToSummon(L2Character activeChar, boolean isCheckOnly)
-	{
-		if (!(activeChar instanceof L2PcInstance))
-		{
-			return false;
-		}
-		
-		String text = "";
-		L2PcInstance player = (L2PcInstance) activeChar;
-		Fort fort = FortManager.getInstance().getFort(player);
-		
-		if ((fort == null) || (fort.getResidenceId() <= 0))
-		{
-			text = "You must be on fort ground to summon this";
-		}
-		else if (!fort.getSiege().isInProgress())
-		{
-			text = "You can only summon this during a siege.";
-		}
-		else if ((player.getClanId() != 0) && (fort.getSiege().getAttackerClan(player.getClanId()) == null))
-		{
-			text = "You can only summon this as a registered attacker.";
-		}
-		else
-		{
-			return true;
-		}
-		
-		if (!isCheckOnly)
-		{
-			player.sendMessage(text);
-		}
-		return false;
 	}
 	
 	/**

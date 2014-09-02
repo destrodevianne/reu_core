@@ -75,50 +75,60 @@ public final class Config
 	// --------------------------------------------------
 	// L2J Property File Definitions
 	// --------------------------------------------------
-	public static final String CHARACTER_CONFIG_FILE = "./config/main/Character.ini";
-	public static final String FEATURE_CONFIG_FILE = "./config/main/Feature.ini";
-	public static final String FORTSIEGE_CONFIGURATION_FILE = "./config/main/FortSiege.ini";
-	public static final String GENERAL_CONFIG_FILE = "./config/main/General.ini";
-	public static final String HEXID_FILE = "./config/network/hexid.txt";
-	public static final String ID_CONFIG_FILE = "./config/main/IdFactory.ini";
-	public static final String SERVER_VERSION_FILE = "./config/version/l2rcore-version.ini";
-	public static final String DATAPACK_VERSION_FILE = "./config/version/l2rdp-version.ini";
-	public static final String L2JMOD_CONFIG_FILE = "./config/main/L2JMods.ini";
-	public static final String LOGIN_CONFIGURATION_FILE = "./config/network/LoginServer.ini";
-	public static final String NPC_CONFIG_FILE = "./config/main/NPC.ini";
-	public static final String PVP_CONFIG_FILE = "./config/main/PVP.ini";
-	public static final String RATES_CONFIG_FILE = "./config/main/Rates.ini";
-	public static final String CONFIGURATION_FILE = "./config/network/Server.ini";
-	public static final String IP_CONFIG_FILE = "./config/network/ipconfig.xml";
-	public static final String SIEGE_CONFIGURATION_FILE = "./config/main/Siege.ini";
-	public static final String TW_CONFIGURATION_FILE = "./config/main/TerritoryWar.ini";
-	public static final String TELNET_FILE = "./config/network/Telnet.ini";
-	public static final String FLOOD_PROTECTOR_FILE = "./config/main/FloodProtector.ini";
-	public static final String MMO_CONFIG_FILE = "./config/main/MMO.ini";
-	public static final String OLYMPIAD_CONFIG_FILE = "./config/main/Olympiad.ini";
-	public static final String GRACIASEEDS_CONFIG_FILE = "./config/main/GraciaSeeds.ini";
-	public static final String CHAT_FILTER_FILE = "./config/main/chatfilter.txt";
-	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini";
-	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
-	public static final String ITEM_MALL_CONFIG_FILE = "./config/main/ItemMall.ini";
-	public static final String DEBUG_CONFIG_FILE = "./config/main/Debug.ini";
-	public static final String GEODATA_CONFIG_FILE = "./config/main/Geodata.ini";
+	
 	// Bosses
 	public static final String ANTHARAS_CONFIG = "./config/bosses/Antharas.ini";
-	public static final String VALAKAS_CONFIG = "./config/bosses/Valakas.ini";
 	public static final String BAIUM_CONFIG = "./config/bosses/Baium.ini";
 	public static final String BELETH_CONFIG = "./config/bosses/Beleth.ini";
 	public static final String CORE_CONFIG = "./config/bosses/Core.ini";
+	public static final String DESTRUCTION_BOSSES_CONFIG = "./config/bosses/DestructionBosses.ini";
 	public static final String EKIMUS_CONFIG = "./config/bosses/Ekimus.ini";
-	public static final String FRINTEZZA_CONFIG = "./config/bosses/Frintezza.ini";
 	public static final String FREYA_EASY_CONFIG = "./config/bosses/FreyaEasy.ini";
 	public static final String FREYA_HARDCORE_CONFIG = "./config/bosses/FreyaHardCore.ini";
+	public static final String FRINTEZZA_CONFIG = "./config/bosses/Frintezza.ini";
 	public static final String ORFEN_CONFIG = "./config/bosses/Orfen.ini";
 	public static final String QUEEN_ANT_CONFIG = "./config/bosses/QueenAnt.ini";
 	public static final String SAILREN_CONFIG = "./config/bosses/Sailren.ini";
+	public static final String VALAKAS_CONFIG = "./config/bosses/Valakas.ini";
 	public static final String VAN_HALTER_CONFIG = "./config/bosses/VanHalter.ini";
 	public static final String ZAKEN_CONFIG = "./config/bosses/Zaken.ini";
-	public static final String DESTRUCTION_BOSSES_CONFIG = "./config/bosses/DestructionBosses.ini";
+	
+	// hexid
+	public static final String HEXID_FILE = "./config/hexid/hexid.txt";
+	
+	// main
+	public static final String CHARACTER_CONFIG_FILE = "./config/main/Character.ini";
+	public static final String CHAT_FILTER_FILE = "./config/main/chatfilter.txt";
+	public static final String CH_SIEGE_FILE = "./config/main/ConquerableHallSiege.ini";
+	public static final String DEBUG_CONFIG_FILE = "./config/main/Debug.ini";
+	public static final String EMAIL_CONFIG_FILE = "./config/main/Email.ini"; // Login only
+	public static final String FEATURE_CONFIG_FILE = "./config/main/Feature.ini";
+	public static final String FLOOD_PROTECTOR_FILE = "./config/main/FloodProtector.ini";
+	public static final String FORTSIEGE_CONFIGURATION_FILE = "./config/main/FortSiege.ini";
+	public static final String GENERAL_CONFIG_FILE = "./config/main/General.ini";
+	public static final String GEODATA_CONFIG_FILE = "./config/main/Geodata.ini";
+	public static final String GRACIASEEDS_CONFIG_FILE = "./config/main/GraciaSeeds.ini";
+	public static final String ID_CONFIG_FILE = "./config/main/IdFactory.ini";
+	public static final String ITEM_MALL_CONFIG_FILE = "./config/main/ItemMall.ini";
+	public static final String L2JMOD_CONFIG_FILE = "./config/main/L2JMods.ini";
+	public static final String NPC_CONFIG_FILE = "./config/main/NPC.ini";
+	public static final String OLYMPIAD_CONFIG_FILE = "./config/main/Olympiad.ini";
+	public static final String PVP_CONFIG_FILE = "./config/main/PVP.ini";
+	public static final String RATES_CONFIG_FILE = "./config/main/Rates.ini";
+	public static final String SIEGE_CONFIGURATION_FILE = "./config/main/Siege.ini";
+	public static final String TW_CONFIGURATION_FILE = "./config/main/TerritoryWar.ini";
+	
+	// network
+	public static final String CLIENT_PACKETS_FILE = "./config/network/ClientPackets.ini";
+	public static final String IP_CONFIG_FILE = "./config/network/ipconfig.xml";
+	public static final String MMO_CONFIG_FILE = "./config/network/MMO.ini";
+	public static final String LOGIN_CONFIGURATION_FILE = "./config/network/LoginServer.ini";
+	public static final String CONFIGURATION_FILE = "./config/network/Server.ini";
+	public static final String TELNET_FILE = "./config/network/Telnet.ini";
+	
+	// version
+	public static final String SERVER_VERSION_FILE = "./config/version/l2rcore-version.ini";
+	public static final String DATAPACK_VERSION_FILE = "./config/version/l2rdp-version.ini";
 	
 	// --------------------------------------------------
 	// L2J Variable Definitions
@@ -473,15 +483,6 @@ public final class Config
 	public static int GENERAL_THREAD_CORE_SIZE;
 	public static int AI_MAX_THREAD;
 	public static int EVENT_MAX_THREAD;
-	public static int CLIENT_PACKET_QUEUE_SIZE;
-	public static int CLIENT_PACKET_QUEUE_MAX_BURST_SIZE;
-	public static int CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND;
-	public static int CLIENT_PACKET_QUEUE_MEASURE_INTERVAL;
-	public static int CLIENT_PACKET_QUEUE_MAX_AVERAGE_PACKETS_PER_SECOND;
-	public static int CLIENT_PACKET_QUEUE_MAX_FLOODS_PER_MIN;
-	public static int CLIENT_PACKET_QUEUE_MAX_OVERFLOWS_PER_MIN;
-	public static int CLIENT_PACKET_QUEUE_MAX_UNDERFLOWS_PER_MIN;
-	public static int CLIENT_PACKET_QUEUE_MAX_UNKNOWN_PER_MIN;
 	public static boolean DEADLOCK_DETECTOR;
 	public static int DEADLOCK_CHECK_INTERVAL;
 	public static boolean RESTART_ON_DEADLOCK;
@@ -892,7 +893,7 @@ public final class Config
 	public static boolean ENABLE_UPNP;
 	public static int PORT_GAME;
 	public static int PORT_LOGIN;
-	public static String LOGIN_BIND_ADDRESS;
+	public static String LOGINSERVER_HOSTNAME;
 	public static int LOGIN_TRY_BEFORE_BAN;
 	public static int LOGIN_BLOCK_AFTER_BAN;
 	public static String GAMESERVER_HOSTNAME;
@@ -915,6 +916,19 @@ public final class Config
 	public static List<Integer> PROTOCOL_LIST;
 	public static boolean LOGIN_SERVER_SCHEDULE_RESTART;
 	public static long LOGIN_SERVER_SCHEDULE_RESTART_TIME;
+	
+	// --------------------------------------------------
+	// Client Packets Settings
+	// --------------------------------------------------
+	public static int CLIENT_PACKET_QUEUE_SIZE;
+	public static int CLIENT_PACKET_QUEUE_MAX_BURST_SIZE;
+	public static int CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND;
+	public static int CLIENT_PACKET_QUEUE_MEASURE_INTERVAL;
+	public static int CLIENT_PACKET_QUEUE_MAX_AVERAGE_PACKETS_PER_SECOND;
+	public static int CLIENT_PACKET_QUEUE_MAX_FLOODS_PER_MIN;
+	public static int CLIENT_PACKET_QUEUE_MAX_OVERFLOWS_PER_MIN;
+	public static int CLIENT_PACKET_QUEUE_MAX_UNDERFLOWS_PER_MIN;
+	public static int CLIENT_PACKET_QUEUE_MAX_UNKNOWN_PER_MIN;
 	
 	// --------------------------------------------------
 	// MMO Settings
@@ -1782,6 +1796,27 @@ public final class Config
 			ALT_VALIDATE_TRIGGER_SKILLS = Character.getBoolean("AltValidateTriggerSkills", false);
 			PLAYER_MOVEMENT_BLOCK_TIME = Character.getInt("NpcTalkBlockingTime", 0) * 1000;
 			
+			// Load ClientPackets L2Properties file (if exists)
+			final PropertiesParser clientPacketsSettings = new PropertiesParser(CLIENT_PACKETS_FILE);
+			
+			CLIENT_PACKET_QUEUE_SIZE = clientPacketsSettings.getInt("ClientPacketQueueSize", 0);
+			if (CLIENT_PACKET_QUEUE_SIZE == 0)
+			{
+				CLIENT_PACKET_QUEUE_SIZE = MMO_MAX_READ_PER_PASS + 2;
+			}
+			CLIENT_PACKET_QUEUE_MAX_BURST_SIZE = clientPacketsSettings.getInt("ClientPacketQueueMaxBurstSize", 0);
+			if (CLIENT_PACKET_QUEUE_MAX_BURST_SIZE == 0)
+			{
+				CLIENT_PACKET_QUEUE_MAX_BURST_SIZE = MMO_MAX_READ_PER_PASS + 1;
+			}
+			CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND = clientPacketsSettings.getInt("ClientPacketQueueMaxPacketsPerSecond", 80);
+			CLIENT_PACKET_QUEUE_MEASURE_INTERVAL = clientPacketsSettings.getInt("ClientPacketQueueMeasureInterval", 5);
+			CLIENT_PACKET_QUEUE_MAX_AVERAGE_PACKETS_PER_SECOND = clientPacketsSettings.getInt("ClientPacketQueueMaxAveragePacketsPerSecond", 40);
+			CLIENT_PACKET_QUEUE_MAX_FLOODS_PER_MIN = clientPacketsSettings.getInt("ClientPacketQueueMaxFloodsPerMin", 2);
+			CLIENT_PACKET_QUEUE_MAX_OVERFLOWS_PER_MIN = clientPacketsSettings.getInt("ClientPacketQueueMaxOverflowsPerMin", 1);
+			CLIENT_PACKET_QUEUE_MAX_UNDERFLOWS_PER_MIN = clientPacketsSettings.getInt("ClientPacketQueueMaxUnderflowsPerMin", 1);
+			CLIENT_PACKET_QUEUE_MAX_UNKNOWN_PER_MIN = clientPacketsSettings.getInt("ClientPacketQueueMaxUnknownPerMin", 5);
+			
 			// Load Telnet L2Properties file (if exists)
 			final PropertiesParser telnetSettings = new PropertiesParser(TELNET_FILE);
 			
@@ -1847,23 +1882,6 @@ public final class Config
 			GENERAL_THREAD_CORE_SIZE = General.getInt("GeneralThreadCoreSize", 4);
 			AI_MAX_THREAD = General.getInt("AiMaxThread", 6);
 			EVENT_MAX_THREAD = General.getInt("EventsMaxThread", 5);
-			CLIENT_PACKET_QUEUE_SIZE = General.getInt("ClientPacketQueueSize", 0);
-			if (CLIENT_PACKET_QUEUE_SIZE == 0)
-			{
-				CLIENT_PACKET_QUEUE_SIZE = MMO_MAX_READ_PER_PASS + 2;
-			}
-			CLIENT_PACKET_QUEUE_MAX_BURST_SIZE = General.getInt("ClientPacketQueueMaxBurstSize", 0);
-			if (CLIENT_PACKET_QUEUE_MAX_BURST_SIZE == 0)
-			{
-				CLIENT_PACKET_QUEUE_MAX_BURST_SIZE = MMO_MAX_READ_PER_PASS + 1;
-			}
-			CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND = General.getInt("ClientPacketQueueMaxPacketsPerSecond", 80);
-			CLIENT_PACKET_QUEUE_MEASURE_INTERVAL = General.getInt("ClientPacketQueueMeasureInterval", 5);
-			CLIENT_PACKET_QUEUE_MAX_AVERAGE_PACKETS_PER_SECOND = General.getInt("ClientPacketQueueMaxAveragePacketsPerSecond", 40);
-			CLIENT_PACKET_QUEUE_MAX_FLOODS_PER_MIN = General.getInt("ClientPacketQueueMaxFloodsPerMin", 2);
-			CLIENT_PACKET_QUEUE_MAX_OVERFLOWS_PER_MIN = General.getInt("ClientPacketQueueMaxOverflowsPerMin", 1);
-			CLIENT_PACKET_QUEUE_MAX_UNDERFLOWS_PER_MIN = General.getInt("ClientPacketQueueMaxUnderflowsPerMin", 1);
-			CLIENT_PACKET_QUEUE_MAX_UNKNOWN_PER_MIN = General.getInt("ClientPacketQueueMaxUnknownPerMin", 5);
 			DEADLOCK_DETECTOR = General.getBoolean("DeadLockDetector", true);
 			DEADLOCK_CHECK_INTERVAL = General.getInt("DeadLockCheckInterval", 20);
 			RESTART_ON_DEADLOCK = General.getBoolean("RestartOnDeadlock", false);
@@ -2762,7 +2780,7 @@ public final class Config
 			GAME_SERVER_LOGIN_HOST = ServerSettings.getString("LoginHostname", "127.0.0.1");
 			GAME_SERVER_LOGIN_PORT = ServerSettings.getInt("LoginPort", 9013);
 			
-			LOGIN_BIND_ADDRESS = ServerSettings.getString("LoginserverHostname", "*");
+			LOGINSERVER_HOSTNAME = ServerSettings.getString("LoginserverHostname", "*");
 			PORT_LOGIN = ServerSettings.getInt("LoginserverPort", 2106);
 			
 			try
