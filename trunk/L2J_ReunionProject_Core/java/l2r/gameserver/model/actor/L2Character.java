@@ -3299,8 +3299,21 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 */
 	public final void startAbnormalEffect(AbnormalEffect mask)
 	{
+		startAbnormalEffect(true, mask);
+	}
+	
+	/**
+	 * Active abnormal effects flags in the binary mask and send Server->Client UserInfo/CharInfo packet.
+	 * @param update
+	 * @param mask
+	 */
+	public final void startAbnormalEffect(boolean update, AbnormalEffect mask)
+	{
 		_AbnormalEffects |= mask.getMask();
-		updateAbnormalEffect();
+		if (update)
+		{
+			updateAbnormalEffect();
+		}
 	}
 	
 	/**
@@ -3446,8 +3459,21 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 */
 	public final void stopAbnormalEffect(AbnormalEffect mask)
 	{
+		stopAbnormalEffect(true, mask);
+	}
+	
+	/**
+	 * Modify the abnormal effect map according to the mask.
+	 * @param update
+	 * @param mask
+	 */
+	public final void stopAbnormalEffect(boolean update, AbnormalEffect mask)
+	{
 		_AbnormalEffects &= ~mask.getMask();
-		updateAbnormalEffect();
+		if (update)
+		{
+			updateAbnormalEffect();
+		}
 	}
 	
 	/**

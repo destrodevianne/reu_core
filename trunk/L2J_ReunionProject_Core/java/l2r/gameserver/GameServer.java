@@ -544,7 +544,7 @@ public class GameServer
 		_log.info(s);
 	}
 	
-	public static void checkFreePorts()
+	private static void checkFreePorts()
 	{
 		boolean binded = false;
 		while (!binded)
@@ -565,7 +565,7 @@ public class GameServer
 			}
 			catch (Exception e)
 			{
-				_log.warn("Port " + Config.PORT_GAME + " is allready binded. Please free it and restart server.");
+				_log.warn("Port " + Config.PORT_GAME + " is already binded. Please free it and restart server.");
 				binded = false;
 				try
 				{
