@@ -18,9 +18,6 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-import l2r.gameserver.model.actor.instance.L2PcInstance;
-import gr.reunion.datatables.AdventTable;
-
 /**
  * @author mochitto
  */
@@ -28,10 +25,9 @@ public class ExNevitAdventPointInfoPacket extends L2GameServerPacket
 {
 	private final int _points;
 	
-	// Add NevitAdvent by pmq Start
-	public ExNevitAdventPointInfoPacket(L2PcInstance player)
+	public ExNevitAdventPointInfoPacket(int points)
 	{
-		_points = AdventTable.getInstance().getAdventPoints(player.getObjectId());
+		_points = points;
 	}
 	
 	@Override

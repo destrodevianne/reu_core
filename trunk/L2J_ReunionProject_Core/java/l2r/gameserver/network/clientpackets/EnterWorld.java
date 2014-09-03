@@ -62,9 +62,6 @@ import l2r.gameserver.network.serverpackets.Die;
 import l2r.gameserver.network.serverpackets.EtcStatusUpdate;
 import l2r.gameserver.network.serverpackets.ExBasicActionList;
 import l2r.gameserver.network.serverpackets.ExGetBookMarkInfoPacket;
-import l2r.gameserver.network.serverpackets.ExNevitAdventEffect;
-import l2r.gameserver.network.serverpackets.ExNevitAdventPointInfoPacket;
-import l2r.gameserver.network.serverpackets.ExNevitAdventTimeChange;
 import l2r.gameserver.network.serverpackets.ExNoticePostArrived;
 import l2r.gameserver.network.serverpackets.ExNotifyPremiumItem;
 import l2r.gameserver.network.serverpackets.ExShowContactList;
@@ -485,9 +482,6 @@ public class EnterWorld extends L2GameClientPacket
 		
 		sendPacket(new SkillCoolTime(activeChar));
 		sendPacket(new ExVoteSystemInfo(activeChar));
-		sendPacket(new ExNevitAdventEffect(0)); // Add NevitAdvent by pmq
-		sendPacket(new ExNevitAdventPointInfoPacket(activeChar)); // Add NevitAdvent by pmq
-		sendPacket(new ExNevitAdventTimeChange(activeChar.getAdventTime(), false)); // Add NevitAdvent by pmq
 		sendPacket(new ExShowContactList(activeChar));
 		
 		for (L2ItemInstance i : activeChar.getInventory().getItems())

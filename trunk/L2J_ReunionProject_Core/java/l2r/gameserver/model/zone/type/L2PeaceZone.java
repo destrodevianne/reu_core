@@ -53,17 +53,14 @@ public class L2PeaceZone extends L2ZoneType
 			{
 				return;
 			}
+			
+			/* Nevit Turn Off on Peace Zone */
+			player.getNevitSystem().stopAdventTask(true);
 		}
 		
 		if (Config.PEACE_ZONE_MODE != 2)
 		{
 			character.setInsideZone(ZoneIdType.PEACE, true);
-			
-			if (character.isPlayer())
-			{
-				L2PcInstance player = character.getActingPlayer();
-				player.pauseAdventTask();
-			}
 		}
 		
 		if (!getAllowStore())
