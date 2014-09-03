@@ -23,7 +23,6 @@ import l2r.gameserver.datatables.xml.ExperienceData;
 import l2r.gameserver.datatables.xml.PetData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.ZoneIdType;
-import l2r.gameserver.instancemanager.BonusExpManager;
 import l2r.gameserver.model.L2PetLevelData;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2ClassMasterInstance;
@@ -47,7 +46,6 @@ import l2r.gameserver.network.serverpackets.StatusUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import l2r.gameserver.network.serverpackets.UserInfo;
 import l2r.gameserver.util.Util;
-import gr.reunion.configsEngine.CustomServerConfigs;
 import gr.reunion.configsEngine.FormulasConfigs;
 
 public class PcStat extends PlayableStat
@@ -155,63 +153,6 @@ public class PcStat extends PlayableStat
 	{
 		L2PcInstance activeChar = getActiveChar();
 		
-		// Add by pmq Start
-		double basePercent = addToExp;
-		
-		if (CustomServerConfigs.ENABLE_RUNE_BONUS)
-		{
-			long[] bonus = BonusExpManager.getInstance().getBonusExpAndSp(getActiveChar(), addToExp, addToSp);
-			if (bonus[0] > 0)
-			{
-				addToExp += bonus[0];
-			}
-			if (bonus[1] > 0)
-			{
-				addToSp += bonus[1];
-			}
-		}
-		
-		if (useBonuses)
-		{
-			if (Config.ENABLE_VITALITY)
-			{
-				if (activeChar.isAdventBlessingActive())
-				{
-					addToExp *= Config.RATE_VITALITY_LEVEL_4;
-					addToSp *= Config.RATE_VITALITY_LEVEL_4;
-				}
-				else
-				{
-					switch (_vitalityLevel)
-					{
-						case 1:
-							addToExp *= Config.RATE_VITALITY_LEVEL_1;
-							addToSp *= Config.RATE_VITALITY_LEVEL_1;
-							break;
-						case 2:
-							addToExp *= Config.RATE_VITALITY_LEVEL_2;
-							addToSp *= Config.RATE_VITALITY_LEVEL_2;
-							break;
-						case 3:
-							addToExp *= Config.RATE_VITALITY_LEVEL_3;
-							addToSp *= Config.RATE_VITALITY_LEVEL_3;
-							break;
-						case 4:
-							addToExp *= Config.RATE_VITALITY_LEVEL_4;
-							addToSp *= Config.RATE_VITALITY_LEVEL_4;
-							break;
-					}
-				}
-			}
-			// Calculate reco exp/sp bonus
-			if ((addToExp > 0) && !activeChar.isInsideZone(ZoneIdType.PEACE))
-			{
-				activeChar.startAdventTask();
-			}
-		}
-		basePercent = basePercent / addToExp;
-		// Add by pmq End
-		
 		// Allowed to gain exp/sp?
 		if (!activeChar.getAccessLevel().canGainExp())
 		{
@@ -228,6 +169,11 @@ public class PcStat extends PlayableStat
 		{
 			bonusExp = getExpBonusMultiplier();
 			bonusSp = getSpBonusMultiplier();
+		}
+		
+		if ((addToExp > 0) && !activeChar.isInsideZone(ZoneIdType.PEACE))
+		{
+			activeChar.getNevitSystem().startAdventTask();
 		}
 		
 		addToExp *= bonusExp;
@@ -404,8 +350,9 @@ public class PcStat extends PlayableStat
 		getActiveChar().sendPacket(new UserInfo(getActiveChar()));
 		getActiveChar().sendPacket(new ExBrExtraUserInfo(getActiveChar()));
 		getActiveChar().sendPacket(new ExVoteSystemInfo(getActiveChar()));
+		// Nevit Points For Level
+		getActiveChar().getNevitSystem().addPoints(2000);
 		
-		getActiveChar().incAdventPoints(2000, false); // Add NevitAdvent by pmq
 		return levelIncreased;
 	}
 	
@@ -811,10 +758,11 @@ public class PcStat extends PlayableStat
 			{
 				int stat = (int) calcStat(Stats.VITALITY_CONSUME_RATE, 1, getActiveChar(), null);
 				
-				if (getActiveChar().isAdventBlessingActive())
+				if (getActiveChar().getNevitSystem().isAdventBlessingActive())
 				{
-					stat -= 10; // Add NevitAdvent by pmq
+					stat = -10; // increase Vitality During Blessing
 				}
+				
 				if (stat == 0)
 				{
 					return;
@@ -886,6 +834,11 @@ public class PcStat extends PlayableStat
 	 */
 	public byte getVitalityLevel()
 	{
+		if (getActiveChar().getNevitSystem().isAdventBlessingActive())
+		{
+			return 4;
+		}
+		
 		return _vitalityLevel;
 	}
 	

@@ -75,6 +75,7 @@ public enum AbnormalEffect
 	S_VESPER_C("vesper_c", 0x001000),
 	S_VESPER_D("vesper_d", 0x002000),
 	ARCANE_SHIELD("arcane_shield", 0x008000),
+	NAVIT_ADVENT("ave_advent_blessing", 0x080000),
 	
 	// event effects
 	E_AFRO_1("afrobaguette1", 0x000001),
@@ -84,8 +85,7 @@ public enum AbnormalEffect
 	E_HEADPHONE("headphone", 0x000010),
 	E_VESPER_1("vesper1", 0x000020),
 	E_VESPER_2("vesper2", 0x000040),
-	E_VESPER_3("vesper3", 0x000080),
-	AVE_ADVENT_BLESSING("ave_advent_blessing", 0x080000); // Add NevitAdvent by pmq
+	E_VESPER_3("vesper3", 0x000080);
 	
 	private final int _mask;
 	private final String _name;

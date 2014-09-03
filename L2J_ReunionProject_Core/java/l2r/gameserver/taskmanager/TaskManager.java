@@ -38,13 +38,13 @@ import javolution.util.FastList;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.taskmanager.tasks.SoIStageUpdater;
-import l2r.gameserver.taskmanager.tasks.TaskAdvent;
 import l2r.gameserver.taskmanager.tasks.TaskBirthday;
 import l2r.gameserver.taskmanager.tasks.TaskClanLeaderApply;
 import l2r.gameserver.taskmanager.tasks.TaskCleanUp;
 import l2r.gameserver.taskmanager.tasks.TaskDailySkillReuseClean;
 import l2r.gameserver.taskmanager.tasks.TaskGlobalVariablesSave;
 import l2r.gameserver.taskmanager.tasks.TaskJython;
+import l2r.gameserver.taskmanager.tasks.TaskNevit;
 import l2r.gameserver.taskmanager.tasks.TaskOlympiadSave;
 import l2r.gameserver.taskmanager.tasks.TaskRaidPointsReset;
 import l2r.gameserver.taskmanager.tasks.TaskRecom;
@@ -189,13 +189,13 @@ public final class TaskManager
 	private void initializate()
 	{
 		registerTask(new SoIStageUpdater());
-		registerTask(new TaskAdvent());
 		registerTask(new TaskBirthday());
 		registerTask(new TaskClanLeaderApply());
 		registerTask(new TaskCleanUp());
 		registerTask(new TaskDailySkillReuseClean());
 		registerTask(new TaskGlobalVariablesSave());
 		registerTask(new TaskJython());
+		registerTask(new TaskNevit());
 		registerTask(new TaskOlympiadSave());
 		registerTask(new TaskRaidPointsReset());
 		registerTask(new TaskRecom());

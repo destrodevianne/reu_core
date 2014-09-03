@@ -159,8 +159,6 @@ import l2r.gameserver.model.actor.knownlist.PcKnownList;
 import l2r.gameserver.model.actor.stat.PcStat;
 import l2r.gameserver.model.actor.stat.Rates;
 import l2r.gameserver.model.actor.status.PcStatus;
-import l2r.gameserver.model.actor.tasks.player.AdventBlessingEndTask;
-import l2r.gameserver.model.actor.tasks.player.AdventPointsTask;
 import l2r.gameserver.model.actor.tasks.player.DismountTask;
 import l2r.gameserver.model.actor.tasks.player.FameTask;
 import l2r.gameserver.model.actor.tasks.player.GameGuardCheckTask;
@@ -186,7 +184,6 @@ import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.base.ClassLevel;
 import l2r.gameserver.model.base.PlayerClass;
 import l2r.gameserver.model.base.SubClass;
-import l2r.gameserver.model.effects.AbnormalEffect;
 import l2r.gameserver.model.effects.EffectFlag;
 import l2r.gameserver.model.effects.EffectTemplate;
 import l2r.gameserver.model.effects.L2Effect;
@@ -196,6 +193,7 @@ import l2r.gameserver.model.entity.Duel;
 import l2r.gameserver.model.entity.Fort;
 import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.model.entity.Instance;
+import l2r.gameserver.model.entity.NevitSystem;
 import l2r.gameserver.model.entity.Siege;
 import l2r.gameserver.model.events.EventDispatcher;
 import l2r.gameserver.model.events.EventType;
@@ -268,9 +266,6 @@ import l2r.gameserver.network.serverpackets.ExFishingEnd;
 import l2r.gameserver.network.serverpackets.ExFishingStart;
 import l2r.gameserver.network.serverpackets.ExGetBookMarkInfoPacket;
 import l2r.gameserver.network.serverpackets.ExGetOnAirShip;
-import l2r.gameserver.network.serverpackets.ExNevitAdventEffect;
-import l2r.gameserver.network.serverpackets.ExNevitAdventPointInfoPacket;
-import l2r.gameserver.network.serverpackets.ExNevitAdventTimeChange;
 import l2r.gameserver.network.serverpackets.ExOlympiadMode;
 import l2r.gameserver.network.serverpackets.ExPrivateStoreSetWholeMsg;
 import l2r.gameserver.network.serverpackets.ExSetCompassZoneCode;
@@ -339,7 +334,6 @@ import gr.reunion.configsEngine.FlagZoneConfigs;
 import gr.reunion.configsEngine.LeaderboardsConfigs;
 import gr.reunion.configsEngine.PremiumServiceConfigs;
 import gr.reunion.configsEngine.PvpRewardSystemConfigs;
-import gr.reunion.datatables.AdventTable;
 import gr.reunion.interf.PlayerEventInfo;
 import gr.reunion.interf.ReunionEvents;
 import gr.reunion.javaBuffer.PlayerMethods;
@@ -5741,7 +5735,7 @@ public final class L2PcInstance extends L2Playable
 					if (Config.ALT_GAME_DELEVEL)
 					{
 						// If player is Lucky shouldn't get penalized.
-						if (!isLucky())
+						if (!isLucky() && !getNevitSystem().isAdventBlessingActive())
 						{
 							// Reduce the Experience of the L2PcInstance in function of the calculated Death Penalty
 							// NOTE: deathPenalty +- Exp will update karma
@@ -6246,6 +6240,11 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 		
+		if (getNevitSystem().isAdventBlessingActive())
+		{
+			lostExp = 0;
+		}
+		
 		// Set the new Experience value of the L2PcInstance
 		getStat().addExp(-lostExp);
 	}
@@ -6289,8 +6288,6 @@ public final class L2PcInstance extends L2Playable
 		stopVitalityTask();
 		stopRecoBonusTask();
 		stopRecoGiveTask();
-		stopAdventBlessingTask();
-		stopAdventBonusTask();
 	}
 	
 	@Override
@@ -15515,125 +15512,6 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	// ============================================== //
-	// Nevit Blessing Engine By L][Reunion Team //
-	// ============================================== //
-	/** Advent 4h task **/
-	private ScheduledFuture<?> _adventBonusTask;
-	/** Advent Blessing task **/
-	public ScheduledFuture<?> _adventBlessingTask;
-	
-	public void pauseAdventTask()
-	{
-		stopAdventBonusTask();
-		sendPacket(new ExNevitAdventTimeChange(getAdventTime(), false));
-	}
-	
-	public void stopAdventBlessingTask()
-	{
-		if (_adventBlessingTask != null)
-		{
-			_adventBlessingTask.cancel(false);
-			_adventBlessingTask = null;
-		}
-	}
-	
-	public void stopAdventBonusTask()
-	{
-		if (_adventBonusTask != null)
-		{
-			_adventBonusTask.cancel(false);
-			_adventBonusTask = null;
-		}
-	}
-	
-	public void startAdventTask()
-	{
-		if (_adventBonusTask == null)
-		{
-			int advent_time = AdventTable.getInstance().getAdventTime(getObjectId());
-			if (advent_time < 14400)
-			{
-				_adventBonusTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new AdventPointsTask(this), 60000, 60000);
-				sendPacket(new ExNevitAdventTimeChange(getAdventTime(), true));
-			}
-		}
-	}
-	
-	public boolean isAdventBlessingActive()
-	{
-		return ((_adventBlessingTask != null) && (_adventBlessingTask.getDelay(TimeUnit.MILLISECONDS) > 0));
-	}
-	
-	public int getAdventTime()
-	{
-		return AdventTable.getInstance().getAdventTime(getObjectId());
-	}
-	
-	public void incAdventPoints(int value, boolean decreasetime)
-	{
-		int adventPoints = AdventTable.getInstance().getAdventPoints(getObjectId());
-		int adventTime = AdventTable.getInstance().getAdventTime(getObjectId());
-		
-		if (decreasetime)
-		{
-			adventTime += 60;
-			if (adventTime >= 14400)
-			{
-				adventTime = 15000;
-				stopAdventBonusTask();
-				_adventBonusTask = null;
-			}
-			// Store new time
-			AdventTable.getInstance().setAdventTime(getObjectId(), adventTime, true);
-		}
-		if (_adventBonusTask != null)
-		{
-			if ((adventPoints + value) >= 7200)
-			{
-				adventPoints = 0;
-				if (!isAdventBlessingActive())
-				{
-					// Abnormal
-					startSpecialEffect(AbnormalEffect.AVE_ADVENT_BLESSING.getMask());
-					// Start 3 min Advent Blessing
-					_adventBlessingTask = ThreadPoolManager.getInstance().scheduleGeneral(new AdventBlessingEndTask(this), 180000);
-					// Display Sysmsg
-					sendPacket(SystemMessageId.THE_ANGEL_NEVIT_HAS_BLESSED_YOU_FROM_ABOVE);
-					// Show counter for player
-					sendPacket(new ExNevitAdventEffect(180));
-				}
-			}
-			else
-			{
-				adventPoints += value;
-			}
-		}
-		// Store
-		AdventTable.getInstance().setAdventPoints(getObjectId(), adventPoints, true);
-		// Show Points
-		sendPacket(new ExNevitAdventPointInfoPacket(this));
-		// Show state
-		sendPacket(new ExNevitAdventTimeChange(getAdventTime(), _adventBonusTask != null));
-	}
-	
-	public void sendAdventPointMsg()
-	{
-		int adventPoints = AdventTable.getInstance().getAdventPoints(getObjectId());
-		if (adventPoints >= 5760)
-		{
-			sendPacket(SystemMessageId.NEVITS_ADVENT_BLESSING_SHINES_STRONGLY_FROM_ABOVE);
-		}
-		else if (adventPoints >= 3600)
-		{
-			sendPacket(SystemMessageId.YOU_ARE_FURTHER_INFUSED_WITH_THE_BLESSINGS_OF_NEVIT);
-		}
-		else if (adventPoints >= 1440)
-		{
-			sendPacket(SystemMessageId.YOU_ARE_STARTING_TO_FEEL_THE_EFFECTS_OF_NEVITS_ADVENT_BLESSING);
-		}
-	}
-	
-	// ============================================== //
 	// Achievements Engine By L][Reunion Team //
 	// ============================================== //
 	private boolean _killedSpecificMob = false;
@@ -16011,6 +15889,14 @@ public final class L2PcInstance extends L2Playable
 	{
 		final AccountVariables vars = getScript(AccountVariables.class);
 		return vars != null ? vars : addScript(new AccountVariables(getAccountName()));
+	}
+	
+	// High Five: Nevit's Bonus System
+	private final NevitSystem _nevitSystem = new NevitSystem(this);
+	
+	public NevitSystem getNevitSystem()
+	{
+		return _nevitSystem;
 	}
 	
 	private PcAdmin _pcAdmin = null;
