@@ -735,7 +735,30 @@ public class Quest extends AbstractScript implements IIdentifiable
 		}
 		catch (Exception e)
 		{
-			showError(player, e);
+			if (Config.DEBUG_SCRIPT_NOTIFIES)
+			{
+				_log.error("Quest[notifyAggroRangeEnter] quest name is: " + getName());
+				if (player != null)
+				{
+					_log.error("Quest[notifyAggroRangeEnter] player is: " + player.getName());
+				}
+				else
+				{
+					_log.error("Quest[notifyAggroRangeEnter] player is: NULL");
+				}
+				if (npc != null)
+				{
+					_log.error("Quest[notifyAggroRangeEnter] ID is: " + npc.getId());
+				}
+				else
+				{
+					_log.error("Quest[notifyAggroRangeEnter] ID is: NULL");
+				}
+			}
+			else
+			{
+				showError(player, e);
+			}
 		}
 		showResult(player, res);
 	}
