@@ -24,7 +24,6 @@ import l2r.gameserver.LoginServerThread;
 import l2r.gameserver.SevenSigns;
 import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.datatables.xml.AdminData;
-import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.PcCondOverride;
 import l2r.gameserver.enums.TeleportWhereType;
@@ -57,6 +56,7 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.olympiad.Olympiad;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.QuestState;
+import l2r.gameserver.model.skills.CommonSkill;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.Die;
 import l2r.gameserver.network.serverpackets.EtcStatusUpdate;
@@ -343,18 +343,18 @@ public class EnterWorld extends L2GameClientPacket
 			{
 				if (cabal == SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE))
 				{
-					activeChar.addSkill(SkillData.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
+					activeChar.addSkill(CommonSkill.THE_VICTOR_OF_WAR.getSkill());
 				}
 				else
 				{
-					activeChar.addSkill(SkillData.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
+					activeChar.addSkill(CommonSkill.THE_VANQUISHED_OF_WAR.getSkill());
 				}
 			}
 		}
 		else
 		{
-			activeChar.removeSkill(SkillData.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
-			activeChar.removeSkill(SkillData.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
+			activeChar.removeSkill(CommonSkill.THE_VICTOR_OF_WAR.getSkill());
+			activeChar.removeSkill(CommonSkill.THE_VANQUISHED_OF_WAR.getSkill());
 		}
 		
 		if (Config.ENABLE_VITALITY && Config.RECOVER_VITALITY_ON_RECONNECT)

@@ -25,15 +25,11 @@ import java.util.Set;
 
 import l2r.Config;
 import l2r.gameserver.engines.DocumentEngine;
-import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.skills.L2Skill;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 
- */
 public class SkillData
 {
 	private static Logger _log = LoggerFactory.getLogger(SkillData.class);
@@ -168,53 +164,6 @@ public class SkillData
 			temp[i++] = _skills.get(SkillData.getSkillHashCode(845, 1));
 		}
 		return temp;
-	}
-	
-	/**
-	 * Enum to hold some important references to frequently used (hardcoded) skills in core
-	 * @author DrHouse
-	 */
-	public static enum FrequentSkill
-	{
-		RAID_CURSE(4215, 1),
-		RAID_CURSE2(4515, 1),
-		SEAL_OF_RULER(246, 1),
-		BUILD_HEADQUARTERS(247, 1),
-		WYVERN_BREATH(4289, 1),
-		STRIDER_SIEGE_ASSAULT(325, 1),
-		FAKE_PETRIFICATION(4616, 1),
-		FIREWORK(5965, 1),
-		LARGE_FIREWORK(2025, 1),
-		BLESSING_OF_PROTECTION(5182, 1),
-		VOID_BURST(3630, 1),
-		VOID_FLOW(3631, 1),
-		THE_VICTOR_OF_WAR(5074, 1),
-		THE_VANQUISHED_OF_WAR(5075, 1),
-		SPECIAL_TREE_RECOVERY_BONUS(2139, 1),
-		WEAPON_GRADE_PENALTY(6209, 1),
-		ARMOR_GRADE_PENALTY(6213, 1);
-		
-		private final SkillHolder _holder;
-		
-		private FrequentSkill(int id, int level)
-		{
-			_holder = new SkillHolder(id, level);
-		}
-		
-		public int getId()
-		{
-			return _holder.getSkillId();
-		}
-		
-		public int getLevel()
-		{
-			return _holder.getSkillLvl();
-		}
-		
-		public L2Skill getSkill()
-		{
-			return _holder.getSkill();
-		}
 	}
 	
 	public static SkillData getInstance()

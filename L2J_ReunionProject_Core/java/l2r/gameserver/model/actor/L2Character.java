@@ -118,6 +118,7 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.items.type.WeaponType;
 import l2r.gameserver.model.options.OptionsSkillHolder;
 import l2r.gameserver.model.options.OptionsSkillType;
+import l2r.gameserver.model.skills.CommonSkill;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.funcs.Func;
@@ -5489,7 +5490,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			{
 				if (getLevel() > (target.getLevel() + 8))
 				{
-					L2Skill skill = SkillData.FrequentSkill.RAID_CURSE2.getSkill();
+					L2Skill skill = CommonSkill.RAID_CURSE2.getSkill();
 					
 					if (skill != null)
 					{
@@ -6784,7 +6785,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				&& (getLevel() > (targetsAttackTarget.getLevel() + 8))) || (!skill.isOffensive() && (targetsCastTarget != null) && targetsCastTarget.isRaid() && targetsCastTarget.giveRaidCurse() && targetsCastTarget.getAttackByList().contains(target) // has attacked raid
 				&& (getLevel() > (targetsCastTarget.getLevel() + 8)))))
 				{
-					final SkillData.FrequentSkill curse = skill.isMagic() ? SkillData.FrequentSkill.RAID_CURSE : SkillData.FrequentSkill.RAID_CURSE2;
+					final CommonSkill curse = skill.isMagic() ? CommonSkill.RAID_CURSE : CommonSkill.RAID_CURSE2;
 					L2Skill curseSkill = curse.getSkill();
 					if (curseSkill != null)
 					{

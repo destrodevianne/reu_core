@@ -21,13 +21,12 @@ package l2r.gameserver.model.actor.instance;
 import java.util.concurrent.Future;
 
 import l2r.gameserver.ThreadPoolManager;
-import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.FourSepulchersManager;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
+import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.quest.QuestState;
-import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.serverpackets.NpcSay;
 
 /**
@@ -35,6 +34,8 @@ import l2r.gameserver.network.serverpackets.NpcSay;
  */
 public class L2SepulcherMonsterInstance extends L2MonsterInstance
 {
+	protected static final SkillHolder FAKE_PETRIFICATION = new SkillHolder(4616, 1);
+	
 	public int mysteriousBoxId = 0;
 	
 	protected Future<?> _victimSpawnKeyBoxTask = null;
@@ -510,8 +511,8 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance
 		@Override
 		public void run()
 		{
-			L2Skill fp = SkillData.FrequentSkill.FAKE_PETRIFICATION.getSkill(); // Invulnerable by petrification
-			fp.getEffects(activeChar, activeChar);
+			// Invulnerable by petrification
+			FAKE_PETRIFICATION.getSkill().getEffects(activeChar, activeChar);
 		}
 	}
 	
