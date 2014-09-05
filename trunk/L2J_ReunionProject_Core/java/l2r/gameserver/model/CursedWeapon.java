@@ -27,7 +27,6 @@ import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.xml.SkillData;
-import l2r.gameserver.datatables.xml.SkillData.FrequentSkill;
 import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.CursedWeaponsManager;
@@ -36,6 +35,7 @@ import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.skills.CommonSkill;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.Earthquake;
@@ -334,18 +334,14 @@ public class CursedWeapon
 			level = _skillMaxLevel;
 		}
 		
-		L2Skill skill = SkillData.getInstance().getInfo(_skillId, level);
-		// Yesod:
-		// To properly support subclasses this skill can not be stored.
+		final L2Skill skill = SkillData.getInstance().getInfo(_skillId, level);
 		_player.addSkill(skill, false);
 		
 		// Void Burst, Void Flow
-		skill = FrequentSkill.VOID_BURST.getSkill();
-		_player.addSkill(skill, false);
-		skill = FrequentSkill.VOID_FLOW.getSkill();
-		_player.addSkill(skill, false);
-		_player.addTransformSkill(FrequentSkill.VOID_BURST.getId());
-		_player.addTransformSkill(FrequentSkill.VOID_FLOW.getId());
+		_player.addSkill(CommonSkill.VOID_BURST.getSkill(), false);
+		_player.addTransformSkill(CommonSkill.VOID_BURST.getId());
+		_player.addSkill(CommonSkill.VOID_FLOW.getSkill(), false);
+		_player.addTransformSkill(CommonSkill.VOID_FLOW.getId());
 		_player.sendSkillList();
 	}
 	
@@ -375,8 +371,8 @@ public class CursedWeapon
 	public void removeSkill()
 	{
 		_player.removeSkill(_skillId);
-		_player.removeSkill(SkillData.FrequentSkill.VOID_BURST.getSkill().getId());
-		_player.removeSkill(SkillData.FrequentSkill.VOID_FLOW.getSkill().getId());
+		_player.removeSkill(CommonSkill.VOID_BURST.getSkill().getId());
+		_player.removeSkill(CommonSkill.VOID_FLOW.getSkill().getId());
 		_player.untransform();
 		_player.sendSkillList();
 	}

@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import l2r.Config;
 import l2r.gameserver.datatables.xml.EnchantItemData;
-import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.items.L2Armor;
@@ -33,6 +32,7 @@ import l2r.gameserver.model.items.enchant.EnchantResultType;
 import l2r.gameserver.model.items.enchant.EnchantScroll;
 import l2r.gameserver.model.items.enchant.EnchantSupportItem;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
+import l2r.gameserver.model.skills.CommonSkill;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.EnchantResult;
@@ -255,7 +255,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 						sm.addItemName(item);
 						activeChar.broadcastPacket(sm);
 						
-						L2Skill skill = SkillData.FrequentSkill.FIREWORK.getSkill();
+						L2Skill skill = CommonSkill.FIREWORK.getSkill();
 						if (skill != null)
 						{
 							activeChar.broadcastPacket(new MagicSkillUse(activeChar, activeChar, skill.getId(), skill.getLevel(), skill.getHitTime(), skill.getReuseDelay()));
@@ -414,7 +414,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 							{
 								activeChar.sendPacket(new EnchantResult(1, crystalId, count));
 								showEnchantAnimation(activeChar, 0);
-							AntibotSystem.sendEnchantBotSignal(activeChar);
+								AntibotSystem.sendEnchantBotSignal(activeChar);
 							}
 							
 							if (Config.LOG_ITEM_ENCHANTS)

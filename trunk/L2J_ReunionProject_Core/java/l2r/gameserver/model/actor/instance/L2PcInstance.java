@@ -79,7 +79,6 @@ import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.datatables.xml.PetData;
 import l2r.gameserver.datatables.xml.RecipeData;
 import l2r.gameserver.datatables.xml.SkillData;
-import l2r.gameserver.datatables.xml.SkillData.FrequentSkill;
 import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
@@ -240,6 +239,7 @@ import l2r.gameserver.model.punishment.PunishmentType;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.QuestState;
 import l2r.gameserver.model.quest.State;
+import l2r.gameserver.model.skills.CommonSkill;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
 import l2r.gameserver.model.skills.targets.L2TargetType;
@@ -2317,16 +2317,16 @@ public final class L2PcInstance extends L2Playable
 		weaponPenalty = weaponPenalty - expertiseLevel - bonus;
 		weaponPenalty = Math.min(Math.max(weaponPenalty, 0), 4);
 		
-		if ((getExpertiseWeaponPenalty() != weaponPenalty) || (getSkillLevel(FrequentSkill.WEAPON_GRADE_PENALTY.getId()) != weaponPenalty))
+		if ((getExpertiseWeaponPenalty() != weaponPenalty) || (getSkillLevel(CommonSkill.WEAPON_GRADE_PENALTY.getId()) != weaponPenalty))
 		{
 			_expertiseWeaponPenalty = weaponPenalty;
 			if (_expertiseWeaponPenalty > 0)
 			{
-				addSkill(SkillData.getInstance().getInfo(FrequentSkill.WEAPON_GRADE_PENALTY.getId(), _expertiseWeaponPenalty));
+				addSkill(SkillData.getInstance().getInfo(CommonSkill.WEAPON_GRADE_PENALTY.getId(), _expertiseWeaponPenalty));
 			}
 			else
 			{
-				removeSkill(getKnownSkill(FrequentSkill.WEAPON_GRADE_PENALTY.getId()), false, true);
+				removeSkill(getKnownSkill(CommonSkill.WEAPON_GRADE_PENALTY.getId()), false, true);
 			}
 			changed = true;
 		}
@@ -2335,16 +2335,16 @@ public final class L2PcInstance extends L2Playable
 		armorPenalty = armorPenalty - expertiseLevel - bonus;
 		armorPenalty = Math.min(Math.max(armorPenalty, 0), 4);
 		
-		if ((getExpertiseArmorPenalty() != armorPenalty) || (getSkillLevel(FrequentSkill.ARMOR_GRADE_PENALTY.getId()) != armorPenalty))
+		if ((getExpertiseArmorPenalty() != armorPenalty) || (getSkillLevel(CommonSkill.ARMOR_GRADE_PENALTY.getId()) != armorPenalty))
 		{
 			_expertiseArmorPenalty = armorPenalty;
 			if (_expertiseArmorPenalty > 0)
 			{
-				addSkill(SkillData.getInstance().getInfo(FrequentSkill.ARMOR_GRADE_PENALTY.getId(), _expertiseArmorPenalty));
+				addSkill(SkillData.getInstance().getInfo(CommonSkill.ARMOR_GRADE_PENALTY.getId(), _expertiseArmorPenalty));
 			}
 			else
 			{
-				removeSkill(getKnownSkill(FrequentSkill.ARMOR_GRADE_PENALTY.getId()), false, true);
+				removeSkill(getKnownSkill(CommonSkill.ARMOR_GRADE_PENALTY.getId()), false, true);
 			}
 			changed = true;
 		}
@@ -7107,7 +7107,7 @@ public final class L2PcInstance extends L2Playable
 		clearPetData();
 		if (wasFlying)
 		{
-			removeSkill(SkillData.FrequentSkill.WYVERN_BREATH.getSkill());
+			removeSkill(CommonSkill.WYVERN_BREATH.getSkill());
 		}
 		broadcastPacket(new Ride(this));
 		setMountObjectID(0);
@@ -9866,7 +9866,7 @@ public final class L2PcInstance extends L2Playable
 			{
 				if (isNoble())
 				{
-					addSkill(FrequentSkill.STRIDER_SIEGE_ASSAULT.getSkill(), false);
+					addSkill(CommonSkill.STRIDER_SIEGE_ASSAULT.getSkill(), false);
 				}
 				break;
 			}
