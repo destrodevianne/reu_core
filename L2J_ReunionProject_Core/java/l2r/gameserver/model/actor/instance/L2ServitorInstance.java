@@ -356,68 +356,70 @@ public class L2ServitorInstance extends L2Summon
 			SummonEffectsTable.getInstance().getServitorEffects(getOwner()).get(getReferenceSkill()).clear();
 		}
 		
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement statement = con.prepareStatement(DELETE_SKILL_SAVE))
 		{
 			// Delete all current stored effects for summon to avoid dupe
-			PreparedStatement statement = con.prepareStatement(DELETE_SKILL_SAVE);
-			
 			statement.setInt(1, getOwner().getObjectId());
 			statement.setInt(2, getOwner().getClassIndex());
 			statement.setInt(3, getReferenceSkill());
 			statement.execute();
-			statement.close();
 			
 			int buff_index = 0;
 			
 			final List<Integer> storedSkills = new FastList<>();
 			
-			// Store all effect data along with calulated remaining
-			// reuse delays for matching skills. 'restore_type'= 0.
-			statement = con.prepareStatement(ADD_SKILL_SAVE);
-			
+			// Store all effect data along with calculated remaining
 			if (storeEffects)
 			{
-				for (L2Effect effect : getAllEffects())
+				try (PreparedStatement ps2 = con.prepareStatement(ADD_SKILL_SAVE))
 				{
-					if (effect == null)
+					for (L2Effect effect : getEffectList().getEffects())
 					{
-						continue;
-					}
-					
-					switch (effect.getEffectType())
-					{
-						case HEAL_OVER_TIME:
-						case CPHEAL_OVER_TIME:
-						case HIDE:
+						if (effect == null)
+						{
 							continue;
-					}
-					
-					L2Skill skill = effect.getSkill();
-					if (storedSkills.contains(skill.getReuseHashCode()))
-					{
-						continue;
-					}
-					
-					// Dances and songs are not kept in retail.
-					if (skill.isDance() && !Config.ALT_STORE_DANCES)
-					{
-						continue;
-					}
-					
-					storedSkills.add(skill.getReuseHashCode());
-					
-					if (effect.getInUse() && !skill.isToggle())
-					{
-						statement.setInt(1, getOwner().getObjectId());
-						statement.setInt(2, getOwner().getClassIndex());
-						statement.setInt(3, getReferenceSkill());
-						statement.setInt(4, skill.getId());
-						statement.setInt(5, skill.getLevel());
-						statement.setInt(6, effect.getCount());
-						statement.setInt(7, effect.getTime());
-						statement.setInt(8, ++buff_index);
-						statement.execute();
+						}
 						
+						final L2Skill skill = effect.getSkill();
+						// Do not save heals.
+						switch (effect.getEffectType())
+						{
+							case HEAL_OVER_TIME:
+							case CPHEAL_OVER_TIME:
+							case HIDE:
+								continue;
+						}
+						
+						if (skill.isToggle())
+						{
+							continue;
+						}
+						
+						// Dances and songs are not kept in retail.
+						if (skill.isDance() && !Config.ALT_STORE_DANCES)
+						{
+							continue;
+						}
+						
+						if (storedSkills.contains(skill.getReuseHashCode()))
+						{
+							continue;
+						}
+						
+						storedSkills.add(skill.getReuseHashCode());
+						
+						ps2.setInt(1, getOwner().getObjectId());
+						ps2.setInt(2, getOwner().getClassIndex());
+						ps2.setInt(3, getReferenceSkill());
+						ps2.setInt(4, skill.getId());
+						ps2.setInt(5, skill.getLevel());
+						ps2.setInt(6, effect.getCount());
+						ps2.setInt(7, effect.getTime());
+						ps2.setInt(8, ++buff_index);
+						ps2.execute();
+						
+						// XXX: Rework me!
 						if (!SummonEffectsTable.getInstance().getServitorEffectsOwner().containsKey(getOwner().getObjectId()))
 						{
 							SummonEffectsTable.getInstance().getServitorEffectsOwner().put(getOwner().getObjectId(), new HashMap<Integer, Map<Integer, List<SummonEffect>>>());
@@ -435,11 +437,10 @@ public class L2ServitorInstance extends L2Summon
 					}
 				}
 			}
-			statement.close();
 		}
 		catch (Exception e)
 		{
-			_log.warn("Could not store summon effect data: "); // FIXME: Duplicate entry
+			_log.warn("Could not store summon effect data: ");
 		}
 	}
 	
