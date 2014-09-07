@@ -16,18 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.olympiad;
+package l2r.gameserver.model.entity.olympiad;
 
 import java.util.List;
 
 import l2r.Config;
+import l2r.util.Rnd;
 
 /**
  * @author DS
  */
-public class OlympiadGameNonClassed extends OlympiadGameNormal
+public class OlympiadGameClassed extends OlympiadGameNormal
 {
-	private OlympiadGameNonClassed(int id, Participant[] opponents)
+	private OlympiadGameClassed(int id, Participant[] opponents)
 	{
 		super(id, opponents);
 	}
@@ -35,35 +36,54 @@ public class OlympiadGameNonClassed extends OlympiadGameNormal
 	@Override
 	public final CompetitionType getType()
 	{
-		return CompetitionType.NON_CLASSED;
+		return CompetitionType.CLASSED;
 	}
 	
 	@Override
 	protected final int getDivider()
 	{
-		return Config.ALT_OLY_DIVIDER_NON_CLASSED;
+		return Config.ALT_OLY_DIVIDER_CLASSED;
 	}
 	
 	@Override
 	protected final int[][] getReward()
 	{
-		return Config.ALT_OLY_NONCLASSED_REWARD;
+		return Config.ALT_OLY_CLASSED_REWARD;
 	}
 	
 	@Override
 	protected final String getWeeklyMatchType()
 	{
-		return COMP_DONE_WEEK_NON_CLASSED;
+		return COMP_DONE_WEEK_CLASSED;
 	}
 	
-	protected static final OlympiadGameNonClassed createGame(int id, List<Integer> list)
+	protected static final OlympiadGameClassed createGame(int id, List<List<Integer>> classList)
 	{
-		final Participant[] opponents = OlympiadGameNormal.createListOfParticipants(list);
-		if (opponents == null)
+		if ((classList == null) || classList.isEmpty())
 		{
 			return null;
 		}
 		
-		return new OlympiadGameNonClassed(id, opponents);
+		List<Integer> list;
+		Participant[] opponents;
+		while (!classList.isEmpty())
+		{
+			list = classList.get(Rnd.nextInt(classList.size()));
+			if ((list == null) || (list.size() < 2))
+			{
+				classList.remove(list);
+				continue;
+			}
+			
+			opponents = OlympiadGameNormal.createListOfParticipants(list);
+			if (opponents == null)
+			{
+				classList.remove(list);
+				continue;
+			}
+			
+			return new OlympiadGameClassed(id, opponents);
+		}
+		return null;
 	}
 }

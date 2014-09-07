@@ -22,7 +22,7 @@ import java.util.Map;
 
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.entity.Hero;
-import l2r.gameserver.model.olympiad.Olympiad;
+import l2r.gameserver.model.entity.olympiad.Olympiad;
 
 /**
  * @author -Wooden-, KenM, godson

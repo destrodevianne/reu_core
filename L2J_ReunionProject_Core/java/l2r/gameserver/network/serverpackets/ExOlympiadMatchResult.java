@@ -20,7 +20,7 @@ package l2r.gameserver.network.serverpackets;
 
 import java.util.List;
 
-import l2r.gameserver.model.olympiad.OlympiadInfo;
+import l2r.gameserver.model.entity.olympiad.OlympiadInfo;
 
 /**
  * @author JIV

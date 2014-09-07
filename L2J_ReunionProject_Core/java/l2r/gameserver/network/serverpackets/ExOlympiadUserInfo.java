@@ -19,7 +19,7 @@
 package l2r.gameserver.network.serverpackets;
 
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.olympiad.Participant;
+import l2r.gameserver.model.entity.olympiad.Participant;
 
 /**
  * @author godson

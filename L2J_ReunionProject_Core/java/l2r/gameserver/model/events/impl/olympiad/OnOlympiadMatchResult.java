@@ -18,10 +18,10 @@
  */
 package l2r.gameserver.model.events.impl.olympiad;
 
+import l2r.gameserver.model.entity.olympiad.CompetitionType;
+import l2r.gameserver.model.entity.olympiad.Participant;
 import l2r.gameserver.model.events.EventType;
 import l2r.gameserver.model.events.impl.IBaseEvent;
-import l2r.gameserver.model.olympiad.CompetitionType;
-import l2r.gameserver.model.olympiad.Participant;
 
 /**
  * @author UnAfraid
