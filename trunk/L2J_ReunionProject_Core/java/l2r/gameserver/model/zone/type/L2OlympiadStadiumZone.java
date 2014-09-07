@@ -33,7 +33,7 @@ import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2OlympiadManagerInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import l2r.gameserver.model.olympiad.OlympiadGameTask;
+import l2r.gameserver.model.entity.olympiad.OlympiadGameTask;
 import l2r.gameserver.model.zone.AbstractZoneSettings;
 import l2r.gameserver.model.zone.L2ZoneRespawn;
 import l2r.gameserver.network.SystemMessageId;

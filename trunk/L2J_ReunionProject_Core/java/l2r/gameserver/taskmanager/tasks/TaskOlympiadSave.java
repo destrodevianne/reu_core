@@ -18,7 +18,7 @@
  */
 package l2r.gameserver.taskmanager.tasks;
 
-import l2r.gameserver.model.olympiad.Olympiad;
+import l2r.gameserver.model.entity.olympiad.Olympiad;
 import l2r.gameserver.taskmanager.Task;
 import l2r.gameserver.taskmanager.TaskManager;
 import l2r.gameserver.taskmanager.TaskManager.ExecutedTask;

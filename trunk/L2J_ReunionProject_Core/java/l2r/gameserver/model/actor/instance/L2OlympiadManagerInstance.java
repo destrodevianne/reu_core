@@ -21,7 +21,7 @@ package l2r.gameserver.model.actor.instance;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.templates.L2NpcTemplate;
-import l2r.gameserver.model.olympiad.Olympiad;
+import l2r.gameserver.model.entity.olympiad.Olympiad;
 
 /**
  * Olympiad Npc's Instance

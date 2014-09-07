@@ -21,12 +21,12 @@ package l2r.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import l2r.gameserver.model.olympiad.AbstractOlympiadGame;
-import l2r.gameserver.model.olympiad.OlympiadGameClassed;
-import l2r.gameserver.model.olympiad.OlympiadGameManager;
-import l2r.gameserver.model.olympiad.OlympiadGameNonClassed;
-import l2r.gameserver.model.olympiad.OlympiadGameTask;
-import l2r.gameserver.model.olympiad.OlympiadGameTeams;
+import l2r.gameserver.model.entity.olympiad.AbstractOlympiadGame;
+import l2r.gameserver.model.entity.olympiad.OlympiadGameClassed;
+import l2r.gameserver.model.entity.olympiad.OlympiadGameManager;
+import l2r.gameserver.model.entity.olympiad.OlympiadGameNonClassed;
+import l2r.gameserver.model.entity.olympiad.OlympiadGameTask;
+import l2r.gameserver.model.entity.olympiad.OlympiadGameTeams;
 
 /**
  * @author mrTJO

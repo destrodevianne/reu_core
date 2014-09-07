@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.model.olympiad;
+package l2r.gameserver.model.entity.olympiad;
 
 import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
@@ -85,24 +85,9 @@ public final class OlympiadGameTask implements Runnable
 	
 	private final L2OlympiadStadiumZone _zone;
 	private AbstractOlympiadGame _game;
-	private GameState _state = GameState.IDLE;
+	private BattleStatus _state = BattleStatus.IDLE;
 	private boolean _needAnnounce = false;
 	private int _countDown = 0;
-	
-	private static enum GameState
-	{
-		BEGIN,
-		TELEPORT_TO_ARENA,
-		GAME_STARTED,
-		BATTLE_COUNTDOWN_FIRST,
-		BATTLE_COUNTDOWN_SECOND,
-		BATTLE_STARTED,
-		BATTLE_IN_PROGRESS,
-		GAME_STOPPED,
-		TELEPORT_TO_TOWN,
-		CLEANUP,
-		IDLE
-	}
 	
 	public OlympiadGameTask(L2OlympiadStadiumZone zone)
 	{
@@ -112,22 +97,22 @@ public final class OlympiadGameTask implements Runnable
 	
 	public final boolean isRunning()
 	{
-		return _state != GameState.IDLE;
+		return _state != BattleStatus.IDLE;
 	}
 	
 	public final boolean isGameStarted()
 	{
-		return (_state.ordinal() >= GameState.GAME_STARTED.ordinal()) && (_state.ordinal() <= GameState.CLEANUP.ordinal());
+		return (_state.ordinal() >= BattleStatus.GAME_STARTED.ordinal()) && (_state.ordinal() <= BattleStatus.CLEANUP.ordinal());
 	}
 	
 	public final boolean isBattleStarted()
 	{
-		return _state == GameState.BATTLE_IN_PROGRESS;
+		return _state == BattleStatus.BATTLE_IN_PROGRESS;
 	}
 	
 	public final boolean isBattleFinished()
 	{
-		return _state == GameState.TELEPORT_TO_TOWN;
+		return _state == BattleStatus.TELEPORT_TO_TOWN;
 	}
 	
 	public final boolean needAnnounce()
@@ -152,14 +137,14 @@ public final class OlympiadGameTask implements Runnable
 	
 	public final void attachGame(AbstractOlympiadGame game)
 	{
-		if ((game != null) && (_state != GameState.IDLE))
+		if ((game != null) && (_state != BattleStatus.IDLE))
 		{
 			_log.warn("Attempt to overwrite non-finished game in state " + _state);
 			return;
 		}
 		
 		_game = game;
-		_state = GameState.BEGIN;
+		_state = BattleStatus.BEGIN;
 		_needAnnounce = false;
 		ThreadPoolManager.getInstance().executeGeneral(this);
 	}
@@ -175,7 +160,7 @@ public final class OlympiadGameTask implements Runnable
 			// Game created
 				case BEGIN:
 				{
-					_state = GameState.TELEPORT_TO_ARENA;
+					_state = BattleStatus.TELEPORT_TO_ARENA;
 					_countDown = Config.ALT_OLY_WAIT_TIME;
 					break;
 				}
@@ -192,7 +177,7 @@ public final class OlympiadGameTask implements Runnable
 					delay = getDelay(TELEPORT_TO_ARENA);
 					if (_countDown <= 0)
 					{
-						_state = GameState.GAME_STARTED;
+						_state = BattleStatus.GAME_STARTED;
 					}
 					break;
 				}
@@ -201,11 +186,11 @@ public final class OlympiadGameTask implements Runnable
 				{
 					if (!startGame())
 					{
-						_state = GameState.GAME_STOPPED;
+						_state = BattleStatus.GAME_STOPPED;
 						break;
 					}
 					
-					_state = GameState.BATTLE_COUNTDOWN_FIRST;
+					_state = BattleStatus.BATTLE_COUNTDOWN_FIRST;
 					_countDown = BATTLE_START_TIME_FIRST[0];
 					delay = 5;
 					break;
@@ -225,7 +210,7 @@ public final class OlympiadGameTask implements Runnable
 					{
 						openDoors();
 						
-						_state = GameState.BATTLE_COUNTDOWN_SECOND;
+						_state = BattleStatus.BATTLE_COUNTDOWN_SECOND;
 						_countDown = BATTLE_START_TIME_SECOND[0];
 						delay = getDelay(BATTLE_START_TIME_SECOND);
 					}
@@ -245,7 +230,7 @@ public final class OlympiadGameTask implements Runnable
 					delay = getDelay(BATTLE_START_TIME_SECOND);
 					if (_countDown <= 0)
 					{
-						_state = GameState.BATTLE_STARTED;
+						_state = BattleStatus.BATTLE_STARTED;
 					}
 					
 					break;
@@ -254,10 +239,10 @@ public final class OlympiadGameTask implements Runnable
 				case BATTLE_STARTED:
 				{
 					_countDown = 0;
-					_state = GameState.BATTLE_IN_PROGRESS; // set state first, used in zone update
+					_state = BattleStatus.BATTLE_IN_PROGRESS; // set state first, used in zone update
 					if (!startBattle())
 					{
-						_state = GameState.GAME_STOPPED;
+						_state = BattleStatus.GAME_STOPPED;
 					}
 					
 					break;
@@ -268,7 +253,7 @@ public final class OlympiadGameTask implements Runnable
 					_countDown += 1000;
 					if (checkBattle() || (_countDown > Config.ALT_OLY_BATTLE))
 					{
-						_state = GameState.GAME_STOPPED;
+						_state = BattleStatus.GAME_STOPPED;
 					}
 					
 					break;
@@ -276,7 +261,7 @@ public final class OlympiadGameTask implements Runnable
 				// End of the battle
 				case GAME_STOPPED:
 				{
-					_state = GameState.TELEPORT_TO_TOWN;
+					_state = BattleStatus.TELEPORT_TO_TOWN;
 					_countDown = TELEPORT_TO_TOWN[0];
 					stopGame();
 					delay = getDelay(TELEPORT_TO_TOWN);
@@ -295,7 +280,7 @@ public final class OlympiadGameTask implements Runnable
 					delay = getDelay(TELEPORT_TO_TOWN);
 					if (_countDown <= 0)
 					{
-						_state = GameState.CLEANUP;
+						_state = BattleStatus.CLEANUP;
 					}
 					
 					break;
@@ -304,7 +289,7 @@ public final class OlympiadGameTask implements Runnable
 				case CLEANUP:
 				{
 					cleanupGame();
-					_state = GameState.IDLE;
+					_state = BattleStatus.IDLE;
 					_game = null;
 					return;
 				}
@@ -321,14 +306,14 @@ public final class OlympiadGameTask implements Runnable
 				case IDLE:
 				{
 					_log.warn("Unable to return players back in town, exception: " + e.getMessage());
-					_state = GameState.IDLE;
+					_state = BattleStatus.IDLE;
 					_game = null;
 					return;
 				}
 			}
 			
 			_log.warn("Exception in " + _state + ", trying to port players back: " + e.getMessage(), e);
-			_state = GameState.GAME_STOPPED;
+			_state = BattleStatus.GAME_STOPPED;
 			ThreadPoolManager.getInstance().scheduleGeneral(this, 1000);
 		}
 	}
