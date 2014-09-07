@@ -584,7 +584,6 @@ public final class Config
 	public static int ALT_OLY_ENCHANT_LIMIT;
 	public static int ALT_OLY_WAIT_TIME;
 	public static boolean ENABLE_OLY_ANTIFEED;
-	public static boolean ENABLE_REUNION_PERIOD;
 	public static int[] ALT_OLY_END_DATE;
 	public static String OLYMPIAD_PERIOD;
 	public static boolean ENABLE_OLYMPIAD;
@@ -2487,7 +2486,6 @@ public final class Config
 			
 			// More olympiad settings
 			ENABLE_OLY_ANTIFEED = Olympiad.getBoolean("EnableOlyAntifeed", false);
-			ENABLE_REUNION_PERIOD = Olympiad.getBoolean("EnableReunionPeriod", false);
 			propertySplit = Olympiad.getString("AltOlyEndDate", "1").split(",");
 			ALT_OLY_END_DATE = new int[propertySplit.length];
 			for (int i = 0; i < propertySplit.length; i++)

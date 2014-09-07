@@ -575,14 +575,25 @@ public class Olympiad extends ListenersContainer
 	
 	protected void setNewOlympiadEnd()
 	{
-		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.OLYMPIAD_PERIOD_S1_HAS_STARTED);
-		sm.addInt(_currentCycle);
-		
-		Announcements.getInstance().announceToAll(sm);
-		
+		Announcements.getInstance().announceToAll(SystemMessage.getSystemMessage(SystemMessageId.OLYMPIAD_PERIOD_S1_HAS_STARTED).addInt(_currentCycle));
 		Calendar currentTime = Calendar.getInstance();
 		
-		if (Config.ENABLE_REUNION_PERIOD)
+		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("MONTH"))
+		{
+			currentTime.add(Calendar.MONTH, 1);
+			currentTime.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("WEEKS"))
+		{
+			currentTime.add(Calendar.HOUR, 336);
+			currentTime.set(Calendar.DAY_OF_WEEK, 1);
+		}
+		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("WEEK"))
+		{
+			currentTime.add(Calendar.HOUR, 168);
+			currentTime.set(Calendar.DAY_OF_WEEK, 1);
+		}
+		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("REUNION"))
 		{
 			int nearest = 0;
 			Calendar[] cals = new Calendar[Config.ALT_OLY_END_DATE.length];
@@ -599,29 +610,6 @@ public class Olympiad extends ListenersContainer
 				{
 					nearest = i;
 				}
-			}
-			
-			cals[nearest].set(Calendar.HOUR_OF_DAY, Config.ALT_OLY_END_HOUR[0]);
-			cals[nearest].set(Calendar.MINUTE, Config.ALT_OLY_END_HOUR[1]);
-			cals[nearest].set(Calendar.SECOND, Config.ALT_OLY_END_HOUR[2]);
-			_olympiadEnd = cals[nearest].getTimeInMillis();
-		}
-		else
-		{
-			if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("MONTH"))
-			{
-				currentTime.add(Calendar.MONTH, 1);
-				currentTime.set(Calendar.DAY_OF_MONTH, 1);
-			}
-			if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("WEEKS"))
-			{
-				currentTime.add(Calendar.HOUR, 336);
-				currentTime.set(Calendar.DAY_OF_WEEK, 1);
-			}
-			if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("WEEK"))
-			{
-				currentTime.add(Calendar.HOUR, 168);
-				currentTime.set(Calendar.DAY_OF_WEEK, 1);
 			}
 			
 			currentTime.set(Calendar.HOUR, Config.ALT_OLY_END_HOUR[0]);
