@@ -440,7 +440,7 @@ public class L2ServitorInstance extends L2Summon
 		}
 		catch (Exception e)
 		{
-			_log.warn("Could not store summon effect data: ");
+			_log.warn("Could not store summon effect data");
 		}
 	}
 	

@@ -8148,33 +8148,31 @@ public final class L2PcInstance extends L2Playable
 			return;
 		}
 		
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement delete = con.prepareStatement(DELETE_SKILL_SAVE);
+			PreparedStatement statement = con.prepareStatement(ADD_SKILL_SAVE);)
 		{
 			// Delete all current stored effects for char to avoid dupe
-			PreparedStatement statement = con.prepareStatement(DELETE_SKILL_SAVE);
-			
-			statement.setInt(1, getObjectId());
-			statement.setInt(2, getClassIndex());
-			statement.execute();
-			statement.close();
+			delete.setInt(1, getObjectId());
+			delete.setInt(2, getClassIndex());
+			delete.execute();
 			
 			int buff_index = 0;
-			
 			final List<Integer> storedSkills = new ArrayList<>();
 			
 			// Store all effect data along with calulated remaining
 			// reuse delays for matching skills. 'restore_type'= 0.
-			statement = con.prepareStatement(ADD_SKILL_SAVE);
-			
 			if (storeEffects)
 			{
-				for (L2Effect effect : getAllEffects())
+				for (L2Effect effect : getEffectList().getEffects())
 				{
 					if (effect == null)
 					{
 						continue;
 					}
 					
+					final L2Skill skill = effect.getSkill();
+					// Do not save heals.
 					switch (effect.getEffectType())
 					{
 						case HEAL_OVER_TIME:
@@ -8183,8 +8181,7 @@ public final class L2PcInstance extends L2Playable
 							continue;
 					}
 					
-					L2Skill skill = effect.getSkill();
-					if (storedSkills.contains(skill.getReuseHashCode()))
+					if (skill.isToggle())
 					{
 						continue;
 					}
@@ -8195,25 +8192,27 @@ public final class L2PcInstance extends L2Playable
 						continue;
 					}
 					
+					if (storedSkills.contains(skill.getReuseHashCode()))
+					{
+						continue;
+					}
+					
 					storedSkills.add(skill.getReuseHashCode());
 					
-					if (effect.getInUse() && !skill.isToggle())
-					{
-						statement.setInt(1, getObjectId());
-						statement.setInt(2, skill.getId());
-						statement.setInt(3, skill.getLevel());
-						statement.setInt(4, effect.getCount());
-						statement.setInt(5, effect.getTime());
-						
-						final TimeStamp t = getSkillReuseTimeStamp(skill.getReuseHashCode());
-						statement.setLong(6, (t != null) && t.hasNotPassed() ? t.getReuse() : 0);
-						statement.setDouble(7, (t != null) && t.hasNotPassed() ? t.getStamp() : 0);
-						
-						statement.setInt(8, 0); // Store type 0, active buffs/debuffs.
-						statement.setInt(9, getClassIndex());
-						statement.setInt(10, ++buff_index);
-						statement.execute();
-					}
+					statement.setInt(1, getObjectId());
+					statement.setInt(2, skill.getId());
+					statement.setInt(3, skill.getLevel());
+					statement.setInt(4, effect.getCount());
+					statement.setInt(5, effect.getTime());
+					
+					final TimeStamp t = getSkillReuseTimeStamp(skill.getReuseHashCode());
+					statement.setLong(6, (t != null) && t.hasNotPassed() ? t.getReuse() : 0);
+					statement.setDouble(7, (t != null) && t.hasNotPassed() ? t.getStamp() : 0);
+					
+					statement.setInt(8, 0); // Store type 0, active buffs/debuffs.
+					statement.setInt(9, getClassIndex());
+					statement.setInt(10, ++buff_index);
+					statement.execute();
 				}
 			}
 			
@@ -8248,7 +8247,6 @@ public final class L2PcInstance extends L2Playable
 					}
 				}
 			}
-			statement.close();
 		}
 		catch (Exception e)
 		{
