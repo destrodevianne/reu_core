@@ -355,7 +355,7 @@ public class LoginServerThread extends Thread
 			}
 			catch (SocketException e)
 			{
-				_log.warn("LoginServer not avaible, trying to reconnect...");
+				_log.warn("LoginServer not available, trying to reconnect...");
 			}
 			catch (IOException e)
 			{
