@@ -421,11 +421,6 @@ public class GameServer
 		
 		KnownListUpdateTaskManager.getInstance();
 		
-		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
-		{
-			OfflineTradersTable.getInstance().restoreOfflineTraders();
-		}
-		
 		if (Config.DEADLOCK_DETECTOR)
 		{
 			_deadDetectThread = new DeadLockDetector();
@@ -491,6 +486,11 @@ public class GameServer
 		AutoAnnounceTaskManager.getInstance();
 		
 		ReunionInfo.load();
+		
+		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
+		{
+			OfflineTradersTable.getInstance().restoreOfflineTraders();
+		}
 	}
 	
 	public static void main(String[] args) throws Exception
