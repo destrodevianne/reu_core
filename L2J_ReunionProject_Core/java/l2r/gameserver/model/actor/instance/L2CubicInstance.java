@@ -27,26 +27,23 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.ZoneIdType;
-import l2r.gameserver.handler.ISkillHandler;
-import l2r.gameserver.handler.SkillHandler;
 import l2r.gameserver.instancemanager.DuelManager;
 import l2r.gameserver.model.L2Object;
 import l2r.gameserver.model.L2Party;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
+import l2r.gameserver.model.actor.tasks.cubic.CubicAction;
+import l2r.gameserver.model.actor.tasks.cubic.CubicDisappear;
+import l2r.gameserver.model.actor.tasks.cubic.CubicHeal;
 import l2r.gameserver.model.effects.L2Effect;
-import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
-import l2r.gameserver.model.skills.l2skills.L2SkillDrain;
 import l2r.gameserver.model.stats.BaseStats;
 import l2r.gameserver.model.stats.Formulas;
 import l2r.gameserver.model.stats.Stats;
 import l2r.gameserver.network.SystemMessageId;
-import l2r.gameserver.network.serverpackets.MagicSkillUse;
-import l2r.gameserver.taskmanager.AttackStanceTaskManager;
 import l2r.util.Rnd;
 
 import org.slf4j.Logger;
@@ -227,7 +224,7 @@ public final class L2CubicInstance implements IIdentifiable
 				// cubic skills list
 				break;
 		}
-		_disappearTask = ThreadPoolManager.getInstance().scheduleGeneral(new Disappear(), _cubicDuration); // disappear
+		_disappearTask = ThreadPoolManager.getInstance().scheduleGeneral(new CubicDisappear(this), _cubicDuration); // disappear
 	}
 	
 	public synchronized void doAction()
@@ -253,10 +250,10 @@ public final class L2CubicInstance implements IIdentifiable
 			case SMART_CUBIC_SPECTRALMASTER:
 			case SMART_CUBIC_EVATEMPLAR:
 			case SMART_CUBIC_SHILLIENTEMPLAR:
-				_actionTask = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new Action(_cubicSkillChance), 0, _cubicDelay);
+				_actionTask = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new CubicAction(this, _cubicSkillChance), 0, _cubicDelay);
 				break;
 			case LIFE_CUBIC:
-				_actionTask = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new Heal(), 0, _cubicDelay);
+				_actionTask = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new CubicHeal(this), 0, _cubicDelay);
 				break;
 		}
 	}
@@ -281,6 +278,26 @@ public final class L2CubicInstance implements IIdentifiable
 	public int getCubicPower()
 	{
 		return _cubicPower;
+	}
+	
+	public L2Character getTarget()
+	{
+		return _target;
+	}
+	
+	public void setTarget(L2Character target)
+	{
+		_target = target;
+	}
+	
+	public List<L2Skill> getSkills()
+	{
+		return _skills;
+	}
+	
+	public int getCubicMaxCount()
+	{
+		return _cubicMaxCount;
 	}
 	
 	public void stopAction()
@@ -515,176 +532,6 @@ public final class L2CubicInstance implements IIdentifiable
 		}
 	}
 	
-	private class Action implements Runnable
-	{
-		private final int _chance;
-		
-		protected Action(int chance)
-		{
-			_chance = chance;
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				if (_owner.isDead() || !_owner.isOnline())
-				{
-					stopAction();
-					_owner.getCubics().remove(this);
-					_owner.broadcastUserInfo();
-					cancelDisappear();
-					return;
-				}
-				if (!AttackStanceTaskManager.getInstance().hasAttackStanceTask(_owner))
-				{
-					if (_owner.hasSummon())
-					{
-						if (!AttackStanceTaskManager.getInstance().hasAttackStanceTask(_owner.getSummon()))
-						{
-							stopAction();
-							return;
-						}
-					}
-					else
-					{
-						stopAction();
-						return;
-					}
-				}
-				// The cubic has already reached its limit and it will stay idle until its duration ends.
-				if ((_cubicMaxCount > -1) && (_currentcount >= _cubicMaxCount))
-				{
-					stopAction();
-					return;
-				}
-				// Smart Cubic debuff cancel is 100%
-				boolean UseCubicCure = false;
-				L2Skill skill = null;
-				
-				if ((_id >= SMART_CUBIC_EVATEMPLAR) && (_id <= SMART_CUBIC_SPECTRALMASTER))
-				{
-					L2Effect[] effects = _owner.getAllEffects();
-					
-					for (L2Effect e : effects)
-					{
-						if ((e != null) && e.getSkill().isDebuff() && e.getSkill().canBeDispeled())
-						{
-							UseCubicCure = true;
-							e.exit();
-						}
-					}
-				}
-				
-				if (UseCubicCure)
-				{
-					// Smart Cubic debuff cancel is needed, no other skill is used in this
-					// activation period
-					MagicSkillUse msu = new MagicSkillUse(_owner, _owner, SKILL_CUBIC_CURE, 1, 0, 0);
-					_owner.broadcastPacket(msu);
-					
-					// The cubic has done an action, increase the currentcount
-					_currentcount++;
-				}
-				else if (Rnd.get(1, 100) < _chance)
-				{
-					skill = _skills.get(Rnd.get(_skills.size()));
-					if (skill != null)
-					{
-						if (skill.getId() == SKILL_CUBIC_HEAL)
-						{
-							// friendly skill, so we look a target in owner's party
-							cubicTargetForHeal();
-						}
-						else
-						{
-							// offensive skill, we look for an enemy target
-							getCubicTarget();
-							if (!isInCubicRange(_owner, _target))
-							{
-								_target = null;
-							}
-						}
-						L2Character target = _target; // copy to avoid npe
-						if ((target != null) && (!target.isDead()))
-						{
-							if (Config.DEBUG)
-							{
-								_log.info("L2CubicInstance: Action.run();");
-								_log.info("Cubic Id: " + _id + " Target: " + target.getName() + " distance: " + Math.sqrt(target.getDistanceSq(_owner.getX(), _owner.getY(), _owner.getZ())));
-							}
-							
-							_owner.broadcastPacket(new MagicSkillUse(_owner, target, skill.getId(), skill.getLevel(), 0, 0));
-							
-							L2SkillType type = skill.getSkillType();
-							ISkillHandler handler = SkillHandler.getInstance().getHandler(skill.getSkillType());
-							L2Character[] targets =
-							{
-								target
-							};
-							
-							if ((type == L2SkillType.PARALYZE) || (type == L2SkillType.STUN) || (type == L2SkillType.ROOT) || (type == L2SkillType.AGGDAMAGE))
-							{
-								if (Config.DEBUG)
-								{
-									_log.info("L2CubicInstance: Action.run() handler " + type);
-								}
-								useCubicDisabler(type, L2CubicInstance.this, skill, targets);
-							}
-							else if (type == L2SkillType.MDAM)
-							{
-								if (Config.DEBUG)
-								{
-									_log.info("L2CubicInstance: Action.run() handler " + type);
-								}
-								useCubicMdam(L2CubicInstance.this, skill, targets);
-							}
-							else if ((type == L2SkillType.POISON) || (type == L2SkillType.DEBUFF) || (type == L2SkillType.DOT))
-							{
-								if (Config.DEBUG)
-								{
-									_log.info("L2CubicInstance: Action.run() handler " + type);
-								}
-								useCubicContinuous(L2CubicInstance.this, skill, targets);
-							}
-							else if (type == L2SkillType.DRAIN)
-							{
-								if (Config.DEBUG)
-								{
-									_log.info("L2CubicInstance: Action.run() skill " + type);
-								}
-								((L2SkillDrain) skill).useCubicSkill(L2CubicInstance.this, targets);
-							}
-							else
-							{
-								handler.useSkill(_owner, skill, targets);
-								if (Config.DEBUG)
-								{
-									_log.info("L2CubicInstance: Action.run(); other handler");
-								}
-							}
-							
-							if (skill.hasEffectType(L2EffectType.DMG_OVER_TIME, L2EffectType.DMG_OVER_TIME_PERCENT))
-							{
-								if (Config.DEBUG)
-								{
-									_log.info("L2CubicInstance: Action.run() handler " + type);
-								}
-								useCubicContinuous(L2CubicInstance.this, skill, targets);
-							}
-							_currentcount++;
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				_log.error("", e);
-			}
-		}
-	}
-	
 	public void useCubicContinuous(L2CubicInstance activeCubic, L2Skill skill, L2Object[] targets)
 	{
 		for (L2Character target : (L2Character[]) targets)
@@ -869,7 +716,7 @@ public final class L2CubicInstance implements IIdentifiable
 	 * @param target
 	 * @return true if the target is inside of the owner's max Cubic range
 	 */
-	public boolean isInCubicRange(L2Character owner, L2Character target)
+	public static boolean isInCubicRange(L2Character owner, L2Character target)
 	{
 		if ((owner == null) || (target == null))
 		{
@@ -976,82 +823,5 @@ public final class L2CubicInstance implements IIdentifiable
 	public boolean givenByOther()
 	{
 		return _givenByOther;
-	}
-	
-	protected class Heal implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			if (_owner.isDead() || !_owner.isOnline())
-			{
-				stopAction();
-				_owner.getCubics().remove(this);
-				_owner.broadcastUserInfo();
-				cancelDisappear();
-				return;
-			}
-			try
-			{
-				L2Skill skill = null;
-				for (L2Skill sk : _skills)
-				{
-					if (sk.getId() == SKILL_CUBIC_HEAL)
-					{
-						skill = sk;
-						break;
-					}
-				}
-				
-				if (skill != null)
-				{
-					cubicTargetForHeal();
-					L2Character target = _target;
-					if ((target != null) && !target.isDead())
-					{
-						if ((target.getMaxHp() - target.getCurrentHp()) > skill.getPower())
-						{
-							L2Character[] targets =
-							{
-								target
-							};
-							ISkillHandler handler = SkillHandler.getInstance().getHandler(skill.getSkillType());
-							if (handler != null)
-							{
-								handler.useSkill(_owner, skill, targets);
-							}
-							else
-							{
-								skill.useSkill(_owner, targets);
-							}
-							
-							MagicSkillUse msu = new MagicSkillUse(_owner, target, skill.getId(), skill.getLevel(), 0, 0);
-							_owner.broadcastPacket(msu);
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				_log.error("", e);
-			}
-		}
-	}
-	
-	private class Disappear implements Runnable
-	{
-		Disappear()
-		{
-			// run task
-		}
-		
-		@Override
-		public void run()
-		{
-			stopAction();
-			cancelDisappear();
-			_owner.getCubics().remove(getId());
-			_owner.broadcastUserInfo();
-		}
 	}
 }

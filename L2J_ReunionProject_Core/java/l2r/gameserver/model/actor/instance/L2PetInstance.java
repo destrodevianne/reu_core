@@ -1044,7 +1044,7 @@ public class L2PetInstance extends L2Summon
 			// Store all effect data along with calculated remaining
 			if (storeEffects)
 			{
-				for (L2Effect effect : getAllEffects())
+				for (L2Effect effect : getEffectList().getEffects())
 				{
 					if (effect == null)
 					{
