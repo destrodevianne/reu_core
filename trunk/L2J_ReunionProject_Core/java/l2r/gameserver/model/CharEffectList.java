@@ -433,7 +433,7 @@ public class CharEffectList
 	public final void stopAllEffects()
 	{
 		// Get all active skills effects from this list
-		L2Effect[] effects = getAllEffects();
+		List<L2Effect> effects = getEffects();
 		
 		// Exit them
 		for (L2Effect e : effects)
@@ -451,7 +451,7 @@ public class CharEffectList
 	public final void stopAllEffectsExceptThoseThatLastThroughDeath()
 	{
 		// Get all active skills effects from this list
-		L2Effect[] effects = getAllEffects();
+		List<L2Effect> effects = getEffects();
 		
 		// Exit them
 		for (L2Effect e : effects)
