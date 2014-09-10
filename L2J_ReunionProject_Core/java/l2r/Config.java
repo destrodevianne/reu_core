@@ -995,6 +995,8 @@ public final class Config
 	// --------------------------------------------------
 	public static int GEODATA;
 	public static String GEODATA_DRIVER;
+	public static File PATHNODE_DIR;
+	public static boolean GEODATA_CELLFINDING;
 	public static String PATHFIND_BUFFERS;
 	public static float LOW_WEIGHT;
 	public static float MEDIUM_WEIGHT;
@@ -2523,6 +2525,16 @@ public final class Config
 			
 			GEODATA = Geodata.getInt("GeoData", 0);
 			GEODATA_DRIVER = Geodata.getString("GeoDataDriver", "l2r.gameserver.geoengine.NullDriver");
+			try
+			{
+				PATHNODE_DIR = new File(Geodata.getString("PathnodeDirectory", "data/pathnode").replaceAll("\\\\", "/")).getCanonicalFile();
+			}
+			catch (IOException e)
+			{
+				_log.warn("Error setting pathnode directory!", e);
+				PATHNODE_DIR = new File("data/pathnode");
+			}
+			GEODATA_CELLFINDING = Geodata.getBoolean("CellPathFinding", false);
 			PATHFIND_BUFFERS = Geodata.getString("PathFindBuffers", "100x6;128x6;192x6;256x4;320x4;384x4;500x2");
 			LOW_WEIGHT = Geodata.getFloat("LowWeight", 0.5f);
 			MEDIUM_WEIGHT = Geodata.getFloat("MediumWeight", 2);

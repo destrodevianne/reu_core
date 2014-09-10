@@ -20,8 +20,10 @@ package l2r.gameserver.pathfinding;
 
 import java.util.List;
 
+import l2r.Config;
 import l2r.gameserver.model.L2World;
 import l2r.gameserver.pathfinding.cellnodes.CellPathFinding;
+import l2r.gameserver.pathfinding.geonodes.GeoPathFinding;
 
 /**
  * @author -Nemesiss-
@@ -30,6 +32,11 @@ public abstract class PathFinding
 {
 	public static PathFinding getInstance()
 	{
+		if (!Config.GEODATA_CELLFINDING)
+		{
+			// Higher Memory Usage, Smaller Cpu Usage
+			return GeoPathFinding.getInstance();
+		}
 		// Cell pathfinding, calculated directly from geodata files
 		return CellPathFinding.getInstance();
 	}
