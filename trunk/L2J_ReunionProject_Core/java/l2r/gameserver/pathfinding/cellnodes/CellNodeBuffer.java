@@ -21,6 +21,7 @@ package l2r.gameserver.pathfinding.cellnodes;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javolution.util.FastList;
+
 import l2r.Config;
 
 /**
