@@ -9668,7 +9668,7 @@ public final class L2PcInstance extends L2Playable
 					// Same side
 					if (getSiegeState() == targetPlayer.getSiegeState())
 					{
-						sendPacket(SystemMessage.getSystemMessage(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS));
+						sendPacket(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS);
 						return false;
 					}
 				}
