@@ -9203,6 +9203,8 @@ public final class L2PcInstance extends L2Playable
 	
 	private boolean checkUseMagicConditions(L2Skill skill, boolean forceUse, boolean dontMove)
 	{
+		L2SkillType sklType = skill.getSkillType();
+		
 		// ************************************* Check Player State *******************************************
 		
 		// Abnormal effects(ex : Stun, Sleep...) are checked in L2Character useMagic()
@@ -9531,8 +9533,38 @@ public final class L2PcInstance extends L2Playable
 		// Check if the skill is defensive
 		if (!skill.isOffensive() && target.isMonster() && !forceUse)
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
-			return false;
+			// check if the target is a monster and if force attack is set.. if not then we don't want to cast.
+			switch (sklTargetType)
+			{
+				case PET:
+				case SERVITOR:
+				case SUMMON:
+				case AURA:
+				case FRONT_AURA:
+				case BEHIND_AURA:
+				case AURA_CORPSE_MOB:
+				case CLAN:
+				case PARTY_CLAN:
+				case SELF:
+				case PARTY:
+				case CORPSE_MOB:
+				case AREA_CORPSE_MOB:
+				case GROUND:
+					break;
+				default:
+				{
+					switch (sklType)
+					{
+						case DELUXE_KEY_UNLOCK:
+						case UNLOCK:
+							break;
+						default:
+							sendPacket(ActionFailed.STATIC_PACKET);
+							return false;
+					}
+					break;
+				}
+			}
 		}
 		
 		// GodFather: If target player is flagged cannot obtain good magic unless is forceUse or is friend(Party, Clan, Ally etc)
@@ -9612,23 +9644,25 @@ public final class L2PcInstance extends L2Playable
 	 * Check if the requested casting is a Pc->Pc skill cast and if it's a valid pvp condition
 	 * @param target L2Object instance containing the target
 	 * @param skill L2Skill instance with the skill being casted
-	 * @return {@code false} if the skill is a pvpSkill and target is not a valid pvp target, {@code true} otherwise.
+	 * @return False if the skill is a pvpSkill and target is not a valid pvp target
 	 */
 	public boolean checkPvpSkill(L2Object target, L2Skill skill)
 	{
-		if ((target == null) || (skill == null) || (this == target))
-		{
-			return false;
-		}
+		return checkPvpSkill(target, skill, false);
+	}
+	
+	/**
+	 * Check if the requested casting is a Pc->Pc skill cast and if it's a valid pvp condition
+	 * @param target L2Object instance containing the target
+	 * @param skill L2Skill instance with the skill being casted
+	 * @param srcIsSummon is L2Summon - caster?
+	 * @return False if the skill is a pvpSkill and target is not a valid pvp target
+	 */
+	public boolean checkPvpSkill(L2Object target, L2Skill skill, boolean srcIsSummon)
+	{
+		final L2PcInstance targetPlayer = target != null ? target.getActingPlayer() : null;
 		
-		final L2PcInstance targetPlayer = target.getActingPlayer();
-		
-		if (targetPlayer == null)
-		{
-			return false;
-		}
-		
-		if (ReunionEvents.isInEvent(this))
+		if (ReunionEvents.isInEvent(this) && (targetPlayer != null))
 		{
 			if (!ReunionEvents.isInEvent(targetPlayer))
 			{
@@ -9649,131 +9683,135 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 		
-		if (skill.isDebuff() || skill.isOffensive()) // || (skill.isOffensive() && skill.hasEffectType(L2EffectType.DISPEL))
+		if (skill.isDebuff())
 		{
-			final boolean isCtrlPressed = (getCurrentSkill() != null) && getCurrentSkill().isCtrlPressed();
-			
-			// Pece Zone
-			if (target.isInsideZone(ZoneIdType.PEACE))
+			if (this == targetPlayer)
 			{
 				return false;
 			}
 			
-			// Siege
-			if ((getSiegeState() != 0) && (targetPlayer.getSiegeState() != 0))
+			// final boolean isCtrlPressed = (getCurrentSkill() != null) && getCurrentSkill().isCtrlPressed();
+			final boolean isInsideSiegeZone = isInsideZone(ZoneIdType.SIEGE);
+			if (targetPlayer != null)
 			{
-				// Register for same siege
-				if (getSiegeSide() == targetPlayer.getSiegeSide())
+				if (isInDuel())
 				{
-					// Same side
-					if (getSiegeState() == targetPlayer.getSiegeState())
+					if (!targetPlayer.isInDuel())
 					{
-						sendPacket(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS);
 						return false;
 					}
-				}
-			}
-			
-			// Duel
-			if (isInDuel() && targetPlayer.isInDuel())
-			{
-				if (getDuelId() == targetPlayer.getDuelId())
-				{
-					return true;
-				}
-			}
-			
-			// Party
-			if (isInParty() && targetPlayer.isInParty())
-			{
-				// Same Party
-				if (getParty().getLeader() == targetPlayer.getParty().getLeader())
-				{
-					if ((skill.getEffectRange() > 0) && isCtrlPressed && (getTarget() == target))
-					{
-						if (skill.isDamage())
-						{
-							return true;
-						}
-					}
-					return false;
-				}
-				else if ((getParty().getCommandChannel() != null) && getParty().getCommandChannel().containsPlayer(targetPlayer))
-				{
-					if ((skill.getEffectRange() > 0) && isCtrlPressed && (getTarget() == target))
-					{
-						if (skill.isDamage())
-						{
-							return true;
-						}
-					}
-					return false;
-				}
-			}
-			
-			// You can debuff anyone except party members while in an arena...
-			if (isInsideZone(ZoneIdType.PVP) && targetPlayer.isInsideZone(ZoneIdType.PVP))
-			{
-				return true;
-			}
-			
-			// Olympiad
-			if (isInOlympiadMode() && targetPlayer.isInOlympiadMode())
-			{
-				// GodFather: Increase +1 to avoid bugs in oly
-				if ((getOlympiadGameId() + 1) == targetPlayer.getOlympiadGameId())
-				{
-					return true;
-				}
-			}
-			
-			final L2Clan aClan = getClan();
-			final L2Clan tClan = targetPlayer.getClan();
-			
-			if ((aClan != null) && (tClan != null))
-			{
-				if (aClan.isAtWarWith(tClan.getId()) && tClan.isAtWarWith(aClan.getId()))
-				{
-					// Check if skill can do dmg
-					if ((skill.isAOE() && (skill.getEffectRange() > 0)) && isCtrlPressed && (getTarget() == target))
+					
+					if ((getDuelId() != 0) && (getDuelId() == targetPlayer.getDuelId()))
 					{
 						return true;
 					}
 				}
-				else if ((getClanId() == targetPlayer.getClanId()) || ((getAllyId() > 0) && (getAllyId() == targetPlayer.getAllyId())))
+				
+				if (isInOlympiadMode())
 				{
-					// Check if skill can do dmg
-					if ((skill.getEffectRange() > 0) && isCtrlPressed && (getTarget() == target))
+					if (!targetPlayer.isInOlympiadMode())
 					{
-						if (skill.isDamage())
-						{
-							return true;
-						}
+						return false;
 					}
-					return false;
-				}
-			}
-			
-			// On retail, it is impossible to debuff a "peaceful" player.
-			if ((targetPlayer.getPvpFlag() == 0) && (targetPlayer.getKarma() == 0))
-			{
-				// Check if skill can do dmg
-				if ((skill.getEffectRange() > 0) && isCtrlPressed && (getTarget() == target))
-				{
-					if (skill.isDamage())
+					
+					// vGodfather fix
+					if (((getOlympiadGameId() + 1) != 0) && (getOlympiadGameId() == targetPlayer.getOlympiadGameId()))
 					{
 						return true;
 					}
 				}
-				return false;
+				
+				if (targetPlayer.isInOlympiadMode())
+				{
+					return false;
+				}
+				
+				if (targetPlayer.isInsideZone(ZoneIdType.PEACE))
+				{
+					return false;
+				}
+				
+				// On retail, you can't debuff party members at all unless you're in duel.
+				if (isInSameParty(targetPlayer) || isInSameChannel(targetPlayer))
+				{
+					return false;
+				}
+				
+				// During Fortress/Castle Sieges, they can't debuff eachothers if they are in the same side.
+				if (isInsideSiegeZone && isInSiege() && (getSiegeState() != 0) && (targetPlayer.getSiegeState() != 0))
+				{
+					final Siege siege = SiegeManager.getInstance().getSiege(getX(), getY(), getZ());
+					if (siege != null)
+					{
+						if ((siege.checkIsDefender(getClan()) && siege.checkIsDefender(targetPlayer.getClan())) || (siege.checkIsAttacker(getClan()) && siege.checkIsAttacker(targetPlayer.getClan())))
+						{
+							sendPacket(SystemMessage.getSystemMessage(SystemMessageId.FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS));
+							return false;
+						}
+					}
+				}
+				
+				// You can debuff anyone except party members while in an arena...
+				if (isInsideZone(ZoneIdType.PVP) && targetPlayer.isInsideZone(ZoneIdType.PVP))
+				{
+					return true;
+				}
+				
+				final L2Clan aClan = getClan();
+				final L2Clan tClan = targetPlayer.getClan();
+				
+				if ((aClan != null) && (tClan != null))
+				{
+					if (aClan.isAtWarWith(tClan.getId()) && tClan.isAtWarWith(aClan.getId()))
+					{
+						return true;
+					}
+				}
+				
+				if ((getClanId() != 0) && (getClanId() == targetPlayer.getClanId()))
+				{
+					return false;
+				}
+				
+				if ((getAllyId() != 0) && (getAllyId() == targetPlayer.getAllyId()))
+				{
+					return false;
+				}
+				
+				// On retail, it is impossible to debuff a "peaceful" player.
+				if ((targetPlayer.getPvpFlag() == 0) && (targetPlayer.getKarma() == 0))
+				{
+					return false;
+				}
+				
+				// vGodFather fix
+				/**
+				 * if ((targetPlayer.getPvpFlag() > 0) || (targetPlayer.getKarma() > 0)) { if (!isCtrlPressed) { switch (skill.getTargetType()) { case AREA: case AURA: case BEHIND_AREA: case BEHIND_AURA: case FRONT_AREA: case FRONT_AURA: { if ((getPvpFlag() > 0) || (getKarma() > 0)) { return true; }
+				 * return false; } default: return true; } } return true; }
+				 */
 			}
-			
-			if ((targetPlayer.getPvpFlag() > 0) || (targetPlayer.getKarma() > 0))
-			{
-				return true;
-			}
-			return false;
 		}
+		
+		if ((targetPlayer != null) && (targetPlayer != this) && !(isInDuel() && (targetPlayer.getDuelId() == getDuelId())) && !isInsideZone(ZoneIdType.PVP) && !targetPlayer.isInsideZone(ZoneIdType.PVP))
+		{
+			SkillUseHolder skilldat = getCurrentSkill();
+			SkillUseHolder skilldatpet = getCurrentPetSkill();
+			if (((skilldat != null) && !skilldat.isCtrlPressed() && skill.isOffensive() && !srcIsSummon) || ((skilldatpet != null) && !skilldatpet.isCtrlPressed() && skill.isOffensive() && srcIsSummon))
+			{
+				if ((getClan() != null) && (targetPlayer.getClan() != null))
+				{
+					if (getClan().isAtWarWith(targetPlayer.getClan().getId()) && targetPlayer.getClan().isAtWarWith(getClan().getId()))
+					{
+						return true;
+					}
+				}
+				if ((targetPlayer.getPvpFlag() == 0) && (targetPlayer.getKarma() == 0))
+				{
+					return false;
+				}
+			}
+		}
+		
 		return true;
 	}
 	
