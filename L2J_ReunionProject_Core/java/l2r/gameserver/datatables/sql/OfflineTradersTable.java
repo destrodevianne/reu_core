@@ -183,7 +183,15 @@ public class OfflineTradersTable
 				
 				try
 				{
-					L2GameClient client = new L2GameClient(null);
+					L2GameClient client = null;
+					try
+					{
+						client = new L2GameClient(null);
+					}
+					catch (Exception e)
+					{
+						continue;
+					}
 					client.setDetached(true);
 					player = L2PcInstance.load(rs.getInt("charId"));
 					client.setActiveChar(player);

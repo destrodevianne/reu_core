@@ -40,6 +40,7 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Playable;
+import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2CubicInstance;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -543,45 +544,6 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 	public final L2TargetType getTargetType()
 	{
 		return _targetType;
-	}
-	
-	public boolean isAOE()
-	{
-		switch (_targetType)
-		{
-			case AREA:
-			case AURA:
-			case BEHIND_AREA:
-			case BEHIND_AURA:
-			case FRONT_AREA:
-			case FRONT_AURA:
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean isDamage()
-	{
-		switch (getSkillType())
-		{
-			case PDAM:
-			case MDAM:
-			case MANADAM:
-			case CHAIN_HEAL:
-			case DOT:
-			case MDOT:
-			case DRAIN:
-			case DEATHLINK:
-			case FATAL:
-			case BLOW:
-			case SIGNET:
-			case SIGNET_CASTTIME:
-				return true;
-			default:
-				return false;
-		}
 	}
 	
 	public final int getCondition()
@@ -1390,7 +1352,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 						return false;
 					}
 					
-					if (!player.checkPvpSkill(targetPlayer, skill))
+					if (!player.checkPvpSkill(targetPlayer, skill, (caster instanceof L2Summon)))
 					{
 						return false;
 					}
