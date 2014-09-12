@@ -9529,7 +9529,7 @@ public final class L2PcInstance extends L2Playable
 			
 		}
 		// Check if the skill is defensive
-		if (skill.isOffensive() && target.isMonster() && !forceUse)
+		if (!skill.isOffensive() && target.isMonster() && !forceUse)
 		{
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
