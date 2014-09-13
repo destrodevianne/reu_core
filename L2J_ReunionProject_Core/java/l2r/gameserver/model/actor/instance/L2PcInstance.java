@@ -11404,7 +11404,7 @@ public final class L2PcInstance extends L2Playable
 		if (getInstanceId() > 0)
 		{
 			final Instance instance = InstanceManager.getInstance().getInstance(getInstanceId());
-			if (instance != null)
+			if ((instance != null) && (instance.getEjectTime() > 0))
 			{
 				instance.cancelEjectDeadPlayer(this);
 			}
