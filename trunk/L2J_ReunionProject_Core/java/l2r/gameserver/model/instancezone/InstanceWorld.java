@@ -109,7 +109,7 @@ public class InstanceWorld
 		if ((victim != null) && victim.isPlayer())
 		{
 			final Instance instance = InstanceManager.getInstance().getInstance(getInstanceId());
-			if (instance != null)
+			if ((instance != null) && (instance.getEjectTime() > 0))
 			{
 				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_WILL_BE_EXPELLED_IN_S1);
 				sm.addInt(instance.getEjectTime() / 60 / 1000);
