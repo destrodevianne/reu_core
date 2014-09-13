@@ -212,7 +212,11 @@ public class OfflineTradersTable
 								case BUY:
 									while (items.next())
 									{
-										player.getBuyList().addItemByItemId(items.getInt(2), items.getLong(3), items.getLong(4));
+										if (player.getBuyList().addItemByItemId(items.getInt(2), items.getLong(3), items.getLong(4)) == null)
+										{
+											// throw new NullPointerException();
+											continue;
+										}
 									}
 									player.getBuyList().setTitle(rs.getString("title"));
 									break;
@@ -220,7 +224,11 @@ public class OfflineTradersTable
 								case PACKAGE_SELL:
 									while (items.next())
 									{
-										player.getSellList().addItem(items.getInt(2), items.getLong(3), items.getLong(4));
+										if (player.getSellList().addItem(items.getInt(2), items.getLong(3), items.getLong(4)) == null)
+										{
+											// throw new NullPointerException();
+											continue;
+										}
 									}
 									player.getSellList().setTitle(rs.getString("title"));
 									player.getSellList().setPackaged(type == PrivateStoreType.PACKAGE_SELL);
