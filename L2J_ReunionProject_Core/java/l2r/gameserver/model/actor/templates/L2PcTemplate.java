@@ -23,13 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import l2r.gameserver.datatables.xml.ExperienceData;
-import l2r.gameserver.datatables.xml.InitialEquipmentData;
 import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.model.Location;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.itemcontainer.Inventory;
-import l2r.gameserver.model.items.PcItemTemplate;
 import l2r.util.Rnd;
 
 /**
@@ -52,7 +50,6 @@ public class L2PcTemplate extends L2CharTemplate
 	
 	private final int _baseSafeFallHeight;
 	
-	private final List<PcItemTemplate> _initialEquipment;
 	private final List<Location> _creationPoints;
 	private final Map<Integer, Integer> _baseSlotDef;
 	
@@ -87,7 +84,6 @@ public class L2PcTemplate extends L2CharTemplate
 		
 		_baseSafeFallHeight = set.getInt("baseSafeFall", 333);
 		
-		_initialEquipment = InitialEquipmentData.getInstance().getEquipmentList(_classId);
 		_creationPoints = creationPoints;
 	}
 	
@@ -243,21 +239,5 @@ public class L2PcTemplate extends L2CharTemplate
 	public int getSafeFallHeight()
 	{
 		return _baseSafeFallHeight;
-	}
-	
-	/**
-	 * @return the initial equipment for this Pc template.
-	 */
-	public List<PcItemTemplate> getInitialEquipment()
-	{
-		return _initialEquipment;
-	}
-	
-	/**
-	 * @return {@code true} if this Pc template has an initial equipment associated, {@code false} otherwise.
-	 */
-	public boolean hasInitialEquipment()
-	{
-		return _initialEquipment != null;
 	}
 }

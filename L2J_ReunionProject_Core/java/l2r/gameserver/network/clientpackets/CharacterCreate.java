@@ -18,6 +18,7 @@
  */
 package l2r.gameserver.network.clientpackets;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import java.util.regex.PatternSyntaxException;
 import l2r.Config;
 import l2r.gameserver.datatables.sql.CharNameTable;
 import l2r.gameserver.datatables.xml.CharTemplateData;
+import l2r.gameserver.datatables.xml.InitialEquipmentData;
 import l2r.gameserver.datatables.xml.SkillData;
 import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.instancemanager.QuestManager;
@@ -291,12 +293,12 @@ public final class CharacterCreate extends L2GameClientPacket
 		shortcut = new L2ShortCut(10, 0, 3, 0, 0, 1);
 		newChar.registerShortCut(shortcut);
 		
-		if (template.hasInitialEquipment())
+		final List<PcItemTemplate> initialItems = InitialEquipmentData.getInstance().getEquipmentList(newChar.getClassId());
+		if (initialItems != null)
 		{
-			L2ItemInstance item;
-			for (PcItemTemplate ie : template.getInitialEquipment())
+			for (PcItemTemplate ie : initialItems)
 			{
-				item = newChar.getInventory().addItem("Init", ie.getId(), ie.getCount(), newChar, null);
+				final L2ItemInstance item = newChar.getInventory().addItem("Init", ie.getId(), ie.getCount(), newChar, null);
 				if (item == null)
 				{
 					_log.warn("Could not create item during char creation: itemId " + ie.getId() + ", amount " + ie.getCount() + ".");
