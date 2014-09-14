@@ -341,7 +341,7 @@ public class AutoSpawnHandler
 		
 		if (_runningSpawns.get(objectId) != null)
 		{
-			return _runningSpawns.get(objectId).getDelay(TimeUnit.MILLISECONDS);
+			return (_runningSpawns.containsKey(objectId)) ? _runningSpawns.get(objectId).getDelay(TimeUnit.MILLISECONDS) : 0;
 		}
 		
 		return 0;

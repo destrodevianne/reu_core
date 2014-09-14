@@ -21,7 +21,6 @@ package l2r.gameserver.model.entity.olympiad;
 import java.util.List;
 
 import l2r.Config;
-import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.MessageType;
 import l2r.gameserver.instancemanager.AntiFeedManager;
@@ -241,15 +240,6 @@ public abstract class AbstractOlympiadGame
 			// Force the character to be visible
 			player.setInvisible(false);
 			
-			// Remove Hero Skills
-			if (player.isHero())
-			{
-				for (L2Skill skill : SkillTreesData.getInstance().getHeroSkillTree().values())
-				{
-					player.removeSkill(skill, false);
-				}
-			}
-			
 			// Avoid prefrenzy (and others) exploit
 			player.stopSkillEffects(176);
 			player.stopSkillEffects(139);
@@ -394,17 +384,8 @@ public abstract class AbstractOlympiadGame
 				{
 					FortManager.getInstance().getFortByOwner(player.getClan()).giveResidentialSkills(player);
 				}
+				player.sendSkillList();
 			}
-			
-			// Add Hero Skills
-			if (player.isHero())
-			{
-				for (L2Skill skill : SkillTreesData.getInstance().getHeroSkillTree().values())
-				{
-					player.addSkill(skill, false);
-				}
-			}
-			player.sendSkillList();
 			
 			// heal again after adding clan skills
 			player.setCurrentCp(player.getMaxCp());
