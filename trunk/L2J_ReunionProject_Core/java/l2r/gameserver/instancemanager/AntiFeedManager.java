@@ -184,9 +184,9 @@ public final class AntiFeedManager
 	 */
 	public final boolean removeClient(int eventId, L2GameClient client)
 	{
-		if (client == null)
+		if ((client == null) || (client.getConnectionAddress() == null))
 		{
-			return false; // unable to determine IP address
+			return false; // unable to determine IP address this can happen from offline shops
 		}
 		
 		final Map<Integer, AtomicInteger> event = _eventIPs.get(eventId);
