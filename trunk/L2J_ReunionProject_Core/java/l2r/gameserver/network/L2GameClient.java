@@ -154,6 +154,28 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		}
 	}
 	
+	public L2GameClient(int con)
+	{
+		super(null);
+		_state = GameClientState.CONNECTED;
+		_connectionStartTime = System.currentTimeMillis();
+		_crypt = new GameCrypt();
+		_stats = new ClientStats();
+		
+		_packetQueue = new ArrayBlockingQueue<>(Config.CLIENT_PACKET_QUEUE_SIZE);
+		
+		if (Config.CHAR_STORE_INTERVAL > 0)
+		{
+			_autoSaveInDB = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new AutoSaveTask(), 300000L, (Config.CHAR_STORE_INTERVAL * 60000L));
+		}
+		else
+		{
+			_autoSaveInDB = null;
+		}
+		
+		_addr = null;
+	}
+	
 	public byte[] enableCrypt()
 	{
 		byte[] key = BlowFishKeygen.getRandomKey();
