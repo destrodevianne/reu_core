@@ -91,7 +91,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	private GameClientState _state;
 	
 	// Info
-	private final InetAddress _addr;
+	private InetAddress _addr;
 	private String _accountName;
 	private SessionKey _sessionId;
 	private L2PcInstance _activeChar;
@@ -150,30 +150,10 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		}
 		catch (UnknownHostException e)
 		{
-			throw new Error("Unable to determine localhost address.");
+			// FIXME: find better way for offline shops
+			_addr = null;
+			// throw new Error("Unable to determine localhost address.");
 		}
-	}
-	
-	public L2GameClient(int con)
-	{
-		super(null);
-		_state = GameClientState.CONNECTED;
-		_connectionStartTime = System.currentTimeMillis();
-		_crypt = new GameCrypt();
-		_stats = new ClientStats();
-		
-		_packetQueue = new ArrayBlockingQueue<>(Config.CLIENT_PACKET_QUEUE_SIZE);
-		
-		if (Config.CHAR_STORE_INTERVAL > 0)
-		{
-			_autoSaveInDB = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new AutoSaveTask(), 300000L, (Config.CHAR_STORE_INTERVAL * 60000L));
-		}
-		else
-		{
-			_autoSaveInDB = null;
-		}
-		
-		_addr = null;
 	}
 	
 	public byte[] enableCrypt()
