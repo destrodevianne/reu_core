@@ -52,10 +52,14 @@ public class SkillData
 	
 	private void load()
 	{
+		final Map<Integer, L2Skill> _temp = new HashMap<>();
+		DocumentEngine.getInstance().loadAllSkills(_temp);
+		
 		_skills.clear();
-		DocumentEngine.getInstance().loadAllSkills(_skills);
+		_skills.putAll(_temp);
 		
 		_skillMaxLevel.clear();
+		_enchantable.clear();
 		for (final L2Skill skill : _skills.values())
 		{
 			final int skillId = skill.getId();
