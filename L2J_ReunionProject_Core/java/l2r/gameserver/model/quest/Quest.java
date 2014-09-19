@@ -755,10 +755,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 					_log.error("Quest[notifyAggroRangeEnter] ID is: NULL");
 				}
 			}
-			else
-			{
-				showError(player, e);
-			}
+			// showError(player, e);
 		}
 		showResult(player, res);
 	}
