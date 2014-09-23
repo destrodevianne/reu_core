@@ -1324,10 +1324,9 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 					return false;
 				}
 				
-				if (skill.isOffensive() && (player.getSiegeState() > 0) && player.isInsideZone(ZoneIdType.SIEGE) && (player.getSiegeState() == targetPlayer.getSiegeState()) && (player.getSiegeSide() == targetPlayer.getSiegeSide()))
-				{
-					return false;
-				}
+				/**
+				 * if (skill.isOffensive() && (player.getSiegeState() > 0) && player.isInsideZone(ZoneIdType.SIEGE) && (player.getSiegeState() == targetPlayer.getSiegeState()) && (player.getSiegeSide() == targetPlayer.getSiegeSide())) { return false; }
+				 */
 				
 				if (skill.isOffensive() && target.isInsideZone(ZoneIdType.PEACE))
 				{
