@@ -84,20 +84,7 @@ public final class RequestMakeMacro extends L2GameClientPacket
 		{
 			return;
 		}
-		
-		// TODO: vGodfather fix Must remove this when skill bug fix
-		for (MacroCmd commands : _macro.getCommands())
-		{
-			if (commands.getType() == 1)
-			{
-				// Invalid macro. Refer to the Help file for instructions.
-				player.sendMessage("You cannot add skill directly from skills, you must first place it in a shortcut.");
-				player.sendPacket(SystemMessageId.INVALID_MACRO);
-				return;
-			}
-		}
-		
-		if ((_commandsLenght > 255))
+		if (_commandsLenght > 255)
 		{
 			// Invalid macro. Refer to the Help file for instructions.
 			player.sendPacket(SystemMessageId.INVALID_MACRO);
