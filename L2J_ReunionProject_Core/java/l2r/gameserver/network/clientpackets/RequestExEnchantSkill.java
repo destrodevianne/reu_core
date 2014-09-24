@@ -162,18 +162,8 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 					_logEnchant.log(record);
 				}
 				
-				// Check if skill had reuse time before enchanting it.
-				final L2Skill oldSkill = player.getKnownSkill(skill.getId());
-				final long reuseTime = player.getSkillRemainingReuseTime(oldSkill.getReuseHashCode());
-				
 				player.addSkill(skill, true);
 				player.sendPacket(ExEnchantSkillResult.valueOf(true));
-				
-				// Restore the reuse time of the skill
-				if (reuseTime > 0)
-				{
-					player.addTimeStamp(skill, reuseTime);
-				}
 				
 				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_SUCCEEDED_IN_ENCHANTING_THE_SKILL_S1);
 				sm.addSkillName(_skillId);
