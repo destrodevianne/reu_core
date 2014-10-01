@@ -578,45 +578,49 @@ public class Olympiad extends ListenersContainer
 		Announcements.getInstance().announceToAll(SystemMessage.getSystemMessage(SystemMessageId.OLYMPIAD_PERIOD_S1_HAS_STARTED).addInt(_currentCycle));
 		Calendar currentTime = Calendar.getInstance();
 		
-		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("MONTH"))
+		switch (Config.OLYMPIAD_PERIOD)
 		{
-			currentTime.add(Calendar.MONTH, 1);
-			currentTime.set(Calendar.DAY_OF_MONTH, 1);
-		}
-		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("WEEKS"))
-		{
-			currentTime.add(Calendar.HOUR, 336);
-			currentTime.set(Calendar.DAY_OF_WEEK, 1);
-		}
-		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("WEEK"))
-		{
-			currentTime.add(Calendar.HOUR, 168);
-			currentTime.set(Calendar.DAY_OF_WEEK, 1);
-		}
-		if (Config.OLYMPIAD_PERIOD.equalsIgnoreCase("REUNION"))
-		{
-			int nearest = 0;
-			Calendar[] cals = new Calendar[Config.ALT_OLY_END_DATE.length];
-			for (int i = 0; i < cals.length; i++)
-			{
-				cals[i] = Calendar.getInstance();
-				cals[i].set(Calendar.DAY_OF_MONTH, Config.ALT_OLY_END_DATE[i]);
-				if (cals[i].before(currentTime))
+			case "MONTH": // retail
+				currentTime.add(Calendar.MONTH, 1);
+				currentTime.set(Calendar.DAY_OF_MONTH, 1);
+				break;
+			case "WEEKS":
+				currentTime.add(Calendar.HOUR, 336);
+				currentTime.set(Calendar.DAY_OF_WEEK, 1);
+				break;
+			case "WEEK":
+				currentTime.add(Calendar.HOUR, 168);
+				currentTime.set(Calendar.DAY_OF_WEEK, 1);
+				break;
+			case "REUNION":
+				int nearest = 0;
+				Calendar[] cals = new Calendar[Config.ALT_OLY_END_DATE.length];
+				for (int i = 0; i < cals.length; i++)
 				{
-					cals[i].add(Calendar.MONTH, 1);
+					cals[i] = Calendar.getInstance();
+					cals[i].set(Calendar.DAY_OF_MONTH, Config.ALT_OLY_END_DATE[i]);
+					if (cals[i].before(currentTime))
+					{
+						cals[i].add(Calendar.MONTH, 1);
+					}
+					
+					if (cals[i].before(cals[nearest]))
+					{
+						nearest = i;
+					}
 				}
-				
-				if (cals[i].before(cals[nearest]))
-				{
-					nearest = i;
-				}
-			}
-			
-			currentTime.set(Calendar.HOUR, Config.ALT_OLY_END_HOUR[0]);
-			currentTime.set(Calendar.MINUTE, Config.ALT_OLY_END_HOUR[1]);
-			currentTime.set(Calendar.SECOND, Config.ALT_OLY_END_HOUR[2]);
-			_olympiadEnd = currentTime.getTimeInMillis();
+				break;
+			default:
+				currentTime.add(Calendar.MONTH, 1);
+				currentTime.set(Calendar.DAY_OF_MONTH, 1);
+				_log.warn("Wrong configuration in Olympiad pediod. Check again your Olympiad settings. Auto set to retail values.");
+				break;
 		}
+		
+		currentTime.set(Calendar.HOUR, Config.ALT_OLY_END_HOUR[0]);
+		currentTime.set(Calendar.MINUTE, Config.ALT_OLY_END_HOUR[1]);
+		currentTime.set(Calendar.SECOND, Config.ALT_OLY_END_HOUR[2]);
+		_olympiadEnd = currentTime.getTimeInMillis();
 		
 		Calendar nextChange = Calendar.getInstance();
 		_nextWeeklyChange = nextChange.getTimeInMillis() + WEEKLY_PERIOD;
