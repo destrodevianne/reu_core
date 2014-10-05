@@ -43,7 +43,7 @@ public class CharNameTable
 	private static Logger _log = LoggerFactory.getLogger(CharNameTable.class);
 	
 	private final Map<Integer, String> _chars = new ConcurrentHashMap<>();
-	private final Map<Integer, String> _charsLastAccess = new ConcurrentHashMap<>();
+	private final Map<Integer, Long> _charsLastAccess = new ConcurrentHashMap<>();
 	private final Map<Integer, Integer> _accessLevels = new ConcurrentHashMap<>();
 	
 	protected CharNameTable()
@@ -172,14 +172,14 @@ public class CharNameTable
 		return null; // not found
 	}
 	
-	public final String getLastAccessById(int id)
+	public final Long getLastAccessById(int id)
 	{
 		if (id <= 0)
 		{
 			return null;
 		}
 		
-		String lastaccess = _charsLastAccess.get(id);
+		Long lastaccess = _charsLastAccess.get(id);
 		if (lastaccess != null)
 		{
 			return lastaccess;
@@ -198,7 +198,7 @@ public class CharNameTable
 			{
 				if (rset.next())
 				{
-					lastaccess = rset.getString(1);
+					lastaccess = rset.getLong(1);
 					_charsLastAccess.put(id, lastaccess);
 					return lastaccess;
 				}
@@ -273,7 +273,7 @@ public class CharNameTable
 				final int id = rs.getInt(1);
 				_chars.put(id, rs.getString(2));
 				_accessLevels.put(id, rs.getInt(3));
-				_charsLastAccess.put(id, rs.getString(4));
+				_charsLastAccess.put(id, rs.getLong(4));
 			}
 		}
 		catch (SQLException e)
