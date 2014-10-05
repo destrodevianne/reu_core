@@ -43,6 +43,7 @@ public class CharNameTable
 	private static Logger _log = LoggerFactory.getLogger(CharNameTable.class);
 	
 	private final Map<Integer, String> _chars = new ConcurrentHashMap<>();
+	private final Map<Integer, String> _charsLastAccess = new ConcurrentHashMap<>();
 	private final Map<Integer, Integer> _accessLevels = new ConcurrentHashMap<>();
 	
 	protected CharNameTable()
@@ -171,6 +172,46 @@ public class CharNameTable
 		return null; // not found
 	}
 	
+	public final String getLastAccessById(int id)
+	{
+		if (id <= 0)
+		{
+			return null;
+		}
+		
+		String lastaccess = _charsLastAccess.get(id);
+		if (lastaccess != null)
+		{
+			return lastaccess;
+		}
+		
+		if (Config.CACHE_CHAR_NAMES)
+		{
+			return null;
+		}
+		
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT lastAccess FROM characters WHERE charId=?"))
+		{
+			ps.setInt(1, id);
+			try (ResultSet rset = ps.executeQuery())
+			{
+				if (rset.next())
+				{
+					lastaccess = rset.getString(1);
+					_charsLastAccess.put(id, lastaccess);
+					return lastaccess;
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			_log.warn(getClass().getSimpleName() + ": Could not check existing char id: " + e.getMessage(), e);
+		}
+		
+		return null; // not found
+	}
+	
 	public final int getAccessLevelById(int objectId)
 	{
 		if (getNameById(objectId) != null)
@@ -225,13 +266,14 @@ public class CharNameTable
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			Statement s = con.createStatement();
-			ResultSet rs = s.executeQuery("SELECT charId, char_name, accesslevel FROM characters"))
+			ResultSet rs = s.executeQuery("SELECT charId, char_name, accesslevel, lastAccess FROM characters"))
 		{
 			while (rs.next())
 			{
 				final int id = rs.getInt(1);
 				_chars.put(id, rs.getString(2));
 				_accessLevels.put(id, rs.getInt(3));
+				_charsLastAccess.put(id, rs.getString(4));
 			}
 		}
 		catch (SQLException e)
