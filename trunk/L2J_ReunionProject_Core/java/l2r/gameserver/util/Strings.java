@@ -273,24 +273,6 @@ public class Strings
 		return result;
 	}
 	
-	/**
-	 * apart from the usual trim, replaces quotes for non-standard UTF-8, udyalyaet ALL double spaces, removes characters <>
-	 * @param s
-	 * @return
-	 */
-	public static String trimHtml(String s)
-	{
-		int i;
-		s = s.trim().replaceAll("\"", "Ξ�Β§Ξ�β€�").replaceAll("'", "Ξ�β€™Ξ�β€�").replaceAll("<", "").replaceAll(">", "");
-		do
-		{
-			i = s.length();
-			s = s.replaceAll("  ", " ");
-		}
-		while (i > s.length());
-		return s;
-	}
-	
 	public static String htmlButton(String value, String action, int width)
 	{
 		return htmlButton(value, action, width, 22);
