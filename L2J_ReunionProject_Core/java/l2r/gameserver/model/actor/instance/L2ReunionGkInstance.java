@@ -10,7 +10,7 @@ import l2r.gameserver.model.actor.templates.L2NpcTemplate;
 import l2r.gameserver.model.zone.L2ZoneType;
 import l2r.gameserver.network.serverpackets.ActionFailed;
 import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
-import gr.reunion.datatables.CustomTable;
+import gr.reunion.datatables.ReunionTable;
 import gr.reunion.main.Conditions;
 import gr.reunion.securityEngine.SecurityActions;
 import gr.reunion.securityEngine.SecurityType;
@@ -140,9 +140,9 @@ public final class L2ReunionGkInstance extends L2Npc
 				try
 				{
 					Integer[] c = new Integer[3];
-					c[0] = CustomTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[0];
-					c[1] = CustomTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[1];
-					c[2] = CustomTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[2];
+					c[0] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[0];
+					c[1] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[1];
+					c[2] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[2];
 					player.destroyItemByItemId("Reunion Teleport", itemIdToGet, price, player, true);
 					player.teleToLocation(c[0], c[1], c[2]);
 				}
@@ -156,9 +156,9 @@ public final class L2ReunionGkInstance extends L2Npc
 				try
 				{
 					Integer[] c = new Integer[3];
-					c[0] = CustomTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[0];
-					c[1] = CustomTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[1];
-					c[2] = CustomTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[2];
+					c[0] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[0];
+					c[1] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[1];
+					c[2] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[2];
 					player.destroyItemByItemId("Global Teleport", itemIdToGet, price, player, true);
 					player.teleToLocation(c[0], c[1], c[2]);
 				}

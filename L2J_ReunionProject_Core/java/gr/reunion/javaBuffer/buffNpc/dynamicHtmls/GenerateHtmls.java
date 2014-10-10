@@ -3,7 +3,7 @@ package gr.reunion.javaBuffer.buffNpc.dynamicHtmls;
 import javolution.text.TextBuilder;
 import javolution.util.FastList;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
-import gr.reunion.datatables.CustomTable;
+import gr.reunion.datatables.ReunionTable;
 import gr.reunion.javaBuffer.BuffInstance;
 import gr.reunion.javaBuffer.BufferMenuCategories;
 import gr.reunion.javaBuffer.BufferPacketCategories;
@@ -90,7 +90,7 @@ public class GenerateHtmls
 				break;
 		}
 		tb.append("<center><img src=\"L2UI.SquareGray\" width=280 height=1>");
-		for (BuffInstance buffInst : CustomTable.getInstance().getBuffs().values())
+		for (BuffInstance buffInst : ReunionTable.getInstance().getBuffs().values())
 		{
 			// Just a check to know if this buff
 			// Is in the category we wish to be
@@ -167,7 +167,7 @@ public class GenerateHtmls
 		// Temporary fix for long html
 		tb.append("<center><img src=\"L2UI.SquareGray\" width=280 height=1></center><table width=280>");
 		// tb.append("<center><img src=\"L2UI.SquareGray\" width=280 height=1><table bgcolor=131210>");
-		for (BuffInstance buffInst : CustomTable.getInstance().getBuffs().values())
+		for (BuffInstance buffInst : ReunionTable.getInstance().getBuffs().values())
 		{
 			int id = buffInst.getId();
 			// Integer level = buffInst.getLevel();

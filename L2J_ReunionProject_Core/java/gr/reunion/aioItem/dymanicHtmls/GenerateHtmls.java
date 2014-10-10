@@ -21,7 +21,7 @@ import gr.reunion.achievementEngine.AchievementsManager;
 import gr.reunion.achievementEngine.base.Achievement;
 import gr.reunion.achievementEngine.base.Condition;
 import gr.reunion.dataHolder.PlayersTopData;
-import gr.reunion.datatables.CustomTable;
+import gr.reunion.datatables.ReunionTable;
 
 /**
  * @author -=GodFather=-
@@ -324,7 +324,7 @@ public class GenerateHtmls
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Character Name:</font></td><td><font color=FFD700>Fa Count:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopFa())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopFa())
 		{
 			String name = playerData.getCharName();
 			long countFa = playerData.getFa();
@@ -359,7 +359,7 @@ public class GenerateHtmls
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Character Name:</font></td><td><font color=FFD700>Clan Name:</font></td><td><font color=FFD700>PvP Kills:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopPvp())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopPvp())
 		{
 			String name = playerData.getCharName();
 			String cName = playerData.getClanName();
@@ -395,7 +395,7 @@ public class GenerateHtmls
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Character Name:</font></td><td><font color=FFD700>Clan Name:</font></td><td><font color=FFD700>Pk Kills:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopPk())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopPk())
 		{
 			String name = playerData.getCharName();
 			String cName = playerData.getClanName();
@@ -431,7 +431,7 @@ public class GenerateHtmls
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Leader Name:</font></td><td><font color=FFD700>Clan Name:</font></td><td><font color=FFD700>Clan Level:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopClan())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopClan())
 		{
 			String name = playerData.getCharName();
 			String cName = playerData.getClanName();

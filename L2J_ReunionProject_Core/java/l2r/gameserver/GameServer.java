@@ -146,11 +146,11 @@ import org.mmocore.network.SelectorThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gr.reunion.configsEngine.CustomConfigController;
+import gr.reunion.configsEngine.ReunionConfigController;
 import gr.reunion.interf.ReunionEvents;
-import gr.reunion.main.CustomServerMods;
 import gr.reunion.main.PlayerValues;
 import gr.reunion.main.ReunionInfo;
+import gr.reunion.main.ReunionServerMods;
 import gr.reunion.protection.Protection;
 
 public class GameServer
@@ -390,19 +390,19 @@ public class GameServer
 		
 		PunishmentManager.getInstance();
 		
-		// Custom settings section
-		printSection("Custom");
-		CustomServerMods.getInstance().checkCustomMods();
+		// Reunion systems section
+		printSection("Reunion Systems");
+		ReunionServerMods.getInstance().checkReunionMods();
 		// System.out.println("Loading static images....");
 		// CustomServerMods.getInstance().loadStaticImages();
 		
 		// Antibot systems
 		printSection("Antibot Engine");
-		CustomServerMods.getInstance().checkAntibotMod();
+		ReunionServerMods.getInstance().checkAntibotMod();
 		
 		// Leader board load data
 		printSection("Leaderboards");
-		CustomServerMods.getInstance().checkLeaderboardsMod();
+		ReunionServerMods.getInstance().checkLeaderboardsMod();
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		
@@ -513,8 +513,8 @@ public class GameServer
 		
 		// Initialize config
 		Config.load();
-		// Custom configs load section
-		CustomConfigController.getInstance().reloadCustomConfigs();
+		// Reunion configs load section
+		ReunionConfigController.getInstance().reloadReunionConfigs();
 		// Check binding address
 		checkFreePorts();
 		_log.info("Custom Configs Loaded...");

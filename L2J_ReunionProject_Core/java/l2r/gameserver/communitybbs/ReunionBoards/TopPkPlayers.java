@@ -3,7 +3,7 @@ package l2r.gameserver.communitybbs.ReunionBoards;
 import javolution.text.TextBuilder;
 import gr.reunion.configsEngine.SmartCommunityConfigs;
 import gr.reunion.dataHolder.PlayersTopData;
-import gr.reunion.datatables.CustomTable;
+import gr.reunion.datatables.ReunionTable;
 
 
 public class TopPkPlayers
@@ -18,7 +18,7 @@ public class TopPkPlayers
 	
 	private void loadDB(String file)
 	{
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopPk())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopPk())
 		{
 			if (getCounter() <= SmartCommunityConfigs.TOP_PLAYER_RESULTS)
 			{
