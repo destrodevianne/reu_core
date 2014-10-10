@@ -82,7 +82,7 @@ import gr.reunion.configsEngine.AioItemsConfigs;
 import gr.reunion.configsEngine.CustomServerConfigs;
 import gr.reunion.configsEngine.LeaderboardsConfigs;
 import gr.reunion.dataHolder.PlayersTopData;
-import gr.reunion.datatables.CustomTable;
+import gr.reunion.datatables.ReunionTable;
 import gr.reunion.donateEngine.DonateHandler;
 import gr.reunion.imageGeneratorEngine.GenerateLogos;
 import gr.reunion.leaderboards.ArenaLeaderboard;
@@ -1165,9 +1165,9 @@ public final class L2AioNpcInstance extends L2Npc
 			try
 			{
 				Integer[] c = new Integer[3];
-				c[0] = CustomTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[0];
-				c[1] = CustomTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[1];
-				c[2] = CustomTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[2];
+				c[0] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[0];
+				c[1] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[1];
+				c[2] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[2];
 				player.destroyItemByItemId("AIO Teleport", itemIdToGet, price, player, true);
 				player.teleToLocation(c[0], c[1], c[2]);
 			}
@@ -1531,7 +1531,7 @@ public final class L2AioNpcInstance extends L2Npc
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Character Name:</font></td><td><font color=FFD700>Clan Name:</font></td><td><font color=FFD700>Fa Count:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopFa())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopFa())
 		{
 			String name = playerData.getCharName();
 			String cName = playerData.getClanName();
@@ -1564,7 +1564,7 @@ public final class L2AioNpcInstance extends L2Npc
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Character Name:</font></td><td><font color=FFD700>Clan Name:</font></td><td><font color=FFD700>PvP Kills:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopPvp())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopPvp())
 		{
 			String name = playerData.getCharName();
 			String cName = playerData.getClanName();
@@ -1597,7 +1597,7 @@ public final class L2AioNpcInstance extends L2Npc
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Character Name:</font></td><td><font color=FFD700>Pk Kills:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopPk())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopPk())
 		{
 			String name = playerData.getCharName();
 			int pvp = playerData.getPk();
@@ -1629,7 +1629,7 @@ public final class L2AioNpcInstance extends L2Npc
 		sb.append("<td><font color=FFD700>No</font></td><td><font color=FFD700>Leader's Name:</font></td><td><font color=FFD700>Clan Name:</font></td><td><font color=FFD700>Clan Level:</font></td>");
 		sb.append("</tr>");
 		int count = 1;
-		for (PlayersTopData playerData : CustomTable.getInstance().getTopClan())
+		for (PlayersTopData playerData : ReunionTable.getInstance().getTopClan())
 		{
 			String name = playerData.getCharName();
 			String cName = playerData.getClanName();
