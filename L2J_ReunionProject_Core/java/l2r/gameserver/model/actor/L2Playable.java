@@ -18,7 +18,6 @@
  */
 package l2r.gameserver.model.actor;
 
-import l2r.Config;
 import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.enums.InstanceType;
 import l2r.gameserver.instancemanager.InstanceManager;
@@ -168,39 +167,12 @@ public abstract class L2Playable extends L2Character
 		
 		// Notify Quest of L2Playable's death
 		L2PcInstance actingPlayer = getActingPlayer();
+		
 		if (!actingPlayer.isNotifyQuestOfDeathEmpty())
 		{
 			for (QuestState qs : actingPlayer.getNotifyQuestOfDeath())
 			{
-				try
-				{
-					qs.getQuest().notifyDeath((killer == null ? this : killer), this, qs);
-				}
-				catch (Exception e)
-				{
-					if (Config.DEBUG_SCRIPT_NOTIFIES)
-					{
-						if (qs != null)
-						{
-							_log.error("L2Playeable[notifyDeath]1 quest name is: " + qs.getQuest().getName());
-						}
-						else
-						{
-							_log.error("L2Playeable[notifyDeath]1 qs is NULL");
-						}
-						
-						if (killer == null)
-						{
-							_log.error("L2Playeable[notifyDeath]1 killer is NULL");
-						}
-						else
-						{
-							_log.error("L2Playeable[notifyDeath]1 killer is: " + killer.getName());
-						}
-						
-						_log.error("L2Playeable[notifyDeath]1 ID is: " + this.getId());
-					}
-				}
+				qs.getQuest().notifyDeath((killer == null ? this : killer), this, qs);
 			}
 		}
 		// Notify instance
@@ -209,26 +181,7 @@ public abstract class L2Playable extends L2Character
 			final Instance instance = InstanceManager.getInstance().getInstance(getInstanceId());
 			if (instance != null)
 			{
-				try
-				{
-					instance.notifyDeath(killer, this);
-				}
-				catch (Exception e)
-				{
-					if (Config.DEBUG_SCRIPT_NOTIFIES)
-					{
-						if (killer == null)
-						{
-							_log.error("L2Playeable[notifyDeath]2 killer is NULL");
-						}
-						else
-						{
-							_log.error("L2Playeable[notifyDeath]2 killer is: " + killer.getName());
-						}
-						
-						_log.error("L2Playeable[notifyDeath]2 ID is: " + this.getId());
-					}
-				}
+				instance.notifyDeath(killer, this);
 			}
 		}
 		
