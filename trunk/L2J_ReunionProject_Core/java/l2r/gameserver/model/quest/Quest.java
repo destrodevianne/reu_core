@@ -1354,17 +1354,15 @@ public class Quest extends AbstractScript implements IIdentifiable
 	{
 		try
 		{
-			_log.warn(getScriptFile().getAbsolutePath(), t);
+			_log.error(getScriptFile().getAbsolutePath(), t);
 		}
 		catch (Exception e)
 		{
 			
 		}
 		
-		if (t.getMessage() == null)
-		{
-			_log.warn(getClass().getSimpleName() + ": " + t.getMessage());
-		}
+		_log.error(getClass().getSimpleName() + ": " + Util.getStackTrace(t));
+		
 		if ((player != null) && player.getAccessLevel().isGm())
 		{
 			String res = "<html><body><title>Script error</title>" + Util.getStackTrace(t) + "</body></html>";
