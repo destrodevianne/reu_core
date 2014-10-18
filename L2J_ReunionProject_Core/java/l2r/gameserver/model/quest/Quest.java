@@ -735,27 +735,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		}
 		catch (Exception e)
 		{
-			if (Config.DEBUG_SCRIPT_NOTIFIES)
-			{
-				_log.error("Quest[notifyAggroRangeEnter] quest name is: " + getName());
-				if (player != null)
-				{
-					_log.error("Quest[notifyAggroRangeEnter] player is: " + player.getName());
-				}
-				else
-				{
-					_log.error("Quest[notifyAggroRangeEnter] player is: NULL");
-				}
-				if (npc != null)
-				{
-					_log.error("Quest[notifyAggroRangeEnter] ID is: " + npc.getId());
-				}
-				else
-				{
-					_log.error("Quest[notifyAggroRangeEnter] ID is: NULL");
-				}
-			}
-			// showError(player, e);
+			showError(player, e);
 		}
 		showResult(player, res);
 	}
@@ -1372,7 +1352,15 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 */
 	public boolean showError(L2PcInstance player, Throwable t)
 	{
-		_log.warn(getScriptFile().getAbsolutePath(), t);
+		try
+		{
+			_log.warn(getScriptFile().getAbsolutePath(), t);
+		}
+		catch (Exception e)
+		{
+			
+		}
+		
 		if (t.getMessage() == null)
 		{
 			_log.warn(getClass().getSimpleName() + ": " + t.getMessage());
