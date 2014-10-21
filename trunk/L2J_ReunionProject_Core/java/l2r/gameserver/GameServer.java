@@ -278,14 +278,9 @@ public class GameServer
 		DoorData.getInstance();
 		ItemAuctionManager.getInstance();
 		CastleManager.getInstance().loadInstances();
-		FortManager.getInstance().loadInstances();
 		NpcBufferTable.getInstance();
-		SpawnTable.getInstance();
-		RaidBossSpawnManager.getInstance();
 		DayNightSpawnManager.getInstance().trim().notifyChangeMode();
 		GrandBossManager.getInstance().initZones();
-		FourSepulchersManager.getInstance().init();
-		DimensionalRiftManager.getInstance();
 		EventDroplist.getInstance();
 		
 		printSection("Siege");
@@ -345,6 +340,12 @@ public class GameServer
 		
 		_log.info("Loading Python Scripts");
 		L2ScriptEngineManager.getInstance().executeScriptList();
+		
+		SpawnTable.getInstance().load();
+		FourSepulchersManager.getInstance().init();
+		DimensionalRiftManager.getInstance();
+		RaidBossSpawnManager.getInstance();
+		FortManager.getInstance().loadInstances();
 		
 		QuestManager.getInstance().report();
 		

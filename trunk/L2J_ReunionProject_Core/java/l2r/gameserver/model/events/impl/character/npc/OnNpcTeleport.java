@@ -23,13 +23,13 @@ import l2r.gameserver.model.events.EventType;
 import l2r.gameserver.model.events.impl.IBaseEvent;
 
 /**
- * @author UnAfraid
+ * @author Zealar
  */
-public class OnNpcSpawn implements IBaseEvent
+public class OnNpcTeleport implements IBaseEvent
 {
 	private final L2Npc _npc;
 	
-	public OnNpcSpawn(L2Npc npc)
+	public OnNpcTeleport(L2Npc npc)
 	{
 		_npc = npc;
 	}
@@ -42,6 +42,6 @@ public class OnNpcSpawn implements IBaseEvent
 	@Override
 	public EventType getType()
 	{
-		return EventType.ON_NPC_SPAWN;
+		return EventType.ON_NPC_TELEPORT;
 	}
 }

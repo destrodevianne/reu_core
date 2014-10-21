@@ -38,6 +38,7 @@ import l2r.gameserver.model.events.impl.character.npc.OnNpcMoveRouteFinished;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSkillFinished;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSkillSee;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSpawn;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcTeleport;
 import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableAggroRangeEnter;
 import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableAttack;
 import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableFactionCall;
@@ -152,6 +153,7 @@ public enum EventType
 	ON_NPC_SKILL_SEE(OnNpcSkillSee.class, void.class),
 	ON_NPC_SPAWN(OnNpcSpawn.class, void.class),
 	ON_NPC_TALK(null, void.class),
+	ON_NPC_TELEPORT(OnNpcTeleport.class, void.class),
 	
 	// Olympiad events
 	ON_OLYMPIAD_MATCH_RESULT(OnOlympiadMatchResult.class, void.class),
