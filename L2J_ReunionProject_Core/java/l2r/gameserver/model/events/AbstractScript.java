@@ -82,6 +82,7 @@ import l2r.gameserver.model.events.impl.character.npc.OnNpcMoveRouteFinished;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSkillFinished;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSkillSee;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSpawn;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcTeleport;
 import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableAggroRangeEnter;
 import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableAttack;
 import l2r.gameserver.model.events.impl.character.npc.attackable.OnAttackableFactionCall;
@@ -410,6 +411,30 @@ public abstract class AbstractScript extends ManagedScript
 	protected final List<AbstractEventListener> setNpcTalkId(int... npcIds)
 	{
 		return registerDummy(EventType.ON_NPC_TALK, ListenerRegisterType.NPC, npcIds);
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Provides instant callback operation when teleport {@link L2Npc}.
+	 * @param callback
+	 * @param npcIds
+	 * @return
+	 */
+	protected final List<AbstractEventListener> setNpcTeleportId(Consumer<OnNpcTeleport> callback, Collection<Integer> npcIds)
+	{
+		return registerConsumer(callback, EventType.ON_NPC_TELEPORT, ListenerRegisterType.NPC, npcIds);
+	}
+	
+	/**
+	 * Provides instant callback operation when teleport {@link L2Npc}.
+	 * @param callback
+	 * @param npcIds
+	 * @return
+	 */
+	protected final List<AbstractEventListener> setNpcTeleportId(Consumer<OnNpcTeleport> callback, int... npcIds)
+	{
+		return registerConsumer(callback, EventType.ON_NPC_TELEPORT, ListenerRegisterType.NPC, npcIds);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------

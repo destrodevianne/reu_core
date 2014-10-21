@@ -75,6 +75,7 @@ import l2r.gameserver.model.events.impl.character.npc.OnNpcCanBeSeen;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcEventReceived;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSkillFinished;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcSpawn;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcTeleport;
 import l2r.gameserver.model.events.returns.TerminateReturn;
 import l2r.gameserver.model.holders.ItemHolder;
 import l2r.gameserver.model.items.L2Item;
@@ -1510,7 +1511,14 @@ public class L2Npc extends L2Character
 		_spiritshotamount = getTemplate().getAIDataStatic().getSpiritShot();
 		_killingBlowWeaponId = 0;
 		
-		EventDispatcher.getInstance().notifyEventAsync(new OnNpcSpawn(this, isTeleporting()), this);
+		if (isTeleporting())
+		{
+			EventDispatcher.getInstance().notifyEventAsync(new OnNpcTeleport(this), this);
+		}
+		else
+		{
+			EventDispatcher.getInstance().notifyEventAsync(new OnNpcSpawn(this), this);
+		}
 		
 		if (!isTeleporting())
 		{
