@@ -25,6 +25,7 @@ import l2r.gameserver.model.items.L2EtcItem;
 import l2r.gameserver.model.items.L2Item;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
+import l2r.gameserver.network.serverpackets.InventoryUpdate;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 import gr.reunion.interf.ReunionEvents;
 
@@ -115,6 +116,10 @@ public class RequestUnEquipItem extends L2GameClientPacket
 		
 		final L2ItemInstance[] unequipped = activeChar.getInventory().unEquipItemInBodySlotAndRecord(_slot);
 		activeChar.broadcastUserInfo();
+		
+		InventoryUpdate playerIU = new InventoryUpdate();
+		playerIU.addItem(item);
+		activeChar.sendPacket(playerIU);
 		
 		// This can be 0 if the user pressed the right mouse button twice very fast.
 		if (unequipped.length > 0)
