@@ -35,26 +35,19 @@ public final class L2ReunionGkInstance extends L2Npc
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
-	public static int getPlayersInZoneCount(int zoneId)
+	private static int getPlayersInZoneCount(int zoneId)
 	{
 		int playersCount = 0;
+		L2ZoneType zone = ZoneManager.getInstance().getZoneById(zoneId);
 		
-		for (L2ZoneType zone : ZoneManager.getInstance().getAllZones())
+		for (L2Character character : zone.getCharactersInside())
 		{
-			if (zone.getId() == zoneId)
+			if (character.isPlayer())
 			{
-				for (L2Character character : zone.getCharactersInside())
-				{
-					if (character.isPlayer())
-					{
-						playersCount++;
-					}
-				}
-				
-				return playersCount;
+				playersCount++;
 			}
 		}
+		
 		return playersCount;
 	}
 	
@@ -139,12 +132,14 @@ public final class L2ReunionGkInstance extends L2Npc
 			{
 				try
 				{
-					Integer[] c = new Integer[3];
-					c[0] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[0];
-					c[1] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[1];
-					c[2] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[2];
-					player.destroyItemByItemId("Reunion Teleport", itemIdToGet, price, player, true);
-					player.teleToLocation(c[0], c[1], c[2]);
+					if (player.destroyItemByItemId("Reunion Teleport", itemIdToGet, price, player, true))
+					{
+						Integer[] c = new Integer[3];
+						c[0] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[0];
+						c[1] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[1];
+						c[2] = ReunionTable.getInstance().getGKCoords(Integer.parseInt(subCommand[1]))[2];
+						player.teleToLocation(c[0], c[1], c[2]);
+					}
 				}
 				catch (Exception e)
 				{
@@ -155,12 +150,14 @@ public final class L2ReunionGkInstance extends L2Npc
 			{
 				try
 				{
-					Integer[] c = new Integer[3];
-					c[0] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[0];
-					c[1] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[1];
-					c[2] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[2];
-					player.destroyItemByItemId("Global Teleport", itemIdToGet, price, player, true);
-					player.teleToLocation(c[0], c[1], c[2]);
+					if (player.destroyItemByItemId("Global Teleport", itemIdToGet, price, player, true))
+					{
+						Integer[] c = new Integer[3];
+						c[0] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[0];
+						c[1] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[1];
+						c[2] = ReunionTable.getInstance().getCoords(Integer.parseInt(subCommand[1]))[2];
+						player.teleToLocation(c[0], c[1], c[2]);
+					}
 				}
 				catch (Exception e)
 				{
