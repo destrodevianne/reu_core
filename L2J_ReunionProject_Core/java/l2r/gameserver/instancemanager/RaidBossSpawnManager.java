@@ -561,6 +561,11 @@ public class RaidBossSpawnManager
 		return _storedInfo;
 	}
 	
+	public StatsSet getStatsSet(int bossId)
+	{
+		return _storedInfo.get(bossId);
+	}
+	
 	/**
 	 * Saves and clears the raid bosses status, including all schedules.
 	 */
