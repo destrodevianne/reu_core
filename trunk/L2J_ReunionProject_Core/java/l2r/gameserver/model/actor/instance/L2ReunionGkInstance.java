@@ -105,7 +105,7 @@ public final class L2ReunionGkInstance extends L2Npc
 			}
 			NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setFile(player.getHtmlPrefix(), "data/html/ReunionGatekeeper/" + subCommand[1]);
-			html.replace("%players%", String.valueOf(getPlayersInZoneCount(ZoneIdType.ZONE_CHAOTIC.getId())));
+			html.replace("%players%", String.valueOf(getPlayersInZoneCount(ZoneIdType.ZONE_CHAOTIC.ordinal())));
 			html.replace("%objectId%", String.valueOf(getObjectId()));
 			player.sendPacket(html);
 		}

@@ -35,6 +35,7 @@ import l2r.gameserver.model.actor.L2Npc;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Hero;
 import l2r.gameserver.model.events.EventDispatcher;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcManorBypass;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerBypass;
 import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.network.SystemMessageId;
@@ -216,10 +217,14 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			}
 			else if (_command.startsWith("manor_menu_select"))
 			{
-				final IBypassHandler manor = BypassHandler.getInstance().getHandler("manor_menu_select");
-				if (manor != null)
+				final L2Npc lastNpc = activeChar.getLastFolkNPC();
+				if (Config.ALLOW_MANOR && (lastNpc != null) && lastNpc.canInteract(activeChar))
 				{
-					manor.useBypass(_command, activeChar, null);
+					final String[] split = _command.substring(_command.indexOf("?") + 1).split("&");
+					final int ask = Integer.parseInt(split[0].split("=")[1]);
+					final int state = Integer.parseInt(split[1].split("=")[1]);
+					final boolean time = split[2].split("=")[1].equals("1");
+					EventDispatcher.getInstance().notifyEventAsync(new OnNpcManorBypass(activeChar, lastNpc, ask, state, time), lastNpc);
 				}
 			}
 			else if (_command.startsWith("_bbs") || _command.startsWith("_maillist") || _command.startsWith("_friendlist"))
