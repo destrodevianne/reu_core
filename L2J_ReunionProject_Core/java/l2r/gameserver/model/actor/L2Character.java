@@ -61,7 +61,6 @@ import l2r.gameserver.instancemanager.DimensionalRiftManager;
 import l2r.gameserver.instancemanager.InstanceManager;
 import l2r.gameserver.instancemanager.MapRegionManager;
 import l2r.gameserver.instancemanager.TerritoryWarManager;
-import l2r.gameserver.instancemanager.TownManager;
 import l2r.gameserver.model.ChanceSkillList;
 import l2r.gameserver.model.CharEffectList;
 import l2r.gameserver.model.FusionSkill;
@@ -352,14 +351,14 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 				{
 					return true;
 				}
-				return (_zones[ZoneIdType.PVP.getId()] > 0) && (_zones[ZoneIdType.PEACE.getId()] == 0);
+				return (_zones[ZoneIdType.PVP.ordinal()] > 0) && (_zones[ZoneIdType.PEACE.ordinal()] == 0);
 			case PEACE:
 				if ((instance != null) && instance.isPvPInstance())
 				{
 					return false;
 				}
 		}
-		return _zones[zone.getId()] > 0;
+		return _zones[zone.ordinal()] > 0;
 	}
 	
 	/**
@@ -370,15 +369,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		if (state)
 		{
-			_zones[zone.getId()]++;
+			_zones[zone.ordinal()]++;
 		}
-		else
+		else if (_zones[zone.ordinal()] > 0)
 		{
-			_zones[zone.getId()]--;
-			if (_zones[zone.getId()] < 0)
-			{
-				_zones[zone.getId()] = 0;
-			}
+			_zones[zone.ordinal()]--;
 		}
 	}
 	
@@ -5831,26 +5826,9 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			{
 				return false;
 			}
-			
-			if ((attacker instanceof L2Character) && (target instanceof L2Character))
-			{
-				return (target.isInsideZone(ZoneIdType.PEACE) || attacker.isInsideZone(ZoneIdType.PEACE));
-			}
-			if (attacker instanceof L2Character)
-			{
-				return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || attacker.isInsideZone(ZoneIdType.PEACE));
-			}
 		}
 		
-		if ((attacker instanceof L2Character) && (target instanceof L2Character))
-		{
-			return (target.isInsideZone(ZoneIdType.PEACE) || attacker.isInsideZone(ZoneIdType.PEACE));
-		}
-		if (attacker instanceof L2Character)
-		{
-			return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || attacker.isInsideZone(ZoneIdType.PEACE));
-		}
-		return ((TownManager.getTown(target.getX(), target.getY(), target.getZ()) != null) || (TownManager.getTown(attacker.getX(), attacker.getY(), attacker.getZ()) != null));
+		return (target.isInsideZone(ZoneIdType.PEACE) || attacker.isInsideZone(ZoneIdType.PEACE));
 	}
 	
 	/**

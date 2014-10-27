@@ -69,7 +69,6 @@ import l2r.gameserver.datatables.xml.HitConditionBonusData;
 import l2r.gameserver.datatables.xml.InitialEquipmentData;
 import l2r.gameserver.datatables.xml.ItemData;
 import l2r.gameserver.datatables.xml.KarmaData;
-import l2r.gameserver.datatables.xml.ManorData;
 import l2r.gameserver.datatables.xml.MerchantPriceConfigData;
 import l2r.gameserver.datatables.xml.MultisellData;
 import l2r.gameserver.datatables.xml.OptionsData;
@@ -292,7 +291,6 @@ public class GameServer
 		CastleManorManager.getInstance();
 		MercTicketManager.getInstance();
 		PcCafePointsManager.getInstance();
-		ManorData.getInstance();
 		
 		printSection("Olympiad");
 		if (Config.ENABLE_OLYMPIAD)

@@ -49,7 +49,6 @@ import l2r.gameserver.scripts.handlers.itemhandlers.MercTicket;
 import l2r.gameserver.scripts.handlers.itemhandlers.NicknameColor;
 import l2r.gameserver.scripts.handlers.itemhandlers.PaganKeys;
 import l2r.gameserver.scripts.handlers.itemhandlers.PetFood;
-import l2r.gameserver.scripts.handlers.itemhandlers.QuestItems;
 import l2r.gameserver.scripts.handlers.itemhandlers.Recipes;
 import l2r.gameserver.scripts.handlers.itemhandlers.RollingDice;
 import l2r.gameserver.scripts.handlers.itemhandlers.ScrollOfResurrection;
@@ -111,7 +110,6 @@ public class ItemHandler implements IHandler<IItemHandler, L2EtcItem>
 		registerHandler(new NicknameColor());
 		registerHandler(new PaganKeys());
 		registerHandler(new PetFood());
-		registerHandler(new QuestItems());
 		registerHandler(new Recipes());
 		registerHandler(new RollingDice());
 		registerHandler(new ScrollOfResurrection());

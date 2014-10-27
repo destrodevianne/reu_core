@@ -16,32 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package l2r.gameserver.network.serverpackets;
-
-import java.util.Comparator;
-import java.util.List;
-
-import l2r.gameserver.instancemanager.CastleManager;
-import l2r.gameserver.model.entity.Castle;
+package l2r.gameserver.enums;
 
 /**
- * @author l3x
+ * @author malyelfik
  */
-public final class ExSendManorList extends L2GameServerPacket
+public enum ManorMode
 {
-	@Override
-	protected void writeImpl()
-	{
-		final List<Castle> castles = CastleManager.getInstance().getCastles();
-		castles.sort(Comparator.comparing(Castle::getResidenceId));
-		
-		writeC(0xFE);
-		writeH(0x22);
-		writeD(castles.size());
-		for (Castle castle : castles)
-		{
-			writeD(castle.getResidenceId());
-			writeS(castle.getName().toLowerCase());
-		}
-	}
+	DISABLED,
+	MODIFIABLE,
+	MAINTENANCE,
+	APPROVED
 }

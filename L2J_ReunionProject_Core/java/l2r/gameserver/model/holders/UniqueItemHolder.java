@@ -24,7 +24,7 @@ import l2r.gameserver.model.interfaces.IUniqueId;
  * Unique object id item holder.
  * @author xban1x
  */
-public final class UniqueItemHolder extends ItemHolder implements IUniqueId
+public class UniqueItemHolder extends ItemHolder implements IUniqueId
 {
 	private final int _objectId;
 	

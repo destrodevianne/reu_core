@@ -573,45 +573,46 @@ public class PcInventory extends Inventory
 	@Override
 	public L2ItemInstance addItem(String process, int itemId, long count, L2PcInstance actor, Object reference)
 	{
-		L2ItemInstance item = super.addItem(process, itemId, count, actor, reference);
-		
-		if ((item != null) && (item.getId() == ADENA_ID) && !item.equals(_adena))
+		final L2ItemInstance item = super.addItem(process, itemId, count, actor, reference);
+		if (item != null)
 		{
-			_adena = item;
-		}
-		
-		if ((item != null) && (item.getId() == FADENA_ID) && !item.equals(_fAdena))
-		{
-			_fAdena = item;
-		}
-		
-		if ((item != null) && (item.getId() == ANCIENT_ADENA_ID) && !item.equals(_ancientAdena))
-		{
-			_ancientAdena = item;
-		}
-		if ((item != null) && (actor != null))
-		{
-			// Send inventory update packet
-			if (!Config.FORCE_INVENTORY_UPDATE)
+			if ((item.getId() == ADENA_ID) && !item.equals(_adena))
 			{
-				InventoryUpdate playerIU = new InventoryUpdate();
-				playerIU.addItem(item);
-				actor.sendPacket(playerIU);
-			}
-			else
-			{
-				actor.sendPacket(new ItemList(actor, false));
+				_adena = item;
 			}
 			
-			// Update current load as well
-			StatusUpdate su = new StatusUpdate(actor);
-			su.addAttribute(StatusUpdate.CUR_LOAD, actor.getCurrentLoad());
-			actor.sendPacket(su);
+			if ((item.getId() == FADENA_ID) && !item.equals(_fAdena))
+			{
+				_fAdena = item;
+			}
 			
-			// Notify to scripts
-			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerItemAdd(actor, item), item.getItem());
+			if ((item.getId() == ANCIENT_ADENA_ID) && !item.equals(_ancientAdena))
+			{
+				_ancientAdena = item;
+			}
+			if (actor != null)
+			{
+				// Send inventory update packet
+				if (!Config.FORCE_INVENTORY_UPDATE)
+				{
+					InventoryUpdate playerIU = new InventoryUpdate();
+					playerIU.addItem(item);
+					actor.sendPacket(playerIU);
+				}
+				else
+				{
+					actor.sendPacket(new ItemList(actor, false));
+				}
+				
+				// Update current load as well
+				StatusUpdate su = new StatusUpdate(actor);
+				su.addAttribute(StatusUpdate.CUR_LOAD, actor.getCurrentLoad());
+				actor.sendPacket(su);
+				
+				// Notify to scripts
+				EventDispatcher.getInstance().notifyEventAsync(new OnPlayerItemAdd(actor, item), item.getItem());
+			}
 		}
-		
 		return item;
 	}
 	

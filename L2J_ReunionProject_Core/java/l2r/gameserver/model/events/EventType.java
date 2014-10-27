@@ -32,6 +32,7 @@ import l2r.gameserver.model.events.impl.character.npc.OnNpcCanBeSeen;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcCreatureSee;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcEventReceived;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
+import l2r.gameserver.model.events.impl.character.npc.OnNpcManorBypass;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcMoveFinished;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcMoveNodeArrived;
 import l2r.gameserver.model.events.impl.character.npc.OnNpcMoveRouteFinished;
@@ -154,6 +155,7 @@ public enum EventType
 	ON_NPC_SPAWN(OnNpcSpawn.class, void.class),
 	ON_NPC_TALK(null, void.class),
 	ON_NPC_TELEPORT(OnNpcTeleport.class, void.class),
+	ON_NPC_MANOR_BYPASS(OnNpcManorBypass.class, void.class),
 	
 	// Olympiad events
 	ON_OLYMPIAD_MATCH_RESULT(OnOlympiadMatchResult.class, void.class),

@@ -33,7 +33,6 @@ import l2r.gameserver.scripts.handlers.bypasshandlers.Freight;
 import l2r.gameserver.scripts.handlers.bypasshandlers.ItemAuctionLink;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Link;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Loto;
-import l2r.gameserver.scripts.handlers.bypasshandlers.ManorManager;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Multisell;
 import l2r.gameserver.scripts.handlers.bypasshandlers.Observation;
 import l2r.gameserver.scripts.handlers.bypasshandlers.OlympiadManagerLink;
@@ -77,7 +76,6 @@ public class BypassHandler implements IHandler<IBypassHandler, String>
 		registerHandler(new ItemAuctionLink());
 		registerHandler(new Link());
 		registerHandler(new Loto());
-		registerHandler(new ManorManager());
 		registerHandler(new Multisell());
 		registerHandler(new Observation());
 		registerHandler(new OlympiadManagerLink());

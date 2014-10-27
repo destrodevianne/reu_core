@@ -44,7 +44,6 @@ import l2r.gameserver.model.items.type.CrystalType;
 import l2r.gameserver.model.items.type.EtcItemType;
 import l2r.gameserver.model.items.type.ItemType;
 import l2r.gameserver.model.items.type.MaterialType;
-import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.funcs.Func;
 import l2r.gameserver.model.skills.funcs.FuncTemplate;
@@ -162,7 +161,6 @@ public abstract class L2Item extends ListenersContainer implements IIdentifiable
 	protected static final Func[] _emptyFunctionSet = new Func[0];
 	protected static final L2Effect[] _emptyEffectSet = new L2Effect[0];
 	
-	private final List<Quest> _questEvents = new FastList<>();
 	private final int _useSkillDisTime;
 	private final int _reuseDelay;
 	private final int _sharedReuseGroup;
@@ -1049,16 +1047,6 @@ public abstract class L2Item extends ListenersContainer implements IIdentifiable
 	public String getIcon()
 	{
 		return _icon;
-	}
-	
-	public void addQuestEvent(Quest q)
-	{
-		_questEvents.add(q);
-	}
-	
-	public List<Quest> getQuestEvents()
-	{
-		return _questEvents;
 	}
 	
 	public int getDefaultEnchantLevel()
