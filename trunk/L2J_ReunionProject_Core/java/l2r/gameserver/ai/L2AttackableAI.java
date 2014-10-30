@@ -643,7 +643,9 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 		// Order to the L2MonsterInstance to random walk (1/100)
 		else if ((npc.getSpawn() != null) && (Rnd.nextInt(RANDOM_WALK_RATE) == 0) && !npc.isNoRndWalk())
 		{
-			int x1, y1, z1;
+			int x1 = 0;
+			int y1 = 0;
+			int z1 = 0;
 			final int range = Config.MAX_DRIFT_RANGE;
 			
 			for (L2Skill sk : _skillrender.getBuffSkills())
@@ -658,10 +660,13 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			if ((npc.getSpawn().getX() == 0) && (npc.getSpawn().getY() == 0) && (npc.getSpawn().getSpawnTerritory() == null))
 			{
 				// Calculate a destination point in the spawn area
-				int p[] = TerritoryTable.getInstance().getRandomPoint(npc.getSpawn().getLocationId());
-				x1 = p[0];
-				y1 = p[1];
-				z1 = p[2];
+				final Location location = TerritoryTable.getInstance().getRandomPoint(npc.getSpawn().getLocationId());
+				if (location != null)
+				{
+					x1 = location.getX();
+					y1 = location.getY();
+					z1 = location.getZ();
+				}
 				
 				// Calculate the distance between the current position of the L2Character and the target (x,y)
 				double distance2 = npc.getPlanDistanceSq(x1, y1);
