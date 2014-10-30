@@ -27,6 +27,7 @@ import java.util.Map;
 
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.model.L2Territory;
+import l2r.gameserver.model.Location;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class TerritoryTable
 	 * @param terr the territory Id?
 	 * @return the random point
 	 */
-	public int[] getRandomPoint(int terr)
+	public Location getRandomPoint(int terr)
 	{
 		return _territory.get(terr).getRandomPoint();
 	}
