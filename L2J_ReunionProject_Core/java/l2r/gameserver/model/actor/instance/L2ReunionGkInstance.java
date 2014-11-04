@@ -40,11 +40,14 @@ public final class L2ReunionGkInstance extends L2Npc
 		int playersCount = 0;
 		L2ZoneType zone = ZoneManager.getInstance().getZoneById(zoneId);
 		
-		for (L2Character character : zone.getCharactersInside())
+		if (zone != null)
 		{
-			if (character.isPlayer())
+			for (L2Character character : zone.getCharactersInside())
 			{
-				playersCount++;
+				if (character.isPlayer())
+				{
+					playersCount++;
+				}
 			}
 		}
 		
