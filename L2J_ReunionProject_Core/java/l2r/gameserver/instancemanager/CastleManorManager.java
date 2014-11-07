@@ -122,7 +122,7 @@ public final class CastleManorManager extends DocumentParser implements IStorabl
 	@Override
 	public final void load()
 	{
-		parseDatapackFile("data/seeds.xml");
+		parseDatapackFile("data/xml/other/seeds.xml");
 		_log.info(getClass().getSimpleName() + ": Loaded " + _seeds.size() + " seeds.");
 	}
 	
