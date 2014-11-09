@@ -241,10 +241,10 @@ public abstract class AbstractOlympiadGame
 			player.setInvisible(false);
 			
 			// Avoid prefrenzy (and others) exploit
-			player.stopSkillEffects(176);
-			player.stopSkillEffects(139);
-			player.stopSkillEffects(406);
-			player.stopSkillEffects(420);
+			player.stopSkillEffects(139); // Guts
+			player.stopSkillEffects(176); // Frenzy
+			player.stopSkillEffects(406); // Angelic Icon
+			player.stopSkillEffects(420); // Zealot
 			// Heal Player fully
 			player.setCurrentCp(player.getMaxCp());
 			player.setCurrentHp(player.getMaxHp());
