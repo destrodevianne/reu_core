@@ -9002,9 +9002,16 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Check if the attacker is not in the same party. NOTE: Party checks goes before oly checks in order to prevent patry member autoattack at oly.
-		if (isInParty() && getParty().getMembers().contains(attacker))
+		if (isInParty())
 		{
-			return false;
+			if (getParty().getMembers().contains(attacker))
+			{
+				return false;
+			}
+			else if ((getParty().getCommandChannel() != null) && getParty().getCommandChannel().getMembers().contains(attacker))
+			{
+				return false;
+			}
 		}
 		
 		// Check if the attacker is in olympia and olympia start
