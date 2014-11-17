@@ -82,6 +82,7 @@ public final class Config
 	public static final String BELETH_CONFIG = "./config/bosses/Beleth.ini";
 	public static final String CORE_CONFIG = "./config/bosses/Core.ini";
 	public static final String DESTRUCTION_BOSSES_CONFIG = "./config/bosses/DestructionBosses.ini";
+	public static final String DROPS_CONFIG = "./config/main/Drops.ini";
 	public static final String EKIMUS_CONFIG = "./config/bosses/Ekimus.ini";
 	public static final String FREYA_EASY_CONFIG = "./config/bosses/FreyaEasy.ini";
 	public static final String FREYA_HARDCORE_CONFIG = "./config/bosses/FreyaHardCore.ini";
@@ -148,7 +149,6 @@ public final class Config
 	public static Map<Integer, Integer> SKILL_REUSE_LIST;
 	public static boolean AUTO_LEARN_SKILLS;
 	public static boolean AUTO_LEARN_FS_SKILLS;
-	public static boolean AUTO_LOOT_HERBS;
 	public static byte BUFFS_MAX_AMOUNT;
 	public static byte TRIGGERED_BUFFS_MAX_AMOUNT;
 	public static byte DANCES_MAX_AMOUNT;
@@ -243,10 +243,6 @@ public final class Config
 	public static byte STARTING_LEVEL;
 	public static int STARTING_SP;
 	public static long MAX_ADENA;
-	public static boolean AUTO_LOOT;
-	public static boolean AUTO_LOOT_RAIDS;
-	public static int LOOT_RAIDS_PRIVILEGE_INTERVAL;
-	public static int LOOT_RAIDS_PRIVILEGE_CC_SIZE;
 	public static int UNSTUCK_INTERVAL;
 	public static int TELEPORT_WATCHDOG_TIMEOUT;
 	public static int PLAYER_SPAWN_PROTECTION;
@@ -502,8 +498,6 @@ public final class Config
 	public static int SAVE_DROPPED_ITEM_INTERVAL;
 	public static boolean CLEAR_DROPPED_ITEM_TABLE;
 	public static boolean AUTODELETE_INVALID_QUEST_DATA;
-	public static boolean PRECISE_DROP_CALCULATION;
-	public static boolean MULTIPLE_ITEM_DROP;
 	public static boolean FORCE_INVENTORY_UPDATE;
 	public static boolean LAZY_CACHE;
 	public static boolean CACHE_CHAR_NAMES;
@@ -677,6 +671,20 @@ public final class Config
 	public static FloodProtectorConfig FLOOD_PROTECTOR_ALLY_CHAT;
 	
 	// --------------------------------------------------
+	// Drops Settings
+	// --------------------------------------------------
+	public static boolean MULTIPLE_ITEM_DROP;
+	public static boolean PRECISE_DROP_CALCULATION;
+	public static boolean DEEPBLUE_DROP_RULES;
+	public static boolean DEEPBLUE_DROP_RULES_RAID;
+	public static boolean AUTO_LOOT_HERBS;
+	public static boolean AUTO_LOOT;
+	public static boolean AUTO_LOOT_RAIDS;
+	public static int LOOT_RAIDS_PRIVILEGE_INTERVAL;
+	public static int LOOT_RAIDS_PRIVILEGE_CC_SIZE;
+	public static boolean DROP_LASTATTACKERISMAXDAMAGER;
+	
+	// --------------------------------------------------
 	// L2JMods Settings
 	// --------------------------------------------------
 	public static boolean L2JMOD_CHAMPION_ENABLE;
@@ -760,8 +768,6 @@ public final class Config
 	public static boolean ALT_ATTACKABLE_NPCS;
 	public static boolean ALT_GAME_VIEWNPC;
 	public static int MAX_DRIFT_RANGE;
-	public static boolean DEEPBLUE_DROP_RULES;
-	public static boolean DEEPBLUE_DROP_RULES_RAID;
 	public static boolean SHOW_NPC_LVL;
 	public static boolean SHOW_CREST_WITHOUT_QUEST;
 	public static boolean ENABLE_RANDOM_ENCHANT_EFFECT;
@@ -1555,7 +1561,6 @@ public final class Config
 			
 			AUTO_LEARN_SKILLS = Character.getBoolean("AutoLearnSkills", false);
 			AUTO_LEARN_FS_SKILLS = Character.getBoolean("AutoLearnForgottenScrollSkills", false);
-			AUTO_LOOT_HERBS = Character.getBoolean("AutoLootHerbs", false);
 			BUFFS_MAX_AMOUNT = Character.getByte("MaxBuffAmount", (byte) 20);
 			TRIGGERED_BUFFS_MAX_AMOUNT = Character.getByte("MaxTriggeredBuffAmount", (byte) 12);
 			DANCES_MAX_AMOUNT = Character.getByte("MaxDanceAmount", (byte) 12);
@@ -1729,10 +1734,6 @@ public final class Config
 			{
 				MAX_ADENA = Long.MAX_VALUE;
 			}
-			AUTO_LOOT = Character.getBoolean("AutoLoot", false);
-			AUTO_LOOT_RAIDS = Character.getBoolean("AutoLootRaids", false);
-			LOOT_RAIDS_PRIVILEGE_INTERVAL = Character.getInt("RaidLootRightsInterval", 900) * 1000;
-			LOOT_RAIDS_PRIVILEGE_CC_SIZE = Character.getInt("RaidLootRightsCCSize", 45);
 			UNSTUCK_INTERVAL = Character.getInt("UnstuckInterval", 300);
 			TELEPORT_WATCHDOG_TIMEOUT = Character.getInt("TeleportWatchdogTimeout", 0);
 			PLAYER_SPAWN_PROTECTION = Character.getInt("PlayerSpawnProtection", 0);
@@ -1907,8 +1908,6 @@ public final class Config
 			SAVE_DROPPED_ITEM_INTERVAL = General.getInt("SaveDroppedItemInterval", 60) * 60000;
 			CLEAR_DROPPED_ITEM_TABLE = General.getBoolean("ClearDroppedItemTable", false);
 			AUTODELETE_INVALID_QUEST_DATA = General.getBoolean("AutoDeleteInvalidQuestData", false);
-			PRECISE_DROP_CALCULATION = General.getBoolean("PreciseDropCalculation", true);
-			MULTIPLE_ITEM_DROP = General.getBoolean("MultipleItemDrop", true);
 			FORCE_INVENTORY_UPDATE = General.getBoolean("ForceInventoryUpdate", false);
 			LAZY_CACHE = General.getBoolean("LazyCache", true);
 			CACHE_CHAR_NAMES = General.getBoolean("CacheCharNames", true);
@@ -2069,8 +2068,6 @@ public final class Config
 			ALT_ATTACKABLE_NPCS = NPC.getBoolean("AltAttackableNpcs", true);
 			ALT_GAME_VIEWNPC = NPC.getBoolean("AltGameViewNpc", false);
 			MAX_DRIFT_RANGE = NPC.getInt("MaxDriftRange", 300);
-			DEEPBLUE_DROP_RULES = NPC.getBoolean("UseDeepBlueDropRules", true);
-			DEEPBLUE_DROP_RULES_RAID = NPC.getBoolean("UseDeepBlueDropRulesRaid", true);
 			SHOW_NPC_LVL = NPC.getBoolean("ShowNpcLevel", false);
 			SHOW_CREST_WITHOUT_QUEST = NPC.getBoolean("ShowCrestWithoutQuest", false);
 			ENABLE_RANDOM_ENCHANT_EFFECT = NPC.getBoolean("EnableRandomEnchantEffect", false);
@@ -2723,6 +2720,20 @@ public final class Config
 			CHANGE_STATUS = destr_load.getInt("ChangeStatus", 30);
 			CHANCE_SPAWN = destr_load.getInt("ChanceSpawn", 50);
 			RESPAWN_TIME = destr_load.getInt("RespawnTime", 720);
+			
+			// Load DROPS_CONFIG L2Properties file (if exists)
+			final PropertiesParser dropsload = new PropertiesParser(DROPS_CONFIG);
+			
+			MULTIPLE_ITEM_DROP = dropsload.getBoolean("MultipleItemDrop", true);
+			PRECISE_DROP_CALCULATION = dropsload.getBoolean("PreciseDropCalculation", true);
+			DEEPBLUE_DROP_RULES = dropsload.getBoolean("UseDeepBlueDropRules", true);
+			DEEPBLUE_DROP_RULES_RAID = dropsload.getBoolean("UseDeepBlueDropRulesRaid", true);
+			AUTO_LOOT_HERBS = dropsload.getBoolean("AutoLootHerbs", false);
+			AUTO_LOOT = dropsload.getBoolean("AutoLoot", false);
+			AUTO_LOOT_RAIDS = dropsload.getBoolean("AutoLootRaids", false);
+			LOOT_RAIDS_PRIVILEGE_INTERVAL = dropsload.getInt("RaidLootRightsInterval", 900) * 1000;
+			LOOT_RAIDS_PRIVILEGE_CC_SIZE = dropsload.getInt("RaidLootRightsCCSize", 45);
+			DROP_LASTATTACKERISMAXDAMAGER = dropsload.getBoolean("DropLastAttackerIsMaxDamager", false);
 			
 			// Load EKIMUS_CONFIG L2Properties file (if exists)
 			final PropertiesParser soi_load = new PropertiesParser(EKIMUS_CONFIG);
