@@ -403,6 +403,25 @@ public class L2Attackable extends L2Npc
 				return;
 			}
 			
+			if (Config.DROP_LASTATTACKERISMAXDAMAGER && (getAggroList().size() > 1))
+			{
+				int maxDamage = 0;
+				L2PcInstance attacker = null;
+				for (Map.Entry<L2Character, AggroInfo> entry : getAggroList().entrySet())
+				{
+					if ((entry.getKey() != null) && (entry.getKey().getActingPlayer() != null) && (entry.getValue().getDamage() > maxDamage))
+					{
+						maxDamage = entry.getValue().getDamage();
+						attacker = entry.getKey().getActingPlayer();
+					}
+				}
+				
+				if (attacker != null)
+				{
+					lastAttacker = attacker;
+				}
+			}
+			
 			// NOTE: Concurrent-safe map is used because while iterating to verify all conditions sometimes an entry must be removed.
 			final Map<L2PcInstance, DamageDoneInfo> rewards = new ConcurrentHashMap<>();
 			L2PcInstance maxDealer = null;
