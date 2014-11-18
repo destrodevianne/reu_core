@@ -39,7 +39,6 @@ import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.datatables.xml.ItemData;
-import l2r.gameserver.engines.skills.DocumentSkill.Skill;
 import l2r.gameserver.enums.QuestSound;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -1770,7 +1769,7 @@ public abstract class AbstractScript extends ManagedScript
 	 * @param instanceId
 	 * @return
 	 */
-	public L2TrapInstance addTrap(int trapId, int x, int y, int z, int heading, Skill skill, int instanceId)
+	public L2TrapInstance addTrap(int trapId, int x, int y, int z, int heading, L2Skill skill, int instanceId)
 	{
 		final L2NpcTemplate npcTemplate = NpcTable.getInstance().getTemplate(trapId);
 		L2TrapInstance trap = new L2TrapInstance(IdFactory.getInstance().getNextId(), npcTemplate, instanceId, -1);
