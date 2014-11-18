@@ -3000,6 +3000,11 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	
 	public final void setIsRunning(boolean value)
 	{
+		if (_isRunning == value)
+		{
+			return;
+		}
+		
 		_isRunning = value;
 		if (getRunSpeed() != 0)
 		{

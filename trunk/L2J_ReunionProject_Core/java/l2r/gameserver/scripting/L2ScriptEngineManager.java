@@ -77,7 +77,6 @@ public final class L2ScriptEngineManager
 		"events",
 		"features",
 		"loaders",
-		"SagasScripts",
 		"TerritoryWarScripts",
 		"vehicles"
 	};
