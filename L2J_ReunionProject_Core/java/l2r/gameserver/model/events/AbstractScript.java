@@ -39,6 +39,7 @@ import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.engines.skills.DocumentSkill.Skill;
 import l2r.gameserver.enums.QuestSound;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -1677,56 +1678,83 @@ public abstract class AbstractScript extends ManagedScript
 	 */
 	public static L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, long despawnDelay, boolean isSummonSpawn, int instanceId)
 	{
+		return addSpawn(null, npcId, x, y, z, heading, randomOffset, despawnDelay, isSummonSpawn, instanceId);
+	}
+	
+	/**
+	 * Add a temporary spawn of the specified NPC.
+	 * @param summoner the NPC that requires this spawn
+	 * @param npcId the ID of the NPC to spawn
+	 * @param x the X coordinate of the spawn location
+	 * @param y the Y coordinate of the spawn location
+	 * @param z the Z coordinate (height) of the spawn location
+	 * @param heading the heading of the NPC
+	 * @param randomOffset if {@code true}, adds +/- 50~100 to X/Y coordinates of the spawn location
+	 * @param despawnDelay time in milliseconds till the NPC is despawned (0 - only despawned on server shutdown)
+	 * @param isSummonSpawn if {@code true}, displays a summon animation on NPC spawn
+	 * @param instanceId the ID of the instance to spawn the NPC in (0 - the open world)
+	 * @return the {@link L2Npc} object of the newly spawned NPC or {@code null} if the NPC doesn't exist
+	 * @see #addSpawn(int, IPositionable, boolean, long, boolean, int)
+	 * @see #addSpawn(int, int, int, int, int, boolean, long)
+	 * @see #addSpawn(int, int, int, int, int, boolean, long, boolean)
+	 */
+	public static L2Npc addSpawn(L2Npc summoner, int npcId, int x, int y, int z, int heading, boolean randomOffset, long despawnDelay, boolean isSummonSpawn, int instanceId)
+	{
 		try
 		{
-			L2NpcTemplate template = NpcTable.getInstance().getTemplate(npcId);
+			final L2NpcTemplate template = NpcTable.getInstance().getTemplate(npcId);
 			if (template == null)
 			{
-				_log.error("addSpawn(): no NPC template found for NPC #" + npcId + "!");
+				_log.error("Couldn't find NPC template for ID:" + npcId + "!");
+				return null;
 			}
-			else
+			
+			if ((x == 0) && (y == 0))
 			{
-				if ((x == 0) && (y == 0))
-				{
-					_log.error("addSpawn(): invalid spawn coordinates for NPC #" + npcId + "!");
-					return null;
-				}
-				if (randomOffset)
-				{
-					int offset = Rnd.get(50, 100);
-					if (Rnd.nextBoolean())
-					{
-						offset *= -1;
-					}
-					x += offset;
-					
-					offset = Rnd.get(50, 100);
-					if (Rnd.nextBoolean())
-					{
-						offset *= -1;
-					}
-					y += offset;
-				}
-				L2Spawn spawn = new L2Spawn(template);
-				spawn.setInstanceId(instanceId);
-				spawn.setHeading(heading);
-				spawn.setX(x);
-				spawn.setY(y);
-				spawn.setZ(z);
-				spawn.stopRespawn();
-				L2Npc result = spawn.spawnOne(isSummonSpawn);
-				
-				if (despawnDelay > 0)
-				{
-					result.scheduleDespawn(despawnDelay);
-				}
-				
-				return result;
+				_log.error("addSpawn(): invalid spawn coordinates for NPC #" + npcId + "!");
+				return null;
 			}
+			
+			if (randomOffset)
+			{
+				int offset = Rnd.get(50, 100);
+				if (Rnd.nextBoolean())
+				{
+					offset *= -1;
+				}
+				x += offset;
+				
+				offset = Rnd.get(50, 100);
+				if (Rnd.nextBoolean())
+				{
+					offset *= -1;
+				}
+				y += offset;
+			}
+			
+			final L2Spawn spawn = new L2Spawn(template);
+			spawn.setInstanceId(instanceId);
+			spawn.setHeading(heading);
+			spawn.setX(x);
+			spawn.setY(y);
+			spawn.setZ(z);
+			spawn.stopRespawn();
+			
+			final L2Npc npc = spawn.spawnOne(isSummonSpawn);
+			if (despawnDelay > 0)
+			{
+				npc.scheduleDespawn(despawnDelay);
+			}
+			
+			if (summoner != null)
+			{
+				summoner.addSummonedNpc(npc);
+			}
+			return npc;
 		}
-		catch (Exception e1)
+		catch (Exception e)
 		{
-			_log.warn("Could not spawn NPC #" + npcId + "; error: " + e1.getMessage());
+			_log.warn("Could not spawn NPC #" + npcId + "; error: " + e.getMessage());
 		}
 		
 		return null;
@@ -1742,7 +1770,7 @@ public abstract class AbstractScript extends ManagedScript
 	 * @param instanceId
 	 * @return
 	 */
-	public L2TrapInstance addTrap(int trapId, int x, int y, int z, int heading, L2Skill skill, int instanceId)
+	public L2TrapInstance addTrap(int trapId, int x, int y, int z, int heading, Skill skill, int instanceId)
 	{
 		final L2NpcTemplate npcTemplate = NpcTable.getInstance().getTemplate(trapId);
 		L2TrapInstance trap = new L2TrapInstance(IdFactory.getInstance().getNextId(), npcTemplate, instanceId, -1);
