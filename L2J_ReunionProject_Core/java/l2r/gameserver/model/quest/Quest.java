@@ -23,16 +23,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+import java.util.function.Predicate;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.cache.HtmCache;
+import l2r.gameserver.enums.CategoryType;
+import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.enums.TrapAction;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2Object;
@@ -44,6 +48,7 @@ import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2TrapInstance;
 import l2r.gameserver.model.base.AcquireSkillType;
+import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.entity.olympiad.CompetitionType;
 import l2r.gameserver.model.entity.olympiad.Participant;
 import l2r.gameserver.model.events.AbstractScript;
@@ -78,6 +83,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 	private final ReentrantReadWriteLock _rwLock = new ReentrantReadWriteLock();
 	private final WriteLock _writeLock = _rwLock.writeLock();
 	private final ReadLock _readLock = _rwLock.readLock();
+	private final Map<Predicate<L2PcInstance>, String> _startCondition = new LinkedHashMap<>();
 	
 	private final int _questId;
 	private final String _name;
@@ -408,6 +414,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(qs.getPlayer(), e);
+			return;
 		}
 		showResult(qs.getPlayer(), res);
 	}
@@ -426,6 +433,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
+			return;
 		}
 		showResult(player, res);
 	}
@@ -445,6 +453,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
+			return;
 		}
 		showResult(player, res);
 	}
@@ -511,9 +520,8 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 * @param event
 	 * @param npc
 	 * @param player
-	 * @return {@code false} if there was an error or the message was sent, {@code true} otherwise
 	 */
-	public final boolean notifyEvent(String event, L2Npc npc, L2PcInstance player)
+	public final void notifyEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		String res = null;
 		try
@@ -522,9 +530,10 @@ public class Quest extends AbstractScript implements IIdentifiable
 		}
 		catch (Exception e)
 		{
-			return showError(player, e);
+			showError(player, e);
+			return;
 		}
-		return showResult(player, res, npc);
+		showResult(player, res);
 	}
 	
 	/**
@@ -540,6 +549,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
+			return;
 		}
 		showResult(player, res);
 	}
@@ -559,28 +569,37 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(killer, e);
+			return;
 		}
 		showResult(killer, res);
 	}
 	
 	/**
 	 * @param npc
-	 * @param activeChar
-	 * @return {@code false} if there was an error or the message was sent, {@code true} otherwise
+	 * @param player
 	 */
-	public final boolean notifyTalk(L2Npc npc, L2PcInstance activeChar)
+	public final void notifyTalk(L2Npc npc, L2PcInstance player)
 	{
 		String res = null;
 		try
 		{
-			res = onTalk(npc, activeChar);
+			final String startConditionHtml = getStartConditionHtml(player);
+			if (!player.hasQuestState(_name) && (startConditionHtml != null))
+			{
+				res = startConditionHtml;
+			}
+			else
+			{
+				res = onTalk(npc, player);
+			}
 		}
 		catch (Exception e)
 		{
-			return showError(activeChar, e);
+			showError(player, e);
+			return;
 		}
-		activeChar.setLastQuestNpcObject(npc.getObjectId());
-		return showResult(activeChar, res, npc);
+		player.setLastQuestNpcObject(npc.getObjectId());
+		showResult(player, res);
 	}
 	
 	/**
@@ -599,6 +618,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
+			return;
 		}
 		showResult(player, res, npc);
 	}
@@ -620,6 +640,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
+			return;
 		}
 		showResult(player, res);
 	}
@@ -627,31 +648,20 @@ public class Quest extends AbstractScript implements IIdentifiable
 	/**
 	 * @param item
 	 * @param player
-	 * @return
 	 */
-	public final boolean notifyItemTalk(L2ItemInstance item, L2PcInstance player)
+	public final void notifyItemTalk(L2ItemInstance item, L2PcInstance player)
 	{
 		String res = null;
 		try
 		{
 			res = onItemTalk(item, player);
-			if (res != null)
-			{
-				if (res.equalsIgnoreCase("true"))
-				{
-					return true;
-				}
-				else if (res.equalsIgnoreCase("false"))
-				{
-					return false;
-				}
-			}
 		}
 		catch (Exception e)
 		{
-			return showError(player, e);
+			showError(player, e);
+			return;
 		}
-		return showResult(player, res);
+		showResult(player, res);
 	}
 	
 	/**
@@ -668,9 +678,8 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 * @param item
 	 * @param player
 	 * @param event
-	 * @return
 	 */
-	public final boolean notifyItemEvent(L2ItemInstance item, L2PcInstance player, String event)
+	public final void notifyItemEvent(L2ItemInstance item, L2PcInstance player, String event)
 	{
 		String res = null;
 		try
@@ -678,21 +687,18 @@ public class Quest extends AbstractScript implements IIdentifiable
 			res = onItemEvent(item, player, event);
 			if (res != null)
 			{
-				if (res.equalsIgnoreCase("true"))
+				if (res.equalsIgnoreCase("true") || res.equalsIgnoreCase("false"))
 				{
-					return true;
-				}
-				else if (res.equalsIgnoreCase("false"))
-				{
-					return false;
+					return;
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			return showError(player, e);
+			showError(player, e);
+			return;
 		}
-		return showResult(player, res);
+		showResult(player, res);
 	}
 	
 	/**
@@ -712,6 +718,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(caster, e);
+			return;
 		}
 		showResult(caster, res);
 	}
@@ -732,6 +739,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(attacker, e);
+			return;
 		}
 		showResult(attacker, res);
 	}
@@ -751,6 +759,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
+			return;
 		}
 		showResult(player, res);
 	}
@@ -778,6 +787,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 			{
 				showError(player, e);
 			}
+			return;
 		}
 		if (player != null)
 		{
@@ -821,6 +831,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 			{
 				showError(player, e);
 			}
+			return;
 		}
 		if (player != null)
 		{
@@ -846,6 +857,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 			{
 				showError(player, e);
 			}
+			return;
 		}
 		if (player != null)
 		{
@@ -2778,5 +2790,90 @@ public class Quest extends AbstractScript implements IIdentifiable
 	public boolean isCustomQuest()
 	{
 		return _isCustom;
+	}
+	
+	public boolean canStartQuest(L2PcInstance player)
+	{
+		for (Predicate<L2PcInstance> cond : _startCondition.keySet())
+		{
+			if (!cond.test(player))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public String getStartConditionHtml(L2PcInstance player)
+	{
+		for (Map.Entry<Predicate<L2PcInstance>, String> startRequirement : _startCondition.entrySet())
+		{
+			if (!startRequirement.getKey().test(player))
+			{
+				return startRequirement.getValue();
+			}
+		}
+		
+		return null;
+	}
+	
+	public void addStartCondition(Predicate<L2PcInstance> questStartRequirement, String html)
+	{
+		_startCondition.put(questStartRequirement, html);
+	}
+	
+	public void addLevelCondition(int minLevel, int maxLevel, String html)
+	{
+		_startCondition.put(p -> (p.getLevel() >= minLevel) && (p.getLevel() <= maxLevel), html);
+	}
+	
+	public void addMinLevelCondition(int minLevel, String html)
+	{
+		_startCondition.put(p -> p.getLevel() >= minLevel, html);
+	}
+	
+	public void addMaxLevelCondition(int maxLevel, String html)
+	{
+		_startCondition.put(p -> p.getLevel() <= maxLevel, html);
+	}
+	
+	public void addRaceCondition(PcRace race, String html)
+	{
+		_startCondition.put(p -> p.getRace() == race, html);
+	}
+	
+	public void addNotRaceCondition(PcRace race, String html)
+	{
+		_startCondition.put(p -> p.getRace() != race, html);
+	}
+	
+	public void addCompletedQuestCondition(String name, String html)
+	{
+		_startCondition.put(p -> p.hasQuestState(name) && p.getQuestState(name).isCompleted(), html);
+	}
+	
+	public void addClassIdCondition(ClassId classId, String html)
+	{
+		_startCondition.put(p -> p.getClassId() == classId, html);
+	}
+	
+	public void addNotClassIdCondition(ClassId classId, String html)
+	{
+		_startCondition.put(p -> p.getClassId() != classId, html);
+	}
+	
+	public void addIsSubClassActiveCondition(String html)
+	{
+		_startCondition.put(p -> p.isSubClassActive(), html);
+	}
+	
+	public void addIsNotSubClassActiveCondition(String html)
+	{
+		_startCondition.put(p -> !p.isSubClassActive(), html);
+	}
+	
+	public void addInCategoryCondition(CategoryType categoryType, String html)
+	{
+		_startCondition.put(p -> p.isInCategory(categoryType), html);
 	}
 }

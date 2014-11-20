@@ -60,7 +60,6 @@ import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.ai.L2CharacterAI;
 import l2r.gameserver.ai.L2PlayerAI;
 import l2r.gameserver.ai.L2SummonAI;
-import l2r.gameserver.cache.HtmCache;
 import l2r.gameserver.cache.WarehouseCacheManager;
 import l2r.gameserver.communitybbs.BB.Forum;
 import l2r.gameserver.communitybbs.Managers.ForumsBBSManager;
@@ -198,7 +197,6 @@ import l2r.gameserver.model.entity.olympiad.OlympiadGameManager;
 import l2r.gameserver.model.entity.olympiad.OlympiadGameTask;
 import l2r.gameserver.model.entity.olympiad.OlympiadManager;
 import l2r.gameserver.model.events.EventDispatcher;
-import l2r.gameserver.model.events.EventType;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerEquipItem;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerFameChanged;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerHennaRemove;
@@ -210,7 +208,6 @@ import l2r.gameserver.model.events.impl.character.player.OnPlayerProfessionChang
 import l2r.gameserver.model.events.impl.character.player.OnPlayerPvPChanged;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerPvPKill;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerTransform;
-import l2r.gameserver.model.events.listeners.AbstractEventListener;
 import l2r.gameserver.model.fishing.L2Fish;
 import l2r.gameserver.model.fishing.L2Fishing;
 import l2r.gameserver.model.holders.ItemHolder;
@@ -238,7 +235,6 @@ import l2r.gameserver.model.punishment.PunishmentAffect;
 import l2r.gameserver.model.punishment.PunishmentType;
 import l2r.gameserver.model.quest.Quest;
 import l2r.gameserver.model.quest.QuestState;
-import l2r.gameserver.model.quest.State;
 import l2r.gameserver.model.skills.CommonSkill;
 import l2r.gameserver.model.skills.L2Skill;
 import l2r.gameserver.model.skills.L2SkillType;
@@ -286,7 +282,6 @@ import l2r.gameserver.network.serverpackets.LeaveWorld;
 import l2r.gameserver.network.serverpackets.MagicSkillUse;
 import l2r.gameserver.network.serverpackets.MyTargetSelected;
 import l2r.gameserver.network.serverpackets.NicknameChanged;
-import l2r.gameserver.network.serverpackets.NpcHtmlMessage;
 import l2r.gameserver.network.serverpackets.ObservationMode;
 import l2r.gameserver.network.serverpackets.ObservationReturn;
 import l2r.gameserver.network.serverpackets.PartySmallWindowUpdate;
@@ -1543,15 +1538,6 @@ public final class L2PcInstance extends L2Playable
 		_quests.remove(quest);
 	}
 	
-	private QuestState[] addToQuestStateArray(QuestState[] questStateArray, QuestState state)
-	{
-		final int len = questStateArray.length;
-		QuestState[] tmp = new QuestState[len + 1];
-		System.arraycopy(questStateArray, 0, tmp, 0, len);
-		tmp[len] = state;
-		return tmp;
-	}
-	
 	/**
 	 * @return a table containing all Quest in progress from the table _quests.
 	 */
@@ -1575,115 +1561,23 @@ public final class L2PcInstance extends L2Playable
 		return quests.toArray(new Quest[quests.size()]);
 	}
 	
-	/**
-	 * @param npcId The Identifier of the NPC
-	 * @return a table containing all QuestState from the table _quests in which the L2PcInstance must talk to the NPC.
-	 */
-	public QuestState[] getQuestsForTalk(int npcId)
+	public void processQuestEvent(String questName, String event)
 	{
-		// Create a QuestState table that will contain all QuestState to modify
-		QuestState[] states = null;
-		
-		final L2NpcTemplate template = NpcTable.getInstance().getTemplate(npcId);
-		if (template == null)
+		final Quest quest = QuestManager.getInstance().getQuest(questName);
+		if ((quest == null) || (event == null) || event.isEmpty())
 		{
-			_log.warn(getClass().getSimpleName() + ": " + getName() + " requested quests for talk on non existing npc " + npcId);
-			return states;
+			return;
 		}
 		
-		// Go through the QuestState of the L2PcInstance quests
-		for (AbstractEventListener listener : template.getListeners(EventType.ON_NPC_TALK))
+		if (getLastQuestNpcObject() > 0)
 		{
-			if (listener.getOwner() instanceof Quest)
+			final L2Object object = L2World.getInstance().findObject(getLastQuestNpcObject());
+			if (object.isNpc() && isInsideRadius(object, L2Npc.INTERACTION_DISTANCE, false, false))
 			{
-				final Quest quest = (Quest) listener.getOwner();
-				
-				// Copy the current L2PcInstance QuestState in the QuestState table
-				if (getQuestState(quest.getName()) != null)
-				{
-					if (states == null)
-					{
-						states = new QuestState[]
-						{
-							getQuestState(quest.getName())
-						};
-					}
-					else
-					{
-						states = addToQuestStateArray(states, getQuestState(quest.getName()));
-					}
-				}
+				final L2Npc npc = (L2Npc) object;
+				quest.notifyEvent(event, npc, this);
 			}
 		}
-		
-		// Return a table containing all QuestState to modify
-		return states;
-	}
-	
-	public QuestState processQuestEvent(String quest, String event)
-	{
-		QuestState retval = null;
-		if (event == null)
-		{
-			event = "";
-		}
-		QuestState qs = getQuestState(quest);
-		if ((qs == null) && event.isEmpty())
-		{
-			return retval;
-		}
-		if (qs == null)
-		{
-			Quest q = QuestManager.getInstance().getQuest(quest);
-			if (q == null)
-			{
-				return retval;
-			}
-			qs = q.newQuestState(this);
-		}
-		if (qs != null)
-		{
-			if (getLastQuestNpcObject() > 0)
-			{
-				L2Object object = L2World.getInstance().findObject(getLastQuestNpcObject());
-				if ((object instanceof L2Npc) && isInsideRadius(object, L2Npc.INTERACTION_DISTANCE, false, false))
-				{
-					L2Npc npc = (L2Npc) object;
-					QuestState[] states = getQuestsForTalk(npc.getId());
-					
-					if (states != null)
-					{
-						for (QuestState state : states)
-						{
-							if (state.getQuest().getName().equals(qs.getQuest().getName()))
-							{
-								if (qs.getQuest().notifyEvent(event, npc, this))
-								{
-									showQuestWindow(quest, npc, State.getStateName(qs.getState()));
-								}
-								
-								retval = qs;
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return retval;
-	}
-	
-	private void showQuestWindow(String questId, L2Npc npc, String stateId)
-	{
-		String path = "data/scripts/quests/" + questId + "/" + stateId + ".htm";
-		String content = HtmCache.getInstance().getHtm(getHtmlPrefix(), path); // TODO path for quests html
-		
-		if (content != null)
-		{
-			sendPacket(new NpcHtmlMessage(npc != null ? npc.getObjectId() : 0, content));
-		}
-		
-		sendPacket(ActionFailed.STATIC_PACKET);
 	}
 	
 	/** List of all QuestState instance that needs to be notified of this L2PcInstance's or its pet's death */
