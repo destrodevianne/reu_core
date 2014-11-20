@@ -1559,6 +1559,20 @@ public abstract class AbstractScript extends ManagedScript
 	
 	/**
 	 * Add a temporary spawn of the specified NPC.
+	 * @param summoner the NPC that requires this spawn
+	 * @param npcId the ID of the NPC to spawn
+	 * @param pos the object containing the spawn location coordinates
+	 * @param randomOffset if {@code true}, adds +/- 50~100 to X/Y coordinates of the spawn location
+	 * @param despawnDelay time in milliseconds till the NPC is despawned (0 - only despawned on server shutdown)
+	 * @return the {@link L2Npc} object of the newly spawned NPC, {@code null} if the NPC doesn't exist
+	 */
+	public static L2Npc addSpawn(L2Npc summoner, int npcId, IPositionable pos, boolean randomOffset, long despawnDelay)
+	{
+		return addSpawn(summoner, npcId, pos.getX(), pos.getY(), pos.getZ(), pos.getHeading(), randomOffset, despawnDelay, false, 0);
+	}
+	
+	/**
+	 * Add a temporary spawn of the specified NPC.
 	 * @param npcId the ID of the NPC to spawn
 	 * @param pos the object containing the spawn location coordinates
 	 * @param isSummonSpawn if {@code true}, displays a summon animation on NPC spawn
