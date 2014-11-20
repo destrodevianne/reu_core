@@ -43,9 +43,9 @@ import l2r.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Announcements
+public final class Announcements
 {
-	private static Logger _log = LoggerFactory.getLogger(Announcements.class);
+	private static final Logger _log = LoggerFactory.getLogger(Announcements.class);
 	
 	private final List<String> _announcements = new FastList<>();
 	private final List<String> _critAnnouncements = new FastList<>();
