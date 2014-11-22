@@ -87,6 +87,8 @@ public class AnswerCoupleAction extends L2GameClientPacket
 			target.sendPacket(sm);
 		}
 		target.setMultiSocialAction(0, 0);
+		activeChar.setActiveRequester(null);
+		target.onTransactionResponse();
 	}
 	
 	@Override

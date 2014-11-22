@@ -1047,6 +1047,18 @@ public final class RequestActionUse extends L2GameClientPacket
 		}
 		
 		SystemMessage sm;
+		if (requester.isProcessingRequest() || requester.isProcessingTransaction())
+		{
+			if (Config.DEBUG)
+			{
+				_log.info("Transaction already in progress.");
+			}
+			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_BUSY_TRY_LATER);
+			sm.addPcName(requester);
+			sendPacket(sm);
+			return;
+		}
+		
 		if (requester.isInStoreMode() || requester.isInCraftMode())
 		{
 			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_IN_PRIVATE_SHOP_MODE_OR_IN_A_BATTLE_AND_CANNOT_BE_REQUESTED_FOR_A_COUPLE_ACTION);
@@ -1228,6 +1240,7 @@ public final class RequestActionUse extends L2GameClientPacket
 			return;
 		}
 		
+		requester.onTransactionRequest(partner);
 		requester.setMultiSocialAction(id, partner.getObjectId());
 		sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_REQUESTED_COUPLE_ACTION_C1);
 		sm.addPcName(partner);
