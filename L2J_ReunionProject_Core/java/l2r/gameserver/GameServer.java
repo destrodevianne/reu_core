@@ -516,7 +516,7 @@ public class GameServer
 		ReunionConfigController.getInstance().reloadReunionConfigs();
 		// Check binding address
 		checkFreePorts();
-		_log.info("Custom Configs Loaded...");
+		_log.info("Reunion Configs Loaded...");
 		// Initialize database
 		Class.forName(Config.DATABASE_DRIVER).newInstance();
 		L2DatabaseFactory.getInstance().getConnection().close();
