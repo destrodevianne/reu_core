@@ -23,21 +23,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
-import java.util.function.Predicate;
 
 import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.cache.HtmCache;
-import l2r.gameserver.enums.CategoryType;
-import l2r.gameserver.enums.PcRace;
 import l2r.gameserver.enums.TrapAction;
 import l2r.gameserver.instancemanager.QuestManager;
 import l2r.gameserver.model.L2Object;
@@ -49,7 +44,6 @@ import l2r.gameserver.model.actor.L2Summon;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2TrapInstance;
 import l2r.gameserver.model.base.AcquireSkillType;
-import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.entity.olympiad.CompetitionType;
 import l2r.gameserver.model.entity.olympiad.Participant;
 import l2r.gameserver.model.events.AbstractScript;
@@ -77,15 +71,13 @@ import org.slf4j.LoggerFactory;
  */
 public class Quest extends AbstractScript implements IIdentifiable
 {
-	public static final Logger _log = LoggerFactory.getLogger(Quest.class);
+	public static final Logger _log = LoggerFactory.getLogger(Quest.class.getName());
 	
 	/** Map containing lists of timers from the name of the timer. */
-	private volatile Map<String, List<QuestTimer>> _questTimers = null;
+	private final Map<String, List<QuestTimer>> _allEventTimers = new ConcurrentHashMap<>();
 	private final ReentrantReadWriteLock _rwLock = new ReentrantReadWriteLock();
 	private final WriteLock _writeLock = _rwLock.writeLock();
 	private final ReadLock _readLock = _rwLock.readLock();
-	/** Map containing all the start conditions. */
-	private volatile Map<Predicate<L2PcInstance>, String> _startCondition = null;
 	
 	private final int _questId;
 	private final String _name;
@@ -243,25 +235,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 	}
 	
 	/**
-	 * Gets the quest timers.
-	 * @return the quest timers
-	 */
-	public final Map<String, List<QuestTimer>> getQuestTimers()
-	{
-		if (_questTimers == null)
-		{
-			synchronized (this)
-			{
-				if (_questTimers == null)
-				{
-					_questTimers = new ConcurrentHashMap<>(1);
-				}
-			}
-		}
-		return _questTimers;
-	}
-	
-	/**
 	 * Add a timer to the quest (if it doesn't exist already) and start it.
 	 * @param name the name of the timer (also passed back as "event" in {@link #onAdvEvent(String, L2Npc, L2PcInstance)})
 	 * @param time time in ms for when to fire the timer
@@ -272,7 +245,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 */
 	public void startQuestTimer(String name, long time, L2Npc npc, L2PcInstance player, boolean repeating)
 	{
-		final List<QuestTimer> timers = getQuestTimers().computeIfAbsent(name, k -> new ArrayList<>(1));
+		final List<QuestTimer> timers = _allEventTimers.computeIfAbsent(name, k -> new ArrayList<>());
 		// if there exists a timer with this name, allow the timer only if the [npc, player] set is unique
 		// nulls act as wildcards
 		if (getQuestTimer(name, npc, player) == null)
@@ -298,12 +271,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 */
 	public QuestTimer getQuestTimer(String name, L2Npc npc, L2PcInstance player)
 	{
-		if (_questTimers == null)
-		{
-			return null;
-		}
-		
-		final List<QuestTimer> timers = getQuestTimers().get(name);
+		final List<QuestTimer> timers = _allEventTimers.get(name);
 		if (timers != null)
 		{
 			_readLock.lock();
@@ -334,12 +302,7 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 */
 	public void cancelQuestTimers(String name)
 	{
-		if (_questTimers == null)
-		{
-			return;
-		}
-		
-		final List<QuestTimer> timers = getQuestTimers().get(name);
+		final List<QuestTimer> timers = _allEventTimers.get(name);
 		if (timers != null)
 		{
 			_writeLock.lock();
@@ -383,9 +346,9 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 */
 	public void removeQuestTimer(QuestTimer timer)
 	{
-		if ((timer != null) && (_questTimers != null))
+		if (timer != null)
 		{
-			final List<QuestTimer> timers = getQuestTimers().get(timer.getName());
+			final List<QuestTimer> timers = _allEventTimers.get(timer.getName());
 			if (timers != null)
 			{
 				_writeLock.lock();
@@ -399,6 +362,11 @@ public class Quest extends AbstractScript implements IIdentifiable
 				}
 			}
 		}
+	}
+	
+	public Map<String, List<QuestTimer>> getQuestTimers()
+	{
+		return _allEventTimers;
 	}
 	
 	// These are methods to call within the core to call the quest events.
@@ -440,7 +408,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(qs.getPlayer(), e);
-			return;
 		}
 		showResult(qs.getPlayer(), res);
 	}
@@ -459,7 +426,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
-			return;
 		}
 		showResult(player, res);
 	}
@@ -479,7 +445,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
-			return;
 		}
 		showResult(player, res);
 	}
@@ -546,8 +511,9 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 * @param event
 	 * @param npc
 	 * @param player
+	 * @return {@code false} if there was an error or the message was sent, {@code true} otherwise
 	 */
-	public final void notifyEvent(String event, L2Npc npc, L2PcInstance player)
+	public final boolean notifyEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		String res = null;
 		try
@@ -556,10 +522,9 @@ public class Quest extends AbstractScript implements IIdentifiable
 		}
 		catch (Exception e)
 		{
-			showError(player, e);
-			return;
+			return showError(player, e);
 		}
-		showResult(player, res);
+		return showResult(player, res, npc);
 	}
 	
 	/**
@@ -575,7 +540,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
-			return;
 		}
 		showResult(player, res);
 	}
@@ -595,37 +559,28 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(killer, e);
-			return;
 		}
 		showResult(killer, res);
 	}
 	
 	/**
 	 * @param npc
-	 * @param player
+	 * @param activeChar
+	 * @return {@code false} if there was an error or the message was sent, {@code true} otherwise
 	 */
-	public final void notifyTalk(L2Npc npc, L2PcInstance player)
+	public final boolean notifyTalk(L2Npc npc, L2PcInstance activeChar)
 	{
 		String res = null;
 		try
 		{
-			final String startConditionHtml = getStartConditionHtml(player);
-			if (!player.hasQuestState(_name) && (startConditionHtml != null))
-			{
-				res = startConditionHtml;
-			}
-			else
-			{
-				res = onTalk(npc, player);
-			}
+			res = onTalk(npc, activeChar);
 		}
 		catch (Exception e)
 		{
-			showError(player, e);
-			return;
+			return showError(activeChar, e);
 		}
-		player.setLastQuestNpcObject(npc.getObjectId());
-		showResult(player, res);
+		activeChar.setLastQuestNpcObject(npc.getObjectId());
+		return showResult(activeChar, res, npc);
 	}
 	
 	/**
@@ -644,7 +599,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
-			return;
 		}
 		showResult(player, res, npc);
 	}
@@ -666,7 +620,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
-			return;
 		}
 		showResult(player, res);
 	}
@@ -674,20 +627,31 @@ public class Quest extends AbstractScript implements IIdentifiable
 	/**
 	 * @param item
 	 * @param player
+	 * @return
 	 */
-	public final void notifyItemTalk(L2ItemInstance item, L2PcInstance player)
+	public final boolean notifyItemTalk(L2ItemInstance item, L2PcInstance player)
 	{
 		String res = null;
 		try
 		{
 			res = onItemTalk(item, player);
+			if (res != null)
+			{
+				if (res.equalsIgnoreCase("true"))
+				{
+					return true;
+				}
+				else if (res.equalsIgnoreCase("false"))
+				{
+					return false;
+				}
+			}
 		}
 		catch (Exception e)
 		{
-			showError(player, e);
-			return;
+			return showError(player, e);
 		}
-		showResult(player, res);
+		return showResult(player, res);
 	}
 	
 	/**
@@ -704,8 +668,9 @@ public class Quest extends AbstractScript implements IIdentifiable
 	 * @param item
 	 * @param player
 	 * @param event
+	 * @return
 	 */
-	public final void notifyItemEvent(L2ItemInstance item, L2PcInstance player, String event)
+	public final boolean notifyItemEvent(L2ItemInstance item, L2PcInstance player, String event)
 	{
 		String res = null;
 		try
@@ -713,18 +678,21 @@ public class Quest extends AbstractScript implements IIdentifiable
 			res = onItemEvent(item, player, event);
 			if (res != null)
 			{
-				if (res.equalsIgnoreCase("true") || res.equalsIgnoreCase("false"))
+				if (res.equalsIgnoreCase("true"))
 				{
-					return;
+					return true;
+				}
+				else if (res.equalsIgnoreCase("false"))
+				{
+					return false;
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			showError(player, e);
-			return;
+			return showError(player, e);
 		}
-		showResult(player, res);
+		return showResult(player, res);
 	}
 	
 	/**
@@ -744,7 +712,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(caster, e);
-			return;
 		}
 		showResult(caster, res);
 	}
@@ -765,7 +732,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(attacker, e);
-			return;
 		}
 		showResult(attacker, res);
 	}
@@ -785,7 +751,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 		catch (Exception e)
 		{
 			showError(player, e);
-			return;
 		}
 		showResult(player, res);
 	}
@@ -813,7 +778,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 			{
 				showError(player, e);
 			}
-			return;
 		}
 		if (player != null)
 		{
@@ -857,7 +821,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 			{
 				showError(player, e);
 			}
-			return;
 		}
 		if (player != null)
 		{
@@ -883,7 +846,6 @@ public class Quest extends AbstractScript implements IIdentifiable
 			{
 				showError(player, e);
 			}
-			return;
 		}
 		if (player != null)
 		{
@@ -2757,26 +2719,23 @@ public class Quest extends AbstractScript implements IIdentifiable
 		// cancel all pending timers before reloading.
 		// if timers ought to be restarted, the quest can take care of it
 		// with its code (example: save global data indicating what timer must be restarted).
-		if (_questTimers != null)
+		for (List<QuestTimer> timers : _allEventTimers.values())
 		{
-			for (List<QuestTimer> timers : getQuestTimers().values())
+			_readLock.lock();
+			try
 			{
-				_readLock.lock();
-				try
+				for (QuestTimer timer : timers)
 				{
-					for (QuestTimer timer : timers)
-					{
-						timer.cancel();
-					}
+					timer.cancel();
 				}
-				finally
-				{
-					_readLock.unlock();
-				}
-				timers.clear();
 			}
-			getQuestTimers().clear();
+			finally
+			{
+				_readLock.unlock();
+			}
+			timers.clear();
 		}
+		_allEventTimers.clear();
 		
 		if (removeFromList)
 		{
@@ -2814,193 +2773,10 @@ public class Quest extends AbstractScript implements IIdentifiable
 	}
 	
 	/**
-	 * Verifies if this is a custom quest.
 	 * @return {@code true} if the quest script is a custom quest, {@code false} otherwise.
 	 */
 	public boolean isCustomQuest()
 	{
 		return _isCustom;
-	}
-	
-	/**
-	 * Gets the start conditions.
-	 * @return the start conditions
-	 */
-	private Map<Predicate<L2PcInstance>, String> getStartConditions()
-	{
-		if (_startCondition == null)
-		{
-			synchronized (this)
-			{
-				if (_startCondition == null)
-				{
-					_startCondition = new LinkedHashMap<>(1);
-				}
-			}
-		}
-		return _startCondition;
-	}
-	
-	/**
-	 * Verifies if the player meets all the start conditions.
-	 * @param player the player
-	 * @return {@code true} if all conditions are met
-	 */
-	public boolean canStartQuest(L2PcInstance player)
-	{
-		if (_startCondition == null)
-		{
-			return true;
-		}
-		
-		for (Predicate<L2PcInstance> cond : _startCondition.keySet())
-		{
-			if (!cond.test(player))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Gets the HTML for the first starting condition not met.
-	 * @param player the player
-	 * @return the HTML
-	 */
-	public String getStartConditionHtml(L2PcInstance player)
-	{
-		if (_startCondition == null)
-		{
-			return null;
-		}
-		
-		for (Entry<Predicate<L2PcInstance>, String> startRequirement : _startCondition.entrySet())
-		{
-			if (!startRequirement.getKey().test(player))
-			{
-				return startRequirement.getValue();
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Adds a predicate to the start conditions.
-	 * @param questStartRequirement the predicate condition
-	 * @param html the HTML to display if that condition is not met
-	 */
-	public void addCondStart(Predicate<L2PcInstance> questStartRequirement, String html)
-	{
-		getStartConditions().put(questStartRequirement, html);
-	}
-	
-	/**
-	 * Adds a minimum/maximum level start condition to the quest.
-	 * @param minLevel the minimum player's level to start the quest
-	 * @param maxLevel the maximum player's level to start the quest
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondLevel(int minLevel, int maxLevel, String html)
-	{
-		getStartConditions().put(p -> (p.getLevel() >= minLevel) && (p.getLevel() <= maxLevel), html);
-	}
-	
-	/**
-	 * Adds a minimum level start condition to the quest.
-	 * @param minLevel the minimum player's level to start the quest
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondMinLevel(int minLevel, String html)
-	{
-		getStartConditions().put(p -> p.getLevel() >= minLevel, html);
-	}
-	
-	/**
-	 * Adds a minimum/maximum level start condition to the quest.
-	 * @param maxLevel the maximum player's level to start the quest
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondMaxLevel(int maxLevel, String html)
-	{
-		getStartConditions().put(p -> p.getLevel() <= maxLevel, html);
-	}
-	
-	/**
-	 * Adds a race start condition to the quest.
-	 * @param race the race
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondRace(PcRace race, String html)
-	{
-		getStartConditions().put(p -> p.getRace() == race, html);
-	}
-	
-	/**
-	 * Adds a not-race start condition to the quest.
-	 * @param race the race
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondNotRace(PcRace race, String html)
-	{
-		getStartConditions().put(p -> p.getRace() != race, html);
-	}
-	
-	/**
-	 * Adds a quest completed start condition to the quest.
-	 * @param name the quest name
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondCompletedQuest(String name, String html)
-	{
-		getStartConditions().put(p -> p.hasQuestState(name) && p.getQuestState(name).isCompleted(), html);
-	}
-	
-	/**
-	 * Adds a class ID start condition to the quest.
-	 * @param classId the class ID
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondClassId(ClassId classId, String html)
-	{
-		getStartConditions().put(p -> p.getClassId() == classId, html);
-	}
-	
-	/**
-	 * Adds a not-class ID start condition to the quest.
-	 * @param classId the class ID
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondNotClassId(ClassId classId, String html)
-	{
-		getStartConditions().put(p -> p.getClassId() != classId, html);
-	}
-	
-	/**
-	 * Adds a subclass active start condition to the quest.
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondIsSubClassActive(String html)
-	{
-		getStartConditions().put(p -> p.isSubClassActive(), html);
-	}
-	
-	/**
-	 * Adds a not-subclass active start condition to the quest.
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondIsNotSubClassActive(String html)
-	{
-		getStartConditions().put(p -> !p.isSubClassActive(), html);
-	}
-	
-	/**
-	 * Adds a category start condition to the quest.
-	 * @param categoryType the category type
-	 * @param html the HTML to display if the condition is not met
-	 */
-	public void addCondInCategory(CategoryType categoryType, String html)
-	{
-		getStartConditions().put(p -> p.isInCategory(categoryType), html);
 	}
 }
