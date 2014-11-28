@@ -22,6 +22,7 @@ import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_ACTIVE;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -2185,6 +2186,15 @@ public class L2Npc extends L2Character
 		{
 			_summonedNpcs.remove(objectId);
 		}
+	}
+	
+	/**
+	 * Gets the summoned NPCs.
+	 * @return the summoned NPCs
+	 */
+	public final Collection<L2Npc> getSummonedNpcs()
+	{
+		return _summonedNpcs != null ? _summonedNpcs.values() : Collections.<L2Npc> emptyList();
 	}
 	
 	/**
