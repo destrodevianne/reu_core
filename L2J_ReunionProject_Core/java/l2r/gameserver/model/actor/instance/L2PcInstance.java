@@ -15432,10 +15432,19 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 		
+		if (isInSameParty(target) || isInSameChannel(target))
+		{
+			return true;
+		}
+		
 		if (isInOlympiadMode() && target.isInOlympiadMode())
 		{
 			if (((getOlympiadGameId() + 1) != 0) && (getOlympiadGameId() == target.getOlympiadGameId()))
 			{
+				if (isInSameParty(target))
+				{
+					return true;
+				}
 				return false;
 			}
 		}
