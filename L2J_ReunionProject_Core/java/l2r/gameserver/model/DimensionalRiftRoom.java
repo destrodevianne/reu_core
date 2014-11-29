@@ -39,7 +39,7 @@ public final class DimensionalRiftRoom
 	private final int _yMax;
 	private final int _zMin;
 	private final int _zMax;
-	private final int[] _teleportCoords;
+	private final Location _teleportCoords;
 	private final Shape _s;
 	private final boolean _isBossRoom;
 	private final FastList<L2Spawn> _roomSpawns;
@@ -56,12 +56,7 @@ public final class DimensionalRiftRoom
 		_yMax = (yMax - 128);
 		_zMin = zMin;
 		_zMax = zMax;
-		_teleportCoords = new int[]
-		{
-			xT,
-			yT,
-			zT
-		};
+		_teleportCoords = new Location(xT, yT, zT);
 		_isBossRoom = isBossRoom;
 		_roomSpawns = new FastList<>();
 		_roomMobs = new FastList<>();
@@ -100,7 +95,7 @@ public final class DimensionalRiftRoom
 		return Rnd.get(_yMin, _yMax);
 	}
 	
-	public int[] getTeleportCoorinates()
+	public Location getTeleportCoorinates()
 	{
 		return _teleportCoords;
 	}
