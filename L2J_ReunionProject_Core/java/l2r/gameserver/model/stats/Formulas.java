@@ -1729,7 +1729,7 @@ public final class Formulas
 			set.set("finalRate", finalRate);
 			Debug.sendSkillDebug(attacker, target, skill, set);
 		}
-		return (Rnd.get(100) < rate);
+		return (Rnd.get(100) < finalRate);
 	}
 	
 	public static boolean calcSkillSuccess(L2Character attacker, L2Character target, L2Skill skill, byte shld, boolean ss, boolean sps, boolean bss)
