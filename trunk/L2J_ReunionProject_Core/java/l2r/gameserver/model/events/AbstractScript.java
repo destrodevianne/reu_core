@@ -39,6 +39,7 @@ import l2r.gameserver.datatables.SpawnTable;
 import l2r.gameserver.datatables.sql.NpcTable;
 import l2r.gameserver.datatables.xml.DoorData;
 import l2r.gameserver.datatables.xml.ItemData;
+import l2r.gameserver.enums.CtrlIntention;
 import l2r.gameserver.enums.QuestSound;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.CastleManager;
@@ -50,6 +51,7 @@ import l2r.gameserver.model.Location;
 import l2r.gameserver.model.actor.L2Attackable;
 import l2r.gameserver.model.actor.L2Character;
 import l2r.gameserver.model.actor.L2Npc;
+import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.instance.L2MonsterInstance;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
@@ -110,6 +112,7 @@ import l2r.gameserver.model.events.listeners.RunnableEventListener;
 import l2r.gameserver.model.events.returns.AbstractEventReturn;
 import l2r.gameserver.model.events.returns.TerminateReturn;
 import l2r.gameserver.model.holders.ItemHolder;
+import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.model.interfaces.IPositionable;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.model.itemcontainer.PcInventory;
@@ -2619,6 +2622,85 @@ public abstract class AbstractScript extends ManagedScript
 	{
 		loc.setInstanceId(instanceId);
 		player.teleToLocation(loc, allowRandomOffset);
+	}
+	
+	/**
+	 * Monster is running and attacking the playable.
+	 * @param npc the NPC that performs the attack
+	 * @param playable the player
+	 */
+	protected void addAttackPlayerDesire(L2Npc npc, L2Playable playable)
+	{
+		addAttackPlayerDesire(npc, playable, 999);
+	}
+	
+	/**
+	 * Monster is running and attacking the target.
+	 * @param npc the NPC that performs the attack
+	 * @param target the target of the attack
+	 * @param desire the desire to perform the attack
+	 */
+	protected void addAttackPlayerDesire(L2Npc npc, L2Playable target, int desire)
+	{
+		if (npc instanceof L2Attackable)
+		{
+			((L2Attackable) npc).addDamageHate(target, 0, desire);
+		}
+		npc.setIsRunning(true);
+		npc.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target);
+	}
+	
+	/**
+	 * Instantly cast a skill upon the given target.
+	 * @param npc the caster NPC
+	 * @param target the target of the cast
+	 * @param skill the skill to cast
+	 */
+	protected void castSkill(L2Npc npc, L2Playable target, SkillHolder skill)
+	{
+		npc.setTarget(target);
+		npc.doCast(skill.getSkill());
+	}
+	
+	/**
+	 * Instantly cast a skill upon the given target.
+	 * @param npc the caster NPC
+	 * @param target the target of the cast
+	 * @param skill the skill to cast
+	 */
+	protected void castSkill(L2Npc npc, L2Playable target, L2Skill skill)
+	{
+		npc.setTarget(target);
+		npc.doCast(skill);
+	}
+	
+	/**
+	 * Adds the desire to cast a skill to the given NPC.
+	 * @param npc the NPC whom cast the skill
+	 * @param target the skill target
+	 * @param skill the skill to cast
+	 * @param desire the desire to cast the skill
+	 */
+	protected void addSkillCastDesire(L2Npc npc, L2Character target, SkillHolder skill, int desire)
+	{
+		addSkillCastDesire(npc, target, skill.getSkill(), desire);
+	}
+	
+	/**
+	 * Adds the desire to cast a skill to the given NPC.
+	 * @param npc the NPC whom cast the skill
+	 * @param target the skill target
+	 * @param skill the skill to cast
+	 * @param desire the desire to cast the skill
+	 */
+	protected void addSkillCastDesire(L2Npc npc, L2Character target, L2Skill skill, int desire)
+	{
+		if (npc instanceof L2Attackable)
+		{
+			((L2Attackable) npc).addDamageHate(target, 0, desire);
+		}
+		npc.setTarget(target);
+		npc.getAI().setIntention(CtrlIntention.AI_INTENTION_CAST, skill, target);
 	}
 	
 	/**

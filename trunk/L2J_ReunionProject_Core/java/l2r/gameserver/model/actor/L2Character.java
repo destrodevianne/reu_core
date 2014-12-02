@@ -7712,6 +7712,15 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	}
 	
 	/**
+	 * Dummy method overriden in {@link L2Attackable}
+	 * @return {@code true} if there is a loot to sweep, {@code false} otherwise.
+	 */
+	public boolean isSweepActive()
+	{
+		return false;
+	}
+	
+	/**
 	 * Dummy method overriden in {@link L2PcInstance}
 	 * @return {@code true} if player is on event, {@code false} otherwise.
 	 */
