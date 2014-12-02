@@ -44,6 +44,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
 import l2r.gameserver.model.effects.EffectTemplate;
 import l2r.gameserver.model.effects.L2Effect;
+import l2r.gameserver.model.effects.L2EffectType;
 import l2r.gameserver.model.entity.Castle;
 import l2r.gameserver.model.entity.ClanHall;
 import l2r.gameserver.model.entity.Fort;
@@ -1899,7 +1900,7 @@ public final class Formulas
 		
 		// FIXME: Fix this LevelMod Formula.
 		// int lvlDifference = (target.getLevel() - (skill.getMagicLevel() > 0 ? skill.getMagicLevel() : attacker.getLevel()));
-		int lvlDifference = target.getLevel() - attacker.getLevel();
+		int lvlDifference = (target.getLevel() - (skill.hasEffectType(L2EffectType.SPOIL) ? skill.getMagicLevel() : attacker.getLevel()));
 		double lvlModifier = Math.pow(1.3, lvlDifference);
 		float targetModifier = 1;
 		if (target.isAttackable() && !target.isRaid() && !target.isRaidMinion() && (target.getLevel() >= Config.MIN_NPC_LVL_MAGIC_PENALTY) && (attacker.getActingPlayer() != null) && ((target.getLevel() - attacker.getActingPlayer().getLevel()) >= 3))
