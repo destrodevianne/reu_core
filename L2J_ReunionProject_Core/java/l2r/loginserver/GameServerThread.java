@@ -155,12 +155,12 @@ public class GameServerThread extends Thread
 			try
 			{
 				L2LoginServer.getInstance().getGameServerListener().removeGameServer(this);
+				L2LoginServer.getInstance().getGameServerListener().removeFloodProtection(_connectionIp);
 			}
 			catch (Exception e)
 			{
 				
 			}
-			L2LoginServer.getInstance().getGameServerListener().removeFloodProtection(_connectionIp);
 		}
 	}
 	
