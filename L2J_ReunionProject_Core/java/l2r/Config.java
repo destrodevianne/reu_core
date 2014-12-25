@@ -127,10 +127,6 @@ public final class Config
 	public static final String CONFIGURATION_FILE = "./config/network/Server.ini";
 	public static final String TELNET_FILE = "./config/network/Telnet.ini";
 	
-	// version
-	public static final String SERVER_VERSION_FILE = "./config/version/l2rcore-version.ini";
-	public static final String DATAPACK_VERSION_FILE = "./config/version/l2rdp-version.ini";
-	
 	// --------------------------------------------------
 	// L2J Variable Definitions
 	// --------------------------------------------------
