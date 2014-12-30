@@ -71,7 +71,14 @@ public final class ItemAuctionInstance
 	/**
 	 * Cached comparator to avoid initialization on each loop run.
 	 */
-	private static final Comparator<ItemAuction> itemAuctionComparator = (o1, o2) -> Long.valueOf(o2.getStartingTime()).compareTo(Long.valueOf(o1.getStartingTime()));
+	private static final Comparator<ItemAuction> itemAuctionComparator = new Comparator<ItemAuction>()
+	{
+		@Override
+		public final int compare(final ItemAuction o1, final ItemAuction o2)
+		{
+			return Long.valueOf(o2.getStartingTime()).compareTo(Long.valueOf(o1.getStartingTime()));
+		}
+	};
 	
 	private final int _instanceId;
 	private final AtomicInteger _auctionIds;

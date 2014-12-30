@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
  */
 public class MerchantPriceConfigData implements InstanceListManager
 {
-	private static Logger _log = LoggerFactory.getLogger(MerchantPriceConfigData.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(MerchantPriceConfigData.class);
 	
 	public static MerchantPriceConfigData getInstance()
 	{
@@ -164,11 +164,11 @@ public class MerchantPriceConfigData implements InstanceListManager
 		try
 		{
 			loadXML();
-			_log.info(getClass().getSimpleName() + ": Loaded " + _mpcs.size() + " merchant price configs.");
+			LOGGER.info(getClass().getSimpleName() + ": Loaded " + _mpcs.size() + " merchant price configs.");
 		}
 		catch (Exception e)
 		{
-			_log.error(getClass().getSimpleName() + ": Failed loading MerchantPriceConfigTable. Reason: " + e.getMessage(), e);
+			LOGGER.error(getClass().getSimpleName() + ": Failed loading MerchantPriceConfigTable. Reason: " + e.getMessage(), e);
 		}
 	}
 	

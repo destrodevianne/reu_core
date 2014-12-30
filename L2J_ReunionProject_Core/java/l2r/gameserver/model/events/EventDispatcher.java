@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class EventDispatcher
 {
-	private static final Logger _log = LoggerFactory.getLogger(EventDispatcher.class.getName());
+	private static final Logger _log = LoggerFactory.getLogger(EventDispatcher.class);
 	
 	protected EventDispatcher()
 	{
@@ -47,7 +47,7 @@ public final class EventDispatcher
 	 */
 	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event)
 	{
-		return Containers.Global().hasListener(event.getType()) ? notifyEvent(event, null, null) : null;
+		return notifyEvent(event, null, null);
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public final class EventDispatcher
 	 */
 	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, Class<T> callbackClass)
 	{
-		return Containers.Global().hasListener(event.getType()) ? notifyEvent(event, null, callbackClass) : null;
+		return notifyEvent(event, null, callbackClass);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public final class EventDispatcher
 	 */
 	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, ListenersContainer container)
 	{
-		return Containers.Global().hasListener(event.getType()) ? notifyEvent(event, container, null) : null;
+		return notifyEvent(event, container, null);
 	}
 	
 	/**
@@ -83,7 +83,7 @@ public final class EventDispatcher
 	{
 		try
 		{
-			return Containers.Global().hasListener(event.getType()) || container.hasListener(event.getType()) ? notifyEventImpl(event, container, callbackClass) : null;
+			return Containers.Global().hasListener(event.getType()) || ((container != null) && container.hasListener(event.getType())) ? notifyEventImpl(event, container, callbackClass) : null;
 		}
 		catch (Exception e)
 		{

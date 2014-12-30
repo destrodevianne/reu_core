@@ -29,13 +29,14 @@ import l2r.gameserver.model.items.enchant.EnchantRateItem;
 import l2r.gameserver.model.items.enchant.EnchantScrollGroup;
 import l2r.gameserver.util.Util;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid
  */
-public final class EnchantItemGroupsData extends DocumentParser
+public final class EnchantItemGroupsData implements DocumentParser
 {
 	private final Map<String, EnchantItemGroup> _itemGroups = new HashMap<>();
 	private final Map<Integer, EnchantScrollGroup> _scrollGroups = new HashMap<>();
@@ -51,14 +52,14 @@ public final class EnchantItemGroupsData extends DocumentParser
 		_itemGroups.clear();
 		_scrollGroups.clear();
 		parseDatapackFile("data/xml/other/enchantItemGroups.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _itemGroups.size() + " item group templates.");
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _scrollGroups.size() + " scroll group templates.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _itemGroups.size() + " item group templates.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _scrollGroups.size() + " scroll group templates.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{

@@ -18,6 +18,8 @@
  */
 package l2r.gameserver.datatables.xml;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -32,19 +34,20 @@ import l2r.gameserver.model.buylist.Product;
 import l2r.gameserver.model.items.L2Item;
 import l2r.util.file.filter.NumericNameFilter;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author Nos
  */
-public final class BuyListData extends DocumentParser
+public final class BuyListData implements DocumentParser
 {
 	private final Map<Integer, L2BuyList> _buyLists = new HashMap<>();
+	private static final FileFilter NUMERIC_FILTER = new NumericNameFilter();
 	
 	protected BuyListData()
 	{
-		setCurrentFileFilter(new NumericNameFilter());
 		load();
 	}
 	
@@ -58,7 +61,7 @@ public final class BuyListData extends DocumentParser
 			parseDirectory("data/xml/buylists/custom", false);
 		}
 		
-		_log.info(getClass().getSimpleName() + ": Loaded " + _buyLists.size() + " BuyLists.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _buyLists.size() + " BuyLists.");
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			Statement statement = con.createStatement();
@@ -73,13 +76,13 @@ public final class BuyListData extends DocumentParser
 				final L2BuyList buyList = getBuyList(buyListId);
 				if (buyList == null)
 				{
-					_log.warn("BuyList found in database but not loaded from xml! BuyListId: " + buyListId);
+					LOGGER.warn("BuyList found in database but not loaded from xml! BuyListId: " + buyListId);
 					continue;
 				}
 				final Product product = buyList.getProductByItemId(itemId);
 				if (product == null)
 				{
-					_log.warn("ItemId found in database but not loaded from xml! BuyListId: " + buyListId + " ItemId: " + itemId);
+					LOGGER.warn("ItemId found in database but not loaded from xml! BuyListId: " + buyListId + " ItemId: " + itemId);
 					continue;
 				}
 				if (count < product.getMaxCount())
@@ -91,18 +94,18 @@ public final class BuyListData extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warn("Failed to load buyList data from database.", e);
+			LOGGER.warn("Failed to load buyList data from database.", e);
 		}
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc, File f)
 	{
 		try
 		{
-			final int buyListId = Integer.parseInt(getCurrentFile().getName().replaceAll(".xml", ""));
+			final int buyListId = Integer.parseInt(f.getName().replaceAll(".xml", ""));
 			
-			for (Node node = getCurrentDocument().getFirstChild(); node != null; node = node.getNextSibling())
+			for (Node node = doc.getFirstChild(); node != null; node = node.getNextSibling())
 			{
 				if ("list".equalsIgnoreCase(node.getNodeName()))
 				{
@@ -140,7 +143,7 @@ public final class BuyListData extends DocumentParser
 							}
 							else
 							{
-								_log.warn("Item not found. BuyList:" + buyList.getListId() + " ItemID:" + itemId + " File:" + getCurrentFile().getName());
+								LOGGER.warn("Item not found. BuyList:" + buyList.getListId() + " ItemID:" + itemId + " File:" + f.getName());
 							}
 						}
 						else if ("npcs".equalsIgnoreCase(list_node.getNodeName()))
@@ -161,8 +164,14 @@ public final class BuyListData extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warn("Failed to load buyList data from xml File:" + getCurrentFile().getName(), e);
+			LOGGER.warn("Failed to load buyList data from xml File:" + f.getName(), e);
 		}
+	}
+	
+	@Override
+	public FileFilter getCurrentFileFilter()
+	{
+		return NUMERIC_FILTER;
 	}
 	
 	public L2BuyList getBuyList(int listId)

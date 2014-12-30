@@ -24,12 +24,13 @@ import java.util.Set;
 
 import l2r.gameserver.engines.DocumentParser;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
  * @author Nos
  */
-public class SecondaryAuthData extends DocumentParser
+public class SecondaryAuthData implements DocumentParser
 {
 	private boolean _enabled = false;
 	private int _maxAttempts = 5;
@@ -47,15 +48,15 @@ public class SecondaryAuthData extends DocumentParser
 	{
 		_forbiddenPasswords.clear();
 		parseFile(new File("config/main/SecondaryAuth.xml"));
-		_log.info(getClass().getSimpleName() + ": Loaded " + _forbiddenPasswords.size() + " forbidden passwords.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _forbiddenPasswords.size() + " forbidden passwords.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		try
 		{
-			for (Node node = getCurrentDocument().getFirstChild(); node != null; node = node.getNextSibling())
+			for (Node node = doc.getFirstChild(); node != null; node = node.getNextSibling())
 			{
 				if ("list".equalsIgnoreCase(node.getNodeName()))
 				{
@@ -93,7 +94,7 @@ public class SecondaryAuthData extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warn("Failed to load secondary auth data from xml.", e);
+			LOGGER.warn("Failed to load secondary auth data from xml.", e);
 		}
 	}
 	

@@ -35,13 +35,14 @@ import l2r.gameserver.network.SystemMessageId;
 import l2r.gameserver.network.serverpackets.L2GameServerPacket;
 import l2r.gameserver.network.serverpackets.SystemMessage;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid
  */
-public class AdminData extends DocumentParser
+public class AdminData implements DocumentParser
 {
 	private static final Map<Integer, L2AccessLevel> _accessLevels = new HashMap<>();
 	private static final Map<String, L2AdminCommandAccessRight> _adminCommandAccessRights = new HashMap<>();
@@ -63,20 +64,20 @@ public class AdminData extends DocumentParser
 		_accessLevels.clear();
 		_adminCommandAccessRights.clear();
 		parseDatapackFile("config/xml/accessLevels.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _accessLevels.size() + " Access Levels");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _accessLevels.size() + " Access Levels");
 		parseDatapackFile("config/xml/adminCommands.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _adminCommandAccessRights.size() + " Access Commands");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _adminCommandAccessRights.size() + " Access Commands");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		Node attr;
 		StatsSet set;
 		L2AccessLevel level;
 		L2AdminCommandAccessRight command;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{
@@ -168,11 +169,11 @@ public class AdminData extends DocumentParser
 			{
 				acar = new L2AdminCommandAccessRight(adminCommand, true, accessLevel.getLevel());
 				_adminCommandAccessRights.put(adminCommand, acar);
-				_log.info(getClass().getSimpleName() + ": No rights defined for admin command " + adminCommand + " auto setting accesslevel: " + accessLevel.getLevel() + " !");
+				LOGGER.info(getClass().getSimpleName() + ": No rights defined for admin command " + adminCommand + " auto setting accesslevel: " + accessLevel.getLevel() + " !");
 			}
 			else
 			{
-				_log.info(getClass().getSimpleName() + ": No rights defined for admin command " + adminCommand + " !");
+				LOGGER.info(getClass().getSimpleName() + ": No rights defined for admin command " + adminCommand + " !");
 				return false;
 			}
 		}
@@ -189,7 +190,7 @@ public class AdminData extends DocumentParser
 		L2AdminCommandAccessRight acar = _adminCommandAccessRights.get(command);
 		if (acar == null)
 		{
-			_log.info(getClass().getSimpleName() + ": No rights defined for admin command " + command + ".");
+			LOGGER.info(getClass().getSimpleName() + ": No rights defined for admin command " + command + ".");
 			return false;
 		}
 		return acar.getRequireConfirm();
@@ -244,7 +245,7 @@ public class AdminData extends DocumentParser
 	{
 		if (Config.DEBUG)
 		{
-			_log.info("added gm: " + player.getName());
+			LOGGER.info("added gm: " + player.getName());
 		}
 		_gmList.put(player, hidden);
 	}
@@ -257,7 +258,7 @@ public class AdminData extends DocumentParser
 	{
 		if (Config.DEBUG)
 		{
-			_log.info("deleted gm: " + player.getName());
+			LOGGER.info("deleted gm: " + player.getName());
 		}
 		_gmList.remove(player);
 	}

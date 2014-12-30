@@ -28,6 +28,7 @@ import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.actor.instance.L2StaticObjectInstance;
 import l2r.gameserver.model.actor.templates.L2CharTemplate;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -35,7 +36,7 @@ import org.w3c.dom.Node;
  * This class loads and holds all static object data.
  * @author UnAfraid
  */
-public final class StaticObjectsData extends DocumentParser
+public final class StaticObjectsData implements DocumentParser
 {
 	private static final Map<Integer, L2StaticObjectInstance> _staticObjects = new HashMap<>();
 	
@@ -52,16 +53,16 @@ public final class StaticObjectsData extends DocumentParser
 	{
 		_staticObjects.clear();
 		parseDatapackFile("data/xml/other/staticObjects.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _staticObjects.size() + " StaticObject Templates.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _staticObjects.size() + " StaticObject Templates.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		Node att;
 		StatsSet set;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{

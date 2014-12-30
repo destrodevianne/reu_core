@@ -30,13 +30,14 @@ import l2r.gameserver.model.skills.funcs.FuncTemplate;
 import l2r.gameserver.model.skills.funcs.LambdaConst;
 import l2r.gameserver.model.stats.Stats;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid
  */
-public class OptionsData extends DocumentParser
+public class OptionsData implements DocumentParser
 {
 	private final Map<Integer, Options> _data = new HashMap<>();
 	
@@ -49,15 +50,15 @@ public class OptionsData extends DocumentParser
 	public synchronized void load()
 	{
 		parseDirectory("data/xml/stats/options");
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _data.size() + " Options.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _data.size() + " Options.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		int id;
 		Options op;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{

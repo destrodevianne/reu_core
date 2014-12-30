@@ -28,6 +28,7 @@ import l2r.gameserver.enums.CategoryType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -35,9 +36,9 @@ import org.w3c.dom.Node;
  * This class holds different categories containing class ids or npc ids.
  * @author Nos, xban1x
  */
-public final class CategoryData extends DocumentParser
+public final class CategoryData implements DocumentParser
 {
-	private static final Logger _log = LoggerFactory.getLogger(CategoryData.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryData.class);
 	
 	private final Map<CategoryType, Set<Integer>> _categories = new HashMap<>();
 	
@@ -50,13 +51,13 @@ public final class CategoryData extends DocumentParser
 	public void load()
 	{
 		parseDatapackFile("data/xml/other/categoryData.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _categories.size() + " Categories.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _categories.size() + " Categories.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
-		for (Node node = getCurrentDocument().getFirstChild(); node != null; node = node.getNextSibling())
+		for (Node node = doc.getFirstChild(); node != null; node = node.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(node.getNodeName()))
 			{
@@ -68,7 +69,7 @@ public final class CategoryData extends DocumentParser
 						final CategoryType categoryType = CategoryType.findByName(attrs.getNamedItem("name").getNodeValue());
 						if (categoryType == null)
 						{
-							_log.warn(getClass().getSimpleName() + ": Can't find category by name :" + attrs.getNamedItem("name").getNodeValue());
+							LOGGER.warn(getClass().getSimpleName() + ": Can't find category by name :" + attrs.getNamedItem("name").getNodeValue());
 							continue;
 						}
 						
@@ -98,7 +99,7 @@ public final class CategoryData extends DocumentParser
 		final Set<Integer> category = getCategoryByType(type);
 		if (category == null)
 		{
-			_log.warn(getClass().getSimpleName() + ": Can't find category type :" + type);
+			LOGGER.warn(getClass().getSimpleName() + ": Can't find category type :" + type);
 			return false;
 		}
 		return category.contains(id);

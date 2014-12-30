@@ -35,13 +35,14 @@ import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.actor.templates.L2DoorTemplate;
 import l2r.gameserver.pathfinding.AbstractNodeLoc;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author JIV, GodKratos, UnAfraid
  */
-public class DoorData extends DocumentParser
+public class DoorData implements DocumentParser
 {
 	private static final Map<String, Set<Integer>> _groups = new HashMap<>();
 	
@@ -64,12 +65,12 @@ public class DoorData extends DocumentParser
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		Node att;
 		StatsSet set;
-		for (Node a = getCurrentDocument().getFirstChild(); a != null; a = a.getNextSibling())
+		for (Node a = doc.getFirstChild(); a != null; a = a.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(a.getNodeName()))
 			{
@@ -92,7 +93,7 @@ public class DoorData extends DocumentParser
 			}
 		}
 		
-		_log.info(getClass().getSimpleName() + ": Loaded " + _doors.size() + " Door Templates for " + _regions.size() + " regions.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _doors.size() + " Door Templates for " + _regions.size() + " regions.");
 	}
 	
 	public void insertCollisionData(StatsSet set)

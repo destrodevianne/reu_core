@@ -52,7 +52,7 @@ import org.w3c.dom.Node;
  */
 public class ProductItemData
 {
-	protected static final Logger _log = LoggerFactory.getLogger(ProductItemData.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(ProductItemData.class);
 	
 	private final Map<Integer, L2ProductItem> _itemsList = new TreeMap<>();
 	private final ConcurrentHashMap<Integer, List<L2ProductItem>> recentList;
@@ -85,7 +85,7 @@ public class ProductItemData
 			File file = new File(Config.DATAPACK_ROOT, "data/xml/other/item-mall.xml");
 			if (!file.exists())
 			{
-				_log.warn(getClass().getSimpleName() + ": Couldn't find data/" + file.getName());
+				LOGGER.warn(getClass().getSimpleName() + ": Couldn't find data/" + file.getName());
 				return;
 			}
 			
@@ -142,11 +142,11 @@ public class ProductItemData
 					}
 				}
 			}
-			_log.info(String.format(getClass().getSimpleName() + ": Loaded %d items for Item Mall.", _itemsList.size()));
+			LOGGER.info(String.format(getClass().getSimpleName() + ": Loaded %d items for Item Mall.", _itemsList.size()));
 		}
 		catch (Exception e)
 		{
-			_log.warn(getClass().getSimpleName() + ": Lists could not be initialized.");
+			LOGGER.warn(getClass().getSimpleName() + ": Lists could not be initialized.");
 			e.printStackTrace();
 		}
 	}

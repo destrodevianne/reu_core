@@ -27,13 +27,14 @@ import l2r.gameserver.model.SiegeScheduleDate;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.util.Util;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid
  */
-public class SiegeScheduleData extends DocumentParser
+public class SiegeScheduleData implements DocumentParser
 {
 	private final List<SiegeScheduleDate> _scheduleData = new ArrayList<>();
 	
@@ -47,18 +48,18 @@ public class SiegeScheduleData extends DocumentParser
 	{
 		_scheduleData.clear();
 		parseDatapackFile("config/main/SiegeSchedule.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _scheduleData.size() + " siege schedulers.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _scheduleData.size() + " siege schedulers.");
 		if (_scheduleData.isEmpty())
 		{
 			_scheduleData.add(new SiegeScheduleDate(new StatsSet()));
-			_log.info(getClass().getSimpleName() + ": Emergency Loaded: " + _scheduleData.size() + " default siege schedulers.");
+			LOGGER.info(getClass().getSimpleName() + ": Emergency Loaded: " + _scheduleData.size() + " default siege schedulers.");
 		}
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{
@@ -101,7 +102,7 @@ public class SiegeScheduleData extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warn("", e);
+			LOGGER.warn("", e);
 			return -1;
 		}
 	}

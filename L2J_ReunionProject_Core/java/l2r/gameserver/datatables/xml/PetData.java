@@ -27,6 +27,7 @@ import l2r.gameserver.model.L2PetData;
 import l2r.gameserver.model.L2PetLevelData;
 import l2r.gameserver.model.StatsSet;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -35,7 +36,7 @@ import org.w3c.dom.Node;
  * TODO: load and use all pet parameters.
  * @author Zoey76 (rework)
  */
-public final class PetData extends DocumentParser
+public final class PetData implements DocumentParser
 {
 	private static final Map<Integer, L2PetData> _pets = new HashMap<>();
 	
@@ -52,14 +53,14 @@ public final class PetData extends DocumentParser
 	{
 		_pets.clear();
 		parseDirectory("data/xml/stats/pets/");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _pets.size() + " Pets.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _pets.size() + " Pets.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
-		Node n = getCurrentDocument().getFirstChild();
+		Node n = doc.getFirstChild();
 		for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
 		{
 			if (d.getNodeName().equals("pet"))
@@ -191,7 +192,7 @@ public final class PetData extends DocumentParser
 	{
 		if (!_pets.containsKey(petId))
 		{
-			_log.info(getClass().getSimpleName() + ": Missing pet data for npcid: " + petId);
+			LOGGER.info(getClass().getSimpleName() + ": Missing pet data for npcid: " + petId);
 		}
 		return _pets.get(petId);
 	}

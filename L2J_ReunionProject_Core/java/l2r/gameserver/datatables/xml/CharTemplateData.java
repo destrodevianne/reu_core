@@ -31,6 +31,7 @@ import l2r.gameserver.model.base.ClassId;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -38,9 +39,9 @@ import org.w3c.dom.Node;
  * This will be reworked Soon(tm).
  * @author Unknown, Forsaiken, Zoey76, GKR
  */
-public final class CharTemplateData extends DocumentParser
+public final class CharTemplateData implements DocumentParser
 {
-	private static final Logger _log = LoggerFactory.getLogger(CharTemplateData.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(CharTemplateData.class.getName());
 	
 	private static final Map<ClassId, L2PcTemplate> _charTemplates = new HashMap<>();
 	
@@ -56,17 +57,17 @@ public final class CharTemplateData extends DocumentParser
 	{
 		_charTemplates.clear();
 		parseDirectory("data/xml/stats/chars/baseStats", false);
-		_log.info(getClass().getSimpleName() + ": Loaded " + _charTemplates.size() + " character templates.");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _dataCount + " level up gain records.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _charTemplates.size() + " character templates.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _dataCount + " level up gain records.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		int classId = 0;
 		
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{

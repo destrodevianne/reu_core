@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 public class SkillData
 {
-	private static Logger _log = LoggerFactory.getLogger(SkillData.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(SkillData.class);
 	
 	private final Map<Integer, L2Skill> _skills = new HashMap<>();
 	private final Map<Integer, Integer> _skillMaxLevel = new HashMap<>();
@@ -118,14 +118,14 @@ public class SkillData
 		{
 			if (Config.DEBUG)
 			{
-				_log.warn(getClass().getSimpleName() + ": call to unexisting skill level id: " + skillId + " requested level: " + level + " max level: " + maxLvl, new Throwable());
+				LOGGER.warn(getClass().getSimpleName() + ": call to unexisting skill level id: " + skillId + " requested level: " + level + " max level: " + maxLvl, new Throwable());
 			}
 			return _skills.get(getSkillHashCode(skillId, maxLvl));
 		}
 		
 		if (Config.DEBUG)
 		{
-			_log.warn(getClass().getSimpleName() + ": No skill info found for skill id " + skillId + " and skill level " + level + ".");
+			LOGGER.warn(getClass().getSimpleName() + ": No skill info found for skill id " + skillId + " and skill level " + level + ".");
 		}
 		return null;
 	}

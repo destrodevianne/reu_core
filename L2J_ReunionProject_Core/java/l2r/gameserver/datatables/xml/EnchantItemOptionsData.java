@@ -26,12 +26,13 @@ import l2r.gameserver.model.items.instance.L2ItemInstance;
 import l2r.gameserver.model.options.EnchantOptions;
 import l2r.gameserver.util.Util;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid
  */
-public class EnchantItemOptionsData extends DocumentParser
+public class EnchantItemOptionsData implements DocumentParser
 {
 	private final Map<Integer, Map<Integer, EnchantOptions>> _data = new HashMap<>();
 	
@@ -48,12 +49,12 @@ public class EnchantItemOptionsData extends DocumentParser
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		Node att = null;
 		int counter = 0;
 		EnchantOptions op = null;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{
@@ -88,7 +89,7 @@ public class EnchantItemOptionsData extends DocumentParser
 				}
 			}
 		}
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _data.size() + " Items and " + counter + " Options.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _data.size() + " Items and " + counter + " Options.");
 	}
 	
 	/**
