@@ -101,17 +101,13 @@ public class L2FlagZone extends L2ZoneType
 			if (FlagZoneConfigs.ENABLE_FLAG_ZONE_AUTO_REVIVE)
 			{
 				activeChar.sendMessage("Get ready! You will be revived in " + FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY + " seconds!");
-				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+				ThreadPoolManager.getInstance().scheduleGeneral(() ->
 				{
-					@Override
-					public void run()
+					if (activeChar.isDead())
 					{
-						if (activeChar.isDead())
-						{
-							activeChar.doRevive();
-							int r = Rnd.get(FlagZoneConfigs.FLAG_ZONE_AUTO_RES_LOCS_COUNT);
-							activeChar.teleToLocation(FlagZoneConfigs.xCoords[r], FlagZoneConfigs.yCoords[r], FlagZoneConfigs.zCoords[r]);
-						}
+						activeChar.doRevive();
+						int r = Rnd.get(FlagZoneConfigs.FLAG_ZONE_AUTO_RES_LOCS_COUNT);
+						activeChar.teleToLocation(FlagZoneConfigs.xCoords[r], FlagZoneConfigs.yCoords[r], FlagZoneConfigs.zCoords[r]);
 					}
 				}, FlagZoneConfigs.FLAG_ZONE_REVIVE_DELAY * 1000);
 			}

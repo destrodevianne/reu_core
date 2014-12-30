@@ -5,7 +5,6 @@ import gr.reunion.configsEngine.SmartCommunityConfigs;
 import gr.reunion.dataHolder.PlayersTopData;
 import gr.reunion.datatables.ReunionTable;
 
-
 public class TopPvpPlayers
 {
 	private int _counter = 1;

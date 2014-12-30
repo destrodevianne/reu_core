@@ -26,6 +26,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.skills.funcs.FuncAdd;
 import l2r.gameserver.model.skills.funcs.LambdaConst;
 import l2r.gameserver.model.stats.Stats;
+
 public final class Elementals
 {
 	private static final Map<Integer, ElementalItems> TABLE = new HashMap<>();

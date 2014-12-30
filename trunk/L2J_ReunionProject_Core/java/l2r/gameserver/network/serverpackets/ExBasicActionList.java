@@ -18,7 +18,6 @@
  */
 package l2r.gameserver.network.serverpackets;
 
-
 /**
  * @author KenM
  */

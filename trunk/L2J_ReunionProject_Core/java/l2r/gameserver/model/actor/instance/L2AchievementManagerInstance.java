@@ -87,9 +87,9 @@ public class L2AchievementManagerInstance extends L2Npc
 		tb.append("<button value=\"Statistics\" action=\"bypass -h npc_%objectId%_showMyStats\" width=160 height=32 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\">");
 		tb.append("<button value=\"Help\" action=\"bypass -h npc_%objectId%_showHelpWindow\" width=160 height=32 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\">");
 		
-		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
+		NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
 		msg.setHtml(tb.toString());
-		msg.replace("%objectId%", String.valueOf(this.getObjectId()));
+		msg.replace("%objectId%", String.valueOf(getObjectId()));
 		
 		player.sendPacket(msg);
 	}
@@ -124,9 +124,9 @@ public class L2AchievementManagerInstance extends L2Npc
 			tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=160 height=32 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></center>");
 		}
 		
-		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
+		NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
 		msg.setHtml(tb.toString());
-		msg.replace("%objectId%", String.valueOf(this.getObjectId()));
+		msg.replace("%objectId%", String.valueOf(getObjectId()));
 		
 		player.sendPacket(msg);
 	}
@@ -160,9 +160,9 @@ public class L2AchievementManagerInstance extends L2Npc
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
 		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMyAchievements\" width=160 height=32 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></center>");
 		
-		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
+		NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
 		msg.setHtml(tb.toString());
-		msg.replace("%objectId%", String.valueOf(this.getObjectId()));
+		msg.replace("%objectId%", String.valueOf(getObjectId()));
 		
 		player.sendPacket(msg);
 	}
@@ -182,9 +182,9 @@ public class L2AchievementManagerInstance extends L2Npc
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
 		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=160 height=32 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></center>");
 		
-		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
+		NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
 		msg.setHtml(tb.toString());
-		msg.replace("%objectId%", String.valueOf(this.getObjectId()));
+		msg.replace("%objectId%", String.valueOf(getObjectId()));
 		
 		player.sendPacket(msg);
 	}
@@ -205,9 +205,9 @@ public class L2AchievementManagerInstance extends L2Npc
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
 		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=160 height=32 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></center>");
 		
-		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
+		NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
 		msg.setHtml(tb.toString());
-		msg.replace("%objectId%", String.valueOf(this.getObjectId()));
+		msg.replace("%objectId%", String.valueOf(getObjectId()));
 		
 		player.sendPacket(msg);
 	}

@@ -278,7 +278,7 @@ public class PrintfFormat
 		dfs = new DecimalFormatSymbols(locale);
 		int ePos = 0;
 		ConversionSpecification sFmt = null;
-		String unCS = this.nonControl(fmtArg, 0);
+		String unCS = nonControl(fmtArg, 0);
 		if (unCS != null)
 		{
 			sFmt = new ConversionSpecification();
@@ -347,7 +347,7 @@ public class PrintfFormat
 			ePos = Math.min(ePos + 1, fmtArg.length());
 			sFmt = new ConversionSpecification(fmtArg.substring(cPos, ePos));
 			vFmt.add(sFmt);
-			unCS = this.nonControl(fmtArg, ePos);
+			unCS = nonControl(fmtArg, ePos);
 			if (unCS != null)
 			{
 				sFmt = new ConversionSpecification();
