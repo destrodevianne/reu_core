@@ -237,7 +237,7 @@ public class L2ElvenRuinsTeleporterInstance extends L2Npc
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		if ((player == null) || (player.getLastFolkNPC() == null) || (player.getLastFolkNPC().getObjectId() != this.getObjectId()))
+		if ((player == null) || (player.getLastFolkNPC() == null) || (player.getLastFolkNPC().getObjectId() != getObjectId()))
 		{
 			return;
 		}
@@ -325,9 +325,9 @@ public class L2ElvenRuinsTeleporterInstance extends L2Npc
 		tb.append("<button value=\"Giran Teleport\" action=\"bypass -h npc_%objectId%_giranTele\" width=160 height=32 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\">");
 		tb.append("<br><br><br>By Matim");
 		
-		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
+		NpcHtmlMessage msg = new NpcHtmlMessage(getObjectId());
 		msg.setHtml(tb.toString());
-		msg.replace("%objectId%", String.valueOf(this.getObjectId()));
+		msg.replace("%objectId%", String.valueOf(getObjectId()));
 		
 		player.sendPacket(msg);
 	}

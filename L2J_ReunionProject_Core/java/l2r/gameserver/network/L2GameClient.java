@@ -1213,7 +1213,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	
 	public int getRevision()
 	{
-		return this.revision;
+		return revision;
 	}
 	
 	public final String getLoginName()

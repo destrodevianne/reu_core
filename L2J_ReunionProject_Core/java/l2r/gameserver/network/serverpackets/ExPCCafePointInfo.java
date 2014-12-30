@@ -27,7 +27,7 @@ public class ExPCCafePointInfo extends L2GameServerPacket
 	private final int _points;
 	private final int _mAddPoint;
 	private int _mPeriodType;
-	private int _remainTime;
+	private final int _remainTime;
 	private int _pointType = 0;
 	
 	public ExPCCafePointInfo()

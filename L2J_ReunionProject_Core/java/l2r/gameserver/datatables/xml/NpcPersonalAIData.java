@@ -26,8 +26,7 @@ import l2r.gameserver.model.actor.L2Npc;
 import l2r.util.Rnd;
 
 /**
- * This class holds parameter, specific to certain NPC's.
- * It can be either general parameters overrided for certain NPC instance instead of template parameters(aggro range, for example), or some optional parameters, handled by datapack scripts.<br>
+ * This class holds parameter, specific to certain NPC's. It can be either general parameters overrided for certain NPC instance instead of template parameters(aggro range, for example), or some optional parameters, handled by datapack scripts.<br>
  * @author GKR
  */
 public class NpcPersonalAIData

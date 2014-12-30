@@ -51,8 +51,12 @@ public class HtmlUtils
 	{
 		String replace = "<fstring";
 		if (params.length > 0)
+		{
 			for (int i = 0; i < params.length; i++)
+			{
 				replace += " p" + (i + 1) + "=\"" + String.valueOf(params[i]) + "\"";
+			}
+		}
 		replace += ">" + id + "</fstring>";
 		return replace;
 	}

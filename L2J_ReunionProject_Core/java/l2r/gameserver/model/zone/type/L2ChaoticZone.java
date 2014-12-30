@@ -79,17 +79,13 @@ public class L2ChaoticZone extends L2RespawnZone
 		{
 			final L2PcInstance activeChar = character.getActingPlayer();
 			activeChar.sendMessage("Get ready! You will be revived in " + ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY + " seconds!");
-			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+			ThreadPoolManager.getInstance().scheduleGeneral(() ->
 			{
-				@Override
-				public void run()
+				if (activeChar.isDead())
 				{
-					if (activeChar.isDead())
-					{
-						activeChar.doRevive();
-						int r = Rnd.get(ChaoticZoneConfigs.CHAOTIC_ZONE_AUTO_RES_LOCS_COUNT);
-						activeChar.teleToLocation(ChaoticZoneConfigs.xCoords[r], ChaoticZoneConfigs.yCoords[r], ChaoticZoneConfigs.zCoords[r]);
-					}
+					activeChar.doRevive();
+					int r = Rnd.get(ChaoticZoneConfigs.CHAOTIC_ZONE_AUTO_RES_LOCS_COUNT);
+					activeChar.teleToLocation(ChaoticZoneConfigs.xCoords[r], ChaoticZoneConfigs.yCoords[r], ChaoticZoneConfigs.zCoords[r]);
 				}
 			}, ChaoticZoneConfigs.CHAOTIC_ZONE_REVIVE_DELAY * 1000);
 		}

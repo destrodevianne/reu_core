@@ -2059,7 +2059,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			setIntention(AI_INTENTION_ACTIVE);
 			if (Config.DEBUG)
 			{
-				_log.warn(getClass().getSimpleName() + ": " + this.getActor().getId() + " - failed executing movementDisable()");
+				_log.warn(getClass().getSimpleName() + ": " + getActor().getId() + " - failed executing movementDisable()");
 				e.printStackTrace();
 			}
 			return;
