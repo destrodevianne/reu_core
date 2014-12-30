@@ -42,6 +42,7 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.stat.PcStat;
 import l2r.gameserver.model.actor.templates.L2PcTemplate;
 import l2r.gameserver.model.base.ClassId;
+import l2r.gameserver.model.events.Containers;
 import l2r.gameserver.model.events.EventDispatcher;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerCreate;
 import l2r.gameserver.model.items.PcItemTemplate;
@@ -343,7 +344,7 @@ public final class CharacterCreate extends L2GameClientPacket
 			startTutorialQuest(newChar);
 		}
 		
-		EventDispatcher.getInstance().notifyEvent(new OnPlayerCreate(newChar, newChar.getObjectId(), newChar.getName(), client));
+		EventDispatcher.getInstance().notifyEvent(new OnPlayerCreate(newChar, newChar.getObjectId(), newChar.getName(), client), Containers.Players());
 		
 		newChar.setOnlineStatus(true, false);
 		newChar.deleteMe();

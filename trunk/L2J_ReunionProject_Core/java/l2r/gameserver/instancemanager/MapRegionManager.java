@@ -42,13 +42,14 @@ import l2r.gameserver.model.entity.clanhall.SiegableHall;
 import l2r.gameserver.model.zone.type.L2ClanHallZone;
 import l2r.gameserver.model.zone.type.L2RespawnZone;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author Nyaran
  */
-public class MapRegionManager extends DocumentParser
+public class MapRegionManager implements DocumentParser
 {
 	private static final Map<String, L2MapRegion> _regions = new HashMap<>();
 	private static final String defaultRespawn = "talking_island_town";
@@ -63,11 +64,11 @@ public class MapRegionManager extends DocumentParser
 	{
 		_regions.clear();
 		parseDirectory(new File(Config.DATAPACK_ROOT, "data/xml/mapregion/"));
-		_log.info(getClass().getSimpleName() + ": Loaded " + _regions.size() + " map regions.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _regions.size() + " map regions.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		String name;
@@ -76,7 +77,7 @@ public class MapRegionManager extends DocumentParser
 		int castle;
 		int bbs;
 		
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{

@@ -23,13 +23,14 @@ import java.util.Map;
 
 import l2r.gameserver.engines.DocumentParser;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid
  */
-public class KarmaData extends DocumentParser
+public class KarmaData implements DocumentParser
 {
 	private final Map<Integer, Double> _karmaTable = new HashMap<>();
 	
@@ -43,14 +44,14 @@ public class KarmaData extends DocumentParser
 	{
 		_karmaTable.clear();
 		parseDatapackFile("data/xml/stats/chars/pcKarmaIncrease.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _karmaTable.size() + " karma modifiers.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _karmaTable.size() + " karma modifiers.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("pcKarmaIncrease".equalsIgnoreCase(n.getNodeName()))
 			{

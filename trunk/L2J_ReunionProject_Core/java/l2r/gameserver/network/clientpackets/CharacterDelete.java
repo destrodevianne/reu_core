@@ -20,6 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.model.CharSelectInfoPackage;
+import l2r.gameserver.model.events.Containers;
 import l2r.gameserver.model.events.EventDispatcher;
 import l2r.gameserver.model.events.impl.character.player.OnPlayerDelete;
 import l2r.gameserver.network.serverpackets.CharDeleteFail;
@@ -69,7 +70,7 @@ public final class CharacterDelete extends L2GameClientPacket
 				case 0: // Success!
 					sendPacket(new CharDeleteSuccess());
 					final CharSelectInfoPackage charInfo = getClient().getCharSelection(_charSlot);
-					EventDispatcher.getInstance().notifyEvent(new OnPlayerDelete(charInfo.getObjectId(), charInfo.getName(), getClient()));
+					EventDispatcher.getInstance().notifyEvent(new OnPlayerDelete(charInfo.getObjectId(), charInfo.getName(), getClient()), Containers.Players());
 					break;
 				case 1:
 					sendPacket(new CharDeleteFail(CharDeleteFail.REASON_YOU_MAY_NOT_DELETE_CLAN_MEMBER));

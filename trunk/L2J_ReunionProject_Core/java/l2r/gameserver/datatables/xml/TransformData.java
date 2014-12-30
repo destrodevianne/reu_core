@@ -32,13 +32,14 @@ import l2r.gameserver.model.holders.AdditionalSkillHolder;
 import l2r.gameserver.model.holders.SkillHolder;
 import l2r.gameserver.network.serverpackets.ExBasicActionList;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author UnAfraid
  */
-public final class TransformData extends DocumentParser
+public final class TransformData implements DocumentParser
 {
 	private final Map<Integer, Transform> _transformData = new HashMap<>();
 	
@@ -52,16 +53,16 @@ public final class TransformData extends DocumentParser
 	{
 		_transformData.clear();
 		parseDirectory("data/xml/stats/transformations", false);
-		_log.info(getClass().getSimpleName() + ": Loaded: " + _transformData.size() + " transform templates.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _transformData.size() + " transform templates.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		Node att;
 		StatsSet set;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{

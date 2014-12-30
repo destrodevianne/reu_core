@@ -18,6 +18,8 @@
  */
 package l2r.gameserver.datatables.xml;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -41,10 +43,11 @@ import l2r.gameserver.util.Util;
 import l2r.util.file.filter.NumericNameFilter;
 
 import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class MultisellData extends DocumentParser
+public final class MultisellData implements DocumentParser
 {
 	public static final int PAGE_SIZE = 40;
 	
@@ -52,16 +55,17 @@ public class MultisellData extends DocumentParser
 	public static final int CLAN_REPUTATION = -200;
 	public static final int FAME = -300;
 	
+	private static final FileFilter NUMERIC_FILTER = new NumericNameFilter();
+	
 	private final Map<Integer, ListContainer> _entries = new HashMap<>();
 	
 	protected MultisellData()
 	{
-		setCurrentFileFilter(new NumericNameFilter());
 		load();
 	}
 	
 	@Override
-	public final void load()
+	public void load()
 	{
 		_entries.clear();
 		parseDatapackDirectory("data/multisell", false);
@@ -71,20 +75,20 @@ public class MultisellData extends DocumentParser
 		}
 		
 		verify();
-		_log.info(getClass().getSimpleName() + ": Loaded " + _entries.size() + " multisell lists.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _entries.size() + " multisell lists.");
 	}
 	
 	@Override
-	protected final void parseDocument()
+	public void parseDocument(Document doc, File f)
 	{
 		try
 		{
-			int id = Integer.parseInt(getCurrentFile().getName().replaceAll(".xml", ""));
+			int id = Integer.parseInt(f.getName().replaceAll(".xml", ""));
 			int entryId = 1;
 			Node att;
 			final ListContainer list = new ListContainer(id);
 			
-			for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+			for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 			{
 				if ("list".equalsIgnoreCase(n.getNodeName()))
 				{
@@ -112,14 +116,14 @@ public class MultisellData extends DocumentParser
 							}
 							catch (Exception e1)
 							{
-								_log.warn(e1.getMessage() + getCurrentDocument().getLocalName());
+								LOGGER.warn(e1.getMessage() + doc.getLocalName());
 								list.setUseRate(1.0);
 							}
 							
 						}
 						catch (DOMException e)
 						{
-							_log.warn(e.getMessage() + getCurrentDocument().getLocalName());
+							LOGGER.warn(e.getMessage() + doc.getLocalName());
 						}
 					}
 					
@@ -153,8 +157,14 @@ public class MultisellData extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.error(getClass().getSimpleName() + ": Error in file " + getCurrentFile(), e);
+			LOGGER.error(getClass().getSimpleName() + ": Error in file " + f, e);
 		}
+	}
+	
+	@Override
+	public FileFilter getCurrentFileFilter()
+	{
+		return NUMERIC_FILTER;
 	}
 	
 	private final Entry parseEntry(Node n, int entryId, ListContainer list)
@@ -231,18 +241,18 @@ public class MultisellData extends DocumentParser
 		{
 			if (player.isAioMultisell())
 			{
-				_log.warn("AIOItem " + getClass().getSimpleName() + ": Cannot find list: " + listId + " requested by player: " + player.getName());
+				LOGGER.warn("AIOItem " + getClass().getSimpleName() + ": Cannot find list: " + listId + " requested by player: " + player.getName());
 			}
 			else
 			{
-				_log.warn(getClass().getSimpleName() + ": can't find list id: " + listId + " requested by player: " + player.getName() + ", npcId:" + (npc != null ? npc.getId() : 0));
+				LOGGER.warn(getClass().getSimpleName() + ": can't find list id: " + listId + " requested by player: " + player.getName() + ", npcId:" + (npc != null ? npc.getId() : 0));
 			}
 			return;
 		}
 		
 		if (((npc != null) && !template.isNpcAllowed(npc.getId())) || ((npc == null) && template.isNpcOnly()))
 		{
-			_log.warn(getClass().getSimpleName() + ": player " + player + " attempted to open multisell " + listId + " from npc " + npc + " which is not allowed!");
+			LOGGER.warn(getClass().getSimpleName() + ": player " + player + " attempted to open multisell " + listId + " from npc " + npc + " which is not allowed!");
 			return;
 		}
 		
@@ -372,14 +382,14 @@ public class MultisellData extends DocumentParser
 				{
 					if (!verifyIngredient(ing))
 					{
-						_log.warn(getClass().getSimpleName() + ": can't find ingredient with itemId: " + ing.getId() + " in list: " + list.getListId());
+						LOGGER.warn(getClass().getSimpleName() + ": can't find ingredient with itemId: " + ing.getId() + " in list: " + list.getListId());
 					}
 				}
 				for (Ingredient ing : ent.getProducts())
 				{
 					if (!verifyIngredient(ing))
 					{
-						_log.warn(getClass().getSimpleName() + ": can't find product with itemId: " + ing.getId() + " in list: " + list.getListId());
+						LOGGER.warn(getClass().getSimpleName() + ": can't find product with itemId: " + ing.getId() + " in list: " + list.getListId());
 					}
 				}
 			}

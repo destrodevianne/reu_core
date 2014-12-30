@@ -23,6 +23,7 @@ import java.util.Map;
 
 import l2r.gameserver.engines.DocumentParser;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -30,7 +31,7 @@ import org.w3c.dom.Node;
  * This class holds the Experience points for each level for players and pets.
  * @author mrTJO
  */
-public final class ExperienceData extends DocumentParser
+public final class ExperienceData implements DocumentParser
 {
 	private final Map<Integer, Long> _expTable = new HashMap<>();
 	
@@ -50,15 +51,15 @@ public final class ExperienceData extends DocumentParser
 	{
 		_expTable.clear();
 		parseDatapackFile("data/xml/stats/experience.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _expTable.size() + " levels.");
-		_log.info(getClass().getSimpleName() + ": Max Player Level is: " + (MAX_LEVEL - 1));
-		_log.info(getClass().getSimpleName() + ": Max Pet Level is: " + (MAX_PET_LEVEL - 1));
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _expTable.size() + " levels.");
+		LOGGER.info(getClass().getSimpleName() + ": Max Player Level is: " + (MAX_LEVEL - 1));
+		LOGGER.info(getClass().getSimpleName() + ": Max Pet Level is: " + (MAX_PET_LEVEL - 1));
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
-		final Node table = getCurrentDocument().getFirstChild();
+		final Node table = doc.getFirstChild();
 		final NamedNodeMap tableAttr = table.getAttributes();
 		
 		MAX_LEVEL = (byte) (Byte.parseByte(tableAttr.getNamedItem("maxLevel").getNodeValue()) + 1);
@@ -88,22 +89,22 @@ public final class ExperienceData extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.error(getClass().getSimpleName() + " incoming level is: " + String.valueOf(level));
+			LOGGER.error(getClass().getSimpleName() + " incoming level is: " + String.valueOf(level));
 			
 			if ((_expTable != null) && !_expTable.isEmpty())
 			{
 				if (_expTable.get(level) != null)
 				{
-					_log.error(getClass().getSimpleName() + " _expTable get(level) is: " + String.valueOf(_expTable.get(level)));
+					LOGGER.error(getClass().getSimpleName() + " _expTable get(level) is: " + String.valueOf(_expTable.get(level)));
 				}
 				else
 				{
-					_log.error(getClass().getSimpleName() + " _expTable.get(level) is NULL");
+					LOGGER.error(getClass().getSimpleName() + " _expTable.get(level) is NULL");
 				}
 			}
 			else
 			{
-				_log.error(getClass().getSimpleName() + " _expTable is NULL");
+				LOGGER.error(getClass().getSimpleName() + " _expTable is NULL");
 			}
 			
 			return 25314105600L;

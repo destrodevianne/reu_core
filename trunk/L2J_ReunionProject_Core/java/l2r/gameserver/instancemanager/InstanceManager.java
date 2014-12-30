@@ -31,13 +31,14 @@ import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.entity.Instance;
 import l2r.gameserver.model.instancezone.InstanceWorld;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * @author evill33t, GodKratos
  */
-public class InstanceManager extends DocumentParser
+public class InstanceManager implements DocumentParser
 {
 	private static final Map<Integer, Instance> _instanceList = new FastMap<>();
 	private final Map<Integer, InstanceWorld> _instanceWorlds = new FastMap<>();
@@ -54,10 +55,10 @@ public class InstanceManager extends DocumentParser
 	{
 		// Creates the multiverse.
 		_instanceList.put(-1, new Instance(-1, "multiverse"));
-		_log.info(getClass().getSimpleName() + ": Multiverse Instance created.");
+		LOGGER.info(getClass().getSimpleName() + ": Multiverse Instance created.");
 		// Creates the universe.
 		_instanceList.put(0, new Instance(0, "universe"));
-		_log.info(getClass().getSimpleName() + ": Universe Instance created.");
+		LOGGER.info(getClass().getSimpleName() + ": Universe Instance created.");
 		load();
 	}
 	
@@ -66,7 +67,7 @@ public class InstanceManager extends DocumentParser
 	{
 		_instanceIdNames.clear();
 		parseDatapackFile("data/xml/other/instancenames.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _instanceIdNames.size() + " instance names.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _instanceIdNames.size() + " instance names.");
 	}
 	
 	/**
@@ -124,7 +125,7 @@ public class InstanceManager extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warn(getClass().getSimpleName() + ": Could not insert character instance time data: " + e.getMessage());
+			LOGGER.warn(getClass().getSimpleName() + ": Could not insert character instance time data: " + e.getMessage());
 		}
 	}
 	
@@ -144,7 +145,7 @@ public class InstanceManager extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warn(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
+			LOGGER.warn(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
 		}
 	}
 	
@@ -181,7 +182,7 @@ public class InstanceManager extends DocumentParser
 		}
 		catch (Exception e)
 		{
-			_log.warn(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
+			LOGGER.warn(getClass().getSimpleName() + ": Could not delete character instance time data: " + e.getMessage());
 		}
 	}
 	
@@ -199,9 +200,9 @@ public class InstanceManager extends DocumentParser
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equals(n.getNodeName()))
 			{
@@ -361,7 +362,7 @@ public class InstanceManager extends DocumentParser
 			_dynamic++;
 			if (_dynamic == Integer.MAX_VALUE)
 			{
-				_log.warn(getClass().getSimpleName() + ": More then " + (Integer.MAX_VALUE - 300000) + " instances created");
+				LOGGER.warn(getClass().getSimpleName() + ": More then " + (Integer.MAX_VALUE - 300000) + " instances created");
 				_dynamic = 300000;
 			}
 		}

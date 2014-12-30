@@ -48,7 +48,7 @@ import org.w3c.dom.Node;
  */
 public class AugmentationData
 {
-	private static final Logger _log = LoggerFactory.getLogger(AugmentationData.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AugmentationData.class);
 	
 	// stats
 	private static final int STAT_BLOCKSIZE = 3640;
@@ -107,13 +107,13 @@ public class AugmentationData
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				_log.info(getClass().getSimpleName() + ": Loaded: " + _blueSkills.get(i).size() + " blue, " + _purpleSkills.get(i).size() + " purple and " + _redSkills.get(i).size() + " red skills for lifeStoneLevel " + i);
+				LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _blueSkills.get(i).size() + " blue, " + _purpleSkills.get(i).size() + " purple and " + _redSkills.get(i).size() + " red skills for lifeStoneLevel " + i);
 			}
 		}
 		else
 		{
-			_log.info(getClass().getSimpleName() + ": Loaded: " + _augmentationChances.size() + " augmentations.");
-			_log.info(getClass().getSimpleName() + ": Loaded: " + _augmentationChancesAcc.size() + " accessory augmentations.");
+			LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _augmentationChances.size() + " augmentations.");
+			LOGGER.info(getClass().getSimpleName() + ": Loaded: " + _augmentationChancesAcc.size() + " accessory augmentations.");
 		}
 	}
 	
@@ -240,7 +240,7 @@ public class AugmentationData
 				File file = new File(Config.DATAPACK_ROOT + "/data/xml/stats/augmentation/augmentation_skillmap.xml");
 				if (!file.exists())
 				{
-					_log.warn(getClass().getSimpleName() + ": ERROR The augmentation skillmap file is missing.");
+					LOGGER.warn(getClass().getSimpleName() + ": ERROR The augmentation skillmap file is missing.");
 					return;
 				}
 				
@@ -309,12 +309,12 @@ public class AugmentationData
 				}
 				if (badAugmantData != 0)
 				{
-					_log.info(getClass().getSimpleName() + ": " + badAugmantData + " bad skill(s) were skipped.");
+					LOGGER.info(getClass().getSimpleName() + ": " + badAugmantData + " bad skill(s) were skipped.");
 				}
 			}
 			catch (Exception e)
 			{
-				_log.warn(getClass().getSimpleName() + ": ERROR parsing augmentation_skillmap.xml.", e);
+				LOGGER.warn(getClass().getSimpleName() + ": ERROR parsing augmentation_skillmap.xml.", e);
 				return;
 			}
 		}
@@ -411,7 +411,7 @@ public class AugmentationData
 			}
 			else
 			{
-				_log.warn(getClass().getSimpleName() + ": ERROR The retailchances.xml data file is missing.");
+				LOGGER.warn(getClass().getSimpleName() + ": ERROR The retailchances.xml data file is missing.");
 				return;
 			}
 		}
@@ -504,7 +504,7 @@ public class AugmentationData
 			}
 			else
 			{
-				_log.warn(getClass().getSimpleName() + ": ERROR The retailchances_accessory.xml data file is missing.");
+				LOGGER.warn(getClass().getSimpleName() + ": ERROR The retailchances_accessory.xml data file is missing.");
 				return;
 			}
 		}
@@ -875,7 +875,7 @@ public class AugmentationData
 		
 		if (Config.DEBUG)
 		{
-			_log.info(getClass().getSimpleName() + ": Augmentation success: stat12=" + stat12 + "; stat34=" + stat34 + "; resultColor=" + resultColor + "; level=" + lifeStoneLevel + "; grade=" + lifeStoneGrade);
+			LOGGER.info(getClass().getSimpleName() + ": Augmentation success: stat12=" + stat12 + "; stat34=" + stat34 + "; resultColor=" + resultColor + "; level=" + lifeStoneLevel + "; grade=" + lifeStoneGrade);
 		}
 		return new L2Augmentation(((stat34 << 16) + stat12));
 	}
@@ -999,7 +999,7 @@ public class AugmentationData
 		
 		if (Config.DEBUG)
 		{
-			_log.info(getClass().getSimpleName() + ": Accessory augmentation success: stat12=" + stat12 + "; stat34=" + stat34 + "; level=" + lifeStoneLevel);
+			LOGGER.info(getClass().getSimpleName() + ": Accessory augmentation success: stat12=" + stat12 + "; stat34=" + stat34 + "; level=" + lifeStoneLevel);
 		}
 		return new L2Augmentation(((stat34 << 16) + stat12));
 	}

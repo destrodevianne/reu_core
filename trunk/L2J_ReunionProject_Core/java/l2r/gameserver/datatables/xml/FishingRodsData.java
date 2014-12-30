@@ -25,6 +25,7 @@ import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.StatsSet;
 import l2r.gameserver.model.fishing.L2FishingRod;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -32,7 +33,7 @@ import org.w3c.dom.Node;
  * This class holds the Fishing Rods information.
  * @author nonom
  */
-public final class FishingRodsData extends DocumentParser
+public final class FishingRodsData implements DocumentParser
 {
 	private static final Map<Integer, L2FishingRod> _fishingRods = new HashMap<>();
 	
@@ -49,17 +50,17 @@ public final class FishingRodsData extends DocumentParser
 	{
 		_fishingRods.clear();
 		parseDatapackFile("data/xml/stats/fishing/fishingRods.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _fishingRods.size() + " Fishing Rods.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _fishingRods.size() + " Fishing Rods.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		Node att;
 		L2FishingRod fishingRod;
 		StatsSet set;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{

@@ -25,6 +25,7 @@ import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.model.base.ClassId;
 import l2r.gameserver.model.base.ClassInfo;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -33,7 +34,7 @@ import org.w3c.dom.Node;
  * It's in <i>beta</i> state, so it's expected to change over time.
  * @author Zoey76
  */
-public final class ClassListData extends DocumentParser
+public final class ClassListData implements DocumentParser
 {
 	private static final Map<ClassId, ClassInfo> _classData = new HashMap<>();
 	
@@ -50,11 +51,11 @@ public final class ClassListData extends DocumentParser
 	{
 		_classData.clear();
 		parseDatapackFile("data/xml/stats/chars/classList.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _classData.size() + " Class data.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _classData.size() + " Class data.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
 		NamedNodeMap attrs;
 		Node attr;
@@ -62,7 +63,7 @@ public final class ClassListData extends DocumentParser
 		String className;
 		String classServName;
 		ClassId parentClassId;
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equals(n.getNodeName()))
 			{

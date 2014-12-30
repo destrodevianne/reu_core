@@ -28,15 +28,16 @@ import l2r.gameserver.model.ActionKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
  * UI Data parser.
  * @author Zoey76
  */
-public class UIData extends DocumentParser
+public class UIData implements DocumentParser
 {
-	private static final Logger _log = LoggerFactory.getLogger(UIData.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UIData.class);
 	
 	private final Map<Integer, List<ActionKey>> _storedKeys = new HashMap<>();
 	private final Map<Integer, List<Integer>> _storedCategories = new HashMap<>();
@@ -52,13 +53,13 @@ public class UIData extends DocumentParser
 		_storedKeys.clear();
 		_storedCategories.clear();
 		parseDatapackFile("data/xml/ui/ui_en.xml");
-		_log.info(getClass().getSimpleName() + ": Loaded " + _storedKeys.size() + " keys " + _storedCategories.size() + " categories.");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + _storedKeys.size() + " keys " + _storedCategories.size() + " categories.");
 	}
 	
 	@Override
-	protected void parseDocument()
+	public void parseDocument(Document doc)
 	{
-		for (Node n = getCurrentDocument().getFirstChild(); n != null; n = n.getNextSibling())
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if ("list".equalsIgnoreCase(n.getNodeName()))
 			{
