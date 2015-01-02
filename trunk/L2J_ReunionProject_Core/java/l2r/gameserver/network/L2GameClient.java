@@ -150,9 +150,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		}
 		catch (UnknownHostException e)
 		{
-			// FIXME: find better way for offline shops
-			_addr = null;
-			// throw new Error("Unable to determine localhost address.");
+			throw new Error("Unable to determine localhost address.");
 		}
 	}
 	
