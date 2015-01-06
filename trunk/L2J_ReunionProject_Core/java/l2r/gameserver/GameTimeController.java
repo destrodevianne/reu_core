@@ -19,11 +19,9 @@
 package l2r.gameserver;
 
 import java.util.Calendar;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-import javolution.util.FastMap;
-import l2r.Config;
-import l2r.gameserver.ai.L2CharacterAI;
-import l2r.gameserver.enums.CtrlEvent;
 import l2r.gameserver.instancemanager.DayNightSpawnManager;
 import l2r.gameserver.model.actor.L2Character;
 
@@ -49,7 +47,7 @@ public final class GameTimeController extends Thread
 	
 	private static GameTimeController _instance;
 	
-	private final FastMap<Integer, L2Character> _movingObjects = new FastMap<Integer, L2Character>().shared();
+	private final Set<L2Character> _movingObjects = ConcurrentHashMap.newKeySet();
 	private final long _referenceTime;
 	private final long _startTime;
 	
@@ -115,7 +113,7 @@ public final class GameTimeController extends Thread
 			return;
 		}
 		
-		_movingObjects.putIfAbsent(cha.getObjectId(), cha);
+		_movingObjects.add(cha);
 	}
 	
 	/**
@@ -131,44 +129,7 @@ public final class GameTimeController extends Thread
 	 */
 	private final void moveObjects()
 	{
-		L2Character character;
-		for (FastMap.Entry<Integer, L2Character> e = _movingObjects.head(), tail = _movingObjects.tail(); (e = e.getNext()) != tail;)
-		{
-			character = e.getValue();
-			
-			if (character.updatePosition(getGameTicks()))
-			{
-				// Destination reached. Remove from map and execute arrive event.
-				_movingObjects.remove(e.getKey());
-				fireCharacterArrived(character);
-			}
-		}
-	}
-	
-	private final void fireCharacterArrived(final L2Character character)
-	{
-		final L2CharacterAI ai = character.getAI();
-		if (ai == null)
-		{
-			return;
-		}
-		
-		ThreadPoolManager.getInstance().executeAi(() ->
-		{
-			try
-			{
-				if (Config.MOVE_BASED_KNOWNLIST)
-				{
-					character.getKnownList().findObjects();
-				}
-				
-				ai.notifyEvent(CtrlEvent.EVT_ARRIVED);
-			}
-			catch (final Throwable e)
-			{
-				_log.warn("", e);
-			}
-		});
+		_movingObjects.removeIf(L2Character::updatePosition);
 	}
 	
 	public final void stopTimer()
