@@ -99,7 +99,7 @@ To activate logs in debug, modify threshold to debug and don't forget to modify 
     <appender name="ERRORLOG" class="org.apache.log4j.RollingFileAppender">
         <param name="Threshold" value="ERROR"/>
         <param name="Encoding" value="UTF-8"/>
-        <param name="File" value="log/main/erros.log"/>
+        <param name="File" value="log/main/errors.log"/>
         <param name="Append" value="true"/>
         <param name="MaxFileSize" value="1024KB"/>
         <param name="MaxBackupIndex" value="5"/>
