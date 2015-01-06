@@ -18,8 +18,6 @@
  */
 package l2r;
 
-import info.tak11.subnet.Subnet;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,6 +36,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -46,9 +46,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
+import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.util.FloodProtectorConfig;
 import l2r.gameserver.util.Util;
@@ -1010,6 +1012,9 @@ public final class Config
 	public static boolean DEBUG_PATH;
 	public static boolean FORCE_GEODATA;
 	public static int COORD_SYNCHRONIZE;
+	public static Path GEODATA_PATH;
+	public static boolean TRY_LOAD_UNSPECIFIED_REGIONS;
+	public static Map<String, Boolean> GEODATA_REGIONS;
 	public static boolean ENABLE_FALLING_DAMAGE;
 	
 	public static enum IdFactoryType
@@ -2539,6 +2544,21 @@ public final class Config
 			DEBUG_PATH = Geodata.getBoolean("DebugPath", false);
 			FORCE_GEODATA = Geodata.getBoolean("ForceGeodata", true);
 			COORD_SYNCHRONIZE = Geodata.getInt("CoordSynchronize", -1);
+			GEODATA_PATH = Paths.get(Geodata.getString("GeoDataPath", "./data/geodata"));
+			TRY_LOAD_UNSPECIFIED_REGIONS = Geodata.getBoolean("TryLoadUnspecifiedRegions", true);
+			GEODATA_REGIONS = new HashMap<>();
+			for (int regionX = L2World.TILE_X_MIN; regionX <= L2World.TILE_X_MAX; regionX++)
+			{
+				for (int regionY = L2World.TILE_Y_MIN; regionY <= L2World.TILE_Y_MAX; regionY++)
+				{
+					String key = regionX + "_" + regionY;
+					if (Geodata.containskey(regionX + "_" + regionY))
+					{
+						GEODATA_REGIONS.put(key, Geodata.getBoolean(key, false));
+					}
+				}
+			}
+			
 			String str = Geodata.getString("EnableFallingDamage", "auto");
 			ENABLE_FALLING_DAMAGE = "auto".equalsIgnoreCase(str) ? GEODATA > 0 : Boolean.parseBoolean(str);
 			
@@ -4084,7 +4104,6 @@ public final class Config
 			{
 				Enumeration<NetworkInterface> niList = NetworkInterface.getNetworkInterfaces();
 				
-				Subnet sub = new Subnet();
 				while (niList.hasMoreElements())
 				{
 					NetworkInterface ni = niList.nextElement();
@@ -4106,14 +4125,18 @@ public final class Config
 							continue;
 						}
 						
-						sub.setIPAddress(ia.getAddress().getHostAddress());
-						sub.setMaskedBits(ia.getNetworkPrefixLength());
-						String subnet = sub.getSubnetAddress() + '/' + sub.getMaskedBits();
+						final String hostAddress = ia.getAddress().getHostAddress();
+						final int subnetPrefixLength = ia.getNetworkPrefixLength();
+						final int subnetMaskInt = IntStream.rangeClosed(1, subnetPrefixLength).reduce((r, e) -> (r << 1) + 1).orElse(0) << (32 - subnetPrefixLength);
+						final int hostAddressInt = Arrays.stream(hostAddress.split("\\.")).mapToInt(Integer::parseInt).reduce((r, e) -> (r << 8) + e).orElse(0);
+						final int subnetAddressInt = hostAddressInt & subnetMaskInt;
+						final String subnetAddress = ((subnetAddressInt >> 24) & 0xFF) + "." + ((subnetAddressInt >> 16) & 0xFF) + "." + ((subnetAddressInt >> 8) & 0xFF) + "." + (subnetAddressInt & 0xFF);
+						final String subnet = subnetAddress + '/' + subnetPrefixLength;
 						if (!_subnets.contains(subnet) && !subnet.equals("0.0.0.0/0"))
 						{
 							_subnets.add(subnet);
-							_hosts.add(sub.getIPAddress());
-							LOGGER.info("Network Config: Adding new subnet: " + subnet + " address: " + sub.getIPAddress());
+							_hosts.add(hostAddress);
+							LOGGER.info("Network Config: Adding new subnet: " + subnet + " address: " + hostAddress);
 						}
 					}
 				}
