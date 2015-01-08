@@ -32,7 +32,6 @@ import l2r.gameserver.datatables.xml.AdminData;
 import l2r.gameserver.model.actor.L2Playable;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.model.actor.instance.L2PetInstance;
-import l2r.gameserver.model.actor.instance.L2Players;
 import l2r.util.StringUtil;
 
 import org.slf4j.Logger;
@@ -169,33 +168,6 @@ public final class L2World
 	{
 		return _allObjects.size();
 	}
-	
-	public static L2Players _players = new L2Players()
-	{
-		@Override
-		public void storePlayer(L2Object player)
-		{
-			
-		}
-		
-		@Override
-		public void removePlayer(L2Object player)
-		{
-			
-		}
-		
-		@Override
-		public L2PcInstance get(int objId)
-		{
-			return null;
-		}
-		
-		@Override
-		public void run()
-		{
-			
-		}
-	};
 	
 	/**
 	 * @return a table containing all GMs.
