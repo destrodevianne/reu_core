@@ -31,7 +31,6 @@ import l2r.gameserver.scripts.handlers.skillhandlers.GiveReco;
 import l2r.gameserver.scripts.handlers.skillhandlers.InstantJump;
 import l2r.gameserver.scripts.handlers.skillhandlers.Manadam;
 import l2r.gameserver.scripts.handlers.skillhandlers.Mdam;
-import l2r.gameserver.scripts.handlers.skillhandlers.NornilsPower;
 import l2r.gameserver.scripts.handlers.skillhandlers.Pdam;
 import l2r.gameserver.scripts.handlers.skillhandlers.Resurrect;
 import l2r.gameserver.scripts.handlers.skillhandlers.ShiftTarget;
@@ -59,7 +58,6 @@ public class SkillHandler implements IHandler<ISkillHandler, L2SkillType>
 		registerHandler(new InstantJump());
 		registerHandler(new Manadam());
 		registerHandler(new Mdam());
-		registerHandler(new NornilsPower());
 		registerHandler(new Pdam());
 		registerHandler(new Resurrect());
 		registerHandler(new ShiftTarget());
