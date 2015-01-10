@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2014 L2J Server
+ * Copyright (C) 2004-2015 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -23,6 +23,7 @@ import l2r.gameserver.model.actor.instance.L2DoorInstance;
 import l2r.gameserver.model.interfaces.IIdentifiable;
 
 /**
+ * Doors template.
  * @author JIV
  */
 public class L2DoorTemplate extends L2CharTemplate implements IIdentifiable
@@ -56,6 +57,7 @@ public class L2DoorTemplate extends L2CharTemplate implements IIdentifiable
 	private final boolean _checkCollision;
 	private final boolean _isAttackableDoor;
 	private final int _clanhallId;
+	private final boolean _stealth;
 	
 	public L2DoorTemplate(StatsSet set)
 	{
@@ -106,6 +108,7 @@ public class L2DoorTemplate extends L2CharTemplate implements IIdentifiable
 		}
 		_isAttackableDoor = set.getBoolean("is_attackable", false);
 		_clanhallId = set.getInt("clanhall_id", 0);
+		_stealth = set.getBoolean("stealth", false);
 	}
 	
 	/**
@@ -241,5 +244,10 @@ public class L2DoorTemplate extends L2CharTemplate implements IIdentifiable
 	public int getClanHallId()
 	{
 		return _clanhallId;
+	}
+	
+	public boolean isStealth()
+	{
+		return _stealth;
 	}
 }
