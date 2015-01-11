@@ -65,8 +65,8 @@ public final class Announcements
 	{
 		_announcements.clear();
 		_critAnnouncements.clear();
-		readFromDisk("data/announcements.txt", _announcements);
-		readFromDisk("data/critannouncements.txt", _critAnnouncements);
+		readFromDisk("data/announcements/announcements.txt", _announcements);
+		readFromDisk("data/announcements/critannouncements.txt", _critAnnouncements);
 		
 		if (Config.DEBUG)
 		{
@@ -198,12 +198,12 @@ public final class Announcements
 		
 		if (isCritical)
 		{
-			path = "data/critannouncements.txt";
+			path = "data/announcements/critannouncements.txt";
 			list = _critAnnouncements;
 		}
 		else
 		{
-			path = "data/announcements.txt";
+			path = "data/announcements/announcements.txt";
 			list = _announcements;
 		}
 		
