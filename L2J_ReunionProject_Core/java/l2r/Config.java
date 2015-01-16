@@ -988,7 +988,6 @@ public final class Config
 	public static boolean DEBUG_SCRIPT_NOTIFIES;
 	public static boolean PACKET_HANDLER_DEBUG;
 	public static boolean DEVELOPER;
-	public static boolean ACCEPT_GEOEDITOR_CONN;
 	public static boolean ALT_DEV_NO_HANDLERS;
 	public static boolean ALT_DEV_NO_QUESTS;
 	public static boolean ALT_DEV_NO_SPAWNS;
@@ -998,10 +997,9 @@ public final class Config
 	// --------------------------------------------------
 	// Geodata Settings
 	// --------------------------------------------------
-	public static int GEODATA;
+	public static int PATHFINDING;
 	public static String GEODATA_DRIVER;
 	public static File PATHNODE_DIR;
-	public static boolean GEODATA_CELLFINDING;
 	public static String PATHFIND_BUFFERS;
 	public static float LOW_WEIGHT;
 	public static float MEDIUM_WEIGHT;
@@ -2512,7 +2510,6 @@ public final class Config
 			DEBUG_SCRIPT_NOTIFIES = Debug.getBoolean("DebugScriptsNotifies", false);
 			PACKET_HANDLER_DEBUG = Debug.getBoolean("PacketHandlerDebug", false);
 			DEVELOPER = Debug.getBoolean("Developer", false);
-			ACCEPT_GEOEDITOR_CONN = Debug.getBoolean("AcceptGeoeditorConn", false);
 			ALT_DEV_NO_HANDLERS = Debug.getBoolean("AltDevNoHandlers", false);
 			ALT_DEV_NO_QUESTS = Debug.getBoolean("AltDevNoQuests", false);
 			ALT_DEV_NO_SPAWNS = Debug.getBoolean("AltDevNoSpawns", false);
@@ -2522,8 +2519,8 @@ public final class Config
 			// Load General L2Properties file (if exists)
 			final PropertiesParser Geodata = new PropertiesParser(GEODATA_CONFIG_FILE);
 			
-			GEODATA = Geodata.getInt("GeoData", 0);
 			GEODATA_DRIVER = Geodata.getString("GeoDataDriver", "l2r.gameserver.geoengine.NullDriver");
+			
 			try
 			{
 				PATHNODE_DIR = new File(Geodata.getString("PathnodeDirectory", "data/pathnode").replaceAll("\\\\", "/")).getCanonicalFile();
@@ -2533,7 +2530,8 @@ public final class Config
 				_log.warn("Error setting pathnode directory!", e);
 				PATHNODE_DIR = new File("data/pathnode");
 			}
-			GEODATA_CELLFINDING = Geodata.getBoolean("CellPathFinding", false);
+			
+			PATHFINDING = Geodata.getInt("PathFinding", 0);
 			PATHFIND_BUFFERS = Geodata.getString("PathFindBuffers", "100x6;128x6;192x6;256x4;320x4;384x4;500x2");
 			LOW_WEIGHT = Geodata.getFloat("LowWeight", 0.5f);
 			MEDIUM_WEIGHT = Geodata.getFloat("MediumWeight", 2);
@@ -2559,8 +2557,7 @@ public final class Config
 				}
 			}
 			
-			String str = Geodata.getString("EnableFallingDamage", "auto");
-			ENABLE_FALLING_DAMAGE = "auto".equalsIgnoreCase(str) ? GEODATA > 0 : Boolean.parseBoolean(str);
+			ENABLE_FALLING_DAMAGE = Geodata.getBoolean("EnableFallingDamage", true);
 			
 			final File hexIdFile = new File(HEXID_FILE);
 			if (hexIdFile.exists())

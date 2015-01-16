@@ -83,7 +83,6 @@ import l2r.gameserver.datatables.xml.SkillTreesData;
 import l2r.gameserver.datatables.xml.StaticObjectsData;
 import l2r.gameserver.datatables.xml.TransformData;
 import l2r.gameserver.datatables.xml.UIData;
-import l2r.gameserver.geoeditorcon.GeoEditorListener;
 import l2r.gameserver.handler.EffectHandler;
 import l2r.gameserver.idfactory.IdFactory;
 import l2r.gameserver.instancemanager.AirShipManager;
@@ -205,7 +204,8 @@ public class GameServer
 		
 		printSection("Geodata");
 		GeoData.getInstance();
-		if (Config.GEODATA == 2)
+		
+		if (Config.PATHFINDING > 0)
 		{
 			PathFinding.getInstance();
 		}
@@ -380,11 +380,6 @@ public class GameServer
 		if (Config.ALLOW_MAIL)
 		{
 			MailManager.getInstance();
-		}
-		
-		if (Config.ACCEPT_GEOEDITOR_CONN)
-		{
-			GeoEditorListener.getInstance();
 		}
 		
 		PunishmentManager.getInstance();

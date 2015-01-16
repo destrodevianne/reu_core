@@ -1282,9 +1282,6 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 			return false;
 		}
 		
-		boolean geoEnabled = Config.GEODATA > 0;
-		boolean geoCanSeeTarget = geoEnabled ? GeoData.getInstance().canSeeTarget(caster, target) : true;
-		
 		final L2PcInstance player = caster.getActingPlayer();
 		final L2PcInstance targetPlayer = target.getActingPlayer();
 		if (player != null)
@@ -1316,7 +1313,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 						}
 					}
 					
-					return geoCanSeeTarget;
+					return GeoData.getInstance().canSeeTarget(caster, target);
 				}
 				
 				if (targetPlayer.inObserverMode())
@@ -1382,7 +1379,7 @@ public abstract class L2Skill implements IChanceSkillTrigger, IIdentifiable
 			}
 		}
 		
-		if (geoEnabled && !GeoData.getInstance().canSeeTarget(caster, target))
+		if (!GeoData.getInstance().canSeeTarget(caster, target))
 		{
 			return false;
 		}

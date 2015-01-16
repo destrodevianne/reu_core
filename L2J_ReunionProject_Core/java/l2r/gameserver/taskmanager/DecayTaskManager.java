@@ -91,7 +91,7 @@ public class DecayTaskManager
 					{
 						delay = Config.RAID_BOSS_DECAY_TIME;
 					}
-					else if ((actor instanceof L2Attackable) && (((L2Attackable) actor).isSpoil() || ((L2Attackable) actor).isSeeded()))
+					else if ((actor instanceof L2Attackable) && (((L2Attackable) actor).isSpoiled() || ((L2Attackable) actor).isSeeded()))
 					{
 						delay = Config.SPOILED_DECAY_TIME;
 					}
