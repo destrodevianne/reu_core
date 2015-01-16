@@ -45,7 +45,6 @@ import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminEnchant;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminExpSp;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminFightCalculator;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminFortSiege;
-import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGeoEditor;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGeodata;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGm;
 import l2r.gameserver.scripts.handlers.admincommandhandlers.AdminGmChat;
@@ -135,7 +134,6 @@ public class AdminCommandHandler implements IHandler<IAdminCommandHandler, Strin
 		registerHandler(new AdminFortSiege());
 		registerHandler(new AdminHellbound());
 		registerHandler(new AdminGeodata());
-		registerHandler(new AdminGeoEditor());
 		registerHandler(new AdminGm());
 		registerHandler(new AdminGmChat());
 		registerHandler(new AdminGraciaSeeds());

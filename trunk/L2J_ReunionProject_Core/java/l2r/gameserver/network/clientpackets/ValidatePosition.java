@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2014 L2J Server
+ * Copyright (C) 2004-2015 L2J Server
  * 
  * This file is part of L2J Server.
  * 
@@ -20,7 +20,7 @@ package l2r.gameserver.network.clientpackets;
 
 import l2r.Config;
 import l2r.gameserver.enums.ZoneIdType;
-import l2r.gameserver.geoeditorcon.GeoEditorListener;
+import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.actor.instance.L2PcInstance;
 import l2r.gameserver.network.serverpackets.GetOnVehicle;
 import l2r.gameserver.network.serverpackets.ValidateLocation;
@@ -129,12 +129,10 @@ public class ValidatePosition extends L2GameClientPacket
 		// party.broadcastToPartyMembers(activeChar, new PartyMemberPosition(activeChar));
 		// }
 		
-		if (Config.ACCEPT_GEOEDITOR_CONN)
+		// Don't allow flying transformations outside gracia area!
+		if (activeChar.isFlyingMounted() && (_x > L2World.GRACIA_MAX_X))
 		{
-			if ((GeoEditorListener.getInstance().getThread() != null) && GeoEditorListener.getInstance().getThread().isWorking() && GeoEditorListener.getInstance().getThread().isSend(activeChar))
-			{
-				GeoEditorListener.getInstance().getThread().sendGmPosition(_x, _y, (short) _z);
-			}
+			activeChar.untransform();
 		}
 		
 		if (activeChar.isFlying() || activeChar.isInsideZone(ZoneIdType.WATER))
@@ -180,7 +178,7 @@ public class ValidatePosition extends L2GameClientPacket
 			// when too far from server calculated true coordinate.
 			// Due to geodata/zone errors, some Z axis checks are made. (maybe a temporary solution)
 			// Important: this code part must work together with L2Character.updatePosition
-			if ((Config.GEODATA > 0) && ((diffSq > 250000) || (Math.abs(dz) > 200)))
+			if ((diffSq > 250000) || (Math.abs(dz) > 200))
 			{
 				// if ((_z - activeChar.getClientZ()) < 200 && Math.abs(activeChar.getLastServerPosition().getZ()-realZ) > 70)
 				

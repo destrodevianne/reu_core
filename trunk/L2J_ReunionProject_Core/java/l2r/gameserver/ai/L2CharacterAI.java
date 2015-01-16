@@ -31,7 +31,6 @@ import static l2r.gameserver.enums.CtrlIntention.AI_INTENTION_REST;
 import java.util.List;
 
 import javolution.util.FastList;
-import l2r.Config;
 import l2r.gameserver.GameTimeController;
 import l2r.gameserver.GeoData;
 import l2r.gameserver.ThreadPoolManager;
@@ -1195,7 +1194,7 @@ public class L2CharacterAI extends AbstractAI
 			setIntention(AI_INTENTION_ACTIVE);
 			return true;
 		}
-		if ((_actor != null) && (_skill != null) && _skill.isOffensive() && (_skill.getAffectRange() > 0) && (Config.GEODATA > 0) && !GeoData.getInstance().canSeeTarget(_actor, target))
+		if ((_actor != null) && (_skill != null) && _skill.isOffensive() && (_skill.getAffectRange() > 0) && !GeoData.getInstance().canSeeTarget(_actor, target))
 		{
 			setIntention(AI_INTENTION_ACTIVE);
 			return true;

@@ -97,8 +97,7 @@ public class L2Attackable extends L2Npc
 	private int _seederObjId = 0;
 	private ItemHolder _harvestItem;
 	// Spoil
-	private boolean _isSpoil = false;
-	private int _isSpoiledBy = 0;
+	private int _spoilerObjectId;
 	private ItemHolder[] _sweepItems;
 	// Over-hit
 	private boolean _overhit;
@@ -1525,7 +1524,7 @@ public class L2Attackable extends L2Npc
 			ItemHolder item = null;
 			if (cat.isSweep())
 			{
-				if (isSpoil())
+				if (isSpoiled())
 				{
 					List<ItemHolder> sweepList = new ArrayList<>();
 					for (L2DropData drop : cat.getAllDrops())
@@ -1812,7 +1811,7 @@ public class L2Attackable extends L2Npc
 	 */
 	public boolean checkSpoilOwner(L2PcInstance sweeper, boolean sendMessage)
 	{
-		if ((sweeper.getObjectId() != getIsSpoiledBy()) && !sweeper.isInLooterParty(getIsSpoiledBy()))
+		if ((sweeper.getObjectId() != getSpoilerObjectId()) && !sweeper.isInLooterParty(getSpoilerObjectId()))
 		{
 			if (sendMessage)
 			{
@@ -2023,7 +2022,7 @@ public class L2Attackable extends L2Npc
 	{
 		super.onSpawn();
 		// Clear mob spoil, seed
-		setSpoil(false);
+		setSpoilerObjectId(0);
 		// Clear all aggro char from list
 		clearAggroList();
 		// Clear Harvester reward
@@ -2051,30 +2050,30 @@ public class L2Attackable extends L2Npc
 	}
 	
 	/**
-	 * @return True if this L2NpcInstance has drops that can be sweeped.
+	 * Checks if its spoiled.
+	 * @return {@code true} if its spoiled, {@code false} otherwise
 	 */
-	public boolean isSpoil()
+	public final boolean isSpoiled()
 	{
-		return _isSpoil;
+		return _spoilerObjectId != 0;
 	}
 	
 	/**
-	 * Set the spoil state of this L2NpcInstance.
-	 * @param isSpoil
+	 * Gets the spoiler object id.
+	 * @return the spoiler object id if its spoiled, 0 otherwise
 	 */
-	public void setSpoil(boolean isSpoil)
+	public final int getSpoilerObjectId()
 	{
-		_isSpoil = isSpoil;
+		return _spoilerObjectId;
 	}
 	
-	public final int getIsSpoiledBy()
+	/**
+	 * Sets the spoiler object id.
+	 * @param spoilerObjectId the spoiler object id
+	 */
+	public final void setSpoilerObjectId(int spoilerObjectId)
 	{
-		return _isSpoiledBy;
-	}
-	
-	public final void setIsSpoiledBy(int value)
-	{
-		_isSpoiledBy = value;
+		_spoilerObjectId = spoilerObjectId;
 	}
 	
 	/**
