@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import l2r.Config;
 import l2r.gameserver.ThreadPoolManager;
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.CtrlIntention;
@@ -274,7 +275,10 @@ public final class WalkingManager implements DocumentParser
 					if (!npc.isInsideRadius(node, 3000, true, false))
 					{
 						final String message = "Route '" + routeName + "': NPC (id=" + npc.getId() + ", x=" + npc.getX() + ", y=" + npc.getY() + ", z=" + npc.getZ() + ") is too far from starting point (node x=" + node.getX() + ", y=" + node.getY() + ", z=" + node.getZ() + ", range=" + npc.calculateDistance(node, true, true) + "), walking will not start";
-						LOGGER.warn(getClass().getSimpleName() + ": " + message);
+						if (Config.DEBUG)
+						{
+							LOGGER.warn(getClass().getSimpleName() + ": " + message);
+						}
 						npc.sendDebugMessage(message);
 						return;
 					}
