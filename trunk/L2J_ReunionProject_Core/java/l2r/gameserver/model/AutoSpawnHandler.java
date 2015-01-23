@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import l2r.Config;
 import l2r.L2DatabaseFactory;
 import l2r.gameserver.Announcements;
 import l2r.gameserver.ThreadPoolManager;
@@ -240,7 +241,10 @@ public class AutoSpawnHandler
 		}
 		catch (Exception e)
 		{
-			_log.warn("AutoSpawnHandler: Could not auto spawn for NPC ID " + spawnInst._npcId + " (Object ID = " + spawnInst._objectId + "): " + e.getMessage(), e);
+			if (Config.DEBUG)
+			{
+				_log.warn("AutoSpawnHandler: Could not auto spawn for NPC ID " + spawnInst._npcId + " (Object ID = " + spawnInst._objectId + "): " + e.getMessage(), e);
+			}
 			return false;
 		}
 		
