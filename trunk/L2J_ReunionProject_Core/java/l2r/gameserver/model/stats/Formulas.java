@@ -2009,19 +2009,34 @@ public final class Formulas
 			return false;
 		}
 		
-		double val = 0.0;
+		final int val = (int) actor.getStat().calcStat(Stats.SKILL_CRITICAL, 0, null, null);
+		
+		if (val == 0)
+		{
+			return false;
+		}
+		
 		if (actor.isPlayer())
 		{
-			if (actor.getActingPlayer().isMageClass())
+			double initVal = 0;
+			switch (val)
 			{
-				val = actor.getStat().calcStat(Stats.SKILL_MASTERY, BaseStats.INT.calcBonus(actor), null, null);
+				case 1:
+				{
+					initVal = (BaseStats.STR).calcBonus(actor);
+					break;
+				}
+				case 4:
+				{
+					initVal = (BaseStats.INT).calcBonus(actor);
+					break;
+				}
 			}
-			else
-			{
-				val = actor.getStat().calcStat(Stats.SKILL_MASTERY, BaseStats.STR.calcBonus(actor), null, null);
-			}
+			initVal *= actor.getStat().calcStat(Stats.SKILL_CRITICAL_PROBABILITY, 1, null, null);
+			return (Rnd.get(100) < initVal);
 		}
-		return Rnd.get(100) < val;
+		
+		return false;
 	}
 	
 	public static double calcValakasTrait(L2Character attacker, L2Character target, L2Skill skill)
