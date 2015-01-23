@@ -236,7 +236,8 @@ public enum Stats
 	SHIELD_DEFENCE_ANGLE("shieldDefAngle"),
 	
 	// Skill mastery
-	SKILL_MASTERY("skillMastery"),
+	SKILL_CRITICAL("skillCritical"),
+	SKILL_CRITICAL_PROBABILITY("skillCriticalProbability"),
 	
 	// Vitality
 	VITALITY_CONSUME_RATE("vitalityConsumeRate"),
