@@ -280,11 +280,16 @@ public abstract class DocumentBase
 	protected void attachFunc(Node n, Object template, String name, Condition attachCond)
 	{
 		Stats stat = Stats.valueOfXml(n.getAttributes().getNamedItem("stat").getNodeValue());
-		String order = n.getAttributes().getNamedItem("order").getNodeValue();
+		int order = -1;
+		final Node orderNode = n.getAttributes().getNamedItem("order");
+		if (orderNode != null)
+		{
+			order = Integer.parseInt(orderNode.getNodeValue());
+		}
+		
 		Lambda lambda = getLambda(n, template);
-		int ord = Integer.decode(getValue(order, template));
 		Condition applayCond = parseCondition(n.getFirstChild(), template);
-		FuncTemplate ft = new FuncTemplate(attachCond, applayCond, name, stat, ord, lambda);
+		FuncTemplate ft = new FuncTemplate(attachCond, applayCond, name, stat, order, lambda);
 		if (template instanceof L2Item)
 		{
 			((L2Item) template).attach(ft);

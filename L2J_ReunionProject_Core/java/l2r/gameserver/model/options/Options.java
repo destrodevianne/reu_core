@@ -85,7 +85,7 @@ public class Options
 			{
 				funcs.add(f);
 			}
-			player.sendDebugMessage("Adding stats: " + t.stat + " val: " + t.lambda.calc(env));
+			player.sendDebugMessage("Adding stats: " + t.getStat() + " val: " + t.getLambda().calc(env));
 		}
 		
 		if (funcs.isEmpty())
