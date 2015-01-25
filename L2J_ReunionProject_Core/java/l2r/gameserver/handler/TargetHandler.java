@@ -52,6 +52,7 @@ import l2r.gameserver.scripts.handlers.targethandlers.PartyNotMe;
 import l2r.gameserver.scripts.handlers.targethandlers.PartyOther;
 import l2r.gameserver.scripts.handlers.targethandlers.Pet;
 import l2r.gameserver.scripts.handlers.targethandlers.Self;
+import l2r.gameserver.scripts.handlers.targethandlers.Siege;
 import l2r.gameserver.scripts.handlers.targethandlers.Summon;
 import l2r.gameserver.scripts.handlers.targethandlers.TargetParty;
 import l2r.gameserver.scripts.handlers.targethandlers.Unlockable;
@@ -97,6 +98,7 @@ public class TargetHandler implements IHandler<ITargetTypeHandler, Enum<L2Target
 		registerHandler(new PartyOther());
 		registerHandler(new Pet());
 		registerHandler(new Self());
+		registerHandler(new Siege());
 		registerHandler(new Summon());
 		registerHandler(new TargetParty());
 		registerHandler(new Unlockable());
