@@ -56,6 +56,7 @@ public enum L2TargetType
 	PARTY_OTHER,
 	PET,
 	SELF,
+	SIEGE,
 	SERVITOR,
 	SUMMON,
 	TARGET_PARTY,
