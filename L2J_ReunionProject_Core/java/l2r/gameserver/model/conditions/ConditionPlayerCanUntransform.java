@@ -49,7 +49,7 @@ public class ConditionPlayerCanUntransform extends Condition
 		{
 			canUntransform = false;
 		}
-		else if ((player.isTransformed() || player.isInStance()) && player.isFlyingMounted() && player.isInsideZone(ZoneIdType.LANDING))
+		else if ((player.isTransformed() || player.isInStance()) && player.isFlyingMounted() && !player.isInsideZone(ZoneIdType.LANDING))
 		{
 			player.sendPacket(SystemMessageId.TOO_HIGH_TO_PERFORM_THIS_ACTION); // TODO: check if message is retail like.
 			canUntransform = false;
