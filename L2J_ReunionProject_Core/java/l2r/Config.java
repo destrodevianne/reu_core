@@ -36,8 +36,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -50,7 +48,6 @@ import java.util.stream.IntStream;
 
 import l2r.gameserver.engines.DocumentParser;
 import l2r.gameserver.enums.IllegalActionPunishmentType;
-import l2r.gameserver.model.L2World;
 import l2r.gameserver.model.itemcontainer.Inventory;
 import l2r.gameserver.util.FloodProtectorConfig;
 import l2r.gameserver.util.Util;
@@ -1010,9 +1007,9 @@ public final class Config
 	public static boolean DEBUG_PATH;
 	public static boolean FORCE_GEODATA;
 	public static int COORD_SYNCHRONIZE;
-	public static Path GEODATA_PATH;
-	public static boolean TRY_LOAD_UNSPECIFIED_REGIONS;
-	public static Map<String, Boolean> GEODATA_REGIONS;
+	// public static Path GEODATA_PATH;
+	// public static boolean TRY_LOAD_UNSPECIFIED_REGIONS;
+	// public static Map<String, Boolean> GEODATA_REGIONS;
 	public static boolean ENABLE_FALLING_DAMAGE;
 	
 	public static enum IdFactoryType
@@ -2542,6 +2539,8 @@ public final class Config
 			DEBUG_PATH = Geodata.getBoolean("DebugPath", false);
 			FORCE_GEODATA = Geodata.getBoolean("ForceGeodata", true);
 			COORD_SYNCHRONIZE = Geodata.getInt("CoordSynchronize", -1);
+			//@formatter:off
+			/**
 			GEODATA_PATH = Paths.get(Geodata.getString("GeoDataPath", "./data/geodata"));
 			TRY_LOAD_UNSPECIFIED_REGIONS = Geodata.getBoolean("TryLoadUnspecifiedRegions", true);
 			GEODATA_REGIONS = new HashMap<>();
@@ -2556,6 +2555,8 @@ public final class Config
 					}
 				}
 			}
+			*/
+			//@formatter:on
 			
 			ENABLE_FALLING_DAMAGE = Geodata.getBoolean("EnableFallingDamage", true);
 			
