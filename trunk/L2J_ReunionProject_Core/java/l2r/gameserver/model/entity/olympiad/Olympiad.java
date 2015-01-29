@@ -585,12 +585,12 @@ public class Olympiad extends ListenersContainer
 				currentTime.set(Calendar.DAY_OF_MONTH, 1);
 				break;
 			case "WEEKS":
-				currentTime.add(Calendar.HOUR, 336);
 				currentTime.set(Calendar.DAY_OF_WEEK, 1);
+				currentTime.add(Calendar.WEEK_OF_YEAR, 2);
 				break;
 			case "WEEK":
-				currentTime.add(Calendar.HOUR, 168);
 				currentTime.set(Calendar.DAY_OF_WEEK, 1);
+				currentTime.add(Calendar.WEEK_OF_YEAR, 1);
 				break;
 			case "REUNION":
 				int nearest = 0;
@@ -617,7 +617,7 @@ public class Olympiad extends ListenersContainer
 				break;
 		}
 		
-		currentTime.set(Calendar.HOUR, Config.ALT_OLY_END_HOUR[0]);
+		currentTime.set(Calendar.HOUR_OF_DAY, Config.ALT_OLY_END_HOUR[0]);
 		currentTime.set(Calendar.MINUTE, Config.ALT_OLY_END_HOUR[1]);
 		currentTime.set(Calendar.SECOND, Config.ALT_OLY_END_HOUR[2]);
 		_olympiadEnd = currentTime.getTimeInMillis();
