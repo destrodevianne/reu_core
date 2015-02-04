@@ -779,31 +779,31 @@ public abstract class L2Item extends ListenersContainer implements IIdentifiable
 	 */
 	public void attach(FuncTemplate f)
 	{
-		switch (f.getStat())
+		switch (f.stat)
 		{
 			case FIRE_RES:
 			case FIRE_POWER:
-				setElementals(new Elementals(Elementals.FIRE, (int) f.getLambda().calc(null)));
+				setElementals(new Elementals(Elementals.FIRE, (int) f.lambda.calc(null)));
 				break;
 			case WATER_RES:
 			case WATER_POWER:
-				setElementals(new Elementals(Elementals.WATER, (int) f.getLambda().calc(null)));
+				setElementals(new Elementals(Elementals.WATER, (int) f.lambda.calc(null)));
 				break;
 			case WIND_RES:
 			case WIND_POWER:
-				setElementals(new Elementals(Elementals.WIND, (int) f.getLambda().calc(null)));
+				setElementals(new Elementals(Elementals.WIND, (int) f.lambda.calc(null)));
 				break;
 			case EARTH_RES:
 			case EARTH_POWER:
-				setElementals(new Elementals(Elementals.EARTH, (int) f.getLambda().calc(null)));
+				setElementals(new Elementals(Elementals.EARTH, (int) f.lambda.calc(null)));
 				break;
 			case HOLY_RES:
 			case HOLY_POWER:
-				setElementals(new Elementals(Elementals.HOLY, (int) f.getLambda().calc(null)));
+				setElementals(new Elementals(Elementals.HOLY, (int) f.lambda.calc(null)));
 				break;
 			case DARK_RES:
 			case DARK_POWER:
-				setElementals(new Elementals(Elementals.DARK, (int) f.getLambda().calc(null)));
+				setElementals(new Elementals(Elementals.DARK, (int) f.lambda.calc(null)));
 				break;
 		}
 		// If _functTemplates is empty, create it and add the FuncTemplate f in it
