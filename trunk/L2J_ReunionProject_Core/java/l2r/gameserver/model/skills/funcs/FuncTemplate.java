@@ -20,7 +20,6 @@ package l2r.gameserver.model.skills.funcs;
 
 import java.lang.reflect.Constructor;
 
-import l2r.gameserver.enums.StatFunction;
 import l2r.gameserver.model.conditions.Condition;
 import l2r.gameserver.model.stats.Env;
 import l2r.gameserver.model.stats.Stats;
@@ -39,26 +38,17 @@ public final class FuncTemplate
 	public Condition applayCond;
 	public final Class<?> func;
 	public final Constructor<?> constructor;
-	private final Stats _stat;
-	private final int _order;
-	private final Lambda _lambda;
+	public final Stats stat;
+	public final int order;
+	public final Lambda lambda;
 	
-	public FuncTemplate(Condition pAttachCond, Condition pApplayCond, String pFunc, Stats pStat, int order, Lambda pLambda)
+	public FuncTemplate(Condition pAttachCond, Condition pApplayCond, String pFunc, Stats pStat, int pOrder, Lambda pLambda)
 	{
-		final StatFunction function = StatFunction.valueOf(pFunc.toUpperCase());
-		if (order >= 0)
-		{
-			_order = order;
-		}
-		else
-		{
-			_order = function.getOrder();
-		}
-		
 		attachCond = pAttachCond;
 		applayCond = pApplayCond;
-		_stat = pStat;
-		_lambda = pLambda;
+		stat = pStat;
+		order = pOrder;
+		lambda = pLambda;
 		try
 		{
 			func = Class.forName("l2r.gameserver.model.skills.funcs.Func" + pFunc);
@@ -87,33 +77,6 @@ public final class FuncTemplate
 		}
 	}
 	
-	/**
-	 * Gets the function stat.
-	 * @return the stat.
-	 */
-	public Stats getStat()
-	{
-		return _stat;
-	}
-	
-	/**
-	 * Gets the function priority order.
-	 * @return the order
-	 */
-	public int getOrder()
-	{
-		return _order;
-	}
-	
-	/**
-	 * Gets the function lambda.
-	 * @return the lambda
-	 */
-	public Lambda getLambda()
-	{
-		return _lambda;
-	}
-	
 	public Func getFunc(Env env, Object owner)
 	{
 		if ((attachCond != null) && !attachCond.test(env))
@@ -122,7 +85,7 @@ public final class FuncTemplate
 		}
 		try
 		{
-			Func f = (Func) constructor.newInstance(_stat, _order, owner, _lambda);
+			Func f = (Func) constructor.newInstance(stat, order, owner, lambda);
 			if (applayCond != null)
 			{
 				f.setCondition(applayCond);
