@@ -978,6 +978,7 @@ public final class Config
 	// Debug Settings
 	// --------------------------------------------------
 	public static boolean DEBUG;
+	public static boolean DEBUG_POSSIBLE_ITEMS_DUPE;
 	public static boolean DEBUG_SKILL_PARSING;
 	public static boolean DEBUG_SKILL_DURATION;
 	public static boolean DEBUG_QUEST_LOST_VARIABLES;
@@ -2500,6 +2501,7 @@ public final class Config
 			final PropertiesParser Debug = new PropertiesParser(DEBUG_CONFIG_FILE);
 			
 			DEBUG = Debug.getBoolean("Debug", false);
+			DEBUG_POSSIBLE_ITEMS_DUPE = Debug.getBoolean("DebugPossibleItemsDupe", false);
 			DEBUG_SKILL_PARSING = Debug.getBoolean("DebugSkillParsing", false);
 			DEBUG_SKILL_DURATION = Debug.getBoolean("DebugSkillDuration", false);
 			DEBUG_QUEST_LOST_VARIABLES = Debug.getBoolean("DebugQuestLostVariables", false);
@@ -2828,8 +2830,6 @@ public final class Config
 				_log.warn("Error setting datapack root!", e);
 				DATAPACK_ROOT = new File(".");
 			}
-			
-			DEBUG = ServerSettings.getBoolean("Debug", false);
 			
 			ACCEPT_NEW_GAMESERVER = ServerSettings.getBoolean("AcceptNewGameServer", true);
 			
