@@ -117,7 +117,7 @@ public final class L2World
 	{
 		if (_allObjects.containsKey(object.getObjectId()))
 		{
-			if (Config.DEBUG)
+			if (Config.DEBUG_POSSIBLE_ITEMS_DUPE)
 			{
 				_log.warn(getClass().getSimpleName() + ": Current object: " + object + " already exist in OID map!");
 				_log.warn(StringUtil.getTraceString(Thread.currentThread().getStackTrace()));
